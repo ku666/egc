@@ -3,7 +3,7 @@ import Router from 'vue-router'
 import EventRouter from '@/views/EventComponent/routers/index'
 // 路由文件，引用各业务模块路由
 // 引入各业务模块路由数据
-import mainDataManagementRouters from '@/views/mainDataManagement/routers/index'
+import mdmMgmtRouters from '@/views/MdmMgmt/routers/index'
 
 // 配置路由
 Vue.use(Router)
@@ -28,7 +28,7 @@ export default new Router({
         component: resolve => require(['@/components/main/Index.vue'], resolve)
       },
       ...EventRouter,
-      ...mainDataManagementRouters
+      ...mdmMgmtRouters
     ]
   }]
 })
