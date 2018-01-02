@@ -48,13 +48,13 @@ export default {
           'title': '主数据管理',
           'subs': [{
             'icon': null,
-            'index': '/mainDataManagement/deviceCategory',
+            'index': '/MdmMgmt/deviceCategory',
             'title': '设备分类管理',
             'subs': null
           },
           {
             'icon': null,
-            'index': '/mainDataManagement/provider',
+            'index': '/MdmMgmt/provider',
             'title': '供应商管理',
             'subs': null
           }]
