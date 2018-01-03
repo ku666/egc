@@ -115,6 +115,7 @@ export default {
       uuidshow: false,
       // 检索条件用表单
       searchForm: {
+        uuid: null,
         pageSize: 10,
         currentPage: 1,
         typeCode: '',
@@ -138,7 +139,7 @@ export default {
     // 根据条件查询设备分类数据到列表中
     search () {
       this.loading = true
-      getDeviceCategoryList(this.search)
+      getDeviceCategoryList(this.searchForm)
         .then(
           function (result) {
             console.log('get device category data by condition')

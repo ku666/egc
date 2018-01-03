@@ -2,7 +2,7 @@
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
       @open="clearValidate"
-      width='40%'>
+      width='30%'>
       <div slot="title">
         <span class="pull-left pl10">{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
     </div>
@@ -33,13 +33,22 @@
         </el-form-item>
       </el-form>
       <div slot='footer' class='dialog-footer'>
-        <el-button size='small' type='primary' @click='submitForm()'>保存</el-button>
+        <el-button size='small' type='primary' @click='save'>保存</el-button>
         <el-button size='small' type='primary' @click='deviceCategoryDetailVisible = false'>取消</el-button>
       </div>
     </el-dialog>
 </template>
+
 <<script>
+import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
+
 export default {
+  props: {
+    search: {
+      type: Function,
+      default: function () { }
+    }
+  },
   data () {
     return {
       deviceCategoryDetailVisible: false,
@@ -55,7 +64,7 @@ export default {
         providerCode: ''
       },
       rules: {
-        parentCode: [
+        parentUuid: [
           { required: true, message: '请输入父类别', trigger: 'blur' },
           { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
         ],
@@ -83,11 +92,31 @@ export default {
         this.$refs['deviceCategoryDetail'].clearValidate()
       })
     },
-    submitForm: function () {
-
+    save: function () {
+      this.$refs['deviceCategoryDetail'].validate((valid) => {
+        if (valid) {
+          var func
+          func = this.deviceCategoryDetail.uuid ? updateDeviceCategory : insertDeviceCategory
+          func(Object.assign({}, this.deviceCategoryDetail)).then(res => {
+            this.$message({
+              message: '设备分类保存成功!',
+              type: 'success'
+            })
+            this.deviceCategoryDetailVisible = false
+            this.search({})
+          })
+        } else {
+          this.$message({
+            message: '请填写正确的内容',
+            type: 'warning'
+          })
+          return false
+        }
+      })
     }
   }
 }
 </script>
+
 <style scoped>
 </style>
