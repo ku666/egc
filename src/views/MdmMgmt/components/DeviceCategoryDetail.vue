@@ -7,8 +7,8 @@
         <span class="pull-left pl10">{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
     </div>
       <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='100px' :rules='rules'>
-        <el-form-item label='父类别' prop='parentCode' >
-            <el-input v-model='deviceCategoryDetail.parentCode' size='small' style='width:200px'></el-input>
+        <el-form-item label='父类别' prop='parentUuid' >
+            <el-input v-model='deviceCategoryDetail.parentUuid' size='small' style='width:200px'></el-input>
         </el-form-item>
         <el-form-item label='类别编码' prop='typeCode'>
             <el-input v-model='deviceCategoryDetail.typeCode' size='small' style='width:200px'></el-input>
@@ -45,7 +45,7 @@ export default {
       deviceCategoryDetailVisible: false,
       deviceCategoryDetail: {
         uuid: null,
-        parentCode: '',
+        parentUuid: '',
         typeCode: '',
         typeName: '',
         typeDesc: '',
@@ -67,7 +67,8 @@ export default {
   },
   methods: {
     detail: function (categoryDetail = {}) {
-      this.deviceCategoryDetail.parentCode = categoryDetail.parentCode
+      this.deviceCategoryDetail.uuid = categoryDetail.uuid
+      this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
       this.deviceCategoryDetail.typeCode = categoryDetail.typeCode
       this.deviceCategoryDetail.typeName = categoryDetail.typeName
       this.deviceCategoryDetail.typeDesc = categoryDetail.typeDesc

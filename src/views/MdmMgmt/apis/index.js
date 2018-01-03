@@ -1,8 +1,16 @@
 import Axios from '@/assets/js/AxiosPlugin'
 
 // 接口地址
-const BASE_PATH = '/scp-modelmgmtcomponent'
+const BASE_PATH = '/egc-mdmcomponent/deviceCategory/api'
 
-// 获取模型信息
-export const getModelList = params => { return Axios.get(BASE_PATH + '/model/list', { params: params }).then(res => res.data) }
-export const requestLogin = params => { return Axios.post(BASE_PATH + '/user/login', { params: params }).then(res => res.data) }
+// 获取设备分类信息
+export const getDeviceCategoryList = (data) => {
+  return Axios.post(BASE_PATH + '/getDeviceCategoriesByCondition', data
+  ).then(res => res.data)
+}
+
+// 删除设备分类信息(根据uuid删除)
+export const deleteDeviceCategory = (data) => {
+  return Axios.post(BASE_PATH + '/deleteDeviceCategory', data
+  ).then(res => res.data)
+}
