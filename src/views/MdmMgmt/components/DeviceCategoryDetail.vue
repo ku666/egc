@@ -2,7 +2,7 @@
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
       @open="clearValidate"
-      width='40%'>
+      width='30%'>
       <div slot="title">
         <span class="pull-left pl10">{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
       </div>
@@ -32,7 +32,7 @@
             <el-input v-model='deviceCategoryDetail.providerCode' size='small' style='width:200px'></el-input>
         </el-form-item>
       </el-form>
-      <div slot='footer' class='dialog-footer'>
+      <div slot='footer' style="text-align: center">
         <el-button size='small' type='primary' @click='save' style="width:100px">保存</el-button>
         <el-button size='small' type='primary' @click='deviceCategoryDetailVisible = false' style="width:100px">取消</el-button>
       </div>
