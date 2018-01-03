@@ -40,8 +40,8 @@
           </el-col>
           <el-col :span='8'>
             <div class='grid-content bg-purple'>
-              <el-button @click='search' size='small' type='primary'>搜索</el-button>
-          </div>
+              <el-button @click='search' size='small' type='primary' style="width:100px">搜索</el-button>
+            </div>
           </el-col>
       </el-row>
     </el-form>
@@ -49,7 +49,7 @@
     <el-row :gutter='20'>
         <el-col :span='24'>
           <div class='grid-content bg-purple'>
-            <el-button @click='detail' size='small' type='primary' icon='el-icon-circle-plus-outline'>新增设备分类</el-button>
+            <el-button @click='detail' size='small' type='primary' style="width:100px">新增设备分类</el-button>
             <device-category-detail ref="detail"></device-category-detail>
           </div>
         </el-col>
@@ -59,6 +59,8 @@
               :data='tableData'
               tooltip-effect='dark'
               v-loading="loading"
+              header-row-class-name = 'row-height'
+              header-row-style = '{height:5px}'
               element-loading-text='拼命加载中'
               style='margin-top: 20px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
@@ -77,21 +79,22 @@
       <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="categoryDetail(scope.row)">属性</el-button>
+          <el-button type='text' size='small' @click="getDeviceAttrs(scope.row)">属性</el-button>
+          <device-attr-mapping ref = 'getDeviceAttrs'></device-attr-mapping>
           <el-button type='text' size='small' @click="detail(scope.row)">编辑</el-button>
           <el-button type='text' size='small' @click="deleteCategory(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination class="table-pager"
-                  background
-                  :current-page="currentPage"
-                  :page-sizes="[10, 20, 50, 100]"
-                  :page-size="pageSize"
-                  layout="total, sizes, prev, pager, next, jumper"
-                  :total="total"
-                  @size-change="sizeChange"
-                  @current-change="currentChange">
+      background
+      :current-page="currentPage"
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="pageSize"
+      layout="total, sizes, prev, pager, next, jumper"
+      :total="total"
+      @size-change="sizeChange"
+      @current-change="currentChange">
     </el-pagination>
   </div>
 </template>
@@ -99,6 +102,7 @@
 <script>
 // 导入新增/修改设备分类弹框页面
 import DeviceCategoryDetail from './DeviceCategoryDetail'
+import DeviceAttrMapping from './DeviceAttrMapping'
 // 导入各种get，pos等请求方法
 import {
   getDeviceCategoryList,
@@ -130,7 +134,9 @@ export default {
   },
   components: {
     // 新增/修改设备分类弹框页面
-    DeviceCategoryDetail
+    DeviceCategoryDetail,
+    // 设备分类的属性弹框页面
+    DeviceAttrMapping
   },
   mounted () {
     this.search()
@@ -171,6 +177,11 @@ export default {
       const categoryDetailTmp = Object.assign({}, categoryDetail)
       this.$refs['detail'].detail(categoryDetailTmp)
     },
+    // 打开设备分类的属性弹框页面
+    getDeviceAttrs: function (categoryDetail = {}) {
+      const categoryDetailTmp = Object.assign({}, categoryDetail)
+      this.$refs['getDeviceAttrs'].getDeviceAttrs(categoryDetailTmp)
+    },
     // 删除设备分类
     deleteCategory: function (categoryDetail = {}) {
       this.$confirm('确定要刪除吗?', '提示', {
@@ -201,5 +212,7 @@ export default {
 </script>
 
 <style scoped>
-
+  row-height {
+    height: 10px;
+  }
 </style>
