@@ -2,6 +2,7 @@
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
       @open="clearValidate"
+      :modal-append-to-body = 'false'
       width='30%'>
       <div slot="title">
         <span class="pull-left pl10">{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
@@ -33,7 +34,7 @@
         </el-form-item>
       </el-form>
       <div slot='footer' style="text-align: center">
-        <el-button size='small' type='primary' @click='save' style="width:100px">保存</el-button>
+        <el-button size='small' type='primary' @click='save' style="width:100px" disabled="true">保存</el-button>
         <el-button size='small' type='primary' @click='deviceCategoryDetailVisible = false' style="width:100px">取消</el-button>
       </div>
     </el-dialog>
@@ -75,7 +76,7 @@ export default {
     }
   },
   methods: {
-    detail: function (categoryDetail = {}) {
+    openDeviceDetailDialog: function (categoryDetail = {}) {
       this.deviceCategoryDetail.uuid = categoryDetail.uuid
       this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
       this.deviceCategoryDetail.typeCode = categoryDetail.typeCode

@@ -4,9 +4,9 @@ import Mock from 'mockjs'
 //   timeout: '500-2000' // 表示响应时间介于 500 和 2000 毫秒之间，默认值是'10-100'。
 // })
 
-const MOCK_API_URL = '/egc-mdmcomponent/deviceCategory/api'
+const DEVICE_CATEGORY_PATH = '/egc-mdmcomponent/deviceCategory/api'
 
-Mock.mock(MOCK_API_URL + '/deleteDeviceCategory', function () {
+Mock.mock(DEVICE_CATEGORY_PATH + '/deleteDeviceCategory', function () {
   console.log('mock delete device category by uuid')
   return {
     'status': true,
@@ -15,7 +15,7 @@ Mock.mock(MOCK_API_URL + '/deleteDeviceCategory', function () {
   }
 })
 
-Mock.mock(MOCK_API_URL + '/getDeviceCategoriesByCondition', function () {
+Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () {
   console.log('mock get device category by condition')
   return {
     'status': true,
@@ -177,6 +177,60 @@ Mock.mock(MOCK_API_URL + '/getDeviceCategoriesByCondition', function () {
           'updateTime': '2017-11-1 11:11:11'
         }
       ]
+    }
+  }
+})
+
+const DEVICE_ATTRIBUTE_PATH = '/egc-mdmcomponent/deviceAttribute/api'
+
+Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
+  console.log('get device category attributes')
+  return {
+    'message': 'success!',
+    'code': '00000',
+    'data': {
+      'currentPage': 1,
+      'pageSize': 10,
+      'totalCount': 30,
+      'result': [ {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+        'attrDesc': '用户呼叫号码',
+        'attrCode': 'user_call_num',
+        'attrType': 'manual_attribute',
+        'attrDataType': 'string',
+        'unitDesc': '',
+        'unitCode': '',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+        'attrDesc': '用户呼叫号码',
+        'attrCode': 'user_call_num',
+        'attrType': 'manual_attribute',
+        'attrDataType': 'string',
+        'unitDesc': '',
+        'unitCode': '',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
+        'attrDesc': '用户呼叫号码',
+        'attrCode': 'user_call_num',
+        'attrType': 'manual_attribute',
+        'attrDataType': 'string',
+        'unitDesc': '',
+        'unitCode': '',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
+      }]
     }
   }
 })

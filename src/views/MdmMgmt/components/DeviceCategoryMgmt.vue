@@ -49,20 +49,19 @@
     <el-row :gutter='20'>
         <el-col :span='24'>
           <div class='grid-content bg-purple'>
-            <el-button @click='detail' size='small' type='primary' style="width:100px">新增设备分类</el-button>
-            <device-category-detail ref="detail"></device-category-detail>
+            <el-button @click='openDeviceDetailDialog' size='small' type='primary' style="width:100px">新增设备分类</el-button>
+            <device-category-detail ref="openDeviceDetailDialog"></device-category-detail>
           </div>
         </el-col>
     </el-row>
 
     <el-table stripe border fit
-              :data='tableData'
-              tooltip-effect='dark'
-              v-loading="loading"
-              header-row-class-name = 'row-height'
-              header-row-style = '{height:5px}'
-              element-loading-text='拼命加载中'
-              style='margin-top: 20px; width: 100%'>
+      :data='tableData'
+      tooltip-effect='dark'
+      v-loading="loading"
+      height="550"
+      element-loading-text='拼命加载中'
+      style='margin-top: 20px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='typeCode' label='类别编码' width='150' sortable></el-table-column>
@@ -79,10 +78,10 @@
       <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="getDeviceAttrs(scope.row)">属性</el-button>
-          <device-attr-mapping ref = 'getDeviceAttrs'></device-attr-mapping>
-          <el-button type='text' size='small' @click="detail(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteCategory(scope.row)">删除</el-button>
+          <el-button type='text' size='small' @click="openDeviceAttrDialog(scope.row)">属性</el-button>
+          <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
+          <el-button type='text' size='small' @click="openDeviceDetailDialog(scope.row)">编辑</el-button>
+          <el-button type='text' size='small' @click="deleteCategory(scope.row)" disabled="true">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -150,7 +149,7 @@ export default {
           function (result) {
             console.log('get device category data by condition')
             this.tableData = result.data.result
-            this.total = result.totalCount
+            this.total = result.data.totalCount
             this.loading = false
           }.bind(this)
         )
@@ -173,14 +172,14 @@ export default {
       this.search()
     },
     // 打开新增/修改设备分类弹框页面
-    detail: function (categoryDetail = {}) {
+    openDeviceDetailDialog: function (categoryDetail = {}) {
       const categoryDetailTmp = Object.assign({}, categoryDetail)
-      this.$refs['detail'].detail(categoryDetailTmp)
+      this.$refs['openDeviceDetailDialog'].openDeviceDetailDialog(categoryDetailTmp)
     },
     // 打开设备分类的属性弹框页面
-    getDeviceAttrs: function (categoryDetail = {}) {
+    openDeviceAttrDialog: function (categoryDetail = {}) {
       const categoryDetailTmp = Object.assign({}, categoryDetail)
-      this.$refs['getDeviceAttrs'].getDeviceAttrs(categoryDetailTmp)
+      this.$refs['openDeviceAttrDialog'].openDeviceAttrDialog(categoryDetailTmp)
     },
     // 删除设备分类
     deleteCategory: function (categoryDetail = {}) {
