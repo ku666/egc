@@ -20,11 +20,13 @@
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='attrType' label='属性类型'></el-table-column>
+      <el-table-column prop='attrDataType' label='数据类型' v-if='uuidshow'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="dammy(scope.row)">属性</el-button>
+          <el-button type='text' size='small' @click="openAttrDmnDialog(scope.row)" v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
+          <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
           <el-button type='text' size='small' @click="dammy(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="dammy(scope.row)" disabled="true">删除</el-button>
+          <el-button type='text' size='small' @click="dammy(scope.row)" disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -41,7 +43,7 @@
     <el-tabs type="border-card" style='margin-top: 10px; width: 100%'>
       <el-tab-pane label="新增新属性">
         <div class = 'div-pane-height'>
-          <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='rules'>
+          <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
               <el-col :span = '12'>
                 <el-form-item label='属性编码' prop='attrCode' >
@@ -83,8 +85,8 @@
               </el-col>
             </el-row>
             <div style="text-align: center">
-                <el-button size='mini' type='primary' @click='save' style="width:100px" disabled="true">保存</el-button>
-                <el-button size='mini' type='primary' @click='save' style="width:100px">清空</el-button>
+                <el-button size='mini' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
+                <el-button size='mini' type='primary' @click='clear' style="width:100px">清空</el-button>
             </div>
           </el-form>
         </div>
@@ -116,7 +118,7 @@
             <el-table-column prop='attrType' label='属性类型'></el-table-column>
             <el-table-column label='操作' width='150'>
               <template slot-scope='scope'>
-                <el-button type='text' size='mini' @click="dammy(scope.row)" disabled="true">添加</el-button>
+                <el-button type='text' size='mini' @click="dammy(scope.row)" disabled>添加</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -136,6 +138,7 @@
 </template>
 
 <script>
+import AttrDomain from './AttrDomain'
 import {getDeviceAttributes} from '@/views/MdmMgmt/apis/index'
 
 export default {
@@ -202,10 +205,19 @@ export default {
         {key: 'select', value: 'select'},
         {key: 'boolean', value: 'boolean'}
       ],
+      attrFormRules: {
+        attrCode: [{ required: true, message: '请输入属性编码', trigger: 'blur' }],
+        attrDesc: [{ required: true, message: '请输入属性描述', trigger: 'blur' }],
+        attrType: [{ required: true, message: '请选择属性类型', trigger: 'change' }],
+        attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }]
+      },
       rules: {
-
+        attrDesc: [{ required: true, message: '请输入属性描述', trigger: 'blur' }]
       }
     }
+  },
+  components: {
+    AttrDomain
   },
   methods: {
     // 打开设备分类的属性弹窗
@@ -290,11 +302,26 @@ export default {
     },
     clearValidate: function () {
       this.$nextTick(() => {
-
+        this.$refs['attrForm'].clearValidate()
       })
     },
     save: function () {
 
+    },
+    clear: function () {
+      this.attrForm = {
+        attrCode: '',
+        attrDesc: '',
+        attrType: '',
+        attrDataType: '',
+        unitDesc: '',
+        unitCode: ''
+      }
+      this.clearValidate()
+    },
+    openAttrDmnDialog: function (attr = {}) {
+      const attrTmp = Object.assign({}, attr)
+      this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
     }
   }
 }

@@ -34,8 +34,8 @@
         </el-form-item>
       </el-form>
       <div slot='footer' style="text-align: center">
-        <el-button size='small' type='primary' @click='save' style="width:100px" disabled="true">保存</el-button>
-        <el-button size='small' type='primary' @click='deviceCategoryDetailVisible = false' style="width:100px">取消</el-button>
+        <el-button size='small' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
+        <el-button size='small' type='primary' @click='clear' style="width:100px">清空</el-button>
       </div>
     </el-dialog>
 </template>
@@ -114,6 +114,17 @@ export default {
           return false
         }
       })
+    },
+    clear: function () {
+      this.deviceCategoryDetail.parentUuid = ''
+      this.deviceCategoryDetail.typeCode = ''
+      this.deviceCategoryDetail.typeName = ''
+      this.deviceCategoryDetail.typeDesc = ''
+      this.deviceCategoryDetail.typeModel = ''
+      this.deviceCategoryDetail.hardwareVersion = ''
+      this.deviceCategoryDetail.softwareVersion = ''
+      this.deviceCategoryDetail.providerCode = ''
+      this.clearValidate()
     }
   }
 }

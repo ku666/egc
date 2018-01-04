@@ -197,7 +197,7 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
         'attrDesc': '用户呼叫号码',
         'attrCode': 'user_call_num',
         'attrType': 'manual_attribute',
-        'attrDataType': 'string',
+        'attrDataType': 'select',
         'unitDesc': '',
         'unitCode': '',
         'createUser': 'admin01',

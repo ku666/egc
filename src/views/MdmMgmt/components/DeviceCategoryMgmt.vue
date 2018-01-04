@@ -81,7 +81,7 @@
           <el-button type='text' size='small' @click="openDeviceAttrDialog(scope.row)">属性</el-button>
           <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
           <el-button type='text' size='small' @click="openDeviceDetailDialog(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteCategory(scope.row)" disabled="true">删除</el-button>
+          <el-button type='text' size='small' @click="deleteCategory(scope.row)" disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
