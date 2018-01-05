@@ -198,8 +198,8 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
         'attrCode': 'user_call_num',
         'attrType': 'manual_attribute',
         'attrDataType': 'select',
-        'unitDesc': '',
-        'unitCode': '',
+        'unitDesc': '1',
+        'unitCode': '2',
         'createUser': 'admin01',
         'updateUser': 'admin01',
         'createTime': '2017-11-1 11:11:11',
@@ -211,8 +211,8 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
         'attrCode': 'user_call_num',
         'attrType': 'manual_attribute',
         'attrDataType': 'string',
-        'unitDesc': '',
-        'unitCode': '',
+        'unitDesc': '3',
+        'unitCode': '4',
         'createUser': 'admin01',
         'updateUser': 'admin01',
         'createTime': '2017-11-1 11:11:11',
@@ -224,13 +224,67 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
         'attrCode': 'user_call_num',
         'attrType': 'manual_attribute',
         'attrDataType': 'string',
-        'unitDesc': '',
-        'unitCode': '',
+        'unitDesc': '5',
+        'unitCode': '6',
         'createUser': 'admin01',
         'updateUser': 'admin01',
         'createTime': '2017-11-1 11:11:11',
         'updateTime': '2017-11-1 11:11:11'
       }]
     }
+  }
+})
+
+const DEVICE_ATTR_DOMAIN_PATH = '/egc-mdmcomponent/deviceAttrDomain/api'
+
+Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
+  console.log('mock get attr domain list')
+  return {
+    'message': 'success!',
+    'code': '00000',
+    'data': [{
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      'attrUuid': '5',
+      'attr_desc': '出入口类型',
+      'domainValue': '大入',
+      'domainValueCode': '1',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      'attrUuid': '5',
+      'attr_desc': '出入口类型',
+      'domainValue': '大入',
+      'domainValueCode': '2',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      'attrUuid': '5',
+      'attr_desc': '出入口类型',
+      'domainValue': '大入',
+      'domainValueCode': '3',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxxx',
+      'attrUuid': '5',
+      'attr_desc': '出入口类型',
+      'domainValue': '大入',
+      'domainValueCode': '4',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    }]
   }
 })

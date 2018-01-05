@@ -1,9 +1,9 @@
 <template>
   <el-dialog
       :visible.sync='attrDomainVisible'
-      @open="clearValidate"
+      @open="clear"
       :modal-append-to-body = 'false'
-      width='50%'>
+      width='30%'>
     <div slot="title">
       <span>设备属性：{{ categoryAttr.attrDesc }}</span>
     </div>
@@ -17,37 +17,28 @@
       style='margin-top: 0;width: 100%'>
       <el-table-column type='index' label='序号' width="50"></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='domainVaule' label='域取值'></el-table-column>
-      <el-table-column prop='domainVauleCode' label='域取值编码'></el-table-column>
+      <el-table-column prop='domainValue' label='域取值'></el-table-column>
+      <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="dammy(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="dammy(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click="editDomain(scope.row)">编辑</el-button>
+          <el-button type='text' size='small' @click="deleteDomain(scope.row)" disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="table-pager"
-      :current-page="searchDomainsForm.currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="searchDomainsForm.pageSize"
-      layout="prev, pager, next"
-      :total="searchDomainsForm.totalCount"
-      @size-change="sizeChange"
-      @current-change="currentChange">
-    </el-pagination>
 
-    <div>
+    <div style="margin-top:20px">
       <el-form :model='domainForm' ref='domainForm' label-width='100px' :rules='rules' :inline="true">
         <el-form-item label='域取值' prop='domainValue' >
-          <el-input v-model='domainForm.domainValue' size='mini' style='width:200px'></el-input>
+          <el-input v-model='domainForm.domainValue' size='mini' style='width:120px'></el-input>
         </el-form-item>
         <el-form-item label='域取值编码' prop='domainValueCode'>
-          <el-input v-model='domainForm.domainValueCode' size='mini' style='width:200px'></el-input>
+          <el-input v-model='domainForm.domainValueCode' size='mini' style='width:120px'></el-input>
         </el-form-item>
       </el-form>
       <div style="text-align: center">
           <el-button size='mini' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
-          <el-button size='mini' type='primary' @click='save' style="width:100px">清空</el-button>
+          <el-button size='mini' type='primary' @click='clear' style="width:100px">清空</el-button>
       </div>
     </div>
 
@@ -76,10 +67,7 @@ export default {
       searchDomainsForm: {
         attrCode: '',
         attrDesc: '',
-        typeCode: '',
-        pageSize: 10,
-        currentPage: 1,
-        totalCount: 0
+        typeCode: ''
       },
       // 设备属性域列表
       domainList: [],
@@ -118,8 +106,7 @@ export default {
       getAttrDomainList({'attrUuid': this.categoryAttr.attrUuid})
         .then(
           function (result) {
-            that.domainList = result.data.result
-            that.searchDomainsForm.totalCount = result.data.totalCount
+            that.domainList = result.data
             that.domainListLoading = false
           }
         )
@@ -130,19 +117,13 @@ export default {
           }
         )
     },
-    // 改变分页大小
-    sizeChange: function (val) {
-      this.searchDomainsForm.pageSize = val
-      this.searchDomainsForm.currentPage = 1
-      this.getDomains()
+    editDomain: function (domain = {}) {
+      this.domainForm.uuid = domain.uuid
+      this.domainForm.domainValue = domain.domainValue
+      this.domainForm.domainValueCode = domain.domainValueCode
     },
-    // 跳转页面
-    currentChange: function (val) {
-      this.searchDomainsForm.currentPage = val
-      this.getDomains()
-    },
-    dammy: function () {
-
+    deleteDomain: function (domain = {}) {
+      // todo
     },
     clearValidate: function () {
       this.$nextTick(() => {
@@ -151,6 +132,11 @@ export default {
     },
     save: function () {
 
+    },
+    clear: function () {
+      this.domainForm.domainValue = ''
+      this.domainForm.domainValueCode = ''
+      this.clearValidate()
     }
   }
 }

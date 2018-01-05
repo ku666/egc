@@ -1,7 +1,7 @@
 <template>
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
-      @open="clearValidate"
+      @open="clear"
       :modal-append-to-body = 'false'
       width='30%'>
       <div slot="title">

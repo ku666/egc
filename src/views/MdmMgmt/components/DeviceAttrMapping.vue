@@ -1,7 +1,7 @@
 <template>
   <el-dialog
       :visible.sync='deviceAttrMappingVisible'
-      @open="clearValidate"
+      @open="clear"
       :modal-append-to-body = 'false'
       width='50%'>
     <div slot="title">
@@ -21,12 +21,14 @@
       <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='attrType' label='属性类型'></el-table-column>
       <el-table-column prop='attrDataType' label='数据类型' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='unitDesc' label='单位描述' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
           <el-button type='text' size='small' @click="openAttrDmnDialog(scope.row)" v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
           <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
-          <el-button type='text' size='small' @click="dammy(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="dammy(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click="editAttr(scope.row)">编辑</el-button>
+          <el-button type='text' size='small' @click="deleteAttr(scope.row)" disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,14 +36,14 @@
       :current-page="searchBindingAttrsForm.currentPage"
       :page-sizes="[10, 20, 50, 100]"
       :page-size="searchBindingAttrsForm.pageSize"
-      layout="prev, pager, next"
+      layout="total, sizes, prev, pager, next, jumper"
       :total="searchBindingAttrsForm.totalCount"
       @size-change="bindingAttrListSizeChange"
       @current-change="bindingAttrListCurrentChange">
     </el-pagination>
 
     <el-tabs type="border-card" style='margin-top: 10px; width: 100%'>
-      <el-tab-pane label="新增新属性">
+      <el-tab-pane label="新增/编辑属性">
         <div class = 'div-pane-height'>
           <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
@@ -118,7 +120,7 @@
             <el-table-column prop='attrType' label='属性类型'></el-table-column>
             <el-table-column label='操作' width='150'>
               <template slot-scope='scope'>
-                <el-button type='text' size='mini' @click="dammy(scope.row)" disabled>添加</el-button>
+                <el-button type='text' size='mini' @click="addToAttr(scope.row)" disabled>添加</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -126,7 +128,7 @@
             :current-page="searchAttrListByCdtForm.currentPage"
             :page-sizes="[10, 20, 50, 100]"
             :page-size="searchAttrListByCdtForm.pageSize"
-            layout="prev, pager, next"
+            layout="total, sizes, prev, pager, next, jumper"
             :total="searchAttrListByCdtForm.totalCount"
             @size-change="sizeChange"
             @current-change="currentChange">
@@ -185,6 +187,7 @@ export default {
       attrListByCdtLoading: false,
       // 新增与设备分类关联属性用
       attrForm: {
+        uuid: '',
         attrCode: '',
         attrDesc: '',
         attrType: '',
@@ -297,8 +300,17 @@ export default {
       this.searchAttrListByCdtForm.currentPage = val
       this.searchAttrListByCdt()
     },
-    dammy: function () {
-
+    editAttr: function (attr = {}) {
+      this.attrForm.uuid = attr.uuid
+      this.attrForm.attrCode = attr.attrCode
+      this.attrForm.attrDesc = attr.attrDesc
+      this.attrForm.attrType = attr.attrType
+      this.attrForm.attrDataType = attr.attrDataType
+      this.attrForm.unitDesc = attr.unitDesc
+      this.attrForm.unitCode = attr.unitCode
+    },
+    deleteAttr: function () {
+      // todo
     },
     clearValidate: function () {
       this.$nextTick(() => {
@@ -306,7 +318,10 @@ export default {
       })
     },
     save: function () {
-
+      // todo
+    },
+    addToAttr: function () {
+      // todo
     },
     clear: function () {
       this.attrForm = {
