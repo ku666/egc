@@ -55,6 +55,12 @@ export default {
             },
             {
               'icon': null,
+              'index': '/mdmmgmt/deviceattrmgmt',
+              'title': '设备属性管理',
+              'subs': null
+            },
+            {
+              'icon': null,
               'index': '/mdmmgmt/providermgmt',
               'title': '供应商管理',
               'subs': null
