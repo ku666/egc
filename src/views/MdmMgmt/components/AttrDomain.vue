@@ -1,10 +1,10 @@
 <template>
   <el-dialog
-      :visible.sync='attrDomainVisible'
-      @open="clear"
+      :visible.sync = 'attrDomainVisible'
+      @open = 'clear'
       :modal-append-to-body = 'false'
-      width='30%'>
-    <div slot="title">
+      width = '30%'>
+    <div slot = 'title'>
       <span>设备属性：{{ categoryAttr.attrDesc }}</span>
     </div>
     <el-table
@@ -13,22 +13,22 @@
       tooltip-effect='dark'
       height = '200'
       v-loading = 'domainListLoading'
-      element-loading-text='拼命加载中'
-      style='margin-top: 0;width: 100%'>
-      <el-table-column type='index' label='序号' width="50"></el-table-column>
+      element-loading-text = '拼命加载中'
+      style = 'margin-top: 0;width: 100%'>
+      <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='domainValue' label='域取值'></el-table-column>
       <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="editDomain(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteDomain(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click='editDomain(scope.row)'>编辑</el-button>
+          <el-button type='text' size='small' @click='deleteDomain(scope.row)' disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <div style="margin-top:20px">
-      <el-form :model='domainForm' ref='domainForm' label-width='100px' :rules='rules' :inline="true">
+    <div style='margin-top:20px'>
+      <el-form :model='domainForm' ref='domainForm' label-width='100px' :rules='rules' :inline='true'>
         <el-form-item label='域取值' prop='domainValue' >
           <el-input v-model='domainForm.domainValue' size='mini' style='width:120px'></el-input>
         </el-form-item>
@@ -36,9 +36,9 @@
           <el-input v-model='domainForm.domainValueCode' size='mini' style='width:120px'></el-input>
         </el-form-item>
       </el-form>
-      <div style="text-align: center">
-          <el-button size='mini' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
-          <el-button size='mini' type='primary' @click='clear' style="width:100px">清空</el-button>
+      <div style='text-align: center'>
+          <el-button size='mini' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
+          <el-button size='mini' type='primary' @click='clear' style='width:100px'>清空</el-button>
       </div>
     </div>
 

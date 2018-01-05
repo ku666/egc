@@ -1,10 +1,10 @@
 <template>
   <el-dialog
       :visible.sync='deviceAttrMappingVisible'
-      @open="clear"
+      @open='clear'
       :modal-append-to-body = 'false'
       width='50%'>
-    <div slot="title">
+    <div slot='title'>
       <span>设备类别：{{ deviceCategoryDetail.typeName }}</span>
     </div>
     <el-table
@@ -15,7 +15,7 @@
       v-loading = 'bindingAttrListLoading'
       element-loading-text='拼命加载中'
       style='margin-top: 0;width: 100%'>
-      <el-table-column type='index' label='序号' width="50"></el-table-column>
+      <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
@@ -25,25 +25,25 @@
       <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="openAttrDmnDialog(scope.row)" v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
+          <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
           <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
-          <el-button type='text' size='small' @click="editAttr(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteAttr(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
+          <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="table-pager"
-      :current-page="searchBindingAttrsForm.currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="searchBindingAttrsForm.pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="searchBindingAttrsForm.totalCount"
-      @size-change="bindingAttrListSizeChange"
-      @current-change="bindingAttrListCurrentChange">
+    <el-pagination class='table-pager'
+      :current-page='searchBindingAttrsForm.currentPage'
+      :page-sizes='[10, 20, 50, 100]'
+      :page-size='searchBindingAttrsForm.pageSize'
+      layout='total, sizes, prev, pager, next, jumper'
+      :total='searchBindingAttrsForm.totalCount'
+      @size-change='bindingAttrListSizeChange'
+      @current-change='bindingAttrListCurrentChange'>
     </el-pagination>
 
-    <el-tabs type="border-card" style='margin-top: 10px; width: 100%'>
-      <el-tab-pane label="新增/编辑属性">
+    <el-tabs type='border-card' style='margin-top: 10px; width: 100%'>
+      <el-tab-pane label='新增/编辑属性'>
         <div class = 'div-pane-height'>
           <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
@@ -86,16 +86,16 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <div style="text-align: center">
-                <el-button size='mini' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
-                <el-button size='mini' type='primary' @click='clear' style="width:100px">清空</el-button>
+            <div style='text-align: center'>
+                <el-button size='mini' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
+                <el-button size='mini' type='primary' @click='clear' style='width:100px'>清空</el-button>
             </div>
           </el-form>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="选择添加已有属性">
+      <el-tab-pane label='选择添加已有属性'>
         <div class = 'div-pane-height'>
-          <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline="true">
+          <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
             <el-form-item label='属性编码' prop='attrCode'>
               <el-input v-model='searchAttrListByCdtForm.attrCode' size='mini' style='width:180px'></el-input>
             </el-form-item>
@@ -103,35 +103,35 @@
               <el-input v-model='searchAttrListByCdtForm.attrDesc' size='mini' style='width:180px'></el-input>
             </el-form-item>
             <el-form-item>
-              <el-button size='mini' type='primary' @click='searchAttrListByCdt' style="width:100px">搜索</el-button>
+              <el-button size='mini' type='primary' @click='searchAttrListByCdt' style='width:100px'>搜索</el-button>
             </el-form-item>
           </el-form>
           <el-table stripe border fit
             :data='attrListByCdt'
             tooltip-effect='dark'
-            v-loading="attrListByCdtLoading"
+            v-loading='attrListByCdtLoading'
             element-loading-text='拼命加载中'
             height = '200'
             style='margin-top: 20px; width: 100%'>
-            <el-table-column type='index' label='序号' width="50"></el-table-column>
+            <el-table-column type='index' label='序号' width='50'></el-table-column>
             <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
             <el-table-column prop='attrCode' label='属性编码'></el-table-column>
             <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
             <el-table-column prop='attrType' label='属性类型'></el-table-column>
             <el-table-column label='操作' width='150'>
               <template slot-scope='scope'>
-                <el-button type='text' size='mini' @click="addToAttr(scope.row)" disabled>添加</el-button>
+                <el-button type='text' size='mini' @click='addToAttr(scope.row)' disabled>添加</el-button>
               </template>
             </el-table-column>
           </el-table>
-          <el-pagination class="table-pager"
-            :current-page="searchAttrListByCdtForm.currentPage"
-            :page-sizes="[10, 20, 50, 100]"
-            :page-size="searchAttrListByCdtForm.pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="searchAttrListByCdtForm.totalCount"
-            @size-change="sizeChange"
-            @current-change="currentChange">
+          <el-pagination class='table-pager'
+            :current-page='searchAttrListByCdtForm.currentPage'
+            :page-sizes='[10, 20, 50, 100]'
+            :page-size='searchAttrListByCdtForm.pageSize'
+            layout='total, sizes, prev, pager, next, jumper'
+            :total='searchAttrListByCdtForm.totalCount'
+            @size-change='sizeChange'
+            @current-change='currentChange'>
           </el-pagination>
         </div>
       </el-tab-pane>

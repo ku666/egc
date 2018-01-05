@@ -1,11 +1,11 @@
 <template>
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
-      @open="clear"
+      @open='clear'
       :modal-append-to-body = 'false'
       width='30%'>
-      <div slot="title">
-        <span class="pull-left pl10">{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
+      <div slot='title'>
+        <span class='pull-left pl10'>{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
       </div>
       <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='100px' :rules='rules'>
         <el-form-item label='父类别' prop='parentUuid' >
@@ -33,9 +33,9 @@
             <el-input v-model='deviceCategoryDetail.providerCode' size='small' style='width:200px'></el-input>
         </el-form-item>
       </el-form>
-      <div slot='footer' style="text-align: center">
-        <el-button size='small' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
-        <el-button size='small' type='primary' @click='clear' style="width:100px">清空</el-button>
+      <div slot='footer' style='text-align: center'>
+        <el-button size='small' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
+        <el-button size='small' type='primary' @click='clear' style='width:100px'>清空</el-button>
       </div>
     </el-dialog>
 </template>

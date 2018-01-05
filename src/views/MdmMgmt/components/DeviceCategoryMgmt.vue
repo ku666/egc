@@ -40,7 +40,7 @@
           </el-col>
           <el-col :span='8'>
             <div class='grid-content bg-purple'>
-              <el-button @click='search' size='small' type='primary' style="width:100px">搜索</el-button>
+              <el-button @click='search' size='small' type='primary' style='width:100px'>搜索</el-button>
             </div>
           </el-col>
       </el-row>
@@ -49,8 +49,8 @@
     <el-row :gutter='20'>
         <el-col :span='24'>
           <div class='grid-content bg-purple'>
-            <el-button @click='openDeviceDetailDialog' size='small' type='primary' style="width:100px">新增设备分类</el-button>
-            <device-category-detail ref="openDeviceDetailDialog"></device-category-detail>
+            <el-button @click='openDeviceDetailDialog' size='small' type='primary' style='width:100px'>新增设备分类</el-button>
+            <device-category-detail ref='openDeviceDetailDialog'></device-category-detail>
           </div>
         </el-col>
     </el-row>
@@ -58,8 +58,8 @@
     <el-table stripe border fit
       :data='tableData'
       tooltip-effect='dark'
-      v-loading="loading"
-      height="550"
+      v-loading='loading'
+      height='550'
       element-loading-text='拼命加载中'
       style='margin-top: 20px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
@@ -78,22 +78,22 @@
       <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="openDeviceAttrDialog(scope.row)">属性</el-button>
+          <el-button type='text' size='small' @click='openDeviceAttrDialog(scope.row)'>属性</el-button>
           <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
-          <el-button type='text' size='small' @click="openDeviceDetailDialog(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteCategory(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click='openDeviceDetailDialog(scope.row)'>编辑</el-button>
+          <el-button type='text' size='small' @click='deleteCategory(scope.row)' disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="table-pager"
+    <el-pagination class='table-pager'
       background
-      :current-page="currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="sizeChange"
-      @current-change="currentChange">
+      :current-page='currentPage'
+      :page-sizes='[10, 20, 50, 100]'
+      :page-size='pageSize'
+      layout='total, sizes, prev, pager, next, jumper'
+      :total='total'
+      @size-change='sizeChange'
+      @current-change='currentChange'>
     </el-pagination>
   </div>
 </template>

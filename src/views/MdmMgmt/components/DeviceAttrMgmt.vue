@@ -2,24 +2,32 @@
   <div style='margin-top: 20px;'>
 
     <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm'>
-      <el-form-item label='属性编码'>
-        <el-input size='small'  placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
-      </el-form-item>
-      <el-form-item label='属性描述'>
-        <el-input size='small' placeholder='属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click='search' size='small' type='primary' style="width:100px">搜索</el-button>
-      </el-form-item>
+      <el-row>
+        <el-col :span= '8'>
+          <el-form-item label='属性编码'>
+            <el-input size='small'  placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span= '8'>
+          <el-form-item label='属性描述'>
+            <el-input size='small' placeholder='属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span= '8'>
+          <el-form-item>
+            <el-button @click='search' size='small' type='primary' style='width:100px'>搜索</el-button>
+          </el-form-item>
+        </el-col>
+      </el-row>
     </el-form>
 
-    <el-button @click='addAttr' size='small' type='primary' style="width:100px">新增属性</el-button>
+    <el-button @click='addAttr' size='small' type='primary' style='width:100px'>新增属性</el-button>
 
     <el-table stripe border fit
       :data='attrList'
       tooltip-effect='dark'
-      v-loading="attrListLoading"
-      height="550"
+      v-loading='attrListLoading'
+      height='550'
       element-loading-text='拼命加载中'
       style='margin-top: 20px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
@@ -36,28 +44,28 @@
       <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click="openAttrDmnDialog(scope.row)" v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
+          <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
           <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
-          <el-button type='text' size='small' @click="editAttr(scope.row)">编辑</el-button>
-          <el-button type='text' size='small' @click="deleteAttr(scope.row)" disabled>删除</el-button>
+          <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
+          <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class="table-pager"
+    <el-pagination class = 'table-pager'
       background
-      :current-page="currentPage"
-      :page-sizes="[10, 20, 50, 100]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-      @size-change="sizeChange"
-      @current-change="currentChange">
+      :current-page = 'currentPage'
+      :page-sizes = '[10, 20, 50, 100]'
+      :page-size = 'pageSize'
+      layout = 'total, sizes, prev, pager, next, jumper'
+      :total = 'total'
+      @size-change = 'sizeChange'
+      @current-change = 'currentChange'>
     </el-pagination>
 
     <el-dialog :visible.sync='attrDialogVisible'
       :modal-append-to-body = 'false'
-      width='50%'>
-      <div slot="title">
+      width='35%'>
+      <div slot='title'>
         <span>{{attrForm.uuid?'修改设备属性':'新增设备属性'}}</span>
     </div>
       <div class = 'div-pane-height'>
@@ -102,9 +110,9 @@
               </el-form-item>
             </el-col>
           </el-row>
-          <div style="text-align: center">
-              <el-button size='mini' type='primary' @click='save' style="width:100px" disabled>保存</el-button>
-              <el-button size='mini' type='primary' @click='clear' style="width:100px">清空</el-button>
+          <div style='text-align: center'>
+              <el-button size='mini' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
+              <el-button size='mini' type='primary' @click='clear' style='width:100px'>清空</el-button>
           </div>
         </el-form>
       </div>

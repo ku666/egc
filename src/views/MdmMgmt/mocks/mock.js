@@ -22,7 +22,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
     'code': '00000',
     'message': 'success!',
     'data': {
-      'total': 19,
+      'total': 10,
       'currentPage': 1,
       'pageSize': 10,
       'result': [
@@ -286,5 +286,70 @@ Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
       'createTime': '2017-11-1 11:11:11',
       'updateTime': '2017-11-1 11:11:11'
     }]
+  }
+})
+
+const PROVIDER_PATH = '/egc-mdmcomponent/provider/api'
+
+Mock.mock(PROVIDER_PATH + '/getProviders', function () {
+  console.log('mock getProviders')
+  return {
+    'message': 'success!',
+    'code': '00000',
+    'data':
+    {
+      'currentPage': '1',
+      'pageSize': '10',
+      'totalCount': '3',
+      'result': [{
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+        'provider_code': '1002',
+        'provider_name': '捷顺',
+        'category': '1',
+        'contact': '010-6666666',
+        'provider_desc': '视频设备供应商',
+        'create_user': 'admin01',
+        'update_user': 'admin01',
+        'create_time': '2017-11-1 11:11:11',
+        'update_time': '2017-11-1 11:11:11'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+        'provider_code': '1002',
+        'provider_name': '捷顺',
+        'category': '1',
+        'contact': '010-6666666',
+        'provider_desc': '视频设备供应商',
+        'create_user': 'admin01',
+        'update_user': 'admin01',
+        'create_time': '2017-11-1 11:11:11',
+        'update_time': '2017-11-1 11:11:11'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
+        'provider_code': '1002',
+        'provider_name': '捷顺',
+        'category': '1',
+        'contact': '010-6666666',
+        'provider_desc': '视频设备供应商',
+        'create_user': 'admin01',
+        'update_user': 'admin01',
+        'create_time': '2017-11-1 11:11:11',
+        'update_time': '2017-11-1 11:11:11'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
+        'provider_code': '1002',
+        'provider_name': '捷顺',
+        'category': '1',
+        'contact': '010-6666666',
+        'provider_desc': '视频设备供应商',
+        'create_user': 'admin01',
+        'update_user': 'admin01',
+        'create_time': '2017-11-1 11:11:11',
+        'update_time': '2017-11-1 11:11:11'
+      }
+      ]
+    }
   }
 })
