@@ -46,7 +46,7 @@
 </template>
 
 <script>
-import {getAttrDomainList} from '@/views/MdmMgmt/apis/index'
+import {getDeviceAttrDomains} from '@/views/MdmMgmt/apis/index'
 
 export default {
   props: {
@@ -103,7 +103,7 @@ export default {
     getDomains: function () {
       let that = this
       that.domainListLoading = true
-      getAttrDomainList({'attrUuid': this.categoryAttr.attrUuid})
+      getDeviceAttrDomains({'attrUuid': this.categoryAttr.attrUuid})
         .then(
           function (result) {
             that.domainList = result.data

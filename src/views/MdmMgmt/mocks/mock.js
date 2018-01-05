@@ -191,7 +191,7 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
     'data': {
       'currentPage': 1,
       'pageSize': 10,
-      'totalCount': 30,
+      'totalCount': 3,
       'result': [ {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
         'attrDesc': '用户呼叫号码',
