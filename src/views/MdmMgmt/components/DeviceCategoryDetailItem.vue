@@ -54,7 +54,7 @@ export default {
     return {
       deviceCategoryDetailVisible: false,
       deviceCategoryDetail: {
-        uuid: null,
+        uuid: '',
         parentUuid: '',
         typeCode: '',
         typeName: '',

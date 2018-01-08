@@ -1,17 +1,9 @@
 <template>
   <div>
-
-    <!--
-    <el-row :gutter='20'>
-        <el-col :span='24' style='text-align:center'>
-          <el-header>设备分类管理</el-header>
-        </el-col>
-    </el-row>
-    -->
-
+    <device-category-detail-item ref = 'openDeviceDetailDialog'></device-category-detail-item>
+    <device-attr-list-item ref = 'openDeviceAttrDialog'></device-attr-list-item>
     <div>
       <el-button @click='openDeviceDetailDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
-      <device-category-detail ref='openDeviceDetailDialog'></device-category-detail>
     </div>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm'>
@@ -35,7 +27,7 @@
       <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
       <el-button @click='search' type='primary' class='btn-search'>查询</el-button>
     </div>
-    <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
+
     <el-table stripe border fit
       :data='tableData'
       tooltip-effect='dark'
@@ -80,8 +72,8 @@
 
 <script>
 // 导入新增/修改设备分类弹框页面
-import DeviceCategoryDetail from './DeviceCategoryDetail'
-import DeviceAttrMapping from './DeviceAttrMapping'
+import DeviceCategoryDetailItem from './DeviceCategoryDetailItem'
+import DeviceAttrListItem from './DeviceAttrListItem'
 
 // 导入各种get，pos等请求方法
 import {
@@ -112,9 +104,9 @@ export default {
   },
   components: {
     // 新增/修改设备分类弹框页面
-    DeviceCategoryDetail,
+    DeviceCategoryDetailItem,
     // 设备分类的属性弹框页面
-    DeviceAttrMapping
+    DeviceAttrListItem
   },
   mounted () {
     this.search()

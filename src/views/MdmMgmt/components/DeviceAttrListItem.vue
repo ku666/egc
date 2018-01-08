@@ -26,7 +26,7 @@
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
           <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
-          <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
+          <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
           <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
           <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
         </template>
@@ -140,7 +140,7 @@
 </template>
 
 <script>
-import AttrDomain from './AttrDomain'
+import AttrDomainItem from './AttrDomainItem'
 import {getDeviceAttributes} from '@/views/MdmMgmt/apis/index'
 
 export default {
@@ -220,7 +220,7 @@ export default {
     }
   },
   components: {
-    AttrDomain
+    AttrDomainItem
   },
   methods: {
     // 打开设备分类的属性弹窗

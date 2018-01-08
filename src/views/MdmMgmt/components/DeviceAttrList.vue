@@ -45,7 +45,7 @@
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
           <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
-          <attr-domain ref = 'openAttrDomainDialog'></attr-domain>
+          <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
           <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
           <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
         </template>
@@ -122,7 +122,7 @@
 
 <script>
 // 导入设备分类属性的域弹框页面
-import AttrDomain from './AttrDomain'
+import AttrDomainItem from './AttrDomainItem'
 
 // 导入各种get，pos等请求方法
 import {
@@ -180,7 +180,7 @@ export default {
     }
   },
   components: {
-    AttrDomain
+    AttrDomainItem
   },
   mounted () {
     this.search()
