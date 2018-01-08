@@ -1,7 +1,7 @@
 <template>
   <div>
-    <device-category-detail-item ref = 'openDeviceDetailDialog'></device-category-detail-item>
-    <device-attr-list-item ref = 'openDeviceAttrDialog'></device-attr-list-item>
+    <device-category-edit-item ref = 'openDeviceDetailDialog'></device-category-edit-item>
+    <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
     <div>
       <el-button @click='openDeviceDetailDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
     </div>
@@ -72,8 +72,8 @@
 
 <script>
 // 导入新增/修改设备分类弹框页面
-import DeviceCategoryDetailItem from './DeviceCategoryDetailItem'
-import DeviceAttrListItem from './DeviceAttrListItem'
+import DeviceCategoryEditItem from './DeviceCategoryEditItem'
+import DeviceAttrEditItem from './DeviceAttrEditItem'
 
 // 导入各种get，pos等请求方法
 import {
@@ -104,9 +104,9 @@ export default {
   },
   components: {
     // 新增/修改设备分类弹框页面
-    DeviceCategoryDetailItem,
+    DeviceCategoryEditItem,
     // 设备分类的属性弹框页面
-    DeviceAttrListItem
+    DeviceAttrEditItem
   },
   mounted () {
     this.search()
