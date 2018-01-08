@@ -3,41 +3,65 @@
       :visible.sync='deviceCategoryDetailVisible'
       :modal-append-to-body = 'false'
       :before-close='closeDialog'
-      width='30%'>
+      width = '960'>
       <div slot='title'>
-        <span class='pull-left pl10'>{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
+        <span class = 'head-text'>{{deviceCategoryDetail.uuid?'修改设备类别':'新增设备类别'}}</span>
       </div>
       <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='100px' :rules='rules'>
-        <el-form-item label='父类别' prop='parentUuid' >
-            <el-input v-model='deviceCategoryDetail.parentUuid' size='small' style='width:200px'></el-input>
-        </el-form-item>
-        <el-form-item label='类别编码' prop='typeCode'>
-            <el-input v-model='deviceCategoryDetail.typeCode' size='small' style='width:200px'></el-input>
-        </el-form-item>
-        <el-form-item label='类别名称' prop='typeName'>
-            <el-input v-model='deviceCategoryDetail.typeName' size='small' style='width:300px'></el-input>
-        </el-form-item>
-        <el-form-item label='类别描述' prop='typeDesc'>
-            <el-input v-model='deviceCategoryDetail.typeDesc' size='small' type='textarea' :rows='4' style='width:300px'></el-input>
-        </el-form-item>
-        <el-form-item label='设备型号' prop='typeModel'>
-            <el-input v-model='deviceCategoryDetail.typeModel' size='small' style='width:200px'></el-input>
-        </el-form-item>
-        <el-form-item label='硬件版本' prop='hardwareVersion'>
-            <el-input v-model='deviceCategoryDetail.hardwareVersion' size='small' style='width:200px'></el-input>
-        </el-form-item>
-        <el-form-item label='软件版本' prop='softwareVersion'>
-            <el-input v-model='deviceCategoryDetail.softwareVersion' size='small' style='width:200px'></el-input>
-        </el-form-item>
-        <el-form-item label='厂商编号' prop='providerCode'>
-            <el-input v-model='deviceCategoryDetail.providerCode' size='small' style='width:200px'></el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span = '12'>
+            <el-form-item label='父类别' prop='parentUuid' >
+              <el-input v-model='deviceCategoryDetail.parentUuid'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span = '12'>
+            <el-form-item label='类别编码' prop='typeCode'>
+              <el-input v-model='deviceCategoryDetail.typeCode'></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span = '12'>
+            <el-form-item label='类别名称' prop='typeName'>
+                <el-input v-model='deviceCategoryDetail.typeName'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span = '12'>
+            <el-form-item label='类别描述' prop='typeDesc'>
+                <el-input v-model='deviceCategoryDetail.typeDesc'></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span = '12'>
+            <el-form-item label='设备型号' prop='typeModel'>
+                <el-input v-model='deviceCategoryDetail.typeModel'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span = '12'>
+            <el-form-item label='硬件版本' prop='hardwareVersion'>
+                <el-input v-model='deviceCategoryDetail.hardwareVersion'></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span = '12'>
+            <el-form-item label='软件版本' prop='softwareVersion'>
+                <el-input v-model='deviceCategoryDetail.softwareVersion'></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span = '12'>
+            <el-form-item label='厂商编号' prop='providerCode'>
+                <el-input v-model='deviceCategoryDetail.providerCode'></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot='footer' style='text-align: center'>
-        <el-button size='small' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
-        <el-button size='small' type='primary' @click='clear' style='width:100px'>清空</el-button>
+        <el-button size='small' type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
+        <el-button size='small' type='primary' @click='save' class = 'btn-save' disabled>保存</el-button>
       </div>
-    </el-dialog>
+  </el-dialog>
 </template>
 
 <<script>
@@ -146,7 +170,32 @@ export default {
 </script>
 
 <style scoped>
-  div .el-button[type='primary'] {
-    width: 100px;
+  .el-input {
+    width: 240px;
+    height: 40px;
+    font-size: 13px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+  }
+
+  .btn-reset {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+    color: #0078F4;
+    background-color: #ffffff;
+  }
+
+  .btn-save {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+  }
+
+  .head-text {
+    font-size: 18px;
+    color: #0078F4;
   }
 </style>

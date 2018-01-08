@@ -3,7 +3,7 @@
     <device-category-edit-item ref = 'deviceCategoryEditDiag'></device-category-edit-item>
     <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
     <div>
-      <el-button @click='openAddDeviceCategoryDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
+      <el-button @click='openAddDeviceCategoryDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备类别</el-button>
     </div>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm'>
