@@ -1,53 +1,47 @@
 <template>
-  <div style='margin-top: 20px;'>
+  <div>
+    <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
+    <div>
+      <el-button @click='addAttr' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增属性</el-button>
+    </div>
 
-    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm'>
-      <el-row>
-        <el-col :span= '8'>
-          <el-form-item label='属性编码'>
-            <el-input size='small'  placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span= '8'>
-          <el-form-item label='属性描述'>
-            <el-input size='small' placeholder='属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
-          </el-form-item>
-        </el-col>
-        <el-col :span= '8'>
-          <el-form-item>
-            <el-button @click='search' size='small' type='primary' style='width:100px'>搜索</el-button>
-          </el-form-item>
-        </el-col>
-      </el-row>
+    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 20px'>
+      <el-form-item label='属性编码'>
+        <el-input placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item label='属性描述'>
+        <el-input placeholder='属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button @click='reset' type='primary' class = 'btn-reset'>清空</el-button>
+        <el-button @click='search' type='primary' class = 'btn-search'>查询</el-button>
+      </el-form-item>
     </el-form>
-
-    <el-button @click='addAttr' size='small' type='primary' style='width:100px'>新增属性</el-button>
 
     <el-table stripe border fit
       :data='attrList'
       tooltip-effect='dark'
       v-loading='attrListLoading'
-      height='550'
+      max-height='560'
       element-loading-text='拼命加载中'
       style='margin-top: 20px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='attrCode' label='属性编码' width='150' sortable></el-table-column>
-      <el-table-column prop='attrDesc' label='属性描述' width='200' sortable show-overflow-tooltip></el-table-column>
-      <el-table-column prop='attrType' label='属性类型' width='200' sortable></el-table-column>
-      <el-table-column prop='attrDataType' label='数据类型' width='150' sortable></el-table-column>
-      <el-table-column prop='unitDesc' label='单位描述' width='150' sortable show-overflow-tooltip></el-table-column>
-      <el-table-column prop='unitCode' label='单位编码' width='150' sortable></el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width='150' sortable></el-table-column>
-      <el-table-column prop='createUser' label='创建人' width='150' sortable></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width='150' sortable></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
+      <el-table-column prop='attrCode' label='属性编码' width='150'></el-table-column>
+      <el-table-column prop='attrDesc' label='属性描述' width='200' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='attrType' label='属性类型' width='200' ></el-table-column>
+      <el-table-column prop='attrDataType' label='数据类型' width='150'></el-table-column>
+      <el-table-column prop='unitDesc' label='单位描述' width='150' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='unitCode' label='单位编码' width='150'></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
+      <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
       <el-table-column label='操作' width='150' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
-          <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-          <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
-          <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
+          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
+          <el-button type='text' icon="el-icon-edit" @click='editAttr(scope.row)'></el-button>
+          <el-button type='text' icon="el-icon-delete" @click='deleteAttr(scope.row)' disabled></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -64,35 +58,35 @@
 
     <el-dialog :visible.sync='attrDialogVisible'
       :modal-append-to-body = 'false'
-      width='35%'>
+      width='960'>
       <div slot='title'>
-        <span>{{attrForm.uuid?'修改设备属性':'新增设备属性'}}</span>
-    </div>
+        <span class = 'head-text'>{{attrForm.uuid?'修改设备属性':'新增设备属性'}}</span>
+      </div>
       <div class = 'div-pane-height'>
         <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
           <el-row>
             <el-col :span = '12'>
               <el-form-item label='属性编码' prop='attrCode' >
-                <el-input v-model='attrForm.attrCode' size='mini' style='width:200px'></el-input>
+                <el-input v-model='attrForm.attrCode'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='属性描述' prop='attrDesc'>
-                <el-input v-model='attrForm.attrDesc' size='mini' style='width:200px'></el-input>
+                <el-input v-model='attrForm.attrDesc'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span = '12'>
               <el-form-item label='属性类型' prop='attrType'>
-                <el-select v-model = 'attrForm.attrType' size='mini' style='width:200px'>
+                <el-select v-model = 'attrForm.attrType'>
                   <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='数据类型' prop='attrDataType'>
-                <el-select v-model = 'attrForm.attrDataType' size='mini' style='width:200px'>
+                <el-select v-model = 'attrForm.attrDataType'>
                   <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
                 </el-select>
               </el-form-item>
@@ -101,18 +95,18 @@
           <el-row>
             <el-col :span = '12'>
                 <el-form-item label='单位描述' prop='unitDesc'>
-                <el-input v-model='attrForm.unitDesc' size='mini' style='width:200px'></el-input>
+                <el-input v-model='attrForm.unitDesc'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='单位编码' prop='unitCode'>
-                  <el-input v-model='attrForm.unitCode' size='mini' style='width:200px'></el-input>
+                  <el-input v-model='attrForm.unitCode'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div style='text-align: center'>
-              <el-button size='mini' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
-              <el-button size='mini' type='primary' @click='clear' style='width:100px'>清空</el-button>
+              <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
+              <el-button type='primary' @click='save' class='btn-search' disabled>保存</el-button>
           </div>
         </el-form>
       </div>
@@ -277,6 +271,15 @@ export default {
       }
       this.clearValidate()
     },
+    reset: function () {
+      this.searchAttrForm = {
+        uuid: '',
+        pageSize: 10,
+        currentPage: 1,
+        attrCode: '',
+        attrDesc: ''
+      }
+    },
     clearValidate: function () {
       this.$nextTick(() => {
         this.$refs['attrForm'].clearValidate()
@@ -287,7 +290,46 @@ export default {
 </script>
 
 <style scoped>
-  row-height {
-    height: 10px;
+  .btn-text {
+    font-size: 18px;
+    color: #0078F4;
+    letter-spacing: 0;
+  }
+
+  .el-input {
+    width: 240px;
+    height: 40px;
+    font-size: 13px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+  }
+
+  .el-select {
+    width: 240px;
+    height: 40px;
+    font-size: 13px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+  }
+
+  .btn-reset {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+    color: #0078F4;
+    background-color: #ffffff;
+  }
+
+  .btn-search {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+  }
+
+  .head-text {
+    font-size: 18px;
+    color: #0078F4;
   }
 </style>
