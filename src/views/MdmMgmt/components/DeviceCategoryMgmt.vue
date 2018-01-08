@@ -1,5 +1,5 @@
 <template>
-  <div style='margin-top: 20px;'>
+  <div>
 
     <!--
     <el-row :gutter='20'>
@@ -9,89 +9,69 @@
     </el-row>
     -->
 
+    <div>
+      <el-button @click='openDeviceDetailDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
+      <device-category-detail ref='openDeviceDetailDialog'></device-category-detail>
+    </div>
+
     <el-form :inline='true' :model='searchForm' ref='searchForm'>
-      <el-row :gutter='20'>
-          <el-col :span='8'>
-            <el-form-item label='类别编码'>
-              <el-input size='small'  placeholder='类别编码' v-model='searchForm.typeCode' @keyup.enter.native = 'search'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span='8'>
-            <el-form-item label='类别名称'>
-              <el-input size='small' placeholder='类别名称' v-model='searchForm.typeName' @keyup.enter.native = 'search'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span='8'>
-            <el-form-item label='类别描述'>
-              <el-input size='small' placeholder='类别描述' v-model='searchForm.typeDesc' @keyup.enter.native = 'search'></el-input>
-            </el-form-item>
-          </el-col>
-      </el-row>
-      <el-row :gutter='20'>
-          <el-col :span='8'>
-            <el-form-item label='设备型号'>
-              <el-input size='small'  placeholder='设备型号' v-model='searchForm.typeModel' @keyup.enter.native = 'search'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span='8'>
-            <el-form-item label='厂商编码'>
-              <el-input size='small' placeholder='厂商编码' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span='8'>
-            <div class='grid-content bg-purple'>
-              <el-button @click='search' size='small' type='primary' style='width:100px'>搜索</el-button>
-            </div>
-          </el-col>
-      </el-row>
+      <el-form-item label='类别编码'>
+        <el-input placeholder='类别编码' v-model='searchForm.typeCode' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item label='类别名称'>
+        <el-input placeholder='类别名称' v-model='searchForm.typeName' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item label='类别描述'>
+        <el-input placeholder='类别描述' v-model='searchForm.typeDesc' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item label='设备型号'>
+        <el-input placeholder='设备型号' v-model='searchForm.typeModel' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
+      <el-form-item label='厂商编码'>
+        <el-input placeholder='厂商编码' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input>
+      </el-form-item>
     </el-form>
-
-    <el-row :gutter='20'>
-        <el-col :span='24'>
-          <div class='grid-content bg-purple'>
-            <el-button @click='openDeviceDetailDialog' size='small' type='primary' style='width:100px'>新增设备分类</el-button>
-            <device-category-detail ref='openDeviceDetailDialog'></device-category-detail>
-          </div>
-        </el-col>
-    </el-row>
-
+    <div align='right' style='margin-top: 10px; padding:0'>
+      <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
+      <el-button @click='search' type='primary' class='btn-search'>查询</el-button>
+    </div>
+    <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
     <el-table stripe border fit
       :data='tableData'
       tooltip-effect='dark'
       v-loading='loading'
-      height='550'
+      max-height='560'
       element-loading-text='拼命加载中'
-      style='margin-top: 20px; width: 100%'>
+      style='margin-top: 30px; width: 100%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='typeCode' label='类别编码' width='150' sortable></el-table-column>
-      <el-table-column prop='typeName' label='类别名称' width='200' sortable></el-table-column>
-      <el-table-column prop='typeDesc' label='类别描述' width='200' sortable show-overflow-tooltip></el-table-column>
-      <el-table-column prop='parentUuid' label='父类别' width='150' sortable></el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' width='150' sortable></el-table-column>
-      <el-table-column prop='hardwareVersion' label='硬件版本' width='150' sortable></el-table-column>
-      <el-table-column prop='softwareVersion' label='软件版本' width='150' sortable></el-table-column>
-      <el-table-column prop='providerCode' label='厂商编码' width='150' sortable></el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width='150' sortable></el-table-column>
-      <el-table-column prop='createUser' label='创建人' width='150' sortable></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width='150' sortable></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='150' sortable></el-table-column>
-      <el-table-column label='操作' width='150' fixed='right'>
+      <el-table-column prop='typeCode' label='类别编码' width='150'></el-table-column>
+      <el-table-column prop='typeName' label='类别名称' width='200'></el-table-column>
+      <el-table-column prop='typeDesc' label='类别描述' width='200' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='parentUuid' label='父类别' width='150'></el-table-column>
+      <el-table-column prop='typeModel' label='设备型号' width='150'></el-table-column>
+      <el-table-column prop='hardwareVersion' label='硬件版本' width='150'></el-table-column>
+      <el-table-column prop='softwareVersion' label='软件版本' width='150'></el-table-column>
+      <el-table-column prop='providerCode' label='厂商编码' width='150'></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
+      <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
+      <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click='openDeviceAttrDialog(scope.row)'>属性</el-button>
-          <device-attr-mapping ref = 'openDeviceAttrDialog'></device-attr-mapping>
-          <el-button type='text' size='small' @click='openDeviceDetailDialog(scope.row)'>编辑</el-button>
-          <el-button type='text' size='small' @click='deleteCategory(scope.row)' disabled>删除</el-button>
+          <el-button type = 'text' @click='openDeviceAttrDialog(scope.row)' icon="el-icon-document"></el-button>
+          <el-button type = 'text' @click='openDeviceDetailDialog(scope.row)' icon="el-icon-edit"></el-button>
+          <el-button type = 'text' @click='deleteCategory(scope.row)' icon="el-icon-delete"></el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-pagination class='table-pager'
       background
-      :current-page='currentPage'
+      :current-page='searchForm.currentPage'
       :page-sizes='[10, 20, 50, 100]'
-      :page-size='pageSize'
+      :page-size='searchForm.pageSize'
       layout='total, sizes, prev, pager, next, jumper'
-      :total='total'
+      :total='searchForm.totalCount'
       @size-change='sizeChange'
       @current-change='currentChange'>
     </el-pagination>
@@ -102,6 +82,7 @@
 // 导入新增/修改设备分类弹框页面
 import DeviceCategoryDetail from './DeviceCategoryDetail'
 import DeviceAttrMapping from './DeviceAttrMapping'
+
 // 导入各种get，pos等请求方法
 import {
   getDeviceCategoryList,
@@ -111,9 +92,6 @@ import {
 export default {
   data () {
     return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 0,
       loading: false,
       uuidshow: false,
       // 检索条件用表单
@@ -121,6 +99,7 @@ export default {
         uuid: null,
         pageSize: 10,
         currentPage: 1,
+        totalCount: 0,
         typeCode: '',
         typeName: '',
         typeDesc: '',
@@ -149,7 +128,7 @@ export default {
           function (result) {
             console.log('get device category data by condition')
             this.tableData = result.data.result
-            this.total = result.data.totalCount
+            this.searchForm.totalCount = result.data.totalCount
             this.loading = false
           }.bind(this)
         )
@@ -162,13 +141,13 @@ export default {
     },
     // 改变分页大小
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      this.searchForm.pageSize = val
+      this.searchForm.currentPage = 1
       this.search()
     },
     // 跳转页面
     currentChange: function (val) {
-      this.currentPage = val
+      this.searchForm.currentPage = val
       this.search()
     },
     // 打开新增/修改设备分类弹框页面
@@ -197,7 +176,7 @@ export default {
             message: '刪除成功!',
             type: 'warning'
           })
-          this.search({})
+          this.search()
         })
       }).catch(() => {
         this.$message({
@@ -205,13 +184,56 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    clear: function () {
+      this.searchForm = {
+        uuid: null,
+        pageSize: 10,
+        currentPage: 1,
+        typeCode: '',
+        typeName: '',
+        typeDesc: '',
+        typeModel: '',
+        providerCode: ''
+      }
     }
   }
 }
 </script>
 
 <style scoped>
-  row-height {
-    height: 10px;
+  .el-input {
+    width: 240px;
+    height: 40px;
+    font-size: 13px;
+    border: 1px solid #DDDDDD;
+    border-radius: 4px;
+  }
+
+  .btn-text {
+    font-size: 18px;
+    color: #0078F4;
+    letter-spacing: 0;
+  }
+
+  .btn-reset {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+    color: #0078F4;
+    background-color: #ffffff;
+  }
+
+  .btn-search {
+    border: 1px solid #0078F4;
+    border-radius: 4px;
+    width: 138px;
+    height: 40px;
+  }
+
+  .el-form {
+    margin-top: 15px;
+    padding: 0
   }
 </style>

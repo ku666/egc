@@ -15,18 +15,18 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/deleteDeviceCategory', function () {
   }
 })
 
-Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () {
-  console.log('mock get device category by condition')
-  return {
-    'status': true,
-    'code': '00000',
-    'message': 'success!',
-    'data': {
-      'total': 10,
-      'currentPage': 1,
-      'pageSize': 10,
-      'result': [
-        {
+Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (options) {
+  let requestbody = JSON.parse(options.body)
+  console.log(requestbody.currentPage)
+  if (requestbody.currentPage === 1) {
+    return {
+      'message': 'code!',
+      'code': '00000',
+      'data': {
+        'currentPage': 1,
+        'pageSize': 10,
+        'totalCount': 11,
+        'result': [{
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
           'typeCode': '3001',
           'typeName': 'camera_video_channel',
@@ -43,7 +43,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
-          'typeCode': '3002',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -58,7 +58,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
-          'typeCode': '3003',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -73,7 +73,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
-          'typeCode': '3004',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -88,7 +88,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx5',
-          'typeCode': '3005',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -103,7 +103,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx6',
-          'typeCode': '3006',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -118,7 +118,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx7',
-          'typeCode': '3007',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -133,7 +133,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx8',
-          'typeCode': '3008',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -148,7 +148,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx9',
-          'typeCode': '3009',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -163,7 +163,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxx10',
-          'typeCode': '3010',
+          'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -175,8 +175,33 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function () 
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
           'updateTime': '2017-11-1 11:11:11'
-        }
-      ]
+        }]
+      }
+    }
+  } else {
+    return {
+      'message': 'code!',
+      'code': '00000',
+      'data': {
+        'currentPage': 2,
+        'pageSize': 10,
+        'totalCount': 11,
+        'result': [{
+          'uuid': 'xxxxxxxxxxxxxxxxxxxxxx11',
+          'typeCode': '3001',
+          'typeName': 'camera_video_channel',
+          'typeDesc': '摄像头通道1',
+          'parentUuid': '1',
+          'typeModel': '2001',
+          'hardwareVersion': '',
+          'softwareVersion': '',
+          'providerCode': '',
+          'createUser': 'admin01',
+          'updateUser': 'admin01',
+          'createTime': '2017-11-1 11:11:11',
+          'updateTime': '2017-11-1 11:11:11'
+        }]
+      }
     }
   }
 })
