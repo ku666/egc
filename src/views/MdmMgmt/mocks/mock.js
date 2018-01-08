@@ -43,7 +43,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
-          'typeCode': '3001',
+          'typeCode': '3002',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -58,7 +58,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
-          'typeCode': '3001',
+          'typeCode': '3003',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -73,7 +73,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
-          'typeCode': '3001',
+          'typeCode': '3004',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -88,7 +88,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx5',
-          'typeCode': '3001',
+          'typeCode': '3005',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -103,7 +103,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx6',
-          'typeCode': '3001',
+          'typeCode': '3006',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -118,7 +118,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx7',
-          'typeCode': '3001',
+          'typeCode': '3007',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -133,7 +133,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx8',
-          'typeCode': '3001',
+          'typeCode': '3008',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -148,7 +148,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx9',
-          'typeCode': '3001',
+          'typeCode': '3009',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -163,7 +163,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxx10',
-          'typeCode': '3001',
+          'typeCode': '3010',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',
@@ -188,7 +188,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         'totalCount': 11,
         'result': [{
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxx11',
-          'typeCode': '3001',
+          'typeCode': '3011',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
           'parentUuid': '1',

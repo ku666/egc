@@ -1,8 +1,8 @@
 <template>
   <el-dialog
       :visible.sync='deviceCategoryDetailVisible'
-      @open='clear'
       :modal-append-to-body = 'false'
+      :before-close='closeDialog'
       width='30%'>
       <div slot='title'>
         <span class='pull-left pl10'>{{deviceCategoryDetail.uuid?'修改设备分类':'新增设备分类'}}</span>
@@ -76,7 +76,7 @@ export default {
     }
   },
   methods: {
-    openDeviceDetailDialog: function (categoryDetail = {}) {
+    editDeviceCategoryDialog: function (categoryDetail = {}) {
       this.deviceCategoryDetail.uuid = categoryDetail.uuid
       this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
       this.deviceCategoryDetail.typeCode = categoryDetail.typeCode
@@ -88,10 +88,16 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
     },
-    clearValidate: function () {
-      this.$nextTick(() => {
-        this.$refs['deviceCategoryDetail'].clearValidate()
-      })
+    addDeviceCategoryDialog: function () {
+      this.deviceCategoryDetail.parentUuid = ''
+      this.deviceCategoryDetail.typeCode = ''
+      this.deviceCategoryDetail.typeName = ''
+      this.deviceCategoryDetail.typeDesc = ''
+      this.deviceCategoryDetail.typeModel = ''
+      this.deviceCategoryDetail.hardwareVersion = ''
+      this.deviceCategoryDetail.softwareVersion = ''
+      this.deviceCategoryDetail.providerCode = ''
+      this.deviceCategoryDetailVisible = true
     },
     save: function () {
       this.$refs['deviceCategoryDetail'].validate((valid) => {
@@ -115,6 +121,11 @@ export default {
         }
       })
     },
+    clearValidate: function () {
+      this.$nextTick(() => {
+        this.$refs['deviceCategoryDetail'].clearValidate()
+      })
+    },
     clear: function () {
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''
@@ -124,6 +135,10 @@ export default {
       this.deviceCategoryDetail.hardwareVersion = ''
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
+      this.clearValidate()
+    },
+    closeDialog: function (done) {
+      done()
       this.clearValidate()
     }
   }

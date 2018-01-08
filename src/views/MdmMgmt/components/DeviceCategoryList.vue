@@ -1,9 +1,9 @@
 <template>
   <div>
-    <device-category-edit-item ref = 'openDeviceDetailDialog'></device-category-edit-item>
+    <device-category-edit-item ref = 'deviceCategoryEditDiag'></device-category-edit-item>
     <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
     <div>
-      <el-button @click='openDeviceDetailDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
+      <el-button @click='openAddDeviceCategoryDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备分类</el-button>
     </div>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm'>
@@ -52,7 +52,7 @@
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
           <el-button type = 'text' @click='openDeviceAttrDialog(scope.row)' icon="el-icon-document"></el-button>
-          <el-button type = 'text' @click='openDeviceDetailDialog(scope.row)' icon="el-icon-edit"></el-button>
+          <el-button type = 'text' @click='openEditDeviceCategoryDialog(scope.row)' icon="el-icon-edit"></el-button>
           <el-button type = 'text' @click='deleteCategory(scope.row)' icon="el-icon-delete"></el-button>
         </template>
       </el-table-column>
@@ -142,15 +142,20 @@ export default {
       this.searchForm.currentPage = val
       this.search()
     },
-    // 打开新增/修改设备分类弹框页面
-    openDeviceDetailDialog: function (categoryDetail = {}) {
-      const categoryDetailTmp = Object.assign({}, categoryDetail)
-      this.$refs['openDeviceDetailDialog'].openDeviceDetailDialog(categoryDetailTmp)
+    // 打开修改设备分类弹框页面
+    openEditDeviceCategoryDialog: function (categoryDetail = {}) {
+      // const categoryDetailTmp = Object.assign({}, categoryDetail)
+      this.$refs['deviceCategoryEditDiag'].editDeviceCategoryDialog(categoryDetail)
+    },
+    // 打开新增设备分类弹框页面
+    openAddDeviceCategoryDialog: function () {
+      // const categoryDetailTmp = Object.assign({}, categoryDetail)
+      this.$refs['deviceCategoryEditDiag'].addDeviceCategoryDialog()
     },
     // 打开设备分类的属性弹框页面
     openDeviceAttrDialog: function (categoryDetail = {}) {
-      const categoryDetailTmp = Object.assign({}, categoryDetail)
-      this.$refs['openDeviceAttrDialog'].openDeviceAttrDialog(categoryDetailTmp)
+      // const categoryDetailTmp = Object.assign({}, categoryDetail)
+      this.$refs['openDeviceAttrDialog'].openDeviceAttrDialog(categoryDetail)
     },
     // 删除设备分类
     deleteCategory: function (categoryDetail = {}) {
