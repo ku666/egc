@@ -89,10 +89,7 @@ export default {
         providerCode: ''
       },
       rules: {
-        parentUuid: [
-          { required: true, message: '请输入父类别', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
-        ],
+        parentUuid: [{ required: true, message: '请输入父类别', trigger: 'blur' }],
         typeCode: [{ required: true, message: '请输入类别编码', trigger: 'blur' }],
         typeName: [{ required: true, message: '请输入类别名称', trigger: 'blur' }],
         typeDesc: [{ required: true, message: '请输入类别描述', trigger: 'blur' }]
@@ -130,7 +127,7 @@ export default {
           func = this.deviceCategoryDetail.uuid ? updateDeviceCategory : insertDeviceCategory
           func(Object.assign({}, this.deviceCategoryDetail)).then(res => {
             this.$message({
-              message: '设备分类保存成功!',
+              message: '设备类别保存成功!',
               type: 'success'
             })
             this.deviceCategoryDetailVisible = false
