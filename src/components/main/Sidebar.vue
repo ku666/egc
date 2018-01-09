@@ -17,7 +17,6 @@
                               <el-menu-item :index="item.index" :key="i"><i :class="item.icon"></i>{{ item.title }} </el-menu-item>
                             </template>
                           </template>
-                        </el-menu-item>
                     </el-submenu>
                   </template>
                 </template>
