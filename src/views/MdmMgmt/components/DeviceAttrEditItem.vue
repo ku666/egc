@@ -22,12 +22,12 @@
       <el-table-column prop='attrDataType' label='数据类型' v-if='uuidshow'></el-table-column>
       <el-table-column prop='unitDesc' label='单位描述' v-if='uuidshow'></el-table-column>
       <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
-      <el-table-column label='操作' width='150'>
+      <el-table-column label='操作' width='120'>
         <template slot-scope='scope'>
           <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
           <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
           <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button>
-          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete" disabled></el-button>
+          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,7 +42,7 @@
     </el-pagination>
 
     <el-tabs type='border-card' style='margin-top: 20px; width: 100%' v-model='selectedTab'>
-      <el-tab-pane label='新增/编辑属性' name='tab1'>
+      <el-tab-pane :label='labeldisplayname' name='tab1'>
         <div class = 'div-pane-height'>
           <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
@@ -87,7 +87,7 @@
             </el-row>
             <div style='text-align: center'>
                 <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-                <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
+                <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
             </div>
           </el-form>
         </div>
@@ -112,16 +112,16 @@
             tooltip-effect='dark'
             v-loading='attrListByCdtLoading'
             element-loading-text='拼命加载中'
-            max-height = '220'
+            max-height = '247'
             style='margin-top: 20px; width: 100%'>
             <el-table-column type='index' label='序号' width='50'></el-table-column>
             <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
             <el-table-column prop='attrCode' label='属性编码'></el-table-column>
             <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
             <el-table-column prop='attrType' label='属性类型'></el-table-column>
-            <el-table-column label='操作' width='150'>
+            <el-table-column label='操作' width='120'>
               <template slot-scope='scope'>
-                <el-button type='text' size='mini' @click='addToAttr(scope.row)' disabled>添加</el-button>
+                <el-button type='text' icon='el-icon-circle-plus-outline' @click='addToAttr(scope.row)'></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -154,6 +154,7 @@ export default {
       deviceAttrMappingVisible: false,
       uuidshow: false,
       selectedTab: 'tab1',
+      labeldisplayname: '新增属性',
       // 从属性分类管理页面传递过来的设备分类信息
       deviceCategoryDetail: {
         uuid: '',
@@ -305,6 +306,7 @@ export default {
     },
     editAttr: function (attr = {}) {
       this.selectedTab = 'tab1'
+      this.labeldisplayname = '编辑属性'
       this.attrForm.uuid = attr.uuid
       this.attrForm.attrCode = attr.attrCode
       this.attrForm.attrDesc = attr.attrDesc
@@ -329,6 +331,7 @@ export default {
     },
     clear: function () {
       this.attrForm = {
+        uuid: '',
         attrCode: '',
         attrDesc: '',
         attrType: '',
@@ -336,6 +339,7 @@ export default {
         unitDesc: '',
         unitCode: ''
       }
+      this.labeldisplayname = '新增属性'
       this.clearValidate()
     },
     resetSearch: function () {
