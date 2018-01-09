@@ -25,9 +25,8 @@
       <el-table-column label='操作' width='120'>
         <template slot-scope='scope'>
           <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
-          <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
           <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button>
-          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete"></el-button>
+          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete" disabled></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,7 +39,7 @@
       @size-change='bindingAttrListSizeChange'
       @current-change='bindingAttrListCurrentChange'>
     </el-pagination>
-
+    <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
     <el-tabs type='border-card' style='margin-top: 20px; width: 100%' v-model='selectedTab'>
       <el-tab-pane :label='labeldisplayname' name='tab1'>
         <div class = 'div-pane-height'>
@@ -87,7 +86,7 @@
             </el-row>
             <div style='text-align: center'>
                 <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-                <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
+                <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
             </div>
           </el-form>
         </div>
@@ -121,7 +120,7 @@
             <el-table-column prop='attrType' label='属性类型'></el-table-column>
             <el-table-column label='操作' width='120'>
               <template slot-scope='scope'>
-                <el-button type='text' icon='el-icon-circle-plus-outline' @click='addToAttr(scope.row)'></el-button>
+                <el-button type='text' icon='el-icon-circle-plus-outline' @click='addToAttr(scope.row)' disabled></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -237,6 +236,8 @@ export default {
 
       // 设置关联属性查询用的条件
       this.searchBindingAttrsForm.typeCode = categoryDetail.typeCode
+
+      this.selectedTab = 'tab1'
 
       this.getBindingAttributes()
       this.searchAttrListByCdt()
