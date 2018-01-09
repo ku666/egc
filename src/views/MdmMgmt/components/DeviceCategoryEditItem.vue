@@ -148,6 +148,7 @@ export default {
       })
     },
     clear: function () {
+      this.deviceCategoryDetail.uuid = ''
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''
       this.deviceCategoryDetail.typeName = ''
