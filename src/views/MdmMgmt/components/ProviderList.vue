@@ -56,7 +56,7 @@
       :modal-append-to-body = 'false'
       width='960'>
       <div slot='title' class='head-text'>
-        <span>{{providerForm.uuid?'修改供应商信息':'新增供应商信息'}}</span>
+        <span>{{providerForm.uuid?'修改供应商':'新增供应商'}}</span>
     </div>
       <div>
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
