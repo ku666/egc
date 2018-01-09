@@ -25,7 +25,7 @@
     </el-form>
     <div align='right' style='margin-top: 10px; padding:0'>
       <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
-      <el-button @click='search' type='primary' class='btn-search'>查询</el-button>
+      <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
     </div>
 
     <el-table stripe border fit
@@ -198,39 +198,6 @@ export default {
 }
 </script>
 
-<style scoped>
-  .el-input {
-    width: 240px;
-    height: 40px;
-    font-size: 13px;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-  }
-
-  .btn-text {
-    font-size: 18px;
-    color: #0078F4;
-    letter-spacing: 0;
-  }
-
-  .btn-reset {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-    color: #0078F4;
-    background-color: #ffffff;
-  }
-
-  .btn-search {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-  }
-
-  .el-form {
-    margin-top: 15px;
-    padding: 0
-  }
+<style lang='less' scoped>
+  @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>

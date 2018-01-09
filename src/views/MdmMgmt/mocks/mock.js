@@ -323,9 +323,9 @@ Mock.mock(PROVIDER_PATH + '/getProviders', function () {
     'code': '00000',
     'data':
     {
-      'currentPage': '1',
-      'pageSize': '10',
-      'totalCount': '3',
+      'currentPage': 1,
+      'pageSize': 10,
+      'totalCount': 4,
       'result': [{
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
         'provider_code': '1002',

@@ -14,7 +14,7 @@
       </el-form-item>
       <el-form-item>
         <el-button @click='reset' type='primary' class = 'btn-reset'>清空</el-button>
-        <el-button @click='search' type='primary' class = 'btn-search'>查询</el-button>
+        <el-button @click='search' type='primary' class = 'btn-plain'>查询</el-button>
       </el-form-item>
     </el-form>
 
@@ -106,7 +106,7 @@
           </el-row>
           <div style='text-align: center'>
               <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-              <el-button type='primary' @click='save' class='btn-search' disabled>保存</el-button>
+              <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
           </div>
         </el-form>
       </div>
@@ -289,47 +289,6 @@ export default {
 }
 </script>
 
-<style scoped>
-  .btn-text {
-    font-size: 18px;
-    color: #0078F4;
-    letter-spacing: 0;
-  }
-
-  .el-input {
-    width: 240px;
-    height: 40px;
-    font-size: 13px;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-  }
-
-  .el-select {
-    width: 240px;
-    height: 40px;
-    font-size: 13px;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-  }
-
-  .btn-reset {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-    color: #0078F4;
-    background-color: #ffffff;
-  }
-
-  .btn-search {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-  }
-
-  .head-text {
-    font-size: 18px;
-    color: #0078F4;
-  }
+<style lang='less' scoped>
+  @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>

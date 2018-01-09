@@ -2,19 +2,18 @@
   <el-dialog
       :visible.sync='deviceAttrMappingVisible'
       @open='clear'
-      :modal-append-to-body = 'false'
-      width='50%'>
-    <div slot='title'>
-      <span>设备类别：{{ deviceCategoryDetail.typeName }}</span>
+      :modal-append-to-body = 'false'>
+    <div slot='title' class='head-text'>
+      <span>设备属性</span>
     </div>
+    <span>设备类别：{{ deviceCategoryDetail.typeName }}</span>
     <el-table
       stripe border fit
       :data='bindingAttrList'
       tooltip-effect='dark'
       height = '200'
       v-loading = 'bindingAttrListLoading'
-      element-loading-text='拼命加载中'
-      style='margin-top: 0;width: 100%'>
+      element-loading-text='拼命加载中'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
@@ -25,10 +24,10 @@
       <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' size='small' @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'>属性域</el-button>
+          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
           <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-          <el-button type='text' size='small' @click='editAttr(scope.row)'>编辑</el-button>
-          <el-button type='text' size='small' @click='deleteAttr(scope.row)' disabled>删除</el-button>
+          <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button>
+          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete" disabled></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -42,33 +41,33 @@
       @current-change='bindingAttrListCurrentChange'>
     </el-pagination>
 
-    <el-tabs type='border-card' style='margin-top: 10px; width: 100%'>
+    <el-tabs type='border-card' style='margin-top: 20px; width: 100%'>
       <el-tab-pane label='新增/编辑属性'>
         <div class = 'div-pane-height'>
           <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
               <el-col :span = '12'>
                 <el-form-item label='属性编码' prop='attrCode' >
-                  <el-input v-model='attrForm.attrCode' size='mini' style='width:200px'></el-input>
+                  <el-input v-model='attrForm.attrCode'></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span = '12'>
                 <el-form-item label='属性描述' prop='attrDesc'>
-                  <el-input v-model='attrForm.attrDesc' size='mini' style='width:200px'></el-input>
+                  <el-input v-model='attrForm.attrDesc'></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span = '12'>
                 <el-form-item label='属性类型' prop='attrType'>
-                  <el-select v-model = 'attrForm.attrType' size='mini' style='width:200px'>
+                  <el-select v-model = 'attrForm.attrType'>
                     <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
               <el-col :span = '12'>
                 <el-form-item label='数据类型' prop='attrDataType'>
-                  <el-select v-model = 'attrForm.attrDataType' size='mini' style='width:200px'>
+                  <el-select v-model = 'attrForm.attrDataType'>
                     <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
                   </el-select>
                 </el-form-item>
@@ -77,18 +76,18 @@
             <el-row>
               <el-col :span = '12'>
                  <el-form-item label='单位描述' prop='unitDesc'>
-                  <el-input v-model='attrForm.unitDesc' size='mini' style='width:200px'></el-input>
+                  <el-input v-model='attrForm.unitDesc'></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span = '12'>
                 <el-form-item label='单位编码' prop='unitCode'>
-                    <el-input v-model='attrForm.unitCode' size='mini' style='width:200px'></el-input>
+                    <el-input v-model='attrForm.unitCode'></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <div style='text-align: center'>
-                <el-button size='mini' type='primary' @click='save' style='width:100px' disabled>保存</el-button>
-                <el-button size='mini' type='primary' @click='clear' style='width:100px'>清空</el-button>
+                <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
+                <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
             </div>
           </el-form>
         </div>
@@ -97,14 +96,15 @@
         <div class = 'div-pane-height'>
           <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
             <el-form-item label='属性编码' prop='attrCode'>
-              <el-input v-model='searchAttrListByCdtForm.attrCode' size='mini' style='width:180px'></el-input>
+              <el-input v-model='searchAttrListByCdtForm.attrCode'></el-input>
             </el-form-item>
             <el-form-item label='属性描述' prop='attrDesc'>
-              <el-input v-model='searchAttrListByCdtForm.attrDesc' size='mini' style='width:180px'></el-input>
+              <el-input v-model='searchAttrListByCdtForm.attrDesc'></el-input>
             </el-form-item>
-            <el-form-item>
-              <el-button size='mini' type='primary' @click='searchAttrListByCdt' style='width:100px'>搜索</el-button>
-            </el-form-item>
+
+              <el-button type='primary' @click='resetSearch' class='btn-reset'>清空</el-button>
+              <el-button type='primary' @click='searchAttrListByCdt' class='btn-plain'>查询</el-button>
+
           </el-form>
           <el-table stripe border fit
             :data='attrListByCdt'
@@ -342,8 +342,6 @@ export default {
 }
 </script>
 
-<style scoped>
-  .div-pane-height {
-    height: 300px;
-  }
+<style lang='less' scoped>
+  @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>

@@ -58,8 +58,8 @@
         </el-row>
       </el-form>
       <div slot='footer' style='text-align: center'>
-        <el-button size='small' type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
-        <el-button size='small' type='primary' @click='save' class = 'btn-save' disabled>保存</el-button>
+        <el-button type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
+        <el-button type='primary' @click='save' class = 'btn-plain' disabled>保存</el-button>
       </div>
   </el-dialog>
 </template>
@@ -166,33 +166,6 @@ export default {
 }
 </script>
 
-<style scoped>
-  .el-input {
-    width: 240px;
-    height: 40px;
-    font-size: 13px;
-    border: 1px solid #DDDDDD;
-    border-radius: 4px;
-  }
-
-  .btn-reset {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-    color: #0078F4;
-    background-color: #ffffff;
-  }
-
-  .btn-save {
-    border: 1px solid #0078F4;
-    border-radius: 4px;
-    width: 138px;
-    height: 40px;
-  }
-
-  .head-text {
-    font-size: 18px;
-    color: #0078F4;
-  }
+<style lang='less' scoped>
+  @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>
