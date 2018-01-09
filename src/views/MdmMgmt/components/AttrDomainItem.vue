@@ -54,9 +54,7 @@
 import {getDeviceAttrDomains} from '@/views/MdmMgmt/apis/index'
 
 export default {
-  props: {
-
-  },
+  props: ['deviceAttrMappingVisible'],
   data () {
     return {
       attrDomainVisible: false,

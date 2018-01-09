@@ -62,7 +62,7 @@
       <div slot='title'>
         <span class = 'head-text'>{{attrForm.uuid?'修改设备属性':'新增设备属性'}}</span>
       </div>
-      <div class = 'div-pane-height'>
+      <div>
         <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
           <el-row>
             <el-col :span = '12'>

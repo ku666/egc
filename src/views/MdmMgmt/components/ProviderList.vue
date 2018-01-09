@@ -58,7 +58,7 @@
       <div slot='title' class='head-text'>
         <span>{{providerForm.uuid?'修改供应商信息':'新增供应商信息'}}</span>
     </div>
-      <div class = 'div-pane-height'>
+      <div>
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
             <el-col :span='12'>

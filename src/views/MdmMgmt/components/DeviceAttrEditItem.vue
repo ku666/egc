@@ -11,7 +11,7 @@
       stripe border fit
       :data='bindingAttrList'
       tooltip-effect='dark'
-      height = '200'
+      max-height = '247'
       v-loading = 'bindingAttrListLoading'
       element-loading-text='拼命加载中'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
@@ -31,7 +31,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination class='table-pager'
+    <el-pagination
       :current-page='searchBindingAttrsForm.currentPage'
       :page-sizes='[10, 20, 50, 100]'
       :page-size='searchBindingAttrsForm.pageSize'
@@ -41,8 +41,8 @@
       @current-change='bindingAttrListCurrentChange'>
     </el-pagination>
 
-    <el-tabs type='border-card' style='margin-top: 20px; width: 100%'>
-      <el-tab-pane label='新增/编辑属性'>
+    <el-tabs type='border-card' style='margin-top: 20px; width: 100%' v-model='selectedTab'>
+      <el-tab-pane label='新增/编辑属性' name='tab1'>
         <div class = 'div-pane-height'>
           <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
             <el-row>
@@ -92,7 +92,7 @@
           </el-form>
         </div>
       </el-tab-pane>
-      <el-tab-pane label='选择添加已有属性'>
+      <el-tab-pane label='选择添加已有属性' name='tab2'>
         <div class = 'div-pane-height'>
           <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
             <el-form-item label='属性编码' prop='attrCode'>
@@ -101,17 +101,18 @@
             <el-form-item label='属性描述' prop='attrDesc'>
               <el-input v-model='searchAttrListByCdtForm.attrDesc'></el-input>
             </el-form-item>
-
+            <el-form-item>
               <el-button type='primary' @click='resetSearch' class='btn-reset'>清空</el-button>
               <el-button type='primary' @click='searchAttrListByCdt' class='btn-plain'>查询</el-button>
-
+            </el-form-item>
           </el-form>
+
           <el-table stripe border fit
             :data='attrListByCdt'
             tooltip-effect='dark'
             v-loading='attrListByCdtLoading'
             element-loading-text='拼命加载中'
-            height = '200'
+            max-height = '220'
             style='margin-top: 20px; width: 100%'>
             <el-table-column type='index' label='序号' width='50'></el-table-column>
             <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
@@ -133,6 +134,7 @@
             @size-change='sizeChange'
             @current-change='currentChange'>
           </el-pagination>
+
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -151,6 +153,7 @@ export default {
     return {
       deviceAttrMappingVisible: false,
       uuidshow: false,
+      selectedTab: 'tab1',
       // 从属性分类管理页面传递过来的设备分类信息
       deviceCategoryDetail: {
         uuid: '',
@@ -215,7 +218,7 @@ export default {
         attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }]
       },
       rules: {
-        attrDesc: [{ required: true, message: '请输入属性描述', trigger: 'blur' }]
+
       }
     }
   },
@@ -301,6 +304,7 @@ export default {
       this.searchAttrListByCdt()
     },
     editAttr: function (attr = {}) {
+      this.selectedTab = 'tab1'
       this.attrForm.uuid = attr.uuid
       this.attrForm.attrCode = attr.attrCode
       this.attrForm.attrDesc = attr.attrDesc
@@ -333,6 +337,16 @@ export default {
         unitCode: ''
       }
       this.clearValidate()
+    },
+    resetSearch: function () {
+      this.searchAttrListByCdtForm = {
+        attrCode: '',
+        attrDesc: '',
+        typeCode: '',
+        pageSize: 10,
+        currentPage: 1,
+        totalCount: 0
+      }
     },
     openAttrDmnDialog: function (attr = {}) {
       const attrTmp = Object.assign({}, attr)

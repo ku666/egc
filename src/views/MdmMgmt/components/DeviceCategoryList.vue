@@ -23,7 +23,7 @@
         <el-input placeholder='厂商编码' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
     </el-form>
-    <div align='right' style='margin-top: 10px; padding:0'>
+    <div align='right'>
       <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
       <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
     </div>
