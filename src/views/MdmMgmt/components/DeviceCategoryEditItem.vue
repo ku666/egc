@@ -11,7 +11,11 @@
         <el-row>
           <el-col :span = '12'>
             <el-form-item label='父类别' prop='parentUuid' >
-              <el-input v-model='deviceCategoryDetail.parentUuid'></el-input>
+              <!-- <el-input v-model='deviceCategoryDetail.parentUuid'></el-input> -->
+              <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid'>
+                  <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeDesc' :value='parent.uuid'>
+                  </el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span = '12'>
@@ -51,8 +55,12 @@
             </el-form-item>
           </el-col>
           <el-col :span = '12'>
-            <el-form-item label='厂商编号' prop='providerCode'>
-                <el-input v-model='deviceCategoryDetail.providerCode'></el-input>
+            <el-form-item label='厂商' prop='providerCode'>
+                <!-- <el-input v-model='deviceCategoryDetail.providerCode'></el-input> -->
+                <el-select clearable filterable v-model='deviceCategoryDetail.providerCode'>
+                  <el-option v-for='provider in providers' :key='provider.provider_code' :label='provider.provider_name' :value='provider.provider_code'>
+                  </el-option>
+                </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -65,18 +73,26 @@
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories} from '@/views/MdmMgmt/apis/index'
 
 export default {
   props: {
     search: {
       type: Function,
       default: function () { }
+    },
+    providers: {
+      type: Array,
+      default: []
     }
+  },
+  mounted () {
+    this.getParents()
   },
   data () {
     return {
       deviceCategoryDetailVisible: false,
+      parents: [],
       deviceCategoryDetail: {
         uuid: '',
         parentUuid: '',
@@ -108,6 +124,19 @@ export default {
       this.deviceCategoryDetail.softwareVersion = categoryDetail.softwareVersion
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
+    },
+    getParents: function () {
+      getDeviceCategories()
+      .then(
+        function (result) {
+          this.parents = result.data
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
     },
     addDeviceCategoryDialog: function () {
       this.deviceCategoryDetail.parentUuid = ''

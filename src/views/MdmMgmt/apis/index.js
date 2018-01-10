@@ -28,6 +28,12 @@ export const getDeviceCategoryList = (data) => {
   ).then(res => res.data)
 }
 
+// 5. 查询设备分类部分信息的接口
+export const getDeviceCategories = (data) => {
+  return Axios.post(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', data
+  ).then(res => res.data)
+}
+
 // 设备属性管理接口
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 const DEVICE_ATTRIBUTE_PATH = '/egc-mdmcomponent/deviceAttribute/api'
@@ -89,7 +95,7 @@ export const getDeviceAttrDomains = (data) => {
 const PROVIDER_PATH = '/egc-mdmcomponent/provider/api'
 // 1. 新增供应商信息的接口
 export const insertProvider = (data) => {
-  return Axios.post(PROVIDER_PATH + '/getDeviceAttrDomains', data
+  return Axios.post(PROVIDER_PATH + '/insertProvider', data
   ).then(res => res.data)
 }
 
@@ -109,6 +115,11 @@ export const deleteProvider = (data) => {
 export const getProviders = (data) => {
   return Axios.post(PROVIDER_PATH + '/getProviders', data
   ).then(res => res.data)
+}
+
+// 5. 获取所有的供应商信息
+export const getAllProviders = () => {
+  return Axios.get(PROVIDER_PATH + '/getAllEnableProviders').then(res => res.data)
 }
 
 // 设备分类属性映射管理

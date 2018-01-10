@@ -29,7 +29,8 @@
       <el-table-column prop='provider_name' label='公司名' width='200' show-overflow-tooltip></el-table-column>
       <el-table-column prop='contact' label='联系方式' width='200'></el-table-column>
       <el-table-column prop='provider_desc' label='供应商描述' width='150'></el-table-column>
-      <el-table-column prop='category' label='供应商类别' width='150' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='categoryName' label='供应商类别' width='200'></el-table-column>
       <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
@@ -64,7 +65,7 @@
             <el-col :span='12'>
               <el-form-item label='供应商类别' prop='category' >
                 <el-select v-model = 'providerForm.category'>
-                  <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.value'></el-option>
+                  <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -140,8 +141,8 @@ export default {
       },
       // 供应商类型下拉列表
       providerTypes: [
-        {key: '1', value: '软件'},
-        {key: '2', value: '硬件'},
+        {key: '1', value: '硬件供应商'},
+        {key: '2', value: '软件供应商'},
         {key: '3', value: '其他'}
       ],
       providerFormRules: {

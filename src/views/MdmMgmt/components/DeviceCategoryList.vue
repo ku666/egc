@@ -1,12 +1,12 @@
 <template>
   <div>
-    <device-category-edit-item ref = 'deviceCategoryEditDiag'></device-category-edit-item>
+    <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers'></device-category-edit-item>
     <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
     <div>
       <el-button @click='openAddDeviceCategoryDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备类别</el-button>
     </div>
 
-    <el-form :inline='true' :model='searchForm' ref='searchForm'>
+    <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px">
       <el-form-item label='类别编码'>
         <el-input placeholder='类别编码' v-model='searchForm.typeCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
@@ -19,8 +19,12 @@
       <el-form-item label='设备型号'>
         <el-input placeholder='设备型号' v-model='searchForm.typeModel' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
-      <el-form-item label='厂商编码'>
-        <el-input placeholder='厂商编码' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input>
+      <el-form-item label='厂商'>
+        <!-- <el-input placeholder='厂商' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input> -->
+        <el-select clearable filterable v-model='searchForm.providerCode'>
+          <el-option v-for='provider in providers' :key='provider.provider_code' :label='provider.provider_name' :value='provider.provider_code'>
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div align='right'>
@@ -40,11 +44,13 @@
       <el-table-column prop='typeCode' label='类别编码' width='150'></el-table-column>
       <el-table-column prop='typeName' label='类别名称' width='200'></el-table-column>
       <el-table-column prop='typeDesc' label='类别描述' width='200' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='parentUuid' label='父类别' width='150'></el-table-column>
+      <el-table-column prop='parentUuid' label='父类别' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='parentTypeDesc' label='父类别' width='150'></el-table-column>
       <el-table-column prop='typeModel' label='设备型号' width='150'></el-table-column>
       <el-table-column prop='hardwareVersion' label='硬件版本' width='150'></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' width='150'></el-table-column>
-      <el-table-column prop='providerCode' label='厂商编码' width='150'></el-table-column>
+      <el-table-column prop='providerCode' label='厂商编码' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='providerName' label='厂商' width='150'></el-table-column>
       <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
@@ -78,7 +84,8 @@ import DeviceAttrEditItem from './DeviceAttrEditItem'
 // 导入各种get，pos等请求方法
 import {
   getDeviceCategoryList,
-  deleteDeviceCategory
+  deleteDeviceCategory,
+  getAllProviders
 } from '@/views/MdmMgmt/apis/index'
 
 export default {
@@ -99,7 +106,8 @@ export default {
         providerCode: ''
       },
       // 检索返回数据
-      tableData: []
+      tableData: [],
+      providers: []
     }
   },
   components: {
@@ -110,9 +118,23 @@ export default {
   },
   mounted () {
     this.search()
+    this.getProviders()
   },
   methods: {
     // 根据条件查询设备分类数据到列表中
+    getProviders: function () {
+      getAllProviders()
+      .then(
+        function (result) {
+          this.providers = result.data
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+    },
     search () {
       this.loading = true
       getDeviceCategoryList(this.searchForm)

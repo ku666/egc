@@ -31,11 +31,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3001',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -46,11 +48,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3002',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -61,11 +65,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3003',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -76,11 +82,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3004',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -91,11 +99,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3005',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -106,11 +116,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3006',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -121,11 +133,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3007',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -136,11 +150,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3008',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -151,11 +167,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3009',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -166,11 +184,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3010',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -191,11 +211,13 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'typeCode': '3011',
           'typeName': 'camera_video_channel',
           'typeDesc': '摄像头通道1',
-          'parentUuid': '1',
+          'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+          'parentTypeDesc': '父类别1',
           'typeModel': '2001',
           'hardwareVersion': '',
           'softwareVersion': '',
-          'providerCode': '',
+          'providerCode': '1003',
+          'providerName': '立林',
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
@@ -203,6 +225,75 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
         }]
       }
     }
+  }
+})
+
+Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', function (options) {
+  return {
+    'message': 'code!',
+    'code': '00000',
+    'data': [
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+        'typeCode': '3001',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别1'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+        'typeCode': '3002',
+        'typeName': 'camera_video_channe2',
+        'typeDesc': '父类别2'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
+        'typeCode': '3003',
+        'typeName': 'camera_video_channe3',
+        'typeDesc': '父类别3'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
+        'typeCode': '3004',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别4'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx5',
+        'typeCode': '3005',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别5'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx6',
+        'typeCode': '3006',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别6'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx7',
+        'typeCode': '3007',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别7'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx8',
+        'typeCode': '3008',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别8'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx9',
+        'typeCode': '3009',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别9'
+      },
+      {
+        'uuid': 'xxxxxxxxxxxxxxxxxxxxxx10',
+        'typeCode': '3010',
+        'typeName': 'camera_video_channel',
+        'typeDesc': '父类别10'
+      }
+    ]
   }
 })
 
@@ -316,21 +407,76 @@ Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
 
 const PROVIDER_PATH = '/egc-mdmcomponent/provider/api'
 
-Mock.mock(PROVIDER_PATH + '/getProviders', function () {
-  console.log('mock getProviders')
+Mock.mock(PROVIDER_PATH + '/getAllEnableProviders', function () {
+  console.log('mock getAllEnableProviders')
   return {
     'message': 'success!',
     'code': '00000',
-    'data':
+    'data': [{
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+      'provider_code': '1001',
+      'provider_name': '捷顺',
+      'category': '1',
+      'contact': '010-6666666',
+      'provider_desc': '视频设备供应商',
+      'create_user': 'admin01',
+      'update_user': 'admin01',
+      'create_time': '2017-11-1 11:11:11',
+      'update_time': '2017-11-1 11:11:11'
+    },
     {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+      'provider_code': '1002',
+      'provider_name': '海康',
+      'category': '1',
+      'contact': '010-6666666',
+      'provider_desc': '视频设备供应商',
+      'create_user': 'admin01',
+      'update_user': 'admin01',
+      'create_time': '2017-11-1 11:11:11',
+      'update_time': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
+      'provider_code': '1003',
+      'provider_name': '立林',
+      'category': '1',
+      'contact': '010-6666666',
+      'provider_desc': '视频设备供应商',
+      'create_user': 'admin01',
+      'update_user': 'admin01',
+      'create_time': '2017-11-1 11:11:11',
+      'update_time': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
+      'provider_code': '1004',
+      'provider_name': '大华',
+      'category': '1',
+      'contact': '010-6666666',
+      'provider_desc': '视频设备供应商',
+      'create_user': 'admin01',
+      'update_user': 'admin01',
+      'create_time': '2017-11-1 11:11:11',
+      'update_time': '2017-11-1 11:11:11'
+    }]
+  }
+})
+
+Mock.mock(PROVIDER_PATH + '/getProviders', function () {
+  return {
+    'message': 'success!',
+    'code': '00000',
+    'data': {
       'currentPage': 1,
       'pageSize': 10,
-      'totalCount': 4,
-      'result': [{
+      'totalCount': 3,
+      'result': [ {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
-        'provider_code': '1002',
+        'provider_code': '1001',
         'provider_name': '捷顺',
         'category': '1',
+        'categoryName': '硬件供应商',
         'contact': '010-6666666',
         'provider_desc': '视频设备供应商',
         'create_user': 'admin01',
@@ -341,8 +487,9 @@ Mock.mock(PROVIDER_PATH + '/getProviders', function () {
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
         'provider_code': '1002',
-        'provider_name': '捷顺',
+        'provider_name': '海康',
         'category': '1',
+        'categoryName': '硬件供应商',
         'contact': '010-6666666',
         'provider_desc': '视频设备供应商',
         'create_user': 'admin01',
@@ -352,9 +499,10 @@ Mock.mock(PROVIDER_PATH + '/getProviders', function () {
       },
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
-        'provider_code': '1002',
-        'provider_name': '捷顺',
+        'provider_code': '1003',
+        'provider_name': '立林',
         'category': '1',
+        'categoryName': '硬件供应商',
         'contact': '010-6666666',
         'provider_desc': '视频设备供应商',
         'create_user': 'admin01',
@@ -364,17 +512,17 @@ Mock.mock(PROVIDER_PATH + '/getProviders', function () {
       },
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
-        'provider_code': '1002',
-        'provider_name': '捷顺',
+        'provider_code': '1004',
+        'provider_name': '大华',
         'category': '1',
+        'categoryName': '硬件供应商',
         'contact': '010-6666666',
         'provider_desc': '视频设备供应商',
         'create_user': 'admin01',
         'update_user': 'admin01',
         'create_time': '2017-11-1 11:11:11',
         'update_time': '2017-11-1 11:11:11'
-      }
-      ]
+      }]
     }
   }
 })
