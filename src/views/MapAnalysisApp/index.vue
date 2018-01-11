@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-button type="primary" @click="carStream">车流数据展示</el-button>
-    <car-stream ref="carStream"></car-stream>
     <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
-    <stream-people ref="streamPeople"></stream-people>
     <el-button type="primary">业主画像数据展示</el-button>
     <el-button type="primary" @click="equipmentShow">设备数数据展示</el-button>
+    <car-stream ref="carStream"></car-stream>
+    <stream-people ref="streamPeople"></stream-people>
     <equipment-report ref="equipmentReport"></equipment-report>
     <div id="map">
       <div id="popup">
