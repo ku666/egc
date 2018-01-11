@@ -1,6 +1,6 @@
 <template>
     <div class="header">
-      <span>恒大集团智慧小区平台</span>
+      <span>恒大集团智慧云平台</span>
       <el-button v-for="(item,i) in titleList" :key="i" class="btn" @click="selectTitle ($event) " :name="item.title">{{ item.title }}</el-button>
         <div class="user-info">
             <el-dropdown trigger="click" @command="handleCommand">
@@ -20,33 +20,7 @@ export default {
     return {
       name: '',
       titleList: [
-        {title: '模型管理'},
-        {title: '用户权限管理'},
-        {title: '设备管理'},
-        {title: '事件应用'},
-        // {title: '日志管理'},
-        // {title: '权限管理'}
-        // {title: '物联网总线管理'},
-        // {title: '可视对讲应用'},
-        {title: '地图应用'},
-        // {title: '地图服务'},
-        // {title: '主数据管理应用'},
-        {title: '主数据管理'},
-        // {title: '卡片管理'},
-        // {title: '小区运营'},
-        // {title: '小区服务应用'}
-        // {title: '生活服务应用'},
-        {title: '个性化广播'},
-        {title: '访客管理'},
-        {title: '示例'}
-        // {title: '梯控应用'},
-        // {title: '视频应用'},
-        // {title: '信息展示应用'},
-        // {title: '小区安全应用'},
-        // {title: '巡查应用'},
-        // {title: '门禁应用'},
-        // {title: '停车场应用'}
-
+        {title: '主数据管理'}
       ]
 
     }
