@@ -35,7 +35,7 @@ export const getCourtCarAccessInfo = data => {
     method: 'get',
     url: contextPath + '/getCourtCarAccessInfo',
     params: data
-  })
+  }).then(res => res.data)
 }
 /**
  * 条件查询车辆出入统计信息（分页获取）
@@ -52,7 +52,7 @@ export const getCarAccessPageList = data => {
     method: 'get',
     url: contextPath + '/getCarAccessPageList',
     params: data
-  })
+  }).then(res => res.data)
 }
 /**
  * 条件查询人员出入统计信息

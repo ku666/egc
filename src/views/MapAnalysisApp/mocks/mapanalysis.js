@@ -45,46 +45,16 @@ export default {
   },
   // 条件查询车辆出入统计信息
   getCourtCarAccessInfo: config => {
-    var data = []
-    for (let i = 0; i < 20; i++) {
-      data.push({
-        courtID: '78364532213783',
-        courtName: '恒大山水城',
-        reportType: '1',
-        date: '2018-01-01',
-        carInCount: '1210',
-        carInRegedCount: '800',
-        carOutCount: '1210',
-        carOutRegedCount: '1100'
-      })
-    }
     return {
-      data: data,
+      data: carInfoDatabase(100),
       code: '00000',
       message: 'success'
     }
   },
   // 条件查询车辆出入统计信息（分业获取）
   getCarAccessPageList: config => {
-    var data = {
-      total: '100',
-      currentPage: '3',
-      pageData: []
-    }
-    for (let i = 0; i < 10; i++) {
-      data.pageData.push({
-        courtID: '785345387345345',
-        courtName: '恒大山水城',
-        reportType: '1',
-        date: '2018-01-01',
-        carInCount: '1210',
-        carInRegedCount: '800',
-        carOutCount: '1100',
-        carOutRegedCount: '1100'
-      })
-    }
     return {
-      data: data,
+      data: carInfoDatabase(10),
       code: '00000',
       message: 'success'
     }
@@ -176,4 +146,28 @@ export default {
       message: 'success'
     }
   }
+}
+function carInfoDatabase (num) {
+  var database = []
+  for (var i = 0; i < num; i++) {
+    database.push({
+      courtID: '785345387345345',
+      courtName: '恒大山水城',
+      reportType: parseInt(Math.random() * 3) + 1 + '',
+      date: createDate(),
+      carInCourt: parseInt(Math.random() * 1000) + 1000 + '',
+      carInRegedCourt: parseInt(Math.random() * 1000) + 1000 + '',
+      carOutCourt: parseInt(Math.random() * 1000) + 1000 + '',
+      carOutRegedCourt: parseInt(Math.random() * 1000) + 1000 + ''
+    })
+  }
+  return database
+}
+function createDate () {
+  var year = 2000 + parseInt(Math.random() * 12)
+  var month = parseInt(Math.random() * 12) + 1
+  month = month > 10 ? month : 0 + month
+  var day = parseInt(Math.random() * 30) + 1
+  day = day > 10 ? day : 0 + day
+  return year + '-' + month + '-' + day
 }

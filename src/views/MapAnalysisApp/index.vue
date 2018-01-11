@@ -1,6 +1,7 @@
 <template>
   <div>
-    <el-button type="primary">车流数据展示</el-button>
+    <el-button type="primary" @click="carStream">车流数据展示</el-button>
+    <car-stream ref="carStream"></car-stream>
     <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
     <stream-people ref="streamPeople"></stream-people>
     <el-button type="primary">业主画像数据展示</el-button>
@@ -20,6 +21,7 @@ import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import hdmap from 'hdmap'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
+import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 export default {
   data () {
     return {
@@ -73,7 +75,8 @@ export default {
   },
   components: {
     StreamPeople,
-    EquipmentReport
+    EquipmentReport,
+    CarStream
   },
   methods: {
     handleTabClick: function
@@ -108,6 +111,9 @@ export default {
       getCourtInfo().then(res => {
         this.$refs['streamPeople'].streamPeople(res.data.data)
       })
+    },
+    carStream: function () {
+      this.$refs.carStream.isShowCarInfoMap = true
     }
   }
 }
