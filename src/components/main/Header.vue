@@ -29,7 +29,7 @@ export default {
         // {title: '物联网总线管理'},
         // {title: '可视对讲应用'},
         {title: '地图应用'},
-        // {title: '地图服务'},
+        {title: '地图分析'},
         // {title: '主数据管理应用'},
         {title: '主数据管理'},
         // {title: '卡片管理'},

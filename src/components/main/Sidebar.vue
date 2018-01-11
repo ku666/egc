@@ -64,6 +64,17 @@ export default {
               'title': '供应商管理',
               'subs': null
             }]
+        },
+        {
+          'icon': 'el-icon-menu',
+          'index': '/mapanalysisapp/mapanalysisappindex',
+          'title': '地图分析',
+          'subs': [{
+            'icon': null,
+            'index': '/mapanalysisapp/index',
+            'title': '地图分析',
+            'subs': null
+          }]
         }
       ]
     }

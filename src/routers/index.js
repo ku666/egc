@@ -8,31 +8,37 @@ import demorouters from '@/views/demo/routers/index'
 // 引入用户管理模块路由数据
 import userMgmtrouters from '@/views/UserMgmt/login/routers/index'
 import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
+import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
 export default new Router({
   mode: 'history',
-  routes: [{
-    path: '/',
-    redirect: '/login'
-  },
+  routes: [
+    {
+      path: '/',
+      redirect: '/login'
+    },
 
-  {
-    path: '/login',
-    component: resolve => require(['@/views/UserMgmt/login/Login.vue'], resolve)
-  },
-  {
-    path: '/home',
-    component: resolve => require(['@/components/main/Home.vue'], resolve),
-    children: [
-      {
-        path: '/',
-        component: resolve => require(['@/components/main/Index.vue'], resolve)
-      },
-      ...demorouters,
-      ...userMgmtrouters,
-      ...mdmMgmtrouters
-    ]
-  }]
+    {
+      path: '/login',
+      component: resolve =>
+        require(['@/views/UserMgmt/login/Login.vue'], resolve)
+    },
+    {
+      path: '/home',
+      component: resolve => require(['@/components/main/Home.vue'], resolve),
+      children: [
+        {
+          path: '/',
+          component: resolve =>
+            require(['@/components/main/Index.vue'], resolve)
+        },
+        ...demorouters,
+        ...userMgmtrouters,
+        ...mdmMgmtrouters,
+        ...MapAnalysisApp
+      ]
+    }
+  ]
 })

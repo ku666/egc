@@ -8,6 +8,9 @@ import App from './App'
 import router from './routers'
 import axios from '@/assets/js/AxiosPlugin'
 import store from './stores'
+import echarts from 'echarts'
+import 'hdmap'
+import 'hdmap/dist/hdmap.css'
 
 Vue.prototype.$http = axios
 // 使用mock时，将引入mock，取消注释
@@ -20,6 +23,7 @@ if (/localhost/.test(location.href) || location.search === '?mock') {
 }
 Vue.use(ElementUI)
 // Vue.use(ajax)
+Vue.prototype.$echarts = echarts
 
 Vue.config.productionTip = false
 
