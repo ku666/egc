@@ -109,6 +109,9 @@ export default {
     },
     streamPeople: function () {
       this.$refs['streamPeople'].streamPeople()
+    },
+    carStream: function () {
+      this.$refs.carStream.isShowCarInfoMap = true
     }
   }
 }
