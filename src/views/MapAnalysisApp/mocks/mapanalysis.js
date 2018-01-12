@@ -118,15 +118,15 @@ export default {
       currentPage: '3',
       pageData: []
     }
-    for (let i = 0; i < 20; i++) {
+    for (let i = 0; i < 100; i++) {
       data.pageData.push({
         courtID: '785345387345345',
         courtName: '恒大山水城',
         reportType: '1',
-        date: '2018-01-01',
-        perInCount: '1210',
+        date: i,
+        perInCount: parseInt(Math.random() * 1000) + '',
         perInRegedCount: '800',
-        perOutCount: '1100',
+        perOutCount: parseInt(Math.random() * 1000) + '',
         perOutRegedCount: '1100'
       })
     }

@@ -15,7 +15,7 @@
   </div>
 </template>
 <script>
-import { getCourtList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import hdmap from 'hdmap'
@@ -105,9 +105,7 @@ export default {
       }
     },
     streamPeople: function () {
-      getCourtInfo().then(res => {
-        this.$refs['streamPeople'].streamPeople(res.data.data)
-      })
+      this.$refs['streamPeople'].streamPeople()
     }
   }
 }
