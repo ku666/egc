@@ -12,13 +12,13 @@ const Axios = axios.create({
 
 // Add a response interceptor
 Axios.interceptors.response.use(response => {
-  console.log('success：' + JSON.stringify(response))
+  // console.log('success：' + JSON.stringify(response))
   // if (responseData.code === '1000') {
   //   return responseData
   // }
   return response
 }, function (error) {
-  console.log('error：' + JSON.stringify(error.response.data))
+  // console.log('error：' + JSON.stringify(error.response.data))
   var responseData = error.response.data
   // 这里处理错误的 http code
   Message.Message.error({
