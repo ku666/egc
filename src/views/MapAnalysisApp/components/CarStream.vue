@@ -5,7 +5,7 @@
       <el-form ref="form" :model="form" label-width="80px">
         <el-row :span="24">
           <el-col :span="8">
-            <el-form-item label="查询方式" >
+            <el-form-item label="查询方式">
               <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%">
                 <el-option label="年报表" value="1"></el-option>
                 <el-option label="月报表" value="2"></el-option>
@@ -27,10 +27,10 @@
           </el-col>
           <el-col :span="14">
             <!-- <el-form-item> -->
-              <el-button size="small" type="primary" @click="submitForm('form')">查询</el-button>
-              <el-button size="small" type="primary" @click="resetForm('form')">重置</el-button>
-              <el-button size="small" type="success" @click="goToTable()">表格显示</el-button>
-              <el-button size="small" type="success" @click="goToMap()">图表显示</el-button>
+            <el-button size="small" type="primary" @click="submitForm('form')">查询</el-button>
+            <el-button size="small" type="primary" @click="resetForm('form')">重置</el-button>
+            <el-button size="small" type="success" @click="goToTable()">表格显示</el-button>
+            <el-button size="small" type="success" @click="goToMap()">图表显示</el-button>
             <!-- </el-form-item> -->
           </el-col>
         </el-row>
@@ -113,10 +113,23 @@ export default {
             text: '小区车流量'
           },
           tooltip: {
-            trigger: 'axis'
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
+            }
+          },
+          grid: {
+            left: '2%',
+            right: '2%',
+            bottom: '10%',
+            containLabel: true
           },
           legend: {
-            data: ['进入车辆', '出去车辆']
+            data: ['进入车辆', '出去车辆'],
+            type: 'plain',
+            show: true,
+            right: '14%',
+            top: '1%'
           },
           toolbox: {
             show: true,
@@ -130,7 +143,10 @@ export default {
           xAxis: [
             {
               type: 'category',
-              data: this.mapDataList.date
+              data: this.mapDataList.date,
+              axisTick: {
+                alignWithLabel: true
+              }
             }
           ],
           yAxis: [
@@ -169,6 +185,15 @@ export default {
         }
         myChart.setOption(option)
         console.log(myChart.getOption())
+        var zoomSize = 8
+        var data = this.mapDataList.date
+        myChart.on('click', function (params) {
+          myChart.dispatchAction({
+            type: 'dataZoom',
+            startValue: data[Math.max(params.dataIndex - zoomSize / 2, 0)],
+            endValue: data[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
+          })
+        })
       })
     },
     sortData: function () {
@@ -233,5 +258,4 @@ export default {
 #carInfoMap {
   height: 400px;
 }
-
 </style>
