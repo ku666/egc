@@ -14,7 +14,7 @@ export default {
 
       this.$notify({
         title: '欢迎光临',
-        message: h('i', { style: 'color: teal' }, '欢迎进入恒大集团智慧小区平台'),
+        message: h('i', { style: 'color: teal' }, '欢迎进入恒大集团智慧云平台'),
         offset: 200
       })
     }
