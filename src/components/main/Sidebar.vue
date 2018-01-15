@@ -48,19 +48,19 @@ export default {
           'subs': [
             {
               'icon': null,
-              'index': '/mdmmgmt/devicecategorymgmt',
+              'index': '/mdmmgmt/devicecategorylist',
               'title': '设备分类管理',
               'subs': null
             },
             {
               'icon': null,
-              'index': '/mdmmgmt/deviceattrmgmt',
+              'index': '/mdmmgmt/deviceattrlist',
               'title': '设备属性管理',
               'subs': null
             },
             {
               'icon': null,
-              'index': '/mdmmgmt/providermgmt',
+              'index': '/mdmmgmt/providerlist',
               'title': '供应商管理',
               'subs': null
             }]
