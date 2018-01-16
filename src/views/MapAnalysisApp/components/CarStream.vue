@@ -73,41 +73,53 @@ export default {
   name: 'CarStream',
   data () {
     return {
-      isShowCarInfoMap: false,
-      isShowTable: true,
-      formDatePickType: 'year',
+      isShowCarInfoMap: false, // 是否显示弹框
+      isShowTable: true, // 是否显示表格
+      preTableShowStatus: '',
+      formDatePickType: 'year', // 报表类型
       form: {
-        courtID: '',
-        reportType: '1',
-        startTime: '',
-        endTime: ''
+        courtID: '', // 小区ID
+        reportType: '1', // 报表类型
+        startTime: '', // 开始时间
+        endTime: '' // 结束时间
       },
-      carStreamData: [],
-      mapDataList: {
+      carStreamData: [], // 后端请求回的车流信息
+      mapDataList: { // 车流信息映射到echarts的数据
         date: [],
-        carInCourt: [],
-        carOutCourt: [],
-        carInRegedCourt: [],
-        carOutRegedCourt: []
-      }
+        carInCourt: [], // 进入车辆数
+        carOutCourt: [], // 出去车辆数
+        carInRegedCourt: [], // 注册车辆数
+        carOutRegedCourt: [] // 临时车辆数
+      },
+      myChart: '',
+      isFirstShowChart: true
     }
   },
   mounted: function () {
     this.$nextTick(function () {
+      // 请求获取小区车流数据
       getCourtCarAccessInfo().then(function (res) {
+        console.log('qingqiushuj')
         this.carStreamData = res.data
       }.bind(this))
     })
   },
   methods: {
+    // 切换到表格
     goToTable: function () {
       this.isShowTable = true
     },
+    // 切换到图表
     goToMap: function () {
+      this.preTableShowStatus = this.isShowTable
+      if (!this.preTableShowStatus) return
       this.isShowTable = false
       this.sortData()
       this.$nextTick(_ => {
+        // 初始化echarts图表
         var myChart = this.$echarts.init(document.getElementById('carInfoMap'))
+        this.myChart = myChart
+        // 设置图表配置信息
         var option = {
           title: {
             text: '小区车流量'
@@ -184,19 +196,27 @@ export default {
           ]
         }
         myChart.setOption(option)
-        console.log(myChart.getOption())
-        var zoomSize = 8
+        // 注册图表缩放控件事件
+        var zoomSize = 16
         var data = this.mapDataList.date
+        this.disPatchAction(myChart, data, { dataIndex: 0 }, zoomSize)
         myChart.on('click', function (params) {
-          myChart.dispatchAction({
-            type: 'dataZoom',
-            startValue: data[Math.max(params.dataIndex - zoomSize / 2, 0)],
-            endValue: data[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
-          })
-        })
+          this.disPatchAction(myChart, data, params, zoomSize)
+        }.bind(this))
+      })
+    },
+    // 改变图表显示范围
+    disPatchAction: function (myChart, data, params, zoomSize) {
+      myChart.dispatchAction({
+        type: 'dataZoom',
+        startValue: data[Math.max(params.dataIndex - zoomSize / 2, 0)],
+        endValue: data[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
       })
     },
     sortData: function () {
+      for (let key in this.mapDataList) {
+        this.mapDataList[key] = []
+      }
       this.carStreamData.forEach(element => {
         this.mapDataList.date.push(element.date)
         this.mapDataList.carInCourt.push(element.carInCourt)
@@ -231,10 +251,16 @@ export default {
   },
   computed: {
     reportType () {
+      console.log('gaib')
       return this.form.reportType
+    },
+    leaveChartView () {
+      // console.log('computed')
+      return this.isShowCarInfoMap + this.isShowTable
     }
   },
   watch: {
+    // 监听报表类型切换
     reportType (newValue) {
       if (newValue === '1') {
         this.formDatePickType = 'year'
@@ -242,6 +268,12 @@ export default {
         this.formDatePickType = 'month'
       } else {
         this.formDatePickType = 'date'
+      }
+    },
+    leaveChartView () {
+      // 取消图表的click事件
+      if (!this.isShowCarInfoMap || this.isShowTable) {
+        if (this.myChart) { this.myChart.off('click') }
       }
     }
   }
