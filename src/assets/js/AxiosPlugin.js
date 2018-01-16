@@ -12,7 +12,7 @@ const Axios = axios.create({
 
 // Add a response interceptor
 Axios.interceptors.response.use(response => {
-  console.log('success：' + JSON.stringify(response))
+  // console.log('success：' + JSON.stringify(response))
   // if (responseData.code === '1000') {
   //   return responseData
   // }
