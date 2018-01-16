@@ -20,34 +20,34 @@
         <div class="tblHeader">
           <el-tabs type="border-card" @tab-click="reportSwitch" v-model="reportType">
             <!-- 报表类型tab切换 -->
-            <el-tab-pane>
+            <el-tab-pane name="1">
               <!-- 日报表 -->
               <span slot="label">日报表</span>
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" type="datetime" placeholder="开始时间" :picker-options="forbiddenDatetime" size="small">
+                <el-date-picker v-model="startDate" type="datetime" placeholder="开始时间" :picker-options="forbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" type="datetime" placeholder="结束时间" size="small">
+                <el-date-picker v-model="endDate" type="datetime" placeholder="结束时间" size="small">
                 </el-date-picker>
               </div>
             </el-tab-pane>
             <!-- 月报表 -->
-            <el-tab-pane label="月报表">
+            <el-tab-pane label="月报表" name="2">
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" type="month" placeholder="开始月份" :picker-options="forbiddenMonth" size="small">
+                <el-date-picker v-model="startDate" type="month" placeholder="开始月份" :picker-options="forbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" type="month" placeholder="结束月份" size="small">
+                <el-date-picker v-model="endDate" type="month" placeholder="结束月份" size="small">
                 </el-date-picker>
               </div>
             </el-tab-pane>
             <!-- 年报表 -->
-            <el-tab-pane label="年报表">
+            <el-tab-pane label="年报表" name="3">
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" align="right" type="year" placeholder="开始年份" :picker-options="forbiddenYear" size="small">
+                <el-date-picker v-model="startDate" align="right" type="year" placeholder="开始年份" :picker-options="forbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" align="right" type="year" placeholder="结束年份" size="small">
+                <el-date-picker v-model="endDate" align="right" type="year" placeholder="结束年份" size="small">
                 </el-date-picker>
               </div>
             </el-tab-pane>
@@ -87,14 +87,14 @@
   </el-dialog>
 </template>
 <script>
-import { getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-// import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+// import { getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
       form: {
         date: '', // 日期
-        dateList: [],
+        dateList: [], // 日期集合
         courtId: '', // 小区id
         courtName: '', // 小区名称
         perInCount: '', // 入园人数
@@ -113,26 +113,14 @@ export default {
       total: 20, // 数据条数
       dateSelection: [],
       dialogVisible: false,
-      reportType: '0', // 报表类型（日、月、年）
-      startDatetimeSelection: '', // 开始时间
-      endDatetimeSelection: new Date(), // 结束时间
+      reportType: '1', // 报表类型（日、月、年）
+      startDate: new Date(new Date().setDate(new Date().getDate() - 15)),
+      endDate: new Date(), // 结束时间
       options: {}, // echarts对象
       // 限制开始时间不能大于结束时间
       forbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > this.endDatetimeSelection
-        }
-      },
-      // 限制开始月份不能大于结束月份
-      forbiddenMonth: {
-        disabledDate: (time) => {
-          return time.getTime() > this.endMonthSelection
-        }
-      },
-      // 限制开始年限不能大于结束年限
-      forbiddenYear: {
-        disabledDate: (time) => {
-          return time.getTime() > this.endYearSelection
+          return time.getTime() > this.endDate
         }
       }
     }
@@ -143,13 +131,14 @@ export default {
       this.isChartShow = true
       this.isTableShow = false
       // echarts图表
-      var myCharts = document.getElementById('flowInformation')
+      let myCharts = document.getElementById('flowInformation')
       let canvas = document.getElementsByClassName('canvas')[0]
       // 自适应宽高
-      var myChartContainer
+      let myChartContainer
       setTimeout(function () {
         myChartContainer = function () {
-          myCharts.style.width = canvas.offsetWidth + 'px'
+          // 处理IE获取不到canvas.offsetWidth的问题
+          myCharts.style.width = canvas.clientWidth === 0 ? '900px' : canvas.offsetWidth + 'px'
         }
         myChartContainer()
         myChart.resize()
@@ -182,7 +171,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: [],
+          data: this.form.dateList,
           boundaryGap: false,
           splitLine: {
             show: true,
@@ -235,12 +224,12 @@ export default {
           showSymbol: false,
           symbol: 'circle',
           symbolSize: 6,
-          data: [],
+          data: this.form.perInCountList,
           areaStyle: {
             normal: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(59, 242, 16,0.7)'
+                color: 'rgba(199, 237, 250,0.7)'
               }, {
                 offset: 1,
                 color: 'rgba(199, 237, 250,0.5)'
@@ -249,7 +238,7 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: '#3bf210'
+              color: '#f7b851'
             }
           },
           lineStyle: {
@@ -260,7 +249,7 @@ export default {
         }, {
           name: '出园人数',
           type: 'line',
-          data: [],
+          data: this.form.perOutCountList,
           smooth: true,
           showSymbol: false,
           symbol: 'circle',
@@ -269,16 +258,16 @@ export default {
             normal: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(240, 166, 17 ,1)'
+                color: 'rgba(216, 244, 247,1)'
               }, {
                 offset: 1,
-                color: 'rgba(240, 230, 17,1)'
+                color: 'rgba(216, 244, 247,1)'
               }], false)
             }
           },
           itemStyle: {
             normal: {
-              color: '#f08a11'
+              color: '#58c8da'
             }
           },
           lineStyle: {
@@ -301,9 +290,6 @@ export default {
             end: 60 // 右边在 60% 的位置。
           })
       }
-      this.options.xAxis[0].data = this.form.dateList // 日期
-      this.options.series[0].data = this.form.perInCountList // 入园人数
-      this.options.series[1].data = this.form.perOutCountList // 出园人数
       myChart.setOption(this.options)
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = function () {
@@ -315,14 +301,6 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      let tableWidth = document.getElementsByClassName('tableWidth')[0]
-      // 隐藏后重置table宽度
-      setTimeout(function () {
-        let tableBodyWidth = tableWidth.getElementsByClassName('el-table__body')[0]
-        let tableHeadeWidth = tableWidth.getElementsByClassName('el-table__header')[0]
-        tableBodyWidth.style.width = tableWidth.offsetWidth + 'px'
-        tableHeadeWidth.style.width = tableWidth.offsetWidth + 'px'
-      })
     },
     // 小区详细信息
     streamPeople: function () {
@@ -334,59 +312,69 @@ export default {
     },
     // 按报表类型展示
     reportSwitch: function (label) {
-      // console.log(label.index)
+      // 根据报表类型加载不同的默认时间
+      if (label.name === '1') {
+        this.startDate = new Date(new Date().setDate(new Date().getDate() - 15))
+      } else if (label.name === '2') {
+        this.startDate = new Date(new Date().setDate(new Date().getMonth() - 1))
+      } else {
+        this.startDate = new Date(new Date().setDate(new Date().getMonth() - 12))
+      }
+      this.reportType = label.name
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
-      console.log(this.endDatetimeSelection)
+      console.log(this.endDate)
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
       this.pageSize = val
-      // this.getPaging()
+      // this.getPgingData()
     },
     // 分页组件当前页变化
     currentChange: function (val) {
       this.currentPage = val
-      // this.getPaging()
+      // this.getPgingData()
     },
-    // 分页
-    getPaging: function () {
+    getData: function () {
+      // courtID=e9cb9549f7e24660b80b5b3c400639dc&reportType=1&startDate=2018-01-01&endDate=2018-01-15
+      let parameter = {
+        courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
+        reportType: this.reportType,
+        startDate: this.startDate,
+        endDate: this.endDate
+      }
+      getCourtPerAccessInfo(parameter).then(res => {
+        let perData = res.data.data
+        // console.log(res.data.data)
+        for (let i = 0; i < perData.length; i++) {
+          this.form.dateList.push(perData[i].date)
+          this.form.perInCountList.push(perData[i].perInCount)
+          this.form.perOutCountList.push(perData[i].perOutCount)
+        }
+      })
+    },
+    // 获取分页
+    getPgingData: function () {
       let pagingParameters = {}
       pagingParameters.currentPage = this.currentPage
       pagingParameters.pageSize = this.pageSize
       pagingParameters.reportType = this.reportType
-      console.log(pagingParameters)
       // getPerAccessPageList(pagingParameters).then(res => {
       getPerAccessPageList().then(res => {
         this.tableData = res.data.data.pageData
         this.total = res.data.data.total
-        for (let i = 0; i < this.tableData.length; i++) {
-          this.form.dateList.push(this.tableData[i].date)
-          this.form.perInCountList.push(Number(this.tableData[i].perInCount))
-          this.form.perOutCountList.push(Number(this.tableData[i].perOutCount))
-        }
       })
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.form.dateList = []
-      this.form.perInCountList = []
-      this.form.perOutCountList = []
-      this.reportType = '0'
-      this.getPaging()
+      this.reportType = '1'
     }
   },
   mounted: function () {
-    getPerAccessPageList().then(res => {
-      this.tableData = res.data.data.pageData
-      this.total = res.data.data.total
-      for (let i = 0; i < this.tableData.length; i++) {
-        this.form.dateList.push(this.tableData[i].date)
-        this.form.perInCountList.push(Number(this.tableData[i].perInCount))
-        this.form.perOutCountList.push(Number(this.tableData[i].perOutCount))
-      }
-    })
+    this.getPgingData()
+    this.getData()
+    console.log(new Date())
   }
 }
 </script>

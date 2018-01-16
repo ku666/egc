@@ -1,5 +1,5 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/scp-mapanalysis'
+let contextPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -64,7 +64,7 @@ export const getCarAccessPageList = data => {
 export const getCourtPerAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCourtPerAccessInfo',
+    url: contextPath + '/getHumanFlowInfo',
     params: data
   })
 }
