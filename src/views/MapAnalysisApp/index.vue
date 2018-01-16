@@ -2,8 +2,8 @@
   <div>
     <el-button type="primary" @click="carStream">车流数据展示</el-button>
     <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
+    <car-stream ref="carStream"></car-stream>
     <stream-people ref="streamPeople"></stream-people>
-    <equipment-report ref="equipmentReport"></equipment-report>
     <div id="map">
       <div id="popup">
         <a href="#" id="popup-closer"></a>
@@ -19,12 +19,16 @@
 </template>
 <script>
 /* eslint-disable */
-import { getCourtList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import hdmap from 'hdmap'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 export default {
+  components: {
+    StreamPeople,
+    CarStream
+  },
   data () {
     return {
       map: null,
@@ -101,9 +105,6 @@ export default {
       })
     })
   },
-  components: {
-    StreamPeople
-  },
   methods: {
     handleSingleClick: function (e) {
       // console.log(e)
@@ -126,9 +127,10 @@ export default {
         }
     },
     streamPeople: function () {
-      getCourtInfo().then(res => {
-        this.$refs['streamPeople'].streamPeople(res.data.data)
-      })
+      this.$refs['streamPeople'].streamPeople()
+    },
+    carStream: function () {
+      this.$refs.carStream.isShowCarInfoMap = true
     },
     openCourt: function () {
       console.log('查看小区车流人流信息')
