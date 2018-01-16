@@ -2,7 +2,7 @@
   <div class="login-wrap">
     <div class="ms-login">
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
-        <div class="ms-title">恒大集团智慧小区平台</div>
+        <div class="ms-title">恒大集团智慧云平台</div>
         <el-form-item prop="username">
           <el-input v-model="ruleForm.username" value="admin" placeholder="username"></el-input>
         </el-form-item>
