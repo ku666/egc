@@ -1,5 +1,6 @@
 import Axios from '@/assets/js/AxiosPlugin'
 let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
+let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -64,7 +65,7 @@ export const getCarAccessPageList = data => {
 export const getCourtPerAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/listHumanFlowInfo',
+    url: personPath + '/listHumanFlowInfo',
     params: data
   })
 }
@@ -81,7 +82,7 @@ export const getCourtPerAccessInfo = data => {
 export const getPerAccessPageList = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/listHumanFlowPage',
+    url: personPath + '/listHumanFlowPage',
     params: data
   })
 }

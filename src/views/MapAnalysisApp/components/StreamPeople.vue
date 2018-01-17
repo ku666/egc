@@ -6,6 +6,8 @@
           <div>
             <span>小区地址：</span>{{cellDetailsList.regionName}}</div>
           <div>
+            <span>小区名称：</span>{{cellDetailsList.courtName}}</div>
+          <div>
             <span>楼栋：</span>{{cellDetailsList.homeCount}}栋</div>
           <div>
             <span>房屋：</span>{{cellDetailsList.houseCount}}间</div>
@@ -326,7 +328,6 @@ export default {
     streamPeople: function (_courtId) {
       this.getPgingData()
       this.getData()
-      console.log(this.parameter.endDate)
       // 请求数据后重置表格宽度
       let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
       let elTableBody = document.querySelector('.el-table__body')
@@ -335,8 +336,8 @@ export default {
         elTableBody.style.width = '100%'
       }
       // 获取小区详细信息
-      getCourtInfo({courtId: _courtId}).then(res => {
-        this.cellDetailsList = res.data.data[0]
+      getCourtInfo({ courtId: _courtId }).then(res => {
+        this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
     },
@@ -368,7 +369,8 @@ export default {
     },
     // 获取人流信息
     getData: function () {
-      getCourtPerAccessInfo(this.parameter).then(res => {
+      // getCourtPerAccessInfo(this.parameter).then(res => {
+      getCourtPerAccessInfo().then(res => {
         if (res.data.code === '00000') {
           let perData = res.data.data
           for (let i = 0; i < perData.length; i++) {
@@ -407,7 +409,9 @@ export default {
       this.parameter.endDate = this.processingDate(this.parameter.endDate)
       // console.log(this.parameter.endDate.getFullYear())
       // console.log(this.processingDate(this.parameter.startDate))
-      getPerAccessPageList(this.parameter).then(res => {
+      // getPerAccessPageList(this.parameter).then(res => {
+      getPerAccessPageList().then(res => {
+        console.log(res.data.data)
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
           this.total = res.data.data.totalCount

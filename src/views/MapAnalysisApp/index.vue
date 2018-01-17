@@ -146,7 +146,7 @@ export default {
         }
     },
     streamPeople: function () {
-      this.$refs['streamPeople'].streamPeople()
+      this.$refs['streamPeople'].streamPeople(this.courtId)
     },
     carStream: function () {
       this.$refs.carStream.isShowCarInfoMap = true

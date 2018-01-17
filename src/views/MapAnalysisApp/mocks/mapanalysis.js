@@ -91,12 +91,12 @@ export default {
   // 条件查询人员出入统计信息（分业获取）
   getPerAccessPageList: config => {
     var data = {
-      total: 100,
+      totalCount: 100,
       currentPage: '3',
-      pageData: []
+      result: []
     }
     for (let i = 0; i < 100; i++) {
-      data.pageData.push({
+      data.result.push({
         courtID: '785345387345345',
         courtName: '恒大山水城',
         reportType: '1',

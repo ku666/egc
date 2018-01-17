@@ -4,6 +4,7 @@ import mapanalysisAPI from './mapanalysis'
 //   timeout: '350-600'
 // })
 let contextPath = '/egc-mapanalysiscomponent/api/mapanalysis'
+let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
 // 条件查询小区列表
 Mock.mock(contextPath + '/getCourtList', 'get', mapanalysisAPI.getCourtList)
 // 获取小区详细信息
@@ -22,13 +23,13 @@ Mock.mock(
 )
 // 条件查询人员出入统计信息
 Mock.mock(
-  contextPath + '/getCourtPerAccessInfo',
+  personPath + '/listHumanFlowInfo',
   'get',
   mapanalysisAPI.getCourtPerAccessInfo
 )
 // 条件查询车人员出入统计信息（分业获取）
 Mock.mock(
-  contextPath + '/getPerAccessPageList',
+  personPath + '/listHumanFlowPage',
   'get',
   mapanalysisAPI.getPerAccessPageList
 )
