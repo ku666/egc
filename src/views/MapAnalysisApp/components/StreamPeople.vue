@@ -303,9 +303,9 @@ export default {
       this.isTableShow = true
     },
     // 小区详细信息
-    streamPeople: function () {
+    streamPeople: function (_courtId) {
       // 获取小区详细信息
-      getCourtInfo().then(res => {
+      getCourtInfo({courtId: _courtId}).then(res => {
         this.cellDetailsList = res.data.data[0]
       })
       this.dialogVisible = true

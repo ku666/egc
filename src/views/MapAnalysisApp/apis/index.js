@@ -1,5 +1,5 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/egc-mapanalysiscomponent/api/mapanalysis'
+let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
