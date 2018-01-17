@@ -92,22 +92,22 @@ export const getDeviceAttrDomains = (data) => {
 
 // 供应商管理
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const PROVIDER_PATH = '/egc-mdmcomponent/provider/api'
+const PROVIDER_PATH = '/egc-mdmmgmtapp/provider'
 // 1. 新增供应商信息的接口
 export const insertProvider = (data) => {
-  return Axios.post(PROVIDER_PATH + '/insertProvider', data
+  return Axios.post(PROVIDER_PATH + '/insert', data
   ).then(res => res.data)
 }
 
 // 2. 修改供应商信息的接口
 export const updateProvider = (data) => {
-  return Axios.post(PROVIDER_PATH + '/updateProvider', data
+  return Axios.post(PROVIDER_PATH + '/update', data
   ).then(res => res.data)
 }
 
 // 3. 删除供应商信息的接口
 export const deleteProvider = (data) => {
-  return Axios.post(PROVIDER_PATH + '/deleteProvider', data
+  return Axios.post(PROVIDER_PATH + '/delete', data
   ).then(res => res.data)
 }
 
