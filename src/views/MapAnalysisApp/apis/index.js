@@ -64,7 +64,7 @@ export const getCarAccessPageList = data => {
 export const getCourtPerAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getHumanFlowInfo',
+    url: contextPath + '/listHumanFlowInfo',
     params: data
   })
 }
@@ -81,7 +81,7 @@ export const getCourtPerAccessInfo = data => {
 export const getPerAccessPageList = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getPerAccessPageList',
+    url: contextPath + '/listHumanFlowPage',
     params: data
   })
 }

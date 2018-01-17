@@ -14,7 +14,7 @@ Mock.mock(/\/egc-smartcommunitymgmtapp\/mapAnalysis\/getCarAccessPageList/, 'get
 // 条件查询人员出入统计信息
 Mock.mock(/\/egc-smartcommunitymgmtapp\/mapAnalysis\/getHumanFlowInfo/, 'get', mapanalysisAPI.getCourtPerAccessInfo)
 // 条件查询车人员出入统计信息（分业获取）
-Mock.mock(/\/egc-smartcommunitymgmtapp\/mapAnalysis\/getPerAccessPageList/, 'get', mapanalysisAPI.getPerAccessPageList)
+Mock.mock(/\/egc-smartcommunitymgmtapp\/mapAnalysis\/listHumanFlowInfo/, 'get', mapanalysisAPI.getPerAccessPageList)
 // 获取行政区划列表
 Mock.mock(/\/egc-smartcommunitymgmtapp\/mapAnalysis\/getOrgList/, 'get', mapanalysisAPI.getOrgList)
 // 获取设备数量信息
