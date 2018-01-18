@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShowCarInfoMap" class="carInfo">
-    <el-dialog :visible.sync="isShowCarInfoMap">
+    <el-dialog :visible.sync="isShowCarInfoMap" @close="closeDialog" title="小区车流量">
       <!-- 表单查询字段开始 -->
       <el-form ref="form" :model="form" label-width="80px" label-position="top">
         <el-row :span="24" class="firstRow">
@@ -28,7 +28,7 @@
           <el-col :span="24">
             <!-- <el-form-item> -->
             <el-button size="small" type="primary" @click="submitForm('form')">查询</el-button>
-            <el-button size="small" type="primary" @click="resetForm('form')">重置</el-button>
+            <!-- <el-button size="small" type="primary" @click="resetForm('form')">重置</el-button> -->
             <el-button size="small" type="success" @click="goToTable()">表格显示</el-button>
             <el-button size="small" type="success" @click="goToMap()">图表显示</el-button>
             <!-- </el-form-item> -->
@@ -55,7 +55,7 @@
           </el-table>
           <!-- 展示表格结束 -->
           <!-- 分页显示控件开始 -->
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="1" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="carStreamData.length+1000">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="carStreamData.length">
           </el-pagination>
         </div>
         <!-- 地图展示 -->
@@ -93,6 +93,7 @@ export default {
         carInRegedCourt: [], // 注册车辆数
         carOutRegedCourt: [] // 临时车辆数
       },
+      currentPage: 2,
       myChart: '',
       loading: false,
       forbiddenStartDatetime: {
@@ -116,12 +117,7 @@ export default {
       if (!this.isShowChart) {
         this.$nextTick(function () {
           // 请求获取小区车流数据
-          getCourtCarAccessInfo({
-            courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
-            reportType: 1,
-            startDate: '2018-01-01',
-            endDate: '2018-01-17'
-          }).then((res) => {
+          getCourtCarAccessInfo().then((res) => {
             this.carStreamData = res.data
             this.sortData()
           })
@@ -144,7 +140,7 @@ export default {
       this.isShowChart = true
       if (!this.preTableShowStatus) return
       if (this.clickCount > 0) return
-      console.log('重复点击')
+      console.log('重复击')
       this.$nextTick(() => {
         this.chartInit()
       })
@@ -156,81 +152,115 @@ export default {
       this.myChart = myChart
       // 设置图表配置信息
       var option = {
-        title: {
-          text: '小区车流量'
-        },
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
-        },
-        grid: {
-          left: '2%',
-          right: '2%',
-          bottom: '10%',
-          containLabel: true
-        },
-        legend: {
-          data: ['进入车辆', '出去车辆'],
-          type: 'plain',
-          show: true,
-          right: '14%',
-          top: '1%'
-        },
-        toolbox: {
-          show: true,
-          feature: {
-            magicType: { show: true, type: ['line', 'bar'] },
-            restore: { show: true },
-            saveAsImage: { show: true }
-          }
-        },
-        calculable: true,
-        xAxis: [
-          {
-            type: 'category',
-            data: this.mapDataList.date,
-            axisTick: {
-              alignWithLabel: true
+        baseOption: {
+          title: {
+            text: '小区车流量'
+          },
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
             }
-          }
-        ],
-        yAxis: [
-          {
-            type: 'value'
-          }
-        ],
-        dataZoom: [
-          {
-            type: 'slider',
-            show: true,
-            xAxisIndex: [0],
-            start: 0,
-            end: 25
           },
-          {
-            type: 'inside',
+          grid: {
+            left: '2%',
+            right: '2%',
+            bottom: '10%',
+            containLabel: true
+          },
+          legend: {
+            data: ['进入车辆', '出去车辆'],
+            type: 'plain',
             show: true,
-            start: 50,
-            xAxisIndex: [0],
-            end: 100
-          }],
-        series: [
-          {
-            name: '进入车辆',
-            type: 'bar',
-            data: this.mapDataList.carInCourt
+            right: '18%',
+            top: '1%'
+          },
+          toolbox: {
+            show: true,
+            feature: {
+              magicType: { show: true, type: ['line', 'bar'] },
+              restore: { show: true },
+              saveAsImage: { show: true }
+            }
+          },
+          calculable: true,
+          xAxis: [
+            {
+              type: 'category',
+              data: this.mapDataList.date,
+              axisTick: {
+                alignWithLabel: true
+              }
+            }
+          ],
+          yAxis: [
+            {
+              type: 'value'
+            }
+          ],
+          dataZoom: [
+            {
+              type: 'slider',
+              show: true,
+              xAxisIndex: [0],
+              start: 0,
+              end: 25
+            },
+            {
+              type: 'inside',
+              show: true,
+              start: 50,
+              xAxisIndex: [0],
+              end: 100
+            }],
+          series: [
+            {
+              name: '进入车辆',
+              type: 'bar',
+              data: this.mapDataList.carInCourt
 
-          },
-          {
-            name: '出去车辆',
-            type: 'bar',
-            data: this.mapDataList.carOutCourt
+            },
+            {
+              name: '出去车辆',
+              type: 'bar',
+              data: this.mapDataList.carOutCourt
+            }
+          ]
+        },
+        media: {
+          option: {
+            legend: {
+              right: '18%',
+              top: '1%'
+            },
+            series: [
+              {
+                radius: [10, '50%'],
+                center: ['25%', '50%']
+              },
+              {
+                radius: [10, '50%'],
+                center: ['75%', '50%']
+              }
+            ]
           }
-        ]
+        }
       }
       myChart.setOption(option)
+      // echarts大小自适应
+      window.onresize = function () {
+        throttle(myChartResize, null, 200)
+      }
+      function myChartResize (params) {
+        myChart.resize()
+      }
+      // onresize事件节流控制
+      function throttle (fn, context, delay, val) {
+        clearTimeout(fn.timeoutId)
+        fn.timeoutId = setTimeout(function () {
+          fn.call(context, val)
+        }, delay)
+      }
       // 注册图表缩放控件事件
       var zoomSize = 16
       var data = this.mapDataList.date
@@ -273,60 +303,42 @@ export default {
     },
     handleSizeChange (val) {
       // 改变分页显示条数，发送请求 初始化状态
-      console.log(`每页 ${val} 条`)
+      console.log(`sizechange ${val} 条`)
     },
     handleCurrentChange (val) {
       // 分页获取数据，发送请求 初始化状态
+      console.log(`currentChange ${val} 条`)
       getCarAccessPageList().then(function (res) {
-        console.log('lucy')
-        console.log(res.data)
+        console.log('分页查询')
         this.carStreamData = res.data
       }.bind(this))
     },
     submitForm (formName) {
-      // 表单验证查询，通过发送请求 初始化状态
+      // 点击查询按钮，通过发送请求 初始化状态
       // 在图表页时初始化echarts
-      this.$refs[formName].validate((valid) => {
-        if (valid) {
-          alert('submit!')
-          getCourtCarAccessInfo({
-            courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
-            reportType: 1,
-            startDate: '2018-01-01',
-            endDate: '2018-01-17'
-          }).then((res) => {
-            this.carStreamData = res.data
-            this.sortData()
-          })
-          this.preTableShowStatus = ''
-          this.clickCount = 0
-        } else {
-          console.log('error submit!!')
-          return false
-        }
+      getCourtCarAccessInfo({
+        courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
+        reportType: 1,
+        startDate: '2018-01-01',
+        endDate: '2018-01-17'
+      }).then((res) => {
+        this.carStreamData = res.data
+        this.sortData()
       })
+      this.preTableShowStatus = ''
+      this.clickCount = 0
     },
     resetForm (formName) {
       // 重置清空表单
       this.$refs[formName].resetFields()
+    },
+    closeDialog () {
+      this.clickCount = 0
     }
   },
   computed: {
-    leaveChartView () {
-      // console.log('computed')
-      return this.isShowCarInfoMap + this.isShowTable
-    }
   },
   watch: {
-    leaveChartView () {
-      // 取消图表的click事件
-      if (!this.isShowCarInfoMap || this.isShowTable) {
-        if (this.myChart) { this.myChart.off('click') }
-      }
-    },
-    isShowCarInfoMap () {
-      this.clickCount = 0
-    }
   }
 }
 </script>
@@ -338,11 +350,18 @@ export default {
   height: 400px;
 }
 .carInfo {
+  /deep/.el-dialog {
+    min-width: 710px;
+  }
+  /deep/.el-dialog__body {
+    padding-top: 0px;
+  }
   /deep/.el-pagination {
     text-align: right;
+    padding: 10px 0 0 0;
   }
   /deep/.el-form-item {
-    // margin-bottom: 0;
+    margin-bottom: 0;
   }
   /deep/.el-form-item__label {
     padding: 0;
