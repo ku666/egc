@@ -96,13 +96,13 @@ const PROVIDER_PATH = '/egc-mdmmgmtapp/provider'
 // 1. 新增供应商信息的接口
 export const insertProvider = (data) => {
   return Axios.post(PROVIDER_PATH + '/insert', data
-  ).then(res => res.data)
+  ).then(res => res)
 }
 
 // 2. 修改供应商信息的接口
 export const updateProvider = (data) => {
   return Axios.post(PROVIDER_PATH + '/update', data
-  ).then(res => res.data)
+  ).then(res => res)
 }
 
 // 3. 删除供应商信息的接口
