@@ -17,6 +17,10 @@ module.exports = {
       //   target: 'http://172.16.30.54:8082/', // 邓代超（地图分析）
       //   changeOrigin: true
       // }
+      // '/egc-smartcommunitymgmtapp': {
+      //   target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
+      //   changeOrigin: true
+      // }
     },
 
     // Various Dev Server settings

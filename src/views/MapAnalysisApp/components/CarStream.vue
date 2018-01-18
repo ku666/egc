@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <el-dialog :visible.sync="isShowCarInfoMap" width='1000px'>
+  <div v-if="isShowCarInfoMap" class="carInfo">
+    <el-dialog :visible.sync="isShowCarInfoMap">
       <!-- 表单查询字段开始 -->
-      <el-form ref="form" :model="form" label-width="80px">
-        <el-row :span="24">
+      <el-form ref="form" :model="form" label-width="80px" label-position="top">
+        <el-row :span="24" class="firstRow">
           <el-col :span="8">
-            <el-form-item label="查询方式">
-              <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%">
+            <el-form-item label="报表类型">
+              <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
                 <el-option label="年报表" value="1"></el-option>
                 <el-option label="月报表" value="2"></el-option>
                 <el-option label="日报表" value="3"></el-option>
@@ -15,17 +15,17 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="开始时间">
-              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.startTime" style="width:100%"></el-date-picker>
+              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime"></el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8" style="text-align:left">
+            <el-form-item label="结束时间">
+              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :span="24" style="text-align:right">
-          <el-col :span="8" style="text-align:left">
-            <el-form-item label="结束时间">
-              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.endTime" style="width:100%"></el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :span="14">
+          <el-col :span="24">
             <!-- <el-form-item> -->
             <el-button size="small" type="primary" @click="submitForm('form')">查询</el-button>
             <el-button size="small" type="primary" @click="resetForm('form')">重置</el-button>
@@ -37,7 +37,7 @@
       </el-form>
       <!-- 表单查询字段结束 -->
       <div class="dataView">
-        <div class="carInfoTable" v-if="isShowTable">
+        <div class="carInfoTable" v-show="isShowTable" v-loading="loading">
           <!-- 展示表格开始 -->
           <el-table stripe :data="carStreamData" height="400" border style="width: 100%">
             <el-table-column prop="courtID" label="小区ID" width="180">
@@ -59,9 +59,9 @@
           </el-pagination>
         </div>
         <!-- 地图展示 -->
-        <div v-else>
-          <div id="carInfoMap"></div>
-        </div>
+        <!-- <div v-show="isShowChart"> -->
+        <div id="carInfoMap" v-show="isShowChart"></div>
+        <!-- </div> -->
       </div>
     </el-dialog>
   </div>
@@ -75,13 +75,15 @@ export default {
     return {
       isShowCarInfoMap: false, // 是否显示弹框
       isShowTable: true, // 是否显示表格
-      preTableShowStatus: '',
+      isShowChart: false,
+      clickCount: 0,
+      preTableShowStatus: '', // 判断是否第一次进入图表显示
       formDatePickType: 'year', // 报表类型
       form: {
         courtID: '', // 小区ID
         reportType: '1', // 报表类型
-        startTime: '', // 开始时间
-        endTime: '' // 结束时间
+        startTime: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
+        endTime: new Date() // 结束时间
       },
       carStreamData: [], // 后端请求回的车流信息
       mapDataList: { // 车流信息映射到echarts的数据
@@ -92,118 +94,151 @@ export default {
         carOutRegedCourt: [] // 临时车辆数
       },
       myChart: '',
-      isFirstShowChart: true
+      loading: false,
+      forbiddenStartDatetime: {
+        disabledDate: (time) => {
+          return time.getTime() > this.form.endTime
+        }
+      },
+      forbiddenEndDatetime: {
+        disabledDate: (time) => {
+          return time.getTime() < this.form.startTime
+        }
+      }
     }
   },
   mounted: function () {
-    this.$nextTick(function () {
-      // 请求获取小区车流数据
-      getCourtCarAccessInfo().then(function (res) {
-        console.log('qingqiushuj')
-        this.carStreamData = res.data
-      }.bind(this))
-    })
   },
   methods: {
+    goToCarStreamPage () {
+      // 进入车流查询页面，小区ID改变，isShowChart=false
+      this.isShowCarInfoMap = true
+      if (!this.isShowChart) {
+        this.$nextTick(function () {
+          // 请求获取小区车流数据
+          getCourtCarAccessInfo({
+            courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
+            reportType: 1,
+            startDate: '2018-01-01',
+            endDate: '2018-01-17'
+          }).then((res) => {
+            this.carStreamData = res.data
+            this.sortData()
+          })
+        })
+      } else {
+        this.$nextTick(function () {
+          this.chartInit()
+        })
+      }
+    },
     // 切换到表格
     goToTable: function () {
       this.isShowTable = true
+      this.isShowChart = false
     },
     // 切换到图表
     goToMap: function () {
       this.preTableShowStatus = this.isShowTable
-      if (!this.preTableShowStatus) return
       this.isShowTable = false
-      this.sortData()
-      this.$nextTick(_ => {
-        // 初始化echarts图表
-        var myChart = this.$echarts.init(document.getElementById('carInfoMap'))
-        this.myChart = myChart
-        // 设置图表配置信息
-        var option = {
-          title: {
-            text: '小区车流量'
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          grid: {
-            left: '2%',
-            right: '2%',
-            bottom: '10%',
-            containLabel: true
-          },
-          legend: {
-            data: ['进入车辆', '出去车辆'],
-            type: 'plain',
-            show: true,
-            right: '14%',
-            top: '1%'
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              magicType: { show: true, type: ['line', 'bar'] },
-              restore: { show: true },
-              saveAsImage: { show: true }
-            }
-          },
-          calculable: true,
-          xAxis: [
-            {
-              type: 'category',
-              data: this.mapDataList.date,
-              axisTick: {
-                alignWithLabel: true
-              }
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value'
-            }
-          ],
-          dataZoom: [
-            {
-              type: 'slider',
-              show: true,
-              xAxisIndex: [0],
-              start: 0,
-              end: 25
-            },
-            {
-              type: 'inside',
-              show: true,
-              start: 50,
-              xAxisIndex: [0],
-              end: 100
-            }],
-          series: [
-            {
-              name: '进入车辆',
-              type: 'bar',
-              data: this.mapDataList.carInCourt
-
-            },
-            {
-              name: '出去车辆',
-              type: 'bar',
-              data: this.mapDataList.carOutCourt
-            }
-          ]
-        }
-        myChart.setOption(option)
-        // 注册图表缩放控件事件
-        var zoomSize = 16
-        var data = this.mapDataList.date
-        this.disPatchAction(myChart, data, { dataIndex: 0 }, zoomSize)
-        myChart.on('click', function (params) {
-          this.disPatchAction(myChart, data, params, zoomSize)
-        }.bind(this))
+      this.isShowChart = true
+      if (!this.preTableShowStatus) return
+      if (this.clickCount > 0) return
+      console.log('重复点击')
+      this.$nextTick(() => {
+        this.chartInit()
       })
+      this.clickCount++
+    },
+    chartInit () {
+      // 初始化echarts图表
+      var myChart = this.$echarts.init(document.getElementById('carInfoMap'))
+      this.myChart = myChart
+      // 设置图表配置信息
+      var option = {
+        title: {
+          text: '小区车流量'
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          left: '2%',
+          right: '2%',
+          bottom: '10%',
+          containLabel: true
+        },
+        legend: {
+          data: ['进入车辆', '出去车辆'],
+          type: 'plain',
+          show: true,
+          right: '14%',
+          top: '1%'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: 'category',
+            data: this.mapDataList.date,
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        dataZoom: [
+          {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            start: 0,
+            end: 25
+          },
+          {
+            type: 'inside',
+            show: true,
+            start: 50,
+            xAxisIndex: [0],
+            end: 100
+          }],
+        series: [
+          {
+            name: '进入车辆',
+            type: 'bar',
+            data: this.mapDataList.carInCourt
+
+          },
+          {
+            name: '出去车辆',
+            type: 'bar',
+            data: this.mapDataList.carOutCourt
+          }
+        ]
+      }
+      myChart.setOption(option)
+      // 注册图表缩放控件事件
+      var zoomSize = 16
+      var data = this.mapDataList.date
+      this.disPatchAction(myChart, data, { dataIndex: 0 }, zoomSize)
+      myChart.on('click', function (params) {
+        console.log('视图zoom点击')
+        this.disPatchAction(myChart, data, params, zoomSize)
+      }.bind(this))
     },
     // 改变图表显示范围
     disPatchAction: function (myChart, data, params, zoomSize) {
@@ -214,6 +249,7 @@ export default {
       })
     },
     sortData: function () {
+      // 整理成echart的数据格式
       for (let key in this.mapDataList) {
         this.mapDataList[key] = []
       }
@@ -225,10 +261,22 @@ export default {
         this.mapDataList.carOutRegedCourt.push(element.carOutRegedCourt)
       })
     },
+    reportTypeSelected () {
+      // 该表报表类型，年报表或月报表等
+      if (this.form.reportType === '1') {
+        this.formDatePickType = 'year'
+      } else if (this.form.reportType === '2') {
+        this.formDatePickType = 'month'
+      } else {
+        this.formDatePickType = 'date'
+      }
+    },
     handleSizeChange (val) {
+      // 改变分页显示条数，发送请求 初始化状态
       console.log(`每页 ${val} 条`)
     },
     handleCurrentChange (val) {
+      // 分页获取数据，发送请求 初始化状态
       getCarAccessPageList().then(function (res) {
         console.log('lucy')
         console.log(res.data)
@@ -236,9 +284,22 @@ export default {
       }.bind(this))
     },
     submitForm (formName) {
+      // 表单验证查询，通过发送请求 初始化状态
+      // 在图表页时初始化echarts
       this.$refs[formName].validate((valid) => {
         if (valid) {
           alert('submit!')
+          getCourtCarAccessInfo({
+            courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
+            reportType: 1,
+            startDate: '2018-01-01',
+            endDate: '2018-01-17'
+          }).then((res) => {
+            this.carStreamData = res.data
+            this.sortData()
+          })
+          this.preTableShowStatus = ''
+          this.clickCount = 0
         } else {
           console.log('error submit!!')
           return false
@@ -246,35 +307,25 @@ export default {
       })
     },
     resetForm (formName) {
+      // 重置清空表单
       this.$refs[formName].resetFields()
     }
   },
   computed: {
-    reportType () {
-      console.log('gaib')
-      return this.form.reportType
-    },
     leaveChartView () {
       // console.log('computed')
       return this.isShowCarInfoMap + this.isShowTable
     }
   },
   watch: {
-    // 监听报表类型切换
-    reportType (newValue) {
-      if (newValue === '1') {
-        this.formDatePickType = 'year'
-      } else if (newValue === '2') {
-        this.formDatePickType = 'month'
-      } else {
-        this.formDatePickType = 'date'
-      }
-    },
     leaveChartView () {
       // 取消图表的click事件
       if (!this.isShowCarInfoMap || this.isShowTable) {
         if (this.myChart) { this.myChart.off('click') }
       }
+    },
+    isShowCarInfoMap () {
+      this.clickCount = 0
     }
   }
 }
@@ -282,12 +333,32 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--  lang="less" -->
-<style lang="less" scoped>
+<style lang="less"  scoped>
 .el-pagination {
-  // padding: 10px 0;
   text-align: right;
 }
 #carInfoMap {
   height: 400px;
 }
 </style>
+<style>
+.carInfo .el-form-item {
+  margin-bottom: 0;
+}
+.carInfo .el-form-item__label {
+  padding: 0;
+}
+.carInfo .el-pager li {
+  min-width: 0px;
+}
+.el-row .el-button {
+  margin: 10px 0px 10px 10px;
+}
+.firstRow .el-col {
+  padding-right: 20px;
+}
+.firstRow .el-col:nth-of-type(3n) {
+  padding-right: 0;
+}
+</style>
+
