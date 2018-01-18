@@ -334,31 +334,28 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--  lang="less" -->
 <style lang="less"  scoped>
-.el-pagination {
-  text-align: right;
-}
 #carInfoMap {
   height: 400px;
 }
-</style>
-<style>
-.carInfo .el-form-item {
-  margin-bottom: 0;
-}
-.carInfo .el-form-item__label {
-  padding: 0;
-}
-.carInfo .el-pager li {
-  min-width: 0px;
-}
-.el-row .el-button {
-  margin: 10px 0px 10px 10px;
-}
-.firstRow .el-col {
-  padding-right: 20px;
-}
-.firstRow .el-col:nth-of-type(3n) {
-  padding-right: 0;
+.carInfo {
+  /deep/.el-pagination {
+    text-align: right;
+  }
+  /deep/.el-form-item {
+    // margin-bottom: 0;
+  }
+  /deep/.el-form-item__label {
+    padding: 0;
+  }
+  /deep/.el-row .el-button {
+    margin: 10px 0px 10px 10px;
+  }
+  /deep/.firstRow .el-col {
+    padding-right: 20px;
+  }
+  /deep/.firstRow .el-col:nth-of-type(3n) {
+    padding-right: 0;
+  }
 }
 </style>
 
