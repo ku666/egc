@@ -87,7 +87,7 @@ export default {
       tableAge: [],
       tableAgeNumData: [],
       peopleData: [],
-      agePer: {},
+      // agePer: {},
       // keysBuild: [],
       // agedata: [],
       // humdata: [],
@@ -166,7 +166,7 @@ export default {
             // this.humdata = []
             this.peopleData = []
             // this.pernumber = []
-            this.agePer = {}
+            // this.agePer = {}
 
             // 业主统计表格数据
             this.tableData.push(res.data)
@@ -192,7 +192,7 @@ export default {
             //   this.peopleData.push({ name: this.tableAge[n], value: this.tableAgeNum[n] })// 转成表格数据结构
             // }
             console.log(66666666)
-            console.log(this.agePer)
+            // console.log(this.agePer)
             console.log(this.tableAgeNum)
             console.log(this.peopleData)
           }
