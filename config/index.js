@@ -16,6 +16,10 @@ module.exports = {
       '/egc-mapanalysiscomponent': {
         target: 'http://172.16.30.27:8082/' // http://192.168.0.186:38761/
       },
+      '/egc-smartcommunitymgmtapp': {
+        target: 'http://172.16.30.62:8082',// 业主画像
+        changeOrigin: true
+      },
       '/device': {
         target: 'http://192.168.0.186:9030', // 设备报表
         changeOrigin: true
