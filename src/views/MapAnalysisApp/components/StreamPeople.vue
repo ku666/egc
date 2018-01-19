@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback">
+  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
     <el-row>
       <el-col :span="4">
         <div>
@@ -19,47 +19,35 @@
       </el-col>
       <!-- 表格展示 -->
       <el-col :span="19" style="height:600px">
-        <div class="tblHeader">
-          <el-tabs type="border-card" @tab-click="reportSwitch" v-model="parameter.reportType">
-            <!-- 报表类型tab切换 -->
-            <el-tab-pane name="1">
-              <!-- 日报表 -->
-              <span slot="label">日报表</span>
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="starTime" type="date" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endTime" type="date" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
+        <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
+          <el-row class="tblHeader">
+            <el-col :span="8">
+              <el-form-item label="报表类型">
+                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small">
+                  <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="开始时间">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
                 </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <!-- 月报表 -->
-            <el-tab-pane label="月报表" name="2">
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="starTime" type="month" placeholder="开始月份" :picker-options="starForbiddenDatetime" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endTime" type="month" placeholder="结束月份" size="small" :picker-options="endForbiddenDatetime">
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结束时间">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
                 </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <!-- 年报表 -->
-            <el-tab-pane label="年报表" name="3">
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="starTime" align="right" type="year" placeholder="开始年份" :picker-options="starForbiddenDatetime" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endTime" align="right" type="year" placeholder="结束年份" size="small" :picker-options="endForbiddenDatetime">
-                </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <el-button type="primary" @click="timeQuery">查询</el-button>
-            <div class="chart">
-              <el-button type="warning" @click="tableSwitch">表单</el-button>
-              <el-button type="danger" @click="chartSwitch">图表</el-button>
-            </div>
-          </el-tabs>
-        </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" style="text-align:right">
+              <el-button type="primary" @click="timeQuery">查询</el-button>
+              <el-button type="success" @click="tableSwitch" plain>表单</el-button>
+              <el-button type="danger" @click="chartSwitch" plain>图表</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
         <div class="show">
           <div v-show="isTableShow">
             <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe>
@@ -105,8 +93,18 @@ export default {
         carOutRegedCount: '',
         perOutCountList: [] // 出园人数集合
       },
+      reportTypeList: [{
+        value: '1',
+        label: '日报'
+      }, {
+        value: '2',
+        label: '月报'
+      }, {
+        value: '3',
+        label: '年报'
+      }],
       parameter: {
-        courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
+        courtID: 'c69aeede4f6341929721e2892beec3cb',
         pageNum: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '1', // 报表类型（日、月、年）
@@ -114,6 +112,8 @@ export default {
         endDate: null // 结束时间
       },
       cellDetailsList: {},
+      timeType: 'date',
+      // reportType: '',
       total: 20, // 数据条数
       tableData: [],
       isChartShow: false,
@@ -140,6 +140,19 @@ export default {
     }
   },
   methods: {
+    // 选择报表
+    reportTypeEvent: function (val) {
+      if (val === '1') {
+        this.timeType = 'date'
+        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
+      } else if (val === '2') {
+        this.timeType = 'month'
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
+      } else {
+        this.timeType = 'year'
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
+      }
+    },
     // 点击切换图表展示
     chartSwitch: function () {
       this.getData()
@@ -319,8 +332,14 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      // 点击切换表格时 重置表格最大高度
+      // 点击切换表格时 重置表格宽高
       let elTable = document.querySelector('.el-table')
+      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      let elTableBody = document.querySelector('.el-table__body')
+      if (belTableHeaderbb) {
+        belTableHeaderbb.style.width = '100%'
+        elTableBody.style.width = '100%'
+      }
       elTable.style.maxHeight = '381px'
     },
     // 小区详细信息
@@ -328,31 +347,12 @@ export default {
     streamPeople: function (_courtId) {
       this.getPgingData()
       this.getData()
-      // 请求数据后重置表格宽度
-      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
-      let elTableBody = document.querySelector('.el-table__body')
-      if (belTableHeaderbb) {
-        belTableHeaderbb.style.width = '100%'
-        elTableBody.style.width = '100%'
-      }
       // 获取小区详细信息
       // getCourtInfo({ courtId: _courtId }).then(res => {
       getCourtInfo().then(res => {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
-    },
-    // 按报表类型展示
-    reportSwitch: function (label) {
-      // 根据报表类型加载不同的默认时间
-      if (label.name === '1') {
-        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
-      } else if (label.name === '2') {
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
-      } else {
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
-      }
-      this.reportType = label.name
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
@@ -373,7 +373,7 @@ export default {
     // 获取人流信息
     getData: function () {
       let perData = {}
-      perData.courtID = 'e9cb9549f7e24660b80b5b3c400639dc'
+      perData.courtID = 'c69aeede4f6341929721e2892beec3cb'
       perData.endDate = this.processingDate(this.endTime)
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
@@ -391,7 +391,9 @@ export default {
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
           // 数据改变时 初始化图表数据
-          this.myChart.setOption(this.echartsData())
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsData())
+          }
         } else {
           this.$message({
             type: 'error',
@@ -434,44 +436,36 @@ export default {
   mounted: function () { }
 }
 </script>
-<style scoped>
-.table-pager {
-  padding: 0;
-  padding-right: 10px;
-  margin-top: 10px;
-  text-align: right;
-  position: absolute;
-  right: 60px;
-  bottom: 10px;
-}
-.block /deep/ {
-  float: left;
-  margin-right: 40px;
-}
-.reporttype {
-  float: left;
-}
-.chart {
-  float: right;
-}
-.tblHeader {
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-.show {
-  border: 1px solid #eee;
-  padding: 10px 0 5px 5px;
-  height: 430px;
-}
-.tblHeader {
-  border: 1px solid #eee;
-  padding: 10px;
-}
-.el-tabs /deep/ .el-date-editor.el-input {
-  width: 200px;
-}
-#flowInformation {
-  height: 420px;
+<style scoped lang='less'>
+.popup {
+  min-width: 710px;
+  /deep/.table-pager {
+    padding: 0;
+    padding-right: 10px;
+    text-align: right;
+    position: absolute;
+    right: 60px;
+    bottom: 35px;
+  }
+  /deep/.block {
+    float: left;
+    margin-right: 40px;
+  }
+  /deep/.el-form-item__label {
+    padding: 0;
+  }
+  /deep/.el-form-item {
+    margin: 0;
+  }
+  /deep/.show {
+    border: 1px solid #eee;
+    padding: 10px 0 5px 5px;
+    height: 430px;
+    margin-top: 10px;
+  }
+  #flowInformation {
+    height: 420px;
+  }
 }
 </style>
 
