@@ -5,10 +5,10 @@
 
     <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm'>
       <el-form-item label='供应商编码'>
-        <el-input placeholder='供应商编码' v-model='searchProviderForm.provider_code' @keyup.enter.native = 'search'></el-input>
+        <el-input placeholder='供应商编码' v-model='searchProviderForm.providerCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
-      <el-form-item label='公司名'>
-        <el-input placeholder='公司名' v-model='searchProviderForm.provider_name' @keyup.enter.native = 'search'></el-input>
+      <el-form-item label='供应商名称'>
+        <el-input placeholder='供应商名称' v-model='searchProviderForm.providerName' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
       <el-form-item>
         <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
@@ -23,22 +23,28 @@
       max-height='560'
       element-loading-text='拼命加载中'
       style='margin-top: 20px; width: 100%'>
-      <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
+      <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='provider_code' label='供应商编码' width='150'></el-table-column>
-      <el-table-column prop='provider_name' label='公司名' width='200' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='contact' label='联系方式' width='200'></el-table-column>
-      <el-table-column prop='provider_desc' label='供应商描述' width='150'></el-table-column>
+      <el-table-column prop='providerCode' label='供应商编码' width='150'></el-table-column>
+      <el-table-column prop='providerName' label='供应商名称' width='200' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='contact' label='联系方式' width='150'></el-table-column>
+      <el-table-column prop='providerDesc' label='供应商描述' width='200' show-overflow-tooltip></el-table-column>
       <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='categoryName' label='供应商类别' width='200'></el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
+      <el-table-column label='供应商类别' width='150'>
+        <template slot-scope="scope">
+          <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
+            {{scope.row.category === providerType.key ? providerType.value : ''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width='160'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-      <el-table-column label='操作' width='150' fixed='right'>
+      <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
           <el-button type='text' @click='editProvider(scope.row)' icon="el-icon-edit"></el-button>
-          <el-button type='text' @click='deleteProvider(scope.row)' icon="el-icon-delete" disabled></el-button>
+          <el-button type='text' @click='deleteProvider(scope.row)' icon="el-icon-delete"></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -63,22 +69,22 @@
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
             <el-col :span='12'>
-              <el-form-item label='供应商类别' prop='category' >
+              <el-form-item label='供应商类别' prop='category'>
                 <el-select v-model = 'providerForm.category'>
                   <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
-              <el-form-item label='供应商编码' prop='provider_code'>
-                <el-input v-model='providerForm.provider_code'></el-input>
+              <el-form-item label='供应商编码' prop='providerCode'>
+                <el-input v-model='providerForm.providerCode'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span='12'>
-              <el-form-item label='公司名' prop='provider_name'>
-                <el-input v-model='providerForm.provider_name'></el-input>
+              <el-form-item label='供应商名称' prop='providerName'>
+                <el-input v-model='providerForm.providerName'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
@@ -89,14 +95,14 @@
           </el-row>
           <el-row>
             <el-col :span='24'>
-              <el-form-item label='供应商描述' prop='provider_desc'>
-                <el-input v-model='providerForm.provider_desc'></el-input>
+              <el-form-item label='供应商描述' prop='providerDesc'>
+                <el-input v-model='providerForm.providerDesc'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div style='text-align: center'>
             <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-            <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
+            <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
           </div>
         </el-form>
       </div>
@@ -109,7 +115,9 @@
 // 导入各种get，pos等请求方法
 import {
   getProviders,
-  deleteProvider
+  deleteProvider,
+  insertProvider,
+  updateProvider
 } from '@/views/MdmMgmt/apis/index'
 
 export default {
@@ -126,29 +134,41 @@ export default {
         uuid: '',
         pageSize: 10,
         currentPage: 1,
-        provider_code: '',
-        provider_name: ''
+        providerCode: '',
+        providerName: ''
       },
       // 检索返回数据
       providerList: [],
       providerForm: {
         uuid: '',
         category: '',
-        provider_code: '',
-        provider_name: '',
+        providerCode: '',
+        providerName: '',
         contact: '',
-        provider_desc: ''
+        providerDesc: ''
       },
       // 供应商类型下拉列表
       providerTypes: [
-        {key: '1', value: '硬件供应商'},
-        {key: '2', value: '软件供应商'},
-        {key: '3', value: '其他'}
+        {key: 1, value: '硬件供应商'},
+        {key: 2, value: '软件供应商'},
+        {key: 3, value: '其他'}
       ],
       providerFormRules: {
         category: [{ required: true, message: '请选择供应商类别', trigger: 'change' }],
-        provider_code: [{ required: true, message: '请输入供应商编码', trigger: 'blur' }],
-        provider_name: [{ required: true, message: '请输入公司名', trigger: 'blur' }]
+        providerCode: [
+          {required: true, message: '请输入供应商编码', trigger: 'blur'},
+          {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
+        ],
+        providerName: [
+          {required: true, message: '请输入公司名', trigger: 'blur'},
+          {max: 100, message: '输入内容应少于100位字符', trigger: 'blur'}
+        ],
+        providerDesc: [
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        contact: [
+          {pattern: /^\d{11}$|^\d{3,4}-?\d{6,10}$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
+        ]
       }
     }
   },
@@ -162,7 +182,7 @@ export default {
       getProviders(this.searchProviderForm)
         .then(
           function (result) {
-            console.log('get providers')
+            console.log(result)
             this.providerList = result.data.result
             this.total = result.data.totalCount
             this.providerListLoading = false
@@ -195,10 +215,10 @@ export default {
       this.providerForm = {
         uuid: attr.uuid,
         category: attr.category,
-        provider_code: attr.provider_code,
-        provider_name: attr.provider_name,
+        providerCode: attr.providerCode,
+        providerName: attr.providerName,
         contact: attr.contact,
-        provider_desc: attr.provider_desc
+        providerDesc: attr.providerDesc
       }
       this.providerDialogVisible = true
     },
@@ -210,15 +230,12 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteProvider({ uuid: attr.uuid }).then(res => {
-          if (res.code !== '0000') {
-            return
-          }
+        deleteProvider(attr).then(res => {
+          this.search({})
           this.$message({
             message: '刪除成功!',
-            type: 'warning'
+            type: 'success'
           })
-          this.search({})
         })
       }).catch(() => {
         this.$message({
@@ -228,26 +245,54 @@ export default {
       })
     },
     save: function () {
-    // todo
+      this.$refs['providerForm'].validate((valid) => {
+        if (valid) {
+          var func
+          func = this.providerForm.uuid ? updateProvider : insertProvider
+          func(Object.assign({}, this.providerForm)).then(res => {
+            this.$message({
+              message: '供应商保存成功!',
+              type: 'success'
+            })
+            this.providerDialogVisible = false
+            this.search({})
+          }).catch(
+            (e) => {
+              console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+              console.log(e.response)
+              console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+              this.$message({
+                message: e.ErrorMsg,
+                type: 'warning'
+              })
+            }
+          )
+        } else {
+          this.$message({
+            message: '请填写正确的内容',
+            type: 'warning'
+          })
+          return false
+        }
+      })
     },
     reset: function () {
       this.searchProviderForm = {
         uuid: '',
         pageSize: 10,
         currentPage: 1,
-        provider_code: '',
-        provider_name: ''
+        providerCode: '',
+        providerName: ''
       }
     },
     clear: function () {
       this.providerForm = {
         uuid: '',
-        attrCode: '',
-        attrDesc: '',
-        attrType: '',
-        attrDataType: '',
-        unitDesc: '',
-        unitCode: ''
+        category: '',
+        providerCode: '',
+        providerName: '',
+        contact: '',
+        providerDesc: ''
       }
       this.clearValidate()
     },
