@@ -61,8 +61,7 @@ export default {
       chooseList: [],// 按照搜索的出来的小区列表数据
       textHtml: '',
       showCourtName: '',// 当前选中的小区名字
-      showCourtId: '', // 当前选中的小区id
-      courtId: '',
+      courtId: '',// 当前选中的小区id
       searchCourtName: ''
     }
   },
@@ -157,7 +156,7 @@ export default {
       this.$refs['streamPeople'].streamPeople(this.courtId)
     },
     carStream: function () {
-      this.$refs.carStream.goToCarStreamPage()
+      this.$refs.carStream.goToCarStreamPage(this.courtId)
     },
     dialogTableVisibleShow: function () {
       this.$refs['ownerPortrait'].openDialog()
@@ -171,7 +170,7 @@ export default {
     },
     openCourtCar: function () {
       console.log('查看小区车流信息')
-      this.$refs.carStream.isShowCarInfoMap = true
+      this.$refs.carStream.goToCarStreamPage(this.courtId)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {

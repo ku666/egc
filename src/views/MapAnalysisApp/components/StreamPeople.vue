@@ -27,9 +27,9 @@
               <span slot="label">日报表</span>
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="starTime" type="datetime" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
+                <el-date-picker v-model="starTime" type="date" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="endTime" type="datetime" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
+                <el-date-picker v-model="endTime" type="date" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
                 </el-date-picker>
               </div>
             </el-tab-pane>
@@ -358,10 +358,6 @@ export default {
     timeQuery: function () {
       // 切换到图表时 查询加载图表
       this.getData()
-      if (this.isChartShow) {
-        this.myChart = this.$echarts.init(this.myChartNode)
-        this.myChart.setOption(this.echartsData())
-      }
       this.getPgingData()
     },
     // 分页组件单页总数变化
@@ -394,6 +390,8 @@ export default {
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
+          // 数据改变时 初始化图表数据
+          this.myChart.setOption(this.echartsData())
         } else {
           this.$message({
             type: 'error',
@@ -407,13 +405,7 @@ export default {
       let year = date.getFullYear()
       let month = date.getMonth() + 1
       let day = date.getDate()
-      // let hours = date.getHours()
       return year + '-' + month + '-' + day
-      // if (this.parameter.reportType === '1') {
-      //   return year + '-' + month + '-' + day + ' ' + hours + ':00:00'
-      // } else {
-      //   return year + '-' + month + '-' + day
-      // }
     },
     // 获取人流分页信息
     getPgingData: function () {
@@ -435,6 +427,8 @@ export default {
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
       this.parameter.reportType = '1'
+      this.isChartShow = false
+      this.isTableShow = true
     }
   },
   mounted: function () { }
@@ -450,7 +444,7 @@ export default {
   right: 60px;
   bottom: 10px;
 }
-.block {
+.block /deep/ {
   float: left;
   margin-right: 40px;
 }
