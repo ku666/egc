@@ -3,7 +3,7 @@ import mapanalysisAPI from './mapanalysis'
 // Mock.setup({
 //   timeout: '350-600'
 // })
-let contextPath = '/egc-mapanalysiscomponent/api/mapanalysis'
+let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
 let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
 // 条件查询小区列表
 Mock.mock(contextPath + '/getCourtList', 'get', mapanalysisAPI.getCourtList)
@@ -35,3 +35,16 @@ Mock.mock(
 )
 // 获取行政区划列表
 Mock.mock(contextPath + '/getOrgList', 'get', mapanalysisAPI.getOrgList)
+
+// 获取设备数量信息
+Mock.mock(
+  personPath + '/getEquipmentInfo',
+  'get',
+  mapanalysisAPI.getEquipmentInfo
+)
+// 获取业主画像信息
+Mock.mock(
+  personPath + '/getBuildProfile',
+  'get',
+  mapanalysisAPI.getBuildProfile
+)

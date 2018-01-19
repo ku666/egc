@@ -9,6 +9,8 @@ import demorouters from '@/views/demo/routers/index'
 import userMgmtrouters from '@/views/UserMgmt/login/routers/index'
 import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
 import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
+// 引人大屏模块路由
+import HouseAllApp from '@/views/HouseAllApp/routers/index'
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -37,7 +39,8 @@ export default new Router({
         ...demorouters,
         ...userMgmtrouters,
         ...mdmMgmtrouters,
-        ...MapAnalysisApp
+        ...MapAnalysisApp,
+        ...HouseAllApp
       ]
     }
   ]

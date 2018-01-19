@@ -4,8 +4,12 @@
       <el-col :span="12">
         <el-button type="primary" @click="carStream">车流数据展示</el-button>
         <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
+        <el-button type="primary" @click="dialogTableVisibleShow">业主画像数据展示</el-button>
+        <el-button type="primary" @click="equipmentShow">设备数数据展示</el-button>
         <car-stream ref="carStream"></car-stream>
         <stream-people ref="streamPeople"></stream-people>
+        <owner-portrait ref="ownerPortrait"></owner-portrait>
+        <equipment-report ref="equipmentReport"></equipment-report>
       </el-col>
       <el-col :span="6">
         <el-input v-model="searchCourtName" placeholder="请输入小区名称" @keyup.enter.native="searchCourt"></el-input>
@@ -39,10 +43,14 @@ import chooseImg from '@/views/MapAnalysisApp/assets/images/u346.png'
 import hdmap from 'hdmap'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
+import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
+import OwnerPortrait from './components/OwnerPortrait'
 export default {
   components: {
     StreamPeople,
-    CarStream
+    CarStream,
+    EquipmentReport,
+    OwnerPortrait
   },
   data () {
     return {
@@ -150,6 +158,12 @@ export default {
     },
     carStream: function () {
       this.$refs.carStream.goToCarStreamPage()
+    },
+    dialogTableVisibleShow: function () {
+      this.$refs['ownerPortrait'].openDialog()
+    },
+    equipmentShow: function () {
+      this.$refs['equipmentReport'].openDialog()
     },
     openCourtPeo: function () {
       console.log('查看小区人流信息')
