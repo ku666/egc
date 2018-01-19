@@ -13,13 +13,10 @@ module.exports = {
       '/demo': {
         target: 'http://172.16.30.46:8082/'
       },
-      '/egc-mapanalysiscomponent': {
-        target: 'http://172.16.30.132:8082/'
+      '/egc-smartcommunitymgmtapp': {
+        target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
+        changeOrigin: true
       }
-      // '/egc-smartcommunitymgmtapp': {
-      //   target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
-      //   changeOrigin: true
-      // }
       // '/egc-smartcommunitymgmtapp': {
       //   target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
       //   changeOrigin: true

@@ -7,20 +7,20 @@
           <el-col :span="8">
             <el-form-item label="报表类型">
               <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
-                <el-option label="年报表" value="1"></el-option>
+                <el-option label="日报表" value="1"></el-option>
                 <el-option label="月报表" value="2"></el-option>
-                <el-option label="日报表" value="3"></el-option>
+                <el-option label="年报表" value="3"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="开始时间">
-              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime"></el-date-picker>
+              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.startDate" style="width:100%" :picker-options="forbiddenStartDatetime"></el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="8" style="text-align:left">
             <el-form-item label="结束时间">
-              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime"></el-date-picker>
+              <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.endDate" style="width:100%" :picker-options="forbiddenEndDatetime"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -40,22 +40,22 @@
         <div class="carInfoTable" v-show="isShowTable" v-loading="loading">
           <!-- 展示表格开始 -->
           <el-table stripe :data="carStreamData" height="400" border style="width: 100%">
-            <el-table-column prop="courtID" label="小区ID" width="180">
-            </el-table-column>
+            <!-- <el-table-column prop="courtID" label="小区ID" width="180">
+            </el-table-column> -->
             <el-table-column prop="date" label="日期" width="180">
             </el-table-column>
-            <el-table-column prop="carInCourt" label="进入车辆" width="180">
+            <el-table-column prop="carInCount" label="进入总车辆" width="180">
             </el-table-column>
-            <el-table-column prop="carOutCourt" label="出去车辆" width="180">
+            <el-table-column prop="carOutCount" label="出去总车辆" width="180">
             </el-table-column>
-            <el-table-column prop="carInRegedCourt" label="登记车辆" width="180">
+            <el-table-column prop="carInRegedCount" label="登记进入总车辆" width="180">
             </el-table-column>
-            <el-table-column prop="carOutRegedCourt" label="临时车辆" width="180">
+            <el-table-column prop="carOutRegedCount" label="登记出去总车辆" width="180">
             </el-table-column>
           </el-table>
           <!-- 展示表格结束 -->
           <!-- 分页显示控件开始 -->
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="carStreamData.length">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalDataNum">
           </el-pagination>
         </div>
         <!-- 地图展示 -->
@@ -75,15 +75,15 @@ export default {
     return {
       isShowCarInfoMap: false, // 是否显示弹框
       isShowTable: true, // 是否显示表格
-      isShowChart: false,
+      isShowChart: false, // 是否显示echarts图表
       clickCount: 0,
       preTableShowStatus: '', // 判断是否第一次进入图表显示
-      formDatePickType: 'year', // 报表类型
+      formDatePickType: 'date', // 报表类型
       form: {
-        courtID: '', // 小区ID
+        courtID: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
         reportType: '1', // 报表类型
-        startTime: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
-        endTime: new Date() // 结束时间
+        startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
+        endDate: new Date() // 结束时间
       },
       carStreamData: [], // 后端请求回的车流信息
       mapDataList: { // 车流信息映射到echarts的数据
@@ -93,17 +93,19 @@ export default {
         carInRegedCourt: [], // 注册车辆数
         carOutRegedCourt: [] // 临时车辆数
       },
-      currentPage: 2,
-      myChart: '',
+      currentPage: 1, // 分页显示当前第几页
+      pageSize: 10, // 每页显示多少条数据
+      totalDataNum: 0, // 总共有几条数据
+      myChart: '', // eCharts实例
       loading: false,
-      forbiddenStartDatetime: {
+      forbiddenStartDatetime: { // 限制开始时间选择器
         disabledDate: (time) => {
-          return time.getTime() > this.form.endTime
+          return time.getTime() > this.form.endDate
         }
       },
-      forbiddenEndDatetime: {
+      forbiddenEndDatetime: { // 限制结束时间选择器
         disabledDate: (time) => {
-          return time.getTime() < this.form.startTime
+          return time.getTime() < this.form.startDate
         }
       }
     }
@@ -116,15 +118,11 @@ export default {
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
         this.$nextTick(function () {
-          // 请求获取小区车流数据
-          getCourtCarAccessInfo().then((res) => {
-            this.carStreamData = res.data
-            this.sortData()
-          })
+          this.getCarAccessPageList()
         })
       } else {
         this.$nextTick(function () {
-          this.chartInit()
+          this.getCourtCarAccessInfo()
         })
       }
     },
@@ -142,7 +140,7 @@ export default {
       if (this.clickCount > 0) return
       console.log('重复击')
       this.$nextTick(() => {
-        this.chartInit()
+        this.getCourtCarAccessInfo()
       })
       this.clickCount++
     },
@@ -152,99 +150,89 @@ export default {
       this.myChart = myChart
       // 设置图表配置信息
       var option = {
-        baseOption: {
-          title: {
-            text: '小区车流量'
-          },
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'shadow'
-            }
-          },
-          grid: {
-            left: '2%',
-            right: '2%',
-            bottom: '10%',
-            containLabel: true
-          },
-          legend: {
-            data: ['进入车辆', '出去车辆'],
-            type: 'plain',
-            show: true,
-            right: '18%',
-            top: '1%'
-          },
-          toolbox: {
-            show: true,
-            feature: {
-              magicType: { show: true, type: ['line', 'bar'] },
-              restore: { show: true },
-              saveAsImage: { show: true }
-            }
-          },
-          calculable: true,
-          xAxis: [
-            {
-              type: 'category',
-              data: this.mapDataList.date,
-              axisTick: {
-                alignWithLabel: true
-              }
-            }
-          ],
-          yAxis: [
-            {
-              type: 'value'
-            }
-          ],
-          dataZoom: [
-            {
-              type: 'slider',
-              show: true,
-              xAxisIndex: [0],
-              start: 0,
-              end: 25
-            },
-            {
-              type: 'inside',
-              show: true,
-              start: 50,
-              xAxisIndex: [0],
-              end: 100
-            }],
-          series: [
-            {
-              name: '进入车辆',
-              type: 'bar',
-              data: this.mapDataList.carInCourt
-
-            },
-            {
-              name: '出去车辆',
-              type: 'bar',
-              data: this.mapDataList.carOutCourt
-            }
-          ]
+        title: {
+          text: '小区车流量'
         },
-        media: {
-          option: {
-            legend: {
-              right: '18%',
-              top: '1%'
-            },
-            series: [
-              {
-                radius: [10, '50%'],
-                center: ['25%', '50%']
-              },
-              {
-                radius: [10, '50%'],
-                center: ['75%', '50%']
-              }
-            ]
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
           }
-        }
+        },
+        grid: {
+          left: '2%',
+          right: '2%',
+          bottom: '10%',
+          containLabel: true
+        },
+        legend: {
+          data: ['进入总车辆', '出去总车辆', '登记进入总车辆', '登记出去总车辆'],
+          type: 'plain',
+          show: true,
+          right: '18%',
+          top: '1%'
+        },
+        toolbox: {
+          show: true,
+          feature: {
+            magicType: { show: true, type: ['line', 'bar'] },
+            restore: { show: true },
+            saveAsImage: { show: true }
+          }
+        },
+        calculable: true,
+        xAxis: [
+          {
+            type: 'category',
+            data: this.mapDataList.date,
+            axisTick: {
+              alignWithLabel: true
+            }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value'
+          }
+        ],
+        dataZoom: [
+          {
+            type: 'slider',
+            show: true,
+            xAxisIndex: [0],
+            start: 0,
+            end: 25
+          },
+          {
+            type: 'inside',
+            show: true,
+            start: 50,
+            xAxisIndex: [0],
+            end: 100
+          }],
+        series: [
+          {
+            name: '进入总车辆',
+            type: 'bar',
+            data: this.mapDataList.carInCourt
+
+          },
+          {
+            name: '出去总车辆',
+            type: 'bar',
+            data: this.mapDataList.carOutCourt
+          },
+          {
+            name: '登记进入总车辆',
+            type: 'bar',
+            data: this.mapDataList.carInRegedCourt
+          },
+          {
+            name: '登记出去总车辆',
+            type: 'bar',
+            data: this.mapDataList.carOutRegedCourt
+          }
+        ]
       }
       myChart.setOption(option)
       // echarts大小自适应
@@ -278,59 +266,98 @@ export default {
         endValue: data[Math.min(params.dataIndex + zoomSize / 2, data.length - 1)]
       })
     },
-    sortData: function () {
+    sortData: function (data) {
       // 整理成echart的数据格式
-      for (let key in this.mapDataList) {
-        this.mapDataList[key] = []
+      this.mapDataList = {
+        date: [],
+        carInCourt: [], // 进入车辆数
+        carOutCourt: [], // 出去车辆数
+        carInRegedCourt: [], // 注册车辆数
+        carOutRegedCourt: [] // 临时车辆数
       }
-      this.carStreamData.forEach(element => {
+      data.forEach(element => {
         this.mapDataList.date.push(element.date)
-        this.mapDataList.carInCourt.push(element.carInCourt)
-        this.mapDataList.carOutCourt.push(element.carOutCourt)
-        this.mapDataList.carInRegedCourt.push(element.carInRegedCourt)
-        this.mapDataList.carOutRegedCourt.push(element.carOutRegedCourt)
+        this.mapDataList.carInCourt.push(element.carInCount)
+        this.mapDataList.carOutCourt.push(element.carOutCount)
+        this.mapDataList.carInRegedCourt.push(element.carInRegedCount)
+        this.mapDataList.carOutRegedCourt.push(element.carOutRegedCount)
       })
     },
     reportTypeSelected () {
       // 该表报表类型，年报表或月报表等
       if (this.form.reportType === '1') {
-        this.formDatePickType = 'year'
+        this.formDatePickType = 'date'
       } else if (this.form.reportType === '2') {
         this.formDatePickType = 'month'
       } else {
-        this.formDatePickType = 'date'
+        this.formDatePickType = 'year'
       }
     },
     handleSizeChange (val) {
       // 改变分页显示条数，发送请求 初始化状态
-      console.log(`sizechange ${val} 条`)
+      this.pageSize = val
+      this.currentPage = 1
+      this.getCarAccessPageList()
     },
     handleCurrentChange (val) {
       // 分页获取数据，发送请求 初始化状态
-      console.log(`currentChange ${val} 条`)
-      getCarAccessPageList().then(function (res) {
+      console.log('触发了吗')
+      var queryParam = this.queryParam()
+      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: val })
+      getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询')
-        this.carStreamData = res.data
-      }.bind(this))
+        console.log(res.data.result)
+        this.carStreamData = res.data.result
+      })
     },
     submitForm (formName) {
-      // 点击查询按钮，通过发送请求 初始化状态
-      // 在图表页时初始化echarts
-      getCourtCarAccessInfo({
-        courtID: 'e9cb9549f7e24660b80b5b3c400639dc',
-        reportType: 1,
-        startDate: '2018-01-01',
-        endDate: '2018-01-17'
-      }).then((res) => {
-        this.carStreamData = res.data
-        this.sortData()
-      })
+      // 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
+      console.log(this.isShowTable)
+      if (this.isShowTable) {
+        this.pageSize = 10
+        this.currentPage = 1
+        this.getCarAccessPageList()
+      } else {
+        this.getCourtCarAccessInfo()
+      }
       this.preTableShowStatus = ''
       this.clickCount = 0
     },
-    resetForm (formName) {
-      // 重置清空表单
-      this.$refs[formName].resetFields()
+    getCourtCarAccessInfo () {
+      console.log('获取时间段内所有数据')
+      var data = this.queryParam()
+      getCourtCarAccessInfo(data).then((res) => {
+        var data = res.data
+        this.sortData(data)
+        this.chartInit()
+      })
+    },
+    getCarAccessPageList () {
+      var queryParam = this.queryParam()
+      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
+      getCarAccessPageList(queryParam).then(res => {
+        console.log('分页查询数据')
+        this.totalDataNum = res.data.totalCount
+        this.carStreamData = res.data.result
+      })
+    },
+    queryParam () {
+      return Object.assign({}, this.form, {
+        startDate: this.timeFomate(this.form.startDate),
+        endDate: this.timeFomate(this.form.endDate)
+      })
+    },
+    timeFomate (date) {
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+      if (this.form.reportType === '1') {
+        return year + '-' + month + '-' + day
+      } else if (this.form.reportType === '2') {
+        return year + '-' + month
+      } else {
+        return year + ''
+      }
     },
     closeDialog () {
       this.clickCount = 0

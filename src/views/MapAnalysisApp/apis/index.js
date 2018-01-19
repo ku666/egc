@@ -34,7 +34,7 @@ export const getCourtInfo = data => {
 export const getCourtCarAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCourtCarAccessInfo',
+    url: personPath + '/listCarFlowInfo',
     params: data
   }).then(res => res.data)
 }
@@ -51,7 +51,7 @@ export const getCourtCarAccessInfo = data => {
 export const getCarAccessPageList = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCarAccessPageList',
+    url: personPath + '/listCarFlowPage',
     params: data
   }).then(res => res.data)
 }
