@@ -1,11 +1,11 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="1400px">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="1450px">
     <!-- <div slot="title">
       <span class="pull-left">设备数报表</span>
     </div> -->
     <div class="container">
-      <el-button type="primary" @click="chartSwitch" plain>图表</el-button>
-      <el-button type="success" @click="tableSwitch" plain>表格</el-button>
+      <el-button type="primary" @click="chartSwitch">图表</el-button>
+      <el-button type="success" @click="tableSwitch">表格</el-button>
       <div v-show="isChartShow">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
@@ -13,7 +13,7 @@
       </div>
       <div v-show="isTableShow">
         <div class="equipmentTable">
-          <el-table :data="tableData1" border max-height="550" sum-text="总数量" show-summary style="width: 100%; margin-top: 20px">
+          <el-table :data="tableData1" :summary-method="getSummaries" border max-height="550" show-summary style="width: 100%; margin-top: 20px">
             <el-table-column prop="deviceType" label="设备ID" align="center">
             </el-table-column>
             <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
@@ -50,6 +50,31 @@ export default {
     }
   },
   methods: {
+    getSummaries (param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '总数量'
+          return
+        }
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!isNaN(value)) {
+              return prev + curr
+            } else {
+              return prev
+            }
+          }, 0)
+          sums[index] += ''
+        } else {
+          sums[index] = 'N/A'
+        }
+      })
+      return sums
+    },
     chartSwitch () {
       this.isChartShow = true
       this.isTableShow = false
@@ -129,7 +154,8 @@ export default {
             console.log(this.onlinedata)
             // 设备数量数据
             let option = {
-              backgroundColor: 'rgba(0,0,20,0.1)',
+              // backgroundColor: 'rgba(0,0,20,0.1)',
+              backgroundColor: 'dark',
               title: {
                 text: '设备总数量',
                 subtext: '恒大山水城',
@@ -140,20 +166,29 @@ export default {
                 formatter: '{a} <br/>{b} : {c} ({d}%)'
               },
               legend: {
+                data: this.names,
                 x: 'center',
                 y: 'bottom',
-                data: this.names
+                type: 'scroll'
               },
               series: [
                 {
                   name: '设备总数量',
                   type: 'pie',
-                  radius: '60%',
-                  center: ['48%', '50%'],
+                  radius: '50%',
+                  center: ['50%', '50%'],
+                  selectedMode: 'single',
                   // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
                   data: this.totaldata,
                   // roseType: 'radius',
                   label: {
+                    emphasis: {
+                      show: true,
+                      textStyle: {
+                        fontSize: '25',
+                        fontWeight: 'bold'
+                      }
+                    }
                   },
                   labelLine: {
                     normal: {
@@ -185,6 +220,7 @@ export default {
               legend: {
                 x: 'center',
                 y: 'bottom',
+                type: 'scroll',
                 data: this.onlinenames
               },
               calculable: true,
@@ -194,6 +230,21 @@ export default {
                   type: 'pie',
                   radius: [100, 170],
                   center: ['50%', '50%'],
+                  selectedMode: 'single',
+                  avoidLabelOverlap: false,
+                  label: {
+                    // normal: {
+                    //   show: true,
+                    //   position: 'center'
+                    // },
+                    emphasis: {
+                      show: true,
+                      textStyle: {
+                        fontSize: '25',
+                        fontWeight: 'bold'
+                      }
+                    }
+                  },
                   // roseType: 'radius',
                   data: this.onlinedata
                 }
@@ -212,15 +263,15 @@ export default {
 #equipmentcharts {
   float: left;
   margin-top: 20px;
-  width: 670px;
-  height: 600px;
+  width: 700px;
+  height: 650px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
   float: right;
-  width: 670px;
+  width: 700px;
   margin-top: 20px;
-  height: 600px;
+  height: 650px;
   border: 1px solid #ccc;
 }
 .clear {

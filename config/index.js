@@ -20,18 +20,16 @@ module.exports = {
         target: 'http://172.16.30.62:8082',// 业主画像
         changeOrigin: true
       },
-      '/device': {
-        target: 'http://192.168.0.186:9030', // 设备报表
+      // '/egc-smartcommunitymgmtapp': {
+      '/mapAnalysis': {
+        // target: 'http://172.16.30.64:8082',// 地图分析
+        target: 'http://192.168.0.186:9030',
         changeOrigin: true
       },
-      '/egc-smartcommunitymgmtapp': {
-        target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
+      '/device': {
+        target: 'http://192.168.0.186:9030/', // 设备报表
         changeOrigin: true
       }
-      // '/egc-smartcommunitymgmtapp': {
-      //   target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
-      //   changeOrigin: true
-      // }
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
