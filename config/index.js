@@ -14,7 +14,7 @@ module.exports = {
         target: 'http://172.16.30.46:8082/'
       },
       '/egc-mapanalysiscomponent': {
-        target: 'http://172.16.30.27:8082/'
+        target: 'http://172.16.30.27:8082/' // http://192.168.0.186:38761/
       },
       '/egc-smartcommunitymgmtapp': {
         target: 'http://172.16.30.30:8082',
