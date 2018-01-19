@@ -3,6 +3,9 @@
     <el-container>
       <el-header>恒大智慧云小区服务平台</el-header>
       <el-main>
+        <p class='back'>
+          <span @click='goBack'>返回</span>
+        </p>
         <div class='house-page'>
           <!-- 小区楼栋信息 -->
           <div class="per-house">
@@ -10,7 +13,7 @@
             <el-table :data="perHouseList" stripe style="flex: 1;">
               <el-table-column prop="houseName" label="楼栋"></el-table-column>
               <el-table-column prop="housePersonNum" label="总人数"></el-table-column>
-              <el-table-column prop="houseSexProportion" label="相别比例"></el-table-column>
+              <el-table-column prop="houseSexProportion" label="性别比例"></el-table-column>
               <el-table-column prop="totalHouse" label="套数"></el-table-column>
               <el-table-column prop="houseOutInFrequency" label="出入频率"></el-table-column>
             </el-table>
@@ -34,7 +37,7 @@
               <li>
                 <strong> 总人数：</strong> 1000</li>
               <li>
-                <strong> 男女比例：</strong>2:1</li>
+                <strong> 男女比例：</strong>1:2</li>
               <li>
                 <strong> 出入频率: </strong> 500次/天</li>
             </ul>
@@ -54,42 +57,33 @@
   </div>
 </template>
 <script>
-// getSearchCourtInfo
 import { getCourtInfo } from '@/views/HouseAllApp/apis/index.js'
 export default {
   data () {
     return {
       // courtId: this.$route.params.id,
       courtName: this.$route.params.name,
-      perHouseList: [{
-        houseName: 'A栋', // 小区楼栋
-        totalHouse: 100, // 小区楼栋总套数
-        housePersonNum: 500, // 小区楼栋总人数
-        houseSexProportion: '1:2', // 小区楼栋性别比例
-        houseOutInFrequency: 150 // 小区楼栋出入频率
-      }, {
-        houseName: 'B栋', // 小区楼栋
-        totalHouse: 100, // 小区楼栋总套数
-        housePersonNum: 500, // 小区楼栋总人数
-        houseSexProportion: '1:2', // 小区楼栋性别比例
-        houseOutInFrequency: 150 // 小区楼栋出入频率
-      }]
+      perHouseList: []
     }
   },
   mounted () {
+    // 获取小区详细信息
     getCourtInfo()
       .then(res => {
         console.log(res.data)
-        this.perHouseList = res.data.data
+        if (res.data.code === '00000') {
+          this.perHouseList = res.data.data
+        }
       })
-    // getSearchCourtInfo()
-    //   .then(res => {
-    //     console.log(res.data)
-    //   })
+  },
+  methods: {
+    goBack () {
+      this.$router.go(-1)
+    }
   }
 }
 </script>
-<style lang="less" scoped>
+<style scoped>
 li {
   list-style: none;
 }
@@ -120,7 +114,6 @@ body {
   margin: 0 auto;
 }
 .house-page {
-  margin-top: 20px;
   overflow: hidden;
 }
 .per-house {
@@ -151,6 +144,13 @@ body {
 }
 .primary-wrap {
   margin-top: 30px;
+}
+.back span {
+  background: #126fe9;
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 </style>
 

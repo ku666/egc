@@ -15,13 +15,15 @@
           <el-table :data="allHouseList" stripe style="flex: 1;margin-top: 10px;" @row-click="goHouseInfo">
             <el-table-column prop="courtName" label="小区"></el-table-column>
             <el-table-column prop="allPersonNum" label="总人数"></el-table-column>
-            <el-table-column prop="sexProportion" label="相别比例"></el-table-column>
+            <el-table-column prop="sexProportion" label="性别比例"></el-table-column>
             <el-table-column prop="houseCount" label="楼栋数"></el-table-column>
             <el-table-column prop="outInFrequency" label="出入频率"></el-table-column>
           </el-table>
         </div>
-        <el-pagination background layout="prev, pager, next" :total="60" @current-change='selectIndex'>
-        </el-pagination>
+        <div class="block">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage4" :page-sizes="[100, 200, 300, 400]" :page-size="100" layout="total, sizes, prev, pager, next, jumper" :total="400">
+          </el-pagination>
+        </div>
       </el-main>
     </el-container>
   </div>
@@ -33,7 +35,8 @@ export default {
   data () {
     return {
       valHouse: '', // 搜索小区
-      allHouseList: []
+      allHouseList: [],
+      currentPage4: 1 // 当前页数
     }
   },
   mounted () {
@@ -41,7 +44,9 @@ export default {
     getCourtList()
       .then(res => {
         console.log(res.data)
-        this.allHouseList = res.data.data
+        if (res.data.code === '00000') {
+          this.allHouseList = res.data.data
+        }
       })
   },
   methods: {
@@ -63,9 +68,13 @@ export default {
       }
     },
     // 当前页数
-    selectIndex (currentPage) {
+    handleCurrentChange (currentPage) {
       console.log(currentPage)
       // 可在下面进行分页数据请求
+    },
+    // 每页显示条数改变
+    handleSizeChange (...rest) {
+      console.log(rest)
     }
   }
 }
@@ -73,7 +82,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--  lang="less" -->
-<style lang="less" scoped>
+<style scoped>
 html,
 body,
 #app {
@@ -139,13 +148,6 @@ a {
 .el-table thead.has-gutter {
   color: #666;
 }
-.el-table__header/deep/ {
-  .has-gutter {
-    .cell {
-      background-color: rgb(51, 51, 51);
-    }
-  }
-}
 .el-input {
   width: 50%;
 }
@@ -161,5 +163,6 @@ a {
 }
 .el-pagination {
   margin-top: 20px;
+  text-align: center;
 }
 </style>
