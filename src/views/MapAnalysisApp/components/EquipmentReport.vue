@@ -4,8 +4,8 @@
       <span class="pull-left">设备数报表</span>
     </div> -->
     <div class="container">
-      <el-button type="primary" @click="chartSwitch" plain>图表</el-button>
-      <el-button type="success" @click="tableSwitch" plain>表格</el-button>
+      <el-button type="primary" @click="chartSwitch">图表</el-button>
+      <el-button type="success" @click="tableSwitch">表格</el-button>
       <div v-show="isChartShow">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
@@ -154,7 +154,8 @@ export default {
             console.log(this.onlinedata)
             // 设备数量数据
             let option = {
-              backgroundColor: 'rgba(0,0,20,0.1)',
+              // backgroundColor: 'rgba(0,0,20,0.1)',
+              backgroundColor: 'dark',
               title: {
                 text: '设备总数量',
                 subtext: '恒大山水城',
@@ -169,7 +170,6 @@ export default {
                 x: 'center',
                 y: 'bottom',
                 type: 'scroll'
-
               },
               series: [
                 {
@@ -177,10 +177,18 @@ export default {
                   type: 'pie',
                   radius: '50%',
                   center: ['50%', '50%'],
+                  selectedMode: 'single',
                   // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
                   data: this.totaldata,
                   // roseType: 'radius',
                   label: {
+                    emphasis: {
+                      show: true,
+                      textStyle: {
+                        fontSize: '25',
+                        fontWeight: 'bold'
+                      }
+                    }
                   },
                   labelLine: {
                     normal: {
@@ -222,6 +230,21 @@ export default {
                   type: 'pie',
                   radius: [100, 170],
                   center: ['50%', '50%'],
+                  selectedMode: 'single',
+                  avoidLabelOverlap: false,
+                  label: {
+                    // normal: {
+                    //   show: true,
+                    //   position: 'center'
+                    // },
+                    emphasis: {
+                      show: true,
+                      textStyle: {
+                        fontSize: '25',
+                        fontWeight: 'bold'
+                      }
+                    }
+                  },
                   // roseType: 'radius',
                   data: this.onlinedata
                 }
