@@ -27,9 +27,9 @@
               <span slot="label">日报表</span>
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="parameter.startDate" type="datetime" placeholder="开始时间" :picker-options="forbiddenDatetime" size="small">
+                <el-date-picker v-model="starTime" type="datetime" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="parameter.endDate" type="datetime" placeholder="结束时间" size="small">
+                <el-date-picker v-model="endTime" type="datetime" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
                 </el-date-picker>
               </div>
             </el-tab-pane>
@@ -37,9 +37,9 @@
             <el-tab-pane label="月报表" name="2">
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="parameter.startDate" type="month" placeholder="开始月份" :picker-options="forbiddenDatetime" size="small">
+                <el-date-picker v-model="starTime" type="month" placeholder="开始月份" :picker-options="starForbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="parameter.endDate" type="month" placeholder="结束月份" size="small">
+                <el-date-picker v-model="endTime" type="month" placeholder="结束月份" size="small" :picker-options="endForbiddenDatetime">
                 </el-date-picker>
               </div>
             </el-tab-pane>
@@ -47,9 +47,9 @@
             <el-tab-pane label="年报表" name="3">
               <div class="block">
                 <span class="demonstration"></span>
-                <el-date-picker v-model="parameter.startDate" align="right" type="year" placeholder="开始年份" :picker-options="forbiddenDatetime" size="small">
+                <el-date-picker v-model="starTime" align="right" type="year" placeholder="开始年份" :picker-options="starForbiddenDatetime" size="small">
                 </el-date-picker>至
-                <el-date-picker v-model="parameter.endDate" align="right" type="year" placeholder="结束年份" size="small">
+                <el-date-picker v-model="endTime" align="right" type="year" placeholder="结束年份" size="small" :picker-options="endForbiddenDatetime">
                 </el-date-picker>
               </div>
             </el-tab-pane>
@@ -63,7 +63,7 @@
         <div class="show">
           <div v-show="isTableShow">
             <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe>
-              <el-table-column prop="date" label="日期">
+              <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
               </el-table-column>
@@ -83,8 +83,8 @@
       </el-col>
     </el-row>
     <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+      <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+      <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
     </span>
   </el-dialog>
 </template>
@@ -110,8 +110,8 @@ export default {
         pageNum: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '1', // 报表类型（日、月、年）
-        startDate: new Date(new Date().setDate(new Date().getDate() - 15)),
-        endDate: new Date()// 结束时间
+        startDate: null, // 开始时间
+        endDate: null // 结束时间
       },
       cellDetailsList: {},
       total: 20, // 数据条数
@@ -120,15 +120,21 @@ export default {
       isTableShow: true,
       dateSelection: [],
       dialogVisible: false,
-      options: {}, // echarts对象
+      starTime: new Date(new Date().setDate(new Date().getDate() - 15)),
+      endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
       myChartContainer: null,
-      // 限制开始时间不能大于结束时间
-      forbiddenDatetime: {
+      // 限制开始时间与结束时间
+      starForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > this.endDate
+          return time.getTime() > this.endTime
+        }
+      },
+      endForbiddenDatetime: {
+        disabledDate: (time) => {
+          return time.getTime() > new Date()
         }
       }
     }
@@ -136,19 +142,17 @@ export default {
   methods: {
     // 点击切换图表展示
     chartSwitch: function () {
+      this.getData()
       this.isChartShow = true
       this.isTableShow = false
-      console.log(this.form.perInCountList)
-      // 保存this
-      let self = this
       // 自适应宽
-      setTimeout(function () {
-        self.myChartContainer = function () {
+      setTimeout(() => {
+        this.myChartContainer = function () {
           // 处理IE获取不到canvas.offsetWidth的问题
-          self.myChartNode.style.width = self.canvasNode.clientWidth === 0 ? '900px' : self.canvasNode.offsetWidth + 'px'
+          this.myChartNode.style.width = this.canvasNode.offsetWidth === 0 ? '900px' : this.canvasNode.offsetWidth + 'px'
         }
-        self.myChartContainer()
-        self.myChart.resize()
+        this.myChartContainer()
+        this.myChart.resize()
       })
       // echarts图表
       this.myChartNode = document.querySelector('#flowInformation')
@@ -156,9 +160,9 @@ export default {
       this.myChart = this.$echarts.init(this.myChartNode)
       this.myChart.setOption(this.echartsData())
       // 屏幕宽度发生改变时重置容器高宽
-      window.onresize = function () {
-        self.myChartContainer()
-        self.myChart.resize()
+      window.onresize = () => {
+        this.myChartContainer()
+        this.myChart.resize()
       }
     },
     // echart图表数据
@@ -315,10 +319,6 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      // 清空图表数据
-      // this.form.dateList = []
-      // this.form.perInCountList = []
-      // this.form.perOutCountList = []
       // 点击切换表格时 重置表格最大高度
       let elTable = document.querySelector('.el-table')
       elTable.style.maxHeight = '381px'
@@ -336,7 +336,8 @@ export default {
         elTableBody.style.width = '100%'
       }
       // 获取小区详细信息
-      getCourtInfo({ courtId: _courtId }).then(res => {
+      // getCourtInfo({ courtId: _courtId }).then(res => {
+      getCourtInfo().then(res => {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
@@ -345,16 +346,22 @@ export default {
     reportSwitch: function (label) {
       // 根据报表类型加载不同的默认时间
       if (label.name === '1') {
-        this.startDate = new Date(new Date().setDate(new Date().getDate() - 15))
+        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
       } else if (label.name === '2') {
-        this.startDate = new Date(new Date().setDate(new Date().getMonth() - 1))
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
       } else {
-        this.startDate = new Date(new Date().setDate(new Date().getMonth() - 12))
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
       }
       this.reportType = label.name
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
+      // 切换到图表时 查询加载图表
+      this.getData()
+      if (this.isChartShow) {
+        this.myChart = this.$echarts.init(this.myChartNode)
+        this.myChart.setOption(this.echartsData())
+      }
       this.getPgingData()
     },
     // 分页组件单页总数变化
@@ -369,10 +376,19 @@ export default {
     },
     // 获取人流信息
     getData: function () {
-      // getCourtPerAccessInfo(this.parameter).then(res => {
-      getCourtPerAccessInfo().then(res => {
+      let perData = {}
+      perData.courtID = 'e9cb9549f7e24660b80b5b3c400639dc'
+      perData.endDate = this.processingDate(this.endTime)
+      perData.startDate = this.processingDate(this.starTime)
+      perData.reportType = this.parameter.reportType
+      getCourtPerAccessInfo(perData).then(res => {
+        // getCourtPerAccessInfo().then(res => {
         if (res.data.code === '00000') {
           let perData = res.data.data
+          // 添加前先清空
+          this.form.dateList = []
+          this.form.perInCountList = []
+          this.form.perOutCountList = []
           for (let i = 0; i < perData.length; i++) {
             this.form.dateList.push(perData[i].date)
             this.form.perInCountList.push(perData[i].perInCount)
@@ -388,30 +404,23 @@ export default {
     },
     // 处理日期对象
     processingDate: function (date) {
-      if (typeof date !== 'string') {
-        var year = date.getFullYear()
-        var month = date.getMonth() + 1
-        var day = date.getDate()
-        switch (this.parameter.reportType) {
-          case '1':
-            return year + '-' + month + '-' + day
-          case '2':
-            return year + '-' + month
-          default:
-            return year
-        }
-      }
-      return date
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      // let hours = date.getHours()
+      return year + '-' + month + '-' + day
+      // if (this.parameter.reportType === '1') {
+      //   return year + '-' + month + '-' + day + ' ' + hours + ':00:00'
+      // } else {
+      //   return year + '-' + month + '-' + day
+      // }
     },
     // 获取人流分页信息
     getPgingData: function () {
-      this.parameter.startDate = this.processingDate(this.parameter.startDate)
-      this.parameter.endDate = this.processingDate(this.parameter.endDate)
-      // console.log(this.parameter.endDate.getFullYear())
-      // console.log(this.processingDate(this.parameter.startDate))
-      // getPerAccessPageList(this.parameter).then(res => {
-      getPerAccessPageList().then(res => {
-        console.log(res.data.data)
+      this.parameter.startDate = this.processingDate(this.starTime)
+      this.parameter.endDate = this.processingDate(this.endTime)
+      getPerAccessPageList(this.parameter).then(res => {
+        // getPerAccessPageList().then(res => {
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
           this.total = res.data.data.totalCount
@@ -426,13 +435,9 @@ export default {
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
       this.parameter.reportType = '1'
-      this.form.dateList = []
-      this.form.perInCountList = []
-      this.form.perOutCountList = []
     }
   },
-  mounted: function () {
-  }
+  mounted: function () { }
 }
 </script>
 <style scoped>
@@ -441,12 +446,9 @@ export default {
   padding-right: 10px;
   margin-top: 10px;
   text-align: right;
-}
-.sidebar {
-  border: 1px solid #ccc;
-  height: 620px;
-  margin-right: 20px;
-  padding: 10px;
+  position: absolute;
+  right: 60px;
+  bottom: 10px;
 }
 .block {
   float: left;
@@ -471,7 +473,7 @@ export default {
   border: 1px solid #eee;
   padding: 10px;
 }
-.el-date-editor.el-input {
+.el-tabs /deep/ .el-date-editor.el-input {
   width: 200px;
 }
 #flowInformation {
