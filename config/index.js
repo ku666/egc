@@ -23,7 +23,7 @@ module.exports = {
         changeOrigin: true
       },
       '/device': {
-        target: 'http://192.168.0.186:9030', // 设备报表
+        target: 'http://192.168.0.186:9030/', // 设备报表
         changeOrigin: true
       }
     },
