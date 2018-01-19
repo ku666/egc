@@ -2,6 +2,7 @@ import Axios from '@/assets/js/AxiosPlugin'
 let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
 let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
 let contextPath1 = '/device'
+let ownertPath = '/egc-smartcommunitymgmtapp'
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -128,7 +129,7 @@ export const getListDeviceForPage = data => {
  */
 export const getBuildProfile = data => {
   return Axios({
-    url: contextPath + '/profile/getOwnerProfile',
+    url: ownertPath + '/profile/getBuildAgeFlowData',
     // url: contextPath + '/getBuildProfile',
     method: 'get',
     params: data
