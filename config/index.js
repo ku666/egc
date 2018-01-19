@@ -16,8 +16,10 @@ module.exports = {
       '/egc-mapanalysiscomponent': {
         target: 'http://172.16.30.27:8082/' // http://192.168.0.186:38761/
       },
-      '/egc-smartcommunitymgmtapp': {
-        target: 'http://172.16.30.64:8082',// 地图分析
+      // '/egc-smartcommunitymgmtapp': {
+      '/mapAnalysis': {
+        // target: 'http://172.16.30.64:8082',// 地图分析
+        target: 'http://192.168.0.186:9030',
         changeOrigin: true
       },
       '/device': {
@@ -34,7 +36,7 @@ module.exports = {
     poll: false, // https://webpack.js.org/configuration/dev-server/#devserver-watchoptions-
 
     // Use Eslint Loader?
-    // If true, your code will be linted during bundling and 
+    // If true, your code will be linted during bundling and
     // linting errors and warings will be shown in the console.
     useEslint: true,
     // If true, eslint errors and warings will also be shown in the error overlay
