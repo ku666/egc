@@ -69,7 +69,7 @@ export default {
   // 条件查询人员出入统计信息
   getCourtPerAccessInfo: config => {
     var data = []
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
       data.push({
         courtID: '78364532213783',
         courtName: '恒大山水城',
@@ -95,7 +95,7 @@ export default {
       currentPage: '3',
       result: []
     }
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 10; i++) {
       data.result.push({
         courtID: '785345387345345',
         courtName: '恒大山水城',
