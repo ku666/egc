@@ -14,10 +14,14 @@ module.exports = {
         target: 'http://172.16.30.46:8082/'
       },
       '/egc-mapanalysiscomponent': {
-        target: 'http://172.16.30.27:8082/'
+        target: 'http://172.16.30.27:8082/' // http://192.168.0.186:38761/
       },
       '/egc-smartcommunitymgmtapp': {
-        target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
+        target: 'http://172.16.30.64:8082',// 地图分析
+        changeOrigin: true
+      },
+      '/device': {
+        target: 'http://192.168.0.186:9030', // 设备报表
         changeOrigin: true
       }
     },

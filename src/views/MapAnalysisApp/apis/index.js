@@ -1,6 +1,7 @@
 import Axios from '@/assets/js/AxiosPlugin'
 let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
 let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
+let contextPath1 = '/device'
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -94,6 +95,42 @@ export const getOrgList = data => {
   return Axios({
     method: 'get',
     url: contextPath + '/getOrgList',
+    params: data
+  })
+}
+
+/**
+ *  获取设备数列表
+ * @param orgCode 设备数code
+ * @param deviceType 设备种类ID
+ * @param deviceTypeDesc 设备名称
+ * @param deviceCount 设备数量
+ * @param onlineCount 设备在网
+ *
+ */
+export const getListDeviceType = data => {
+  return Axios({
+    method: 'get',
+    url: contextPath1 + '/listDeviceType',
+    params: data
+  })
+}
+export const getListDeviceForPage = data => {
+  return Axios({
+    method: 'get',
+    url: contextPath1 + '/listDeviceForPage',
+    params: data
+  })
+}
+/**
+ *  获取业主画像列表
+ * @param orgCode 业主画像code
+ */
+export const getBuildProfile = data => {
+  return Axios({
+    url: contextPath + '/profile/getOwnerProfile',
+    // url: contextPath + '/getBuildProfile',
+    method: 'get',
     params: data
   })
 }
