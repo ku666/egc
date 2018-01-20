@@ -10,7 +10,6 @@
       </div>
 
       <div style = 'text-align: left'>
-      <!-- <div style = 'text-align: left' v-if = 'showstep1'> -->
         <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline = 'true'>
           <el-form-item label='父设备' prop='parentUuid' >
             <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid'>
@@ -52,7 +51,7 @@
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories, getDeviceAttributes} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -70,8 +69,7 @@ export default {
     }
   },
   mounted () {
-    this.getParents()
-    this.getBindingAttributes()
+    // this.getParents()
   },
   data () {
     return {
@@ -155,46 +153,19 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
     },
-    getBindingAttributes: function () {
-      let that = this
-      getDeviceAttributes(that.searchBindingAttrsForm)
-        .then(
-          function (result) {
-            that.bindingAttrList = result.data.result
-            that.searchBindingAttrsForm.totalCount = result.data.totalCount
-            that.bindingAttrListLoading = false
-          }
-        )
-        .catch(
-          function (error) {
-            that.bindingAttrListLoading = false
-            console.log(error)
-          }
-        )
-    },
-    // next: function () {
-    //   this.active = 1
-    //   this.showstep1 = false
-    //   this.showstep2 = true
+    // getParents: function () {
+    //   getDeviceCategories()
+    //   .then(
+    //     function (result) {
+    //       this.parents = result.data
+    //     }.bind(this)
+    //   )
+    //   .catch(
+    //     function (error) {
+    //       console.log(error)
+    //     }
+    //   )
     // },
-    // back: function () {
-    //   this.active = 0
-    //   this.showstep1 = true
-    //   this.showstep2 = false
-    // },
-    getParents: function () {
-      getDeviceCategories()
-      .then(
-        function (result) {
-          this.parents = result.data
-        }.bind(this)
-      )
-      .catch(
-        function (error) {
-          console.log(error)
-        }
-      )
-    },
     addDeviceCategoryDialog: function () {
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''

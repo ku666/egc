@@ -7,31 +7,31 @@
       <span>设备属性</span>
     </div>
 
-    <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
+    <el-form :model='searchForm' ref='searchForm' :rules='rules' :inline='true'>
       <el-form-item label='属性编码' prop='attrCode'>
-        <el-input v-model='searchAttrListByCdtForm.attrCode' style='width:150px'></el-input>
+        <el-input v-model='searchForm.attrCode' style='width:150px'></el-input>
       </el-form-item>
       <el-form-item label='属性描述' prop='attrDesc'>
-        <el-input v-model='searchAttrListByCdtForm.attrDesc' style='width:150px'></el-input>
+        <el-input v-model='searchForm.attrDesc' style='width:150px'></el-input>
       </el-form-item>
        <el-form-item label='属性类型' prop='attrType'>
-        <el-select v-model='searchAttrListByCdtForm.attrType' style='width:160px'>
+        <el-select v-model='searchForm.attrType' style='width:160px'>
           <el-option v-for='tp in attrTypes' :key='tp.key' :label='tp.value' :value='tp.key'></el-option>
         </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type='primary' @click='resetSearch' class='btn-reset'>清空</el-button>
-        <el-button type='primary' @click='searchAttrListByCdt' class='btn-plain'>查询</el-button>
+        <el-button type='primary' @click='getAttrList' class='btn-plain'>查询</el-button>
       </el-form-item>
     </el-form>
 
     <span>设备：{{ deviceCategoryDetail.typeName }}</span>
     <el-table
       stripe border fit
-      :data='bindingAttrList'
+      :data='attrList'
       tooltip-effect='dark'
       max-height = '500'
-      v-loading = 'bindingAttrListLoading'
+      v-loading = 'attrListLoading'
       element-loading-text='拼命加载中'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
@@ -51,13 +51,13 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      :current-page='searchBindingAttrsForm.currentPage'
+      :current-page='searchForm.currentPage'
       :page-sizes='[10, 20, 50, 100]'
-      :page-size='searchBindingAttrsForm.pageSize'
+      :page-size='searchForm.pageSize'
       layout='total, sizes, prev, pager, next, jumper'
-      :total='searchBindingAttrsForm.totalCount'
-      @size-change='bindingAttrListSizeChange'
-      @current-change='bindingAttrListCurrentChange'>
+      :total='searchForm.totalCount'
+      @size-change='sizeChange'
+      @current-change='currentChange'>
     </el-pagination>
     <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
   </el-dialog>
@@ -90,42 +90,16 @@ export default {
         providerCode: ''
       },
       // 搜索和设备分类关联的属性列表用
-      searchBindingAttrsForm: {
+      searchForm: {
+        typeCode: '',
         attrCode: '',
         attrDesc: '',
-        typeCode: '',
         pageSize: 10,
         currentPage: 1,
         totalCount: 0
       },
-      bindingAttrList: [],
-      bindingAttrListLoading: false,
-      // 根据条件搜索所有属性列表用
-      searchAttrListByCdtForm: {
-        attrCode: '',
-        attrType: '',
-        attrDesc: '',
-        typeCode: '',
-        pageSize: 10,
-        currentPage: 1,
-        totalCount: 0
-      },
-      attrListByCdt: [],
-      attrofdevice: [
-        {key: 1, value: '是'},
-        {key: 2, value: '否'}
-      ],
-      attrListByCdtLoading: false,
-      // 新增与设备分类关联属性用
-      attrForm: {
-        uuid: '',
-        attrCode: '',
-        attrDesc: '',
-        attrType: '',
-        attrDataType: '',
-        unitDesc: '',
-        unitCode: ''
-      },
+      attrList: [],
+      attrListLoading: false,
       // 属性类型下拉列表
       attrTypes: [
         {key: 'manual_attribute', value: 'manual_attribute'},
@@ -139,12 +113,6 @@ export default {
         {key: 'select', value: 'select'},
         {key: 'boolean', value: 'boolean'}
       ],
-      attrFormRules: {
-        attrCode: [{ required: true, message: '请输入属性编码', trigger: 'blur' }],
-        attrDesc: [{ required: true, message: '请输入属性描述', trigger: 'blur' }],
-        attrType: [{ required: true, message: '请选择属性类型', trigger: 'change' }],
-        attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }]
-      },
       rules: {
 
       }
@@ -163,114 +131,44 @@ export default {
       this.deviceCategoryDetail.typeName = categoryDetail.typeName
 
       // 设置关联属性查询用的条件
-      this.searchBindingAttrsForm.typeCode = categoryDetail.typeCode
-
-      this.getBindingAttributes()
-      this.searchAttrListByCdt()
+      this.searchForm.typeCode = categoryDetail.typeCode
+      this.getAttrList()
 
       // 显示弹框
       this.deviceAttrMappingVisible = true
     },
     // 查询设备分类的属性
-    getBindingAttributes: function () {
+    getAttrList: function () {
       let that = this
-      that.bindingAttrListLoading = true
-      getDeviceAttributes(that.searchBindingAttrsForm)
+      that.attrListLoading = true
+      getDeviceAttributes(that.searchForm)
         .then(
           function (result) {
-            that.bindingAttrList = result.data.result
-            that.searchBindingAttrsForm.totalCount = result.data.totalCount
-            that.bindingAttrListLoading = false
+            that.attrList = result.data.result
+            that.searchForm.totalCount = result.data.totalCount
+            that.attrListLoading = false
           }
         )
         .catch(
           function (error) {
-            that.bindingAttrListLoading = false
-            console.log(error)
-          }
-        )
-    },
-    // 改变分页大小
-    bindingAttrListSizeChange: function (val) {
-      this.searchBindingAttrsForm.pageSize = val
-      this.searchBindingAttrsForm.currentPage = 1
-      this.getBindingAttributes()
-    },
-    // 跳转页面
-    bindingAttrListCurrentChange: function (val) {
-      this.searchBindingAttrsForm.currentPage = val
-      this.getBindingAttributes()
-    },
-    // 根据条件搜索设备分类的属性信息
-    searchAttrListByCdt: function () {
-      let that = this
-      that.attrListByCdtLoading = true
-      getDeviceAttributes(that.searchAttrListByCdtForm)
-        .then(
-          function (result) {
-            that.attrListByCdt = result.data.result
-            that.searchAttrListByCdtForm.totalCount = result.data.totalCount
-            that.attrListByCdtLoading = false
-          }
-        )
-        .catch(
-          function (error) {
-            that.attrListByCdtLoading = false
+            that.attrListLoading = false
             console.log(error)
           }
         )
     },
     // 改变分页大小
     sizeChange: function (val) {
-      this.searchAttrListByCdtForm.pageSize = val
-      this.searchAttrListByCdtForm.currentPage = 1
-      this.searchAttrListByCdt()
+      this.searchForm.pageSize = val
+      this.searchForm.currentPage = 1
+      this.getAttrList()
     },
     // 跳转页面
     currentChange: function (val) {
-      this.searchAttrListByCdtForm.currentPage = val
-      this.searchAttrListByCdt()
-    },
-    editAttr: function (attr = {}) {
-      this.selectedTab = 'tab1'
-      this.labeldisplayname = '编辑属性'
-      this.attrForm.uuid = attr.uuid
-      this.attrForm.attrCode = attr.attrCode
-      this.attrForm.attrDesc = attr.attrDesc
-      this.attrForm.attrType = attr.attrType
-      this.attrForm.attrDataType = attr.attrDataType
-      this.attrForm.unitDesc = attr.unitDesc
-      this.attrForm.unitCode = attr.unitCode
-    },
-    deleteAttr: function () {
-      // todo
-    },
-    clearValidate: function () {
-      this.$nextTick(() => {
-        this.$refs['attrForm'].clearValidate()
-      })
-    },
-    save: function () {
-      // todo
-    },
-    addToAttr: function () {
-      // todo
-    },
-    clear: function () {
-      this.attrForm = {
-        uuid: '',
-        attrCode: '',
-        attrDesc: '',
-        attrType: '',
-        attrDataType: '',
-        unitDesc: '',
-        unitCode: ''
-      }
-      this.labeldisplayname = '新增属性'
-      this.clearValidate()
+      this.searchForm.currentPage = val
+      this.getAttrList()
     },
     resetSearch: function () {
-      this.searchAttrListByCdtForm = {
+      this.searchForm = {
         attrCode: '',
         attrDesc: '',
         typeCode: '',
@@ -282,6 +180,9 @@ export default {
     openAttrDmnDialog: function (attr = {}) {
       const attrTmp = Object.assign({}, attr)
       this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
+    },
+    clear: function () {
+
     }
   }
 }
