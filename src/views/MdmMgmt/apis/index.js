@@ -2,23 +2,23 @@ import Axios from '@/assets/js/AxiosPlugin'
 
 // 设备分类管理
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const DEVICE_CATEGORY_PATH = '/egc-mdmcomponent/deviceCategory/api'
+const DEVICE_CATEGORY_PATH = '/egc-mdmmgmtapp/deviceCategory'
 
 // 1. 新增设备分类信息的接口
 export const insertDeviceCategory = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/insertDeviceCategory', data
+  return Axios.post(DEVICE_CATEGORY_PATH + '/insert', data
   ).then(res => res.data)
 }
 
 // 2. 修改设备分类信息的接口
 export const updateDeviceCategory = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/updateDeviceCategory', data
+  return Axios.post(DEVICE_CATEGORY_PATH + '/insert', data
   ).then(res => res.data)
 }
 
 // 3. 删除设备分类信息的接口
 export const deleteDeviceCategory = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/deleteDeviceCategory', data
+  return Axios.post(DEVICE_CATEGORY_PATH + '/delete', data
   ).then(res => res.data)
 }
 
@@ -36,7 +36,7 @@ export const getDeviceCategories = (data) => {
 
 // 设备属性管理接口
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const DEVICE_ATTRIBUTE_PATH = '/egc-mdmcomponent/deviceAttribute/api'
+const DEVICE_ATTRIBUTE_PATH = '/egc-mdmmgmtapp/deviceAttribute/api'
 
 // 1. 新增设备属性信息的接口
 export const insertDeviceAttribute = (data) => {

@@ -1,20 +1,22 @@
 <template>
   <div>
-    <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers'></device-category-edit-item>
+    <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers' v-bind:mode = 'mode'></device-category-edit-item>
     <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
-    <div>
-      <el-button @click='openAddDeviceCategoryDialog' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增设备类别</el-button>
-    </div>
 
-    <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px">
-      <el-form-item label='类别编码'>
-        <el-input placeholder='类别编码' v-model='searchForm.typeCode' @keyup.enter.native = 'search'></el-input>
+    <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备主数据管理</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:30px'>
+      <el-form-item label='设备编码'>
+        <el-input placeholder='设备编码' v-model='searchForm.typeCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
-      <el-form-item label='类别名称'>
-        <el-input placeholder='类别名称' v-model='searchForm.typeName' @keyup.enter.native = 'search'></el-input>
+      <el-form-item label='设备名称'>
+        <el-input placeholder='设备名称' v-model='searchForm.typeName' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
-      <el-form-item label='类别描述'>
-        <el-input placeholder='类别描述' v-model='searchForm.typeDesc' @keyup.enter.native = 'search'></el-input>
+      <el-form-item label='设备描述'>
+        <el-input placeholder='设备描述' v-model='searchForm.typeDesc' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
       <el-form-item label='设备型号'>
         <el-input placeholder='设备型号' v-model='searchForm.typeModel' @keyup.enter.native = 'search'></el-input>
@@ -22,30 +24,65 @@
       <el-form-item label='厂商'>
         <!-- <el-input placeholder='厂商' v-model='searchForm.providerCode' @keyup.enter.native = 'search'></el-input> -->
         <el-select clearable filterable v-model='searchForm.providerCode'>
-          <el-option v-for='provider in providers' :key='provider.provider_code' :label='provider.provider_name' :value='provider.provider_code'>
+          <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item>
+        <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
+        <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+      </el-form-item>
     </el-form>
-    <div align='right'>
-      <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
-      <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
-    </div>
+
+    <el-row>
+      <el-col :span = '22'>
+          <el-button @click='openAddDeviceCategoryDialog(2)' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增设备</el-button>
+          <el-button @click='deleteCategory' icon='el-icon-remove-outline' type="text" class='btn-text'>删除设备</el-button>
+          <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button>
+      </el-col>
+      <el-col :span = '2'>
+        <el-button icon='el-icon-d-arrow-right' type="text" class='btn-text' @click="gotoattrmgnt">设备属性管理</el-button>
+      </el-col>
+    </el-row>
 
     <el-table stripe border fit
       :data='tableData'
       tooltip-effect='dark'
       v-loading='loading'
       max-height='560'
+      @row-dblclick = 'openEditDeviceCategoryDialog(3)'
+      @selection-change = 'getAllSelects'
       element-loading-text='拼命加载中'
-      style='margin-top: 30px; width: 100%'>
-      <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
+      style='width: 99%'>
+      <!-- <el-table-column type='expand'>
+        <template slot-scope="props">
+          <el-table :show-header = 'false' :data='tableData'>
+            <el-table-column type='selection' width='50'></el-table-column>
+            <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
+            <el-table-column prop='typeCode' label='设备编码' width='150'></el-table-column>
+            <el-table-column prop='typeName' label='设备名称' width='200'></el-table-column>
+            <el-table-column prop='typeDesc' label='设备描述' width='200' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='parentUuid' label='父设备' v-if='uuidshow'></el-table-column>
+            <el-table-column prop='parentTypeDesc' label='父设备' width='150'></el-table-column>
+            <el-table-column prop='typeModel' label='设备型号' width='150'></el-table-column>
+            <el-table-column prop='hardwareVersion' label='硬件版本' width='150'></el-table-column>
+            <el-table-column prop='softwareVersion' label='软件版本' width='150'></el-table-column>
+            <el-table-column prop='providerCode' label='厂商编码' v-if='uuidshow'></el-table-column>
+            <el-table-column prop='providerName' label='厂商' width='150'></el-table-column>
+            <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
+            <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
+            <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
+            <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
+          </el-table>
+        </template>
+      </el-table-column> -->
+      <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='typeCode' label='类别编码' width='150'></el-table-column>
-      <el-table-column prop='typeName' label='类别名称' width='200'></el-table-column>
-      <el-table-column prop='typeDesc' label='类别描述' width='200' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='parentUuid' label='父类别' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='parentTypeDesc' label='父类别' width='150'></el-table-column>
+      <el-table-column prop='typeCode' label='设备编码' width='150'></el-table-column>
+      <el-table-column prop='typeName' label='设备名称' width='200'></el-table-column>
+      <el-table-column prop='typeDesc' label='设备描述' width='200' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='parentUuid' label='父设备' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='parentTypeDesc' label='父设备' width='150'></el-table-column>
       <el-table-column prop='typeModel' label='设备型号' width='150'></el-table-column>
       <el-table-column prop='hardwareVersion' label='硬件版本' width='150'></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' width='150'></el-table-column>
@@ -55,14 +92,15 @@
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-      <el-table-column label='操作' width='100' fixed='right'>
+      <!-- <el-table-column label='操作' width='50' fixed = 'right'>
         <template slot-scope='scope'>
-          <el-button type = 'text' @click='openDeviceAttrDialog(scope.row)' icon="el-icon-document"></el-button>
-          <el-button type = 'text' @click='openEditDeviceCategoryDialog(scope.row)' icon="el-icon-edit"></el-button>
+          <el-button type = 'text' @click='openEditDeviceCategoryDialog(scope.row, 1)' icon="el-icon-document"></el-button>
+          <el-button type = 'text' @click='openEditDeviceCategoryDialog(scope.row, 3)' icon="el-icon-edit"></el-button>
           <el-button type = 'text' @click='deleteCategory(scope.row)' icon="el-icon-delete"></el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
+
     <el-pagination class='table-pager'
       background
       :current-page='searchForm.currentPage'
@@ -73,6 +111,7 @@
       @size-change='sizeChange'
       @current-change='currentChange'>
     </el-pagination>
+
   </div>
 </template>
 
@@ -107,7 +146,9 @@ export default {
       },
       // 检索返回数据
       tableData: [],
-      providers: []
+      providers: [],
+      mode: 1,
+      allSelects: []
     }
   },
   components: {
@@ -126,7 +167,7 @@ export default {
       getAllProviders()
       .then(
         function (result) {
-          this.providers = result.data
+          this.providers = JSON.parse(result.data)
         }.bind(this)
       )
       .catch(
@@ -134,6 +175,9 @@ export default {
           console.log(error)
         }
       )
+    },
+    getAllSelects: function (sel) {
+      this.allSelects = sel
     },
     search () {
       this.loading = true
@@ -165,12 +209,14 @@ export default {
       this.search()
     },
     // 打开修改设备分类弹框页面
-    openEditDeviceCategoryDialog: function (categoryDetail = {}) {
+    openEditDeviceCategoryDialog: function (categoryDetail = {}, varMode) {
+      this.mode = varMode
       // const categoryDetailTmp = Object.assign({}, categoryDetail)
       this.$refs['deviceCategoryEditDiag'].editDeviceCategoryDialog(categoryDetail)
     },
     // 打开新增设备分类弹框页面
-    openAddDeviceCategoryDialog: function () {
+    openAddDeviceCategoryDialog: function (varMode) {
+      this.mode = varMode
       // const categoryDetailTmp = Object.assign({}, categoryDetail)
       this.$refs['deviceCategoryEditDiag'].addDeviceCategoryDialog()
     },
@@ -179,15 +225,27 @@ export default {
       // const categoryDetailTmp = Object.assign({}, categoryDetail)
       this.$refs['openDeviceAttrDialog'].openDeviceAttrDialog(categoryDetail)
     },
+    gotoattrmgnt: function () {
+      this.$router.push({
+        name: 'deviceAttrList'
+      })
+    },
     // 删除设备分类
-    deleteCategory: function (categoryDetail = {}) {
+    deleteCategory: function () {
+      if (this.allSelects.length === 0) {
+        this.$message({
+          message: '请选择要删除的设备',
+          type: 'warning'
+        })
+        return
+      }
       this.$confirm('确定要刪除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceCategory({ uuid: categoryDetail.uuid }).then(res => {
+        deleteDeviceCategory({ uuid: '' }).then(res => {
           if (res.code !== '0000') {
             return
           }
@@ -198,10 +256,10 @@ export default {
           this.search()
         })
       }).catch(() => {
-        this.$message({
-          type: 'info',
-          message: '已取消删除'
-        })
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
       })
     },
     clear: function () {

@@ -20,8 +20,8 @@
       <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
-          <el-button type='text' icon="el-icon-delete" @click='deleteDomain(scope.row)' disabled></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,7 +43,7 @@
       </el-form>
       <div style='text-align: center'>
           <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-          <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
+          <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
       </div>
     </div>
 

@@ -4,77 +4,56 @@
       :modal-append-to-body = 'false'
       :before-close='closeDialog'
       width = '960'>
+      <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
       <div slot='title'>
-        <span class = 'head-text'>{{deviceCategoryDetail.uuid?'修改设备类别':'新增设备类别'}}</span>
+        <span class = 'head-text'>{{title}}</span>
       </div>
-      <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='100px' :rules='rules'>
-        <el-row>
-          <el-col :span = '12'>
-            <el-form-item label='父类别' prop='parentUuid' >
-              <!-- <el-input v-model='deviceCategoryDetail.parentUuid'></el-input> -->
-              <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid'>
-                  <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeDesc' :value='parent.uuid'>
-                  </el-option>
+
+      <div style = 'text-align: left'>
+      <!-- <div style = 'text-align: left' v-if = 'showstep1'> -->
+        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline = 'true'>
+          <el-form-item label='父设备' prop='parentUuid' >
+            <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid'>
+                <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeDesc' :value='parent.uuid'>
+                </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label='设备编码' prop='typeCode'>
+            <el-input v-model='deviceCategoryDetail.typeCode'></el-input>
+          </el-form-item>
+          <el-form-item label='设备名称' prop='typeName'>
+              <el-input v-model='deviceCategoryDetail.typeName'></el-input>
+          </el-form-item>
+          <el-form-item label='设备描述' prop='typeDesc'>
+              <el-input v-model='deviceCategoryDetail.typeDesc'></el-input>
+          </el-form-item>
+          <el-form-item label='设备型号' prop='typeModel'>
+              <el-input v-model='deviceCategoryDetail.typeModel'></el-input>
+          </el-form-item>
+          <el-form-item label='硬件版本' prop='hardwareVersion'>
+              <el-input v-model='deviceCategoryDetail.hardwareVersion'></el-input>
+          </el-form-item>
+          <el-form-item label='软件版本' prop='softwareVersion'>
+              <el-input v-model='deviceCategoryDetail.softwareVersion'></el-input>
+          </el-form-item>
+          <el-form-item label='厂商' prop='providerCode'>
+              <el-select clearable filterable v-model='deviceCategoryDetail.providerCode'>
+                <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+                </el-option>
               </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span = '12'>
-            <el-form-item label='类别编码' prop='typeCode'>
-              <el-input v-model='deviceCategoryDetail.typeCode'></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span = '12'>
-            <el-form-item label='类别名称' prop='typeName'>
-                <el-input v-model='deviceCategoryDetail.typeName'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span = '12'>
-            <el-form-item label='类别描述' prop='typeDesc'>
-                <el-input v-model='deviceCategoryDetail.typeDesc'></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span = '12'>
-            <el-form-item label='设备型号' prop='typeModel'>
-                <el-input v-model='deviceCategoryDetail.typeModel'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span = '12'>
-            <el-form-item label='硬件版本' prop='hardwareVersion'>
-                <el-input v-model='deviceCategoryDetail.hardwareVersion'></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span = '12'>
-            <el-form-item label='软件版本' prop='softwareVersion'>
-                <el-input v-model='deviceCategoryDetail.softwareVersion'></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span = '12'>
-            <el-form-item label='厂商' prop='providerCode'>
-                <!-- <el-input v-model='deviceCategoryDetail.providerCode'></el-input> -->
-                <el-select clearable filterable v-model='deviceCategoryDetail.providerCode'>
-                  <el-option v-for='provider in providers' :key='provider.provider_code' :label='provider.provider_name' :value='provider.provider_code'>
-                  </el-option>
-                </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-      <div slot='footer' style='text-align: center'>
-        <el-button type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
-        <el-button type='primary' @click='save' class = 'btn-plain' disabled>保存</el-button>
+          </el-form-item>
+        </el-form>
+        <div slot='footer' style='text-align: center; margin-top: 20px'>
+          <el-button type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
+          <el-button type='primary' @click='save' class = 'btn-plain'>保存</el-button>
+        </div>
       </div>
   </el-dialog>
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories} from '@/views/MdmMgmt/apis/index'
-
+import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories, getDeviceAttributes} from '@/views/MdmMgmt/apis/index'
+import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
     search: {
@@ -84,10 +63,15 @@ export default {
     providers: {
       type: Array,
       default: []
+    },
+    mode: {
+      type: Number,
+      default: 1
     }
   },
   mounted () {
     this.getParents()
+    this.getBindingAttributes()
   },
   data () {
     return {
@@ -104,11 +88,57 @@ export default {
         softwareVersion: '',
         providerCode: ''
       },
+      bindingAttrList: [],
+      bindingAttrListLoading: false,
+      active: 0,
+      showstep1: true,
+      showstep2: false,
+      searchAttrListByCdtForm: {
+        attrCode: '',
+        attrType: '',
+        attrDesc: '',
+        typeCode: '',
+        pageSize: 10,
+        currentPage: 1,
+        totalCount: 0
+      },
       rules: {
-        parentUuid: [{ required: true, message: '请输入父类别', trigger: 'blur' }],
-        typeCode: [{ required: true, message: '请输入类别编码', trigger: 'blur' }],
-        typeName: [{ required: true, message: '请输入类别名称', trigger: 'blur' }],
-        typeDesc: [{ required: true, message: '请输入类别描述', trigger: 'blur' }]
+        parentUuid: [{ required: true, message: '请选择父类别', trigger: 'change' }],
+        typeCode: [
+          { required: true, message: '请输入类别编码', trigger: 'blur' },
+          {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
+        ],
+        typeName: [
+          { required: true, message: '请输入类别名称', trigger: 'blur' },
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        typeDesc: [
+          { required: true, message: '请输入类别描述', trigger: 'blur' },
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        typeModel: [
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        hardwareVersion: [
+          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+        ],
+        softwareVersion: [
+          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+        ]
+      }
+    }
+  },
+  components: {
+    AttrDomainItem
+  },
+  computed: {
+    title: function () {
+      if (this.mode === 1) {
+        return '查看设备'
+      } else if (this.mode === 2) {
+        return '新增设备'
+      } else if (this.mode === 3) {
+        return '修改设备'
       }
     }
   },
@@ -125,6 +155,33 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
     },
+    getBindingAttributes: function () {
+      let that = this
+      getDeviceAttributes(that.searchBindingAttrsForm)
+        .then(
+          function (result) {
+            that.bindingAttrList = result.data.result
+            that.searchBindingAttrsForm.totalCount = result.data.totalCount
+            that.bindingAttrListLoading = false
+          }
+        )
+        .catch(
+          function (error) {
+            that.bindingAttrListLoading = false
+            console.log(error)
+          }
+        )
+    },
+    // next: function () {
+    //   this.active = 1
+    //   this.showstep1 = false
+    //   this.showstep2 = true
+    // },
+    // back: function () {
+    //   this.active = 0
+    //   this.showstep1 = true
+    //   this.showstep2 = false
+    // },
     getParents: function () {
       getDeviceCategories()
       .then(
@@ -190,7 +247,13 @@ export default {
     },
     closeDialog: function (done) {
       done()
+      // this.showstep1 = true
+      // this.showstep2 = false
       this.clearValidate()
+    },
+    openAttrDmnDialog: function (attr = {}) {
+      const attrTmp = Object.assign({}, attr)
+      this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
     }
   }
 }

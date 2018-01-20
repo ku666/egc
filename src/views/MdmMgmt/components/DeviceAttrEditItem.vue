@@ -6,12 +6,31 @@
     <div slot='title' class='head-text'>
       <span>设备属性</span>
     </div>
-    <span>设备类别：{{ deviceCategoryDetail.typeName }}</span>
+
+    <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
+      <el-form-item label='属性编码' prop='attrCode'>
+        <el-input v-model='searchAttrListByCdtForm.attrCode' style='width:150px'></el-input>
+      </el-form-item>
+      <el-form-item label='属性描述' prop='attrDesc'>
+        <el-input v-model='searchAttrListByCdtForm.attrDesc' style='width:150px'></el-input>
+      </el-form-item>
+       <el-form-item label='属性类型' prop='attrType'>
+        <el-select v-model='searchAttrListByCdtForm.attrType' style='width:160px'>
+          <el-option v-for='tp in attrTypes' :key='tp.key' :label='tp.value' :value='tp.key'></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <el-button type='primary' @click='resetSearch' class='btn-reset'>清空</el-button>
+        <el-button type='primary' @click='searchAttrListByCdt' class='btn-plain'>查询</el-button>
+      </el-form-item>
+    </el-form>
+
+    <span>设备：{{ deviceCategoryDetail.typeName }}</span>
     <el-table
       stripe border fit
       :data='bindingAttrList'
       tooltip-effect='dark'
-      max-height = '247'
+      max-height = '500'
       v-loading = 'bindingAttrListLoading'
       element-loading-text='拼命加载中'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
@@ -24,9 +43,10 @@
       <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
       <el-table-column label='操作' width='120'>
         <template slot-scope='scope'>
-          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
-          <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button>
-          <el-button type='text' @click='deleteAttr(scope.row)' icon="el-icon-delete" disabled></el-button>
+          <!-- <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button> -->
+          <el-button type='text' size = 'mini' @click='addAttr(scope.row)' icon="el-icon-plus"></el-button>
+          <el-button type='text' size = 'mini' @click='deleteAttr(scope.row)' icon="el-icon-minus"></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -40,103 +60,6 @@
       @current-change='bindingAttrListCurrentChange'>
     </el-pagination>
     <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-    <el-tabs type='border-card' style='margin-top: 20px; width: 100%' v-model='selectedTab'>
-      <el-tab-pane :label='labeldisplayname' name='tab1'>
-        <div class = 'div-pane-height'>
-          <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
-            <el-row>
-              <el-col :span = '12'>
-                <el-form-item label='属性编码' prop='attrCode' >
-                  <el-input v-model='attrForm.attrCode'></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span = '12'>
-                <el-form-item label='属性描述' prop='attrDesc'>
-                  <el-input v-model='attrForm.attrDesc'></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span = '12'>
-                <el-form-item label='属性类型' prop='attrType'>
-                  <el-select v-model = 'attrForm.attrType'>
-                    <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span = '12'>
-                <el-form-item label='数据类型' prop='attrDataType'>
-                  <el-select v-model = 'attrForm.attrDataType'>
-                    <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span = '12'>
-                 <el-form-item label='单位描述' prop='unitDesc'>
-                  <el-input v-model='attrForm.unitDesc'></el-input>
-                </el-form-item>
-              </el-col>
-              <el-col :span = '12'>
-                <el-form-item label='单位编码' prop='unitCode'>
-                    <el-input v-model='attrForm.unitCode'></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <div style='text-align: center'>
-                <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-                <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
-            </div>
-          </el-form>
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label='选择添加已有属性' name='tab2'>
-        <div class = 'div-pane-height'>
-          <el-form :model='searchAttrListByCdtForm' ref='searchAttrListByCdtForm' :rules='rules' :inline='true'>
-            <el-form-item label='属性编码' prop='attrCode'>
-              <el-input v-model='searchAttrListByCdtForm.attrCode'></el-input>
-            </el-form-item>
-            <el-form-item label='属性描述' prop='attrDesc'>
-              <el-input v-model='searchAttrListByCdtForm.attrDesc'></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type='primary' @click='resetSearch' class='btn-reset'>清空</el-button>
-              <el-button type='primary' @click='searchAttrListByCdt' class='btn-plain'>查询</el-button>
-            </el-form-item>
-          </el-form>
-
-          <el-table stripe border fit
-            :data='attrListByCdt'
-            tooltip-effect='dark'
-            v-loading='attrListByCdtLoading'
-            element-loading-text='拼命加载中'
-            max-height = '247'
-            style='margin-top: 20px; width: 100%'>
-            <el-table-column type='index' label='序号' width='50'></el-table-column>
-            <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-            <el-table-column prop='attrCode' label='属性编码'></el-table-column>
-            <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='attrType' label='属性类型'></el-table-column>
-            <el-table-column label='操作' width='120'>
-              <template slot-scope='scope'>
-                <el-button type='text' icon='el-icon-circle-plus-outline' @click='addToAttr(scope.row)' disabled></el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-          <el-pagination class='table-pager'
-            :current-page='searchAttrListByCdtForm.currentPage'
-            :page-sizes='[10, 20, 50, 100]'
-            :page-size='searchAttrListByCdtForm.pageSize'
-            layout='total, sizes, prev, pager, next, jumper'
-            :total='searchAttrListByCdtForm.totalCount'
-            @size-change='sizeChange'
-            @current-change='currentChange'>
-          </el-pagination>
-
-        </div>
-      </el-tab-pane>
-    </el-tabs>
   </el-dialog>
 </template>
 
@@ -180,6 +103,7 @@ export default {
       // 根据条件搜索所有属性列表用
       searchAttrListByCdtForm: {
         attrCode: '',
+        attrType: '',
         attrDesc: '',
         typeCode: '',
         pageSize: 10,
@@ -187,6 +111,10 @@ export default {
         totalCount: 0
       },
       attrListByCdt: [],
+      attrofdevice: [
+        {key: 1, value: '是'},
+        {key: 2, value: '否'}
+      ],
       attrListByCdtLoading: false,
       // 新增与设备分类关联属性用
       attrForm: {
@@ -236,8 +164,6 @@ export default {
 
       // 设置关联属性查询用的条件
       this.searchBindingAttrsForm.typeCode = categoryDetail.typeCode
-
-      this.selectedTab = 'tab1'
 
       this.getBindingAttributes()
       this.searchAttrListByCdt()

@@ -1,11 +1,17 @@
 <template>
   <div>
     <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-    <div>
+    <!-- <div>
       <el-button @click='addAttr' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增属性</el-button>
-    </div>
+    </div> -->
 
-    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 20px'>
+    <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 30px'>
       <el-form-item label='属性编码'>
         <el-input placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
@@ -18,13 +24,24 @@
       </el-form-item>
     </el-form>
 
+    <el-row>
+      <el-col :span = '22'>
+          <el-button @click='addAttr' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增设备属性</el-button>
+          <el-button @click='deleteCategory' icon='el-icon-remove-outline' type="text" class='btn-text'>删除设备属性</el-button>
+          <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
+      </el-col>
+      <el-col :span = '2'>
+        <el-button icon='el-icon-d-arrow-left' type="text" class='btn-text' @click="gotodevicemgnt">设备主数据管理</el-button>
+      </el-col>
+    </el-row>
+
     <el-table stripe border fit
       :data='attrList'
       tooltip-effect='dark'
       v-loading='attrListLoading'
       max-height='560'
       element-loading-text='拼命加载中'
-      style='margin-top: 20px; width: 100%'>
+      style='width: 99%'>
       <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码' width='150'></el-table-column>
@@ -198,6 +215,11 @@ export default {
             console.log(error)
           }.bind(this)
         )
+    },
+    gotodevicemgnt: function () {
+      this.$router.push({
+        name: 'deviceCategoryList'
+      })
     },
     // 改变分页大小
     sizeChange: function (val) {
