@@ -75,6 +75,30 @@ export default {
             'title': '地图分析',
             'subs': null
           }]
+        },
+        {
+          'icon': 'el-icon-menu',
+          'index': '/MdmApp/MdmAppindex',
+          'title': '小区信息',
+          'subs': [
+            {
+              'icon': null,
+              'index': '/MdmApp/personManager',
+              'title': '人员信息',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/MdmApp/orgManager',
+              'title': '组织信息',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/MdmApp/houseManager',
+              'title': '房屋信息',
+              'subs': null
+            }]
         }
       ]
     }
