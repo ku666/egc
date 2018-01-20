@@ -87,7 +87,6 @@ export default {
         providerCode: ''
       },
       rules: {
-        parentUuid: [{ required: true, message: '请选择父类别', trigger: 'change' }],
         typeCode: [
           { required: true, message: '请输入类别编码', trigger: 'blur' },
           {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}

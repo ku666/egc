@@ -58,9 +58,7 @@ export const deleteDeviceAttribute = (data) => {
 
 // 4. 查询设备属性信息的接口
 export const getDeviceAttributes = (data) => {
-  console.log('datadatadatadata')
   console.log(data)
-  console.log('datadatadatadata')
   return Axios.post(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', data
   ).then(res => res.data)
 }
