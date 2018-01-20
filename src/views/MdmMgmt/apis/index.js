@@ -29,8 +29,8 @@ export const getDeviceCategoryList = (data) => {
 }
 
 // 5. 查询设备分类部分信息的接口
-export const getDeviceCategories = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', data
+export const getDeviceCategories = (val) => {
+  return Axios.get(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition?keyword=' + val
   ).then(res => res.data)
 }
 

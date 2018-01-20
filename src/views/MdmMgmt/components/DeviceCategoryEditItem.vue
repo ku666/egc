@@ -51,7 +51,7 @@
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -69,7 +69,7 @@ export default {
     }
   },
   mounted () {
-    // this.getParents()
+    this.getParents()
   },
   data () {
     return {
@@ -85,20 +85,6 @@ export default {
         hardwareVersion: '',
         softwareVersion: '',
         providerCode: ''
-      },
-      bindingAttrList: [],
-      bindingAttrListLoading: false,
-      active: 0,
-      showstep1: true,
-      showstep2: false,
-      searchAttrListByCdtForm: {
-        attrCode: '',
-        attrType: '',
-        attrDesc: '',
-        typeCode: '',
-        pageSize: 10,
-        currentPage: 1,
-        totalCount: 0
       },
       rules: {
         parentUuid: [{ required: true, message: '请选择父类别', trigger: 'change' }],
@@ -153,19 +139,19 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
     },
-    // getParents: function () {
-    //   getDeviceCategories()
-    //   .then(
-    //     function (result) {
-    //       this.parents = result.data
-    //     }.bind(this)
-    //   )
-    //   .catch(
-    //     function (error) {
-    //       console.log(error)
-    //     }
-    //   )
-    // },
+    getParents: function () {
+      getDeviceCategories('')
+      .then(
+        function (result) {
+          this.parents = result.data
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+    },
     addDeviceCategoryDialog: function () {
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''

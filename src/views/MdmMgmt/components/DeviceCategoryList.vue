@@ -1,7 +1,7 @@
 <template>
   <div>
     <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers' v-bind:mode = 'mode'></device-category-edit-item>
-    <device-attr-edit-item ref = 'openDeviceAttrDialog'></device-attr-edit-item>
+    <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item>
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
@@ -193,7 +193,7 @@ export default {
     // 打开设备分类的属性弹框页面
     openDeviceAttrDialog: function (categoryDetail = {}) {
       // const categoryDetailTmp = Object.assign({}, categoryDetail)
-      this.$refs['openDeviceAttrDialog'].openDeviceAttrDialog(categoryDetail)
+      this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(categoryDetail)
     },
     gotoattrmgnt: function () {
       this.$router.push({
