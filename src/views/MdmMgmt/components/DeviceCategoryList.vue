@@ -154,7 +154,7 @@ export default {
       getDeviceCategoryList(this.searchForm)
         .then(
           function (result) {
-            console.log('get device category data by condition')
+            console.log(result)
             this.tableData = result.data.result
             this.searchForm.totalCount = result.data.totalCount
             this.loading = false

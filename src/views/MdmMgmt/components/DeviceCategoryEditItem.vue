@@ -55,10 +55,6 @@ import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories} from '@
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
-    search: {
-      type: Function,
-      default: function () { }
-    },
     providers: {
       type: Array,
       default: []
@@ -173,7 +169,7 @@ export default {
               type: 'success'
             })
             this.deviceCategoryDetailVisible = false
-            this.search({})
+            this.$parent.search({})
           })
         } else {
           this.$message({
@@ -203,8 +199,6 @@ export default {
     },
     closeDialog: function (done) {
       done()
-      // this.showstep1 = true
-      // this.showstep2 = false
       this.clearValidate()
     },
     openAttrDmnDialog: function (attr = {}) {
