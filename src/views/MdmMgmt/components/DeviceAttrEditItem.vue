@@ -4,10 +4,10 @@
       @open='clear'
       :modal-append-to-body = 'false'>
     <div slot='title' class='head-text'>
-      <span>设备属性</span>
+      <span>{{ deviceCategoryDetail.typeName }} 属性列表信息</span>
     </div>
 
-    <el-form :model='searchForm' ref='searchForm' :rules='rules' :inline='true'>
+    <el-form :model='searchForm' ref='searchForm' :rules='rules' :inline='true' style='margin-top: -10px'>
       <el-form-item label='属性编码' prop='attrCode'>
         <el-input v-model='searchForm.attrCode' style='width:150px'></el-input>
       </el-form-item>
@@ -25,30 +25,31 @@
       </el-form-item>
     </el-form>
 
-    <span>设备：{{ deviceCategoryDetail.typeName }}</span>
+    <!-- <span>设备：{{ deviceCategoryDetail.typeName }}</span> -->
     <el-table
-      stripe border fit
+      stripe fit
       :data='attrList'
       tooltip-effect='dark'
-      max-height = '500'
+      height = '400'
       v-loading = 'attrListLoading'
       element-loading-text='拼命加载中'>
-      <el-table-column type='index' label='序号' width='50'></el-table-column>
-      <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
+      <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
+      <el-table-column type='selection' width='50'></el-table-column>
+      <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='attrType' label='属性类型'></el-table-column>
-      <el-table-column prop='attrDataType' label='数据类型' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='unitDesc' label='单位描述' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='unitCode' label='单位编码' v-if='uuidshow'></el-table-column>
-      <el-table-column label='操作' width='120'>
-        <template slot-scope='scope'>
+      <el-table-column prop='attrDataType' label='数据类型'></el-table-column>
+      <el-table-column prop='unitDesc' label='单位描述'></el-table-column>
+      <el-table-column prop='unitCode' label='单位编码'></el-table-column>
+      <!-- <el-table-column label='操作' width='80'> -->
+        <!-- <template slot-scope='scope'> -->
           <!-- <el-button type='text' @click='editAttr(scope.row)' icon="el-icon-edit"></el-button> -->
-          <el-button type='text' size = 'mini' @click='addAttr(scope.row)' icon="el-icon-plus"></el-button>
-          <el-button type='text' size = 'mini' @click='deleteAttr(scope.row)' icon="el-icon-minus"></el-button>
-          <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
-        </template>
-      </el-table-column>
+          <!-- <el-button type='text' size = 'mini' @click='addAttr(scope.row)' icon="el-icon-circle-plus-outline"></el-button> -->
+          <!-- <el-button type='text' size = 'mini' @click='deleteAttr(scope.row)' icon="el-icon-remove-outline"></el-button> -->
+          <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
+        <!-- </template> -->
+      <!-- </el-table-column> -->
     </el-table>
     <el-pagination
       :current-page='searchForm.currentPage'
@@ -59,12 +60,12 @@
       @size-change='sizeChange'
       @current-change='currentChange'>
     </el-pagination>
-    <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
+    <!-- <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item> -->
   </el-dialog>
 </template>
 
 <script>
-import AttrDomainItem from './AttrDomainItem'
+// import AttrDomainItem from './AttrDomainItem'
 import {getDeviceAttributes} from '@/views/MdmMgmt/apis/index'
 
 export default {
@@ -74,9 +75,7 @@ export default {
   data () {
     return {
       deviceAttrMappingVisible: false,
-      uuidshow: false,
-      selectedTab: 'tab1',
-      labeldisplayname: '新增属性',
+      showflag: false,
       // 从属性分类管理页面传递过来的设备分类信息
       deviceCategoryDetail: {
         uuid: '',
@@ -91,7 +90,7 @@ export default {
       },
       // 搜索和设备分类关联的属性列表用
       searchForm: {
-        typeCode: '',
+        typeUuid: '',
         attrCode: '',
         attrDesc: '',
         pageSize: 10,
@@ -119,7 +118,7 @@ export default {
     }
   },
   components: {
-    AttrDomainItem
+    // AttrDomainItem
   },
   methods: {
     // 打开设备分类的属性弹窗
@@ -131,7 +130,7 @@ export default {
       this.deviceCategoryDetail.typeName = categoryDetail.typeName
 
       // 设置关联属性查询用的条件
-      this.searchForm.typeCode = categoryDetail.typeCode
+      this.searchForm.typeUuid = categoryDetail.uuid
       this.getAttrList()
 
       // 显示弹框

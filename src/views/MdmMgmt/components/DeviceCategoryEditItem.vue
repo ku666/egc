@@ -1,57 +1,76 @@
 <template>
-  <el-dialog
-      :visible.sync='deviceCategoryDetailVisible'
-      :modal-append-to-body = 'false'
-      :before-close='closeDialog'
-      width = '960'>
-      <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-      <div slot='title'>
-        <span class = 'head-text'>{{title}}</span>
-      </div>
+  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='40%'>
+    <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item>
+    <div slot='title'>
+      <span class='head-text'>{{title}}</span>
+    </div>
 
-      <div style = 'text-align: left'>
-        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline = 'true'>
-          <el-form-item label='父设备' prop='parentUuid' >
-            <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid'>
-                <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeDesc' :value='parent.uuid'>
-                </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label='设备编码' prop='typeCode'>
-            <el-input v-model='deviceCategoryDetail.typeCode'></el-input>
-          </el-form-item>
-          <el-form-item label='设备名称' prop='typeName'>
-              <el-input v-model='deviceCategoryDetail.typeName'></el-input>
-          </el-form-item>
-          <el-form-item label='设备描述' prop='typeDesc'>
-              <el-input v-model='deviceCategoryDetail.typeDesc'></el-input>
-          </el-form-item>
-          <el-form-item label='设备型号' prop='typeModel'>
-              <el-input v-model='deviceCategoryDetail.typeModel'></el-input>
-          </el-form-item>
-          <el-form-item label='硬件版本' prop='hardwareVersion'>
-              <el-input v-model='deviceCategoryDetail.hardwareVersion'></el-input>
-          </el-form-item>
-          <el-form-item label='软件版本' prop='softwareVersion'>
-              <el-input v-model='deviceCategoryDetail.softwareVersion'></el-input>
-          </el-form-item>
-          <el-form-item label='厂商' prop='providerCode'>
-              <el-select clearable filterable v-model='deviceCategoryDetail.providerCode'>
-                <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
-                </el-option>
-              </el-select>
-          </el-form-item>
-        </el-form>
-        <div slot='footer' style='text-align: center; margin-top: 20px'>
-          <el-button type='primary' @click='clear' class = 'btn-reset'>清空</el-button>
-          <el-button type='primary' @click='save' class = 'btn-plain'>保存</el-button>
-        </div>
+    <div v-show='basicshow' style=''>
+      <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='110px' :rules='rules' :inline='true' >
+        <el-form-item label='设备编码' prop='typeCode'>
+          <el-input v-model='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
+        </el-form-item>
+        <el-form-item label='设备名称' prop='typeName'>
+          <el-input v-model='deviceCategoryDetail.typeName' :disabled='viewFlag'></el-input>
+        </el-form-item>
+        <el-form-item label='设备描述' prop='typeDesc'>
+          <el-input v-model='deviceCategoryDetail.typeDesc' :disabled='viewFlag'></el-input>
+        </el-form-item>
+        <el-form-item label='父设备' prop='parentUuid'>
+          <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlag'>
+            <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeName' :value='parent.uuid'>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label='设备型号' prop='typeModel'>
+          <el-input v-model='deviceCategoryDetail.typeModel' :disabled='viewFlag'></el-input>
+        </el-form-item>
+        <el-form-item label='供应商' prop='providerCode'>
+          <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
+            <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label='硬件版本' prop='hardwareVersion'>
+          <el-input v-model='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag'></el-input>
+        </el-form-item>
+        <el-form-item label='软件版本' prop='softwareVersion'>
+          <el-input v-model='deviceCategoryDetail.softwareVersion' :disabled='viewFlag'></el-input>
+        </el-form-item>
+      </el-form>
+      <div style='text-align: center; margin-top: 20px'>
+        <el-button type='primary' @click='clear' class='btn-reset' :disabled='viewFlag'>清空</el-button>
+        <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button>
       </div>
+    </div>
+    <!-- :render-content="renderFunc" -->
+    <!-- @change="handleChange" -->
+    <!-- v-model="value3" -->
+    <div v-show='attrshow'>
+      <el-row type = 'flex' justify = 'center'>
+        <el-col :span = '19'>
+          <el-transfer
+            filterable
+            :titles="['当前设备属性', '全部属性']"
+            :button-texts="['添加属性', '删除属性']"
+            :props= '{
+              key: "attrCode",
+              label: "attrDesc"
+            }'
+            :data="transferData">
+          </el-transfer>
+        </el-col>
+      </el-row>
+      <div style='text-align: center; margin-top: 20px'>
+        <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button>
+        <el-button type='primary' @click='save' class='btn-plain' :disabled='viewFlag'>保存</el-button>
+      </div>
+    </div>
   </el-dialog>
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceCategories} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -62,15 +81,17 @@ export default {
     mode: {
       type: Number,
       default: 1
+    },
+    parents: {
+      type: Array,
+      default: []
     }
   },
   mounted () {
-    this.getParents()
   },
   data () {
     return {
       deviceCategoryDetailVisible: false,
-      parents: [],
       deviceCategoryDetail: {
         uuid: '',
         parentUuid: '',
@@ -82,6 +103,23 @@ export default {
         softwareVersion: '',
         providerCode: ''
       },
+      viewFlag: false,
+      basicshow: true,
+      attrshow: false,
+      transferData: [
+        {
+          attrCode: '1',
+          attrDesc: '属性1'
+        },
+        {
+          attrCode: '2',
+          attrDesc: '属性2'
+        },
+        {
+          attrCode: '3',
+          attrDesc: '属性3'
+        }
+      ],
       rules: {
         typeCode: [
           { required: true, message: '请输入类别编码', trigger: 'blur' },
@@ -123,6 +161,7 @@ export default {
   },
   methods: {
     editDeviceCategoryDialog: function (categoryDetail = {}) {
+      this.viewFlag = false
       this.deviceCategoryDetail.uuid = categoryDetail.uuid
       this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
       this.deviceCategoryDetail.typeCode = categoryDetail.typeCode
@@ -134,20 +173,8 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
     },
-    getParents: function () {
-      getDeviceCategories('')
-      .then(
-        function (result) {
-          this.parents = result.data
-        }.bind(this)
-      )
-      .catch(
-        function (error) {
-          console.log(error)
-        }
-      )
-    },
     addDeviceCategoryDialog: function () {
+      this.viewFlag = false
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''
       this.deviceCategoryDetail.typeName = ''
@@ -157,6 +184,27 @@ export default {
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
       this.deviceCategoryDetailVisible = true
+    },
+    viewDeviceCategoryDialog: function (categoryDetail = {}) {
+      this.viewFlag = true
+      this.deviceCategoryDetail.uuid = categoryDetail.uuid
+      this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
+      this.deviceCategoryDetail.typeCode = categoryDetail.typeCode
+      this.deviceCategoryDetail.typeName = categoryDetail.typeName
+      this.deviceCategoryDetail.typeDesc = categoryDetail.typeDesc
+      this.deviceCategoryDetail.typeModel = categoryDetail.typeModel
+      this.deviceCategoryDetail.hardwareVersion = categoryDetail.hardwareVersion
+      this.deviceCategoryDetail.softwareVersion = categoryDetail.softwareVersion
+      this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
+      this.deviceCategoryDetailVisible = true
+    },
+    next: function () {
+      this.basicshow = false
+      this.attrshow = true
+    },
+    back: function () {
+      this.basicshow = true
+      this.attrshow = false
     },
     save: function () {
       this.$refs['deviceCategoryDetail'].validate((valid) => {
@@ -200,6 +248,8 @@ export default {
     closeDialog: function (done) {
       done()
       this.clearValidate()
+      this.basicshow = true
+      this.attrshow = false
     },
     openAttrDmnDialog: function (attr = {}) {
       const attrTmp = Object.assign({}, attr)
@@ -210,5 +260,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmMgmt/assets/css/index.less';
+@import "~@/views/MdmMgmt/assets/css/index.less";
+
+
 </style>

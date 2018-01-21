@@ -20,16 +20,21 @@
     </el-form>
 
     <div>
-      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增供应商</el-button>
-      <el-button @click='deleteProvider' icon='el-icon-remove-outline' type="text" class='btn-text'>删除供应商</el-button>
+      <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
+      <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
+      <el-button @click='deleteProvider' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
     </div>
 
     <el-table stripe border fit
+      ref = 'providerTable'
       :data='providerList'
       tooltip-effect='dark'
       v-loading='providerListLoading'
       max-height='560'
-      @row-dblclick = 'editProvider'
+      @selection-change = 'getSelections'
+      @row-dblclick = 'editProviderdbl'
+      @row-click = 'checkrow'
       element-loading-text='拼命加载中'
       style='width: 99%'>
       <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
@@ -71,7 +76,7 @@
 
     <el-dialog :visible.sync='providerDialogVisible'
       :modal-append-to-body = 'false'
-      width='960'>
+      width='40%'>
       <div slot='title' class='head-text'>
         <span>{{title}}</span>
     </div>
@@ -80,39 +85,39 @@
           <el-row>
             <el-col :span='12'>
               <el-form-item label='供应商类别' prop='category'>
-                <el-select v-model = 'providerForm.category'>
+                <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
                   <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
               <el-form-item label='供应商编码' prop='providerCode'>
-                <el-input v-model='providerForm.providerCode'></el-input>
+                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span='12'>
               <el-form-item label='供应商名称' prop='providerName'>
-                <el-input v-model='providerForm.providerName'></el-input>
+                <el-input v-model='providerForm.providerName' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
               <el-form-item label='联系方式' prop='contact'>
-                <el-input v-model='providerForm.contact'></el-input>
+                <el-input v-model='providerForm.contact' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span='24'>
               <el-form-item label='供应商描述' prop='providerDesc'>
-                <el-input v-model='providerForm.providerDesc'></el-input>
+                <el-input v-model='providerForm.providerDesc' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div style='text-align: center'>
-            <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-            <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
+            <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
+            <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
           </div>
         </el-form>
       </div>
@@ -139,6 +144,9 @@ export default {
       providerListLoading: false,
       uuidshow: false,
       providerDialogVisible: false,
+      disabledflag: false,
+      selections: [],
+      mode: 1,
       // 检索条件用表单
       searchProviderForm: {
         uuid: '',
@@ -163,7 +171,6 @@ export default {
         {key: 2, value: '软件供应商'},
         {key: 3, value: '其他'}
       ],
-      mode: 1,
       providerFormRules: {
         category: [{ required: true, message: '请选择供应商类别', trigger: 'change' }],
         providerCode: [
@@ -189,8 +196,10 @@ export default {
   computed: {
     title: function () {
       if (this.mode === 1) {
-        return '新增供应商'
+        return '查看供应商'
       } else if (this.mode === 2) {
+        return '新增供应商'
+      } else if (this.mode === 3) {
         return '修改供应商'
       }
     }
@@ -226,14 +235,77 @@ export default {
       this.currentPage = val
       this.search()
     },
+    // 单击行时，勾选或者去掉勾选checkbox
+    checkrow: function (row) {
+      this.$refs['providerTable'].toggleRowSelection(row)
+    },
+    // checkbox勾选事件
+    getSelections: function (sel) {
+      this.selections = sel
+    },
+    // 查看供应商
+    viewProvider: function () {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要查看的供应商',
+          type: 'warning'
+        })
+      } else if (this.selections.length > 1) {
+        this.$message({
+          message: '一次只能查看一个供应商',
+          type: 'warning'
+        })
+      } else {
+        this.mode = 1
+        this.providerForm = {
+          uuid: this.selections[0].uuid,
+          category: this.selections[0].category,
+          providerCode: this.selections[0].providerCode,
+          providerName: this.selections[0].providerName,
+          contact: this.selections[0].contact,
+          providerDesc: this.selections[0].providerDesc
+        }
+        this.providerDialogVisible = true
+        this.disabledflag = true
+      }
+    },
+    // 添加供应商
     addProvider: function () {
-      this.mode = 1
+      this.mode = 2
+      this.disabledflag = false
       this.clear()
       this.providerDialogVisible = true
     },
-    editProvider: function (attr = {}) {
+    // 选择行后，点击编辑供应商按钮打开供应商弹框
+    editProvider: function () {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要修改的供应商',
+          type: 'warning'
+        })
+      } else if (this.selections.length > 1) {
+        this.$message({
+          message: '一次只能修改一个供应商',
+          type: 'warning'
+        })
+      } else {
+        this.mode = 3
+        this.providerForm = {
+          uuid: this.selections[0].uuid,
+          category: this.selections[0].category,
+          providerCode: this.selections[0].providerCode,
+          providerName: this.selections[0].providerName,
+          contact: this.selections[0].contact,
+          providerDesc: this.selections[0].providerDesc
+        }
+        this.providerDialogVisible = true
+        this.disabledflag = false
+      }
+    },
+    // 双击行打开编辑供应商弹框
+    editProviderdbl: function (attr = {}) {
       console.log(attr)
-      this.mode = 2
+      this.mode = 3
       this.clear()
       this.providerForm = {
         uuid: attr.uuid,
@@ -244,9 +316,17 @@ export default {
         providerDesc: attr.providerDesc
       }
       this.providerDialogVisible = true
+      this.disabledflag = false
     },
     // 删除设备分类
     deleteProvider: function (attr = {}) {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要删除的供应商',
+          type: 'warning'
+        })
+        return
+      }
       this.$confirm('确定要刪除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
