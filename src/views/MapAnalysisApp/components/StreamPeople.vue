@@ -1,20 +1,26 @@
 <template>
   <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
     <el-row>
-      <el-col :span="4">
+      <el-col :span="4" class="leftText">
         <div>
           <div>
-            <span>小区地址：</span>{{cellDetailsList.regionName}}</div>
+            <span>小区地址</span>
+            <i></i>：{{cellDetailsList.regionName}}广东省广州市增城区恒大山水城恒大酒店2F华夏厅</div>
           <div>
-            <span>小区名称：</span>{{cellDetailsList.courtName}}</div>
+            <span>小区名称</span>
+            <i></i>：{{cellDetailsList.courtName}}</div>
           <div>
-            <span>楼栋：</span>{{cellDetailsList.homeCount}}栋</div>
+            <span>楼栋</span>
+            <i></i>：{{cellDetailsList.homeCount}}栋</div>
           <div>
-            <span>房屋：</span>{{cellDetailsList.houseCount}}间</div>
+            <span>房屋</span>
+            <i></i>：{{cellDetailsList.houseCount}}间</div>
           <div>
-            <span>占地面积：</span>{{cellDetailsList.floorArea}}平方米</div>
+            <span>占地面积</span>
+            <i></i>：{{cellDetailsList.floorArea}}平方米</div>
           <div>
-            <span>建筑面积：</span>{{cellDetailsList.buildArea}}平方米</div>
+            <span>建筑面积</span>
+            <i></i>：{{cellDetailsList.buildArea}}平方米</div>
         </div>
       </el-col>
       <!-- 表格展示 -->
@@ -23,7 +29,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="报表类型">
-                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small">
+                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" style="width:95%">
                   <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -31,13 +37,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -50,7 +56,7 @@
         </el-form>
         <div class="show">
           <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe>
+            <el-table :data="tableData" width="100%" height="380" class="tableWidth" stripe border>
               <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
@@ -60,7 +66,7 @@
               <el-table-column prop="perOutCount" label="出园人数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -70,9 +76,9 @@
         </div>
       </el-col>
     </el-row>
-    <span slot="footer" class="dialog-footer">
+    <!-- <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-    </span>
+    </span> -->
   </el-dialog>
 </template>
 <script>
@@ -432,7 +438,9 @@ export default {
 </script>
 <style scoped lang='less'>
 .popup {
-  min-width: 710px;
+  /deep/.el-dialog {
+    min-width: 710px;
+  }
   /deep/.table-pager {
     padding: 0;
     padding-right: 10px;
@@ -447,18 +455,56 @@ export default {
   }
   /deep/.el-form-item__label {
     padding: 0;
+    font-size: 16px;
+    font-weight: 540;
   }
   /deep/.el-form-item {
-    margin: 0;
+    margin-bottom: 10px;
   }
   /deep/.show {
-    border: 1px solid #eee;
     padding: 10px 0 5px 5px;
     height: 430px;
     margin-top: 10px;
   }
+  .canvas {
+    border: 1px solid #ccc;
+    padding: 10px 8px 5px 5px;
+  }
   #flowInformation {
     height: 420px;
+  }
+  /deep/.el-dialog__body {
+    padding: 0px 20px;
+  }
+  /deep/.el-dialog__header {
+    span {
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+  .leftText {
+    height: 530px;
+    padding: 5px 10px;
+    background-color: #f6faff;
+    div {
+      line-height: 30px;
+      font-size: 15px;
+      span {
+        font-weight: 550;
+        width: 65px;
+        font-size: 16px;
+        text-align: justify;
+        text-align-last: justify;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: top;
+        i {
+          display: inline-block;
+          width: 100%;
+          height: 0;
+        }
+      }
+    }
   }
 }
 </style>

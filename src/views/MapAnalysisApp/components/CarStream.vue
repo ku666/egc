@@ -3,7 +3,7 @@
     <el-dialog :visible.sync="isShowCarInfoMap" @close="closeDialog" title="小区车流量" width="70%">
       <el-row>
         <el-col :span="4">
-          <div>
+          <div class="leftText">
             <div>
               <span>小区地址：</span>广州市中心镇</div>
             <div>
@@ -446,6 +446,13 @@ export default {
   }
   /deep/.firstRow .el-col:nth-of-type(3n) {
     padding-right: 0;
+  }
+  .leftText{
+    line-height: 35px;
+    font-size: 15px;
+    span{
+      font-weight: 400;
+    }
   }
 }
 </style>
