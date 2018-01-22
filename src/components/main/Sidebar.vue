@@ -77,6 +77,12 @@ export default {
           },
           {
             'icon': null,
+            'index': '/mapanalysisapp/index2',
+            'title': '首页2',
+            'subs': null
+          },
+          {
+            'icon': null,
             'index': '/houseallapp/index',
             'title': '全国小区',
             'subs': null
