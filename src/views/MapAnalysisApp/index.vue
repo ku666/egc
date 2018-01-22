@@ -4,11 +4,11 @@
       <el-col :span="12">
         <el-button type="primary" @click="carStream">车流数据展示</el-button>
         <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
-        <el-button type="primary" @click="dialogTableVisibleShow">业主画像数据展示</el-button>
+        <el-button type="primary" @click="OwnerPortrait">业主画像数据展示</el-button>
         <el-button type="primary" @click="equipmentShow">设备数数据展示</el-button>
         <car-stream ref="carStream"></car-stream>
         <stream-people ref="streamPeople"></stream-people>
-        <owner-portrait ref="ownerPortrait"></owner-portrait>
+        <owner-portrait ref="OwnerPortrait"></owner-portrait>
         <equipment-report ref="equipmentReport"></equipment-report>
       </el-col>
       <el-col :span="6">
@@ -44,7 +44,7 @@ import hdmap from 'hdmap'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
-import OwnerPortrait from './components/OwnerPortrait'
+import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
 export default {
   components: {
     StreamPeople,
@@ -158,15 +158,23 @@ export default {
     carStream: function () {
       this.$refs.carStream.goToCarStreamPage(this.courtId)
     },
-    dialogTableVisibleShow: function () {
-      this.$refs['ownerPortrait'].openDialog()
+    OwnerPortrait: function () {
+      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
     },
+    // dialogTableVisibleShow: function () {
+    //   this.$refs['ownerPortrait'].openDialog()
+    //   // this.$refs['ownerPortrait'].goToOwnerStreamPage(this.courtId)
+    // },
     equipmentShow: function () {
       this.$refs['equipmentReport'].openDialog()
     },
     openCourtPeo: function () {
       console.log('查看小区人流信息')
       this.$refs['streamPeople'].streamPeople(this.courtId)
+    },
+    openCourtPeo: function () {
+      console.log('查看小区人流信息')
+      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
     },
     openCourtCar: function () {
       console.log('查看小区车流信息')
