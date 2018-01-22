@@ -18,7 +18,7 @@ export const updateDeviceCategory = (data) => {
 
 // 3. 删除设备分类信息的接口
 export const deleteDeviceCategory = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/delete', data
+  return Axios.post(DEVICE_CATEGORY_PATH + '/delete?uuid=' + data
   ).then(res => res.data)
 }
 

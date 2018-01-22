@@ -181,7 +181,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceCategory(this.selections).then(res => {
+        deleteDeviceCategory(this.selections[0].uuid).then(res => {
           if (res.code !== '0000') {
             return
           }
