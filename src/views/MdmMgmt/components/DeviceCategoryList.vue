@@ -280,7 +280,8 @@ export default {
         getAllProviders()
         .then(
           function (result) {
-            this.providers = JSON.parse(result.data)
+            console.log(result.data)
+            this.providers = result.data
             sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
           }.bind(this)
         )

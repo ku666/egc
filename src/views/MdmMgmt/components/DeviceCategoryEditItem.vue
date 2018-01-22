@@ -199,8 +199,18 @@ export default {
       this.deviceCategoryDetailVisible = true
     },
     next: function () {
-      this.basicshow = false
-      this.attrshow = true
+      this.$refs['deviceCategoryDetail'].validate((valid) => {
+        if (valid) {
+          this.basicshow = false
+          this.attrshow = true
+        } else {
+          this.$message({
+            message: '请填写正确的内容',
+            type: 'warning'
+          })
+          return false
+        }
+      })
     },
     back: function () {
       this.basicshow = true
