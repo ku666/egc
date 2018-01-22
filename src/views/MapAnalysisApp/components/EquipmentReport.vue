@@ -33,6 +33,7 @@
 <script>
 import { getListDeviceType } from '@/views/MapAnalysisApp/apis/index'
 export default {
+  name: 'EquipmentReport',
   data () {
     return {
       dialogReportVisible: false,
@@ -154,8 +155,8 @@ export default {
             console.log(this.onlinedata)
             // 设备数量数据
             let option = {
-              // backgroundColor: 'rgba(0,0,20,0.1)',
-              backgroundColor: 'dark',
+              backgroundColor: 'rgba(0,0,20,0.1)',
+              // backgroundColor: 'dark',
               title: {
                 text: '设备总数量',
                 subtext: '恒大山水城',
