@@ -76,10 +76,12 @@ export default {
       })
       return sums
     },
+    // 点击图标
     chartSwitch () {
       this.isChartShow = true
       this.isTableShow = false
     },
+    // 点击表格
     tableSwitch () {
       this.isChartShow = false
       this.isTableShow = true
@@ -111,149 +113,155 @@ export default {
     //       }
     //     })
     // },
+    chartInit () {
+      let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
+      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      // 设备数量数据
+      let option = {
+        backgroundColor: 'rgba(0,0,20,0.1)',
+        // backgroundColor: 'dark',
+        title: {
+          text: '设备总数量',
+          subtext: '恒大山水城',
+          x: 'center'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          data: this.names,
+          x: 'center',
+          y: 'bottom',
+          type: 'scroll'
+        },
+        series: [
+          {
+            name: '设备总数量',
+            type: 'pie',
+            radius: '50%',
+            center: ['50%', '50%'],
+            selectedMode: 'single',
+            // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
+            data: this.totaldata,
+            // roseType: 'radius',
+            label: {
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '25',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                smooth: 0.3,
+                length: 10,
+                length2: 20
+              }
+            },
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+              return Math.random() * 200
+            }
+          }
+        ]
+      }
+      // 设备实时在网数量数据
+      let option1 = {
+        backgroundColor: 'rgba(0,0,33,0.1)',
+        title: {
+          text: '设备实时在网数量',
+          subtext: '恒大山水城',
+          x: 'center'
+        },
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          x: 'center',
+          y: 'bottom',
+          type: 'scroll',
+          data: this.onlinenames
+        },
+        calculable: true,
+        series: [
+          {
+            name: '实时在网数量',
+            type: 'pie',
+            radius: [100, 170],
+            center: ['50%', '50%'],
+            selectedMode: 'single',
+            avoidLabelOverlap: false,
+            label: {
+              // normal: {
+              //   show: true,
+              //   position: 'center'
+              // },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: '25',
+                  fontWeight: 'bold'
+                }
+              }
+            },
+            // roseType: 'radius',
+            data: this.onlinedata
+          }
+        ]
+      }
+      equipmentcharts.setOption(option)
+      equipmentonlinecharts.setOption(option1)
+    },
     openDialog () {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
-        let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
-        let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
-        getListDeviceType().then(res => {
-          if (res.data.code === '00000') {
-            this.tableData = res.data.data
-            console.log(111111)
-            console.log(this.tableData)
-            this.onlinedata = []
-            this.totaldata = []
-            for (let i in this.tableData) {
-              this.names.push(this.tableData[i].deviceTypeDesc)
-              if (this.tableData[i].onlineCount !== 0) {
-                this.onlinenames.push(this.tableData[i].deviceTypeDesc)
-              }
-              this.onlinedata.push(
-                {
-                  name: this.tableData[i].deviceTypeDesc,
-                  value: this.tableData[i].onlineCount,
-                  itemStyle: {
-                    normal: {
-                      label: {
-                        show: true,
-                        formatter: function (params, option) {
-                          if (params.data.value === 0) {
-                            params.data.label.normal.show = false
-                            params.data.labelLine.normal.show = false
-                          }
+        let equiData = {}
+        equiData.courtUuid = 'c69aeede4f6341929721e2892beec3cb'
+        getListDeviceType(equiData).then(res => {
+          // if (res.data.code === '00000') {
+          this.tableData = res.data
+          console.log(111111)
+          console.log(this.tableData)
+          this.onlinedata = []
+          this.totaldata = []
+          for (let i in this.tableData) {
+            this.names.push(this.tableData[i].deviceTypeDesc)
+            if (this.tableData[i].onlineCount !== 0) {
+              this.onlinenames.push(this.tableData[i].deviceTypeDesc)
+            }
+            // console.log(this.onlinenames)
+            this.onlinedata.push(
+              {
+                name: this.tableData[i].deviceTypeDesc,
+                value: this.tableData[i].onlineCount,
+                itemStyle: {
+                  normal: {
+                    label: {
+                      show: true,
+                      formatter: function (params, option) {
+                        if (params.data.value === 0) {
+                          params.data.label.normal.show = false
+                          params.data.labelLine.normal.show = false
                         }
-                      },
-                      labelLine: {
-                        show: true
                       }
+                    },
+                    labelLine: {
+                      show: true
                     }
                   }
-                })
-              this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
-            }
-            console.log(this.onlinedata)
-            // 设备数量数据
-            let option = {
-              backgroundColor: 'rgba(0,0,20,0.1)',
-              // backgroundColor: 'dark',
-              title: {
-                text: '设备总数量',
-                subtext: '恒大山水城',
-                x: 'center'
-              },
-              tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
-              },
-              legend: {
-                data: this.names,
-                x: 'center',
-                y: 'bottom',
-                type: 'scroll'
-              },
-              series: [
-                {
-                  name: '设备总数量',
-                  type: 'pie',
-                  radius: '50%',
-                  center: ['50%', '50%'],
-                  selectedMode: 'single',
-                  // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
-                  data: this.totaldata,
-                  // roseType: 'radius',
-                  label: {
-                    emphasis: {
-                      show: true,
-                      textStyle: {
-                        fontSize: '25',
-                        fontWeight: 'bold'
-                      }
-                    }
-                  },
-                  labelLine: {
-                    normal: {
-                      smooth: 0.3,
-                      length: 10,
-                      length2: 20
-                    }
-                  },
-                  animationType: 'scale',
-                  animationEasing: 'elasticOut',
-                  animationDelay: function (idx) {
-                    return Math.random() * 200
-                  }
                 }
-              ]
-            }
-            // 设备实时在网数量数据
-            let option1 = {
-              backgroundColor: 'rgba(0,0,33,0.1)',
-              title: {
-                text: '设备实时在网数量',
-                subtext: '恒大山水城',
-                x: 'center'
-              },
-              tooltip: {
-                trigger: 'item',
-                formatter: '{a} <br/>{b} : {c} ({d}%)'
-              },
-              legend: {
-                x: 'center',
-                y: 'bottom',
-                type: 'scroll',
-                data: this.onlinenames
-              },
-              calculable: true,
-              series: [
-                {
-                  name: '实时在网数量',
-                  type: 'pie',
-                  radius: [100, 170],
-                  center: ['50%', '50%'],
-                  selectedMode: 'single',
-                  avoidLabelOverlap: false,
-                  label: {
-                    // normal: {
-                    //   show: true,
-                    //   position: 'center'
-                    // },
-                    emphasis: {
-                      show: true,
-                      textStyle: {
-                        fontSize: '25',
-                        fontWeight: 'bold'
-                      }
-                    }
-                  },
-                  // roseType: 'radius',
-                  data: this.onlinedata
-                }
-              ]
-            }
-            equipmentcharts.setOption(option)
-            equipmentonlinecharts.setOption(option1)
+              })
+            this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
           }
+          this.chartInit()
+          console.log(this.onlinedata)
+          // }
         })
       })
     }
