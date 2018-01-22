@@ -1,18 +1,18 @@
 <template>
   <div class="house-wrap">
     <el-container>
-      <el-header>恒大智慧云小区服务平台</el-header>
+      <!-- <el-header>恒大智慧云小区服务平台</el-header> -->
       <el-main>
         <!-- 所有小区 -->
         <div class="all-house">
           <div class='house-box'>
-            <h3 class="house-title">全国恒大小区业主画像</h3>
+            <h3 class="house-title">全国恒大小区列表</h3>
             <div class="search-box">
               <el-input v-model="valHouse" placeholder="请输入要查询的小区" @keydown.native="houseInfo"></el-input>
               <el-button type="primary" icon="el-icon-search" @click="searchHouse">搜索</el-button>
             </div>
           </div>
-          <el-table :data="allHouseList" stripe style="flex: 1;margin-top: 10px;" @row-click="goHouseInfo">
+          <el-table :data="allHouseList" stripe style="flex: 1;margin-top: 10px;" @row-click="goHouseInfo" height="600" border>
             <el-table-column prop="courtName" label="小区"></el-table-column>
             <el-table-column prop="allPersonNum" label="总人数"></el-table-column>
             <el-table-column prop="sexProportion" label="性别比例"></el-table-column>
@@ -126,7 +126,7 @@ a {
   margin: 0 auto;
 }
 .all-house {
-  box-shadow: 0px 3px 5px 5px #eee;
+  /* box-shadow: 0px 3px 5px 5px #eee; */
   padding: 20px 18px 30px;
 }
 .house-box {
