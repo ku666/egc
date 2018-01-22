@@ -12,7 +12,7 @@
         <equipment-report ref="equipmentReport"></equipment-report>
       </el-col>
       <el-col :span="6">
-        <el-input v-model="searchCourtName" placeholder="请输入小区名称" @keyup.enter.native="searchCourt"></el-input>
+        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
       </el-col>
       <el-col :span="4">
         <el-button type="primary" @click="searchCourt">查询</el-button>
@@ -130,6 +130,7 @@ export default {
     })
   },
   methods: {
+    // 点击地图
     handleSingleClick: function (e) {
       // console.log(e)
       // if (e.feature) {
@@ -174,6 +175,18 @@ export default {
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
+      debugger
+      let str = this.searchCourtName // 把多个空格合并成一个空格
+      str = str.trim() // 去掉字符串前后的空格
+      str = str.replace(/s+/g, " ")
+      if(str === ''){
+        this.searchCourtName = str
+        this.$message({
+          type: 'warning',
+          message: '请输入要查询的小区名称'
+        })
+        return
+      }
       getCourtList({courtName:this.searchCourtName}).then(res => {
         let msgType = 'warning'
         if (res.data.code === '00000'){

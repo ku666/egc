@@ -1,6 +1,6 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
-let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
+let contextPath = '/mapanalysis' // /egc-mapanalysiscomponent
+let personPath = '/mapAnalysis/' // /egc-smartcommunitymgmtapp
 let contextPath1 = '/device'
 /**
  * 条件查询小区列表
