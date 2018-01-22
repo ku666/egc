@@ -20,7 +20,7 @@
       <!-- 表格展示 -->
       <el-col :span="19" style="height:600px">
         <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
-          <el-row class="tblHeader">
+          <el-row>
             <el-col :span="8">
               <el-form-item label="报表类型">
                 <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small">
@@ -72,7 +72,6 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-      <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
     </span>
   </el-dialog>
 </template>
@@ -113,8 +112,7 @@ export default {
       },
       cellDetailsList: {},
       timeType: 'date',
-      // reportType: '',
-      total: 20, // 数据条数
+      total: 10, // 数据条数
       tableData: [],
       isChartShow: false,
       isTableShow: true,
@@ -125,6 +123,7 @@ export default {
       myChart: null,
       myChartNode: null,
       canvasNode: null,
+      num: 0, // 图表点击计数
       myChartContainer: null,
       // 限制开始时间与结束时间
       starForbiddenDatetime: {
@@ -155,9 +154,14 @@ export default {
     },
     // 点击切换图表展示
     chartSwitch: function () {
-      this.getData()
       this.isChartShow = true
       this.isTableShow = false
+      // 多次点击
+      if (this.num > 0) {
+        return
+      }
+      this.num++
+      this.getData()
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -332,33 +336,24 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      // 点击切换表格时 重置表格宽高
-      let elTable = document.querySelector('.el-table')
-      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
-      let elTableBody = document.querySelector('.el-table__body')
-      if (belTableHeaderbb) {
-        belTableHeaderbb.style.width = '100%'
-        elTableBody.style.width = '100%'
-      }
-      elTable.style.maxHeight = '381px'
     },
-    // 小区详细信息
     // 打开组件的回调
     streamPeople: function (_courtId) {
       this.getPgingData()
       this.getData()
       // 获取小区详细信息
-      // getCourtInfo({ courtId: _courtId }).then(res => {
-      getCourtInfo().then(res => {
+      getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
-      // 切换到图表时 查询加载图表
+      // 查询时页面初始化到第一页
+      this.parameter.pageNum = 1
       this.getData()
       this.getPgingData()
+      this.num = 0
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
@@ -378,7 +373,6 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        // getCourtPerAccessInfo().then(res => {
         if (res.data.code === '00000') {
           let perData = res.data.data
           // 添加前先清空
@@ -414,10 +408,9 @@ export default {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getPerAccessPageList(this.parameter).then(res => {
-        // getPerAccessPageList().then(res => {
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
-          this.total = res.data.data.totalCount
+          // this.total = res.data.data.totalCount
         } else {
           this.$message({
             type: 'error',
@@ -431,6 +424,7 @@ export default {
       this.parameter.reportType = '1'
       this.isChartShow = false
       this.isTableShow = true
+      this.num = 0
     }
   },
   mounted: function () { }
