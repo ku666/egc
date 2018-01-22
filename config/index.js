@@ -20,8 +20,8 @@ module.exports = {
         target: 'http://192.168.0.186:9030', // 设备报表
         changeOrigin: true
       },
-      '/egc-smartcommunitymgmtapp': {
-        target: 'http://172.16.30.64:8082/', // 邓代超（地图分析）
+      '/mapAnalysis': {
+        target: 'http://192.168.0.186:9030', // 邓代超（地图分析）
         changeOrigin: true
       }
       // '/egc-smartcommunitymgmtapp': {
