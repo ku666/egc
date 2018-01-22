@@ -65,11 +65,11 @@
     </el-table>
     <el-pagination class = 'table-pager'
       background
-      :current-page = 'currentPage'
+      :current-page = 'searchProviderForm.currentPage'
       :page-sizes = '[10, 20, 50, 100]'
-      :page-size = 'pageSize'
+      :page-size = 'searchProviderForm.pageSize'
       layout = 'total, sizes, prev, pager, next, jumper'
-      :total = 'total'
+      :total = 'searchProviderForm.total'
       @size-change = 'sizeChange'
       @current-change = 'currentChange'>
     </el-pagination>
@@ -138,9 +138,6 @@ import {
 export default {
   data () {
     return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 0,
       providerListLoading: false,
       uuidshow: false,
       providerDialogVisible: false,
@@ -152,6 +149,7 @@ export default {
         uuid: '',
         pageSize: 10,
         currentPage: 1,
+        total: 0,
         providerCode: '',
         providerName: ''
       },
@@ -178,7 +176,7 @@ export default {
           {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
         ],
         providerName: [
-          {required: true, message: '请输入公司名', trigger: 'blur'},
+          {required: true, message: '请输入供应商名', trigger: 'blur'},
           {max: 100, message: '输入内容应少于100位字符', trigger: 'blur'}
         ],
         providerDesc: [
@@ -213,7 +211,7 @@ export default {
           function (result) {
             console.log(result)
             this.providerList = result.data.result
-            this.total = result.data.totalCount
+            this.searchProviderForm.total = result.data.totalCount
             this.providerListLoading = false
           }.bind(this)
         )
@@ -226,13 +224,13 @@ export default {
     },
     // 改变分页大小
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      this.searchProviderForm.pageSize = val
+      this.searchProviderForm.currentPage = 1
       this.search()
     },
     // 跳转页面
     currentChange: function (val) {
-      this.currentPage = val
+      this.searchProviderForm.currentPage = val
       this.search()
     },
     // 单击行时，勾选或者去掉勾选checkbox
@@ -319,7 +317,7 @@ export default {
       this.disabledflag = false
     },
     // 删除设备分类
-    deleteProvider: function (attr = {}) {
+    deleteProvider: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要删除的供应商',
@@ -333,7 +331,9 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteProvider(attr).then(res => {
+        let uuidList = []
+        this.selections.forEach((provider) => uuidList.push(provider.uuid))
+        deleteProvider({'uuidList': uuidList}).then(res => {
           this.search({})
           this.$message({
             message: '刪除成功!',

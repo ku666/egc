@@ -364,7 +364,9 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceAttribute(attr.uuid).then(res => {
+        let uuidList = []
+        this.selections.forEach((attr) => uuidList.push(attr.uuid))
+        deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'warning'

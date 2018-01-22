@@ -52,7 +52,7 @@ export const updateDeviceAttribute = (data) => {
 
 // 3. 删除设备属性信息的接口
 export const deleteDeviceAttribute = (data) => {
-  return Axios.post(DEVICE_ATTRIBUTE_PATH + '/delete?uuid=' + data
+  return Axios.post(DEVICE_ATTRIBUTE_PATH + '/delete', data
   ).then(res => res.data)
 }
 
