@@ -18,7 +18,7 @@ export default {
     ]
     for (let i = 0, len = condiArr.length; i < len; i++) {
       data.push({
-        courtID: '145375415345831' + Math.random() * 1000,
+        courtID: 'c69aeede4f6341929721e2892beec3cb',
         courtName: '恒大山水城' + i,
         gpsLon: condiArr[i][0],
         gpsLat: condiArr[i][1],
@@ -33,9 +33,8 @@ export default {
   },
   // 获取小区详细信息
   getCourtInfo: config => {
-    var data = []
-    data.push({
-      courtId: '5737834237375345',
+    var data = {
+      courtId: 'c69aeede4f6341929721e2892beec3cb',
       courtName: '恒大山水城',
       org: '001002',
       regionName: '广东省增城区中新镇',
@@ -43,7 +42,7 @@ export default {
       homeCount: '1000',
       buildArea: '21100',
       floorArea: '11000'
-    })
+    }
     return {
       data: data,
       code: '00000',
