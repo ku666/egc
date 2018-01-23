@@ -1,5 +1,5 @@
 <template>
-  <div class="person-manager" v-loading="loading">
+  <div class="person-manager">
     <!-- <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view> -->
     <div class="tree-view-container">
       <!--
@@ -34,7 +34,7 @@
         <hr/>
 
         <!-- 带分页表格 -->
-        <el-table :data="tableData" stripe height="100%">
+        <el-table :data="tableData" stripe height="100%" v-loading="loading">
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">

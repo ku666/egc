@@ -1,5 +1,5 @@
 <template>
-  <div class="house-manager" v-loading="loading">
+  <div class="house-manager">
     <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view>
     <div class="tree-view-container">
       <!--
@@ -15,7 +15,7 @@
       <div class="house-list">
         <!-- 带分页表格 -->
         <div class="house-table">
-          <el-table :data="tableData" stripe height="100%" @selection-change="handleSelectionChange">
+          <el-table :data="tableData" stripe height="100%" @selection-change="handleSelectionChange" v-loading="loading">
             <!--
             <el-table-column fixed="left" type="selection" width="55">
             </el-table-column>
