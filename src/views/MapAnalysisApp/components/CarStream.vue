@@ -3,19 +3,25 @@
     <el-dialog :visible.sync="isShowCarInfoMap" @close="closeDialog" title="小区车流量" width="70%">
       <el-row>
         <el-col :span="4">
-          <div>
+          <div class="description">
             <div>
-              <span>小区地址：</span>广州市中心镇</div>
+              <span>小区地址</span>：广州市中心镇
+            </div>
             <div>
-              <span>小区名称：</span>恒大山水城</div>
+              <span>小区名称</span>：恒大山水城
+            </div>
             <div>
-              <span>楼栋：</span>108栋</div>
+              <span>楼栋</span>：108栋
+            </div>
             <div>
-              <span>房屋：</span>1024间</div>
+              <span>房屋</span>：1024间
+            </div>
             <div>
-              <span>占地面积：</span>12306平方米</div>
+              <span>占地面积</span>：12306平方米
+            </div>
             <div>
-              <span>建筑面积：</span>118118118平方米</div>
+              <span>建筑面积</span>：118118118平方米
+            </div>
           </div>
         </el-col>
         <el-col :span="20">
@@ -331,7 +337,7 @@ export default {
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询')
         // console.log(res.data.result)
-        this.carStreamData = res.data.data.result
+        this.carStreamData = res.data.result
       }).catch(res => {
         console.log('res', res)
       })
@@ -353,7 +359,7 @@ export default {
       console.log('获取时间段内所有数据,增加catch')
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
-        var data = res.data.data
+        var data = res.data
         this.sortData(data)
         this.chartInit()
       }).catch(res => {
@@ -365,8 +371,8 @@ export default {
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询数据')
-        this.totalDataNum = res.data.data.totalCount
-        this.carStreamData = res.data.data.result
+        this.totalDataNum = res.data.totalRows
+        this.carStreamData = res.data.result
       }).catch(res => {
         console.log('res', res)
       })
@@ -408,6 +414,17 @@ export default {
   border: 1px solid #dcdfe6;
 }
 .carInfo {
+  .description{
+    span{
+      display: inline-block;
+      width: 72px;
+      text-align: justify;
+      text-align-last:justify;
+    }
+    i{
+      display: inline-block;
+    }
+  }
   /deep/.el-dialog {
     min-width: 820px;
   }
