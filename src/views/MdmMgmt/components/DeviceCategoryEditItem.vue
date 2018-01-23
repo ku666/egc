@@ -41,20 +41,20 @@
         <div style='text-align: center; margin-top: 20px'>
           <el-button type='primary' @click='clear' class='btn-reset' :disabled='viewFlag'>清空</el-button>
           <!-- <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button> -->
-          <el-button type='primary' @click='next' class='btn-plain'>保存</el-button>
+          <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="设备属性信息" name = 'attr'>
+      <el-tab-pane label="设备属性信息" name = 'attr' v-if = 'deviceSaved'>
         <el-form>
           <el-form-item>
             <el-row type = 'flex' justify = 'center'>
               <el-col :span = '19'>
                 <el-transfer
                   filterable
-                  :titles="['当前设备属性', '全部属性']"
-                  :button-texts="['添加属性', '删除属性']"
+                  :titles="['全部属性', '当前设备属性']"
+                  :button-texts="['删除属性', '添加属性']"
                   :props= '{
-                    key: "attrCode",
+                    key: "uuid",
                     label: "attrDesc"
                   }'
                   v-model='selectAttr'
@@ -66,7 +66,7 @@
         </el-form>
         <div style='text-align: center; margin-top: 20px'>
           <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
-          <el-button type='primary' @click='save' class='btn-plain' :disabled='viewFlag'>保存</el-button>
+          <el-button type='primary' @click='saveMapping' class='btn-plain' :disabled='viewFlag'>保存</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -92,7 +92,7 @@ export default {
     }
   },
   mounted () {
-    this.getAllAttr()
+
   },
   data () {
     return {
@@ -117,6 +117,7 @@ export default {
       viewFlag: false,
       selectAttr: [],
       transferData: [],
+      deviceSaved: false,
       rules: {
         typeCode: [
           { required: true, message: '请输入类别编码', trigger: 'blur' },
@@ -157,6 +158,7 @@ export default {
     }
   },
   methods: {
+    // 编辑设备信息
     editDeviceCategoryDialog: function (categoryDetail = {}) {
       this.viewFlag = false
       this.deviceCategoryDetail.uuid = categoryDetail.uuid
@@ -169,8 +171,12 @@ export default {
       this.deviceCategoryDetail.softwareVersion = categoryDetail.softwareVersion
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
-      this.$parent.getParents()
+      this.deviceSaved = true
+      this.getAllAttr()
+      this.getDeviceAttr()
+      // this.$parent.getParents()
     },
+    // 添加设备信息
     addDeviceCategoryDialog: function () {
       this.viewFlag = false
       this.deviceCategoryDetail.parentUuid = ''
@@ -182,7 +188,8 @@ export default {
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
       this.deviceCategoryDetailVisible = true
-      this.$parent.getParents()
+      this.getAllAttr()
+      // this.$parent.getParents()
     },
     // viewDeviceCategoryDialog: function (categoryDetail = {}) {
     //   this.viewFlag = true
@@ -197,26 +204,26 @@ export default {
     //   this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
     //   this.deviceCategoryDetailVisible = true
     // },
+    // 取得所有的属性
     getAllAttr: function () {
       getDeviceAttributeList({})
       .then(res => {
-        console.log(res)
         this.transferData = res.data
+        console.log('-----------------')
+        console.log(this.transferData)
       })
     },
-    next: function () {
-      this.$refs['deviceCategoryDetail'].validate((valid) => {
-        if (valid) {
-
-        } else {
-          this.$message({
-            message: '请填写正确的内容',
-            type: 'warning'
-          })
-          return false
-        }
+    // 取得当前设备的属性
+    getDeviceAttr: function () {
+      getDeviceAttributeList({'typeCode': this.deviceCategoryDetail.typeCode})
+      .then(res => {
+        res.data.forEach(element => {
+          this.selectAttr = []
+          this.selectAttr.push(element.uuid)
+        })
       })
     },
+    // 保存设备基本信息
     save: function () {
       this.$refs['deviceCategoryDetail'].validate((valid) => {
         if (valid) {
@@ -227,8 +234,9 @@ export default {
               message: '设备类别保存成功!',
               type: 'success'
             })
-            this.deviceCategoryDetailVisible = false
+            // this.deviceCategoryDetailVisible = false
             this.$parent.search({})
+            this.deviceSaved = true
           })
         } else {
           this.$message({
@@ -239,11 +247,24 @@ export default {
         }
       })
     },
+    // 保存设备属性信息
+    saveMapping: function () {
+      if (this.selectAttr.length === 0) {
+        this.$message({
+          message: '请选择设备属性',
+          type: 'warning'
+        })
+        return false
+      } else {
+      }
+    },
+    // 清除验证信息
     clearValidate: function () {
       this.$nextTick(() => {
         this.$refs['deviceCategoryDetail'].clearValidate()
       })
     },
+    // 清除表单信息
     clear: function () {
       this.deviceCategoryDetail.uuid = ''
       this.deviceCategoryDetail.parentUuid = ''
@@ -256,15 +277,19 @@ export default {
       this.deviceCategoryDetail.providerCode = ''
       this.clearValidate()
     },
+    // 关闭当前弹框前执行的方法
     closeDialog: function (done) {
       done()
       this.clearValidate()
       this.activeTab = 'basic'
-    },
-    openAttrDmnDialog: function (attr = {}) {
-      const attrTmp = Object.assign({}, attr)
-      this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
+      this.selectAttr = []
+      this.deviceSaved = false
     }
+    // // 打开设备属性域弹框
+    // openAttrDmnDialog: function (attr = {}) {
+    //   const attrTmp = Object.assign({}, attr)
+    //   this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
+    // }
   }
 }
 </script>
