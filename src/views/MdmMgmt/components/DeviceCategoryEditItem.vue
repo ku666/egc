@@ -57,6 +57,7 @@
                     key: "attrCode",
                     label: "attrDesc"
                   }'
+                  v-model='selectAttr'
                   :data="transferData">
                 </el-transfer>
               </el-col>
@@ -64,7 +65,7 @@
           </el-form-item>
         </el-form>
         <div style='text-align: center; margin-top: 20px'>
-          <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button>
+          <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
           <el-button type='primary' @click='save' class='btn-plain' :disabled='viewFlag'>保存</el-button>
         </div>
       </el-tab-pane>
@@ -73,7 +74,7 @@
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -91,6 +92,7 @@ export default {
     }
   },
   mounted () {
+    this.getAllAttr()
   },
   data () {
     return {
@@ -106,24 +108,15 @@ export default {
         softwareVersion: '',
         providerCode: ''
       },
+      searchCon: {
+        typeCode: '',
+        attrCode: '',
+        attrDesc: ''
+      },
       activeTab: 'basic',
       viewFlag: false,
-      basicshow: true,
-      attrshow: false,
-      transferData: [
-        {
-          attrCode: '1',
-          attrDesc: '属性1'
-        },
-        {
-          attrCode: '2',
-          attrDesc: '属性2'
-        },
-        {
-          attrCode: '3',
-          attrDesc: '属性3'
-        }
-      ],
+      selectAttr: [],
+      transferData: [],
       rules: {
         typeCode: [
           { required: true, message: '请输入类别编码', trigger: 'blur' },
@@ -204,6 +197,13 @@ export default {
     //   this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
     //   this.deviceCategoryDetailVisible = true
     // },
+    getAllAttr: function () {
+      getDeviceAttributeList({})
+      .then(res => {
+        console.log(res)
+        this.transferData = res.data
+      })
+    },
     next: function () {
       this.$refs['deviceCategoryDetail'].validate((valid) => {
         if (valid) {
