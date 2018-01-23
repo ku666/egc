@@ -4,8 +4,9 @@
       @open = 'clear'
       :modal-append-to-body = 'false'
       width = '40%'>
-    <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div>
+    <!-- <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div> -->
     <!-- <span>设备属性：{{ categoryAttr.attrDesc }}</span> -->
+    <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ categoryAttr.attrDesc }} 属性域</div>
 
     <hr/>
     <el-table

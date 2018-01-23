@@ -3,9 +3,10 @@
       :visible.sync='deviceAttrMappingVisible'
       @open='clear'
       :modal-append-to-body = 'false'>
-    <div slot='title' class='head-text'>
+    <!-- <div slot='title' class='head-text'>
       <span>{{ deviceCategoryDetail.typeName }} 属性列表信息</span>
-    </div>
+    </div> -->
+    <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ deviceCategoryDetail.typeName }} 属性列表信息</div>
 
     <el-form :model='searchForm' ref='searchForm' :rules='rules' :inline='true' style='margin-top: -10px'>
       <el-form-item label='属性编码' prop='attrCode'>

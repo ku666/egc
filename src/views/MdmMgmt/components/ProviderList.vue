@@ -82,9 +82,10 @@
       <!-- <div slot='title' class='head-text'>
         <span>{{title}}</span>
       </div> -->
-      <el-steps :active='1' simple>
+      <!-- <el-steps :active='1' simple>
         <el-step :title="title" icon="el-icon-edit"></el-step>
-      </el-steps>
+      </el-steps> -->
+      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <div>
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>

@@ -252,22 +252,22 @@ export default {
       this.$refs['deviceCategoryEditDiag'].editDeviceCategoryDialog(device)
     },
     // ********************查看设备详情********************
-    viewDeviceClick: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要查看的设备',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能查看一个设备',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(this.selections[0])
-      }
-    },
+    // viewDeviceClick: function () {
+    //   if (this.selections.length === 0) {
+    //     this.$message({
+    //       message: '请选择要查看的设备',
+    //       type: 'warning'
+    //     })
+    //   } else if (this.selections.length > 1) {
+    //     this.$message({
+    //       message: '一次只能查看一个设备',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.mode = 1
+    //     this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(this.selections[0])
+    //   }
+    // },
     // viewDeviceDblClick: function (device = {}) {
     //   this.mode = 1
     //   this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(device)
@@ -307,44 +307,44 @@ export default {
     },
     // 查询供应商信息
     getProviders: function () {
-      let providersTemp = sessionStorage.getItem('PROVIDERS')
-      if (providersTemp === null || providersTemp === undefined) {
-        getAllProviders()
-        .then(
-          function (result) {
-            console.log(result.data)
-            this.providers = result.data
-            sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      } else {
-        this.providers = JSON.parse(providersTemp)
-      }
+      // let providersTemp = sessionStorage.getItem('PROVIDERS')
+      // if (providersTemp === null || providersTemp === undefined) {
+      getAllProviders()
+      .then(
+        function (result) {
+          console.log(result.data)
+          this.providers = result.data
+          // sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+      // } else {
+      //   this.providers = JSON.parse(providersTemp)
+      // }
     },
     // 查询所有的设备
     getParents: function () {
-      let parentsTemp = sessionStorage.getItem('DEVICES')
-      if (parentsTemp === null || parentsTemp === undefined) {
-        getDeviceCategories('')
-        .then(
-          function (result) {
-            this.parents = result.data
-            sessionStorage.setItem('DEVICES', JSON.stringify(this.parents))
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      } else {
-        this.parents = JSON.parse(parentsTemp)
-      }
+      // let parentsTemp = sessionStorage.getItem('DEVICES')
+      // if (parentsTemp === null || parentsTemp === undefined) {
+      getDeviceCategories('')
+      .then(
+        function (result) {
+          this.parents = result.data
+          // sessionStorage.setItem('DEVICES', JSON.stringify(this.parents))
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+      // } else {
+      //   this.parents = JSON.parse(parentsTemp)
+      // }
     },
     // 设备属性列表编辑页面
     openDeviceAttrDialog: function () {

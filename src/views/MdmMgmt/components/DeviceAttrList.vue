@@ -60,10 +60,10 @@
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
           <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
-          <el-button type='text' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
-          <el-button type='text' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
         </template>
       </el-table-column>
 
@@ -86,9 +86,10 @@
       <!-- <div slot='title'>
         <span class = 'head-text'>{{title}}</span>
       </div> -->
-      <el-steps :active='1' simple>
+      <!-- <el-steps :active='1' simple>
         <el-step :title="title" icon="el-icon-edit"></el-step>
-      </el-steps>
+      </el-steps> -->
+      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <div>
         <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
           <el-row>
