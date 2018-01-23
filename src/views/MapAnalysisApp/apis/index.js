@@ -3,13 +3,8 @@ let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
 
 let personPath = '/mapAnalysis'
 let devicePath = '/device'
-<<<<<<< HEAD
-// let ownertPath = '/egc-smartcommunitymgmtapp'
-let ownertPath = '/profile'
-=======
 let ownertPath = '/profile'
 
->>>>>>> mywork
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
