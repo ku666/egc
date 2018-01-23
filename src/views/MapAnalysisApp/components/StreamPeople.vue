@@ -56,7 +56,7 @@
         </el-form>
         <div class="show">
           <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" height="380" class="tableWidth" stripe border>
+            <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe border>
               <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
@@ -343,6 +343,15 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
+      // 请求数据后重置表格宽度
+      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      let elTableBody = document.querySelector('.el-table__body')
+      if (belTableHeaderbb) {
+        belTableHeaderbb.style.width = '100%'
+        elTableBody.style.width = '100%'
+      }
+      let elTable = document.querySelector('.el-table')
+      elTable.style.maxHeight = '381px'
     },
     // 打开组件的回调
     streamPeople: function (_courtId) {
@@ -379,24 +388,29 @@ export default {
       this.parameter.pageNum = val
       this.getPgingData()
     },
+    // 判断选择的时间是否符合要求
     timeJudgment: function (val) {
       switch (this.parameter.reportType) {
         case '1':
-          if (this.endTime.getTime() - this.starTime.getTime() > 2678400000) {
+          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) {
             this.isRequest = false
             this.$message({
               type: 'error',
               message: '日报查询范围为1个月'
             })
+          } else {
+            this.isRequest = true
           }
           break
         case '2':
-          if (this.endTime.getTime() - this.starTime.getTime() > 31536000000) {
+          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) {
             this.isRequest = false
             this.$message({
               type: 'error',
               message: '月报查询范围为1年'
             })
+          } else {
+            this.isRequest = true
           }
           break
         case '3':
@@ -419,7 +433,7 @@ export default {
           this.form.perInCountList = []
           this.form.perOutCountList = []
           for (let i = 0; i < perData.length; i++) {
-            this.form.dateList.push(perData[i].date)
+            this.form.dateList.push(perData[i].date + ':00:00')
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
@@ -440,14 +454,7 @@ export default {
       let year = date.getFullYear()
       let month = date.getMonth() + 1
       let day = date.getDate()
-      let hours = date.getHours()
-      if (this.parameter.reportType === '1') {
-        return year + '-' + month + '-' + day + ' ' + hours
-      } else if (this.parameter.reportType === '2') {
-        return year + '-' + month + '-' + day
-      } else {
-        return year + '-' + month
-      }
+      return year + '-' + month + '-' + day
     },
     // 获取人流分页信息
     getPgingData: function () {
