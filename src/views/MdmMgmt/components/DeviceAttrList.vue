@@ -1,11 +1,14 @@
 <template>
   <div>
     <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
-    <div>
-      <el-button @click='addAttr' type="text" icon='el-icon-circle-plus-outline' class='btn-text'>新增属性</el-button>
-    </div>
 
-    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 20px'>
+    <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
+    </el-breadcrumb>
+
+    <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 30px'>
       <el-form-item label='属性编码'>
         <el-input placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
       </el-form-item>
@@ -18,15 +21,32 @@
       </el-form-item>
     </el-form>
 
+    <el-row>
+      <el-col :span = '22'>
+          <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+          <el-button @click='addAttr' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
+          <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
+          <el-button @click='delAttr' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
+          <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
+      </el-col>
+      <el-col :span = '2'>
+        <el-button icon='el-icon-d-arrow-left' type="text" class='btn-text' @click="gotodevicemgnt">设备主数据管理</el-button>
+      </el-col>
+    </el-row>
+
     <el-table stripe border fit
+      ref = 'attrTable'
       :data='attrList'
       tooltip-effect='dark'
       v-loading='attrListLoading'
       max-height='560'
+      @selection-change = 'getSelections'
+      @row-dblclick = 'editAttrdbl'
+      @row-click = 'checkrow'
       element-loading-text='拼命加载中'
-      style='margin-top: 20px; width: 100%'>
-      <el-table-column type='index' label='序号' width='50' fixed='left'></el-table-column>
-      <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
+      style='width: 99%'>
+      <el-table-column type='selection' width='50'></el-table-column>
+      <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码' width='150'></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' width='200' show-overflow-tooltip></el-table-column>
       <el-table-column prop='attrType' label='属性类型' width='200' ></el-table-column>
@@ -37,56 +57,56 @@
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-      <el-table-column label='操作' width='150' fixed='right'>
+      <el-table-column label='操作' width='50' fixed='right'>
         <template slot-scope='scope'>
           <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
-          <el-button type='text' icon="el-icon-edit" @click='editAttr(scope.row)'></el-button>
-          <el-button type='text' icon="el-icon-delete" @click='deleteAttr(scope.row)' disabled></el-button>
         </template>
       </el-table-column>
+
     </el-table>
     <el-pagination class = 'table-pager'
       background
-      :current-page = 'currentPage'
+      :current-page = 'searchAttrForm.currentPage'
       :page-sizes = '[10, 20, 50, 100]'
-      :page-size = 'pageSize'
+      :page-size = 'searchAttrForm.pageSize'
       layout = 'total, sizes, prev, pager, next, jumper'
-      :total = 'total'
+      :total = 'searchAttrForm.total'
       @size-change = 'sizeChange'
       @current-change = 'currentChange'>
     </el-pagination>
 
     <el-dialog :visible.sync='attrDialogVisible'
       :modal-append-to-body = 'false'
-      width='960'>
+      :before-close='closedialog'
+      width='40%'>
       <div slot='title'>
-        <span class = 'head-text'>{{attrForm.uuid?'修改设备属性':'新增设备属性'}}</span>
+        <span class = 'head-text'>{{title}}</span>
       </div>
       <div>
         <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
           <el-row>
             <el-col :span = '12'>
               <el-form-item label='属性编码' prop='attrCode' >
-                <el-input v-model='attrForm.attrCode'></el-input>
+                <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='属性描述' prop='attrDesc'>
-                <el-input v-model='attrForm.attrDesc'></el-input>
+                <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span = '12'>
               <el-form-item label='属性类型' prop='attrType'>
-                <el-select v-model = 'attrForm.attrType'>
+                <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
                   <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='数据类型' prop='attrDataType'>
-                <el-select v-model = 'attrForm.attrDataType'>
+                <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
                   <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
                 </el-select>
               </el-form-item>
@@ -95,18 +115,18 @@
           <el-row>
             <el-col :span = '12'>
                 <el-form-item label='单位描述' prop='unitDesc'>
-                <el-input v-model='attrForm.unitDesc'></el-input>
+                <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span = '12'>
               <el-form-item label='单位编码' prop='unitCode'>
-                  <el-input v-model='attrForm.unitCode'></el-input>
+                  <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div style='text-align: center'>
-              <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-              <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
+              <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
+              <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
           </div>
         </el-form>
       </div>
@@ -121,37 +141,31 @@ import AttrDomainItem from './AttrDomainItem'
 // 导入各种get，pos等请求方法
 import {
   getDeviceAttributes,
-  deleteDeviceAttribute
+  deleteDeviceAttribute,
+  insertDeviceAttribute,
+  updateDeviceAttribute
 } from '@/views/MdmMgmt/apis/index'
 
 export default {
   data () {
     return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 0,
       attrListLoading: false,
-      uuidshow: false,
+      showflag: false,
       attrDialogVisible: false,
+      mode: 1,
+      selections: [],
+      disabledflag: false,
       // 检索条件用表单
       searchAttrForm: {
         uuid: '',
         pageSize: 10,
         currentPage: 1,
+        total: 0,
         attrCode: '',
         attrDesc: ''
       },
       // 检索返回数据
       attrList: [],
-      attrForm: {
-        uuid: '',
-        attrCode: '',
-        attrDesc: '',
-        attrType: '',
-        attrDataType: '',
-        unitDesc: '',
-        unitCode: ''
-      },
       // 属性类型下拉列表
       attrTypes: [
         {key: 'manual_attribute', value: 'manual_attribute'},
@@ -165,11 +179,32 @@ export default {
         {key: 'select', value: 'select'},
         {key: 'boolean', value: 'boolean'}
       ],
+      attrForm: {
+        uuid: '',
+        attrCode: '',
+        attrDesc: '',
+        attrType: '',
+        attrDataType: '',
+        unitDesc: '',
+        unitCode: ''
+      },
       attrFormRules: {
-        attrCode: [{ required: true, message: '请输入属性编码', trigger: 'blur' }],
-        attrDesc: [{ required: true, message: '请输入属性描述', trigger: 'blur' }],
+        attrCode: [
+          {required: true, message: '请输入属性编码', trigger: 'blur'},
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        attrDesc: [
+          { required: true, message: '请输入属性描述', trigger: 'blur' },
+          {max: 128, message: '输入内容应少于128位字符', trigger: 'blur'}
+        ],
         attrType: [{ required: true, message: '请选择属性类型', trigger: 'change' }],
-        attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }]
+        attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }],
+        unitDesc: [
+          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+        ],
+        unitCode: [
+          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+        ]
       }
     }
   },
@@ -178,6 +213,17 @@ export default {
   },
   mounted () {
     this.search()
+  },
+  computed: {
+    title: function () {
+      if (this.mode === 1) {
+        return '查看设备属性'
+      } else if (this.mode === 2) {
+        return '新增设备属性'
+      } else if (this.mode === 3) {
+        return '修改设备属性'
+      }
+    }
   },
   methods: {
     // 根据条件查询设备分类数据到列表中
@@ -188,7 +234,7 @@ export default {
           function (result) {
             console.log('get attr domain info')
             this.attrList = result.data.result
-            this.total = result.data.totalCount
+            this.searchAttrForm.total = result.data.totalCount
             this.attrListLoading = false
           }.bind(this)
         )
@@ -198,6 +244,16 @@ export default {
             console.log(error)
           }.bind(this)
         )
+    },
+    // 跳转到设备主数据页面
+    gotodevicemgnt: function () {
+      this.$router.push({
+        name: 'deviceCategoryList'
+      })
+    },
+    // 单击行时，勾选或者去掉勾选checkbox
+    checkrow: function (row) {
+      this.$refs['attrTable'].toggleRowSelection(row)
     },
     // 改变分页大小
     sizeChange: function (val) {
@@ -210,16 +266,52 @@ export default {
       this.currentPage = val
       this.search()
     },
-    // 打开新增/修改设备分类弹框页面
+    // 打开新增/修改设备域弹框页面
     openAttrDmnDialog: function (attr = {}) {
       const attrTmp = Object.assign({}, attr)
       this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
     },
+    // checkbox勾选事件
+    getSelections: function (sel) {
+      this.selections = sel
+    },
+    // ************************查看属性*****************
+    viewAttr: function () {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要查看的设备属性',
+          type: 'warning'
+        })
+      } else if (this.selections.length > 1) {
+        this.$message({
+          message: '一次只能查看一个设备属性',
+          type: 'warning'
+        })
+      } else {
+        this.mode = 1
+        this.attrForm = {
+          uuid: this.selections[0].uuid,
+          attrCode: this.selections[0].attrCode,
+          attrDesc: this.selections[0].attrDesc,
+          attrType: this.selections[0].attrType,
+          attrDataType: this.selections[0].attrDataType,
+          unitDesc: this.selections[0].unitDesc,
+          unitCode: this.selections[0].unitCode
+        }
+        this.attrDialogVisible = true
+        this.disabledflag = true
+      }
+    },
+    // ************************添加属性*****************
     addAttr: function () {
+      this.disabledflag = false
+      this.mode = 2
       this.clear()
       this.attrDialogVisible = true
     },
-    editAttr: function (attr = {}) {
+    // ************************双击修改属性*****************
+    editAttrdbl: function (attr = {}) {
+      this.mode = 3
       this.attrForm = {
         uuid: attr.uuid,
         attrCode: attr.attrCode,
@@ -231,18 +323,50 @@ export default {
       }
       this.attrDialogVisible = true
     },
-    // 删除设备分类
-    deleteAttr: function (attr = {}) {
+    // ************************点击修改属性按钮修改属性*****************
+    editAttr: function () {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要修改的设备属性',
+          type: 'warning'
+        })
+      } else if (this.selections.length > 1) {
+        this.$message({
+          message: '一次只能修改一个设备属性',
+          type: 'warning'
+        })
+      } else {
+        this.mode = 3
+        this.attrForm = {
+          uuid: this.selections[0].uuid,
+          attrCode: this.selections[0].attrCode,
+          attrDesc: this.selections[0].attrDesc,
+          attrType: this.selections[0].attrType,
+          attrDataType: this.selections[0].attrDataType,
+          unitDesc: this.selections[0].unitDesc,
+          unitCode: this.selections[0].unitCode
+        }
+        this.attrDialogVisible = true
+      }
+    },
+    // 删除属性
+    delAttr: function (attr = {}) {
+      if (this.selections.length === 0) {
+        this.$message({
+          message: '请选择要删除的设备属性',
+          type: 'warning'
+        })
+        return
+      }
       this.$confirm('确定要刪除吗?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceAttribute({ uuid: attr.uuid }).then(res => {
-          if (res.code !== '0000') {
-            return
-          }
+        let uuidList = []
+        this.selections.forEach((attr) => uuidList.push(attr.uuid))
+        deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'warning'
@@ -256,9 +380,30 @@ export default {
         })
       })
     },
+    // 保存新增的设备属性或者修改的设备属性
     save: function () {
-    // todo
+      this.$refs['attrForm'].validate((valid) => {
+        if (valid) {
+          var func
+          func = this.attrForm.uuid ? updateDeviceAttribute : insertDeviceAttribute
+          func(Object.assign({}, this.attrForm)).then(res => {
+            this.$message({
+              message: '设备类别保存成功!',
+              type: 'success'
+            })
+            this.attrDialogVisible = false
+            this.search({})
+          })
+        } else {
+          this.$message({
+            message: '请填写正确的内容',
+            type: 'warning'
+          })
+          return false
+        }
+      })
     },
+    // 清空新增和修改属性表单
     clear: function () {
       this.attrForm = {
         uuid: '',
@@ -271,6 +416,7 @@ export default {
       }
       this.clearValidate()
     },
+    // 清空查询表单
     reset: function () {
       this.searchAttrForm = {
         uuid: '',
@@ -280,10 +426,16 @@ export default {
         attrDesc: ''
       }
     },
+    // 清除验证信息
     clearValidate: function () {
       this.$nextTick(() => {
         this.$refs['attrForm'].clearValidate()
       })
+    },
+    // 关闭当前弹框前执行的方法
+    closedialog: function (done) {
+      done()
+      this.clear()
     }
   }
 }

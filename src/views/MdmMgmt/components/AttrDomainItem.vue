@@ -3,9 +3,9 @@
       :visible.sync = 'attrDomainVisible'
       @open = 'clear'
       :modal-append-to-body = 'false'
-      width = '960'>
-    <div slot = 'title' class= 'head-text'>设备属性域</div>
-    <span>设备属性：{{ categoryAttr.attrDesc }}</span>
+      width = '40%'>
+    <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div>
+    <!-- <span>设备属性：{{ categoryAttr.attrDesc }}</span> -->
     <el-table
       stripe border fit
       :data='domainList'
@@ -13,15 +13,15 @@
       max-height = '400'
       v-loading = 'domainListLoading'
       element-loading-text = '拼命加载中'
-      style = 'margin-top: 0;width: 100%'>
+      style = 'margin-top: -15px;width: 100%'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='domainValue' label='域取值'></el-table-column>
       <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
       <el-table-column label='操作' width='150'>
         <template slot-scope='scope'>
-          <el-button type='text' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
-          <el-button type='text' icon="el-icon-delete" @click='deleteDomain(scope.row)' disabled></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -43,7 +43,7 @@
       </el-form>
       <div style='text-align: center'>
           <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-          <el-button type='primary' @click='save' class='btn-plain' disabled>保存</el-button>
+          <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
       </div>
     </div>
 
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import {getDeviceAttrDomains} from '@/views/MdmMgmt/apis/index'
+import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmMgmt/apis/index'
 
 export default {
   props: ['deviceAttrMappingVisible'],
@@ -80,11 +80,18 @@ export default {
       domainForm: {
         uuid: '',
         attrUuid: '',
+        attrDesc: '',
         domainValue: '',
         domainValueCode: ''
       },
       rules: {
-        domainValue: [{ required: true, message: '请输入域取值', trigger: 'blur' }]
+        domainValue: [
+          {required: true, message: '请输入域取值', trigger: 'blur'},
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ],
+        domainValueCode: [
+          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+        ]
       }
     }
   },
@@ -97,6 +104,9 @@ export default {
       this.categoryAttr.attrDesc = attr.attrDesc
       this.categoryAttr.attrDataType = attr.attrDataType
 
+      this.domainForm.attrUuid = attr.uuid
+      this.domainForm.attrDesc = attr.attrDesc
+
       this.getDomains()
 
       // 显示弹框
@@ -106,7 +116,7 @@ export default {
     getDomains: function () {
       let that = this
       that.domainListLoading = true
-      getDeviceAttrDomains({'attrUuid': this.categoryAttr.attrUuid})
+      getDeviceAttrDomains(this.categoryAttr.attrUuid)
         .then(
           function (result) {
             that.domainList = result.data
@@ -126,16 +136,58 @@ export default {
       this.domainForm.domainValue = domain.domainValue
       this.domainForm.domainValueCode = domain.domainValueCode
     },
+    // 删除属性域
     deleteDomain: function (domain = {}) {
-      // todo
+      this.clearValidate()
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        deleteDeviceAttrDomain(domain.uuid).then(res => {
+          this.$message({
+            message: '刪除成功!',
+            type: 'warning'
+          })
+          this.getDomains({})
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     },
+    // 清除验证信息
     clearValidate: function () {
       this.$nextTick(() => {
         this.$refs['domainForm'].clearValidate()
       })
     },
+    // 保存属性域
     save: function () {
-
+      this.$refs['domainForm'].validate((valid) => {
+        if (valid) {
+          var func
+          func = this.domainForm.uuid ? updateDeviceAttrDomain : insertDeviceAttrDomain
+          func(Object.assign({}, this.domainForm)).then(res => {
+            this.$message({
+              message: '属性域保存成功!',
+              type: 'success'
+            })
+            this.getDomains({})
+            this.domainForm.domainValue = ''
+            this.domainForm.domainValueCode = ''
+          })
+        } else {
+          this.$message({
+            message: '请填写正确的内容',
+            type: 'warning'
+          })
+          return false
+        }
+      })
     },
     clear: function () {
       this.domainForm.domainValue = ''

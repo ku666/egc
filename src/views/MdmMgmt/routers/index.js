@@ -9,17 +9,17 @@ import deviceAttrList from '@/views/MdmMgmt/components/DeviceAttrList'
 export default[
   {
     path: '/mdmmgmt/devicecategorylist',
-    name: '设备分类管理',
+    name: 'deviceCategoryList',
     component: deviceCategoryList
   },
   {
     path: '/mdmmgmt/providerlist',
-    name: '供应商管理',
+    name: 'providerList',
     component: providerList
   },
   {
     path: '/mdmmgmt/deviceattrlist',
-    name: '设备属性管理',
+    name: 'deviceAttrList',
     component: deviceAttrList
   }
 ]
