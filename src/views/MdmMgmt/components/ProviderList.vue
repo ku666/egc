@@ -3,7 +3,7 @@
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>供应商主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>供应商管理</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:30px'>
@@ -20,10 +20,10 @@
     </el-form>
 
     <div>
-      <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+      <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
       <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-      <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
-      <el-button @click='deleteProvider' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
+      <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+      <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
     </div>
 
     <hr/>
@@ -41,7 +41,7 @@
       <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
       <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
+      <el-table-column prop='providerCode' label='供应商编码' width='100'></el-table-column>
       <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
       <el-table-column prop='contact' label='联系方式'></el-table-column>
       <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>
@@ -54,15 +54,16 @@
         </template>
       </el-table-column>
       <el-table-column prop='createTime' label='创建时间'></el-table-column>
-      <el-table-column prop='createUser' label='创建人'></el-table-column>
+      <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人'></el-table-column>
-      <!-- <el-table-column label='操作' width='150'>
+      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
+      <el-table-column label='操作' width='80' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' @click='editProvider(scope.row)' icon="el-icon-edit"></el-button>
-          <el-button type='text' @click='deleteProvider(scope.row)' icon="el-icon-delete"></el-button>
+          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+          <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
         </template>
-      </el-table-column> -->
+      </el-table-column>
     </el-table>
     <el-pagination class = 'table-pager'
       background
@@ -243,7 +244,7 @@ export default {
       this.selections = sel
     },
     // 查看供应商
-    viewProvider: function () {
+    /* viewProvider: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要查看的供应商',
@@ -267,6 +268,19 @@ export default {
         this.providerDialogVisible = true
         this.disabledflag = true
       }
+    }, */
+    viewProvider: function (provider = {}) {
+      this.mode = 1
+      this.providerForm = {
+        uuid: this.selections[0].uuid,
+        category: this.selections[0].category,
+        providerCode: this.selections[0].providerCode,
+        providerName: this.selections[0].providerName,
+        contact: this.selections[0].contact,
+        providerDesc: this.selections[0].providerDesc
+      }
+      this.providerDialogVisible = true
+      this.disabledflag = true
     },
     // 添加供应商
     addProvider: function () {
@@ -276,7 +290,7 @@ export default {
       this.providerDialogVisible = true
     },
     // 选择行后，点击编辑供应商按钮打开供应商弹框
-    editProvider: function () {
+    /* editProvider: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要修改的供应商',
@@ -300,7 +314,7 @@ export default {
         this.providerDialogVisible = true
         this.disabledflag = false
       }
-    },
+    }, */
     // 双击行打开编辑供应商弹框
     editProviderdbl: function (attr = {}) {
       console.log(attr)
@@ -318,7 +332,7 @@ export default {
       this.disabledflag = false
     },
     // 删除设备分类
-    deleteProvider: function () {
+    deleteProviderBatch: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要删除的供应商',
@@ -334,6 +348,29 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((provider) => uuidList.push(provider.uuid))
+        deleteProvider({'uuidList': uuidList}).then(res => {
+          this.search({})
+          this.$message({
+            message: '刪除成功!',
+            type: 'success'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    deleteProvider: function (provider = {}) {
+      let uuidList = []
+      uuidList.push(provider.uuid)
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
         deleteProvider({'uuidList': uuidList}).then(res => {
           this.search({})
           this.$message({

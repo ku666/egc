@@ -5,7 +5,7 @@
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>设备主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备管理</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:30px'>
@@ -35,10 +35,10 @@
 
     <el-row>
       <el-col :span = '22'>
-          <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+          <!-- <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
           <el-button @click='addDevice' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-          <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
-          <el-button @click='deleteDevice' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
+          <!-- <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+          <el-button @click='deleteDeviceBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
           <!-- <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>编辑设备属性</el-button> -->
       </el-col>
       <el-col :span = '2'>
@@ -86,6 +86,13 @@
       <el-table-column prop='createUser' label='创建人'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column>
       <el-table-column prop='updateUser' label='修改人'></el-table-column>
+      <el-table-column label='操作' width='80' fixed='right'>
+        <template slot-scope='scope'>
+          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+          <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination class='table-pager'
@@ -168,7 +175,7 @@ export default {
       this.$refs['deviceCategoryEditDiag'].addDeviceCategoryDialog()
     },
     // ********************删除设备********************
-    deleteDevice: function () {
+    deleteDeviceBatch: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要删除的设备',
@@ -183,6 +190,30 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(() => {
         deleteDeviceCategory(this.selections[0].uuid).then(res => {
+          if (res.code !== '0000') {
+            return
+          }
+          this.$message({
+            message: '刪除成功!',
+            type: 'warning'
+          })
+          this.search()
+        })
+      }).catch(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
+      })
+    },
+    deleteDevice: function (device = {}) {
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        deleteDeviceCategory(device.uuid).then(res => {
           if (res.code !== '0000') {
             return
           }

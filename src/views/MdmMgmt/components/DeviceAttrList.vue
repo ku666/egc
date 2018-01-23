@@ -23,10 +23,10 @@
 
     <el-row>
       <el-col :span = '22'>
-          <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+          <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
           <el-button @click='addAttr' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-          <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
-          <el-button @click='delAttr' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
+          <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+          <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
           <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
       </el-col>
       <el-col :span = '2'>
@@ -58,9 +58,12 @@
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-      <el-table-column label='操作' width='50' fixed='right'>
+      <el-table-column label='操作' width='80' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
+          <!-- <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
+          <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
+          <el-button type='text' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
+          <el-button type='text' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
         </template>
       </el-table-column>
 
@@ -277,7 +280,7 @@ export default {
       this.selections = sel
     },
     // ************************查看属性*****************
-    viewAttr: function () {
+    /* viewAttr: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要查看的设备属性',
@@ -302,6 +305,20 @@ export default {
         this.attrDialogVisible = true
         this.disabledflag = true
       }
+    }, */
+    viewAttr: function (attr = {}) {
+      this.mode = 1
+      this.attrForm = {
+        uuid: this.selections[0].uuid,
+        attrCode: this.selections[0].attrCode,
+        attrDesc: this.selections[0].attrDesc,
+        attrType: this.selections[0].attrType,
+        attrDataType: this.selections[0].attrDataType,
+        unitDesc: this.selections[0].unitDesc,
+        unitCode: this.selections[0].unitCode
+      }
+      this.attrDialogVisible = true
+      this.disabledflag = true
     },
     // ************************添加属性*****************
     addAttr: function () {
@@ -351,7 +368,7 @@ export default {
       }
     },
     // 删除属性
-    delAttr: function (attr = {}) {
+    delAttrBatch: function (attr = {}) {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要删除的设备属性',
@@ -367,6 +384,29 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((attr) => uuidList.push(attr.uuid))
+        deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
+          this.$message({
+            message: '刪除成功!',
+            type: 'warning'
+          })
+          this.search({})
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    delAttr: function (attr = {}) {
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        let uuidList = []
+        uuidList.push(attr.uuid)
         deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
