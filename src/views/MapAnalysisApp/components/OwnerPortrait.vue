@@ -85,7 +85,7 @@
               <el-table-column width="324px" prop="outCount" label="出去次数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -103,7 +103,7 @@
               <el-table-column width="487px" prop="num" label="人数">
               </el-table-column>
             </el-table>
-            <!-- <el-pagination class="table-pager" :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <!-- <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination> -->
           </div>
           <!-- 图表展示 -->
@@ -121,7 +121,7 @@
 </template>
 <script>
 // import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-import { getBuildProfile, getListDevice, getPerProfile } from '@/views/MapAnalysisApp/apis/index'
+import { getBuildProfile, getListDevice, getPerProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
@@ -152,14 +152,11 @@ export default {
         value: '222b79f4a7b44d03b6f55f028992851f',
         label: '恒大山水城'
       }, {
-        value: '2',
+        value: '4c12aee6d522412fa8d9d47d6a39cc82',
         label: '#1'
       }, {
         value: '3',
         label: '#2'
-      }, {
-        value: '4',
-        label: '#3'
       }],
       classList: [{
         value: '1',
@@ -168,7 +165,7 @@ export default {
         value: '2',
         label: '业主人数'
       }],
-      buildValue: '请选择楼栋',
+      buildValue: '222b79f4a7b44d03b6f55f028992851f',
       classValue: '出入频率',
       reportTypeList: [{
         value: '1',
@@ -181,17 +178,18 @@ export default {
         label: '年报'
       }],
       parameter: {
-        courtID: 'c69aeede4f6341929721e2892beec3cb',
-        pageNum: 1, // 多少页
-        pageSize: 10, // 多少条数据
-        reportType: '1', // 报表类型（日、月、年）
-        startDate: null, // 开始时间
-        endDate: null // 结束时间
+        // courtID: 'c69aeede4f6341929721e2892beec3cb',
+        currentPage: 1, // 多少页
+        pageSize: 10 // 多少条数据
+        // reportType: '1', // 报表类型（日、月、年）
+        // startDate: null, // 开始时间
+        // endDate: null // 结束时间
       },
       cellDetailsList: {},
+      rateData: {},
       timeType: 'date',
       // reportType: '',
-      total: 20, // 数据条数
+      total: 10, // 数据条数
       tableData: [],
       tableRateData: [],
       tableOwnerData: [],
@@ -557,17 +555,15 @@ export default {
       this.getData()
       this.getPerData()
       // 获取小区详细信息
-      // getCourtInfo({ courtId: _courtId }).then(res => {
-      // getCourtInfo().then(res => {
-      //   this.cellDetailsList = res.data.data
-      // })
+      getCourtInfo({ courtId: _courtId }).then(res => {
+        this.cellDetailsList = res.data.data
+      })
       this.dialogVisible = true
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
       // 切换到图表时 查询加载图表
       console.log(3333)
-      // if (this.buildValue === ){ }
       console.log(this.buildValue)
       this.getData()
       this.getPerData()
@@ -580,7 +576,7 @@ export default {
     },
     // 分页组件当前页变化
     currentChange: function (val) {
-      this.parameter.pageNum = val
+      this.parameter.currentPage = val
       this.getPgingData()
     },
     // 获取楼栋信息(暂时为业主年龄段数据)
@@ -628,22 +624,21 @@ export default {
     },
     // 获取业主人数信息（暂时为出入频率数据）
     getPerData: function () {
-      let rateData = {}
+      // let rateData = {}
       // rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
-      rateData.courtUuid = this.buildValue
+      this.rateData.courtUuid = this.buildValue
       // perData.endDate = this.processingDate(this.endTime)
       // perData.startDate = this.processingDate(this.starTime)
       // perData.buildType = this.parameter.reportType
       // 出入频率接口
-      getPerProfile(rateData).then(res => {
-        // getCourtPerAccessInfo().then(res => {
+      getPerProfile(this.rateData).then(res => {
         if (res.data.code === '00000') {
-          let rateAllData = res.data.data
+          // let rateAllData = res.data.data
           this.tableRateData = res.data.data.flow
           // 自定义添加小区名字
-          for (let i in this.tableRateData) {
-            this.tableRateData[i].name = '恒大山水城'
-          }
+          // for (let i in this.tableRateData) {
+          //   this.tableRateData[i].name = '恒大山水城'
+          // }
           // 添加前先清空
           this.form.dateListRate = []
           this.form.perInCountListRate = []
@@ -653,8 +648,6 @@ export default {
             this.form.perInCountListRate.push(this.tableRateData[i].inCount)
             this.form.perOutCountListRate.push(this.tableRateData[i].outCount)
           }
-          console.log(222222)
-          console.log(rateAllData)
           // 数据改变时 初始化图表数据
           // if (this.isChartShow) {
           //   this.myChart.setOption(this.echartsData())
@@ -675,21 +668,23 @@ export default {
       let day = date.getDate()
       return year + '-' + month + '-' + day
     },
-    // 获取人流分页信息
+    // 获取出入频率分页信息
     getPgingData: function () {
-      this.parameter.startDate = this.processingDate(this.starTime)
-      this.parameter.endDate = this.processingDate(this.endTime)
+      // this.parameter.startDate = this.processingDate(this.starTime)
+      // this.parameter.endDate = this.processingDate(this.endTime)
       getListDevice(this.parameter).then(res => {
         // getPerAccessPageList().then(res => {
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
-          this.total = res.data.data.totalCount
+          // this.total = res.data.data.totalCount
         } else {
           this.$message({
             type: 'error',
             message: res.data.message
           })
         }
+        console.log(33333)
+        console.log(this.tableData)
       })
     },
     // 关闭窗口(dialog)前重置数据
