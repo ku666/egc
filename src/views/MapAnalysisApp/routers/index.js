@@ -1,5 +1,6 @@
 import index from '@/views/MapAnalysisApp/index'
 import index2 from '@/views/MapAnalysisApp/index2'
+import courtInfo from '@/views/MapAnalysisApp/courtInfo'
 
 export default [
   {
@@ -11,5 +12,10 @@ export default [
     path: '/mapanalysisapp/index2',
     name: 'mapanalyindex2',
     component: index2
+  },
+  {
+    path: '/mapanalysisapp/courtinfo/:courtID',
+    name: 'mapanalycourtinfo',
+    component: courtInfo
   }
 ]
