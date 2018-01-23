@@ -26,7 +26,8 @@
       <el-button @click='deleteProvider' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
     </div>
 
-    <el-table stripe border fit
+    <hr/>
+    <el-table stripe
       ref = 'providerTable'
       :data='providerList'
       tooltip-effect='dark'

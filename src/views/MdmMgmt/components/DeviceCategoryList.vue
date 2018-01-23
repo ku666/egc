@@ -46,7 +46,8 @@
       </el-col>
     </el-row>
 
-    <el-table stripe border fit
+    <hr/>
+    <el-table stripe
       ref = 'deviceTable'
       :data='tableData'
       tooltip-effect='dark'

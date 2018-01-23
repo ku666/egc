@@ -34,7 +34,8 @@
       </el-col>
     </el-row>
 
-    <el-table stripe border fit
+    <hr/>
+    <el-table stripe
       ref = 'attrTable'
       :data='attrList'
       tooltip-effect='dark'
