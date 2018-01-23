@@ -26,6 +26,18 @@
             </el-table-column>
             <el-table-column label="房屋用途" prop="houseUseForStr">
             </el-table-column>
+            <el-table-column label="居住人数" prop="residentNum">
+            </el-table-column>
+            <el-table-column width="200" label="房产证编号" prop="houseCertificate">
+            </el-table-column>
+            <el-table-column width="200" label="土地证编号" prop="landCertificate">
+            </el-table-column>
+            <el-table-column label="房屋面积" prop="buildingArea">
+            </el-table-column>
+            <el-table-column label="楼层" prop="floor">
+            </el-table-column>
+            <el-table-column label="紧急联系电话" prop="emergencyPhone">
+            </el-table-column>
             <!--
             <el-table-column fixed="right" label="操作" width="150">
               <template slot-scope="scope">
@@ -175,6 +187,7 @@ export default {
     //   this.$refs['houseUpload'].openDialog()
     // },
     search: function (options) {
+      // console.log('search options:' + JSON.stringify(options))
       let condition = {}
       this.loading = true
       condition.pageSize = this.pageSize
