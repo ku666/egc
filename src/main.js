@@ -30,6 +30,42 @@ Vue.config.productionTip = false
 // axios 统一配置
 // ajax.init()
 
+// 权限指令
+Vue.directive('has', {
+  bind: function (el, binding) {
+    if (!Vue.prototype.$_has(binding.value)) {
+      el.parentNode.removeChild(el)
+    }
+  }
+})
+
+// 权限检查方法
+Vue.prototype.$_has = function (rArray) {
+  let permission = false
+  let resources = []
+  if (Array.isArray(rArray)) {
+    rArray.forEach(function (e) {
+      resources = resources.concat(e)
+    })
+  } else {
+    resources = resources.concat(rArray)
+  }
+  resources.forEach(function (p) {
+    // if (this.$store.getters.userResourcePermission[p]) {
+    //  if (this.$root.userResourcePermission[p]) {
+
+    let userResourcePermissionStr = sessionStorage.getItem('userResourcePermission')
+    var qs = require('qs')
+    let userResourcePermission = qs.parse(userResourcePermissionStr)
+
+    if (userResourcePermission[p]) {
+      permission = true
+    }
+  })
+
+  return permission
+}
+
 /* eslint-disable no-new */
 new Vue({
   store,
