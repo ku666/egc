@@ -4,11 +4,11 @@
       <el-col :span="4" class="leftText">
         <div>
           <div>
-            <span>小区地址</span>
-            <i></i>：{{cellDetailsList.regionName}}广东省广州市增城区恒大山水城恒大酒店2F华夏厅</div>
-          <div>
             <span>小区名称</span>
             <i></i>：{{cellDetailsList.courtName}}</div>
+          <div>
+            <span>小区地址</span>
+            <i></i>：{{cellDetailsList.regionName}}</div>
           <div>
             <span>楼栋</span>
             <i></i>：{{cellDetailsList.homeCount}}栋</div>
@@ -37,13 +37,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -124,11 +124,12 @@ export default {
       isTableShow: true,
       dateSelection: [],
       dialogVisible: false,
-      starTime: new Date(new Date().setDate(new Date().getDate() - 15)),
+      starTime: new Date(new Date().setDate(new Date().getDate() - 7)),
       endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
+      isRequest: true,
       num: 0, // 图表点击计数
       myChartContainer: null,
       // 限制开始时间与结束时间
@@ -149,12 +150,12 @@ export default {
     reportTypeEvent: function (val) {
       if (val === '1') {
         this.timeType = 'date'
-        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
+        this.starTime = new Date(new Date().setDate(new Date().getDate() - 7))
       } else if (val === '2') {
-        this.timeType = 'month'
+        this.timeType = 'date'
         this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
       } else {
-        this.timeType = 'year'
+        this.timeType = 'month'
         this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
       }
     },
@@ -357,8 +358,15 @@ export default {
     timeQuery: function () {
       // 查询时页面初始化到第一页
       this.parameter.pageNum = 1
-      this.getData()
-      this.getPgingData()
+      if (this.isRequest) {
+        this.getData()
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
       this.num = 0
     },
     // 分页组件单页总数变化
@@ -371,6 +379,31 @@ export default {
       this.parameter.pageNum = val
       this.getPgingData()
     },
+    timeJudgment: function (val) {
+      switch (this.parameter.reportType) {
+        case '1':
+          if (this.endTime.getTime() - this.starTime.getTime() > 2678400000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '日报查询范围为1个月'
+            })
+          }
+          break
+        case '2':
+          if (this.endTime.getTime() - this.starTime.getTime() > 31536000000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '月报查询范围为1年'
+            })
+          }
+          break
+        case '3':
+          this.isRequest = true
+          break
+      }
+    },
     // 获取人流信息
     getData: function () {
       let perData = {}
@@ -379,8 +412,8 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        if (res.data.code === '00000') {
-          let perData = res.data.data
+        if (res.status === 200) {
+          let perData = res.data
           // 添加前先清空
           this.form.dateList = []
           this.form.perInCountList = []
@@ -397,7 +430,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: res.data.message
+            message: res.statusText
           })
         }
       })
@@ -407,20 +440,27 @@ export default {
       let year = date.getFullYear()
       let month = date.getMonth() + 1
       let day = date.getDate()
-      return year + '-' + month + '-' + day
+      let hours = date.getHours()
+      if (this.parameter.reportType === '1') {
+        return year + '-' + month + '-' + day + ' ' + hours
+      } else if (this.parameter.reportType === '2') {
+        return year + '-' + month + '-' + day
+      } else {
+        return year + '-' + month
+      }
     },
     // 获取人流分页信息
     getPgingData: function () {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getPerAccessPageList(this.parameter).then(res => {
-        if (res.data.code === '00000') {
-          this.tableData = res.data.data.result
-          // this.total = res.data.data.totalCount
+        if (res.status === 200) {
+          this.tableData = res.data.result
+          this.total = res.data.totalRows
         } else {
           this.$message({
             type: 'error',
-            message: res.data.message
+            message: res.statusText
           })
         }
       })
