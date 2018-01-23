@@ -6,8 +6,10 @@
       width = '40%'>
     <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div>
     <!-- <span>设备属性：{{ categoryAttr.attrDesc }}</span> -->
+
+    <hr/>
     <el-table
-      stripe border fit
+      stripe
       :data='domainList'
       tooltip-effect='dark'
       max-height = '400'
