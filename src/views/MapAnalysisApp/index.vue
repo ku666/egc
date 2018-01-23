@@ -174,7 +174,7 @@ export default {
       this.$refs['streamPeople'].streamPeople(this.courtId)
     },
     openCourtPeo: function () {
-      console.log('查看小区人流信息')
+      console.log('查看小区业主画像信息')
       this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
     },
     openCourtCar: function () {

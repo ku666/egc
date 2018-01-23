@@ -145,9 +145,9 @@ export const getPerProfile = data => {
     params: data
   })
 }
-export const getListDevice = data => {
+export const getListDevice = data => { // 分页
   return Axios({
-    url: ownertPath + '/getCourtAgeFlowData',
+    url: ownertPath + '/getBuildProfileList',
     // url: contextPath + '/getBuildProfile',
     method: 'get',
     params: data
