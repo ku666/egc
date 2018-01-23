@@ -9,6 +9,7 @@ export function getOrgList (data) {
 }
 
 export function getOrgTree (data) {
+  console.log('搜索组织' + JSON.stringify(data))
   return fetch({
     url: '/scp-mdm-app/org/getAllOrgs',
     method: 'GET',

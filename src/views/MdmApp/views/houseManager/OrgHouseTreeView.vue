@@ -1,8 +1,14 @@
 <template>
   <div class="tree-container" v-loading="loading">
-    <el-input placeholder="按组织名称进行过滤" @keypress.enter.native="filterOrg" prefix-icon="el-icon-search" v-model="searchKey" class="fuzzy-search">
-    </el-input>
-    <el-tree ref="tree" :data="treeData" :props="defaultProps" :expand-on-click-node="false" @node-click="clickNode" default-expand-all :filter-node-method="filterNode"></el-tree>
+    <div>
+      <el-input placeholder="小区名称" prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      </el-input>
+      <el-button @click='searchOrg' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
+    </div>
+    <el-tree ref="tree" :data="treeData" node-key="uuid" :props="defaultProps" :expand-on-click-node="false" @node-click="clickNode">
+    </el-tree>
+    <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="20" @size-change="sizeChange" @current-change="currentChange">
+    </el-pagination>
   </div>
 </template>
 <script>
@@ -16,6 +22,10 @@ export default {
   data () {
     return {
       searchKey: '',
+      // filterText: '',
+      total: 0,
+      currentPage: 1,
+      pageSize: 10,
       treeData: [],
       loading: false,
       defaultProps: {
@@ -24,6 +34,11 @@ export default {
       }
     }
   },
+  // watch: {
+  //   filterText (val) {
+  //     this.$refs.tree.filter(val)
+  //   }
+  // },
   methods: {
     addHouse: function () {
       this.$message({
@@ -38,15 +53,52 @@ export default {
       })
     },
     clickNode: function (data, node) {
-      this.search({ uuid: data.uuid })
+      // console.log('是否叶子节点' + node.isLeaf)
+      if (node.isLeaf) {
+        this.search({ uuid: data.uuid })
+      }
+    },
+    /**
+     * @description 分页组件单页总数变化
+     * @param Number val 选择的单页总数得值
+     */
+    sizeChange: function (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.getOrgTree()
+    },
+    /**
+     * @description 分页组件当前页变化
+     * @param Number val 选择当前页的值
+     */
+    currentChange: function (val) {
+      this.currentPage = val
+      this.getOrgTree()
+    },
+    searchOrg: function () {
+      if (this.currentPage !== 1) {
+        this.currentPage = 1
+      } else {
+        this.getOrgTree()
+      }
     },
     // 获取组织树数据
     getOrgTree: function () {
       this.loading = true
-      getOrgTree({ uuid: this.searchKey }).then(res => {
-        this.treeData.splice(0, this.treeData.length)
+      // 传递参数小区name做过滤条件
+      // 查询条件
+      let condition = {}
+      condition.name = this.searchKey
+      // 分页
+      condition.pageSize = this.pageSize
+      condition.currentPage = this.currentPage
+
+      getOrgTree(condition).then(res => {
+        // this.treeData.splice(0, this.treeData.length)
+        // console.log('aaaaaaaaaaaaaaaaaaaaaaaa:' + JSON.stringify(res.data))
+        this.total = res.data.pageCount
         setTimeout(() => {
-          this.treeData.push(res.data.data)
+          this.treeData = res.data.data
           this.loading = false
         }, 1000)
       })
