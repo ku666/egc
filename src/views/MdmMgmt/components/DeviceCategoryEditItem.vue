@@ -1,11 +1,11 @@
 <template>
   <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='40%'>
     <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item>
-    <div slot='title'>
-      <span class='head-text'>{{title}}</span>
-    </div>
 
     <div v-show='basicshow' style=''>
+      <el-steps :active='1' simple>
+        <el-step title="设备基本信息" icon="el-icon-edit"></el-step>
+      </el-steps>
       <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='110px' :rules='rules' :inline='true' >
         <el-form-item label='设备编码' prop='typeCode'>
           <el-input v-model='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
@@ -40,27 +40,35 @@
       </el-form>
       <div style='text-align: center; margin-top: 20px'>
         <el-button type='primary' @click='clear' class='btn-reset' :disabled='viewFlag'>清空</el-button>
-        <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button>
+        <!-- <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button> -->
+        <el-button type='primary' @click='next' class='btn-plain'>保存</el-button>
       </div>
     </div>
     <!-- :render-content="renderFunc" -->
     <!-- @change="handleChange" -->
     <!-- v-model="value3" -->
     <div v-show='attrshow'>
-      <el-row type = 'flex' justify = 'center'>
-        <el-col :span = '19'>
-          <el-transfer
-            filterable
-            :titles="['当前设备属性', '全部属性']"
-            :button-texts="['添加属性', '删除属性']"
-            :props= '{
-              key: "attrCode",
-              label: "attrDesc"
-            }'
-            :data="transferData">
-          </el-transfer>
-        </el-col>
-      </el-row>
+      <el-steps :active='1' simple>
+        <el-step title="设备属性信息" icon="el-icon-edit"></el-step>
+      </el-steps>
+      <el-form>
+        <el-form-item>
+          <el-row type = 'flex' justify = 'center'>
+            <el-col :span = '19'>
+              <el-transfer
+                filterable
+                :titles="['当前设备属性', '全部属性']"
+                :button-texts="['添加属性', '删除属性']"
+                :props= '{
+                  key: "attrCode",
+                  label: "attrDesc"
+                }'
+                :data="transferData">
+              </el-transfer>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
       <div style='text-align: center; margin-top: 20px'>
         <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button>
         <el-button type='primary' @click='save' class='btn-plain' :disabled='viewFlag'>保存</el-button>
@@ -271,6 +279,11 @@ export default {
 
 <style lang='less' scoped>
 @import "~@/views/MdmMgmt/assets/css/index.less";
-
-
+.header_style {
+    padding: 13px 8%;
+    border-radius: 4px;
+    background: #f5f7fa;
+    // display: flex;
+    width: 80%
+}
 </style>

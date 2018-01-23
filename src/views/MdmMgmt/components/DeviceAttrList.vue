@@ -58,9 +58,9 @@
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-      <el-table-column label='操作' width='80' fixed='right'>
+      <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
-          <!-- <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
+          <el-button type='text' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
           <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
           <el-button type='text' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
           <el-button type='text' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
@@ -83,9 +83,12 @@
       :modal-append-to-body = 'false'
       :before-close='closedialog'
       width='40%'>
-      <div slot='title'>
+      <!-- <div slot='title'>
         <span class = 'head-text'>{{title}}</span>
-      </div>
+      </div> -->
+      <el-steps :active='1' simple>
+        <el-step :title="title" icon="el-icon-edit"></el-step>
+      </el-steps>
       <div>
         <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
           <el-row>

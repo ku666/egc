@@ -57,7 +57,7 @@
       <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间'></el-table-column>
       <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
-      <el-table-column label='操作' width='80' fixed='right'>
+      <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
           <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
@@ -79,9 +79,12 @@
     <el-dialog :visible.sync='providerDialogVisible'
       :modal-append-to-body = 'false'
       width='40%'>
-      <div slot='title' class='head-text'>
+      <!-- <div slot='title' class='head-text'>
         <span>{{title}}</span>
-    </div>
+      </div> -->
+      <el-steps :active='1' simple>
+        <el-step :title="title" icon="el-icon-edit"></el-step>
+      </el-steps>
       <div>
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
