@@ -1,5 +1,6 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
+let contextPath = '/egcmapanalysis'
+// let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
 
 let personPath = '/mapAnalysis'
 let devicePath = '/device'
@@ -145,7 +146,8 @@ export const getPerProfile = data => {
     params: data
   })
 }
-export const getListDevice = data => { // 分页
+export const getListDevice = data => {
+  // 分页
   return Axios({
     url: ownertPath + '/getBuildProfileList',
     // url: contextPath + '/getBuildProfile',

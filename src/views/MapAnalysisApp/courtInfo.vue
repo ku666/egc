@@ -26,33 +26,46 @@
       </div>
       <!-- end infoCon -->
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text">查看详情</el-button>
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
         <div id="mapECarts0" class="smallBox" style="width:230px; height:300px"></div>
         <div id="mapECarts1" class="smallBox" style="width:240px; height:300px"></div>
       </el-card>
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text">查看详情</el-button>
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
         <div id="mapECarts2" style="width:480px; height:300px"></div>
       </el-card>
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text">查看详情</el-button>
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
         <div id="mapECarts3" style="width:480px; height:300px"></div>
       </el-card>
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text">查看详情</el-button>
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
         <div id="mapECarts4" style="width:480px; height:300px"></div>
       </el-card>
+      <car-stream ref="carStream"></car-stream>
+      <stream-people ref="streamPeople"></stream-people>
+      <owner-portrait ref="OwnerPortrait"></owner-portrait>
+      <equipment-report ref="equipmentReport"></equipment-report>
     </div>
   </el-container>
 </template>
 <script>
-import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getBuildProfile } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getPerProfile } from '@/views/MapAnalysisApp/apis/index.js'
 import peopleOption from '@/views/MapAnalysisApp/assets/js/peopleStream.js'
 import carOption from '@/views/MapAnalysisApp/assets/js/carStream.js'
 import equipKind from '@/views/MapAnalysisApp/assets/js/equipKind.js'
 import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerInfo.js'
+import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
+import CarStream from '@/views/MapAnalysisApp/components/CarStream'
+import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
+import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
 export default {
-  components: {},
+  components: {
+    StreamPeople,
+    CarStream,
+    EquipmentReport,
+    OwnerPortrait
+  },
   data () {
     return {
       echartsList: [],
@@ -72,23 +85,23 @@ export default {
     }
   },
   mounted: function () {
+    this.courtInfo.courtId = this.$route.params.courtID
     this.getCourtInfoData()
     var sDate = new Date()
     var eDate = new Date()
     sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7)
     this.startDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
     this.endDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
-    this.courtInfo.courtId = this.$route.params.courtID
     this.getPeopleStreamData()
     this.getCarStreamData()
-    // this.getMyCharts(3).setOption(carOption.option)
     this.getEquipKindsData()
     this.getCourtOwnerData()
   },
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      getCourtInfo().then(res => {
+      let param = {courtID: this.courtInfo.courtId}
+      getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
           let list = res.data.data
@@ -104,35 +117,32 @@ export default {
     /** 获取最近一个月内的人员流量日报数据 */
     getPeopleStreamData: function () {
       let param = {
-        courtID: this.courtInfo.courtId,
+        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
-        // if (res.data.code === '00000') {
-        //   let list = res.data.data
-        //   console.log('人员流量数据：')
-        //   console.log(list)
-        // }
-        let data = res.data
-        let timeDate = []
-        let perInCount = []
-        let perOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 10))
-          if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
-          if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
-          perInCount.push(parseFloat(item.perInCount))
-          perOutCount.push(parseFloat(item.perOutCount))
-        })
-        peopleOption.updateTimeData(timeDate)
-        peopleOption.updateInData(perInCount)
-        peopleOption.updateOutData(perOutCount)
-        console.log('人流信息：')
-        console.log(peopleOption.option)
-        this.getMyCharts(2).setOption(peopleOption.option)
+        if (res.data.code === '00000') {
+          let data = res.data.data
+          let timeDate = []
+          let perInCount = []
+          let perOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
+            if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
+            perInCount.push(parseFloat(item.perInCount))
+            perOutCount.push(parseFloat(item.perOutCount))
+          })
+          peopleOption.updateTimeData(timeDate)
+          peopleOption.updateInData(perInCount)
+          peopleOption.updateOutData(perOutCount)
+          // console.log('人流信息：')
+          // console.log(peopleOption.option)
+          this.getMyCharts(2).setOption(peopleOption.option)
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -143,7 +153,7 @@ export default {
     /** 获取最近一个月内的车行流量日报数据 */
     getCarStreamData: function () {
       let param = {
-        courtID: this.courtInfo.courtId,
+        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
@@ -151,25 +161,24 @@ export default {
       getCourtCarAccessInfo(param).then(res => {
         console.log('车流信息：')
         // console.log(res)
-        // if (res.data.code === '00000') {
-        //   // let list = res.data.data
-        // }
-        let data = res.data
-        let timeDate = []
-        let carInCount = []
-        let carOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 10))
-          if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
-          if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
-          carInCount.push(parseFloat(item.carInCount))
-          carOutCount.push(parseFloat(item.carOutCount))
-        })
-        carOption.updateTimeData(timeDate)
-        carOption.updateInData(carInCount)
-        carOption.updateOutData(carOutCount)
-        console.log(carOption.option)
-        this.getMyCharts(3).setOption(carOption.option)
+        if (res.data.code === '00000') {
+          let data = res.data.data
+          let timeDate = []
+          let carInCount = []
+          let carOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
+            if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
+            carInCount.push(parseFloat(item.carInCount))
+            carOutCount.push(parseFloat(item.carOutCount))
+          })
+          carOption.updateTimeData(timeDate)
+          carOption.updateInData(carInCount)
+          carOption.updateOutData(carOutCount)
+          console.log(carOption.option)
+          this.getMyCharts(3).setOption(carOption.option)
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -180,7 +189,7 @@ export default {
     /** 获取小区设置种类数据 */
     getEquipKindsData: function () {
       let param = {
-        courtUuid: 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: 'c69aeede4f6341929721e2892beec3cb' // this.courtInfo.courtId
       }
       getListDeviceType(param).then(res => {
         console.log(res)
@@ -207,26 +216,26 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-      let param = { courtUuid: '1', buildId: '111', sourceSysId: '1', targetSysId: '1', queryDate: '2018-1-19' }
-      getBuildProfile(param).then(res => {
-        console.log(res)
-        if (res.data.code === '00000') {
-          let ageData = []
-          let ageLevelData = []
-          let list = res.data.data[0]
-          let sexData = [{value: list.maleOwner, name: '男'}, {value: list.femaleOwner, name: '女'}]
-          // debugger
-          list = JSON.parse(list.ageRange)
-          list.map(function (item, index) {
-            ageLevelData.push(item.age)
-            ageData.push(item.num)
-          })
-          ownerOption.updateSexData(sexData)
-          ownerOption.updateAgeLevelData(ageLevelData)
-          ownerOption.updateAgeData(ageData)
-          this.getMyCharts(0).setOption(ownerOption.optionSex)
-          this.getMyCharts(1).setOption(ownerOption.optionAge)
-        }
+       // this.courtInfo.courtId
+      let param = { courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0' }
+      getPerProfile(param).then(res => {
+        // console.log(res)
+        let ageData = []
+        let ageLevelData = []
+        let list = res.data
+        if (!list.maleOwner)list.maleOwner = Math.round(Math.random() * 1000)
+        if (!list.femaleOwner)list.femaleOwner = Math.round(Math.random() * 1000)
+        let sexData = [{value: list.maleOwner, name: '男'}, {value: list.femaleOwner, name: '女'}]
+        list = res.data.ageGroupInfo
+        list.map(function (item, index) {
+          ageLevelData.push(item.group)
+          ageData.push(item.countNum)
+        })
+        ownerOption.updateSexData(sexData)
+        ownerOption.updateAgeLevelData(ageLevelData)
+        ownerOption.updateAgeData(ageData)
+        this.getMyCharts(0).setOption(ownerOption.optionSex)
+        this.getMyCharts(1).setOption(ownerOption.optionAge)
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -234,8 +243,24 @@ export default {
         })
       })
     },
-    // 点击小区点位事件
-    handleClickMap: function (e) {},
+    // 查看各个报表的详情
+    handleCheckDetail: function (index) {
+      // console.log('查看各个报表的详情 ' + index)
+      switch (index) {
+        case 0:
+          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtId)
+          break
+        case 1:
+          this.$refs['streamPeople'].streamPeople(this.courtInfo.courtId)
+          break
+        case 2:
+          this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtId)
+          break
+        case 3:
+          this.$refs['equipmentReport'].openDialog(this.courtInfo.courtId)
+          break
+      }
+    },
     getMyCharts: function (index) {
       return this.echartsList[index] ? this.echartsList[index] : this.$echarts.init(document.getElementById('mapECarts' + index))
     }

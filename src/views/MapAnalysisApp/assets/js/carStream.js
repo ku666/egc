@@ -1,6 +1,6 @@
-var timeData = [] // '周一', '周二', '周三', '周四', '周五', '周六', '周日'
-var data1 = [] // 120, 132, 101, 134, 90, 230, 210
-var data2 = [] // 820, 932, 901, 934, 1290, 1330, 1320
+var timeData = [] // '周一', '周二'
+var data1 = [] // 120, 132, 101
+var data2 = [] // 820, 932, 901
 var option = {
   title: {
     text: '车行流量',
@@ -12,38 +12,25 @@ var option = {
   tooltip: {
     trigger: 'axis',
     axisPointer: {
-      type: 'cross',
-      label: {
-        backgroundColor: '#6a7985'
+      lineStyle: {
+        color: '#ddd'
       }
-    }
+    },
+    backgroundColor: 'rgba(255,255,255,1)',
+    padding: [5, 10],
+    textStyle: {
+      color: '#7588E4'
+    },
+    extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
   },
   legend: {
-    data: ['进园区流量', '出园区流量']
+    data: ['进园车流量', '出园车流量']
   },
   toolbox: {
     feature: {
       saveAsImage: {}
     }
   },
-  grid: {
-    left: '3%',
-    right: '4%',
-    bottom: '3%',
-    containLabel: true
-  },
-  xAxis: [
-    {
-      type: 'category',
-      boundaryGap: false,
-      data: timeData
-    }
-  ],
-  yAxis: [
-    {
-      type: 'value'
-    }
-  ],
   dataZoom: [
     {
       type: 'slider',
@@ -59,32 +46,101 @@ var option = {
       end: 10
     }
   ],
+  xAxis: {
+    type: 'category',
+    data: timeData,
+    boundaryGap: false,
+    splitLine: {
+      show: true,
+      interval: 'auto',
+      lineStyle: {
+        color: ['#D4DFF5']
+      }
+    },
+    axisTick: {
+      show: false
+    },
+    axisLine: {
+      lineStyle: {
+        color: '#609ee9'
+      }
+    },
+    axisLabel: {
+      margin: 10,
+      textStyle: {
+        fontSize: 14
+      }
+    }
+  },
+  yAxis: {
+    type: 'value',
+    splitLine: {
+      lineStyle: {
+        color: ['#D4DFF5']
+      }
+    },
+    axisTick: {
+      show: false
+    },
+    axisLine: {
+      lineStyle: {
+        color: '#609ee9'
+      }
+    },
+    axisLabel: {
+      margin: 10,
+      textStyle: {
+        fontSize: 14
+      }
+    }
+  },
   series: [
     {
-      name: '进园区流量',
+      name: '进园车流量',
       type: 'line',
       smooth: true,
-      stack: '总量',
-      // areaStyle: { normal: {} },
-      data: data1
-    },
-    {
-      name: '出园区流量',
-      type: 'line',
-      smooth: true,
-      stack: '总量',
-      label: {
+      showSymbol: false,
+      symbol: 'circle',
+      symbolSize: 6,
+      data: data1,
+      areaStyle: {
+        normal: {}
+      },
+      itemStyle: {
         normal: {
-          show: true,
-          position: 'top'
+          color: '#f7b851'
         }
       },
-      // areaStyle: { normal: {} },
-      data: data2
+      lineStyle: {
+        normal: {
+          width: 3
+        }
+      }
+    },
+    {
+      name: '出园车流量',
+      type: 'line',
+      smooth: true,
+      showSymbol: false,
+      symbol: 'circle',
+      symbolSize: 6,
+      data: data2,
+      areaStyle: {
+        normal: {}
+      },
+      itemStyle: {
+        normal: {
+          color: '#58c8da'
+        }
+      },
+      lineStyle: {
+        normal: {
+          width: 3
+        }
+      }
     }
   ]
 }
-
 /**
  * 更新车行流量时间轴数据
  * @param {*} data 时间点的数据 []

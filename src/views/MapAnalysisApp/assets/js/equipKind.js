@@ -1,19 +1,15 @@
 // 设备种类数据
 var data = [
-  // { value: 335, name: '直接访问' },
-  // { value: 310, name: '邮件营销' },
-  // { value: 274, name: '联盟广告' },
-  // { value: 235, name: '视频广告' },
   // { value: 400, name: '搜索引擎' }
 ]
 var option = {
-  backgroundColor: '#2c343c',
+  // backgroundColor: '#2c343c',
   title: {
     text: '小区设备种类',
     left: 'center',
-    top: 20,
+    top: 5,
     textStyle: {
-      color: '#ccc',
+      // color: '#000',
       fontSize: '14',
       fontWeight: 'bold'
     }
@@ -33,7 +29,7 @@ var option = {
     min: 80,
     max: 600,
     inRange: {
-      colorLightness: [0, 1]
+      // colorLightness: [0, 1]
     }
   },
   series: [
@@ -48,14 +44,14 @@ var option = {
       label: {
         normal: {
           textStyle: {
-            color: 'rgba(255, 255, 255, 0.3)'
+            color: '#666'
           }
         }
       },
       labelLine: {
         normal: {
           lineStyle: {
-            color: 'rgba(255, 255, 255, 0.3)'
+            color: '#FF8C00'
           },
           smooth: 0.2,
           length: 10,
