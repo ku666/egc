@@ -42,7 +42,7 @@ export default {
       'url': '/mdmapp/mdmappindex',
       'menus': [{
         'id': null,
-        'title': '房屋管理',
+        'title': '房屋主数据',
         'url': '/mdmapp/housemanager',
         'icon': null,
         'submenus': null,
@@ -50,7 +50,7 @@ export default {
       },
       {
         'id': null,
-        'title': '人员管理',
+        'title': '人员主数据',
         'url': '/mdmapp/personmanager',
         'icon': null,
         'submenus': null,
@@ -58,7 +58,7 @@ export default {
       },
       {
         'id': null,
-        'title': '设备管理',
+        'title': '设备主数据',
         'url': '/mdmmgmt/devicecategorylist',
         'icon': null,
         'submenus': null,
@@ -66,7 +66,7 @@ export default {
       },
       {
         'id': null,
-        'title': '供应商管理',
+        'title': '供应商主数据',
         'url': '/mdmmgmt/providerlist',
         'icon': null,
         'submenus': null,

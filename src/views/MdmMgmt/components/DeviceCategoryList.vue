@@ -5,7 +5,7 @@
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>设备管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:30px'>
@@ -82,10 +82,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width='160'></el-table-column>
-      <el-table-column prop='createUser' label='创建人'></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人'></el-table-column>
+      <!-- <el-table-column prop='createTime' label='创建时间' width='160'></el-table-column> -->
+      <!-- <el-table-column prop='createUser' label='创建人'></el-table-column> -->
+      <!-- <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column> -->
+      <!-- <el-table-column prop='updateUser' label='修改人'></el-table-column> -->
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
