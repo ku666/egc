@@ -96,9 +96,9 @@ export default {
       getOrgTree(condition).then(res => {
         // this.treeData.splice(0, this.treeData.length)
         // console.log('aaaaaaaaaaaaaaaaaaaaaaaa:' + JSON.stringify(res.data))
-        this.total = res.data.pageCount
+        this.total = res.data.data.pageCount
         setTimeout(() => {
-          this.treeData = res.data.data
+          this.treeData = res.data.data.pageData
           this.loading = false
         }, 1000)
       })
