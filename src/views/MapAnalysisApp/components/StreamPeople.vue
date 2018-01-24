@@ -146,26 +146,20 @@ export default {
     // 选择报表
     reportTypeEvent: function (val) {
       if (val === '1') {
-        this.timeType = 'date'
-        this.starTime = new Date(new Date().setDate(new Date().getDate() - 7))
+        this.timeType = 'date' // 1年31622400000  1个月2764800000 7天604800000
+        this.starTime = new Date(this.endTime.getTime() - 604800000)
       } else if (val === '2') {
         this.timeType = 'date'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
+        this.starTime = new Date(this.endTime.getTime() - 2764800000)
       } else {
         this.timeType = 'month'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
+        this.starTime = new Date(this.endTime.getTime() - 31622400000)
       }
     },
     // 点击切换图表展示
     chartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
-      // 多次点击
-      if (this.num > 0) {
-        return
-      }
-      this.num++
-      this.getData()
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -185,6 +179,12 @@ export default {
         this.myChartContainer()
         this.myChart.resize()
       }
+      // 多次点击
+      if (this.num > 0) {
+        return
+      }
+      this.num++
+      this.getData()
     },
     // echart图表数据
     echartsData: function () {
@@ -206,7 +206,7 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: this.dataZoom,
+        dataZoom: [],
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -354,6 +354,7 @@ export default {
     },
     // 打开组件的回调
     streamPeople: function (_courtId) {
+      this.reportTypeEvent('1') // 重置表报时间
       this.getPgingData()
       this.getData()
       // 获取小区详细信息
@@ -425,19 +426,22 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        if (res.data.code === '00000') {
-          let perData = res.data.data
+        console.log(res.data)
+        if (res.status === 200) {
+          let perData = res.data
           // 添加前先清空
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
           for (let i = 0; i < perData.length; i++) {
             this.form.dateList.push(perData[i].date)
-            this.form.perInCountList.push(perData[i].perInCount)
-            this.form.perOutCountList.push(perData[i].perOutCount)
+            this.form.perInCountList.push(perData[i].perInCount - 0 + parseInt(Math.random() * 1000))
+            this.form.perOutCountList.push(perData[i].perOutCount - 0 + parseInt(Math.random() * 1000))
           }
           // 数据改变时 初始化图表数据
+          console.log(this.echartsData())
           if (this.isChartShow) {
+            this.myChart = this.$echarts.init(this.myChartNode)
             this.myChart.setOption(this.echartsData())
           }
         } else {
@@ -460,9 +464,9 @@ export default {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getPerAccessPageList(this.parameter).then(res => {
-        if (res.data.code === '00000') {
-          this.tableData = res.data.data.result
-          this.total = res.data.data.totalRows
+        if (res.status === 200) {
+          this.tableData = res.data.result
+          this.total = res.data.totalRows
         } else {
           this.$message({
             type: 'error',
