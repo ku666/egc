@@ -3,7 +3,7 @@
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据</el-breadcrumb-item>
       <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
     </el-breadcrumb>
 
