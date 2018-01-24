@@ -206,7 +206,16 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: [],
+        dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
+          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+          start: 0, // 左边在 10% 的位置。
+          end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
+        },
+        { // 这个dataZoom组件，也控制x轴。
+          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+          start: 10, // 左边在 10% 的位置。
+          end: 60 // 右边在 60% 的位置。
+        }],
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -321,21 +330,6 @@ export default {
           }
         }]
       }
-      // 当日报表数量大于31的时候添加滚动条
-      if (this.form.dateList.length < 31) {
-        options.dataZoom = []
-      } else {
-        options.dataZoom = [{ // 这个dataZoom组件，默认控制x轴。
-          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
-          start: 0, // 左边在 10% 的位置。
-          end: 10 // 右边在 60% 的位置。
-        },
-        { // 这个dataZoom组件，也控制x轴。
-          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
-          start: 10, // 左边在 10% 的位置。
-          end: 60 // 右边在 60% 的位置。
-        }]
-      }
       return options
     },
     // 点击切换表格展示
@@ -426,7 +420,6 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        console.log(res.data)
         if (res.status === 200) {
           let perData = res.data
           // 添加前先清空
@@ -439,7 +432,6 @@ export default {
             this.form.perOutCountList.push(perData[i].perOutCount - 0 + parseInt(Math.random() * 1000))
           }
           // 数据改变时 初始化图表数据
-          console.log(this.echartsData())
           if (this.isChartShow) {
             this.myChart = this.$echarts.init(this.myChartNode)
             this.myChart.setOption(this.echartsData())
