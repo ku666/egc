@@ -139,11 +139,14 @@ export default {
     }
   },
   mounted: function () {
-    console.log(this)
   },
   methods: {
-    goToCarStreamPage: function () {
+    goToCarStreamPage: function (courtId) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
+      if (courtId) {
+        this.form.courtID = courtId
+      }
+      console.log('进入页面')
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
         this.$nextTick(function () {
@@ -279,7 +282,7 @@ export default {
         }, delay)
       }
       // 注册图表缩放控件事件
-      var zoomSize = 16
+      var zoomSize = 8
       var data = this.mapDataList.date
       this.disPatchAction(myChart, data, { dataIndex: 0 }, zoomSize)
       myChart.on('click', function (params) {
@@ -317,9 +320,9 @@ export default {
       if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
       } else if (this.form.reportType === '2') {
-        this.formDatePickType = 'month'
+        this.formDatePickType = 'date'
       } else {
-        this.formDatePickType = 'year'
+        this.formDatePickType = 'month'
       }
     },
     handleSizeChange: function (val) {
@@ -335,11 +338,12 @@ export default {
       var queryParam = this.queryParam()
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
-        console.log('分页查询')
-        // console.log(res.data.result)
-        this.carStreamData = res.data.result
-      }).catch(res => {
-        console.log('res', res)
+        if (res.status === 200) {
+          console.log('分页查询')
+          this.carStreamData = res.data.result
+        } else {
+          this.errMessage()
+        }
       })
     },
     submitForm: function (formName) {
@@ -361,11 +365,14 @@ export default {
       console.log('获取时间段内所有数据,增加catch')
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
-        var data = res.data
-        this.sortData(data)
-        this.chartInit()
-      }).catch(res => {
-        console.log('res', res)
+        if (res.status === 200) {
+          var data = res.data
+          console.log('caraccessinfo')
+          this.sortData(data)
+          this.chartInit()
+        } else {
+          this.errMessage()
+        }
       })
     },
     getCarAccessPageList: function () {
@@ -373,10 +380,14 @@ export default {
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询数据')
-        this.totalDataNum = res.data.totalRows
-        this.carStreamData = res.data.result
-      }).catch(res => {
-        console.log('res', res)
+        console.log(res)
+        if (res.status === 200) {
+          this.totalDataNum = res.data.totalRows
+          this.carStreamData = res.data.result
+        } else {
+          console.log('dd')
+          this.errMessage()
+        }
       })
     },
     queryParam: function () {
@@ -392,9 +403,9 @@ export default {
       if (this.form.reportType === '1') {
         return year + '-' + month + '-' + day
       } else if (this.form.reportType === '2') {
-        return year + '-' + month
+        return year + '-' + month + '-' + day
       } else {
-        return year + ''
+        return year + '-' + month
       }
     },
     closeDialog: function () {
@@ -406,7 +417,7 @@ export default {
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000) + '天')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000) > 31) {
             this.$message.error({
-              message: '只能查一个月之内的报表',
+              message: '只能查一个月之内的日报表',
               duration: 1500
             })
             return 1
@@ -416,13 +427,19 @@ export default {
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) + '月')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) > 12) {
             this.$message.error({
-              message: '只能查一年之内的报表',
+              message: '只能查一年之内的月报表',
               duration: 1500
             })
             return 1
           }
           break
       }
+    },
+    errMessage: function () {
+      this.$message.error({
+        message: '出错了',
+        duration: 1500
+      })
     }
   },
   computed: {
