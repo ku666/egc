@@ -1,7 +1,7 @@
 <template>
   <div>
     <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers' v-bind:mode = 'mode' v-bind:parents = 'parents'></device-category-edit-item>
-    <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item>
+    <!-- <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item> -->
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
@@ -112,7 +112,7 @@
 <script>
 // 导入设备编辑组件，设备属性列表编辑组件
 import DeviceCategoryEditItem from './DeviceCategoryEditItem' // 设备编辑（查看，增加，修改）组件
-import DeviceAttrEditItem from './DeviceAttrEditItem' // 设备属性列表编辑组件
+// import DeviceAttrEditItem from './DeviceAttrEditItem' // 设备属性列表编辑组件
 
 // 导入访问后端方法
 import {
@@ -153,9 +153,9 @@ export default {
   },
   components: {
     // 新增/修改设备分类弹框页面
-    DeviceCategoryEditItem,
+    DeviceCategoryEditItem
     // 设备分类的属性弹框页面
-    DeviceAttrEditItem
+    // DeviceAttrEditItem
   },
   mounted () {
     // 查询所有的设备信息
@@ -347,22 +347,22 @@ export default {
       // }
     },
     // 设备属性列表编辑页面
-    openDeviceAttrDialog: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要编辑的设备',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能编辑一个设备的属性列表信息',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(this.selections[0])
-      }
-    },
+    // openDeviceAttrDialog: function () {
+    //   if (this.selections.length === 0) {
+    //     this.$message({
+    //       message: '请选择要编辑的设备',
+    //       type: 'warning'
+    //     })
+    //   } else if (this.selections.length > 1) {
+    //     this.$message({
+    //       message: '一次只能编辑一个设备的属性列表信息',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.mode = 1
+    //     this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(this.selections[0])
+    //   }
+    // },
     // 打开设备属性列表管理页面
     gotoattrmgnt: function () {
       this.$router.push({

@@ -1,10 +1,9 @@
 <template>
   <div>
-    <attr-domain-item ref = 'openAttrDomainDialog'></attr-domain-item>
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备管理</el-breadcrumb-item>
       <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
     </el-breadcrumb>
 
@@ -30,7 +29,7 @@
           <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
       </el-col>
       <el-col :span = '2'>
-        <el-button icon='el-icon-d-arrow-left' type="text" class='btn-text' @click="gotodevicemgnt">设备主数据管理</el-button>
+        <el-button icon='el-icon-d-arrow-left' type="text" class='btn-text' @click="gotodevicemgnt">设备管理</el-button>
       </el-col>
     </el-row>
 
@@ -60,7 +59,7 @@
       <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
-          <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button>
+          <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
           <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
           <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
           <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
@@ -90,54 +89,61 @@
         <el-step :title="title" icon="el-icon-edit"></el-step>
       </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-      <div>
-        <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
-          <el-row>
-            <el-col :span = '12'>
-              <el-form-item label='属性编码' prop='attrCode' >
-                <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span = '12'>
-              <el-form-item label='属性描述' prop='attrDesc'>
-                <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span = '12'>
-              <el-form-item label='属性类型' prop='attrType'>
-                <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
-                  <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span = '12'>
-              <el-form-item label='数据类型' prop='attrDataType'>
-                <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
-                  <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span = '12'>
-                <el-form-item label='单位描述' prop='unitDesc'>
-                <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span = '12'>
-              <el-form-item label='单位编码' prop='unitCode'>
-                  <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div style='text-align: center'>
-              <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-              <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+      <el-tabs style="height: 430px; margin-top:-20px" v-model='activeTab'>
+        <el-tab-pane label="属性基本信息" name = 'basic'>
+          <div>
+            <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
+              <el-row>
+                <el-col :span = '12'>
+                  <el-form-item label='属性编码' prop='attrCode' >
+                    <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='属性描述' prop='attrDesc'>
+                    <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span = '12'>
+                  <el-form-item label='属性类型' prop='attrType'>
+                    <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
+                      <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='数据类型' prop='attrDataType'>
+                    <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
+                      <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span = '12'>
+                    <el-form-item label='单位描述' prop='unitDesc'>
+                    <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='单位编码' prop='unitCode'>
+                      <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <div style='text-align: center'>
+                  <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
+                  <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+              </div>
+            </el-form>
           </div>
-        </el-form>
-      </div>
+        </el-tab-pane>
+        <el-tab-pane label="属性域信息" name = 'domain' v-if = 'attrSaved'>
+          <attr-domain-item ref='openAttrDomainDialog' v-bind:attrUuid = 'attrForm.uuid'></attr-domain-item>
+        </el-tab-pane>
+      </el-tabs>
     </el-dialog>
   </div>
 </template>
@@ -163,6 +169,8 @@ export default {
       mode: 1,
       selections: [],
       disabledflag: false,
+      activeTab: 'basic',
+      attrSaved: true,
       // 检索条件用表单
       searchAttrForm: {
         uuid: '',
@@ -275,10 +283,10 @@ export default {
       this.search()
     },
     // 打开新增/修改设备域弹框页面
-    openAttrDmnDialog: function (attr = {}) {
-      const attrTmp = Object.assign({}, attr)
-      this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
-    },
+    // openAttrDmnDialog: function (attr = {}) {
+    //   const attrTmp = Object.assign({}, attr)
+    //   this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
+    // },
     // checkbox勾选事件
     getSelections: function (sel) {
       this.selections = sel
@@ -310,26 +318,27 @@ export default {
         this.disabledflag = true
       }
     }, */
-    viewAttr: function (attr = {}) {
-      this.mode = 1
-      this.attrForm = {
-        uuid: this.selections[0].uuid,
-        attrCode: this.selections[0].attrCode,
-        attrDesc: this.selections[0].attrDesc,
-        attrType: this.selections[0].attrType,
-        attrDataType: this.selections[0].attrDataType,
-        unitDesc: this.selections[0].unitDesc,
-        unitCode: this.selections[0].unitCode
-      }
-      this.attrDialogVisible = true
-      this.disabledflag = true
-    },
+    // viewAttr: function (attr = {}) {
+    //   this.mode = 1
+    //   this.attrForm = {
+    //     uuid: this.selections[0].uuid,
+    //     attrCode: this.selections[0].attrCode,
+    //     attrDesc: this.selections[0].attrDesc,
+    //     attrType: this.selections[0].attrType,
+    //     attrDataType: this.selections[0].attrDataType,
+    //     unitDesc: this.selections[0].unitDesc,
+    //     unitCode: this.selections[0].unitCode
+    //   }
+    //   this.attrDialogVisible = true
+    //   this.disabledflag = true
+    // },
     // ************************添加属性*****************
     addAttr: function () {
       this.disabledflag = false
       this.mode = 2
       this.clear()
       this.attrDialogVisible = true
+      this.attrSaved = false
     },
     // ************************双击修改属性*****************
     editAttrdbl: function (attr = {}) {
@@ -344,33 +353,43 @@ export default {
         unitCode: attr.unitCode
       }
       this.attrDialogVisible = true
-    },
-    // ************************点击修改属性按钮修改属性*****************
-    editAttr: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要修改的设备属性',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能修改一个设备属性',
-          type: 'warning'
-        })
+      if (this.attrForm.attrDataType === 'select') {
+        this.attrSaved = true
       } else {
-        this.mode = 3
-        this.attrForm = {
-          uuid: this.selections[0].uuid,
-          attrCode: this.selections[0].attrCode,
-          attrDesc: this.selections[0].attrDesc,
-          attrType: this.selections[0].attrType,
-          attrDataType: this.selections[0].attrDataType,
-          unitDesc: this.selections[0].unitDesc,
-          unitCode: this.selections[0].unitCode
-        }
-        this.attrDialogVisible = true
+        this.attrSaved = false
       }
     },
+    // ************************点击修改属性按钮修改属性*****************
+    // editAttr: function () {
+    //   if (this.selections.length === 0) {
+    //     this.$message({
+    //       message: '请选择要修改的设备属性',
+    //       type: 'warning'
+    //     })
+    //   } else if (this.selections.length > 1) {
+    //     this.$message({
+    //       message: '一次只能修改一个设备属性',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.mode = 3
+    //     this.attrForm = {
+    //       uuid: this.selections[0].uuid,
+    //       attrCode: this.selections[0].attrCode,
+    //       attrDesc: this.selections[0].attrDesc,
+    //       attrType: this.selections[0].attrType,
+    //       attrDataType: this.selections[0].attrDataType,
+    //       unitDesc: this.selections[0].unitDesc,
+    //       unitCode: this.selections[0].unitCode
+    //     }
+    //     if (this.attrForm.attrDataType === 'select') {
+    //       this.attrSaved = true
+    //     } else {
+    //       this.attrSaved = false
+    //     }
+    //     this.attrDialogVisible = true
+    //   }
+    // },
     // 删除属性
     delAttrBatch: function (attr = {}) {
       if (this.selections.length === 0) {
@@ -436,7 +455,13 @@ export default {
               message: '设备类别保存成功!',
               type: 'success'
             })
-            this.attrDialogVisible = false
+            this.attrForm.uuid = res.data.uuid
+            if (this.attrForm.attrDataType === 'select') {
+              this.attrSaved = true
+            } else {
+              this.attrSaved = false
+            }
+            // this.attrDialogVisible = false
             this.search({})
           })
         } else {
@@ -481,6 +506,8 @@ export default {
     closedialog: function (done) {
       done()
       this.clear()
+      this.attrSaved = false
+      this.activeTab = 'basic'
     }
   }
 }

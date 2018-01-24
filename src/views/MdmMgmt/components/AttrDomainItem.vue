@@ -1,22 +1,23 @@
 <template>
-  <el-dialog
+  <!-- <el-dialog
       :visible.sync = 'attrDomainVisible'
       @open = 'clear'
       :modal-append-to-body = 'false'
-      width = '40%'>
+      width = '40%'> -->
     <!-- <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div> -->
     <!-- <span>设备属性：{{ categoryAttr.attrDesc }}</span> -->
-    <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ categoryAttr.attrDesc }} 属性域</div>
+  <div>
+    <!-- <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ categoryAttr.attrDesc }} 属性域</div> -->
 
-    <hr/>
+    <!-- <hr/> -->
     <el-table
-      stripe
+      stripe border
       :data='domainList'
       tooltip-effect='dark'
-      max-height = '400'
+      height = '260'
       v-loading = 'domainListLoading'
       element-loading-text = '拼命加载中'
-      style = 'margin-top: -15px;width: 100%'>
+      style = 'width: 100%'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='domainValue' label='域取值'></el-table-column>
@@ -49,18 +50,19 @@
           <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
       </div>
     </div>
-
-  </el-dialog>
+  </div>
+  <!-- </el-dialog> -->
 </template>
 
 <script>
 import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmMgmt/apis/index'
 
 export default {
-  props: ['deviceAttrMappingVisible'],
+  // props: ['deviceAttrMappingVisible'],
+  props: ['attrUuid'],
   data () {
     return {
-      attrDomainVisible: false,
+      // attrDomainVisible: false,
       uuidshow: false,
       // 从设备属性弹框传递到设备属性域弹框的信息
       categoryAttr: {
@@ -98,28 +100,32 @@ export default {
       }
     }
   },
+  mounted () {
+    this.getDomains()
+  },
   methods: {
     // 打开设备属性域弹窗
-    openAttrDomainDialog: function (attr = {}) {
-      // 将父页面的设备分类信息传递到弹框中
-      this.categoryAttr.attrUuid = attr.uuid
-      this.categoryAttr.attrCode = attr.attrCode
-      this.categoryAttr.attrDesc = attr.attrDesc
-      this.categoryAttr.attrDataType = attr.attrDataType
+    // openAttrDomainDialog: function (attr = {}) {
+    //   // 将父页面的设备分类信息传递到弹框中
+    //   this.categoryAttr.attrUuid = attr.uuid
+    //   this.categoryAttr.attrCode = attr.attrCode
+    //   this.categoryAttr.attrDesc = attr.attrDesc
+    //   this.categoryAttr.attrDataType = attr.attrDataType
 
-      this.domainForm.attrUuid = attr.uuid
-      this.domainForm.attrDesc = attr.attrDesc
+    //   this.domainForm.attrUuid = attr.uuid
+    //   this.domainForm.attrDesc = attr.attrDesc
 
-      this.getDomains()
+    //   this.getDomains()
 
-      // 显示弹框
-      this.attrDomainVisible = true
-    },
+    //   // 显示弹框
+    //   this.attrDomainVisible = true
+    // },
     // 查询设备分类的属性
     getDomains: function () {
       let that = this
       that.domainListLoading = true
-      getDeviceAttrDomains(this.categoryAttr.attrUuid)
+      that.domainForm.attrUuid = that.attrUuid
+      getDeviceAttrDomains(that.attrUuid)
         .then(
           function (result) {
             that.domainList = result.data
