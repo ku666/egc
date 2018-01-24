@@ -124,25 +124,25 @@ export default {
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
-        if (res.data.code === '00000') {
-          let data = res.data.data
-          let timeDate = []
-          let perInCount = []
-          let perOutCount = []
-          data.map(function (item, index) {
-            timeDate.push(item.date.substr(0, 13) + '点')
-            if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
-            if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
-            perInCount.push(parseFloat(item.perInCount))
-            perOutCount.push(parseFloat(item.perOutCount))
-          })
-          peopleOption.updateTimeData(timeDate)
-          peopleOption.updateInData(perInCount)
-          peopleOption.updateOutData(perOutCount)
-          // console.log('人流信息：')
-          // console.log(peopleOption.option)
-          this.getMyCharts(2).setOption(peopleOption.option)
-        }
+        // if (res.data.code === '00000') {
+        let data = res.data
+        let timeDate = []
+        let perInCount = []
+        let perOutCount = []
+        data.map(function (item, index) {
+          timeDate.push(item.date.substr(0, 13) + '点')
+          if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
+          if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
+          perInCount.push(parseFloat(item.perInCount))
+          perOutCount.push(parseFloat(item.perOutCount))
+        })
+        peopleOption.updateTimeData(timeDate)
+        peopleOption.updateInData(perInCount)
+        peopleOption.updateOutData(perOutCount)
+        // console.log('人流信息：')
+        // console.log(peopleOption.option)
+        this.getMyCharts(2).setOption(peopleOption.option)
+        // }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -161,24 +161,24 @@ export default {
       getCourtCarAccessInfo(param).then(res => {
         console.log('车流信息：')
         // console.log(res)
-        if (res.data.code === '00000') {
-          let data = res.data.data
-          let timeDate = []
-          let carInCount = []
-          let carOutCount = []
-          data.map(function (item, index) {
-            timeDate.push(item.date.substr(0, 13) + '点')
-            if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
-            if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
-            carInCount.push(parseFloat(item.carInCount))
-            carOutCount.push(parseFloat(item.carOutCount))
-          })
-          carOption.updateTimeData(timeDate)
-          carOption.updateInData(carInCount)
-          carOption.updateOutData(carOutCount)
-          console.log(carOption.option)
-          this.getMyCharts(3).setOption(carOption.option)
-        }
+        // if (res.data.code === '00000') {
+        let data = res.data
+        let timeDate = []
+        let carInCount = []
+        let carOutCount = []
+        data.map(function (item, index) {
+          timeDate.push(item.date.substr(0, 13) + '点')
+          if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
+          if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
+          carInCount.push(parseFloat(item.carInCount))
+          carOutCount.push(parseFloat(item.carOutCount))
+        })
+        carOption.updateTimeData(timeDate)
+        carOption.updateInData(carInCount)
+        carOption.updateOutData(carOutCount)
+        console.log(carOption.option)
+        this.getMyCharts(3).setOption(carOption.option)
+        // }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -217,15 +217,15 @@ export default {
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
        // this.courtInfo.courtId
-      let param = { courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0' }
+      let param = {courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0', type: '1'}
       getPerProfile(param).then(res => {
         // console.log(res)
         let ageData = []
         let ageLevelData = []
         let list = res.data
-        if (!list.maleOwner)list.maleOwner = Math.round(Math.random() * 1000)
-        if (!list.femaleOwner)list.femaleOwner = Math.round(Math.random() * 1000)
-        let sexData = [{value: list.maleOwner, name: '男'}, {value: list.femaleOwner, name: '女'}]
+        if (!list.sexInfo)list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
+        if (!list.sexInfo)list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
+        let sexData = [{value: list.sexInfo[0].maleOwner, name: '男'}, {value: list.sexInfo[0].femaleOwner, name: '女'}]
         list = res.data.ageGroupInfo
         list.map(function (item, index) {
           ageLevelData.push(item.group)

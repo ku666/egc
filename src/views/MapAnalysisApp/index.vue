@@ -1,24 +1,14 @@
 <template>
-  <div>
-    <el-row>
-      <el-col :span="12">
-        <el-button type="primary" @click="carStream">车流数据展示</el-button>
-        <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
-        <el-button type="primary" @click="OwnerPortrait">业主画像数据展示</el-button>
-        <el-button type="primary" @click="equipmentShow">设备数数据展示</el-button>
-        <car-stream ref="carStream"></car-stream>
-        <stream-people ref="streamPeople"></stream-people>
-        <owner-portrait ref="OwnerPortrait"></owner-portrait>
-        <equipment-report ref="equipmentReport"></equipment-report>
-      </el-col>
-      <el-col :span="6">
-        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-      </el-col>
-      <el-col :span="4">
-        <el-button type="primary" @click="searchCourt">查询</el-button>
-      </el-col>
-    </el-row>
-      
+  <div class="mapcontainer">
+    <div class="searchBox">
+      <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
+      <el-button type="primary" @click="searchCourt">查询</el-button>
+    </div>
+    <car-stream ref="carStream"></car-stream>
+    <stream-people ref="streamPeople"></stream-people>
+    <owner-portrait ref="OwnerPortrait"></owner-portrait>
+    <equipment-report ref="equipmentReport"></equipment-report>
+
     <div id="map">
       <div id="popup">
         <a href="#" id="popup-closer"></a>
@@ -29,8 +19,10 @@
     <div id="tipWin" class="courtTipclass">
       <div class="courtNameCl">{{showCourtName}}</div>
       <div class="btnCl">
-        <el-button type="primary" size="mini" @click="openCourtPeo" class="checkBtn">查看小区人流</el-button>
-        <el-button type="primary" size="mini" @click="openCourtCar" class="checkBtn">查看小区车流</el-button>
+        <el-button type="primary" size="mini" @click="openCourtPeo" class="checkBtn">查看小区人流信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtCar" class="checkBtn">查看小区车流信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtOwner" class="checkBtn">查看小区业主信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtEquip" class="checkBtn">查看小区设备信息</el-button>
       </div>
     </div>
   </div>
@@ -80,14 +72,6 @@ export default {
         popupcontent: 'popup-content'
       }
     })
-    // this.map.addMarker({
-    //   id: 123456,
-    //   position: [12647121.812652418,2668640.7961829444],
-    //   markerType: 'common',
-    //   name: '恒大酒店',
-    //   imgUrl: markerImg,
-    //   size: [32, 48]
-    // })
     // 添加弹窗
     this.map.addPopup('tipWin')
     this.map.regEventListener('singleclick', this.handleSingleClick)
@@ -110,15 +94,14 @@ export default {
             item.gpsLat = tran[1]
             if(item.gpsLat && item.gpsLon){
               this.map.addMarker({
-              id: item.courtID,
-              position: [item.gpsLon, item.gpsLat],
-              markerType: 'common',
-              name: item.courtName,
-              imgUrl: markerImg,
-              size: [32, 48]
-            })
+                id: item.courtID,
+                position: [item.gpsLon, item.gpsLat],
+                markerType: 'common',
+                name: item.courtName,
+                imgUrl: markerImg,
+                size: [32, 48]
+              })
             }
-            
           }
         }, this)
       }
@@ -132,17 +115,6 @@ export default {
   methods: {
     // 点击地图
     handleSingleClick: function (e) {
-      // console.log(e)
-      // if (e.feature) {
-      //   this.map._map.getView().fit(e.feature.getGeometry(),
-      //     {
-      //       size: this.map._map.getSize(),
-      //       duration: 1000,
-      //       maxZoom: 16
-      //     })
-      // } else {
-      //   this.textHtml += '([' + e.coordinate + '])\n'
-      // }
       if (e.feature && e.feature.markerType === 'common') {
           this.map.showPopup('tipWin', e.coordinate)
           this.showCourtName = e.feature.name
@@ -153,29 +125,24 @@ export default {
           this.setMarkers(this.chooseList,[])
         }
     },
-    streamPeople: function () {
+    // 查看小区人流信息
+    openCourtPeo: function () {
       this.$refs['streamPeople'].streamPeople(this.courtId)
     },
-    carStream: function () {
+    // 查看小区车流信息
+    openCourtCar: function () {
       this.$refs.carStream.goToCarStreamPage(this.courtId)
     },
-    OwnerPortrait: function () {
+    // 查看小区业主信息
+    openCourtOwner: function () {
       this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
     },
-    equipmentShow: function () {
+    // 查看小区设备信息
+    openCourtEquip: function () {
       this.$refs['equipmentReport'].openDialog(this.courtId)
-    },
-    openCourtPeo: function () {
-      console.log('查看小区人流信息')
-      this.$refs['streamPeople'].streamPeople(this.courtId)
-    },
-    openCourtCar: function () {
-      console.log('查看小区车流信息')
-      this.$refs.carStream.goToCarStreamPage(this.courtId)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
-      debugger
       let str = this.searchCourtName // 把多个空格合并成一个空格
       str = str.trim() // 去掉字符串前后的空格
       str = str.replace(/s+/g, " ")
@@ -244,6 +211,18 @@ export default {
 }
 </script>
 <style scoped>
+.mapcontainer{
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+}
+.searchBox{
+  width: 50%;
+  height: 60px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+}
 #map {
   /* float: left; */
   width: 100%;
@@ -252,16 +231,18 @@ export default {
   margin-top: 10px;
 }
 .courtTipclass {
-  height: 70px;
+  height: 150px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
   background-color: rgb(192, 221, 155);
 }
 .courtNameCl{
-  height: 70px;
-  line-height: 70px;
-  float: left;
+  width: 120px;
+  padding-left: 10px;
 }
 .btnCl{
-  float: right;
+  width: 140px;
 }
 .checkBtn {
   display: block;
