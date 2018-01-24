@@ -41,7 +41,7 @@
       <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
       <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='providerCode' label='供应商编码' width='100'></el-table-column>
+      <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
       <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
       <el-table-column prop='contact' label='联系方式'></el-table-column>
       <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>

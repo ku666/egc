@@ -60,7 +60,7 @@
       style='width: 99%'>
       <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备编码' width='80'></el-table-column>
+      <el-table-column prop='typeCode' label='设备编码'></el-table-column>
       <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
       <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
