@@ -121,7 +121,6 @@ export default {
         backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          color: '#fff',
           subtext: '恒大山水城',
           x: 'center'
         },
