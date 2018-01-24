@@ -225,7 +225,7 @@ export default {
         getListDeviceType(equiData).then(res => {
           // if (res.data.code === '00000') {
           this.tableData = res.data
-          console.log(111111)
+          // console.log(111111)
           console.log(this.tableData)
           this.onlinedata = []
           this.totaldata = []
@@ -271,13 +271,13 @@ export default {
 #equipmentcharts {
   float: left;
   margin-top: 10px;
-  width: 49.5%;
+  width: 640px;
   height: 600px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
   float: right;
-  width: 49.5%;
+  width: 640px;
   margin-top: 10px;
   height: 600px;
   border: 1px solid #ccc;
