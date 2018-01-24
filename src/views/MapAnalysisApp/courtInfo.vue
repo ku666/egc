@@ -257,7 +257,7 @@ export default {
           this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtId)
           break
         case 3:
-          this.$refs['equipmentReport'].openDialog(this.courtInfo.courtId)
+          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtId)
           break
       }
     },
