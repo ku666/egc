@@ -3,7 +3,7 @@
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>供应商管理</el-breadcrumb-item>
+      <el-breadcrumb-item>供应商主数据</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:30px'>
@@ -41,7 +41,7 @@
       <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
       <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='providerCode' label='供应商编码' width='100'></el-table-column>
+      <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
       <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
       <el-table-column prop='contact' label='联系方式'></el-table-column>
       <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>
@@ -53,10 +53,10 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop='createTime' label='创建时间'></el-table-column>
+      <!-- <el-table-column prop='createTime' label='创建时间'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column> -->
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -86,7 +86,7 @@
         <el-step :title="title" icon="el-icon-edit"></el-step>
       </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-      <div>
+      <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
             <el-col :span='12'>

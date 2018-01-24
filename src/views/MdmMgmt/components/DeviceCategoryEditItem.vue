@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='40%'>
-    <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item>
+    <!-- <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item> -->
 
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
 
@@ -209,8 +209,6 @@ export default {
       getDeviceAttributeList({})
       .then(res => {
         this.transferData = res.data
-        console.log('-----------------')
-        console.log(this.transferData)
       })
     },
     // 取得当前设备的属性
@@ -235,6 +233,7 @@ export default {
               type: 'success'
             })
             // this.deviceCategoryDetailVisible = false
+            this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
             this.deviceSaved = true
           })

@@ -88,7 +88,8 @@ export const updateDeviceAttrDomain = (data) => {
 
 // 3. 删除设备属性域信息的接口
 export const deleteDeviceAttrDomain = (data) => {
-  return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete/?uuid=' + data
+  // return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete/?uuid=' + data
+  return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete', { 'uuid': data }
   ).then(res => res.data)
 }
 
