@@ -30,7 +30,7 @@ export const getDeviceCategoryList = (data) => {
 
 // 5. 查询设备分类部分信息的接口
 export const getDeviceCategories = (val) => {
-  return Axios.get(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition?keyword=' + val
+  return Axios.get(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', {params: {'keyword': val}}
   ).then(res => res.data)
 }
 
@@ -56,10 +56,17 @@ export const deleteDeviceAttribute = (data) => {
   ).then(res => res.data)
 }
 
-// 4. 查询设备属性信息的接口
+// 4. 查询设备属性信息的接口（带分页信息）
 export const getDeviceAttributes = (data) => {
   console.log(data)
   return Axios.post(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', data
+  ).then(res => res.data)
+}
+
+// 5. 查询设备属性信息接口 （不带分页信息）
+export const getDeviceAttributeList = (data) => {
+  console.log(data)
+  return Axios.post(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributeList', data
   ).then(res => res.data)
 }
 
@@ -81,13 +88,15 @@ export const updateDeviceAttrDomain = (data) => {
 
 // 3. 删除设备属性域信息的接口
 export const deleteDeviceAttrDomain = (data) => {
-  return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete/?uuid=' + data
+  // return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete/?uuid=' + data
+  return Axios.post(DEVICE_ATTR_DOMAIN_PATH + '/delete', { 'uuid': data }
   ).then(res => res.data)
 }
 
 // 4. 查询设备属性域信息的接口
 export const getDeviceAttrDomains = (data) => {
-  return Axios.get(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains?attrUuid=' + data
+  // return Axios.get(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains?attrUuid=' + data
+  return Axios.get(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', { params: { 'attrUuid': data } }
   ).then(res => res.data)
 }
 

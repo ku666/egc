@@ -348,4 +348,20 @@ div:hover {
   margin: 20px 20px 20px 0px;
   font-weight: bold;
 }
+
+.btn-reset {
+  border: 1px solid #0078F4;
+  border-radius: 4px;
+  width: 90px;
+  height: 40px;
+  color: #0078F4;
+  background-color: #ffffff;
+}
+
+.btn-plain {
+  border: 1px solid #0078F4;
+  border-radius: 4px;
+  width: 90px;
+  height: 40px;
+}
 </style>

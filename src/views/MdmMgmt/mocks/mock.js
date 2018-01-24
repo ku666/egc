@@ -228,7 +228,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
   }
 })
 
-Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition?keyword=1', function (options) {
+Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', function (options) {
   return {
     'message': 'code!',
     'code': '00000',

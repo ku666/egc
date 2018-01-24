@@ -1,11 +1,11 @@
 <template>
   <div>
     <device-category-edit-item ref = 'deviceCategoryEditDiag' v-bind:providers = 'providers' v-bind:mode = 'mode' v-bind:parents = 'parents'></device-category-edit-item>
-    <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item>
+    <!-- <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item> -->
 
     <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>设备主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
     </el-breadcrumb>
 
     <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:30px'>
@@ -35,10 +35,10 @@
 
     <el-row>
       <el-col :span = '22'>
-          <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button>
+          <!-- <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
           <el-button @click='addDevice' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-          <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button>
-          <el-button @click='deleteDevice' icon='el-icon-remove-outline' type="text" class='btn-text'>删除</el-button>
+          <!-- <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+          <el-button @click='deleteDeviceBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
           <!-- <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>编辑设备属性</el-button> -->
       </el-col>
       <el-col :span = '2'>
@@ -46,7 +46,8 @@
       </el-col>
     </el-row>
 
-    <el-table stripe border fit
+    <hr/>
+    <el-table stripe
       ref = 'deviceTable'
       :data='tableData'
       tooltip-effect='dark'
@@ -59,7 +60,7 @@
       style='width: 99%'>
       <el-table-column type='selection' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备编码' width='80'></el-table-column>
+      <el-table-column prop='typeCode' label='设备编码'></el-table-column>
       <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
       <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
@@ -81,10 +82,17 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width='160'></el-table-column>
-      <el-table-column prop='createUser' label='创建人'></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人'></el-table-column>
+      <!-- <el-table-column prop='createTime' label='创建时间' width='160'></el-table-column> -->
+      <!-- <el-table-column prop='createUser' label='创建人'></el-table-column> -->
+      <!-- <el-table-column prop='updateTime' label='修改时间' width='160'></el-table-column> -->
+      <!-- <el-table-column prop='updateUser' label='修改人'></el-table-column> -->
+      <el-table-column label='操作' width='100' fixed='right'>
+        <template slot-scope='scope'>
+          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+          <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+        </template>
+      </el-table-column>
     </el-table>
 
     <el-pagination class='table-pager'
@@ -104,7 +112,7 @@
 <script>
 // 导入设备编辑组件，设备属性列表编辑组件
 import DeviceCategoryEditItem from './DeviceCategoryEditItem' // 设备编辑（查看，增加，修改）组件
-import DeviceAttrEditItem from './DeviceAttrEditItem' // 设备属性列表编辑组件
+// import DeviceAttrEditItem from './DeviceAttrEditItem' // 设备属性列表编辑组件
 
 // 导入访问后端方法
 import {
@@ -145,9 +153,9 @@ export default {
   },
   components: {
     // 新增/修改设备分类弹框页面
-    DeviceCategoryEditItem,
+    DeviceCategoryEditItem
     // 设备分类的属性弹框页面
-    DeviceAttrEditItem
+    // DeviceAttrEditItem
   },
   mounted () {
     // 查询所有的设备信息
@@ -167,7 +175,7 @@ export default {
       this.$refs['deviceCategoryEditDiag'].addDeviceCategoryDialog()
     },
     // ********************删除设备********************
-    deleteDevice: function () {
+    deleteDeviceBatch: function () {
       if (this.selections.length === 0) {
         this.$message({
           message: '请选择要删除的设备',
@@ -182,6 +190,30 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(() => {
         deleteDeviceCategory(this.selections[0].uuid).then(res => {
+          if (res.code !== '0000') {
+            return
+          }
+          this.$message({
+            message: '刪除成功!',
+            type: 'warning'
+          })
+          this.search()
+        })
+      }).catch(() => {
+        // this.$message({
+        //   type: 'info',
+        //   message: '已取消删除'
+        // })
+      })
+    },
+    deleteDevice: function (device = {}) {
+      this.$confirm('确定要刪除吗?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        dangerouslyUseHTMLString: true
+      }).then(() => {
+        deleteDeviceCategory(device.uuid).then(res => {
           if (res.code !== '0000') {
             return
           }
@@ -220,22 +252,22 @@ export default {
       this.$refs['deviceCategoryEditDiag'].editDeviceCategoryDialog(device)
     },
     // ********************查看设备详情********************
-    viewDeviceClick: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要查看的设备',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能查看一个设备',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(this.selections[0])
-      }
-    },
+    // viewDeviceClick: function () {
+    //   if (this.selections.length === 0) {
+    //     this.$message({
+    //       message: '请选择要查看的设备',
+    //       type: 'warning'
+    //     })
+    //   } else if (this.selections.length > 1) {
+    //     this.$message({
+    //       message: '一次只能查看一个设备',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.mode = 1
+    //     this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(this.selections[0])
+    //   }
+    // },
     // viewDeviceDblClick: function (device = {}) {
     //   this.mode = 1
     //   this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(device)
@@ -275,62 +307,62 @@ export default {
     },
     // 查询供应商信息
     getProviders: function () {
-      let providersTemp = sessionStorage.getItem('PROVIDERS')
-      if (providersTemp === null || providersTemp === undefined) {
-        getAllProviders()
-        .then(
-          function (result) {
-            console.log(result.data)
-            this.providers = result.data
-            sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      } else {
-        this.providers = JSON.parse(providersTemp)
-      }
+      // let providersTemp = sessionStorage.getItem('PROVIDERS')
+      // if (providersTemp === null || providersTemp === undefined) {
+      getAllProviders()
+      .then(
+        function (result) {
+          console.log(result.data)
+          this.providers = result.data
+          // sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+      // } else {
+      //   this.providers = JSON.parse(providersTemp)
+      // }
     },
     // 查询所有的设备
     getParents: function () {
-      let parentsTemp = sessionStorage.getItem('DEVICES')
-      if (parentsTemp === null || parentsTemp === undefined) {
-        getDeviceCategories('')
-        .then(
-          function (result) {
-            this.parents = result.data
-            sessionStorage.setItem('DEVICES', JSON.stringify(this.parents))
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      } else {
-        this.parents = JSON.parse(parentsTemp)
-      }
+      // let parentsTemp = sessionStorage.getItem('DEVICES')
+      // if (parentsTemp === null || parentsTemp === undefined) {
+      getDeviceCategories('')
+      .then(
+        function (result) {
+          this.parents = result.data
+          // sessionStorage.setItem('DEVICES', JSON.stringify(this.parents))
+        }.bind(this)
+      )
+      .catch(
+        function (error) {
+          console.log(error)
+        }
+      )
+      // } else {
+      //   this.parents = JSON.parse(parentsTemp)
+      // }
     },
     // 设备属性列表编辑页面
-    openDeviceAttrDialog: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要编辑的设备',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能编辑一个设备的属性列表信息',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(this.selections[0])
-      }
-    },
+    // openDeviceAttrDialog: function () {
+    //   if (this.selections.length === 0) {
+    //     this.$message({
+    //       message: '请选择要编辑的设备',
+    //       type: 'warning'
+    //     })
+    //   } else if (this.selections.length > 1) {
+    //     this.$message({
+    //       message: '一次只能编辑一个设备的属性列表信息',
+    //       type: 'warning'
+    //     })
+    //   } else {
+    //     this.mode = 1
+    //     this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(this.selections[0])
+    //   }
+    // },
     // 打开设备属性列表管理页面
     gotoattrmgnt: function () {
       this.$router.push({
