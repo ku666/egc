@@ -5,7 +5,7 @@
         <el-button type="primary" @click="carStream">车流数据展示</el-button>
         <el-button type="primary" @click="streamPeople">人流数据展示</el-button>
         <el-button type="primary" @click="OwnerPortrait">业主画像数据展示</el-button>
-        <el-button type="primary" @click="equipmentShow">设备数数据展示</el-button>
+        <el-button type="primary" @click="equipmentReport">设备数数据展示</el-button>
         <car-stream ref="carStream"></car-stream>
         <stream-people ref="streamPeople"></stream-people>
         <owner-portrait ref="OwnerPortrait"></owner-portrait>
@@ -162,8 +162,8 @@ export default {
     OwnerPortrait: function () {
       this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
     },
-    equipmentShow: function () {
-      this.$refs['equipmentReport'].openDialog(this.courtId)
+    equipmentReport: function () {
+      this.$refs['equipmentReport'].equipmentReport(this.courtId)
     },
     openCourtPeo: function () {
       console.log('查看小区人流信息')

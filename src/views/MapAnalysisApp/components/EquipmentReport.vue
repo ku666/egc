@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="1450px">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%">
     <!-- <div slot="title">
       <span class="pull-left">设备数报表</span>
     </div> -->
@@ -119,9 +119,9 @@ export default {
       // 设备数量数据
       let option = {
         backgroundColor: 'rgba(0,0,20,0.1)',
-        // backgroundColor: 'dark',
         title: {
           text: '设备总数量',
+          color: '#fff',
           subtext: '恒大山水城',
           x: 'center'
         },
@@ -192,7 +192,7 @@ export default {
           {
             name: '实时在网数量',
             type: 'pie',
-            radius: [100, 170],
+            radius: [100, 155],
             center: ['50%', '50%'],
             selectedMode: 'single',
             avoidLabelOverlap: false,
@@ -204,7 +204,7 @@ export default {
               emphasis: {
                 show: true,
                 textStyle: {
-                  fontSize: '25',
+                  fontSize: '24',
                   fontWeight: 'bold'
                 }
               }
@@ -217,7 +217,7 @@ export default {
       equipmentcharts.setOption(option)
       equipmentonlinecharts.setOption(option1)
     },
-    openDialog (courtId) {
+    equipmentReport (courtId) {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
@@ -271,16 +271,16 @@ export default {
 <style scoped>
 #equipmentcharts {
   float: left;
-  margin-top: 20px;
-  width: 700px;
-  height: 650px;
+  margin-top: 10px;
+  width: 635px;
+  height: 600px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
   float: right;
-  width: 700px;
-  margin-top: 20px;
-  height: 650px;
+  width: 635px;
+  margin-top: 10px;
+  height: 600px;
   border: 1px solid #ccc;
 }
 .clear {
