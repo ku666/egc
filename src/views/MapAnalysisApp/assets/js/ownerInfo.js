@@ -127,7 +127,6 @@ var updateAgeData = function (data) {
 var ownerOption = {
   optionSex: optionSex,
   optionAge: optionAge,
-  kindData: kindData,
   updateSexData: updateSexData,
   updateAgeLevelData: updateAgeLevelData,
   updateAgeData: updateAgeData

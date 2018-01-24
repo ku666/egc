@@ -32,22 +32,19 @@ export default {
     }
   },
   methods: {
-    reflushMapData: function () {
-      this.getMyCharts.setOption(mapData.option)
-    },
     // 点击小区点位事件
     handleClickMap: function (e) {
+      mapData.updateChooseData([]) // 清空‘强调显示’的小区信息
+      this.getMyCharts.setOption(mapData.option)
       if (e.seriesType === 'scatter' || e.seriesType === 'effectScatter') {
-        console.log(e)
-        console.log(e.data.courtID)
-        console.log('跳转到对应的小区详情页：' + e.name)
+        // 跳转到指定的小区的详情页
         this.$router.push('/mapanalysisapp/courtinfo/'+e.data.courtID)
       }
     },
     // 获取小区列表数据
-    getCourtListData: function () {
+    getCourtListData: function (isSearch) {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
-      getCourtList().then(res => {
+      getCourtList({courtName:this.searchCourtName}).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
           let list = res.data.data
@@ -61,18 +58,21 @@ export default {
                 item.gpsLon = test[index][0]
                 item.gpsLat = test[index][1]
               }
-              let kk = Math.round(Math.random() * 100)
+              // let kk = Math.round(Math.random() * 100)
               let obj = {
                 name: item.courtName,
-                value: [item.gpsLon, item.gpsLat, kk],
+                value: [item.gpsLon, item.gpsLat],
                 courtID: item.courtID
               }
               pointdata.push(obj)
             }
           }, this)
-          mapData.updateData(pointdata)
-          mapData.updateChooseData(pointdata.slice(2,4))
-          this.reflushMapData()
+          if (isSearch && isSearch === 'search') {
+            mapData.updateChooseData(pointdata)
+          } else {
+            mapData.updateData(pointdata)
+          }
+          this.getMyCharts.setOption(mapData.option)
         }
       }).catch(err => {
         this.$message({
@@ -94,7 +94,7 @@ export default {
         })
         return
       }
-      this.getCourtListData()
+      this.getCourtListData('search')
     }
   }
 }

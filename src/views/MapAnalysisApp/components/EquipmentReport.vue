@@ -217,7 +217,7 @@ export default {
       equipmentcharts.setOption(option)
       equipmentonlinecharts.setOption(option1)
     },
-    openDialog () {
+    openDialog (courtId) {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
