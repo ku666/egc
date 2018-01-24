@@ -416,8 +416,6 @@ export default {
       getPerAccessPageList(this.parameter).then(res => {
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
-          console.log(33333)
-          console.log(this.tableData)
           // this.total = res.data.data.totalCount
         } else {
           this.$message({

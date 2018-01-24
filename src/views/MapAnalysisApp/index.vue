@@ -173,10 +173,10 @@ export default {
       console.log('查看小区人流信息')
       this.$refs['streamPeople'].streamPeople(this.courtId)
     },
-    openCourtPeo: function () {
-      console.log('查看小区业主画像信息')
-      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
-    },
+    // openCourtPeo: function () {
+    //   console.log('查看小区业主画像信息')  
+    //   this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
+    // },
     openCourtCar: function () {
       console.log('查看小区车流信息')
       this.$refs.carStream.goToCarStreamPage(this.courtId)

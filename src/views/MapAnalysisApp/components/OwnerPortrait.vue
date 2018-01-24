@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="1300px" @close="closeCallback" class='popup'>
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="1300px" @close="closeCallback" class='popup'>
     <el-row>
       <el-col :span="4">
         <div>
@@ -30,6 +30,7 @@
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col class="line" :span="1">&nbsp;</el-col>
               <el-col :span="3">
                 <el-form-item label="查询项">
                   <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
@@ -38,16 +39,18 @@
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col class="line" :span="1">&nbsp;</el-col>
             </div>
             <div class="wrap-date">
-              <el-col :span="6">
+              <el-col :span="3">
                 <el-form-item label="报表类型">
-                  <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
+                  <el-select v-model="parameter.queryType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
                     <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
                     </el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
+              <el-col class="line" :span="1">&nbsp;</el-col>
               <el-col :span="6" class="stime">
                 <el-form-item label="开始时间">
                   <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
@@ -61,15 +64,15 @@
                 </el-form-item>
               </el-col>
             </div>
-            <el-col :span="24" style="text-align:right" v-show="rateShow">
-              <el-button type="primary" @click="timeQuery">查询</el-button>
+            <el-col v-show="rateShow" :span="24" style="text-align:right">
+              <el-button type="primary" @click="timeQuery">查询出入</el-button>
               <el-button type="success" @click="tableSwitch" plain>表单出入</el-button>
               <el-button type="danger" @click="chartSwitch" plain>图表出入</el-button>
             </el-col>
-            <el-col :span="24" style="text-align:right" v-show="ownerShow">
-              <el-button type="primary" @click="timeQuery">查询</el-button>
+            <el-col v-show="ownerShow" :span="24" style="text-align:right">
+              <el-button type="primary" @click="timeQueryOwner">查询业主</el-button>
               <el-button type="success" @click="tableSwitch" plain>表单业主</el-button>
-              <el-button type="danger" @click="chartSwitch1" plain>图表业主</el-button>
+              <el-button type="danger" @click="chartSwitchOwner" plain>图表业主</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -85,7 +88,7 @@
               <el-table-column width="324px" prop="outCount" label="出去次数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination @size-change="sizeChange" @current-change="currentChange" class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -98,13 +101,11 @@
             <el-table :data="tableOwnerData" width="100%" max-height="440" class="tableWidth" stripe>
               <!-- <el-table-column prop="name" label="小区名称">
               </el-table-column> -->
-              <el-table-column width="487px" prop="age" label="年龄段">
+              <el-table-column width="487px" prop="group" label="年龄段">
               </el-table-column>
-              <el-table-column width="487px" prop="num" label="人数">
+              <el-table-column width="487px" prop="countNum" label="人数">
               </el-table-column>
             </el-table>
-            <!-- <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
-            </el-pagination> -->
           </div>
           <!-- 图表展示 -->
           <div class="canvas" style="width:98%" v-show="isChartShow">
@@ -115,13 +116,11 @@
     </el-row>
     <span slot="footer" class="dialog-footer">
       <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-      <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
     </span>
   </el-dialog>
 </template>
 <script>
-// import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-import { getBuildProfile, getListDevice, getPerProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
@@ -134,11 +133,11 @@ export default {
         mailData: [], // 临时男女人数集合
         courtId: '', // 小区id
         courtName: '', // 小区名称
-        perInCount: '', // 进入次数
+        // perInCount: '', // 进入次数
         carInRegedCount: '',
         perInCountList: [], // 进入次数集合
         perInCountListRate: [], // 临时进入次数集合
-        perOutCount: '', // 出去次数
+        // perOutCount: '', // 出去次数
         carOutRegedCount: '',
         perOutCountList: [], // 出去次数集合
         perOutCountListRate: [] // 临时出去次数集合
@@ -151,12 +150,6 @@ export default {
       buildList: [{
         value: '222b79f4a7b44d03b6f55f028992851f',
         label: '恒大山水城'
-      }, {
-        value: '4c12aee6d522412fa8d9d47d6a39cc82',
-        label: '#1'
-      }, {
-        value: '3',
-        label: '#2'
       }],
       classList: [{
         value: '1',
@@ -166,30 +159,25 @@ export default {
         label: '业主人数'
       }],
       buildValue: '222b79f4a7b44d03b6f55f028992851f',
-      classValue: '出入频率',
+      classValue: '1',
       reportTypeList: [{
-        value: '1',
+        value: '0',
         label: '日报'
       }, {
-        value: '2',
+        value: '1',
         label: '月报'
       }, {
-        value: '3',
+        value: '2',
         label: '年报'
       }],
       parameter: {
-        // courtID: 'c69aeede4f6341929721e2892beec3cb',
-        currentPage: 1, // 多少页
-        pageSize: 10 // 多少条数据
-        // reportType: '1', // 报表类型（日、月、年）
-        // startDate: null, // 开始时间
-        // endDate: null // 结束时间
+        queryType: '0'
       },
       cellDetailsList: {},
       rateData: {},
       timeType: 'date',
-      // reportType: '',
-      total: 10, // 数据条数
+      queryType: '',
+      total: 0, // 数据条数
       tableData: [],
       tableRateData: [],
       tableOwnerData: [],
@@ -201,8 +189,8 @@ export default {
       endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
-      myChart1: null,
-      myChartNode1: null,
+      myChartOwner: null,
+      myChartNodeOwner: null,
       canvasNode: null,
       myChartContainer: null,
       // 限制开始时间与结束时间
@@ -213,7 +201,7 @@ export default {
       },
       endForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > new Date()
+          return time.getTime() < this.starTime
         }
       }
     }
@@ -221,15 +209,15 @@ export default {
   methods: {
     // 选择报表
     reportTypeEvent: function (val) {
-      if (val === '1') {
+      if (val === '0') {
         this.timeType = 'date'
         this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
-      } else if (val === '2') {
+      } else if (val === '1') {
         this.timeType = 'month'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 15))
       } else {
         this.timeType = 'year'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
+        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
       }
     },
     // 选择项改变业主人数与出入频率切换
@@ -246,13 +234,13 @@ export default {
         this.ownerBoxShow = true
         this.rateShow = false
         this.ownerShow = true
-        // this.chartSwitch1()
+        // this.chartSwitchOwner()
       }
     },
-    // 点击切换图表展示
+    // 点击切换出入率图表展示
     chartSwitch: function () {
-      this.getData()
-      this.getPerData()
+      // this.getData()
+      this.getRateData()
       this.isChartShow = true
       this.isTableShow = false
       // 自适应宽
@@ -275,16 +263,16 @@ export default {
         this.myChart.resize()
       }
     },
-    // echarts图表业主人数配比
-    chartSwitch1: function () {
+    // 点击切换图表业主人数配比
+    chartSwitchOwner: function () {
       this.getData()
-      this.getPerData()
+      // this.getRateData()
       this.isChartShow = true
       this.isTableShow = false
-      this.myChartNode1 = document.querySelector('#flowInformation1')
-      this.canvasNode1 = document.querySelector('.canvas')
-      this.myChart1 = this.$echarts.init(this.myChartNode1)
-      this.myChart1.setOption(this.echartsData1())
+      this.myChartNodeOwner = document.querySelector('#flowInformation1')
+      this.canvasNodeOwner = document.querySelector('.canvas')
+      this.myChartOwner = this.$echarts.init(this.myChartNodeOwner)
+      this.myChartOwner.setOption(this.echartsDataOwner())
     },
     // echart图表出入频率数据
     echartsData: function () {
@@ -441,7 +429,7 @@ export default {
       return options
     },
     // echart图表业主人员配比
-    echartsData1: function () {
+    echartsDataOwner: function () {
       // 业主人员配比echarts
       let options = {
         title: {
@@ -476,11 +464,11 @@ export default {
                 show: true
               }
             },
-            data: this.form.mailData
-            // data: [
-            //   { value: 1200, name: '女', selected: true },
-            //   { value: 1464, name: '男' }
-            // ]
+            // data: this.form.mailData
+            data: [
+              { value: 1200, name: '女', selected: true },
+              { value: 1464, name: '男' }
+            ]
           },
           {
             name: '参数',
@@ -553,25 +541,83 @@ export default {
     OwnerPortrait: function (_courtId) {
       this.getPgingData()
       this.getData()
-      this.getPerData()
+      this.getRateData()
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
     },
-    // 按时间（报表类型）查询
+    // 按时间（报表类型）查询出入率
+    timeQueryOwner: function () {
+      this.isChartShow = false
+      this.isTableShow = true
+      // 切换到图表时 查询加载图表
+      // 判断当选择项为小区的ID时 查小区的总数据
+      if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
+        this.getRateData() // 小区出入率总数据方法
+        this.getPgingData() // 小区出入率分页数据方法
+        console.log('请求小区出入率数据')
+        console.log(this.classValue)
+        console.log(this.buildValue)
+      } else if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
+        this.getData() // 小区业主人数总数据方法
+        console.log('请求小区的业主人数数据')
+        console.log(this.classValue)
+        console.log(this.buildValue)
+      } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
+        this.getRateBuildData() // 楼栋出入率总数据方法
+        this.getPgingBuildData() // 楼栋出入率分页数据方法
+        console.log('请求楼栋出入率数据')
+        console.log(this.classValue)
+        console.log(this.buildValue)
+      } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
+        this.getBuildData() // 楼栋业主人数总数据方法
+        console.log('请求楼栋业主人数数据')
+        console.log(this.classValue)
+        console.log(this.buildValue)
+      }
+    },
+    // 按时间（报表类型）查询业主人数
     timeQuery: function () {
       // 切换到图表时 查询加载图表
-      console.log(3333)
-      console.log(this.buildValue)
-      this.getData()
-      this.getPerData()
-      this.getPgingData()
+      if (this.parameter.queryType === '0' && parseInt(Math.abs(this.endTime - this.starTime) / 1000 / 60 / 60 / 24) > 30) {
+        alert('查询日期间隔不能超过一个月')
+      } else if (this.parameter.queryType === '1' && parseInt(Math.abs(this.endTime - this.starTime) / 1000 / 60 / 60 / 24) > 365) {
+        alert('查询日期间隔不能超过一年')
+      } else {
+        this.isChartShow = false
+        this.isTableShow = true
+        // 判断当选择项为小区的ID时 查小区的总数据
+        if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
+          this.getRateData() // 小区出入率总数据方法
+          this.getPgingData() // 小区出入率分页数据方法
+          console.log('请求小区出入率数据')
+          console.log(this.classValue)
+          console.log(this.buildValue)
+        } else if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
+          this.getData() // 小区业主人数总数据方法
+          console.log('请求小区的业主人数数据')
+          console.log(this.classValue)
+          console.log(this.buildValue)
+        } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
+          this.getRateBuildData() // 楼栋出入率总数据方法
+          this.getPgingBuildData() // 楼栋出入率分页数据方法
+          console.log('请求楼栋出入率数据')
+          console.log(this.classValue)
+          console.log(this.buildValue)
+        } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
+          this.getBuildData() // 楼栋业主人数总数据方法
+          console.log('请求楼栋业主人数数据')
+          console.log(this.classValue)
+          console.log(this.buildValue)
+        }
+      }
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
       this.parameter.pageSize = val
+      this.parameter.currentPage = 1
       this.getPgingData()
     },
     // 分页组件当前页变化
@@ -579,41 +625,34 @@ export default {
       this.parameter.currentPage = val
       this.getPgingData()
     },
-    // 获取楼栋信息(暂时为业主年龄段数据)
+    // 获取小区业主年龄人数数据
     getData: function () {
       let perData = {}
-      perData.businessId = '1'
-      perData.sourceSysId = '1'
-      perData.targetSysId = '1'
-      perData.courtUuid = '1'
-      // perData.endDate = this.processingDate(this.endTime)
-      // perData.startDate = this.processingDate(this.starTime)
-      // perData.buildType = this.parameter.reportType
-      perData.buildId = '111'
-      perData.buildId = '111'
-      perData.buildType = '1'
-      // 业主人数接口数据
-      getBuildProfile(perData).then(res => {
-        // getCourtPerAccessInfo().then(res => {
-        if (res.data.code === '00000') {
-          // let buildAllData = res.data.data
-          this.tableOwnerData = JSON.parse(res.data.data[0].ageRange)
-          let manData = res.data.data[0].maleOwner
-          let womanData = res.data.data[0].femaleOwner
+      perData.courtUuid = this.buildValue
+      // perData.startTime = '2018-01-19'
+      // perData.endTime = '2018-01-19'
+      // perData.pageSize = 10
+      // perData.currentPage = 1
+      perData.queryType = '0'
+      perData.type = 1
+      // 小区业主人数接口数据
+      getCourtProfile(perData).then(res => {
+        if (res.data !== '') {
+          this.tableOwnerData = res.data.ageGroupInfo
           // 添加前先清空
           this.form.dateListAge = []
           this.form.dateListPeople = []
           this.form.mailData = []
           for (let i = 0; i < this.tableOwnerData.length; i++) {
-            this.form.dateListAge.push(this.tableOwnerData[i].age)
-            this.form.dateListPeople.push({ name: this.tableOwnerData[i].age, value: this.tableOwnerData[i].num })// 转成echarts数据结构
+            this.form.dateListAge.push(this.tableOwnerData[i].group)
+            this.form.dateListPeople.push({ name: this.tableOwnerData[i].group, value: this.tableOwnerData[i].countNum })// 转成echarts数据结构
           }
-          this.form.mailData.push({ value: womanData, name: '女', selected: true }, { value: manData, name: '男' })
+          // this.form.mailData.push({ value: womanData, name: '女', selected: true }, { value: manData, name: '男' })
           // 数据改变时 初始化图表数据
-          // if (this.isChartShow) {
-          //   this.myChart.setOption(this.echartsData())
-          //   this.myChart1.setOption(this.echartsData1())
-          // }
+          if (this.isChartShow) {
+            // this.myChart.setOption(this.echartsData())
+            this.myChartOwner.setOption(this.echartsDataOwner())
+          }
         } else {
           this.$message({
             type: 'error',
@@ -622,37 +661,100 @@ export default {
         }
       })
     },
-    // 获取业主人数信息（暂时为出入频率数据）
-    getPerData: function () {
-      // let rateData = {}
-      // rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
+    // 获取楼栋业主年龄人数数据
+    getBuildData: function () {
+      let perData = {}
+      perData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
+      perData.buildId = this.buildValue
+      // perData.startTime = '2018-01-19'
+      // perData.endTime = '2018-01-19'
+      // perData.pageSize = 10
+      // perData.currentPage = 1
+      perData.queryType = '0'
+      perData.type = 0
+      // 业主人数接口数据
+      getBuildProfile(perData).then(res => {
+        if (res.data !== '') {
+          this.tableOwnerData = res.data.ageGroupInfo
+          // 添加前先清空
+          this.form.dateListAge = []
+          this.form.dateListPeople = []
+          this.form.mailData = []
+          for (let i = 0; i < this.tableOwnerData.length; i++) {
+            this.form.dateListAge.push(this.tableOwnerData[i].group)
+            this.form.dateListPeople.push({ name: this.tableOwnerData[i].group, value: this.tableOwnerData[i].countNum })// 转成echarts数据结构
+          }
+          // this.form.mailData.push({ value: womanData, name: '女', selected: true }, { value: manData, name: '男' })
+          // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            // this.myChart.setOption(this.echartsData())
+            this.myChartOwner.setOption(this.echartsDataOwner())
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
+    },
+    // 获取小区出入率总数据（图表展示）
+    getRateData: function () {
       this.rateData.courtUuid = this.buildValue
-      // perData.endDate = this.processingDate(this.endTime)
-      // perData.startDate = this.processingDate(this.starTime)
-      // perData.buildType = this.parameter.reportType
-      // 出入频率接口
-      getPerProfile(this.rateData).then(res => {
-        if (res.data.code === '00000') {
-          // let rateAllData = res.data.data
-          this.tableRateData = res.data.data.flow
-          // 自定义添加小区名字
-          // for (let i in this.tableRateData) {
-          //   this.tableRateData[i].name = '恒大山水城'
-          // }
+      this.rateData.queryType = '0'
+      // this.rateData.currentPage = 1
+      this.rateData.type = 0
+      // 小区出入频率接口
+      getCourtRateProfile(this.rateData).then(res => {
+        if (res.data !== '') {
+          let tableRateAllData = res.data.flow
           // 添加前先清空
           this.form.dateListRate = []
           this.form.perInCountListRate = []
           this.form.perOutCountListRate = []
-          for (let i = 0; i < this.tableRateData.length; i++) {
-            this.form.dateListRate.push(this.tableRateData[i].timeGroup)
-            this.form.perInCountListRate.push(this.tableRateData[i].inCount)
-            this.form.perOutCountListRate.push(this.tableRateData[i].outCount)
+          for (let i = 0; i < tableRateAllData.length; i++) {
+            this.form.dateListRate.push(tableRateAllData[i].timeGroup)
+            this.form.perInCountListRate.push(tableRateAllData[i].inCount)
+            this.form.perOutCountListRate.push(tableRateAllData[i].outCount)
           }
           // 数据改变时 初始化图表数据
-          // if (this.isChartShow) {
-          //   this.myChart.setOption(this.echartsData())
-          //   this.myChart1.setOption(this.echartsData1())
-          // }
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsData())
+            // this.myChartOwner.setOption(this.echartsDataOwner())
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
+    },
+    // 获取楼栋出入率总数据（图表展示）
+    getRateBuildData: function () {
+      this.rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
+      this.rateData.buildId = this.buildValue
+      this.rateData.queryType = '0'
+      // this.rateData.currentPage = 1
+      this.rateData.type = 0
+      // 楼栋出入频率接口
+      getBuildRateProfile(this.rateData).then(res => {
+        if (res.data !== '') {
+          let tableRateAllData = res.data.flow
+          // 添加前先清空
+          this.form.dateListRate = []
+          this.form.perInCountListRate = []
+          this.form.perOutCountListRate = []
+          for (let i = 0; i < tableRateAllData.length; i++) {
+            this.form.dateListRate.push(tableRateAllData[i].timeGroup)
+            this.form.perInCountListRate.push(tableRateAllData[i].inCount)
+            this.form.perOutCountListRate.push(tableRateAllData[i].outCount)
+          }
+          // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsData())
+            // this.myChartOwner.setOption(this.echartsDataOwner())
+          }
         } else {
           this.$message({
             type: 'error',
@@ -668,28 +770,61 @@ export default {
       let day = date.getDate()
       return year + '-' + month + '-' + day
     },
-    // 获取出入频率分页信息
+    // 获取小区出入频率分页信息
     getPgingData: function () {
-      // this.parameter.startDate = this.processingDate(this.starTime)
-      // this.parameter.endDate = this.processingDate(this.endTime)
-      getListDevice(this.parameter).then(res => {
-        // getPerAccessPageList().then(res => {
-        if (res.data.code === '00000') {
-          this.tableData = res.data.data.result
-          // this.total = res.data.data.totalCount
+      this.parameter.courtUuid = this.buildValue
+      this.parameter.startTime = '2018-01-19'
+      this.parameter.endTime = '2018-01-19'
+      this.parameter.pageSize = 10
+      // this.parameter.currentPage = 1
+      this.parameter.queryType = '0'
+      this.parameter.type = 0
+      getCourtListDevice(this.parameter).then(res => {
+        if (res.data !== '') {
+          let build = res.data.buildInfo
+          for (let i in build) {
+            this.buildList.push({ value: build[i].uuid, label: build[i].name })
+          }
+          // this.cellDetailsList.homeCount = res.data.buildInfo.length
+          this.tableRateData = res.data.flow
+          this.total = res.data.countNum
         } else {
           this.$message({
             type: 'error',
             message: res.data.message
           })
         }
-        console.log(33333)
-        console.log(this.tableData)
+      })
+    },
+    // 获取楼栋出入频率分页信息
+    getPgingBuildData: function () {
+      this.parameter.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
+      this.parameter.buildId = this.buildValue
+      this.parameter.startTime = '2018-01-19'
+      this.parameter.endTime = '2018-01-19'
+      this.parameter.pageSize = 10
+      // this.parameter.currentPage = 1
+      this.parameter.queryType = '0'
+      this.parameter.type = 1
+      getBuildListDevice(this.parameter).then(res => {
+        if (res.data !== '') {
+          let build = res.data.buildInfo
+          for (let i in build) {
+            this.buildList.push({ value: build[i].uuid, label: build[i].name })
+          }
+          this.tableRateData = res.data.flow
+          this.total = res.data.countNum
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
       })
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.parameter.reportType = '1'
+      this.parameter.queryType = '0'
       this.isChartShow = false
       this.isTableShow = true
     }
@@ -732,9 +867,5 @@ export default {
   width: 970px;
   height: 430px;
 }
-// .tblHeader:nth-child(3),.tblHeader:nth-child(4),.tblHeader:nth-child(5){
-//   display: inline-block;
-//   text-align: right;
-// }
 </style>
 
