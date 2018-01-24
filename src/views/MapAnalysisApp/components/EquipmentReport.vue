@@ -271,13 +271,13 @@ export default {
 #equipmentcharts {
   float: left;
   margin-top: 10px;
-  width: 635px;
+  width: 49.5%;
   height: 600px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
   float: right;
-  width: 635px;
+  width: 49.5%;
   margin-top: 10px;
   height: 600px;
   border: 1px solid #ccc;
