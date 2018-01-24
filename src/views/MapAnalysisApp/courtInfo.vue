@@ -207,18 +207,26 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-      let param = { courtUuid: '222b79f4a7b44d03b6f55f028992851f', businessId: '1', sourceSysId: '1', targetSysId: '1', queryDate: '2018-1-19' }
+      let param = { courtUuid: '1', buildId: '111', sourceSysId: '1', targetSysId: '1', queryDate: '2018-1-19' }
       getBuildProfile(param).then(res => {
         console.log(res)
-        // if (res.data.code === '00000') {
-        //   // let list = res.data.data
-        // }
-        let sexData = []
-        let ageData = []
-        ownerOption.updateSexData(sexData)
-        ownerOption.updateAgeData(ageData)
-        this.getMyCharts(0).setOption(ownerOption.optionSex)
-        this.getMyCharts(1).setOption(ownerOption.optionAge)
+        if (res.data.code === '00000') {
+          let ageData = []
+          let ageLevelData = []
+          let list = res.data.data[0]
+          let sexData = [{value: list.maleOwner, name: '男'}, {value: list.femaleOwner, name: '女'}]
+          // debugger
+          list = JSON.parse(list.ageRange)
+          list.map(function (item, index) {
+            ageLevelData.push(item.age)
+            ageData.push(item.num)
+          })
+          ownerOption.updateSexData(sexData)
+          ownerOption.updateAgeLevelData(ageLevelData)
+          ownerOption.updateAgeData(ageData)
+          this.getMyCharts(0).setOption(ownerOption.optionSex)
+          this.getMyCharts(1).setOption(ownerOption.optionAge)
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',

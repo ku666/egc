@@ -27,6 +27,7 @@ var option = {
       saveAsImage: {}
     }
   },
+  calculable: true,
   visualMap: {
     show: false,
     min: 80,

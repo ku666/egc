@@ -97,9 +97,17 @@ var optionAge = {
     }
   ]
 }
-
 /**
- * 更新人员入园流量数据
+ * 更新业主年龄分段数据
+ * @param {*} data 时间点的数据 []
+ */
+var updateAgeLevelData = function (data) {
+  if (data instanceof Array && data.length > 0) {
+    optionAge.yAxis.data = data
+  }
+}
+/**
+ * 更新小区业主性别占比数据
  * @param {*} data 人数的数据 []
  */
 var updateSexData = function (data) {
@@ -108,7 +116,7 @@ var updateSexData = function (data) {
   }
 }
 /**
- * 更新人员入园流量数据
+ * 更新小区业主年龄段占比数据
  * @param {*} data 人数的数据 []
  */
 var updateAgeData = function (data) {
@@ -121,6 +129,7 @@ var ownerOption = {
   optionAge: optionAge,
   kindData: kindData,
   updateSexData: updateSexData,
+  updateAgeLevelData: updateAgeLevelData,
   updateAgeData: updateAgeData
 }
 export default ownerOption
