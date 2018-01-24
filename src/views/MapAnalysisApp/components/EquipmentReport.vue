@@ -31,7 +31,7 @@
   </el-dialog>
 </template>
 <script>
-import { getListDeviceType } from '@/views/MapAnalysisApp/apis/index'
+import { getListDeviceType, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   name: 'EquipmentReport',
   data () {
@@ -44,7 +44,8 @@ export default {
       onlinenames: [],
       tableData1: [],
       onlinedata: [],
-      totaldata: []
+      totaldata: [],
+      cellDetailsList: {} // 小区详细信息
       // currentPage: 1, // 当前页
       // pageSize: 10, // 多少条数据
       // total: 20 // 数据条数
@@ -121,8 +122,13 @@ export default {
         backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          subtext: '恒大山水城',
-          x: 'center'
+          subtext: this.cellDetailsList.courtName,
+          x: 'center',
+          subtextStyle: {
+            color: '#333',
+            fontSize: 16,
+            fontWeight: 'bolder'
+          }
         },
         tooltip: {
           trigger: 'item',
@@ -173,8 +179,13 @@ export default {
         backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          subtext: '恒大山水城',
-          x: 'center'
+          subtext: this.cellDetailsList.courtName,
+          x: 'center',
+          subtextStyle: {
+            color: '#333',
+            fontSize: 16,
+            fontWeight: 'bolder'
+          }
         },
         tooltip: {
           trigger: 'item',
@@ -220,6 +231,10 @@ export default {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
+        getCourtInfo({ courtId: courtId }).then(res => {
+          this.cellDetailsList = res.data.data
+          console.log(this.cellDetailsList)
+        })
         let equiData = {}
         equiData.courtUuid = 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
