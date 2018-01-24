@@ -13,8 +13,8 @@ module.exports = {
       '/demo': {
         target: 'http://172.16.30.46:8082/'
       },
-      '/egc-mapanalysiscomponent': {
-        target: 'http://172.16.30.27:8082/' // http://192.168.0.186:38761/
+      '/egcmapanalysis': { // /egc-mapanalysiscomponent
+        target: 'http://192.168.0.186:9033' // http://192.168.0.186:38761/
       },
       '/profile': {
         target: 'http://192.168.0.186:9030',// 业主画像
