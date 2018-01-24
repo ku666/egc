@@ -4,9 +4,9 @@ import Mock from 'mockjs'
 //   timeout: '500-2000' // 表示响应时间介于 500 和 2000 毫秒之间，默认值是'10-100'。
 // })
 
-const DEVICE_CATEGORY_PATH = '/egc-mdmcomponent/deviceCategory/api'
+const DEVICE_CATEGORY_PATH = '/egc-mdmmgmtapp/deviceCategory'
 
-Mock.mock(DEVICE_CATEGORY_PATH + '/deleteDeviceCategory', function () {
+Mock.mock(DEVICE_CATEGORY_PATH + '/delete', function () {
   console.log('mock delete device category by uuid')
   return {
     'status': true,
@@ -297,7 +297,7 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', functi
   }
 })
 
-const DEVICE_ATTRIBUTE_PATH = '/egc-mdmcomponent/deviceAttribute/api'
+const DEVICE_ATTRIBUTE_PATH = '/egc-mdmmgmtapp/deviceAttribute'
 
 Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
   console.log('get device category attributes')
@@ -351,7 +351,7 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
   }
 })
 
-const DEVICE_ATTR_DOMAIN_PATH = '/egc-mdmcomponent/deviceAttrDomain/api'
+const DEVICE_ATTR_DOMAIN_PATH = '/egc-mdmmgmtapp/deviceAttrDomain'
 
 Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
   console.log('mock get attr domain list')
@@ -405,7 +405,7 @@ Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
   }
 })
 
-const PROVIDER_PATH = '/egc-mdmcomponent/provider/api'
+const PROVIDER_PATH = '/egc-mdmmgmtapp/provider'
 
 Mock.mock(PROVIDER_PATH + '/getAllEnableProviders', function () {
   console.log('mock getAllEnableProviders')
@@ -414,51 +414,51 @@ Mock.mock(PROVIDER_PATH + '/getAllEnableProviders', function () {
     'code': '00000',
     'data': [{
       'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
-      'provider_code': '1001',
-      'provider_name': '捷顺',
+      'providerCode': '1001',
+      'providerName': '捷顺',
       'category': '1',
       'contact': '010-6666666',
-      'provider_desc': '视频设备供应商',
-      'create_user': 'admin01',
-      'update_user': 'admin01',
-      'create_time': '2017-11-1 11:11:11',
-      'update_time': '2017-11-1 11:11:11'
+      'providerDesc': '视频设备供应商',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
     },
     {
       'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
-      'provider_code': '1002',
-      'provider_name': '海康',
+      'providerCode': '1002',
+      'providerName': '海康',
       'category': '1',
       'contact': '010-6666666',
-      'provider_desc': '视频设备供应商',
-      'create_user': 'admin01',
-      'update_user': 'admin01',
-      'create_time': '2017-11-1 11:11:11',
-      'update_time': '2017-11-1 11:11:11'
+      'providerDesc': '视频设备供应商',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
     },
     {
       'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
-      'provider_code': '1003',
-      'provider_name': '立林',
+      'providerCode': '1003',
+      'providerName': '立林',
       'category': '1',
       'contact': '010-6666666',
-      'provider_desc': '视频设备供应商',
-      'create_user': 'admin01',
-      'update_user': 'admin01',
-      'create_time': '2017-11-1 11:11:11',
-      'update_time': '2017-11-1 11:11:11'
+      'providerDesc': '视频设备供应商',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
     },
     {
       'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
-      'provider_code': '1004',
-      'provider_name': '大华',
+      'providerCode': '1004',
+      'providerName': '大华',
       'category': '1',
       'contact': '010-6666666',
-      'provider_desc': '视频设备供应商',
-      'create_user': 'admin01',
-      'update_user': 'admin01',
-      'create_time': '2017-11-1 11:11:11',
-      'update_time': '2017-11-1 11:11:11'
+      'providerDesc': '视频设备供应商',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
     }]
   }
 })
@@ -473,55 +473,55 @@ Mock.mock(PROVIDER_PATH + '/getProviders', function () {
       'totalCount': 3,
       'result': [ {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
-        'provider_code': '1001',
-        'provider_name': '捷顺',
+        'providerCode': '1001',
+        'providerName': '捷顺',
         'category': '1',
         'categoryName': '硬件供应商',
         'contact': '010-6666666',
-        'provider_desc': '视频设备供应商',
-        'create_user': 'admin01',
-        'update_user': 'admin01',
-        'create_time': '2017-11-1 11:11:11',
-        'update_time': '2017-11-1 11:11:11'
+        'providerDesc': '视频设备供应商',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
       },
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
-        'provider_code': '1002',
-        'provider_name': '海康',
+        'providerCode': '1002',
+        'providerName': '海康',
         'category': '1',
         'categoryName': '硬件供应商',
         'contact': '010-6666666',
-        'provider_desc': '视频设备供应商',
-        'create_user': 'admin01',
-        'update_user': 'admin01',
-        'create_time': '2017-11-1 11:11:11',
-        'update_time': '2017-11-1 11:11:11'
+        'providerDesc': '视频设备供应商',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
       },
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
-        'provider_code': '1003',
-        'provider_name': '立林',
+        'providerCode': '1003',
+        'providerName': '立林',
         'category': '1',
         'categoryName': '硬件供应商',
         'contact': '010-6666666',
-        'provider_desc': '视频设备供应商',
-        'create_user': 'admin01',
-        'update_user': 'admin01',
-        'create_time': '2017-11-1 11:11:11',
-        'update_time': '2017-11-1 11:11:11'
+        'providerDesc': '视频设备供应商',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
       },
       {
         'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx4',
-        'provider_code': '1004',
-        'provider_name': '大华',
+        'providerCode': '1004',
+        'providerName': '大华',
         'category': '1',
         'categoryName': '硬件供应商',
         'contact': '010-6666666',
-        'provider_desc': '视频设备供应商',
-        'create_user': 'admin01',
-        'update_user': 'admin01',
-        'create_time': '2017-11-1 11:11:11',
-        'update_time': '2017-11-1 11:11:11'
+        'providerDesc': '视频设备供应商',
+        'createUser': 'admin01',
+        'updateUser': 'admin01',
+        'createTime': '2017-11-1 11:11:11',
+        'updateTime': '2017-11-1 11:11:11'
       }]
     }
   }

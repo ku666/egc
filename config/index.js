@@ -31,6 +31,9 @@ module.exports = {
       '/device': {
         target: 'http://192.168.0.186:9030/', // 设备报表
         changeOrigin: true
+       },
+      "/egc-mdmmgmtapp": {
+        target: 'http://127.0.0.1:9040/'
       }
     },
     // Various Dev Server settings
