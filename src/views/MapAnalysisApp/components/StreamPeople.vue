@@ -10,10 +10,10 @@
             <span>小区地址</span>
             <i></i>：{{cellDetailsList.regionName}}</div>
           <div>
-            <span>楼栋</span>
-            <i></i>：{{cellDetailsList.homeCount}}栋</div>
+            <span>户数</span>
+            <i></i>：{{cellDetailsList.homeCount}}户</div>
           <div>
-            <span>房屋</span>
+            <span>房屋总数</span>
             <i></i>：{{cellDetailsList.houseCount}}间</div>
           <div>
             <span>占地面积</span>
@@ -56,7 +56,7 @@
         </el-form>
         <div class="show">
           <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe border>
+            <el-table :data="tableData" width="100%" height="380" class="tableWidth" stripe border>
               <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
@@ -92,10 +92,8 @@ export default {
         courtId: '', // 小区id
         courtName: '', // 小区名称
         perInCount: '', // 入园人数
-        carInRegedCount: '',
         perInCountList: [], // 入园人数集合
-        perOutCount: '', // 出园人数
-        carOutRegedCount: '',
+        perOutCount: '', // 出园人数,
         perOutCountList: [] // 出园人数集合
       },
       reportTypeList: [{
@@ -116,20 +114,19 @@ export default {
         startDate: null, // 开始时间
         endDate: null // 结束时间
       },
-      cellDetailsList: {},
-      timeType: 'date',
+      cellDetailsList: {}, // 小区详细信息
+      timeType: 'date', // 日期type属性
       total: 10, // 数据条数
-      tableData: [],
-      isChartShow: false,
-      isTableShow: true,
-      dateSelection: [],
+      tableData: [], // 表格数据
+      isChartShow: false, // 是否显示图表
+      isTableShow: true, // 是否显示表格
       dialogVisible: false,
-      starTime: new Date(new Date().setDate(new Date().getDate() - 7)),
+      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
       endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
-      isRequest: true,
+      isRequest: true, // 判断时间选择是否正确
       num: 0, // 图表点击计数
       myChartContainer: null,
       // 限制开始时间与结束时间
@@ -209,7 +206,7 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: [],
+        dataZoom: this.dataZoom,
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -325,17 +322,19 @@ export default {
         }]
       }
       // 当日报表数量大于31的时候添加滚动条
-      if (this.form.dateList.length > 31) {
-        options.dataZoom.push({ // 这个dataZoom组件，默认控制x轴。
+      if (this.form.dateList.length < 31) {
+        options.dataZoom = []
+      } else {
+        options.dataZoom = [{ // 这个dataZoom组件，默认控制x轴。
           type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
           start: 0, // 左边在 10% 的位置。
           end: 10 // 右边在 60% 的位置。
         },
-          { // 这个dataZoom组件，也控制x轴。
-            type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
-            start: 10, // 左边在 10% 的位置。
-            end: 60 // 右边在 60% 的位置。
-          })
+        { // 这个dataZoom组件，也控制x轴。
+          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+          start: 10, // 左边在 10% 的位置。
+          end: 60 // 右边在 60% 的位置。
+        }]
       }
       return options
     },
@@ -426,14 +425,14 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        if (res.status === 200) {
-          let perData = res.data
+        if (res.data.code === '00000') {
+          let perData = res.data.data
           // 添加前先清空
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
           for (let i = 0; i < perData.length; i++) {
-            this.form.dateList.push(perData[i].date + ':00:00')
+            this.form.dateList.push(perData[i].date)
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
@@ -461,9 +460,9 @@ export default {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getPerAccessPageList(this.parameter).then(res => {
-        if (res.status === 200) {
-          this.tableData = res.data.result
-          this.total = res.data.totalRows
+        if (res.data.code === '00000') {
+          this.tableData = res.data.data.result
+          this.total = res.data.data.totalRows
         } else {
           this.$message({
             type: 'error',
@@ -530,7 +529,7 @@ export default {
     }
   }
   .leftText {
-    height: 530px;
+    height: 585px;
     padding: 5px 10px;
     background-color: #f6faff;
     div {
