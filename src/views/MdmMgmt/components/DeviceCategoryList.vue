@@ -58,7 +58,8 @@
             <el-table-column prop='typeCode' label='设备编码' width="100">
               <template slot-scope="scope">
                 <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
-                <i class='fa fa-cog' style="float: left; color: #66b1ff"></i>
+                <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
+                <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
                 <div style='padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
                 <!-- </div> -->
               </template>
@@ -442,7 +443,7 @@ div.cell i.el-icon-arrow-right::before {
   color: #66b1ff;
   width:0px;
   /* margin-left: -1000px; */
-  content: "\F085";
+  content: "\f085";
 }
 .el-table__expanded-cell {
   padding: 0;
