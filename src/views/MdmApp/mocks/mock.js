@@ -9,7 +9,21 @@ Mock.setup({
 Mock.mock(/\/scp-mdm-app\/org\/list/, 'get', orgAPI.getOrgList)
 
 // 房屋管理模拟接口
-Mock.mock(/\/scp-mdm-app\/house\/getHousesByConditions/, 'get', houseAPI.getHouseList)
+Mock.mock(/\/scp-mdm-app\/house\/getHousesByConditions/, 'get', function (params) {
+  // console.log(params.url)
+  if (params.url.indexOf('uuid') > 0) {
+    return houseAPI.getHouseList()
+  } else {
+    return {
+      data: {
+        pageCount: 0,
+        pageData: []
+      },
+      code: '0000',
+      msg: 'success'
+    }
+  }
+})
 Mock.mock(/\/scp-mdm-app\/house\/deleteHouse/, 'post', houseAPI.deleteHouse)
 Mock.mock(/\/scp-mdm-app\/house\/batchDeleteHouse/, 'post', houseAPI.batchDeleteHouse)
 Mock.mock(/\/scp-mdm-app\/house\/insertHouse/, 'post', houseAPI.insertHouse)

@@ -54,9 +54,9 @@ export default {
     },
     clickNode: function (data, node) {
       // console.log('是否叶子节点' + node.isLeaf)
-      if (node.isLeaf) {
-        this.search({ uuid: data.uuid })
-      }
+      // if (node.isLeaf) {
+      this.search({ uuid: data.uuid })
+      // }
     },
     /**
      * @description 分页组件单页总数变化
@@ -81,6 +81,7 @@ export default {
       } else {
         this.getOrgTree()
       }
+      this.search()
     },
     // 获取组织树数据
     getOrgTree: function () {

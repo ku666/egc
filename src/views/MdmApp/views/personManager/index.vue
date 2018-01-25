@@ -14,28 +14,40 @@
       -->
       <div class="person-list">
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' style='margin-top: 20px;'>
-          <el-form-item label='姓名'>
-            <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
-          </el-form-item>
-          <el-form-item label='证件类别'>
-            <el-select v-model="searchCondition.idType" placeholder="请选择">
-              <el-option v-for="item in idTypes" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label='证件号码'>
-            <el-input placeholder='输入证件号码' v-model='searchCondition.ID'></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
-            <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
-          </el-form-item>
+          <el-row class="line-one">
+            <el-col :span="5">
+              <el-form-item label='姓名'>
+                <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label='证件号码'>
+                <el-input placeholder='输入证件号码' v-model='searchCondition.ID'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label='电话'>
+                <el-input placeholder='输入电话' v-model='searchCondition.phone'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="5">
+              <el-form-item label='电子邮箱'>
+                <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item>
+                <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
+                <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
         </el-form>
         <hr/>
 
         <!-- 带分页表格 -->
-        <el-table :data="tableData" stripe height="100%" v-loading="loading">
-          <el-table-column type="expand">
+        <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading">
+          <!-- <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-table :data="props.row.detail" stripe height="100%">
@@ -48,7 +60,7 @@
                 </el-table>
               </el-form>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column fixed="left" type="selection" width="55">
           </el-table-column> -->
           <el-table-column label="姓名" prop="name">
@@ -62,6 +74,10 @@
           <el-table-column label="证件类型" prop="idenTypeStr">
           </el-table-column>
           <el-table-column label="证件号码" prop="idenNum" width="170">
+          </el-table-column>
+          <el-table-column label="联系电话" prop="phone">
+          </el-table-column>
+          <el-table-column label="电子邮箱" prop="mail">
           </el-table-column>
           <!-- <el-table-column label="房屋地址" prop="houseAddress" width="120">
           </el-table-column>
@@ -80,6 +96,72 @@
         </el-pagination>
       </div>
     </div>
+
+    <!-- 弹出新窗口 -->
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='40%'>
+      <div slot='title' class='header_style'>{{ this.title }}</div>
+      <el-tabs style="height: 430px; margin-top:-20px;" v-model='activeName'>
+        <el-tab-pane label="基本信息" name='basic'>
+          <div>
+            <el-form :model='modelDetailForm' ref='detailForm' label-width='100px'>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>姓名：</label>
+                  <label>{{this.modelDetailForm.name}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>人员类型：</label>
+                  <label>{{this.modelDetailForm.userTypeStr}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>性别：</label>
+                  <label>{{this.modelDetailForm.sexStr}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>生日：</label>
+                  <label>{{this.modelDetailForm.birth}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>证件类型：</label>
+                  <label>{{this.modelDetailForm.idenTypeStr}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>证件号码：</label>
+                  <label>{{this.modelDetailForm.idenNum}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>联系电话：</label>
+                  <label>{{this.modelDetailForm.phone}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>电子邮箱：</label>
+                  <label>{{this.modelDetailForm.mail}}</label>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="房产信息" name='detail'>
+          <el-table :data="this.modelDetailForm.detail" stripe height="340">
+            <el-table-column label="小区" prop="courtName" width="120"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress" width="120"></el-table-column>
+            <el-table-column label="电话" prop="phone" width="120"></el-table-column>
+            <el-table-column label="电子邮件" prop="mail" width="120"></el-table-column>
+            <el-table-column label="创建日期" prop="createTime" width="120"></el-table-column>
+            <el-table-column label="备注" prop="description" width="120"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      <div style='text-align: center'>
+        <el-button type='primary' @click='closeDetailDialog' class='btn-plain'>关闭</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -98,11 +180,15 @@ export default {
       pageSize: 10,
       tableData: [],
       loading: false,
-      activeName: '1',
+      detailDialogVisible: false,
+      title: '人员详细信息',
+      activeName: 'basic',
+      modelDetailForm: {},
       searchCondition: {
         name: '',
-        idType: 1,
-        ID: ''
+        ID: '',
+        phone: '',
+        mail: ''
       },
       idTypes: [
         {
@@ -133,13 +219,27 @@ export default {
     // PersonEdit
   },
   methods: {
+    showPersonDetail: function (rowData = {}) {
+      this.detailDialogVisible = true
+      this.modelDetailForm = rowData
+      // console.log(JSON.stringify(rowData))
+    },
+    closeDetailDialog: function () {
+      this.detailDialogVisible = false
+      this.activeName = 'basic'
+    },
+    handleClose: function () {
+      this.activeName = 'basic'
+      this.detailDialogVisible = false
+    },
     reset: function () {
       this.searchCondition = {
         name: '',
         // pageSize: 10,
         // currentPage: 1,
-        idType: 1,
-        ID: ''
+        ID: '',
+        phone: '',
+        mail: ''
       }
     },
     /**
@@ -251,8 +351,9 @@ export default {
       this.loading = true
       // 查询条件
       condition.name = this.searchCondition.name
-      condition.idType = this.searchCondition.idType
       condition.ID = this.searchCondition.ID
+      condition.phone = this.searchCondition.phone
+      condition.mail = this.searchCondition.mail
       // 分页
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
@@ -338,7 +439,7 @@ export default {
   color: #909399;
 }
 div:hover {
-  background: #f6faff;
+  /* background: #f6faff; */
 }
 .el-collapse-item.is-active {
   background: #f6faff;
@@ -350,18 +451,29 @@ div:hover {
 }
 
 .btn-reset {
-  border: 1px solid #0078F4;
+  border: 1px solid #0078f4;
   border-radius: 4px;
   width: 90px;
   height: 40px;
-  color: #0078F4;
+  color: #0078f4;
   background-color: #ffffff;
 }
 
 .btn-plain {
-  border: 1px solid #0078F4;
+  border: 1px solid #0078f4;
   border-radius: 4px;
   width: 90px;
   height: 40px;
+}
+.line-one {
+  line-height: 40px;
+}
+.header_style {
+  font-size: 30px;
+  color: #505458;
+  text-align: center;
+}
+.el-input{
+  width: 150px;
 }
 </style>
