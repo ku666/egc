@@ -47,11 +47,12 @@
     </el-row>
 
     <hr/>
-    <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'>
+    <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
+    <el-table stripe ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' element-loading-text='拼命加载中' style='width: 99%'>
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName'>:data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName'>
+          <el-table :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备编码' width="100">
@@ -195,9 +196,9 @@ export default {
   },
   methods: {
     // 列表选择方法
-    getSelections: function (sel) {
-      this.selections = sel
-    },
+    // getSelections: function (sel) {
+    //   this.selections = sel
+    // },
     // ********************新增设备********************
     addDevice: function () {
       this.mode = 2
@@ -301,9 +302,9 @@ export default {
     //   this.mode = 1
     //   this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(device)
     // },
-    checkrow: function (row) {
-      this.$refs['deviceTable'].toggleRowSelection(row)
-    },
+    // checkrow: function (row) {
+    //   this.$refs['deviceTable'].toggleRowSelection(row)
+    // },
     // ********************查询设备********************
     search () {
       this.loading = true
