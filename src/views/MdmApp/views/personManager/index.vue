@@ -63,6 +63,7 @@
           </el-table-column> -->
           <!-- <el-table-column fixed="left" type="selection" width="55">
           </el-table-column> -->
+          <el-table-column type="index"></el-table-column>
           <el-table-column label="姓名" prop="name">
           </el-table-column>
           <el-table-column label="人员类型" prop="userTypeStr">
