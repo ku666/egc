@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="1300px" @close="closeCallback" class='popup'>
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
     <el-row>
       <el-col :span="4">
         <div>
@@ -18,11 +18,11 @@
         </div>
       </el-col>
       <!-- 表格展示 -->
-      <el-col :span="19" style="height:600px">
+      <el-col :span="20" style="height:600px">
         <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
-          <el-row class="tblHeader">
-            <div class="wrap-class">
-              <el-col :span="3">
+          <el-row class="tblHeader" :span="24">
+            <!-- <div class="wrap-class"> -->
+              <el-col :span="4">
                 <el-form-item label="小区楼栋选择">
                   <el-select v-model="buildValue" placeholder="请选择" size="small">
                     <el-option v-for="item in buildList" :key="item.value" :label="item.label" :value="item.value">
@@ -30,8 +30,8 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col class="line" :span="1">&nbsp;</el-col>
-              <el-col :span="3">
+              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
+              <el-col :span="4">
                 <el-form-item label="查询项">
                   <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
                     <el-option v-for="item in classList" :key="item.value" :label="item.label" :value="item.value">
@@ -39,10 +39,10 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col class="line" :span="1">&nbsp;</el-col>
-            </div>
-            <div class="wrap-date">
-              <el-col :span="3">
+              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
+            <!-- </div> -->
+            <!-- <div class="wrap-date"> -->
+              <el-col :span="4">
                 <el-form-item label="报表类型">
                   <el-select v-model="parameter.queryType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
                     <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
@@ -50,20 +50,20 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col class="line" :span="1">&nbsp;</el-col>
+              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
               <el-col :span="6" class="stime">
                 <el-form-item label="开始时间">
-                  <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
+                  <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="6">
                 <el-form-item label="结束时间">
-                  <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
+                  <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
-            </div>
+            <!-- </div> -->
             <el-col v-show="rateShow" :span="24" style="text-align:right">
               <el-button type="primary" @click="timeQuery">查询出入</el-button>
               <el-button type="success" @click="tableSwitch" plain>表单出入</el-button>
@@ -120,7 +120,7 @@
   </el-dialog>
 </template>
 <script>
-import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
@@ -147,10 +147,7 @@ export default {
       ownerBoxShow: false,
       rateShow: true,
       ownerShow: false,
-      buildList: [{
-        value: '222b79f4a7b44d03b6f55f028992851f',
-        label: '恒大山水城'
-      }],
+      buildList: [],
       classList: [{
         value: '1',
         label: '出入频率'
@@ -171,7 +168,7 @@ export default {
         label: '年报'
       }],
       parameter: {
-        queryType: '0'
+        // queryType: '0'
       },
       cellDetailsList: {},
       rateData: {},
@@ -543,32 +540,20 @@ export default {
       this.getData()
       this.getRateData()
       // 获取小区详细信息
-      getCourtInfo({ courtId: _courtId }).then(res => {
-        this.cellDetailsList = res.data.data
-      })
+      // getCourtInfo({ courtId: _courtId }).then(res => {
+      //   this.cellDetailsList = res.data.data
+      // })
       this.dialogVisible = true
     },
-    // 按时间（报表类型）查询出入率
+    // （报表类型）查询出入率
     timeQueryOwner: function () {
       this.isChartShow = false
       this.isTableShow = true
       // 切换到图表时 查询加载图表
       // 判断当选择项为小区的ID时 查小区的总数据
-      if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
-        this.getRateData() // 小区出入率总数据方法
-        this.getPgingData() // 小区出入率分页数据方法
-        console.log('请求小区出入率数据')
-        console.log(this.classValue)
-        console.log(this.buildValue)
-      } else if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
+      if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
         this.getData() // 小区业主人数总数据方法
         console.log('请求小区的业主人数数据')
-        console.log(this.classValue)
-        console.log(this.buildValue)
-      } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
-        this.getRateBuildData() // 楼栋出入率总数据方法
-        this.getPgingBuildData() // 楼栋出入率分页数据方法
-        console.log('请求楼栋出入率数据')
         console.log(this.classValue)
         console.log(this.buildValue)
       } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
@@ -578,7 +563,7 @@ export default {
         console.log(this.buildValue)
       }
     },
-    // 按时间（报表类型）查询业主人数
+    // （报表类型）查询业主人数
     timeQuery: function () {
       // 切换到图表时 查询加载图表
       if (this.parameter.queryType === '0' && parseInt(Math.abs(this.endTime - this.starTime) / 1000 / 60 / 60 / 24) > 30) {
@@ -595,20 +580,10 @@ export default {
           console.log('请求小区出入率数据')
           console.log(this.classValue)
           console.log(this.buildValue)
-        } else if (this.buildValue === '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
-          this.getData() // 小区业主人数总数据方法
-          console.log('请求小区的业主人数数据')
-          console.log(this.classValue)
-          console.log(this.buildValue)
         } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '1') {
           this.getRateBuildData() // 楼栋出入率总数据方法
           this.getPgingBuildData() // 楼栋出入率分页数据方法
           console.log('请求楼栋出入率数据')
-          console.log(this.classValue)
-          console.log(this.buildValue)
-        } else if (this.buildValue !== '222b79f4a7b44d03b6f55f028992851f' && this.classValue === '2') {
-          this.getBuildData() // 楼栋业主人数总数据方法
-          console.log('请求楼栋业主人数数据')
           console.log(this.classValue)
           console.log(this.buildValue)
         }
@@ -629,11 +604,11 @@ export default {
     getData: function () {
       let perData = {}
       perData.courtUuid = this.buildValue
-      // perData.startTime = '2018-01-19'
-      // perData.endTime = '2018-01-19'
+      perData.startTime = '2018-01-19'
+      perData.endTime = '2018-01-19'
       // perData.pageSize = 10
       // perData.currentPage = 1
-      perData.queryType = '0'
+      perData.queryType = '0' // 报表类型
       perData.type = 1
       // 小区业主人数接口数据
       getCourtProfile(perData).then(res => {
@@ -782,6 +757,7 @@ export default {
       getCourtListDevice(this.parameter).then(res => {
         if (res.data !== '') {
           let build = res.data.buildInfo
+          this.buildList = []
           for (let i in build) {
             this.buildList.push({ value: build[i].uuid, label: build[i].name })
           }
@@ -809,6 +785,7 @@ export default {
       getBuildListDevice(this.parameter).then(res => {
         if (res.data !== '') {
           let build = res.data.buildInfo
+          this.buildList = []
           for (let i in build) {
             this.buildList.push({ value: build[i].uuid, label: build[i].name })
           }
@@ -858,6 +835,9 @@ export default {
     padding: 10px 0 5px 5px;
     height: 430px;
     margin-top: 10px;
+  }
+  /deep/.tblHeader .el-col {
+    padding-right: 10px;
   }
   #flowInformation {
     height: 420px;
