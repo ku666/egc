@@ -11,6 +11,8 @@ export default {
         birth: '1990年1月1日',
         idenTypeStr: '身份证',
         idenNum: '33900519921222334' + i,
+        phone: '1510581372' + i,
+        mail: 'me@me.com',
         // houseAddress: '1幢1单元101',
         // phone: '15105813720',
         detail: [

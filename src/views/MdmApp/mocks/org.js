@@ -89,8 +89,10 @@ export default {
       }
     ]
     return {
-      pageCount: 20,
-      data: data,
+      data: {
+        pageData: data,
+        pageCount: 20
+      },
       code: '0000',
       msg: 'success'
     }
