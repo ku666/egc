@@ -6,10 +6,10 @@
     <div class="container">
       <el-button type="primary" @click="chartSwitch">图表</el-button>
       <el-button type="success" @click="tableSwitch">表格</el-button>
-      <div v-show="isChartShow">
+      <div v-show="isChartShow" class="chartContainer">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
-        <div class="clear"></div>
+        <!-- <div class="clear"></div> -->
       </div>
       <div v-show="isTableShow">
         <div class="equipmentTable">
@@ -283,19 +283,28 @@ export default {
 }
 </script>
 <style scoped>
-#equipmentcharts {
-  float: left;
+.container{
+  margin-top: -25px;
+}
+.chartContainer{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
   margin-top: 10px;
+}
+#equipmentcharts {
+  /* float: left; */
+  /* margin-top: 10px; */
   width: 640px;
    /* width: 49.5%; */
   height: 600px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
-  float: right;
+  /* float: right; */
+  /* margin-top: 10px; */
   width: 640px;
-  /* width: 49.5%; */
-  margin-top: 10px;
   height: 600px;
   border: 1px solid #ccc;
 }

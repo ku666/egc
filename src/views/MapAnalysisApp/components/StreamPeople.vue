@@ -532,9 +532,10 @@ export default {
       line-height: 30px;
       font-size: 15px;
       span {
-        font-weight: 550;
+        // font-weight: 550;
         width: 65px;
-        font-size: 16px;
+        font-size: 14px;
+        color: #999;
         text-align: justify;
         text-align-last: justify;
         display: inline-block;
