@@ -6,6 +6,7 @@
     <div class="container">
       <el-button type="primary" @click="chartSwitch">图表</el-button>
       <el-button type="success" @click="tableSwitch">表格</el-button>
+      <div class="courtName">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chartContainer">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
@@ -122,13 +123,13 @@ export default {
         backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          subtext: this.cellDetailsList.courtName,
-          x: 'center',
-          subtextStyle: {
-            color: '#333',
-            fontSize: 16,
-            fontWeight: 'bolder'
-          }
+          // subtext: this.cellDetailsList.courtName,
+          x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -179,13 +180,13 @@ export default {
         backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          subtext: this.cellDetailsList.courtName,
-          x: 'center',
-          subtextStyle: {
-            color: '#333',
-            fontSize: 16,
-            fontWeight: 'bolder'
-          }
+          // subtext: this.cellDetailsList.courtName,
+          x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -283,10 +284,18 @@ export default {
 }
 </script>
 <style scoped>
-.container{
+.container {
   margin-top: -25px;
 }
-.chartContainer{
+.courtName {
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  margin: -20px 0 10px ;
+  text-align: center;
+
+}
+.chartContainer {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -297,7 +306,7 @@ export default {
   /* float: left; */
   /* margin-top: 10px; */
   width: 640px;
-   /* width: 49.5%; */
+  /* width: 49.5%; */
   height: 600px;
   border: 1px solid #ccc;
 }
