@@ -430,7 +430,7 @@ export default {
 @import "~@/views/MdmMgmt/assets/css/index.less";
 @import "~@/views/MdmMgmt/assets/css/font-awesome/css/font-awesome.min.css";
 </style>
-<style>
+<style scoped>
 @font-face {
   font-family: 'FontAwesome';
   src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
