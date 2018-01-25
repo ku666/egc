@@ -8,8 +8,8 @@
           <div class='house-box'>
             <h3 class="house-title">全国恒大小区列表</h3>
             <div class="search-box">
-              <el-input v-model="valHouse" placeholder="请输入要查询的小区" @keydown.native="houseInfo"></el-input>
-              <el-button type="primary" icon="el-icon-search" @click="searchHouse">搜索</el-button>
+              <el-input v-model="searchCourtName" placeholder="请输入要查询的小区" @keydown.enter.native="searchCourt"></el-input>
+              <el-button type="primary" icon="el-icon-search" @click="searchCourt">搜索</el-button>
             </div>
           </div>
           <el-table :data="allHouseList" stripe style="flex: 1;margin-top: 10px;" @row-click="goHouseInfo" height="600" border>
@@ -34,7 +34,7 @@ import { getCourtList } from '@/views/HouseAllApp/apis/index.js'
 export default {
   data () {
     return {
-      valHouse: '', // 搜索小区
+      searchCourtName: '', // 搜索小区
       allHouseList: [],
       currentPage4: 1 // 当前页数
     }
@@ -55,17 +55,20 @@ export default {
       console.log(params.courtName)
       this.$router.push('/houseallapp/houseinfo/' + params.courtName)
     },
-    // 点击搜索按钮进入小区详细信息
-    searchHouse () {
-      if (this.valHouse !== '') {
-        this.$router.push('/houseallapp/houseinfo/' + this.valHouse)
+    /** 按条件查询小区列表 */
+    searchCourt () {
+      let str = this.searchCourtName // 把多个空格合并成一个空格
+      str = str.trim() // 去掉字符串前后的空格
+      str = str.replace(/\s+/g, ' ')
+      if (str === '') {
+        this.searchCourtName = str
+        this.$message({
+          type: 'warning',
+          message: '请输入要查询的小区名称'
+        })
+        return
       }
-    },
-    // 回车进入小区详细信息
-    houseInfo (event) {
-      if (event.keyCode === 13 && this.valHouse !== '') {
-        this.$router.push('/houseallapp/houseinfo/' + this.valHouse)
-      }
+      this.$router.push('/houseallapp/houseinfo/' + this.searchCourtName)
     },
     // 当前页数
     handleCurrentChange (currentPage) {
