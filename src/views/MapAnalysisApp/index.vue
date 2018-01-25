@@ -29,7 +29,7 @@
 </template>
 <script>
 /* eslint-disable */
-import { getCourtList,getCourtInfo } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import chooseImg from '@/views/MapAnalysisApp/assets/images/u346.png'
 import hdmap from 'hdmap'

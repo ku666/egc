@@ -100,7 +100,7 @@ export default {
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      let param = {courtID: this.courtInfo.courtId}
+      let param = {courtId: this.courtInfo.courtId}
       getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
