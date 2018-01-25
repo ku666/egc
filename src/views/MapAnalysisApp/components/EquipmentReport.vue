@@ -1,15 +1,16 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="1450px">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%">
     <!-- <div slot="title">
       <span class="pull-left">设备数报表</span>
     </div> -->
     <div class="container">
       <el-button type="primary" @click="chartSwitch">图表</el-button>
       <el-button type="success" @click="tableSwitch">表格</el-button>
-      <div v-show="isChartShow">
+      <div class="courtName">{{cellDetailsList.courtName}}</div>
+      <div v-show="isChartShow" class="chartContainer">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
-        <div class="clear"></div>
+        <!-- <div class="clear"></div> -->
       </div>
       <div v-show="isTableShow">
         <div class="equipmentTable">
@@ -31,7 +32,7 @@
   </el-dialog>
 </template>
 <script>
-import { getListDeviceType } from '@/views/MapAnalysisApp/apis/index'
+import { getListDeviceType, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   name: 'EquipmentReport',
   data () {
@@ -44,7 +45,8 @@ export default {
       onlinenames: [],
       tableData1: [],
       onlinedata: [],
-      totaldata: []
+      totaldata: [],
+      cellDetailsList: {} // 小区详细信息
       // currentPage: 1, // 当前页
       // pageSize: 10, // 多少条数据
       // total: 20 // 数据条数
@@ -119,11 +121,15 @@ export default {
       // 设备数量数据
       let option = {
         backgroundColor: 'rgba(0,0,20,0.1)',
-        // backgroundColor: 'dark',
         title: {
           text: '设备总数量',
-          subtext: '恒大山水城',
+          // subtext: this.cellDetailsList.courtName,
           x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -174,8 +180,13 @@ export default {
         backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          subtext: '恒大山水城',
+          // subtext: this.cellDetailsList.courtName,
           x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -192,7 +203,7 @@ export default {
           {
             name: '实时在网数量',
             type: 'pie',
-            radius: [100, 170],
+            radius: [100, 155],
             center: ['50%', '50%'],
             selectedMode: 'single',
             avoidLabelOverlap: false,
@@ -204,7 +215,7 @@ export default {
               emphasis: {
                 show: true,
                 textStyle: {
-                  fontSize: '25',
+                  fontSize: '24',
                   fontWeight: 'bold'
                 }
               }
@@ -217,16 +228,20 @@ export default {
       equipmentcharts.setOption(option)
       equipmentonlinecharts.setOption(option1)
     },
-    openDialog () {
+    equipmentReport (courtId) {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
+        getCourtInfo({ courtId: courtId }).then(res => {
+          this.cellDetailsList = res.data.data
+          console.log(this.cellDetailsList)
+        })
         let equiData = {}
         equiData.courtUuid = 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
           // if (res.data.code === '00000') {
           this.tableData = res.data
-          console.log(111111)
+          // console.log(111111)
           console.log(this.tableData)
           this.onlinedata = []
           this.totaldata = []
@@ -269,18 +284,37 @@ export default {
 }
 </script>
 <style scoped>
+.container {
+  margin-top: -25px;
+}
+.courtName {
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  margin: -20px 0 10px ;
+  text-align: center;
+
+}
+.chartContainer {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
+}
 #equipmentcharts {
-  float: left;
-  margin-top: 20px;
-  width: 700px;
-  height: 650px;
+  /* float: left; */
+  /* margin-top: 10px; */
+  width: 640px;
+  /* width: 49.5%; */
+  height: 600px;
   border: 1px solid #ccc;
 }
 #equipmentonlinecharts {
-  float: right;
-  width: 700px;
-  margin-top: 20px;
-  height: 650px;
+  /* float: right; */
+  /* margin-top: 10px; */
+  width: 640px;
+  height: 600px;
   border: 1px solid #ccc;
 }
 .clear {

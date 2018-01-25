@@ -3,7 +3,7 @@ import mapanalysisAPI from './mapanalysis'
 // Mock.setup({
 //   timeout: '350-600'
 // })
-let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
+let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
 let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis/'
 // 条件查询小区列表
 Mock.mock(contextPath + '/getCourtList', 'get', mapanalysisAPI.getCourtList)

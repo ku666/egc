@@ -1,10 +1,10 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/egc-mapanalysiscomponent/mapanalysis'
-
+let contextPath = '/egcmapanalysis'
+// let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
 let personPath = '/mapAnalysis'
 let devicePath = '/device'
-// let ownertPath = '/egc-smartcommunitymgmtapp'
 let ownertPath = '/profile'
+
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -165,6 +165,8 @@ export const getBuildRateProfile = data => { // 楼栋出入率接口
   })
 }
 export const getBuildListDevice = data => { // 楼栋的出入率分页数据
+// export const getListDevice = data => {
+  // 分页
   return Axios({
     url: ownertPath + '/getBuildAgeFlowData',
     method: 'get',

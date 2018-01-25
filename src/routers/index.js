@@ -11,6 +11,7 @@ import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
 import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 // 引人大屏模块路由
 import HouseAllApp from '@/views/HouseAllApp/routers/index'
+import MdmApp from '@/views/MdmApp/routers/index'
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -40,7 +41,8 @@ export default new Router({
         ...userMgmtrouters,
         ...mdmMgmtrouters,
         ...MapAnalysisApp,
-        ...HouseAllApp
+        ...HouseAllApp,
+        ...MdmApp
       ]
     }
   ]

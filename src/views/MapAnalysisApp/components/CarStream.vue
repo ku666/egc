@@ -5,22 +5,22 @@
         <el-col :span="4">
           <div class="description">
             <div>
-              <span>小区地址</span>：广州市中心镇
+              <p>小区地址</p>：广州市中心镇
             </div>
             <div>
-              <span>小区名称</span>：恒大山水城
+              <p>小区名称</p>：恒大山水城
             </div>
             <div>
-              <span>楼栋</span>：108栋
+              <p>楼 栋</p>：108栋
             </div>
             <div>
-              <span>房屋</span>：1024间
+              <p>房 屋</p>：1024间
             </div>
             <div>
-              <span>占地面积</span>：12306平方米
+              <p>占地面积</p>：12306平方米
             </div>
             <div>
-              <span>建筑面积</span>：118118118平方米
+              <p>建筑面积</p>：118118118平方米
             </div>
           </div>
         </el-col>
@@ -39,12 +39,12 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开始时间">
-                  <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.startDate" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.startDate" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align:left">
                 <el-form-item label="结束时间">
-                  <el-date-picker :type="formDatePickType" placeholder="选择日期" v-model="form.endDate" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.endDate" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -133,17 +133,20 @@ export default {
       },
       forbiddenEndDatetime: { // 限制结束时间选择器
         disabledDate: (time) => {
-          return time.getTime() < this.form.startDate
+          return time.getTime() < this.form.startDate || time.getTime() > Date.now()
         }
       }
     }
   },
   mounted: function () {
-    console.log(this)
   },
   methods: {
-    goToCarStreamPage: function () {
+    goToCarStreamPage: function (courtId) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
+      if (courtId) {
+        this.form.courtID = courtId
+      }
+      console.log('进入页面')
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
         this.$nextTick(function () {
@@ -279,7 +282,7 @@ export default {
         }, delay)
       }
       // 注册图表缩放控件事件
-      var zoomSize = 16
+      var zoomSize = 8
       var data = this.mapDataList.date
       this.disPatchAction(myChart, data, { dataIndex: 0 }, zoomSize)
       myChart.on('click', function (params) {
@@ -317,9 +320,9 @@ export default {
       if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
       } else if (this.form.reportType === '2') {
-        this.formDatePickType = 'month'
+        this.formDatePickType = 'date'
       } else {
-        this.formDatePickType = 'year'
+        this.formDatePickType = 'month'
       }
     },
     handleSizeChange: function (val) {
@@ -335,15 +338,18 @@ export default {
       var queryParam = this.queryParam()
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
-        console.log('分页查询')
-        // console.log(res.data.result)
-        this.carStreamData = res.data.result
-      }).catch(res => {
-        console.log('res', res)
+        if (res.status === 200) {
+          console.log('分页查询')
+          this.carStreamData = res.data.result
+        } else {
+          this.errMessage()
+        }
       })
     },
     submitForm: function (formName) {
       // 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
+      if (this.datePickRangeConfrim() === 1) return
+      console.log('日期区间通过验证')
       console.log(this.isShowTable)
       if (this.isShowTable) {
         this.pageSize = 10
@@ -359,11 +365,14 @@ export default {
       console.log('获取时间段内所有数据,增加catch')
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
-        var data = res.data
-        this.sortData(data)
-        this.chartInit()
-      }).catch(res => {
-        console.log('res', res)
+        if (res.status === 200) {
+          var data = res.data
+          console.log('caraccessinfo')
+          this.sortData(data)
+          this.chartInit()
+        } else {
+          this.errMessage()
+        }
       })
     },
     getCarAccessPageList: function () {
@@ -371,10 +380,14 @@ export default {
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询数据')
-        this.totalDataNum = res.data.totalRows
-        this.carStreamData = res.data.result
-      }).catch(res => {
-        console.log('res', res)
+        console.log(res)
+        if (res.status === 200) {
+          this.totalDataNum = res.data.totalRows
+          this.carStreamData = res.data.result
+        } else {
+          console.log('dd')
+          this.errMessage()
+        }
       })
     },
     queryParam: function () {
@@ -390,13 +403,43 @@ export default {
       if (this.form.reportType === '1') {
         return year + '-' + month + '-' + day
       } else if (this.form.reportType === '2') {
-        return year + '-' + month
+        return year + '-' + month + '-' + day
       } else {
-        return year + ''
+        return year + '-' + month
       }
     },
     closeDialog: function () {
       this.clickCount = 0
+    },
+    datePickRangeConfrim () {
+      switch (this.form.reportType) {
+        case '1':
+          // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000) + '天')
+          if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000) > 31) {
+            this.$message.error({
+              message: '只能查一个月之内的日报表',
+              duration: 1500
+            })
+            return 1
+          }
+          break
+        case '2':
+          // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) + '月')
+          if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) > 12) {
+            this.$message.error({
+              message: '只能查一年之内的月报表',
+              duration: 1500
+            })
+            return 1
+          }
+          break
+      }
+    },
+    errMessage: function () {
+      this.$message.error({
+        message: '出错了',
+        duration: 1500
+      })
     }
   },
   computed: {
@@ -414,12 +457,12 @@ export default {
   border: 1px solid #dcdfe6;
 }
 .carInfo {
-  .description{
-    span{
+  .description {
+    p {
       display: inline-block;
-      width: 72px;
+      width: 57px;
       text-align: justify;
-      text-align-last:justify;
+      text-align-last: justify;
     }
   }
   /deep/.el-dialog {
@@ -461,10 +504,10 @@ export default {
   /deep/.firstRow .el-col:nth-of-type(3n) {
     padding-right: 0;
   }
-  .leftText{
+  .leftText {
     line-height: 35px;
     font-size: 15px;
-    span{
+    span {
       font-weight: 400;
     }
   }

@@ -4,16 +4,16 @@
       <el-col :span="4" class="leftText">
         <div>
           <div>
-            <span>小区地址</span>
-            <i></i>：{{cellDetailsList.regionName}}广东省广州市增城区恒大山水城恒大酒店2F华夏厅</div>
-          <div>
             <span>小区名称</span>
             <i></i>：{{cellDetailsList.courtName}}</div>
           <div>
-            <span>楼栋</span>
-            <i></i>：{{cellDetailsList.homeCount}}栋</div>
+            <span>小区地址</span>
+            <i></i>：{{cellDetailsList.regionName}}</div>
           <div>
-            <span>房屋</span>
+            <span>户数</span>
+            <i></i>：{{cellDetailsList.homeCount}}户</div>
+          <div>
+            <span>房屋总数</span>
             <i></i>：{{cellDetailsList.houseCount}}间</div>
           <div>
             <span>占地面积</span>
@@ -37,13 +37,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -92,10 +92,8 @@ export default {
         courtId: '', // 小区id
         courtName: '', // 小区名称
         perInCount: '', // 入园人数
-        carInRegedCount: '',
         perInCountList: [], // 入园人数集合
-        perOutCount: '', // 出园人数
-        carOutRegedCount: '',
+        perOutCount: '', // 出园人数,
         perOutCountList: [] // 出园人数集合
       },
       reportTypeList: [{
@@ -116,19 +114,19 @@ export default {
         startDate: null, // 开始时间
         endDate: null // 结束时间
       },
-      cellDetailsList: {},
-      timeType: 'date',
+      cellDetailsList: {}, // 小区详细信息
+      timeType: 'date', // 日期type属性
       total: 10, // 数据条数
-      tableData: [],
-      isChartShow: false,
-      isTableShow: true,
-      dateSelection: [],
+      tableData: [], // 表格数据
+      isChartShow: false, // 是否显示图表
+      isTableShow: true, // 是否显示表格
       dialogVisible: false,
-      starTime: new Date(new Date().setDate(new Date().getDate() - 15)),
+      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
       endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
+      isRequest: true, // 判断时间选择是否正确
       num: 0, // 图表点击计数
       myChartContainer: null,
       // 限制开始时间与结束时间
@@ -148,26 +146,20 @@ export default {
     // 选择报表
     reportTypeEvent: function (val) {
       if (val === '1') {
-        this.timeType = 'date'
-        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
+        this.timeType = 'date' // 1年31622400000  1个月2764800000 7天604800000
+        this.starTime = new Date(this.endTime.getTime() - 604800000)
       } else if (val === '2') {
-        this.timeType = 'month'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
+        this.timeType = 'date'
+        this.starTime = new Date(this.endTime.getTime() - 2764800000)
       } else {
-        this.timeType = 'year'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
+        this.timeType = 'month'
+        this.starTime = new Date(this.endTime.getTime() - 31622400000)
       }
     },
     // 点击切换图表展示
     chartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
-      // 多次点击
-      if (this.num > 0) {
-        return
-      }
-      this.num++
-      this.getData()
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -187,6 +179,12 @@ export default {
         this.myChartContainer()
         this.myChart.resize()
       }
+      // 多次点击
+      if (this.num > 0) {
+        return
+      }
+      this.num++
+      this.getData()
     },
     // echart图表数据
     echartsData: function () {
@@ -208,7 +206,16 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: [],
+        dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
+          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+          start: 0, // 左边在 10% 的位置。
+          end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
+        },
+        { // 这个dataZoom组件，也控制x轴。
+          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+          start: 10, // 左边在 10% 的位置。
+          end: 60 // 右边在 60% 的位置。
+        }],
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -323,28 +330,25 @@ export default {
           }
         }]
       }
-      // 当日报表数量大于31的时候添加滚动条
-      if (this.form.dateList.length > 31) {
-        options.dataZoom.push({ // 这个dataZoom组件，默认控制x轴。
-          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
-          start: 0, // 左边在 10% 的位置。
-          end: 10 // 右边在 60% 的位置。
-        },
-          { // 这个dataZoom组件，也控制x轴。
-            type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
-            start: 10, // 左边在 10% 的位置。
-            end: 60 // 右边在 60% 的位置。
-          })
-      }
       return options
     },
     // 点击切换表格展示
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
+      // 请求数据后重置表格宽度
+      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      let elTableBody = document.querySelector('.el-table__body')
+      if (belTableHeaderbb) {
+        belTableHeaderbb.style.width = '100%'
+        elTableBody.style.width = '100%'
+      }
+      let elTable = document.querySelector('.el-table')
+      elTable.style.maxHeight = '381px'
     },
     // 打开组件的回调
     streamPeople: function (_courtId) {
+      this.reportTypeEvent('1') // 重置表报时间
       this.getPgingData()
       this.getData()
       // 获取小区详细信息
@@ -357,8 +361,15 @@ export default {
     timeQuery: function () {
       // 查询时页面初始化到第一页
       this.parameter.pageNum = 1
-      this.getData()
-      this.getPgingData()
+      if (this.isRequest) {
+        this.getData()
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
       this.num = 0
     },
     // 分页组件单页总数变化
@@ -371,6 +382,36 @@ export default {
       this.parameter.pageNum = val
       this.getPgingData()
     },
+    // 判断选择的时间是否符合要求
+    timeJudgment: function (val) {
+      switch (this.parameter.reportType) {
+        case '1':
+          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '日报查询范围为1个月'
+            })
+          } else {
+            this.isRequest = true
+          }
+          break
+        case '2':
+          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '月报查询范围为1年'
+            })
+          } else {
+            this.isRequest = true
+          }
+          break
+        case '3':
+          this.isRequest = true
+          break
+      }
+    },
     // 获取人流信息
     getData: function () {
       let perData = {}
@@ -379,25 +420,26 @@ export default {
       perData.startDate = this.processingDate(this.starTime)
       perData.reportType = this.parameter.reportType
       getCourtPerAccessInfo(perData).then(res => {
-        if (res.data.code === '00000') {
-          let perData = res.data.data
+        if (res.status === 200) {
+          let perData = res.data
           // 添加前先清空
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
           for (let i = 0; i < perData.length; i++) {
             this.form.dateList.push(perData[i].date)
-            this.form.perInCountList.push(perData[i].perInCount)
-            this.form.perOutCountList.push(perData[i].perOutCount)
+            this.form.perInCountList.push(perData[i].perInCount - 0 + parseInt(Math.random() * 1000))
+            this.form.perOutCountList.push(perData[i].perOutCount - 0 + parseInt(Math.random() * 1000))
           }
           // 数据改变时 初始化图表数据
           if (this.isChartShow) {
+            this.myChart = this.$echarts.init(this.myChartNode)
             this.myChart.setOption(this.echartsData())
           }
         } else {
           this.$message({
             type: 'error',
-            message: res.data.message
+            message: res.statusText
           })
         }
       })
@@ -414,13 +456,13 @@ export default {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getPerAccessPageList(this.parameter).then(res => {
-        if (res.data.code === '00000') {
-          this.tableData = res.data.data.result
-          // this.total = res.data.data.totalCount
+        if (res.status === 200) {
+          this.tableData = res.data.result
+          this.total = res.data.totalRows
         } else {
           this.$message({
             type: 'error',
-            message: res.data.message
+            message: res.statusText
           })
         }
       })
@@ -483,16 +525,17 @@ export default {
     }
   }
   .leftText {
-    height: 530px;
+    height: 585px;
     padding: 5px 10px;
     background-color: #f6faff;
     div {
       line-height: 30px;
       font-size: 15px;
       span {
-        font-weight: 550;
+        // font-weight: 550;
         width: 65px;
-        font-size: 16px;
+        font-size: 14px;
+        color: #999;
         text-align: justify;
         text-align-last: justify;
         display: inline-block;
