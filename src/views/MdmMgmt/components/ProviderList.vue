@@ -1,133 +1,134 @@
 <template>
-  <div>
+  <div class='out'>
+    <div class='out-container'>
+      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+        <el-breadcrumb-item>供应商主数据</el-breadcrumb-item>
+      </el-breadcrumb>
 
-    <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>供应商主数据</el-breadcrumb-item>
-    </el-breadcrumb>
+      <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:30px'>
+        <el-form-item label='供应商编码'>
+          <el-input placeholder='供应商编码' v-model='searchProviderForm.providerCode' @keyup.enter.native = 'search'></el-input>
+        </el-form-item>
+        <el-form-item label='供应商名称'>
+          <el-input placeholder='供应商名称' v-model='searchProviderForm.providerName' @keyup.enter.native = 'search'></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
+          <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+        </el-form-item>
+      </el-form>
 
-    <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:30px'>
-      <el-form-item label='供应商编码'>
-        <el-input placeholder='供应商编码' v-model='searchProviderForm.providerCode' @keyup.enter.native = 'search'></el-input>
-      </el-form-item>
-      <el-form-item label='供应商名称'>
-        <el-input placeholder='供应商名称' v-model='searchProviderForm.providerName' @keyup.enter.native = 'search'></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
-        <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
-      </el-form-item>
-    </el-form>
-
-    <div>
-      <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-      <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-      <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-    </div>
-
-    <hr/>
-    <el-table stripe
-      ref = 'providerTable'
-      :data='providerList'
-      tooltip-effect='dark'
-      v-loading='providerListLoading'
-      max-height='560'
-      @selection-change = 'getSelections'
-      @row-dblclick = 'editProviderdbl'
-      @row-click = 'checkrow'
-      element-loading-text='拼命加载中'
-      style='width: 99%'>
-      <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
-      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
-      <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
-      <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='contact' label='联系方式'></el-table-column>
-      <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
-      <el-table-column label='供应商类别'>
-        <template slot-scope="scope">
-          <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
-            {{scope.row.category === providerType.key ? providerType.value : ''}}
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop='createTime' label='创建时间'></el-table-column>
-      <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
-      <el-table-column label='操作' width='100'>
-        <template slot-scope='scope'>
-          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
-          <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
-          <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination class = 'table-pager'
-      background
-      :current-page = 'searchProviderForm.currentPage'
-      :page-sizes = '[10, 20, 50, 100]'
-      :page-size = 'searchProviderForm.pageSize'
-      layout = 'total, sizes, prev, pager, next, jumper'
-      :total = 'searchProviderForm.total'
-      @size-change = 'sizeChange'
-      @current-change = 'currentChange'>
-    </el-pagination>
-
-    <el-dialog :visible.sync='providerDialogVisible'
-      :modal-append-to-body = 'false'
-      width='40%'>
-      <!-- <div slot='title' class='head-text'>
-        <span>{{title}}</span>
-      </div> -->
-      <!-- <el-steps :active='1' simple>
-        <el-step :title="title" icon="el-icon-edit"></el-step>
-      </el-steps> -->
-      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-      <div style='margin-top:-20px'>
-        <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
-          <el-row>
-            <el-col :span='12'>
-              <el-form-item label='供应商类别' prop='category'>
-                <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
-                  <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span='12'>
-              <el-form-item label='供应商编码' prop='providerCode'>
-                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span='12'>
-              <el-form-item label='供应商名称' prop='providerName'>
-                <el-input v-model='providerForm.providerName' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span='12'>
-              <el-form-item label='联系方式' prop='contact'>
-                <el-input v-model='providerForm.contact' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span='24'>
-              <el-form-item label='供应商描述' prop='providerDesc'>
-                <el-input v-model='providerForm.providerDesc' :disabled = 'disabledflag'></el-input>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <div style='text-align: center'>
-            <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-            <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
-          </div>
-        </el-form>
+      <div>
+        <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
+        <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
+        <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+        <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
       </div>
-    </el-dialog>
+
+      <hr/>
+      <el-table stripe
+        ref = 'providerTable'
+        :data='providerList'
+        tooltip-effect='dark'
+        v-loading='providerListLoading'
+        max-height='560'
+        @selection-change = 'getSelections'
+        @row-dblclick = 'editProviderdbl'
+        @row-click = 'checkrow'
+        element-loading-text='拼命加载中'
+        style='width: 99%'>
+        <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
+        <!-- <el-table-column type='selection' width='50'></el-table-column> -->
+        <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
+        <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
+        <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='contact' label='联系方式'></el-table-column>
+        <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
+        <el-table-column label='供应商类别'>
+          <template slot-scope="scope">
+            <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
+              {{scope.row.category === providerType.key ? providerType.value : ''}}
+            </div>
+          </template>
+        </el-table-column>
+        <el-table-column prop='createTime' label='创建时间'></el-table-column>
+        <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
+        <el-table-column prop='updateTime' label='修改时间'></el-table-column>
+        <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
+        <el-table-column label='操作' width='100'>
+          <template slot-scope='scope'>
+            <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+            <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
+            <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination class = 'table-pager'
+        background
+        :current-page = 'searchProviderForm.currentPage'
+        :page-sizes = '[10, 20, 50, 100]'
+        :page-size = 'searchProviderForm.pageSize'
+        layout = 'total, sizes, prev, pager, next, jumper'
+        :total = 'searchProviderForm.total'
+        @size-change = 'sizeChange'
+        @current-change = 'currentChange'>
+      </el-pagination>
+
+      <el-dialog :visible.sync='providerDialogVisible'
+        :modal-append-to-body = 'false'
+        width='40%'>
+        <!-- <div slot='title' class='head-text'>
+          <span>{{title}}</span>
+        </div> -->
+        <!-- <el-steps :active='1' simple>
+          <el-step :title="title" icon="el-icon-edit"></el-step>
+        </el-steps> -->
+        <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
+        <div style='margin-top:-20px'>
+          <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
+            <el-row>
+              <el-col :span='12'>
+                <el-form-item label='供应商类别' prop='category'>
+                  <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
+                    <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span='12'>
+                <el-form-item label='供应商编码' prop='providerCode'>
+                  <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span='12'>
+                <el-form-item label='供应商名称' prop='providerName'>
+                  <el-input v-model='providerForm.providerName' :disabled = 'disabledflag'></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span='12'>
+                <el-form-item label='联系方式' prop='contact'>
+                  <el-input v-model='providerForm.contact' :disabled = 'disabledflag'></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span='24'>
+                <el-form-item label='供应商描述' prop='providerDesc'>
+                  <el-input v-model='providerForm.providerDesc' :disabled = 'disabledflag'></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div style='text-align: center'>
+              <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
+              <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+            </div>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -403,9 +404,6 @@ export default {
             this.search({})
           }).catch(
             (e) => {
-              console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
-              console.log(e.response)
-              console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
               this.$message({
                 message: e.ErrorMsg,
                 type: 'warning'
@@ -452,4 +450,5 @@ export default {
 
 <style lang='less' scoped>
   @import '~@/views/MdmMgmt/assets/css/index.less';
+
 </style>

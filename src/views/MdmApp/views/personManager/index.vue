@@ -2,6 +2,10 @@
   <div class="person-manager">
     <!-- <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view> -->
     <div class="tree-view-container">
+      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+        <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
+      </el-breadcrumb>
       <!--
       <div class="operation pb10 clearfix">
         <el-button type="primary" @click="personEdit">添加</el-button>
@@ -14,34 +18,22 @@
       -->
       <div class="person-list">
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' style='margin-top: 20px;'>
-          <el-row class="line-one">
-            <el-col :span="5">
-              <el-form-item label='姓名'>
-                <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
-              <el-form-item label='证件号码'>
-                <el-input placeholder='输入证件号码' v-model='searchCondition.ID'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
-              <el-form-item label='电话'>
-                <el-input placeholder='输入电话' v-model='searchCondition.phone'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="5">
-              <el-form-item label='电子邮箱'>
-                <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail'></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="4">
-              <el-form-item>
-                <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
-                <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
+          <el-form-item label='姓名'>
+            <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
+          </el-form-item>
+          <el-form-item label='证件号码'>
+            <el-input placeholder='输入证件号码' v-model='searchCondition.ID'></el-input>
+          </el-form-item>
+          <el-form-item label='电话'>
+            <el-input placeholder='输入电话' v-model='searchCondition.phone'></el-input>
+          </el-form-item>
+          <el-form-item label='电子邮箱'>
+            <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail'></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
+            <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+          </el-form-item>
         </el-form>
         <hr/>
 
@@ -474,7 +466,17 @@ div:hover {
   color: #505458;
   text-align: center;
 }
-.el-input{
-  width: 150px;
+.el-input {
+  width: 200px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.el-select {
+  width: 200px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 4px;
 }
 </style>
