@@ -77,24 +77,26 @@ export default {
           'icon': 'el-icon-menu',
           'index': '/mapanalysisapp/mapanalysisappindex',
           'title': '智慧社区',
-          'subs': [{
-            'icon': null,
-            'index': '/mapanalysisapp/index',
-            'title': '地图分析',
-            'subs': null
-          },
-          {
-            'icon': null,
-            'index': '/mapanalysisapp/index2',
-            'title': '首页2',
-            'subs': null
-          },
-          {
-            'icon': null,
-            'index': '/houseallapp/index',
-            'title': '全国小区',
-            'subs': null
-          }]
+          'subs': [
+            {
+              'icon': null,
+              'index': '/mapanalysisapp/index',
+              'title': '地图分析',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/mapanalysisapp/index2',
+              'title': '首页2',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/houseallapp/index',
+              'title': '全国小区',
+              'subs': null
+            }
+          ]
         }
       ]
     }

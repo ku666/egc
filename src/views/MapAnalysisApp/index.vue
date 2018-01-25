@@ -139,7 +139,7 @@ export default {
     },
     // 查看小区设备信息
     openCourtEquip: function () {
-      this.$refs['equipmentReport'].openDialog(this.courtId)
+      this.$refs['equipmentReport'].equipmentReport(this.courtId)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
