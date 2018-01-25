@@ -6,7 +6,7 @@
         <el-breadcrumb-item>供应商主数据</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:30px'>
+      <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
         <el-form-item label='供应商编码'>
           <el-input placeholder='供应商编码' v-model='searchProviderForm.providerCode' @keyup.enter.native = 'search'></el-input>
         </el-form-item>

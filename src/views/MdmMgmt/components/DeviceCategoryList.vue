@@ -9,7 +9,7 @@
         <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:30px'>
+      <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
         <el-form-item label='设备编码'>
           <el-input placeholder='设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
         </el-form-item>

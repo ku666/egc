@@ -17,7 +17,7 @@
       </div>
       -->
       <div class="person-list">
-        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' style='margin-top: 20px;'>
+        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='姓名'>
             <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
           </el-form-item>

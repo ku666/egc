@@ -7,7 +7,7 @@
         <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
       </el-breadcrumb>
 
-      <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' style='margin-top: 30px'>
+      <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
           <el-input placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
         </el-form-item>
