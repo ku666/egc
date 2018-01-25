@@ -460,8 +460,8 @@ export default {
               this.attrSaved = true
             } else {
               this.attrSaved = false
+              this.attrDialogVisible = false
             }
-            // this.attrDialogVisible = false
             this.search({})
           })
         } else {

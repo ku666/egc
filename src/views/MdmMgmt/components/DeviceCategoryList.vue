@@ -52,14 +52,14 @@
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
+          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备编码' width="100">
               <template slot-scope="scope">
                 <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
-                  <i class='el-icon-arrow-down' style="float: left"></i>
-                  <div style= 'padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
+                <i class='fa fa-cog' style="float: left; color: #66b1ff"></i>
+                <div style='padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
                 <!-- </div> -->
               </template>
             </el-table-column>
@@ -91,8 +91,8 @@
             <el-table-column label='操作' width='88'>
               <template slot-scope='scope'>
                 <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
-                <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
-                <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+                <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+                <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -128,8 +128,8 @@
       <el-table-column label='操作' width='90'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
-          <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
-          <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -243,7 +243,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceCategory({'value': [device.uuid]}).then(res => {
+        deleteDeviceCategory({ 'value': [device.uuid] }).then(res => {
           if (res.code !== '0000') {
             return
           }
@@ -427,23 +427,41 @@ export default {
 
 <style lang='less' scoped>
 @import "~@/views/MdmMgmt/assets/css/index.less";
+@import "~@/views/MdmMgmt/assets/css/font-awesome/css/font-awesome.min.css";
 </style>
 <style>
+@font-face {
+  font-family: 'FontAwesome';
+  src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+div.cell i.el-icon-arrow-right::before {
+  font: normal normal normal 14px/1 FontAwesome;
+  color: #66b1ff;
+  width:0px;
+  /* margin-left: -1000px; */
+  content: "\F085";
+}
 .el-table__expanded-cell {
-  padding: 0
+  padding: 0;
 }
 .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
 }
 .el-table .cell {
-  padding-left: 0
+  padding-left: 0;
 }
 .el-table .child-row {
   /* color:#999; */
   /* font-size: 90%; */
   /* background: #f5f7fa; */
 }
-.el-table .child-row td{
+.el-table .child-row td {
   padding: 0;
+}
+.el-table__expand-icon {
+  /* color: red; */
 }
 </style>
