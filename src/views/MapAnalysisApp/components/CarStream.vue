@@ -64,7 +64,7 @@
             <div class="carInfoTable" v-show="isShowTable" v-loading="loading">
               <!-- 展示表格开始 -->
               <el-table stripe :data="carStreamData" height="400" border style="width: 100%">
-                <!-- <el-table-column prop="courtID" label="小区ID" width="180">
+                <!-- <el-table-column prop="courtId" label="小区ID" width="180">
             </el-table-column> -->
                 <el-table-column prop="date" label="日期">
                 </el-table-column>
@@ -108,7 +108,7 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtID: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
+        courtId: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
         reportType: '1', // 报表类型
         startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
         endDate: new Date() // 结束时间
@@ -144,7 +144,7 @@ export default {
     goToCarStreamPage: function (courtId) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
       if (courtId) {
-        this.form.courtID = courtId
+        this.form.courtId = courtId
       }
       console.log('进入页面')
       this.isShowCarInfoMap = true
