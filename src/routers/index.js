@@ -7,9 +7,16 @@ import demorouters from '@/views/demo/routers/index'
 
 // 引入用户管理模块路由数据
 import userMgmtrouters from '@/views/UserMgmt/login/routers/index'
+import userManagementRouters from '@/views/UserMgmt/userManagement/routers/index'
 import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
 import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 import MdmApp from '@/views/MdmApp/routers/index'
+
+// 引入更新升级模块路由数据
+import upgradeMgmt from '@/views/ApplicationUpgrade/ConfigurationMgmt/routers/index'
+import sofwarePackageMgmt from '@/views/ApplicationUpgrade/SofwarePackageMgmt/routers/index'
+import sofwarePackageDispatch from '@/views/ApplicationUpgrade/SoftwarePackageDispatch/routers/index'
+
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -37,9 +44,13 @@ export default new Router({
         },
         ...demorouters,
         ...userMgmtrouters,
+        ...userManagementRouters,
         ...mdmMgmtrouters,
         ...MapAnalysisApp,
-        ...MdmApp
+        ...MdmApp,
+        ...upgradeMgmt,
+        ...sofwarePackageMgmt,
+        ...sofwarePackageDispatch
       ]
     }
   ]

@@ -53,11 +53,11 @@
       <el-table-column prop='attrDataType' label='数据类型' ></el-table-column>
       <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
       <el-table-column prop='unitCode' label='单位编码' ></el-table-column>
-      <!-- <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column> -->
-      <el-table-column label='操作' width='100' fixed='right'>
+      <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
+      <el-table-column label='操作' width='100'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
           <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
@@ -460,8 +460,8 @@ export default {
               this.attrSaved = true
             } else {
               this.attrSaved = false
+              this.attrDialogVisible = false
             }
-            // this.attrDialogVisible = false
             this.search({})
           })
         } else {

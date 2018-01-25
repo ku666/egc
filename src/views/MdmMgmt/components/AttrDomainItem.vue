@@ -210,3 +210,8 @@ export default {
 <style lang='less' scoped>
   @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>
+<style>
+div.cell {
+  padding-left: 10px;
+}
+</style>
