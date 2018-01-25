@@ -5,22 +5,22 @@
         <el-col :span="4">
           <div class="description">
             <div>
-              <p>小区地址</p>：广州市中心镇
+              <p>小区名称</p>：{{courtInfo.courtName}}
             </div>
             <div>
-              <p>小区名称</p>：恒大山水城
+              <p>小区地址</p>：{{courtInfo.regionName}}
             </div>
             <div>
-              <p>楼 栋</p>：108栋
+              <p>户 数</p>：{{courtInfo.homeCount}}栋
             </div>
             <div>
-              <p>房 屋</p>：1024间
+              <p>房屋总数</p>：{{courtInfo.houseCount}}间
             </div>
             <div>
-              <p>占地面积</p>：12306平方米
+              <p>占地面积</p>：{{courtInfo.floorArea}}平方米
             </div>
             <div>
-              <p>建筑面积</p>：118118118平方米
+              <p>建筑面积</p>：{{courtInfo.buildArea}}平方米
             </div>
           </div>
         </el-col>
@@ -94,7 +94,7 @@
 </template>
   
 <script>
-import { getCourtCarAccessInfo, getCarAccessPageList } from '../apis/index'
+import { getCourtCarAccessInfo, getCarAccessPageList, getCourtInfo } from '../apis/index'
 export default {
   name: 'CarStream',
   data () {
@@ -113,6 +113,7 @@ export default {
         startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
         endDate: new Date() // 结束时间
       },
+      courtInfo: {},
       carStreamData: [], // 后端请求回的车流信息
       mapDataList: { // 车流信息映射到echarts的数据
         date: [],
@@ -147,6 +148,7 @@ export default {
         this.form.courtId = courtId
       }
       console.log('进入页面')
+      this.getCourtInfo()
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
         this.$nextTick(function () {
@@ -388,6 +390,13 @@ export default {
           console.log('dd')
           this.errMessage()
         }
+      })
+    },
+    getCourtInfo: function () {
+      getCourtInfo({ courtId: this.form.courtID }).then(res => {
+        console.log('小区信息')
+        console.log(res)
+        this.courtInfo = res.data.data
       })
     },
     queryParam: function () {
