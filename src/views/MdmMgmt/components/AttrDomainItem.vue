@@ -20,9 +20,9 @@
       style = 'width: 100%'>
       <el-table-column type='index' label='序号' width='50'></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='domainValue' label='域取值'></el-table-column>
-      <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
-      <el-table-column label='操作' width='150'>
+      <el-table-column prop='domainValue' label='域取值' width='270'></el-table-column>
+      <el-table-column prop='domainValueCode' label='域取值编码' width='270'></el-table-column>
+      <el-table-column label='操作' width='100'>
         <template slot-scope='scope'>
           <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
           <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>

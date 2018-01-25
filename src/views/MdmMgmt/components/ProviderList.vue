@@ -23,7 +23,7 @@
       <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
       <el-button @click='addProvider' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
       <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-      <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
+      <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
     </div>
 
     <hr/>
@@ -39,7 +39,7 @@
       element-loading-text='拼命加载中'
       style='width: 99%'>
       <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
-      <el-table-column type='selection' width='50'></el-table-column>
+      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
       <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>

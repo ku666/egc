@@ -25,7 +25,7 @@
           <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
           <el-button @click='addAttr' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
           <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-          <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button>
+          <!-- <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
           <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
       </el-col>
       <el-col :span = '2'>
@@ -45,7 +45,7 @@
       @row-click = 'checkrow'
       element-loading-text='拼命加载中'
       style='width: 99%'>
-      <el-table-column type='selection' width='50'></el-table-column>
+      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
