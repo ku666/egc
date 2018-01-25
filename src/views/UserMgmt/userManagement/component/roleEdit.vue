@@ -824,15 +824,15 @@ export default {
     width: 250px
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    width: 125px
+    width: 130px
   }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 125px
+    width: 130px
   }
   #resourceTable >>> colgroup col:nth-child(6) {
-    width: 125px
+    width: 130px
   }
   #resourceTable >>> colgroup col:nth-child(7) {
-    width: 75px
+    width: 85px
   }
 </style>

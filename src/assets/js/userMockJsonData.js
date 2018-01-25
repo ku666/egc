@@ -226,8 +226,24 @@ export default {
             },
             {
               'id': null,
+              'title': '查看小区用户组',
+              'url': '/userMgmt/userManagement/CommunityUserGroup',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
               'title': '角色管理',
               'url': '/userMgmt/userManagement/role',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
+              'title': '查看小区角色',
+              'url': '/userMgmt/userManagement/CommunityRole',
               'icon': null,
               'submenus': null,
               'items': null
