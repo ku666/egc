@@ -187,6 +187,70 @@ export default {
         'items': null
       }
       ]
+    },
+    {
+      'id': '5',
+      'title': '系统管理',
+      'icon': 'el-icon-menu',
+      'url': '13',
+      'menus': [
+        {
+          'id': null,
+          'title': '用户权限管理',
+          'icon': 'el-icon-menu',
+          'url': '/usermgmt/userauthmgmt',
+          'submenus': [
+            {
+              'id': null,
+              'title': '用户管理',
+              'url': '/userMgmt/userManagement/user',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            // {
+            //   'id': null,
+            //   'title': '部门管理',
+            //   'url': '/userMgmt/userManagement/department',
+            //   'icon': null,
+            //   'submenus': null,
+            //   'items': null
+            // },
+            {
+              'id': null,
+              'title': '用户组管理',
+              'url': '/userMgmt/userManagement/userGroup',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
+              'title': '角色管理',
+              'url': '/userMgmt/userManagement/role',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
+              'title': '资源管理',
+              'url': '/userMgmt/userManagement/resource',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            }
+            // {
+            //   'id': null,
+            //   'title': '修改密码',
+            //   'url': '/usermgmt/userManagement/pwdedit',
+            //   'icon': null,
+            //   'submenus': null,
+            //   'items': null
+            // }
+          ]
+        }
+      ]
     }
     ],
     'token': 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJsaW56aG9uZzEyMyIsImV4cCI6MTUxNTQ5NDI0Mn0.ERXV7NOoodRngLCVSemsxxJ_pdj3TxF92z5hkb7NMeKMPxJ3HCy4rogD-ndCDLw3A1AhTMxOgfLNCRYZG_vQfLwaFIlbNInmk0Q2wetMgN0EgwIt2LWDjEXkFfIst7aIS_0j6dAQHWnpEiKloyBUWWO-RGbgbbXjqdbaBfFIF98'
