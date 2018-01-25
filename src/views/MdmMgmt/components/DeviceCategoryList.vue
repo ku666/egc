@@ -242,7 +242,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteDeviceCategory(device.uuid).then(res => {
+        deleteDeviceCategory({'value': [device.uuid]}).then(res => {
           if (res.code !== '0000') {
             return
           }

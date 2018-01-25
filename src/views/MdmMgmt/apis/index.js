@@ -18,7 +18,7 @@ export const updateDeviceCategory = (data) => {
 
 // 3. 删除设备分类信息的接口
 export const deleteDeviceCategory = (data) => {
-  return Axios.post(DEVICE_CATEGORY_PATH + '/delete?uuid=' + data
+  return Axios.post(DEVICE_CATEGORY_PATH + '/batchDelete', data
   ).then(res => res.data)
 }
 
@@ -134,16 +134,10 @@ export const getAllProviders = () => {
 
 // 设备分类属性映射管理
 // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-const DEVICE_ATTR_MAPPING_PATH = '/egc-mdmcomponent/deviceAttrMapping/api'
+const DEVICE_ATTR_MAPPING_PATH = '/egc-mdmmgmtapp/deviceAttrMapping'
 
 // 1. 新增设备分类属性映射信息的接口
-export const insertDeviceAttrMapping = (data) => {
-  return Axios.post(DEVICE_ATTR_MAPPING_PATH + '/insertDeviceAttrMapping', data
-  ).then(res => res.data)
-}
-
-// 2. 删除设备分类属性映射信息的接口
-export const deleteDeviceAttrMapping = (data) => {
-  return Axios.post(DEVICE_ATTR_MAPPING_PATH + '/deleteDeviceAttrMapping', data
+export const batchInsert = (data) => {
+  return Axios.post(DEVICE_ATTR_MAPPING_PATH + '/batchInsert', data
   ).then(res => res.data)
 }
