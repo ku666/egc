@@ -430,7 +430,7 @@ export default {
 @import "~@/views/MdmMgmt/assets/css/index.less";
 @import "~@/views/MdmMgmt/assets/css/font-awesome/css/font-awesome.min.css";
 </style>
-<style scoped>
+<style >
 @font-face {
   font-family: 'FontAwesome';
   src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
@@ -446,13 +446,13 @@ div.cell i.el-icon-arrow-right::before {
   /* content: "\f1cd"; */
 }
 .el-table__expanded-cell {
-  padding: 0;
+  /* padding: 0 5px; */
 }
 .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
 }
 .el-table .cell {
-  padding-left: 0;
+  /* padding-left: 0; */
 }
 .el-table .child-row {
   /* color:#999; */
@@ -460,7 +460,7 @@ div.cell i.el-icon-arrow-right::before {
   /* background: #f5f7fa; */
 }
 .el-table .child-row td {
-  padding: 0;
+  padding: 0px;
 }
 .el-table__expand-icon {
   /* color: red; */
