@@ -64,17 +64,17 @@
                 <!-- </div> -->
               </template>
             </el-table-column>
+            <el-table-column prop='typeModel' label='设备型号' width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop='typeName' label='设备名称' width="160" show-overflow-tooltip></el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述' width="160" show-overflow-tooltip></el-table-column>
+            <el-table-column prop='typeDesc' label='设备描述' width="280" show-overflow-tooltip></el-table-column>
             <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-            <el-table-column label='父设备' width="120" show-overflow-tooltip>
+            <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
               <template slot-scope="scope">
                 <div v-for='device in parents' v-bind:key='device.uuid'>
                   {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
                 </div>
               </template>
-            </el-table-column>
-            <el-table-column prop='typeModel' label='设备型号' width="120" show-overflow-tooltip></el-table-column>
+            </el-table-column> -->
             <el-table-column prop='hardwareVersion' label='硬件版本' width="100" show-overflow-tooltip></el-table-column>
             <el-table-column prop='softwareVersion' label='软件版本' width="120" show-overflow-tooltip></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
@@ -101,17 +101,17 @@
       </el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='typeCode' label='设备编码' width="100"></el-table-column>
+      <el-table-column prop='typeModel' label='设备型号' width="120" show-overflow-tooltip></el-table-column>
       <el-table-column prop='typeName' label='设备名称' width="160" show-overflow-tooltip></el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' width="160" show-overflow-tooltip></el-table-column>
+      <el-table-column prop='typeDesc' label='设备描述' width="280" show-overflow-tooltip></el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-      <el-table-column label='父设备' width="120" show-overflow-tooltip>
+      <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
         <template slot-scope="scope">
           <div v-for='device in parents' v-bind:key='device.uuid'>
             {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
           </div>
         </template>
-      </el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' width="120" show-overflow-tooltip></el-table-column>
+      </el-table-column> -->
       <el-table-column prop='hardwareVersion' label='硬件版本' width="100" show-overflow-tooltip></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' width="120" show-overflow-tooltip></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
@@ -439,11 +439,11 @@ export default {
   font-style: normal;
 }
 div.cell i.el-icon-arrow-right::before {
-  font: normal normal normal 14px/1 FontAwesome;
+  /* font: normal normal normal 14px/1 FontAwesome;
   color: #66b1ff;
-  width:0px;
+  width:0px; */
   /* margin-left: -1000px; */
-  content: "\f085";
+  /* content: "\f1cd"; */
 }
 .el-table__expanded-cell {
   padding: 0;
