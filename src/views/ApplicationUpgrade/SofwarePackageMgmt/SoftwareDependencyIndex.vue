@@ -81,7 +81,7 @@ export default {
 }
 </script>
 
-<style type="text/css" scoped>
+<style scoped>
   @import "assets/css/softwaremgmt.less"
 </style>
 
