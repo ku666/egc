@@ -8,3 +8,5 @@ import '@/views/UserMgmt/login/mocks/mock.js'
 import '@/views/MdmMgmt/mocks/mock.js'
 import '@/views/MapAnalysisApp/mocks/mock.js'
 import '@/views/MdmApp/mocks/mock.js'
+// 引用更新升级模块的mock文件
+import '@/views/ApplicationUpgrade/configurationMgmt/mocks/mock.js'
