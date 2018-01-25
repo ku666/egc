@@ -10,6 +10,7 @@
           <grid-list id="usergroupTable"
             :editable="true" 
             :deletable="true" 
+            :showOperation="true" 
             :tableData="roleData.roleBaseVoList" 
             :params="roleListParam" 
             style="margin-top: 15px" 
@@ -123,6 +124,9 @@
           title: '角色名称',
           prop: 'roleName'
         }, {
+          title: '用户类型',
+          prop: 'userType'
+        }, {
           title: '角色说明',
           prop: 'remark'
         }]
@@ -182,13 +186,13 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              this.roleListParam = [{
-                title: '角色名称',
-                prop: 'roleName'
-              }, {
-                title: '角色说明',
-                prop: 'remark'
-              }]
+              // this.roleListParam = [{
+              //   title: '角色名称',
+              //   prop: 'roleName'
+              // }, {
+              //   title: '角色说明',
+              //   prop: 'remark'
+              // }]
               this.roleData = result
             }.bind(this)
           )
@@ -204,13 +208,13 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              this.roleListParam = [{
-                title: '角色名称',
-                prop: 'roleName'
-              }, {
-                title: '角色说明',
-                prop: 'remark'
-              }]
+              // this.roleListParam = [{
+              //   title: '角色名称',
+              //   prop: 'roleName'
+              // }, {
+              //   title: '角色说明',
+              //   prop: 'remark'
+              // }]
               this.roleData = result
             }.bind(this)
           )
@@ -269,12 +273,15 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-      width: 170px
+      width: 110px
     }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 250px
+    width: 110px
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 100px
+    width: 220px
+  }
+  #usergroupTable >>> colgroup col:nth-child(4) {
+    width: 80px
   }
 </style>

@@ -11,4 +11,4 @@ import '@/views/MdmApp/mocks/mock.js'
 // 引用更新升级模块的mock文件
 import '@/views/ApplicationUpgrade/configurationMgmt/mocks/mock.js'
 // 引用用户权限管理模块的mock文件
-import '@/views/userMgmt/userManagement/mocks/mock.js'
+import '@/views/UserMgmt/userManagement/mocks/mock.js'
