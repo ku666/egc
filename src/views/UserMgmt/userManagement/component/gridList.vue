@@ -13,7 +13,7 @@
     >
     </el-table-column>
     <el-table-column
-      label="操作"
+      label="操作" v-if="showOperation"
       >
       <template slot-scope="scope">     
         <span v-if="editable" @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px">
@@ -22,6 +22,7 @@
         <span v-if="deletable" @click="handleClickDelete(scope.$index)" style="cursor:pointer">
           <img :src="deleteImg" style="width: 20px">
         </span>
+        <span v-if="viewable" @click="handleClickView(scope.$index)" style="cursor:pointer" class="el-icon-view"></span>
       </template>
     </el-table-column>
   </el-table>
@@ -36,7 +37,9 @@
       tableData: undefined,
       editable: false,
       deletable: true,
-      total: undefined
+      viewable: false,
+      total: undefined,
+      showOperation: false
     },
     data () {
       return {
@@ -66,20 +69,14 @@
             message: '已取消删除'
           })
         })
-        //   callback: action => {
-        //     this.$emit('listenToDeleteEvent', this.tableData[row])
-        //     console.log('gridlist 删除' + row + '行')
-        //     this.tableData.splice(row, 1)
-        //     this.$message({
-        //       type: 'info',
-        //       message: '已删除'
-        //     })
-        //   }
-        // })
       },
       handleClickEdit (rowIndex) {
         this.$emit('listenToEditEvent', this.tableData[rowIndex])
         console.log('gridlist 编辑' + rowIndex + '行')
+      },
+      handleClickView (rowIndex) {
+        this.$emit('listenToEditEvent', this.tableData[rowIndex])
+        console.log('gridlist 查看' + rowIndex + '行')
       },
       handleClickSelect (row) {
         this.$emit('listenToClickEvent', this.tableData[row])
@@ -91,6 +88,9 @@
   }
 </script>
 
-<style>
-
+<style scoped>
+  .el-icon-view:before {
+    color: #0078f4;
+    font-size: 18px
+  }
 </style>
