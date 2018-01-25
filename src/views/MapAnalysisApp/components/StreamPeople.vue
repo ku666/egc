@@ -156,7 +156,9 @@ export default {
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
-      this.getData()
+      if (this.isChartShow) {
+        this.getData()
+      }
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -197,6 +199,18 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
+        toolbox: {
+          right: '15',
+          feature: {
+            magicType: {
+              type: ['line', 'bar']
+            },
+            saveAsImage: {
+              show: true,
+              right: '20'
+            }
+          }
+        },
         dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
           type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
           start: 0, // 左边在 10% 的位置。
@@ -209,9 +223,7 @@ export default {
           end: 60 // 右边在 60% 的位置。
         }],
         legend: {
-          x: 'right', // 默认在上面，
-          right: 20,
-          orient: 'vertical', //  默认横排显示
+          x: 'center', // 默认在上面，
           data: ['入园人数', '出园人数']
         },
         xAxis: [{
@@ -365,8 +377,11 @@ export default {
         })
       }
       // 重置点击次数
-      this.chartClickNum = 0
-      this.tableClickNum = 0
+      if (this.isTableShow) {
+        this.chartClickNum = 0
+      } else {
+        this.tableClickNum = 0
+      }
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
@@ -382,7 +397,7 @@ export default {
     timeJudgment: function (val) {
       switch (this.parameter.reportType) {
         case '1':
-          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) {
+          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) { // 一个月2851200000
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -393,7 +408,7 @@ export default {
           }
           break
         case '2':
-          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) {
+          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) { // 一年31622400000
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -519,9 +534,10 @@ export default {
     background-color: #f6faff;
     div {
       line-height: 30px;
-      font-size: 15px;
+      font-size: 14px;
       span {
         width: 65px;
+        font-size: 15px;
         text-align: justify;
         text-align-last: justify;
         display: inline-block;
