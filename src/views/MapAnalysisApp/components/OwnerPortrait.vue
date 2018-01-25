@@ -22,47 +22,47 @@
         <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
           <el-row class="tblHeader" :span="24">
             <!-- <div class="wrap-class"> -->
-              <el-col :span="4">
-                <el-form-item label="小区楼栋选择">
-                  <el-select v-model="buildValue" placeholder="请选择" size="small">
-                    <el-option v-for="item in buildList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
-              <el-col :span="4">
-                <el-form-item label="查询项">
-                  <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
-                    <el-option v-for="item in classList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
+            <el-col :span="4">
+              <el-form-item label="楼栋选择">
+                <el-select v-model="buildValue" placeholder="请选择" size="small">
+                  <el-option v-for="item in buildList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
+            <el-col :span="4">
+              <el-form-item label="查询项">
+                <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
+                  <el-option v-for="item in classList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
             <!-- </div> -->
             <!-- <div class="wrap-date"> -->
-              <el-col :span="4">
-                <el-form-item label="报表类型">
-                  <el-select v-model="parameter.queryType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
-                    <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
-              <el-col :span="6" class="stime">
-                <el-form-item label="开始时间">
-                  <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="结束时间">
-                  <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
+            <el-col :span="4">
+              <el-form-item label="报表类型">
+                <el-select v-model="parameter.queryType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
+                  <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <!-- <el-col class="line" :span="1">&nbsp;</el-col> -->
+            <el-col :span="6" class="stime">
+              <el-form-item label="开始时间">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="结束时间">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
             <!-- </div> -->
             <el-col v-show="rateShow" :span="24" style="text-align:right">
               <el-button type="primary" @click="timeQuery">查询出入</el-button>
@@ -79,13 +79,13 @@
         <div class="show" v-show="rateBoxshow">
           <div v-show="isTableShow">
             <el-table :data="tableRateData" width="100%" max-height="380" class="tableWidth" stripe>
-              <el-table-column width="326px" prop="timeGroup" label="时间">
+              <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
               <!-- <el-table-column width="243px" prop="name" label="小区名称">
               </el-table-column> -->
-              <el-table-column width="324px" prop="inCount" label="进入次数">
+              <el-table-column style="width:100%" prop="inCount" label="进入次数">
               </el-table-column>
-              <el-table-column width="324px" prop="outCount" label="出去次数">
+              <el-table-column style="width:100%" prop="outCount" label="出去次数">
               </el-table-column>
             </el-table>
             <el-pagination @size-change="sizeChange" @current-change="currentChange" class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
@@ -98,17 +98,17 @@
         </div>
         <div class="show" v-show="ownerBoxShow">
           <div v-show="isTableShow">
-            <el-table :data="tableOwnerData" width="100%" max-height="440" class="tableWidth" stripe>
-              <!-- <el-table-column prop="name" label="小区名称">
+            <el-table :data="tableOwnerData" style="width:100%" max-height="440" class="tableWidth" stripe>
+              <!-- <el-table-column style="width:100%" prop="name" label="小区名称">
               </el-table-column> -->
-              <el-table-column width="487px" prop="group" label="年龄段">
+              <el-table-column prop="group" label="年龄段">
               </el-table-column>
-              <el-table-column width="487px" prop="countNum" label="人数">
+              <el-table-column prop="countNum" label="人数">
               </el-table-column>
             </el-table>
           </div>
           <!-- 图表展示 -->
-          <div class="canvas" style="width:98%" v-show="isChartShow">
+          <div class="canvasOwner" style="width:98%" v-show="isChartShow">
             <div id="flowInformation1"></div>
           </div>
         </div>
@@ -120,7 +120,7 @@
   </el-dialog>
 </template>
 <script>
-import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile } from '@/views/MapAnalysisApp/apis/index'
+import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
@@ -240,7 +240,7 @@ export default {
       this.getRateData()
       this.isChartShow = true
       this.isTableShow = false
-      // 自适应宽
+      // 出入率折线图自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
           // 处理IE获取不到canvas.offsetWidth的问题
@@ -266,10 +266,24 @@ export default {
       // this.getRateData()
       this.isChartShow = true
       this.isTableShow = false
+      // 业主人数饼图自适应宽
+      setTimeout(() => {
+        this.myChartContainerOwner = function () {
+          // 处理IE获取不到canvas.offsetWidth的问题
+          this.myChartNodeOwner.style.width = this.canvasNodeOwner.offsetWidth === 0 ? '900px' : this.canvasNodeOwner.offsetWidth + 'px'
+        }
+        this.myChartContainerOwner()
+        this.myChartOwner.resize()
+      })
       this.myChartNodeOwner = document.querySelector('#flowInformation1')
-      this.canvasNodeOwner = document.querySelector('.canvas')
+      this.canvasNodeOwner = document.querySelector('.canvasOwner')
       this.myChartOwner = this.$echarts.init(this.myChartNodeOwner)
       this.myChartOwner.setOption(this.echartsDataOwner())
+      // 屏幕宽度发生改变时重置容器高宽
+      window.onresize = () => {
+        this.myChartContainerOwner()
+        this.myChartOwner.resize()
+      }
     },
     // echart图表出入频率数据
     echartsData: function () {
@@ -540,9 +554,9 @@ export default {
       this.getData()
       this.getRateData()
       // 获取小区详细信息
-      // getCourtInfo({ courtId: _courtId }).then(res => {
-      //   this.cellDetailsList = res.data.data
-      // })
+      getCourtInfo({ courtId: _courtId }).then(res => {
+        this.cellDetailsList = res.data.data
+      })
       this.dialogVisible = true
     },
     // （报表类型）查询出入率
@@ -675,7 +689,11 @@ export default {
     },
     // 获取小区出入率总数据（图表展示）
     getRateData: function () {
-      this.rateData.courtUuid = this.buildValue
+      // this.rateData.courtUuid = this.buildValue
+      this.rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
+      this.rateData.startTime = '2018-01-19'
+      this.rateData.endTime = '2018-01-19'
+      // this.rateData.pageSize = 10
       this.rateData.queryType = '0'
       // this.rateData.currentPage = 1
       this.rateData.type = 0
@@ -708,7 +726,10 @@ export default {
     // 获取楼栋出入率总数据（图表展示）
     getRateBuildData: function () {
       this.rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
-      this.rateData.buildId = this.buildValue
+      this.rateData.buildId = 'ed07deb2c91746a6997c75f5098051ca'
+      // this.rateData.startTime = '2018-01-19'
+      // this.rateData.endTime = '2018-01-19'
+      // this.rateData.pageSize = 10
       this.rateData.queryType = '0'
       // this.rateData.currentPage = 1
       this.rateData.type = 0
@@ -747,7 +768,8 @@ export default {
     },
     // 获取小区出入频率分页信息
     getPgingData: function () {
-      this.parameter.courtUuid = this.buildValue
+      // this.parameter.courtUuid = this.buildValue
+      this.parameter.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
       this.parameter.startTime = '2018-01-19'
       this.parameter.endTime = '2018-01-19'
       this.parameter.pageSize = 10
@@ -761,7 +783,6 @@ export default {
           for (let i in build) {
             this.buildList.push({ value: build[i].uuid, label: build[i].name })
           }
-          // this.cellDetailsList.homeCount = res.data.buildInfo.length
           this.tableRateData = res.data.flow
           this.total = res.data.countNum
         } else {
@@ -770,12 +791,34 @@ export default {
             message: res.data.message
           })
         }
+        // console.log(111111111)
+        // console.log(res.data)
       })
+    },
+    // 报表传的日期参数
+    queryParam: function () {
+      return Object.assign({}, this.form, {
+        starTime: this.timeFomate(this.starTime),
+        endTime: this.timeFomate(this.endTime)
+      })
+    },
+    timeFomate: function (date) {
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+      if (this.parameter.queryType === '0') {
+        return year + '-' + month + '-' + day
+      } else if (this.parameter.queryType === '1') {
+        return year + '-' + month + '-' + day
+      } else {
+        return year + '-' + month
+      }
     },
     // 获取楼栋出入频率分页信息
     getPgingBuildData: function () {
       this.parameter.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
-      this.parameter.buildId = this.buildValue
+      // this.parameter.buildId = this.buildValue
+      this.parameter.buildId = 'ed07deb2c91746a6997c75f5098051ca'
       this.parameter.startTime = '2018-01-19'
       this.parameter.endTime = '2018-01-19'
       this.parameter.pageSize = 10
@@ -838,6 +881,10 @@ export default {
   }
   /deep/.tblHeader .el-col {
     padding-right: 10px;
+    vertical-align: top;
+  }
+  /deep/.tblHeader .el-input__inner {
+    vertical-align: top;
   }
   #flowInformation {
     height: 420px;

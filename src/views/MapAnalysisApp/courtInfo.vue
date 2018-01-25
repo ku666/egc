@@ -100,7 +100,7 @@ export default {
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      let param = {courtID: this.courtInfo.courtId}
+      let param = { courtID: this.courtInfo.courtId }
       getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
@@ -131,8 +131,8 @@ export default {
         let perOutCount = []
         data.map(function (item, index) {
           timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
-          if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
+          if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
+          if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
           perInCount.push(parseFloat(item.perInCount))
           perOutCount.push(parseFloat(item.perOutCount))
         })
@@ -168,8 +168,8 @@ export default {
         let carOutCount = []
         data.map(function (item, index) {
           timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
-          if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
+          if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
+          if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
           carInCount.push(parseFloat(item.carInCount))
           carOutCount.push(parseFloat(item.carOutCount))
         })
@@ -216,16 +216,16 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-       // this.courtInfo.courtId
-      let param = {courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0', type: '1'}
+      // this.courtInfo.courtId
+      let param = { courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
         // console.log(res)
         let ageData = []
         let ageLevelData = []
         let list = res.data
-        if (!list.sexInfo)list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
-        if (!list.sexInfo)list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
-        let sexData = [{value: list.sexInfo[0].maleOwner, name: '男'}, {value: list.sexInfo[0].femaleOwner, name: '女'}]
+        if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
+        if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
+        let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
         list = res.data.ageGroupInfo
         list.map(function (item, index) {
           ageLevelData.push(item.group)
@@ -275,25 +275,25 @@ export default {
   padding: 15px 0px;
   color: #374258;
   background-color: #fee;
-  /deep/.el-card__body{
+  /deep/.el-card__body {
     padding: 10px 20px;
   }
-  /deep/.el-card__header{
+  /deep/.el-card__header {
     padding: 10px 20px;
   }
 }
-.infoCon{
+.infoCon {
   display: inline-block;
   width: 1080px;
   text-align: center;
 }
-.itemCl{
+.itemCl {
   margin: 35px 0px;
 }
-.itemlabel{
+.itemlabel {
   color: rgb(180, 154, 154);
 }
-.itemvalue{
+.itemvalue {
   display: inline-block;
   width: 300px;
   text-align: left;
@@ -301,17 +301,17 @@ export default {
   border-bottom: 1px solid #ccc;
 }
 
-.echartsBox{
+.echartsBox {
   position: relative;
   display: inline-block;
   width: 520px;
   height: 330px;
   margin: 10px 0px 10px 15px;
 }
-.smallBox{
+.smallBox {
   display: inline-block;
 }
-.checkmoreBtn{
+.checkmoreBtn {
   display: inline-block;
   width: 70px;
   height: 30px;
