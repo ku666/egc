@@ -27,7 +27,7 @@
     </div>
 
     <hr/>
-    <el-table stripe
+    <el-table
       ref = 'providerTable'
       :data='providerList'
       tooltip-effect='dark'
@@ -53,10 +53,10 @@
           </div>
         </template>
       </el-table-column>
-      <!-- <el-table-column prop='createTime' label='创建时间'></el-table-column>
+      <el-table-column prop='createTime' label='创建时间'></el-table-column>
       <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
       <el-table-column prop='updateTime' label='修改时间'></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column> -->
+      <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
       <el-table-column label='操作' width='100' fixed='right'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->

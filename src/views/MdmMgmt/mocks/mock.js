@@ -41,7 +41,43 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
-          'updateTime': '2017-11-1 11:11:11'
+          'updateTime': '2017-11-1 11:11:11',
+          'slave': [
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            },
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            }
+          ]
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
@@ -58,7 +94,43 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
-          'updateTime': '2017-11-1 11:11:11'
+          'updateTime': '2017-11-1 11:11:11',
+          'slave': [
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            },
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            }
+          ]
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
