@@ -5,22 +5,22 @@
         <div>
           <div>
             <span>小区名称</span>
-            <i></i>：{{cellDetailsList.courtName}}</div>
+            ：{{cellDetailsList.courtName}}</div>
           <div>
             <span>小区地址</span>
-            <i></i>：{{cellDetailsList.regionName}}</div>
+            ：{{cellDetailsList.regionName}}</div>
           <div>
             <span>户数</span>
-            <i></i>：{{cellDetailsList.homeCount}}户</div>
+            ：{{cellDetailsList.homeCount}}户</div>
           <div>
             <span>房屋总数</span>
-            <i></i>：{{cellDetailsList.houseCount}}间</div>
+            ：{{cellDetailsList.houseCount}}间</div>
           <div>
             <span>占地面积</span>
-            <i></i>：{{cellDetailsList.floorArea}}平方米</div>
+            ：{{cellDetailsList.floorArea}}平方米</div>
           <div>
             <span>建筑面积</span>
-            <i></i>：{{cellDetailsList.buildArea}}平方米</div>
+            ：{{cellDetailsList.buildArea}}平方米</div>
         </div>
       </el-col>
       <!-- 表格展示 -->
@@ -76,9 +76,6 @@
         </div>
       </el-col>
     </el-row>
-    <!-- <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-    </span> -->
   </el-dialog>
 </template>
 <script>
@@ -127,7 +124,8 @@ export default {
       myChartNode: null,
       canvasNode: null,
       isRequest: true, // 判断时间选择是否正确
-      num: 0, // 图表点击计数
+      chartClickNum: 0, // 图表点击
+      tableClickNum: 0, // 表格点击
       myChartContainer: null,
       // 限制开始时间与结束时间
       starForbiddenDatetime: {
@@ -145,21 +143,20 @@ export default {
   methods: {
     // 选择报表
     reportTypeEvent: function (val) {
-      if (val === '1') {
-        this.timeType = 'date' // 1年31622400000  1个月2764800000 7天604800000
-        this.starTime = new Date(this.endTime.getTime() - 604800000)
-      } else if (val === '2') {
+      if (val === '1' || val === '2') {
         this.timeType = 'date'
-        this.starTime = new Date(this.endTime.getTime() - 2764800000)
       } else {
         this.timeType = 'month'
-        this.starTime = new Date(this.endTime.getTime() - 31622400000)
       }
     },
     // 点击切换图表展示
     chartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
+      // 多次点击
+      if (this.chartClickNum > 0) return
+      this.chartClickNum++
+      this.getData()
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -179,12 +176,6 @@ export default {
         this.myChartContainer()
         this.myChart.resize()
       }
-      // 多次点击
-      if (this.num > 0) {
-        return
-      }
-      this.num++
-      this.getData()
     },
     // echart图表数据
     echartsData: function () {
@@ -209,6 +200,7 @@ export default {
         dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
           type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
           start: 0, // 左边在 10% 的位置。
+          // end: 10 // 滑块结束位置设置。
           end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
         },
         { // 这个dataZoom组件，也控制x轴。
@@ -337,20 +329,22 @@ export default {
       this.isChartShow = false
       this.isTableShow = true
       // 请求数据后重置表格宽度
-      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      let belTableHeaderbb = document.querySelector('.el-table__header')
       let elTableBody = document.querySelector('.el-table__body')
       if (belTableHeaderbb) {
         belTableHeaderbb.style.width = '100%'
         elTableBody.style.width = '100%'
       }
       let elTable = document.querySelector('.el-table')
-      elTable.style.maxHeight = '381px'
+      elTable.style.height = '382px'
+      // 多次点击
+      if (this.tableClickNum > 0) return
+      this.tableClickNum++
+      this.getPgingData()
     },
     // 打开组件的回调
     streamPeople: function (_courtId) {
-      this.reportTypeEvent('1') // 重置表报时间
       this.getPgingData()
-      this.getData()
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
@@ -362,15 +356,17 @@ export default {
       // 查询时页面初始化到第一页
       this.parameter.pageNum = 1
       if (this.isRequest) {
-        this.getData()
-        this.getPgingData()
+        if (this.isTableShow) this.getPgingData()
+        else this.getData()
       } else {
         this.$message({
           type: 'error',
           message: '请选择正确的时间'
         })
       }
-      this.num = 0
+      // 重置点击次数
+      this.chartClickNum = 0
+      this.tableClickNum = 0
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
@@ -412,14 +408,11 @@ export default {
           break
       }
     },
-    // 获取人流信息
+    // 获取人流信息(图表)
     getData: function () {
-      let perData = {}
-      perData.courtID = 'c69aeede4f6341929721e2892beec3cb'
-      perData.endDate = this.processingDate(this.endTime)
-      perData.startDate = this.processingDate(this.starTime)
-      perData.reportType = this.parameter.reportType
-      getCourtPerAccessInfo(perData).then(res => {
+      this.parameter.startDate = this.processingDate(this.starTime)
+      this.parameter.endDate = this.processingDate(this.endTime)
+      getCourtPerAccessInfo(this.parameter).then(res => {
         if (res.status === 200) {
           let perData = res.data
           // 添加前先清空
@@ -451,7 +444,7 @@ export default {
       let day = date.getDate()
       return year + '-' + month + '-' + day
     },
-    // 获取人流分页信息
+    // 获取人流分页信息（表格）
     getPgingData: function () {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
@@ -469,16 +462,13 @@ export default {
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.parameter.reportType = '1'
-      this.isChartShow = false
-      this.isTableShow = true
       this.num = 0
     }
   },
   mounted: function () { }
 }
 </script>
-<style scoped lang='less'>
+<style lang='less' scoped>
 .popup {
   /deep/.el-dialog {
     min-width: 710px;
@@ -521,7 +511,6 @@ export default {
   /deep/.el-dialog__header {
     span {
       font-weight: 600;
-      font-size: 20px;
     }
   }
   .leftText {
@@ -534,17 +523,12 @@ export default {
       span {
         font-weight: 550;
         width: 65px;
-        font-size: 16px;
+        // font-size: 16px;
         text-align: justify;
         text-align-last: justify;
         display: inline-block;
         overflow: hidden;
         vertical-align: top;
-        i {
-          display: inline-block;
-          width: 100%;
-          height: 0;
-        }
       }
     }
   }
