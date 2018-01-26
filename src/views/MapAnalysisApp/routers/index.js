@@ -14,7 +14,7 @@ export default [
     component: index2
   },
   {
-    path: '/mapanalysisapp/courtinfo/:courtID',
+    path: '/mapanalysisapp/courtinfo/:courtId',
     name: 'mapanalycourtinfo',
     component: courtInfo
   }
