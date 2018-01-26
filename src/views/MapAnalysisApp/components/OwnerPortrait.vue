@@ -112,7 +112,8 @@
 </template>
 <script>
 /* eslint-disable */
-/*  小区ID传参 = this.buildValueCourt
+/*  在楼栋选项内小区ID传参 = this.buildValueCourt
+/*  页面内固定的小区ID传参 = this.fixCourtId
     楼栋ID传参 = this.buildValue
     开始时间传参 = queryParamStart
     结束时间传参 = queryParamEnd
@@ -129,13 +130,14 @@ export default {
         dateListPeople: [], // 年龄段以及人数集合饼图数据
         dateListRate: [], // 出入时间段集合
         mailData: [], // 男女人数集合
-        courtId: '', // 小区id
+        // courtId: '', // 小区id
         courtName: '', // 小区名称
         perInCountList: [], // 进入次数集合
         perInCountListRate: [], // 进入次数集合
         perOutCountList: [], // 出去次数集合
         perOutCountListRate: [] // 出去次数集合
       },
+      fixCourtId: '',
       rateBoxshow: true,
       disabled: false,
       ownerBoxShow: false,
@@ -244,9 +246,9 @@ export default {
     },
     // 点击切换出入率图表展示
     chartSwitch: function () {
-      if (this.buildValue === this.buildValueCourt && this.classValue === '1') {
+      if (this.buildValue === this.fixCourtId && this.classValue === '1') {
         this.getRateData()
-      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '1') {
+      } else if (this.buildValue !== this.fixCourtId && this.classValue === '1') {
         this.getRateBuildData()
       }
       this.isChartShow = true
@@ -273,9 +275,9 @@ export default {
     },
     // 点击切换图表业主人数配比
     chartSwitchOwner: function () {
-      if (this.buildValue === this.buildValueCourt && this.classValue === '2') {
+      if (this.buildValue === this.fixCourtId && this.classValue === '2') {
         this.getCourtPerData()
-      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '2') {
+      } else if (this.buildValue !== this.fixCourtId && this.classValue === '2') {
         this.getBuildPerData()
       }
       this.isChartShow = true
@@ -564,10 +566,9 @@ export default {
     // 小区详细信息
     // 打开组件的回调
     OwnerPortrait: function (_courtId) {
-      // this.form.courtId = _courtId
+      this.fixCourtId = _courtId
       this.buildValue = _courtId
       this.buildValueCourt = _courtId
-      // this.courtIdValue = _courtId
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.buildValue = _courtId
@@ -575,6 +576,10 @@ export default {
         this.buildList = []
         this.buildList.unshift({ label: this.cellDetailsList.courtName, value: this.buildValueCourt })
         this.buildValue = this.buildList[0].value
+        console.log(1111111111)
+        console.log(this.buildValue)
+        console.log(this.buildList)
+        console.log(1111111111)
       })
       this.getPgingData()
       this.getCourtPerData()
@@ -598,9 +603,6 @@ export default {
     },
     // （报表类型）查询出入率
     timeQuery: function () {
-      console.log(111111111)
-      console.log(this.parameter.queryType)
-      console.log(111111111)
       this.parameter.currentPage = 1
       if (this.parameter.queryType === '0' && parseInt(Math.abs(this.endTime - this.startTime) / 1000 / 60 / 60 / 24) > 30) {
         alert('查询日期间隔不能超过一个月')
@@ -863,6 +865,10 @@ export default {
       let queryParamEnd = this.queryParamEnd()
       this.parameterBuild.courtUuid = this.buildValueCourt
       this.parameterBuild.buildId = this.buildValue
+      console.log(2222222222)
+      console.log(this.buildValueCourt)
+      console.log(this.buildValue)
+      console.log(222222222222)
       this.parameterBuild.startTime = queryParamStart
       this.parameterBuild.endTime = queryParamEnd
       this.parameterBuild.queryType = this.parameter.queryType
