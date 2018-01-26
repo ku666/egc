@@ -1,7 +1,7 @@
 <template>
   <div class="sub-page">
     <el-container>
-      <el-header>恒大智慧云小区服务平台</el-header>
+      <!-- <el-header>恒大智慧云小区服务平台</el-header> -->
       <el-main>
         <p class='back'>
           <span @click='goBack'>返回</span>
@@ -74,6 +74,11 @@ export default {
         if (res.data.code === '00000') {
           this.perHouseList = res.data.data
         }
+      }).catch((err) => {
+        this.$message({
+          type: 'warning',
+          message: err
+        })
       })
   },
   methods: {
