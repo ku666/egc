@@ -126,6 +126,7 @@ export default {
         // console.log(res)
         // if (res.data.code === '00000') {
         let data = res.data
+        data = data.reverse()
         let timeDate = []
         let perInCount = []
         let perOutCount = []
@@ -163,6 +164,7 @@ export default {
         // console.log(res)
         // if (res.data.code === '00000') {
         let data = res.data
+        data = data.reverse()
         let timeDate = []
         let carInCount = []
         let carOutCount = []
