@@ -112,12 +112,12 @@
 </template>
 <script>
 /* eslint-disable */
-/* 小区ID传参 = this.buildValueCourt
-      楼栋ID传参 = this.buildValue
-      开始时间传参 = queryParamStart
-      结束时间传参 = queryParamEnd
-      报表类型传参 = this.parameter.queryType
-      出入率与人数数据字段 = 0/1/2*/
+/*  小区ID传参 = this.buildValueCourt
+    楼栋ID传参 = this.buildValue
+    开始时间传参 = queryParamStart
+    结束时间传参 = queryParamEnd
+    报表类型传参 = this.parameter.queryType
+    出入率与人数数据字段 = 0/1/2  */
 import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
@@ -244,9 +244,9 @@ export default {
     },
     // 点击切换出入率图表展示
     chartSwitch: function () {
-      if (this.buildValue === this.form.courtId && this.classValue === '1') {
+      if (this.buildValue === this.buildValueCourt && this.classValue === '1') {
         this.getRateData()
-      } else if (this.buildValue !== this.form.courtId && this.classValue === '1') {
+      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '1') {
         this.getRateBuildData()
       }
       this.isChartShow = true
@@ -273,9 +273,9 @@ export default {
     },
     // 点击切换图表业主人数配比
     chartSwitchOwner: function () {
-      if (this.buildValue === this.form.courtId && this.classValue === '2') {
+      if (this.buildValue === this.buildValueCourt && this.classValue === '2') {
         this.getCourtPerData()
-      } else if (this.buildValue !== this.form.courtId && this.classValue === '2') {
+      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '2') {
         this.getBuildPerData()
       }
       this.isChartShow = true
@@ -564,7 +564,7 @@ export default {
     // 小区详细信息
     // 打开组件的回调
     OwnerPortrait: function (_courtId) {
-      this.form.courtId = _courtId
+      // this.form.courtId = _courtId
       this.buildValue = _courtId
       this.buildValueCourt = _courtId
       // this.courtIdValue = _courtId
@@ -626,9 +626,9 @@ export default {
       this.parameter.currentPage = 1
       this.parameterBuild.currentPage = 1
       if (this.classValue === '1') {
-        if(this.buildValue === this.buildValueCourt){
+        if (this.buildValue === this.buildValueCourt) {
           this.getPgingData()
-        }else{
+        } else {
           this.getPgingBuildData()
         }
       }
@@ -638,9 +638,9 @@ export default {
       this.parameter.currentPage = val
       this.parameterBuild.currentPage = val
       if (this.classValue === '1') {
-        if(this.buildValue === this.buildValueCourt){
+        if (this.buildValue === this.buildValueCourt) {
           this.getPgingData()
-        }else{
+        } else {
           this.getPgingBuildData()
         }
       }
@@ -682,7 +682,7 @@ export default {
     // 获取楼栋业主年龄人数数据
     getBuildPerData: function () {
       let perDataBuild = {}
-      perDataBuild.courtUuid = this.form.courtId
+      perDataBuild.courtUuid = this.buildValueCourt
       perDataBuild.buildId = this.buildValue
       perDataBuild.queryType = this.parameter.queryType
       perDataBuild.type = 1
