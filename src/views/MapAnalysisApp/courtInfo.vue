@@ -85,11 +85,11 @@ export default {
     }
   },
   mounted: function () {
-    this.courtInfo.courtId = this.$route.params.courtID
+    this.courtInfo.courtId = this.$route.params.courtId
     this.getCourtInfoData()
-    var sDate = new Date()
-    var eDate = new Date()
-    sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7)
+    var sDate = new Date('2018/01/25')
+    var eDate = new Date('2018/01/25')
+    // sDate.setTime(sDate.getTime() - 3600 * 1000 * 24) // * 7
     this.startDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
     this.endDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
     this.getPeopleStreamData()
@@ -100,7 +100,7 @@ export default {
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      let param = { courtID: this.courtInfo.courtId }
+      let param = { courtId: this.courtInfo.courtId }
       getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
@@ -117,7 +117,7 @@ export default {
     /** 获取最近一个月内的人员流量日报数据 */
     getPeopleStreamData: function () {
       let param = {
-        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
+        courtID: this.courtInfo.courtId, // 'c69aeede4f6341929721e2892beec3cb'
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
@@ -153,7 +153,7 @@ export default {
     /** 获取最近一个月内的车行流量日报数据 */
     getCarStreamData: function () {
       let param = {
-        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
+        courtID: this.courtInfo.courtId, // 'c69aeede4f6341929721e2892beec3cb'
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
@@ -189,14 +189,14 @@ export default {
     /** 获取小区设置种类数据 */
     getEquipKindsData: function () {
       let param = {
-        courtUuid: 'c69aeede4f6341929721e2892beec3cb' // this.courtInfo.courtId
+        courtUuid: this.courtInfo.courtId // 'c69aeede4f6341929721e2892beec3cb'
       }
       getListDeviceType(param).then(res => {
         console.log(res)
         // if (res.data.code === '00000') {
         //   // let list = res.data.data
         // }
-        let data = res.data
+        let data = res.data // .slice(0, 10)
         let equipData = []
         data.map(function (item, index) {
           let obj = {
@@ -216,8 +216,8 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-      // this.courtInfo.courtId
-      let param = { courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0', type: '1' }
+      // '222b79f4a7b44d03b6f55f028992851f'
+      let param = { courtUuid: this.courtInfo.courtId, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
         // console.log(res)
         let ageData = []

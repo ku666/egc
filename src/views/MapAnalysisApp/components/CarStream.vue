@@ -108,10 +108,10 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtId: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
+        courtID: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
         reportType: '1', // 报表类型
-        startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
-        endDate: new Date() // 结束时间
+        startDate: new Date(new Date().setDate(new Date().getDate() - 1)), // 开始时间
+        endDate: new Date('2018-01-25') // 结束时间
       },
       courtInfo: {},
       carStreamData: [], // 后端请求回的车流信息
@@ -145,7 +145,7 @@ export default {
     goToCarStreamPage: function (courtId) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
       if (courtId) {
-        this.form.courtId = courtId
+        this.form.courtID = courtId
       }
       console.log('进入页面')
       this.getCourtInfo()
@@ -309,13 +309,22 @@ export default {
         carInRegedCourt: [], // 注册车辆数
         carOutRegedCourt: [] // 临时车辆数
       }
-      data.forEach(element => {
-        this.mapDataList.date.push(element.date)
-        this.mapDataList.carInCourt.push(element.carInCount)
-        this.mapDataList.carOutCourt.push(element.carOutCount)
-        this.mapDataList.carInRegedCourt.push(element.carInRegedCount)
-        this.mapDataList.carOutRegedCourt.push(element.carOutRegedCount)
-      })
+      // data.forEach(element => {
+      //   this.mapDataList.date.push(element.date)
+      //   this.mapDataList.carInCourt.push(element.carInCount)
+      //   this.mapDataList.carOutCourt.push(element.carOutCount)
+      //   this.mapDataList.carInRegedCourt.push(element.carInRegedCount)
+      //   this.mapDataList.carOutRegedCourt.push(element.carOutRegedCount)
+      // })
+      console.log('data')
+      console.log(data)
+      for (let i = data.length - 1; i >= 0; i--) {
+        this.mapDataList.date.push(data[i].date)
+        this.mapDataList.carInCourt.push(data[i].carInCount)
+        this.mapDataList.carOutCourt.push(data[i].carOutCount)
+        this.mapDataList.carInRegedCourt.push(data[i].carInRegedCount)
+        this.mapDataList.carOutRegedCourt.push(data[i].carOutRegedCount)
+      }
     },
     reportTypeSelected: function () {
       // 该表报表类型，年报表或月报表等
@@ -352,7 +361,6 @@ export default {
       // 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
       if (this.datePickRangeConfrim() === 1) return
       console.log('日期区间通过验证')
-      console.log(this.isShowTable)
       if (this.isShowTable) {
         this.pageSize = 10
         this.currentPage = 1
@@ -382,7 +390,6 @@ export default {
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询数据')
-        console.log(res)
         if (res.status === 200) {
           this.totalDataNum = res.data.totalRows
           this.carStreamData = res.data.result
@@ -395,7 +402,6 @@ export default {
     getCourtInfo: function () {
       getCourtInfo({ courtId: this.form.courtID }).then(res => {
         console.log('小区信息')
-        console.log(res)
         this.courtInfo = res.data.data
       })
     },

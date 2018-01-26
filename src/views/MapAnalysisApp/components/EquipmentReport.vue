@@ -237,7 +237,7 @@ export default {
           console.log(this.cellDetailsList)
         })
         let equiData = {}
-        equiData.courtUuid = 'c69aeede4f6341929721e2892beec3cb'
+        equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
           // if (res.data.code === '00000') {
           this.tableData = res.data
@@ -291,7 +291,7 @@ export default {
   color: #000;
   font-size: 20px;
   font-weight: bold;
-  margin: -20px 0 10px ;
+  margin: -30px 0 35px;
   text-align: center;
 
 }

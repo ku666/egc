@@ -104,7 +104,8 @@ export default {
         label: '年报'
       }],
       parameter: {
-        courtID: 'c69aeede4f6341929721e2892beec3cb',
+        // courtID: '222b79f4a7b44d03b6f55f028992851f',
+        courtID: '',
         pageNum: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '1', // 报表类型（日、月、年）
@@ -118,8 +119,8 @@ export default {
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
       dialogVisible: false,
-      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
-      endTime: new Date(), // 结束时间
+      starTime: new Date('2018-1-25'), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
+      endTime: new Date('2018-1-25'), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
@@ -357,6 +358,7 @@ export default {
     // 打开组件的回调
     streamPeople: function (_courtId) {
       this.getPgingData()
+      this.parameter.courtID = _courtId
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
@@ -434,10 +436,10 @@ export default {
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
-          for (let i = 0; i < perData.length; i++) {
+          for (let i = perData.length - 1; i > 0; i--) {
             this.form.dateList.push(perData[i].date)
-            this.form.perInCountList.push(perData[i].perInCount - 0 + parseInt(Math.random() * 1000))
-            this.form.perOutCountList.push(perData[i].perOutCount - 0 + parseInt(Math.random() * 1000))
+            this.form.perInCountList.push(perData[i].perInCount)
+            this.form.perOutCountList.push(perData[i].perOutCount)
           }
           // 数据改变时 初始化图表数据
           if (this.isChartShow) {
