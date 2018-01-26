@@ -118,7 +118,7 @@ export default {
       if (e.feature && e.feature.markerType === 'common') {
           this.map.showPopup('tipWin', e.coordinate)
           this.showCourtName = e.feature.name
-          this.courtId = e.feature.id_
+          this.courtId = e.feature.id
         }else{
           // 关闭弹窗
           this.map.closePopup()
