@@ -358,7 +358,7 @@ export default {
     // 打开组件的回调
     streamPeople: function (_courtId) {
       this.getPgingData()
-      this.courtID = _courtId
+      this.parameter.courtID = _courtId
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
