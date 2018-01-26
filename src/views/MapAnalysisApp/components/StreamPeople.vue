@@ -104,8 +104,8 @@ export default {
         label: '年报'
       }],
       parameter: {
-        courtID: '222b79f4a7b44d03b6f55f028992851f',
-        // courtID: '',
+        // courtID: '222b79f4a7b44d03b6f55f028992851f',
+        courtID: '',
         pageNum: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '1', // 报表类型（日、月、年）
@@ -358,6 +358,7 @@ export default {
     // 打开组件的回调
     streamPeople: function (_courtId) {
       this.getPgingData()
+      this.courtID = _courtId
       // 获取小区详细信息
       getCourtInfo({ courtId: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
@@ -435,7 +436,6 @@ export default {
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
-          debugger
           for (let i = perData.length - 1; i > 0; i--) {
             this.form.dateList.push(perData[i].date)
             this.form.perInCountList.push(perData[i].perInCount)
