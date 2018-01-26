@@ -59,12 +59,12 @@
             </el-col>
             <!-- </div> -->
             <el-col v-show="rateShow" :span="24" style="text-align:right">
-              <el-button type="primary" @click="timeQuery">查询出入率</el-button>
+              <el-button type="primary" @click="timeQuery">查询</el-button>
               <el-button type="success" @click="tableSwitch" plain>表单</el-button>
               <el-button type="danger" @click="chartSwitch" plain>图表</el-button>
             </el-col>
             <el-col v-show="ownerShow" :span="24" style="text-align:right">
-              <el-button type="primary" @click="timeQueryOwner">查询业主数</el-button>
+              <el-button type="primary" @click="timeQueryOwner">查询</el-button>
               <el-button type="success" @click="tableSwitch" plain>表单</el-button>
               <el-button type="danger" @click="chartSwitchOwner" plain>图表</el-button>
             </el-col>
@@ -112,8 +112,7 @@
 </template>
 <script>
 /* eslint-disable */
-/*  在楼栋选项内小区ID传参 = this.buildValueCourt
-/*  页面内固定的小区ID传参 = this.fixCourtId
+/*  小区ID传参 = this.buildValueCourt
     楼栋ID传参 = this.buildValue
     开始时间传参 = queryParamStart
     结束时间传参 = queryParamEnd
@@ -246,9 +245,9 @@ export default {
     },
     // 点击切换出入率图表展示
     chartSwitch: function () {
-      if (this.buildValue === this.fixCourtId && this.classValue === '1') {
+      if (this.buildValue === this.buildValueCourt && this.classValue === '1') {
         this.getRateData()
-      } else if (this.buildValue !== this.fixCourtId && this.classValue === '1') {
+      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '1') {
         this.getRateBuildData()
       }
       this.isChartShow = true
@@ -275,9 +274,9 @@ export default {
     },
     // 点击切换图表业主人数配比
     chartSwitchOwner: function () {
-      if (this.buildValue === this.fixCourtId && this.classValue === '2') {
+      if (this.buildValue === this.buildValueCourt && this.classValue === '2') {
         this.getCourtPerData()
-      } else if (this.buildValue !== this.fixCourtId && this.classValue === '2') {
+      } else if (this.buildValue !== this.buildValueCourt && this.classValue === '2') {
         this.getBuildPerData()
       }
       this.isChartShow = true
@@ -566,7 +565,7 @@ export default {
     // 小区详细信息
     // 打开组件的回调
     OwnerPortrait: function (_courtId) {
-      this.fixCourtId = _courtId
+      // this.fixCourtId = _courtId
       this.buildValue = _courtId
       this.buildValueCourt = _courtId
       // 获取小区详细信息
@@ -805,6 +804,10 @@ export default {
       this.parameter.endTime = queryParamEnd
       this.parameter.queryType = this.parameter.queryType
       this.parameter.type = 0
+      console.log(33333)
+      console.log(this.buildValueCourt)
+      console.log(this.buildValue)
+      console.log(33333333333333333)
       getCourtListDevice(this.parameter).then(res => {
         if (res.data !== '') {
           this.tableRateData = res.data.flow
@@ -826,7 +829,6 @@ export default {
       this.parameter.startTime = queryParamStart
       this.parameter.endTime = queryParamEnd
       this.parameter.pageSize = 10
-      // this.parameter.currentPage = 1
       this.parameter.queryType = this.parameter.queryType
       this.parameter.type = 0
       getCourtListDevice(this.parameter).then(res => {
