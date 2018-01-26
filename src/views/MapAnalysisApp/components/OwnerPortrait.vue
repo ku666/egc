@@ -111,6 +111,7 @@
   </el-dialog>
 </template>
 <script>
+/* eslint-disable */
 import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
@@ -192,6 +193,13 @@ export default {
     }
   },
   methods: {
+    // 处理日期对象
+    processingDate: function (date) {
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      return year + '-' + month + '-' + day
+    },
     // 选择报表
     reportTypeEvent: function (val) {
       if (val === '0') {
@@ -283,7 +291,7 @@ export default {
       // 出入频率echarts
       let options = {
         title: {
-          text: '人员流量'
+          text: '业主出入率'
         },
         tooltip: {
           trigger: 'axis',
@@ -543,6 +551,7 @@ export default {
     // 小区详细信息
     // 打开组件的回调
     OwnerPortrait: function (_courtId) {
+      this.courtId = _courtId
       this.getPgingData()
       this.getCourtPerData()
       this.getRateData()
@@ -552,7 +561,6 @@ export default {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
-      this.courtId = _courtId
     },
     // （报表类型）查询业主
     timeQueryOwner: function () {
@@ -614,7 +622,7 @@ export default {
     // 获取小区业主年龄人数数据
     getCourtPerData: function () {
       let perDataCourt = {}
-      perDataCourt.courtUuid = this.buildValue
+      perDataCourt.courtUuid = this.courtId
       perDataCourt.queryType = this.parameter.queryType // 报表类型
       perDataCourt.type = 1
       // 小区业主人数接口数据
@@ -648,7 +656,7 @@ export default {
     // 获取楼栋业主年龄人数数据
     getBuildPerData: function () {
       let perDataBuild = {}
-      perDataBuild.courtUuid = ''
+      perDataBuild.courtUuid = this.courtId
       perDataBuild.buildId = this.buildValue
       perDataBuild.queryType = this.parameter.queryType
       perDataBuild.type = 1
@@ -684,9 +692,9 @@ export default {
     getRateData: function () {
       let rateDataCourt = {}
       // this.rateData.courtUuid = this.buildValue
-      rateDataCourt.courtUuid = ''
-      rateDataCourt.startTime = this.starTime
-      rateDataCourt.endTime = this.endTime
+      rateDataCourt.courtUuid = this.courtId
+      rateDataCourt.startTime = this.processingDate(this.starTime)
+      rateDataCourt.endTime = this.processingDate(this.endTime)
       rateDataCourt.pageSize = 1000
       rateDataCourt.queryType = this.parameter.queryType
       rateDataCourt.currentPage = 1
@@ -720,10 +728,10 @@ export default {
     // 获取楼栋出入率总数据（图表展示）
     getRateBuildData: function () {
       let rateDataBuild = {}
-      rateDataBuild.courtUuid = ''
+      rateDataBuild.courtUuid = this.courtId
       rateDataBuild.buildId = 'ed07deb2c91746a6997c75f5098051ca'
-      rateDataBuild.startTime = this.starTime
-      rateDataBuild.endTime = this.endTime
+      rateDataBuild.startTime = this.processingDate(this.starTime)
+      rateDataBuild.endTime = this.processingDate(this.endTime)
       rateDataBuild.queryType = this.parameter.queryType
       rateDataBuild.currentPage = 1
       rateDataBuild.type = 0
@@ -764,9 +772,9 @@ export default {
     getPgingData: function () {
       let parameterCourtPage = {}
       // parameter.courtUuid = this.buildValue
-      parameterCourtPage.courtUuid = ''
-      parameterCourtPage.startTime = this.starTime
-      parameterCourtPage.endTime = this.endTime
+      parameterCourtPage.courtUuid = this.courtId
+      parameterCourtPage.startTime = this.processingDate(this.starTime)
+      parameterCourtPage.endTime = this.processingDate(this.endTime)
       parameterCourtPage.pageSize = 10
       parameterCourtPage.currentPage = 1
       parameterCourtPage.queryType = this.parameter.queryType
@@ -788,8 +796,8 @@ export default {
     getCourtSelect: function () {
       // this.parameter.courtUuid = this.buildValue
       this.parameterSelect.courtUuid = this.courtId
-      this.parameterSelect.startTime = this.starTime
-      this.parameterSelect.endTime = this.endTime
+      this.parameterSelect.startTime = this.processingDate(this.starTime)
+      this.parameterSelect.endTime = this.processingDate(this.endTime)
       this.parameterSelect.pageSize = 10
       this.parameterSelect.currentPage = 1
       this.parameterSelect.queryType = this.parameter.queryType
@@ -831,11 +839,11 @@ export default {
     // 获取楼栋出入频率分页信息
     getPgingBuildData: function () {
       let parameterBuildPage = {}
-      parameterBuildPage.courtUuid = ''
+      parameterBuildPage.courtUuid = this.courtId
       // parameterBuildPage.buildId = this.buildValue
       parameterBuildPage.buildId = 'ed07deb2c91746a6997c75f5098051ca'
-      parameterBuildPage.startTime = this.starTime
-      parameterBuildPage.endTime = '2018-01-19'
+      parameterBuildPage.startTime = this.processingDate(this.starTime)
+      parameterBuildPage.endTime = this.processingDate(this.endTime)
       parameterBuildPage.pageSize = 10
       parameterBuildPage.currentPage = 1
       parameterBuildPage.queryType = '0'
