@@ -43,7 +43,6 @@
 import searchDepCondition from './SearchDepCondition'
 import hardwareDepDetails from './HardwareDepDetails'
 import { getHardwareDepDetails, getHardwareDepByPage } from '../apis/index'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
     searchDepCondition,

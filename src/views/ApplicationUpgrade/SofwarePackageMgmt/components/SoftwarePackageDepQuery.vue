@@ -43,7 +43,6 @@
 import searchDepCondition from './SearchDepCondition'
 import softpackDepDetails from './SoftwarePackageDepDetails'
 import { getSoftPackDepByPage, getSoftPackDepDetails } from '../apis/index'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
     searchDepCondition,

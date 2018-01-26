@@ -43,10 +43,9 @@
 import searchDepCondition from './SearchDepCondition'
 import dbDepDetails from './dbDepDetails'
 import { getdbDepDetails, getDatabaseDepByPage } from '../apis/index'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
-    searchDepCondition
+    searchDepCondition,
     dbDepDetails
   },
   data () {

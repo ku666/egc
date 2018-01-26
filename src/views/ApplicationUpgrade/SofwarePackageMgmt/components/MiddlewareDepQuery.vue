@@ -43,7 +43,6 @@
 import searchDepCondition from './SearchDepCondition'
 import middlewareDepDetailsCom from './MiddlewareDepDetails'
 import { getMiddlewareDepDetails, getMiddlewareDepByPage } from '../apis/index'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
     searchDepCondition,
