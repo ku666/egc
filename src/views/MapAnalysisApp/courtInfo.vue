@@ -87,9 +87,9 @@ export default {
   mounted: function () {
     this.courtInfo.courtId = this.$route.params.courtId
     this.getCourtInfoData()
-    var sDate = new Date('2018/01/25')
-    var eDate = new Date('2018/01/25')
-    // sDate.setTime(sDate.getTime() - 3600 * 1000 * 24) // * 7
+    var sDate = new Date()
+    var eDate = new Date()
+    sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7) //
     this.startDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
     this.endDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
     this.getPeopleStreamData()

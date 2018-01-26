@@ -39,13 +39,14 @@ export default {
             url: '/mapanalysisapp/index2',
             title: '首页2',
             subs: null
-          },
-          {
-            icon: null,
-            url: '/houseallapp/index',
-            title: '全国小区',
-            subs: null
           }
+          // ,
+          // {
+          //   icon: null,
+          //   url: '/houseallapp/index',
+          //   title: '全国小区',
+          //   subs: null
+          // }
         ]
       },
       {
