@@ -136,6 +136,7 @@ export default {
     // 查看小区业主信息
     openCourtOwner: function () {
       this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
+      console.log(this.courtId)
     },
     // 查看小区设备信息
     openCourtEquip: function () {
