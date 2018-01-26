@@ -41,7 +41,7 @@
 
 <script>
 import searchDepCondition from './SearchDepCondition'
-import dbDepDetails from './dbDepDetails'
+import dbDepDetails from './DbDepDetails'
 import { getdbDepDetails, getDatabaseDepByPage } from '../apis/index'
 export default {
   components: {
