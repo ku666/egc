@@ -39,7 +39,7 @@
         :data='attrList'
         tooltip-effect='dark'
         v-loading='attrListLoading'
-        max-height='560'
+        height="100%"
         @selection-change = 'getSelections'
         @row-dblclick = 'editAttrdbl'
         @row-click = 'checkrow'
@@ -49,15 +49,15 @@
         <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
         <el-table-column prop='attrCode' label='属性编码'></el-table-column>
         <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='attrType' label='属性类型' ></el-table-column>
-        <el-table-column prop='attrDataType' label='数据类型' ></el-table-column>
+        <el-table-column prop='attrType' label='属性类型' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='attrDataType' label='数据类型' show-overflow-tooltip></el-table-column>
         <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
         <el-table-column prop='unitCode' label='单位编码' ></el-table-column>
-        <el-table-column prop='createTime' label='创建时间' width='150'></el-table-column>
-        <el-table-column prop='createUser' label='创建人' width='150'></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' width='150'></el-table-column>
-        <el-table-column prop='updateUser' label='修改人' width='150'></el-table-column>
-        <el-table-column label='操作' width='100'>
+        <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='createUser' label='创建人'></el-table-column>
+        <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='updateUser' label='修改人'></el-table-column>
+        <el-table-column label='操作'>
           <template slot-scope='scope'>
             <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
             <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->

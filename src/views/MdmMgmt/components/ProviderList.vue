@@ -32,7 +32,7 @@
         :data='providerList'
         tooltip-effect='dark'
         v-loading='providerListLoading'
-        max-height='560'
+        height="100%"
         @selection-change = 'getSelections'
         @row-dblclick = 'editProviderdbl'
         @row-click = 'checkrow'
@@ -41,9 +41,9 @@
         <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column prop='providerCode' label='供应商编码'></el-table-column>
+        <el-table-column prop='providerCode' label='供应商编码' show-overflow-tooltip></el-table-column>
         <el-table-column prop='providerName' label='供应商名称' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='contact' label='联系方式'></el-table-column>
+        <el-table-column prop='contact' label='联系方式' show-overflow-tooltip></el-table-column>
         <el-table-column prop='providerDesc' label='供应商描述' show-overflow-tooltip></el-table-column>
         <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
         <el-table-column label='供应商类别'>
@@ -53,10 +53,10 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop='createTime' label='创建时间'></el-table-column>
-        <el-table-column prop='createUser' label='创建人' width='80'></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间'></el-table-column>
-        <el-table-column prop='updateUser' label='修改人' width='80'></el-table-column>
+        <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='createUser' label='创建人'></el-table-column>
+        <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
+        <el-table-column prop='updateUser' label='修改人'></el-table-column>
         <el-table-column label='操作' width='100'>
           <template slot-scope='scope'>
             <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
