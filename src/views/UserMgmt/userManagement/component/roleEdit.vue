@@ -12,6 +12,17 @@
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
+      <el-form-item label="用户类型" prop="userType" class="is-required">
+        <el-select placeholder="请选择用户类型" @visible-change='getUserTypeList' @change='userTypeSelected' style='float:left; width: 650px' v-model='form.userType'>
+          <el-option
+            v-for='(item, index) in userTypeList'
+            :key='index'
+            :label='item.userType'
+            :value='item.uuid'
+            :userGroupId='item.uuid'>
+          </el-option>
+        </el-select>      
+      </el-form-item>
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" v-model='form.remark' placeholder='请输入角色说明' rows="3" style="width:650px"></el-input>
       </el-form-item>
@@ -159,7 +170,8 @@ export default {
     form: {
       roleName: undefined,
       remark: undefined,
-      uuid: undefined
+      uuid: undefined,
+      userType: undefined
     }
   },
   components: {
@@ -663,6 +675,9 @@ export default {
           { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
           { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '角色名只能为字母、数字和汉字' },
           { validator: validateRoleName }
+        ],
+        userType: [
+          {required: true, message: '请选择用户类型', trigger: 'blur'}
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }

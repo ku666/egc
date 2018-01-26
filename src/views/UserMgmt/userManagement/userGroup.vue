@@ -15,6 +15,7 @@
         <grid-list 
           :editable="true" 
           :deletable="true" 
+          :showOperation="true" 
           :tableData="userGroupList" 
           :params="userGroupListParam" 
           style="margin-top: 15px" 

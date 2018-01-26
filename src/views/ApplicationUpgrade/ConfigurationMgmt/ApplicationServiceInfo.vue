@@ -327,6 +327,6 @@ export default {
 }
 </script>
 
-<<style>
-@import "assets/css/upgrademgmt.less";
+<style scoped>
+ @import "assets/css/upgrademgmt.less"
 </style>

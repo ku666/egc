@@ -357,5 +357,5 @@ export default {
 </script>
 
 <style scoped>
-@import "assets/css/upgrademgmt.less";
+ @import "assets/css/upgrademgmt.less"
 </style>

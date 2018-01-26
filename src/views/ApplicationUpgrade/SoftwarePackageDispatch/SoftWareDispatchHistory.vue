@@ -196,6 +196,6 @@ export default {
 }
 </script>
 
-<<style>
-@import "assets/css/softwaredispatch.less"
+<style scoped>
+ @import "assets/css/softwaredispatch.less"
 </style>

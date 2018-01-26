@@ -575,6 +575,6 @@ export default {
 }
 </script>
 
-<style type="text/css" scoped>
-@import 'assets/css/softwaremgmt.less';
+<style scoped>
+ @import 'assets/css/softwaremgmt.less'
 </style>

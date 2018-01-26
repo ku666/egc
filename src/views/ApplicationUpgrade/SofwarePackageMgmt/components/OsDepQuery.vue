@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import searchDepCondition from './searchDepCondition'
+import searchDepCondition from './SearchDepCondition'
 import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
