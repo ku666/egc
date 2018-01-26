@@ -108,7 +108,7 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtId: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
+        courtID: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
         reportType: '1', // 报表类型
         startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
         endDate: new Date() // 结束时间
@@ -145,7 +145,7 @@ export default {
     goToCarStreamPage: function (courtId) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
       if (courtId) {
-        this.form.courtId = courtId
+        this.form.courtID = courtId
       }
       console.log('进入页面')
       this.getCourtInfo()
@@ -382,7 +382,6 @@ export default {
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
         console.log('分页查询数据')
-        console.log(res)
         if (res.status === 200) {
           this.totalDataNum = res.data.totalRows
           this.carStreamData = res.data.result
