@@ -17,7 +17,7 @@
       </el-form-item>
       <el-form-item label="软件包登记者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.createUser"></el-input>
-      <!-- </el-form-item>
+      </el-form-item>
       <el-form-item label="软件包英文名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
@@ -37,22 +37,22 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="应用类型" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input> -->
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
 
       <el-form-item label="开发者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.developer"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="软件包功能说明" :label-width="formLabelWidth">
+      <el-form-item label="软件包功能说明" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="前续软件包版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.latestPreVer"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="端口" :label-width="formLabelWidth">
+      <el-form-item label="端口" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="软件包源服务器名称" :label-width="formLabelWidth">
@@ -63,7 +63,7 @@
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item> -->
+      </el-form-item>
 
       <div>
         <el-button type="primary" @click="saveSoftwareInfoEvent">保 存</el-button>

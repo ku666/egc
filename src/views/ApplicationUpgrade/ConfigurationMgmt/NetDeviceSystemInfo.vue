@@ -4,7 +4,7 @@
     <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <el-col :span="24">
         <div>
-          <el-table :data="netDeviceListData" stripe border>
+          <el-table :data="netDeviceListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -58,7 +58,7 @@ import netDeviceDetails from './components/NetDeviceDetails'
 import netDeviceEdit from './components/NetDeviceEdit'
 import netDeviceHistory from './components/NetDeviceHistory'
 
-import { getAddressData, getNetDeviceInfoByPage, getNetDeviceDetails, updateNetDeviceInfo, getauServersHistoryList, syncNetDeviceData } from './apis/index'
+import { getNetDeviceInfoByPage, getNetDeviceDetails, updateNetDeviceInfo, getauServersHistoryList, syncNetDeviceData } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -84,6 +84,7 @@ export default {
       synDataLoading: false,
       syncDataStatus: '',
       maxlength: 30,
+      loading: true,
       searchConditionList: {
         'city': '',
         'condition': '',
@@ -149,11 +150,13 @@ export default {
     // 查询
     _handleFilter () {
       console.log('_handleFilter --- > ' + JSON.stringify(this.searchConditionList))
+      this.loading = true
       getNetDeviceInfoByPage(this.searchConditionList)
         .then(
           function (result) {
             this.netDeviceListData = result.netequipList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
@@ -298,7 +301,6 @@ export default {
             }
           )
     },
-
     // 初始加载网络设备的信息
     loadData () {
       getNetDeviceInfoByPage(this.searchConditionList)
@@ -307,6 +309,7 @@ export default {
             console.log('get data by page')
             this.netDeviceListData = result.netequipList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
@@ -326,27 +329,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.page = val
       this.loadData()
-    },
-
-    // 加载小区数据
-    loadAddressData () {
-      getAddressData()
-        .then(
-          function (result) {
-            this.addressData = result.addressData
-          }.bind(this)
-        ).catch()
     }
   },
-
   mounted () {
-    // 加载小区数据
-    // this.loadAddressData()
     this.loadData()
   }
 }
 </script>
 
-<<style>
-@import "assets/css/upgrademgmt.less";
+<style scoped>
+@import "assets/css/upgrademgmt.less"
 </style>

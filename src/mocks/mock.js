@@ -9,7 +9,8 @@ import '@/views/MdmMgmt/mocks/mock.js'
 import '@/views/MapAnalysisApp/mocks/mock.js'
 import '@/views/MdmApp/mocks/mock.js'
 // 引用更新升级模块的mock文件
-import '@/views/ApplicationUpgrade/ConfigurationMgmt/mocks/mock.js'
+import '@/views/ApplicationUpgrade/configurationMgmt/mocks/mock.js'
+import '@/views/ApplicationUpgrade/SofwarePackageMgmt/mocks/mock.js'
 
 // 引用日志管理模块的mock文件
 import '@/views/LogServiceComponent/mocks/mock.js'

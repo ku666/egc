@@ -4,7 +4,7 @@
     <el-row>
       <el-col :span="24">
         <div>
-          <el-table :data="hardwareDepListData" stripe border>
+          <el-table :data="dbDepListData" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -33,7 +33,7 @@
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <server-hardware-details :hardwareDepDetails="hardwareDepDetails"></server-hardware-details>
+        <hardware-dep-details :dbDepDetails="dbDepDetails"></hardware-dep-details>
       </el-dialog>
     </div>
   </div>
@@ -41,10 +41,13 @@
 
 <script>
 import searchDepCondition from './SearchDepCondition'
+import dbDepDetails from './dbDepDetails'
+import { getdbDepDetails, getDatabaseDepByPage } from '../apis/index'
 import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
 export default {
   components: {
     searchDepCondition
+    dbDepDetails
   },
   data () {
     return {
@@ -54,52 +57,50 @@ export default {
       dialogStatus: '',
       addr: '',
       dialogDetailsVisible: false,
-      hardwareDepListData: undefined,
-      hardwareDepDetails: undefined,
-      synDataLoading: false,
+      dbDepListData: undefined,
+      dbDepDetails: undefined,
       maxlength: 30,
       searchConditionList: {
-        'condition': '',
+        'key': '',
         'currentPage': 1,
         'pageSize': 10
-      },
-      defaultProps: {
-        label: 'name',
-        value: 'name',
-        children: 'children'
       },
       tableTitleList: [
         {
           colName: '软件包名称',
-          prop: 'uuid',
+          prop: 'package_name',
           width: 120
         }, {
           colName: '软件包版本',
-          prop: 'uuid',
+          prop: 'package_version',
           width: 100
         }, {
           colName: '开发者',
-          prop: 'uuid',
+          prop: 'package_provider',
           width: 100
         }, {
           colName: '应用&组件名称',
           prop: 'uuid',
           width: 120
         }, {
-          colName: 'CPU要求（核数）',
-          prop: 'uuid',
-          width: 140
-        }, {
-          colName: '内存要求（G）',
-          prop: 'uuid',
-          width: 160
-        }, {
-          colName: '硬盘要求',
+          colName: '前续软件包版本',
           prop: 'uuid',
           width: 120
         }, {
+          colName: 'CPU要求（核数）',
+          prop: 'cpuFrequency',
+          width: 140
+        }, {
+          colName: '内存要求（G）',
+          prop: 'ram',
+          width: 160
+        }, {
+          colName: '硬盘要求',
+          prop: 'storage',
+          width: 120
+        }, {
           colName: '备注',
-          prop: 'uuid'
+          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
@@ -109,10 +110,10 @@ export default {
   methods: {
     // 查询
     _handleFilter (params) {
-      getHardwareDepByCondition(params)
+      getDatabaseDepByPage(params)
         .then(
           function (result) {
-            this.hardwareDepListData = result.data
+            this.dbDepListData = result.data.data
             this.total = result.pageCount
           }.bind(this)
         ).catch(
@@ -123,38 +124,38 @@ export default {
               showClose: true,
               type: 'error',
               duration: 2000
-            }).bind(this)
+            })
             console.log(error)
-          }
+          }.bind(this)
         )
     },
 
-    // 查看服务器依赖每条详细信息
+    // 查看硬件依赖每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '服硬件运行环境以来信息详情'
-      var rowData = this.hardwareDepListData[rowIdx]
+      this.dialogStatus = '硬件运行环境依赖信息详情'
+      var rowData = this.dbDepListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
-      getHardwareDepDetails(eachRowUUID)
+      getdbDepDetails(eachRowUUID)
           .then(
             function (result) {
-              this.hardwareDepDetails = result.auServers
+              console.log(JSON.stringify(result))
+              this.dbDepDetails = result.data
               this.dialogDetailsVisible = true
-              console.log('server details -----------> ' + JSON.stringify(this.hardwareDepDetails))
+              console.log('harware dep details -----------> ' + JSON.stringify(this.dbDepDetails))
             }.bind(this)
           )
           .catch()
     },
 
-    // 初始加载服务器依赖的信息
+    // 初始加载硬件依赖的信息
     loadData () {
-      getHardwareDepByPage(this.searchConditionList)
+      getDatabaseDepByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.info(JSON.stringify(result))
-            this.hardwareDepListData = result.data
-            console.log('hardwareDepListData =  ' + JSON.stringify(result))
-            this.total = result.pageCount
+            this.dbDepListData = result.data.data
+            this.total = result.data.totalCount
+            console.log('---- db dep by page  --  >  ' + JSON.stringify(result))
           }.bind(this)
         )
         .catch(

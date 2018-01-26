@@ -4,7 +4,7 @@
     <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <el-col :span="24">
         <div>
-          <el-table :data="auServerListData" stripe border>
+          <el-table :data="auServerListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -58,7 +58,7 @@ import serverHardwareDetails from './components/ServerHardwareDetails'
 import serverHardwareEdit from './components/ServerHardwareEdit'
 import serverHardwareHistory from './components/ServerHardwareHistory'
 
-import { getAddressData, getauServersDetails, getauServersByPage, updateAuServerInfor, getauServersHistoryList, syncauServersData } from './apis/index'
+import { getauServersDetails, getauServersByPage, updateAuServerInfor, getauServersHistoryList, syncauServersData } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -83,7 +83,7 @@ export default {
       synDataLoading: false,
       syncDataStatus: '',
       maxlength: 30,
-      // addressData: [],
+      loading: true,
       searchConditionList: {
         'city': '',
         'condition': '',
@@ -148,11 +148,13 @@ export default {
   methods: {
     // 查询
     _handleFilter (params) {
+      this.loading = true
       getauServersByPage(params)
         .then(
           function (result) {
             this.auServerListData = result.auServersList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         ).catch(
           function (error) {
@@ -162,9 +164,10 @@ export default {
               showClose: true,
               type: 'error',
               duration: 2000
-            }).bind(this)
+            })
+            this.loading = false
             console.log(error)
-          }
+          }.bind(this)
         )
     },
 
@@ -179,10 +182,8 @@ export default {
             function (result) {
               this.auServerDetails = result.auServers
               this.dialogDetailsVisible = true
-              console.log('server details -----------> ' + JSON.stringify(this.auServerDetails))
             }.bind(this)
-          )
-          .catch()
+          ).catch()
     },
 
     // 编辑每条服务器信息
@@ -197,8 +198,7 @@ export default {
               this.dialogEditVisible = true
               console.log('edit server details ----------->   ' + JSON.stringify(this.auServerDetails))
             }.bind(this)
-          )
-          .catch(
+          ).catch(
             function (error) {
               console.log(error)
             }
@@ -268,15 +268,14 @@ export default {
               })
             }
           }.bind(this)
-        )
-        .catch(
+        ).catch(
           function (error) {
             this.synDataLoading = false
             console.log(error)
             this.$message({
               title: '数据刷新失败',
               message: '数据刷新失败',
-              type: 'success',
+              type: 'error',
               duration: 2000
             })
           }
@@ -304,6 +303,7 @@ export default {
                 duration: 2000
               })
               console.log(error)
+              this.loading = false
             }.bind(this)
           )
     },
@@ -316,11 +316,12 @@ export default {
             this.auServerListData = result.auServersList
             console.log('auServerListData =  ' + JSON.stringify(result))
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
-        )
-        .catch(
+        ).catch(
           function (error) {
             console.log(error)
+            this.loading = false
           }
         )
     },
@@ -335,22 +336,9 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.page = val
       this.loadData()
-    },
-
-    // 加载小区数据
-    loadAddressData () {
-      getAddressData()
-        .then(
-          function (result) {
-            this.addressData = result.addressData
-          }.bind(this)
-        ).catch()
     }
   },
-
   mounted () {
-    // 加载小区数据
-    // this.loadAddressData()
     this.loadData()
   }
 }
