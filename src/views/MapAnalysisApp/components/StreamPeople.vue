@@ -136,7 +136,7 @@ export default {
       },
       endForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > new Date()
+          return time.getTime() > new Date() || time.getTime() < this.starTime
         }
       }
     }
@@ -388,12 +388,12 @@ export default {
     // 分页组件单页总数变化
     sizeChange: function (val) {
       this.parameter.pageSize = val
-      this.getPgingData()
+      if (this.isRequest) this.getPgingData()
     },
     // 分页组件当前页变化
     currentChange: function (val) {
       this.parameter.pageNum = val
-      this.getPgingData()
+      if (this.isRequest) this.getPgingData()
     },
     // 判断选择的时间是否符合要求
     timeJudgment: function (val) {
