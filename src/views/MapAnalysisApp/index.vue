@@ -94,7 +94,7 @@ export default {
             item.gpsLat = tran[1]
             if(item.gpsLat && item.gpsLon){
               this.map.addMarker({
-                id: item.courtID,
+                id: item.courtId,
                 position: [item.gpsLon, item.gpsLat],
                 markerType: 'common',
                 name: item.courtName,
@@ -175,7 +175,7 @@ export default {
     setMarkers: function (unArr,activeArr) {
       if(unArr){
         unArr.map(function (item,index) {
-          let feat = this.map.getMarkerBylayerKey(item.courtID,'commonLayer')
+          let feat = this.map.getMarkerBylayerKey(item.courtId,'commonLayer')
           if(feat){
             this.setMarkerStyle(feat,markerImg)
           }
@@ -184,7 +184,7 @@ export default {
       }
       if(activeArr){
         activeArr.map(function (item,index) {
-          let feat2 = this.map.getMarkerBylayerKey(item.courtID,'commonLayer')
+          let feat2 = this.map.getMarkerBylayerKey(item.courtId,'commonLayer')
           if(feat2){
             this.setMarkerStyle(feat2,chooseImg)
             // this.map.showPopup('tipWin', feat2.getGeometry().getCoordinates()) //暂时去掉弹窗提示
