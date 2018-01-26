@@ -291,7 +291,7 @@ export default {
   color: #000;
   font-size: 20px;
   font-weight: bold;
-  margin: -30px 0 35px ;
+  margin: -30px 0 35px;
   text-align: center;
 
 }
