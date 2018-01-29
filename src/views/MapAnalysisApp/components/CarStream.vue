@@ -31,9 +31,9 @@
               <el-col :span="8">
                 <el-form-item label="报表类型">
                   <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
-                    <el-option label="日报表" value="1"></el-option>
-                    <el-option label="月报表" value="2"></el-option>
-                    <el-option label="年报表" value="3"></el-option>
+                    <el-option label="日报表" value="0"></el-option>
+                    <el-option label="月报表" value="1"></el-option>
+                    <el-option label="年报表" value="2"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -64,8 +64,6 @@
             <div class="carInfoTable" v-show="isShowTable" v-loading="loading">
               <!-- 展示表格开始 -->
               <el-table stripe :data="carStreamData" height="400" border style="width: 100%">
-                <!-- <el-table-column prop="courtId" label="小区ID" width="180">
-            </el-table-column> -->
                 <el-table-column prop="date" label="日期">
                 </el-table-column>
                 <el-table-column prop="carInCount" label="进入总车辆">
@@ -79,7 +77,7 @@
               </el-table>
               <!-- 展示表格结束 -->
               <!-- 分页显示控件开始 -->
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalDataNum" background small>
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10,20,30,50,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" background small>
               </el-pagination>
             </div>
             <!-- 地图展示 -->
@@ -108,10 +106,10 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtID: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
-        reportType: '1', // 报表类型
-        startDate: new Date(new Date().setDate(new Date('2018-01-25').getDate() - 1)), // 开始时间
-        endDate: new Date('2018-01-25') // 结束时间
+        courtUuid: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
+        reportType: '0', // 报表类型
+        startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
+        endDate: new Date() // 结束时间
       },
       courtInfo: {},
       carStreamData: [], // 后端请求回的车流信息
@@ -124,7 +122,7 @@ export default {
       },
       currentPage: 1, // 分页显示当前第几页
       pageSize: 10, // 每页显示多少条数据
-      totalDataNum: 0, // 总共有几条数据
+      totalRows: 0, // 总共有几条数据
       myChart: '', // eCharts实例
       loading: false,
       forbiddenStartDatetime: { // 限制开始时间选择器
@@ -142,10 +140,10 @@ export default {
   mounted: function () {
   },
   methods: {
-    goToCarStreamPage: function (courtId) {
+    goToCarStreamPage: function (courtUuid) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
-      if (courtId) {
-        this.form.courtID = courtId
+      if (courtUuid) {
+        this.form.courtUuid = courtUuid
       }
       console.log('进入页面')
       this.getCourtInfo()
@@ -328,12 +326,18 @@ export default {
     },
     reportTypeSelected: function () {
       // 该表报表类型，年报表或月报表等
-      if (this.form.reportType === '1') {
+      if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
-      } else if (this.form.reportType === '2') {
+        this.form.startDate = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
+        this.form.endDate = new Date() // 结束时间
+      } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
+        this.form.endDate = new Date() // 结束时间
+        this.form.startDate = new Date(new Date().setDate(1))
       } else {
         this.formDatePickType = 'month'
+        this.form.endDate = new Date() // 结束时间
+        this.form.startDate = new Date(new Date().getFullYear() - 1 + ' 01 01')// 开始时间
       }
     },
     handleSizeChange: function (val) {
@@ -363,13 +367,13 @@ export default {
       this.clickCount = 0
     },
     getCourtCarAccessInfo: function () {
-      console.log('获取时间段内所有数据,增加catch')
+      console.log('getCourtCarAccessInfo')
       if (this.datePickRangeConfrim()) return
       var data = this.queryParam()
+      console.log(data)
       getCourtCarAccessInfo(data).then((res) => {
         if (res.status === 200) {
           var data = res.data
-          console.log('caraccessinfo')
           this.sortData(data)
           this.chartInit()
         } else {
@@ -380,20 +384,20 @@ export default {
     getCarAccessPageList: function () {
       if (this.datePickRangeConfrim()) return
       var queryParam = this.queryParam()
-      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
+      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, currentPage: this.currentPage })
+      console.log('getCarAccessPageList')
+      console.log(queryParam)
       getCarAccessPageList(queryParam).then(res => {
-        console.log('分页查询数据')
         if (res.status === 200) {
-          this.totalDataNum = res.data.totalRows
+          this.totalRows = res.data.totalRows
           this.carStreamData = res.data.result
         } else {
-          console.log('dd')
           this.errMessage()
         }
       })
     },
     getCourtInfo: function () {
-      getCourtInfo({ courtId: this.form.courtID }).then(res => {
+      getCourtInfo({ courtUuid: this.form.courtUuid }).then(res => {
         console.log('小区信息')
         this.courtInfo = res.data.data
       })
@@ -408,20 +412,20 @@ export default {
       var year = date.getFullYear()
       var month = date.getMonth() + 1
       var day = date.getDate()
-      if (this.form.reportType === '1') {
-        return year + '-' + month + '-' + day
-      } else if (this.form.reportType === '2') {
-        return year + '-' + month + '-' + day
-      } else {
-        return year + '-' + month
-      }
+      // if (this.form.reportType === '0') {
+      return year + '-' + month + '-' + day
+      // } else if (this.form.reportType === '1') {
+      //   return year + '-' + month + '-' + day
+      // } else {
+      //   return year + '-' + month
+      // }
     },
     closeDialog: function () {
       this.clickCount = 0
     },
     datePickRangeConfrim () {
       switch (this.form.reportType) {
-        case '1':
+        case '0':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000) + '天')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000) > 31) {
             this.$message.error({
@@ -431,7 +435,7 @@ export default {
             return 1
           }
           break
-        case '2':
+        case '1':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) + '月')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) > 12) {
             this.$message.error({
