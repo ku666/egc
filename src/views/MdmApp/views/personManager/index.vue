@@ -1,56 +1,34 @@
 <template>
   <div class="person-manager">
-    <!-- <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view> -->
     <div class="tree-view-container">
-      <!--
-      <div class="operation pb10 clearfix">
-        <el-button type="primary" @click="personEdit">添加</el-button>
-        <person-edit ref="personEdit"></person-edit>
-        <el-button @click="personUpload">导入</el-button>
-        <upload title="人员导入" action="/scp-mdm-app/user/uploadUsers" downloadUrl="/scp-mdm-app/user/downloadExcelTemplate" tips="请选择EXCEL文件！" ref='personUpload'></upload>
-        <el-button @click="download">导出</el-button>
-        <el-button type="danger" @click="delBatchPerson">批量删除</el-button>
-      </div>
-      -->
+      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+        <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
+      </el-breadcrumb>
       <div class="person-list">
-        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' style='margin-top: 20px;'>
+        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='姓名'>
             <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
           </el-form-item>
-          <el-form-item label='证件类别'>
-            <el-select v-model="searchCondition.idType" placeholder="请选择">
-              <el-option v-for="item in idTypes" :key="item.value" :label="item.label" :value="item.value">
-              </el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label='证件号码'>
-            <el-input placeholder='输入证件号码' v-model='searchCondition.ID'></el-input>
+            <el-input placeholder='输入证件号码' v-model='searchCondition.idenNum'></el-input>
+          </el-form-item>
+          <el-form-item label='电话'>
+            <el-input placeholder='输入电话' v-model='searchCondition.phone'></el-input>
+          </el-form-item>
+          <el-form-item label='电子邮箱'>
+            <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail'></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
             <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
           </el-form-item>
         </el-form>
-        <hr/>
 
         <!-- 带分页表格 -->
-        <el-table :data="tableData" stripe height="100%" v-loading="loading">
-          <el-table-column type="expand">
-            <template slot-scope="props">
-              <el-form label-position="left" inline class="demo-table-expand">
-                <el-table :data="props.row.detail" stripe height="100%">
-                  <el-table-column label="小区" prop="courtName"></el-table-column>
-                  <el-table-column label="房屋地址" prop="houseAddress"></el-table-column>
-                  <el-table-column label="电话" prop="phone"></el-table-column>
-                  <el-table-column label="电子邮件" prop="mail"></el-table-column>
-                  <el-table-column label="创建日期" prop="createTime"></el-table-column>
-                  <el-table-column label="备注" prop="description"></el-table-column>
-                </el-table>
-              </el-form>
-            </template>
-          </el-table-column>
-          <!-- <el-table-column fixed="left" type="selection" width="55">
-          </el-table-column> -->
+        <hr/>
+        <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading">
+          <el-table-column type="index"></el-table-column>
           <el-table-column label="姓名" prop="name">
           </el-table-column>
           <el-table-column label="人员类型" prop="userTypeStr">
@@ -63,30 +41,81 @@
           </el-table-column>
           <el-table-column label="证件号码" prop="idenNum" width="170">
           </el-table-column>
-          <!-- <el-table-column label="房屋地址" prop="houseAddress" width="120">
+          <el-table-column label="联系电话" prop="phone">
           </el-table-column>
-          <el-table-column label="电话号码" prop="phone" width="120">
-          </el-table-column> -->
-          <!-- <el-table-column fixed="right" label="操作" width="150">
-            <template slot-scope="scope">
-              <el-button @click="personEdit(scope.row)" size="mini">
-                编辑</el-button>
-              <el-button @click="delPerson(scope.row)" size="mini" type="danger">
-                删除</el-button>
-            </template>
-          </el-table-column> -->
+          <el-table-column label="电子邮箱" prop="mail">
+          </el-table-column>
         </el-table>
         <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
         </el-pagination>
       </div>
     </div>
+
+    <!-- 弹出新窗口 -->
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='750px'>
+      <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
+      <el-tabs style="height: 350px; margin-top:-20px;" v-model='activeName'>
+        <el-tab-pane label="基本信息" name='basic'>
+          <div>
+            <el-form :model='modelDetailForm' ref='detailForm' label-width='100px'>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>姓名：</label>
+                  <label>{{this.modelDetailForm.name}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>人员类型：</label>
+                  <label>{{this.modelDetailForm.userTypeStr}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>性别：</label>
+                  <label>{{this.modelDetailForm.sexStr}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>生日：</label>
+                  <label>{{this.modelDetailForm.birth}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>证件类型：</label>
+                  <label>{{this.modelDetailForm.idenTypeStr}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>证件号码：</label>
+                  <label>{{this.modelDetailForm.idenNum}}</label>
+                </el-col>
+              </el-row>
+              <el-row class="line-one">
+                <el-col :span="12">
+                  <label>联系电话：</label>
+                  <label>{{this.modelDetailForm.phone}}</label>
+                </el-col>
+                <el-col :span="12">
+                  <label>电子邮箱：</label>
+                  <label>{{this.modelDetailForm.mail}}</label>
+                </el-col>
+              </el-row>
+            </el-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="房产信息" name='detail'>
+          <el-table :data="this.modelDetailForm.detail" stripe height="100%" width="100%">
+            <el-table-column label="小区" prop="courtName"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress"></el-table-column>
+            <el-table-column label="备注" prop="description"></el-table-column>
+          </el-table>
+        </el-tab-pane>
+      </el-tabs>
+      <!-- <div style='text-align: center'>
+        <el-button type='primary' @click='closeDetailDialog' class='btn-plain'>关闭</el-button>
+      </div> -->
+    </el-dialog>
   </div>
 </template>
 <script>
-// import OrgHouseTreeView from './OrgHouseTreeView'
-// import PersonEdit from './PersonEdit'
-// import Upload from '../../components/Upload'
-// import { getPersonList, deletePerson, batchDeletePerson } from '../../apis/personManager'
 import { getPersonList } from '../../apis/personManager'
 export default {
   data () {
@@ -98,11 +127,15 @@ export default {
       pageSize: 10,
       tableData: [],
       loading: false,
-      activeName: '1',
+      detailDialogVisible: false,
+      title: '人员详细信息',
+      activeName: 'basic',
+      modelDetailForm: {},
       searchCondition: {
         name: '',
-        idType: 1,
-        ID: ''
+        idenNum: '',
+        phone: '',
+        mail: ''
       },
       idTypes: [
         {
@@ -128,18 +161,29 @@ export default {
     }
   },
   components: {
-    // OrgHouseTreeView
-    // Upload,
-    // PersonEdit
   },
   methods: {
+    showPersonDetail: function (rowData = {}) {
+      this.detailDialogVisible = true
+      this.modelDetailForm = rowData
+      // console.log(JSON.stringify(rowData))
+    },
+    closeDetailDialog: function () {
+      this.detailDialogVisible = false
+      this.activeName = 'basic'
+    },
+    handleClose: function () {
+      this.activeName = 'basic'
+      this.detailDialogVisible = false
+    },
     reset: function () {
       this.searchCondition = {
         name: '',
         // pageSize: 10,
         // currentPage: 1,
-        idType: 1,
-        ID: ''
+        idenNum: '',
+        phone: '',
+        mail: ''
       }
     },
     /**
@@ -166,93 +210,14 @@ export default {
       this.currentPage = val
       this.search()
     },
-    /**
-     * @description 开始人员添加/编辑
-     *
-     * @param {Object} personInfo @default {} 人员信息
-     */
-    // personEdit: function (personInfo = {}) {
-    //   const personInfoTmp = Object.assign({}, personInfo)
-    //   this.$refs['personEdit'].personEdit(personInfoTmp)
-    // },
-    /**
-     * @description 人员删除
-     *
-     * @param {Object} personInfo @default {} 人员信息
-     */
-    // delPerson: function (personInfo = {}) {
-    //   this.$confirm('确定要刪除吗?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning',
-    //     dangerouslyUseHTMLString: true
-    //   }).then(() => {
-    //     deletePerson({ uuid: personInfo.uuid }).then(res => {
-    //       if (res.data.code !== '0000') {
-    //         return
-    //       }
-    //       this.$message({
-    //         message: '刪除成功',
-    //         type: 'warning'
-    //       })
-    //     })
-    //   }).catch((err) => {
-    //     this.$message({
-    //       type: 'info',
-    //       message: err
-    //     })
-    //   })
-    // },
-    /**
-     * @description 人员批量删除
-     *
-     * @param {Array} personInfo @default [] 人员信息
-     */
-    // delBatchPerson: function () {
-    //   const personList = [].concat(this.selections)
-    //   let ids = []
-    //   if (personList.length <= 0) {
-    //     this.$message({
-    //       message: '请至少选择一项！',
-    //       type: 'warning'
-    //     })
-    //     return
-    //   }
-    //   for (let i = 0, length = personList.length; i < length; i++) {
-    //     ids.push(personList[i].uuid)
-    //   }
-    //   this.$confirm('确定要刪除人员信息吗?', '提示', {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning',
-    //     dangerouslyUseHTMLString: true
-    //   }).then(() => {
-    //     batchDeletePerson({ users: ids }).then(res => {
-    //       if (res.data.code !== '0000') {
-    //         return
-    //       }
-    //       this.$message({
-    //         message: '刪除成功',
-    //         type: 'warning'
-    //       })
-    //     })
-    //   }).catch(() => {
-    //     this.$message({
-    //       type: 'info',
-    //       message: '已取消删除'
-    //     })
-    //   })
-    // },
-    // personUpload: function () {
-    //   this.$refs['personUpload'].openDialog()
-    // },
     search: function (options) {
       let condition = {}
       this.loading = true
       // 查询条件
       condition.name = this.searchCondition.name
-      condition.idType = this.searchCondition.idType
-      condition.ID = this.searchCondition.ID
+      condition.idenNum = this.searchCondition.idenNum
+      condition.phone = this.searchCondition.phone
+      condition.mail = this.searchCondition.mail
       // 分页
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
@@ -262,10 +227,13 @@ export default {
       }
       getPersonList(condition)
         .then(res => {
+          console.log('res')
+          console.log(res)
+          console.log('res')
           var self = this
-          this.total = res.data.data.pageCount
+          this.total = res.data.totalCount
           const timeOut = setTimeout(function () {
-            self.tableData = res.data.data.pageData
+            self.tableData = res.data.result
             self.loading = false
             clearTimeout(timeOut)
           }, 1000)
@@ -274,9 +242,6 @@ export default {
           console.log(err)
           this.loading = false
         })
-    },
-    download: function () {
-      window.open('/scp-mdm-app/user/downloadUsers')
     }
   },
   mounted: function () {
@@ -338,7 +303,7 @@ export default {
   color: #909399;
 }
 div:hover {
-  background: #f6faff;
+  /* background: #f6faff; */
 }
 .el-collapse-item.is-active {
   background: #f6faff;
@@ -350,18 +315,42 @@ div:hover {
 }
 
 .btn-reset {
-  border: 1px solid #0078F4;
+  border: 1px solid #0078f4;
   border-radius: 4px;
   width: 90px;
   height: 40px;
-  color: #0078F4;
+  color: #0078f4;
   background-color: #ffffff;
 }
 
 .btn-plain {
-  border: 1px solid #0078F4;
+  border: 1px solid #0078f4;
   border-radius: 4px;
   width: 90px;
   height: 40px;
+}
+.line-one {
+  line-height: 40px;
+}
+.header_style {
+  padding: 13px 3%;
+  border-radius: 4px;
+  background: #f5f7fa;
+  width: 90%;
+  color: #0078F4;
+  font-size: 18px;
+}
+.el-input {
+  width: 200px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 4px;
+}
+
+.el-select {
+  width: 200px;
+  height: 20px;
+  font-size: 13px;
+  border-radius: 4px;
 }
 </style>

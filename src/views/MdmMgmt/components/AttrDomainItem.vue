@@ -11,18 +11,18 @@
 
     <!-- <hr/> -->
     <el-table
-      stripe border
+      stripe
       :data='domainList'
       tooltip-effect='dark'
-      height = '260'
+      height = '200'
+      width = "660px"
       v-loading = 'domainListLoading'
-      element-loading-text = '拼命加载中'
-      style = 'width: 100%'>
-      <el-table-column type='index' label='序号' width='50'></el-table-column>
+      element-loading-text = '拼命加载中'>
+      <el-table-column type='index' label='序号' width="90px"></el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-      <el-table-column prop='domainValue' label='域取值'></el-table-column>
-      <el-table-column prop='domainValueCode' label='域取值编码'></el-table-column>
-      <el-table-column label='操作' width='150'>
+      <el-table-column prop='domainValue' label='域取值' width="250px"></el-table-column>
+      <el-table-column prop='domainValueCode' label='域取值编码' width="250px"></el-table-column>
+      <el-table-column label='操作' width="90px">
         <template slot-scope='scope'>
           <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
           <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
@@ -209,4 +209,9 @@ export default {
 
 <style lang='less' scoped>
   @import '~@/views/MdmMgmt/assets/css/index.less';
+</style>
+<style>
+div.cell {
+  padding-left: 10px;
+}
 </style>
