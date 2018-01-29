@@ -128,7 +128,7 @@
         }, {
           title: '用户类型',
           prop: 'userType'
-        }, {          
+        }, {
           title: '角色说明',
           prop: 'remark'
         }]
