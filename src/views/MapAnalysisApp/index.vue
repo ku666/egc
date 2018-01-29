@@ -53,7 +53,7 @@ export default {
       chooseList: [],// 按照搜索的出来的小区列表数据
       textHtml: '',
       showCourtName: '',// 当前选中的小区名字
-      courtId: '',// 当前选中的小区id
+      courtUuid: '',// 当前选中的小区id
       searchCourtName: ''
     }
   },
@@ -94,7 +94,7 @@ export default {
             item.gpsLat = tran[1]
             if(item.gpsLat && item.gpsLon){
               this.map.addMarker({
-                id: item.courtId,
+                id: item.courtUuid,
                 position: [item.gpsLon, item.gpsLat],
                 markerType: 'common',
                 name: item.courtName,
@@ -118,7 +118,7 @@ export default {
       if (e.feature && e.feature.markerType === 'common') {
           this.map.showPopup('tipWin', e.coordinate)
           this.showCourtName = e.feature.name
-          this.courtId = e.feature.id
+          this.courtUuid = e.feature.id
         }else{
           // 关闭弹窗
           this.map.closePopup()
@@ -127,20 +127,19 @@ export default {
     },
     // 查看小区人流信息
     openCourtPeo: function () {
-      this.$refs['streamPeople'].streamPeople(this.courtId)
+      this.$refs['streamPeople'].streamPeople(this.courtUuid)
     },
     // 查看小区车流信息
     openCourtCar: function () {
-      this.$refs.carStream.goToCarStreamPage(this.courtId)
+      this.$refs.carStream.goToCarStreamPage(this.courtUuid)
     },
     // 查看小区业主信息
     openCourtOwner: function () {
-      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
-      console.log(this.courtId)
+      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtUuid)
     },
     // 查看小区设备信息
     openCourtEquip: function () {
-      this.$refs['equipmentReport'].equipmentReport(this.courtId)
+      this.$refs['equipmentReport'].equipmentReport(this.courtUuid)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
@@ -176,7 +175,7 @@ export default {
     setMarkers: function (unArr,activeArr) {
       if(unArr){
         unArr.map(function (item,index) {
-          let feat = this.map.getMarkerBylayerKey(item.courtId,'commonLayer')
+          let feat = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
           if(feat){
             this.setMarkerStyle(feat,markerImg)
           }
@@ -185,12 +184,12 @@ export default {
       }
       if(activeArr){
         activeArr.map(function (item,index) {
-          let feat2 = this.map.getMarkerBylayerKey(item.courtId,'commonLayer')
+          let feat2 = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
           if(feat2){
             this.setMarkerStyle(feat2,chooseImg)
             // this.map.showPopup('tipWin', feat2.getGeometry().getCoordinates()) //暂时去掉弹窗提示
             // this.showCourtName = item.courtName
-            // this.courtId = feat2.id_
+            // this.courtUuid = feat2.id_
           }
         },this)
         this.chooseList = activeArr
