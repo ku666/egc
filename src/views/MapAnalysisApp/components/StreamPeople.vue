@@ -105,7 +105,7 @@ export default {
       }],
       parameter: {
         // courtUuid: '222b79f4a7b44d03b6f55f028992851f',
-        courtUuid: '222b79f4a7b44d03b6f55f028992851f',
+        courtUuid: '',
         currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '0', // 报表类型（日、月、年）
