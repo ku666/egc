@@ -1,8 +1,8 @@
 <template>
-  <div class="mapCon">
+  <div class="mapCon ui-common">
     <div class="searchBox">
       <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-      <el-button type="primary" @click="searchCourt">查询</el-button>
+      <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
     </div>
     <div id="mapECarts" style="width:1200px; height:800px"></div>
   </div>
