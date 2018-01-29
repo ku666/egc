@@ -66,7 +66,7 @@
               <el-table-column prop="perOutCount" label="出园人数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" background :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -86,7 +86,7 @@ export default {
       form: {
         date: '', // 日期
         dateList: [], // 日期集合
-        courtId: '', // 小区id
+        courtUuid: '', // 小区id
         courtName: '', // 小区名称
         perInCount: '', // 入园人数
         perInCountList: [], // 入园人数集合
@@ -94,19 +94,19 @@ export default {
         perOutCountList: [] // 出园人数集合
       },
       reportTypeList: [{
-        value: '1',
+        value: '0',
         label: '日报'
       }, {
-        value: '2',
+        value: '1',
         label: '月报'
       }, {
-        value: '3',
+        value: '2',
         label: '年报'
       }],
       parameter: {
-        // courtID: '222b79f4a7b44d03b6f55f028992851f',
-        courtID: '',
-        pageNum: 1, // 多少页
+        // courtUuid: '222b79f4a7b44d03b6f55f028992851f',
+        courtUuid: '222b79f4a7b44d03b6f55f028992851f',
+        currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '1', // 报表类型（日、月、年）
         startDate: null, // 开始时间
@@ -119,8 +119,8 @@ export default {
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
       dialogVisible: false,
-      starTime: new Date('2018-1-25'), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
-      endTime: new Date('2018-1-25'), // 结束时间
+      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
+      endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
@@ -144,7 +144,7 @@ export default {
   methods: {
     // 选择报表
     reportTypeEvent: function (val) {
-      if (val === '1' || val === '2') {
+      if (val === '0' || val === '1') {
         this.timeType = 'date'
       } else {
         this.timeType = 'month'
@@ -356,11 +356,12 @@ export default {
       this.getPgingData()
     },
     // 打开组件的回调
-    streamPeople: function (_courtId) {
+    streamPeople: function (_courtUuid) {
       this.getPgingData()
-      this.parameter.courtID = _courtId
+      this.parameter.courtUuid = _courtUuid
       // 获取小区详细信息
-      getCourtInfo({ courtId: _courtId }).then(res => {
+      console.log(_courtUuid)
+      getCourtInfo({ courtUuid: _courtUuid }).then(res => {
         this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
@@ -368,7 +369,7 @@ export default {
     // 按时间（报表类型）查询
     timeQuery: function () {
       // 查询时页面初始化到第一页
-      this.parameter.pageNum = 1
+      this.parameter.currentPage = 1
       if (this.isRequest) {
         if (this.isTableShow) this.getPgingData()
         else this.getData()
@@ -392,13 +393,13 @@ export default {
     },
     // 分页组件当前页变化
     currentChange: function (val) {
-      this.parameter.pageNum = val
+      this.parameter.currentPage = val
       if (this.isRequest) this.getPgingData()
     },
     // 判断选择的时间是否符合要求
     timeJudgment: function (val) {
       switch (this.parameter.reportType) {
-        case '1':
+        case '0':
           if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) { // 一个月2851200000
             this.isRequest = false
             this.$message({
@@ -409,7 +410,7 @@ export default {
             this.isRequest = true
           }
           break
-        case '2':
+        case '1':
           if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) { // 一年31622400000
             this.isRequest = false
             this.$message({
@@ -420,7 +421,7 @@ export default {
             this.isRequest = true
           }
           break
-        case '3':
+        case '2':
           this.isRequest = true
           break
       }
@@ -465,6 +466,7 @@ export default {
     getPgingData: function () {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
+      console.log(this.parameter)
       getPerAccessPageList(this.parameter).then(res => {
         if (res.status === 200) {
           this.tableData = res.data.result
