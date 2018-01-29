@@ -70,7 +70,7 @@ export default {
     return {
       echartsList: [],
       courtInfo: {
-        courtId: '',
+        courtUuid: '',
         courtName: '',
         org: '',
         regionName: '',
@@ -85,7 +85,7 @@ export default {
     }
   },
   mounted: function () {
-    this.courtInfo.courtId = this.$route.params.courtId
+    this.courtInfo.courtUuid = this.$route.params.courtUuid
     this.getCourtInfoData()
     var sDate = new Date()
     var eDate = new Date()
@@ -100,7 +100,7 @@ export default {
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      let param = { courtId: this.courtInfo.courtId }
+      let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
@@ -117,7 +117,7 @@ export default {
     /** 获取最近一个月内的人员流量日报数据 */
     getPeopleStreamData: function () {
       let param = {
-        courtID: this.courtInfo.courtId, // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid, // 'c69aeede4f6341929721e2892beec3cb'
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
@@ -154,7 +154,7 @@ export default {
     /** 获取最近一个月内的车行流量日报数据 */
     getCarStreamData: function () {
       let param = {
-        courtID: this.courtInfo.courtId, // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid, // 'c69aeede4f6341929721e2892beec3cb'
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
@@ -191,7 +191,7 @@ export default {
     /** 获取小区设置种类数据 */
     getEquipKindsData: function () {
       let param = {
-        courtUuid: this.courtInfo.courtId // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid // 'c69aeede4f6341929721e2892beec3cb'
       }
       getListDeviceType(param).then(res => {
         console.log(res)
@@ -219,7 +219,7 @@ export default {
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
       // '222b79f4a7b44d03b6f55f028992851f'
-      let param = { courtUuid: this.courtInfo.courtId, queryType: '0', type: '1' }
+      let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
         // console.log(res)
         let ageData = []
@@ -250,16 +250,16 @@ export default {
       // console.log('查看各个报表的详情 ' + index)
       switch (index) {
         case 0:
-          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtId)
+          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtUuid)
           break
         case 1:
-          this.$refs['streamPeople'].streamPeople(this.courtInfo.courtId)
+          this.$refs['streamPeople'].streamPeople(this.courtInfo.courtUuid)
           break
         case 2:
-          this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtId)
+          this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtUuid)
           break
         case 3:
-          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtId)
+          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtUuid)
           break
       }
     },

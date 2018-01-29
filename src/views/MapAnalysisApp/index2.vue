@@ -38,7 +38,7 @@ export default {
       this.getMyCharts.setOption(mapData.option)
       if (e.seriesType === 'scatter' || e.seriesType === 'effectScatter') {
         // 跳转到指定的小区的详情页
-        this.$router.push('/mapanalysisapp/courtinfo/'+e.data.courtId)
+        this.$router.push('/mapanalysisapp/courtinfo/'+e.data.courtUuid)
       }
     },
     // 获取小区列表数据
@@ -62,7 +62,7 @@ export default {
               let obj = {
                 name: item.courtName,
                 value: [item.gpsLon, item.gpsLat],
-                courtId: item.courtId
+                courtUuid: item.courtUuid
               }
               pointdata.push(obj)
             }

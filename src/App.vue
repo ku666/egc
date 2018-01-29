@@ -12,5 +12,6 @@ export default {
 
 <style lang="less">
 @import "assets/css/main.less";
+@import "assets/css/common.less";
 @import "assets/css/color-dark.less";
 </style>

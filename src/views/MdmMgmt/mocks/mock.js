@@ -41,7 +41,43 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
-          'updateTime': '2017-11-1 11:11:11'
+          'updateTime': '2017-11-1 11:11:11',
+          'slave': [
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            },
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            }
+          ]
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
@@ -58,7 +94,43 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
           'createUser': 'admin01',
           'updateUser': 'admin01',
           'createTime': '2017-11-1 11:11:11',
-          'updateTime': '2017-11-1 11:11:11'
+          'updateTime': '2017-11-1 11:11:11',
+          'slave': [
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            },
+            {
+              'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+              'typeCode': '3002',
+              'typeName': 'camera_video_channel',
+              'typeDesc': '摄像头通道1',
+              'parentUuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+              'parentTypeDesc': '父类别1',
+              'typeModel': '2001',
+              'hardwareVersion': '',
+              'softwareVersion': '',
+              'providerCode': '1003',
+              'providerName': '立林',
+              'createUser': 'admin01',
+              'updateUser': 'admin01',
+              'createTime': '2017-11-1 11:11:11',
+              'updateTime': '2017-11-1 11:11:11'
+            }
+          ]
         },
         {
           'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
@@ -228,7 +300,8 @@ Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesByCondition', function (op
   }
 })
 
-Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition', function (options) {
+// Mock.mock(DEVICE_CATEGORY_PATH + '/getDeviceCategoriesSimpleByCondition?keyword=/.*/', function (options) {
+Mock.mock(/\/egc-mdmmgmtapp\/deviceCategory\/getDeviceCategoriesSimpleByCondition\?keyword=.*/, function (options) {
   return {
     'message': 'code!',
     'code': '00000',
@@ -351,9 +424,57 @@ Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributes', function () {
   }
 })
 
-const DEVICE_ATTR_DOMAIN_PATH = '/egc-mdmmgmtapp/deviceAttrDomain'
+Mock.mock(DEVICE_ATTRIBUTE_PATH + '/getDeviceAttributeList', function () {
+  console.log('get device category attributes')
+  return {
+    'message': 'success!',
+    'code': '00000',
+    'data': [{
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx1',
+      'attrDesc': '属性描述1',
+      'attrCode': 'user_call_num',
+      'attrType': 'manual_attribute',
+      'attrDataType': 'select',
+      'unitDesc': '1',
+      'unitCode': '2',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx2',
+      'attrDesc': '属性描述2',
+      'attrCode': 'user_call_num',
+      'attrType': 'manual_attribute',
+      'attrDataType': 'string',
+      'unitDesc': '3',
+      'unitCode': '4',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    },
+    {
+      'uuid': 'xxxxxxxxxxxxxxxxxxxxxxx3',
+      'attrDesc': '属性描述3',
+      'attrCode': 'user_call_num',
+      'attrType': 'manual_attribute',
+      'attrDataType': 'string',
+      'unitDesc': '5',
+      'unitCode': '6',
+      'createUser': 'admin01',
+      'updateUser': 'admin01',
+      'createTime': '2017-11-1 11:11:11',
+      'updateTime': '2017-11-1 11:11:11'
+    }]
+  }
+})
 
-Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
+// const DEVICE_ATTR_DOMAIN_PATH = '/egc-mdmmgmtapp/deviceAttrDomain'
+
+// Mock.mock(DEVICE_ATTR_DOMAIN_PATH + '/getDeviceAttrDomains', function () {
+Mock.mock(/\/egc-mdmmgmtapp\/deviceAttrDomain.*/, function () {
   console.log('mock get attr domain list')
   return {
     'message': 'success!',
