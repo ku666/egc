@@ -353,7 +353,7 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((provider) => uuidList.push(provider.uuid))
-        deleteProvider({'uuidList': uuidList}).then(res => {
+        deleteProvider({'value': uuidList}).then(res => {
           this.search({})
           this.$message({
             message: '刪除成功!',
@@ -376,7 +376,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteProvider({'uuidList': uuidList}).then(res => {
+        deleteProvider({'value': uuidList}).then(res => {
           this.search({})
           this.$message({
             message: '刪除成功!',

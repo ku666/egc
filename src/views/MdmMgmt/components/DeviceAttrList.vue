@@ -408,7 +408,7 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((attr) => uuidList.push(attr.uuid))
-        deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
+        deleteDeviceAttribute({'value': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'warning'
@@ -431,7 +431,7 @@ export default {
       }).then(() => {
         let uuidList = []
         uuidList.push(attr.uuid)
-        deleteDeviceAttribute({'uuidList': uuidList}).then(res => {
+        deleteDeviceAttribute({'value': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'warning'
