@@ -3,16 +3,24 @@
     <div>
       <el-input placeholder="小区名称" prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
       </el-input>
-      <el-button @click='searchOrg' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
+      <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
     </div>
-    <el-tree ref="tree" :data="treeData" node-key="uuid" :props="defaultProps" :expand-on-click-node="false" @node-click="clickNode">
+    <el-tree ref="tree"
+      :data="treeData"
+      node-key="uuid"
+      :props="defaultProps"
+      :load="getTree"
+      :expand-on-click-node="false"
+      lazy
+      @node-click="clickNode">
     </el-tree>
-    <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="20" @size-change="sizeChange" @current-change="currentChange">
+    <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="total" @size-change="sizeChange" @current-change="currentChange">
     </el-pagination>
   </div>
 </template>
 <script>
-import { getOrgTree } from '../../apis/orgManager'
+import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   props: {
     search: {
@@ -25,7 +33,7 @@ export default {
       // filterText: '',
       total: 0,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 25,
       treeData: [],
       loading: false,
       defaultProps: {
@@ -34,29 +42,13 @@ export default {
       }
     }
   },
-  // watch: {
-  //   filterText (val) {
-  //     this.$refs.tree.filter(val)
-  //   }
-  // },
   methods: {
-    addHouse: function () {
-      this.$message({
-        message: '添加房屋',
-        type: 'success'
-      })
-    },
-    delOrg: function () {
-      this.$message({
-        message: '删除组织',
-        type: 'warning'
-      })
-    },
     clickNode: function (data, node) {
-      // console.log('是否叶子节点' + node.isLeaf)
-      // if (node.isLeaf) {
-      this.search({ uuid: data.uuid })
-      // }
+      if (node.level === 1) {
+        this.search({ 'courtUuid': node.data.uuid })
+      } else if (node.level > 1) {
+        this.search({ 'orgUuid': node.data.uuid })
+      }
     },
     /**
      * @description 分页组件单页总数变化
@@ -65,7 +57,7 @@ export default {
     sizeChange: function (val) {
       this.pageSize = val
       this.currentPage = 1
-      this.getOrgTree()
+      this.getCourts()
     },
     /**
      * @description 分页组件当前页变化
@@ -73,66 +65,45 @@ export default {
      */
     currentChange: function (val) {
       this.currentPage = val
-      this.getOrgTree()
+      this.getCourts()
     },
-    searchOrg: function () {
-      if (this.currentPage !== 1) {
-        this.currentPage = 1
-      } else {
-        this.getOrgTree()
-      }
-      this.search()
-    },
-    // 获取组织树数据
-    getOrgTree: function () {
+    getCourts: function () {
       this.loading = true
-      // 传递参数小区name做过滤条件
-      // 查询条件
       let condition = {}
       condition.name = this.searchKey
-      // 分页
+      condition.platformFlag = 1
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
-
-      getOrgTree(condition).then(res => {
-        // this.treeData.splice(0, this.treeData.length)
-        // console.log('aaaaaaaaaaaaaaaaaaaaaaaa:' + JSON.stringify(res.data))
-        this.total = res.data.data.pageCount
+      getCourtsByConditions(condition).then(res => {
+        this.total = res.data.data.totalCount
         setTimeout(() => {
-          this.treeData = res.data.data.pageData
+          this.treeData = res.data.data.result
           this.loading = false
         }, 1000)
       })
     },
-    filterNode: function (value, data) {
-      if (!value) return true
-      return data.name.indexOf(value) !== -1
-    },
-    filterOrg: function () {
-      this.$refs.tree.filter(this.searchKey)
+    // 获取组织树数据
+    getTree: function (node, resolve) {
+      if (this.treeData.length === 0) {
+        this.getCourts()
+      }
+      if (node.level > 0) {
+        this.loading = true
+        let condition = {}
+        condition.courtUuid = node.data.uuid
+        getAllOrgTreeByCourtUuid(condition).then(res => {
+          if (res.data.data != null) {
+            resolve(res.data.data)
+          } else {
+            resolve([])
+          }
+          this.loading = false
+        })
+      }
     }
-    // renderContent: function (h, { node, data, store }) {
-    //   return (
-    //     <span>
-    //       <span style="margin-right:8px">{node.label}</span>
-    //       <i
-    //         class="el-icon-plus"
-    //         title="添加"
-    //         on-click={() => {
-    //           this.addHouse()
-    //         }}
-    //       />
-    //       <i class="el-icon-close"
-    //         on-click={() => {
-    //           this.delOrg()
-    //         }}
-    //       />
-    //     </span>
-    //   )
-    // }
   },
   mounted: function () {
-    this.getOrgTree()
+    // this.getTree()
   }
 }
 </script>

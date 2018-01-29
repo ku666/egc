@@ -1,4 +1,29 @@
 export default {
+  getAllOrgTreeByCourtUuid: config => {
+    var data = [
+      {
+        uuid: '235jklgdsj4543',
+        name: '1幢',
+        children: [{
+          uuid: '235432432jklgdsj4543',
+          name: '1单元'
+        }]
+      },
+      {
+        uuid: '235jkl54gdsj4543',
+        name: '2幢',
+        children: [{
+          uuid: '235432435432jklgdsj4543',
+          name: '1单元'
+        }]
+      }
+    ]
+    return {
+      data: data,
+      code: '0000',
+      msg: 'success'
+    }
+  },
   getOrgList: config => {
     var data = []
     for (let i = 0; i < 2; i++) {
