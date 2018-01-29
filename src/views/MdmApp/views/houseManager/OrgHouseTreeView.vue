@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container" v-loading="loading">
     <div>
-      <el-input placeholder="小区名称" prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      <el-input placeholder="小区名称" @keyup.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
       </el-input>
       <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
     </div>
