@@ -45,8 +45,8 @@ export default {
     }
     return {
       data: {
-        pageCount: 20,
-        pageData: data
+        totalCount: 20,
+        result: data
       },
       code: '0000',
       msg: 'success'

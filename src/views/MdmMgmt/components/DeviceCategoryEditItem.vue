@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='35%'>
+  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='750px'>
     <!-- <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item> -->
 
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>

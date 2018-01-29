@@ -52,9 +52,9 @@
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='40%'>
-      <div slot='title' class='header_style'>{{ this.title }}</div>
-      <el-tabs style="height: 430px; margin-top:-20px;" v-model='activeName'>
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='750px'>
+      <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
+      <el-tabs style="height: 350px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
           <div>
             <el-form :model='modelDetailForm' ref='detailForm' label-width='100px'>
@@ -102,19 +102,16 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
-          <el-table :data="this.modelDetailForm.detail" stripe height="340">
-            <el-table-column label="小区" prop="courtName" width="120"></el-table-column>
-            <el-table-column label="房屋" prop="houseAddress" width="120"></el-table-column>
-            <el-table-column label="电话" prop="phone" width="120"></el-table-column>
-            <el-table-column label="电子邮件" prop="mail" width="120"></el-table-column>
-            <el-table-column label="创建日期" prop="createTime" width="120"></el-table-column>
-            <el-table-column label="备注" prop="description" width="120"></el-table-column>
+          <el-table :data="this.modelDetailForm.detail" stripe height="100%" width="100%">
+            <el-table-column label="小区" prop="courtName"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress"></el-table-column>
+            <el-table-column label="备注" prop="description"></el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
-      <div style='text-align: center'>
+      <!-- <div style='text-align: center'>
         <el-button type='primary' @click='closeDetailDialog' class='btn-plain'>关闭</el-button>
-      </div>
+      </div> -->
     </el-dialog>
   </div>
 </template>
@@ -230,13 +227,13 @@ export default {
       }
       getPersonList(condition)
         .then(res => {
-          var self = this
-          this.total = res.data.pageCount
           console.log('res')
           console.log(res)
           console.log('res')
+          var self = this
+          this.total = res.data.totalCount
           const timeOut = setTimeout(function () {
-            self.tableData = res.data.pageData
+            self.tableData = res.data.result
             self.loading = false
             clearTimeout(timeOut)
           }, 1000)
@@ -336,9 +333,12 @@ div:hover {
   line-height: 40px;
 }
 .header_style {
-  font-size: 30px;
-  color: #505458;
-  text-align: center;
+  padding: 13px 3%;
+  border-radius: 4px;
+  background: #f5f7fa;
+  width: 90%;
+  color: #0078F4;
+  font-size: 18px;
 }
 .el-input {
   width: 200px;

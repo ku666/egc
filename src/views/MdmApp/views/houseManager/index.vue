@@ -84,9 +84,9 @@ export default {
       getHouseList(options)
         .then(res => {
           var self = this
-          this.total = res.data.data.pageCount
+          this.total = res.data.data.totalCount
           const timeOut = setTimeout(function () {
-            self.tableData = res.data.data
+            self.tableData = res.data.data.result
             self.loading = false
             clearTimeout(timeOut)
           }, 1000)

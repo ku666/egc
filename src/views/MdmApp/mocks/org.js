@@ -3,19 +3,11 @@ export default {
     var data = [
       {
         uuid: '235jklgdsj4543',
-        name: '1幢',
-        children: [{
-          uuid: '235432432jklgdsj4543',
-          name: '1单元'
-        }]
+        name: '1幢'
       },
       {
         uuid: '235jkl54gdsj4543',
-        name: '2幢',
-        children: [{
-          uuid: '235432435432jklgdsj4543',
-          name: '1单元'
-        }]
+        name: '2幢'
       }
     ]
     return {

@@ -81,7 +81,7 @@
       <el-dialog :visible.sync='attrDialogVisible'
         :modal-append-to-body = 'false'
         :before-close='closedialog'
-        width='40%'>
+        width='750px'>
         <!-- <div slot='title'>
           <span class = 'head-text'>{{title}}</span>
         </div> -->
@@ -89,7 +89,7 @@
           <el-step :title="title" icon="el-icon-edit"></el-step>
         </el-steps> -->
         <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-        <el-tabs style="height: 430px; margin-top:-20px" v-model='activeTab'>
+        <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
           <el-tab-pane label="属性基本信息" name = 'basic'>
             <div>
               <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>

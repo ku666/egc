@@ -78,7 +78,7 @@
 
       <el-dialog :visible.sync='providerDialogVisible'
         :modal-append-to-body = 'false'
-        width='40%'>
+        width='750px'>
         <!-- <div slot='title' class='head-text'>
           <span>{{title}}</span>
         </div> -->
