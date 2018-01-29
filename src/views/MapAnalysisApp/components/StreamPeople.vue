@@ -108,7 +108,7 @@ export default {
         courtUuid: '222b79f4a7b44d03b6f55f028992851f',
         currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
-        reportType: '1', // 报表类型（日、月、年）
+        reportType: '0', // 报表类型（日、月、年）
         startDate: null, // 开始时间
         endDate: null // 结束时间
       },
@@ -144,10 +144,12 @@ export default {
   methods: {
     // 选择报表
     reportTypeEvent: function (val) {
-      if (val === '0' || val === '1') {
+      if (val === '0' || val === '1') { // 1年31622400000  7天604800000
         this.timeType = 'date'
+        this.starTime = new Date(this.endTime.getTime() - 604800000)
       } else {
         this.timeType = 'month'
+        this.starTime = new Date(this.endTime.getTime() - 31622400000)
       }
     },
     // 点击切换图表展示
@@ -360,7 +362,6 @@ export default {
       this.getPgingData()
       this.parameter.courtUuid = _courtUuid
       // 获取小区详细信息
-      console.log(_courtUuid)
       getCourtInfo({ courtUuid: _courtUuid }).then(res => {
         this.cellDetailsList = res.data.data
       })
