@@ -44,7 +44,7 @@ export default {
             .then(
               function (result) {
                 this.$message({
-                  message: '添加成功',
+                  message: '保存成功！',
                   type: 'success'
                 })
                 this.$emit('listenToAddEvent', this.formData)
@@ -66,7 +66,7 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        user_type: '3'
+        userType: undefined
       }
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
@@ -144,7 +144,7 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        user_type: '3'
+        userType: undefined
       },
       formData: undefined
     }

@@ -11,57 +11,15 @@
       <el-form-item label='用户组名称' prop='usergroupName' class='is-required'>
         <el-input v-model='editForm.usergroupName' placeholder='请输入用户组名称'></el-input>
       </el-form-item>
-      <!-- <el-form-item label='类型'> -->
-      <!-- <el-select 
-        v-model="editForm.parentUsergroupName"
-        @visible-change='getParUsergroupOptionList'
-        @change='parUsergroupBoxSelected'
-      >
-          <el-option
-            v-for='item in parentUsergroupList'
-            :key='item'
-            :label='item'
-            :value='item'>
-          </el-option>
-       </el-select> -->
-      <!-- </el-form-item> -->
       <el-form-item label='用户组说明' prop='remark'>
         <el-input type='textarea' rows="3" v-model='editForm.remark' style="width:650px"></el-input>
       </el-form-item>
-      <el-button class='action-btn' style='margin-left: 10px; float: right; margin-bottom: 10px' type='primary' @click="handleSave('editForm')">保存</el-button>
+      <div style="float:right">
+      <el-button class='cancel-btn' type='primary' @click="handleCancel('editForm')">取消</el-button>
+      <el-button class='action-btn' style='margin-left: 10px' type='primary' @click="handleSave('editForm')">保存</el-button>
+      </div>
     </el-form>
     </el-container>
-    <!-- <div v-show="showDirUserGroup">
-      <div size='small' style='float:left; margin-top: 10px'>已经加入本用户组的{{ tabTitle }}</div>
-      <el-select 
-      @visible-change='getDirUsergroupOptionList'
-      @change='usergroupBoxSelected'
-      style='margin-left: 30px'>
-        <el-option
-          v-for='(item, index) in userGroupList'
-          :key='index'
-          :label='item.usergroupName'
-          :value='item.uuid'>
-        </el-option>
-      </el-select>
-      <grid-list 
-        :editable='false' 
-        :deletable='true' 
-        @listenToDeleteEvent='userGroupDeleteEvent' 
-        :tableData='dirUsergroupDetailData.usergroupBaseVoList' 
-        :params='dirUsergroupParam' 
-        style='margin-top: 20px'>
-      </grid-list>
-      <el-pagination 
-        :page-sizes="[5,10,20,30]" 
-        layout="total, sizes, prev, pager, next, jumper" 
-        :total="total" 
-        style="margin-top:10px"
-        @size-change="handleUserGroupSizeChange"
-        @current-change="handleUserGroupCurrentChange"
-        :page-size="query.pageSize"
-      ></el-pagination>
-    </div> -->
       <div v-show="showUser" style="margin-top:-5px">
         <div size='small' style='float:left; margin-top: 10px'>添加直属用户</div>
         <el-select 
@@ -81,7 +39,8 @@
           :deletable='true'
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
-          :params='userParam'>
+          :params='userParam'
+          style='margin-top: 10px'>
         </grid-list>
         <el-pagination 
           :page-sizes="[5,10,20,30]" 
@@ -113,6 +72,7 @@
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
+          style='margin-top: 10px'
         >
         </grid-list>
         <el-pagination 
@@ -135,7 +95,7 @@ import {
   // getUserGroupData,
   getRoleUserGroup,
   getRoleUser,
-  getRoleListAll,
+  getRoleListAllMaindata,
   getDirUserGroupList,
   getDirUserGroupFilterList,
   createUserUsergroup,
@@ -282,10 +242,10 @@ export default {
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleListAll()
+      getRoleListAllMaindata()
         .then(
           function (result) {
-            this.tmpRoleList = result.roleBaseVoList
+            this.tmpRoleList = result
             getUsergroupRoleFilterList(this.usergroupUuid)
             .then(
               function (result) {
@@ -412,33 +372,6 @@ export default {
       this.showUser = tab.name === '2'
       this.showRole = tab.name === '3'
     },
-    // userGroupDeleteEvent (data) {
-    //   deleteDirUserGroup(data.uuid)
-    //     .then(
-    //       function (result) {
-    //         console.log('解除了下属用户组：' + data.uuid)
-    //         getDirUserList(this.query)
-    //           .then(
-    //             function (result) {
-    //               console.log('result:' + JSON.stringify(result))
-    //               this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
-    //               this.dirUserDetailData.pageCount = result.pageCount
-    //               this.$emit('listenToEditEvent', this.usergroupUuid)
-    //             }.bind(this)
-    //           )
-    //           .catch(
-    //             function (error) {
-    //               console.log(error)
-    //             }
-    //           )
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log(error)
-    //       }
-    //     )
-    // },
     userDeleteEvent (data) {
       console.log(JSON.stringify(data))
       deleteDirUser(data.usergroupUserUuid)
@@ -446,6 +379,10 @@ export default {
           function (result) {
             this.$emit('listenToChildDeleteEvent', this.usergroupUuid)
             this.query.usergroupUuid = this.usergroupUuid
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
             getDirUserList(this.query)
               .then(
                 function (result) {
@@ -465,6 +402,7 @@ export default {
         .catch(
           function (error) {
             console.log(error)
+            this.$message.error(error.response.data.message)
           }
         )
     },
@@ -475,7 +413,10 @@ export default {
           function (result) {
             this.$emit('listenToChildDeleteEvent', this.usergroupUuid)
             this.query.usergroupUuid = this.usergroupUuid
-            console.log(this.query)
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
             getUsergroupRoleList(this.query)
               .then(
                 function (result) {
@@ -495,12 +436,9 @@ export default {
         .catch(
           function (error) {
             console.log(error)
+            this.$message.error(error.response.data.message)
           }
         )
-    },
-    gridEditEvent (data) {
-      console.log('userGroupEdit：编辑了第' + data + '行')
-      this.$emit('gridEditEvent', data)
     },
     handleSave (editForm) {
       this.$refs[editForm].validate((valid) => {
@@ -511,10 +449,11 @@ export default {
             .then(
               function (result) {
                 this.$message({
-                  message: '添加成功',
+                  message: '保存成功！',
                   type: 'success'
                 })
-                this.$emit('listenToEditSaveEvent', this.formData)
+                this.$emit('listenToChildEditEvent', this.formData)
+                this.$emit('listenToChildCloseEvent')
               }.bind(this)
             )
             .catch(
@@ -609,6 +548,25 @@ export default {
             console.log(error)
           }
         )
+    },
+    handleCancel (editForm) {
+      // this.queryCancel.currentPage = 1
+      // this.queryCancel.pageSize = 5
+      // this.queryCancel.usergroupUuid = this.usergroupUuid
+      // console.log(this.queryCancel)
+      this.$emit('listenToChildCloseEvent')
+      // getUserGroupData(this.queryCancel)
+      //   .then(
+      //     function (result) {
+      //       this.editForm.usergroupName = result.usergroupBaseVo.usergroupName
+      //       this.editForm.remark = result.usergroupBaseVo.remark
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
     }
   },
     // watch: {
@@ -666,6 +624,11 @@ export default {
         pageSize: 5,
         usergroupUuid: undefined
       },
+      queryCancel: {
+        currentPage: 1,
+        pageSize: 5,
+        usergroupUuid: undefined
+      },
       queryParent: {
         currentPage: 1,
         pageSize: 5,
@@ -697,18 +660,6 @@ export default {
           title: '用户组名称',
           prop: 'usergroupName'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '用户类型',
-        //   prop: 'remark'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirUsersName'
@@ -761,40 +712,40 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 16%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 14%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 120px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 120px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 170px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 200px
+    width: 18%
   }
   #userTable >>> colgroup col:nth-child(7) {
-    width: 50px
+    width: 10%
   }
   #userTable {
     margin-top: 15px
   }
   #roleTable >>> colgroup col:nth-child(1) {
-    width: 165px
+    width: 20%
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    width: 205px
+    width: 30%
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    width: 420px
+    width: 40%
   }
   #roleTable >>> colgroup col:nth-child(4) {
-    width: 110px
+    width: 10%
   }
   #roleTable {
     margin-top: 15px

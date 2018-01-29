@@ -1,7 +1,7 @@
 <template>
   <div style="text-align:center">
     <el-container style="text-align: center">
-    <el-form ref='form' label-width='70px' :model='form' :rules="rules" style="margin: 0 auto">
+    <el-form ref='form' label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
@@ -98,7 +98,7 @@
               .then(
                 function (result) {
                   this.$message({
-                    message: '添加成功',
+                    message: '保存成功！',
                     type: 'success'
                   })
                   this.form.roleName = null
@@ -119,7 +119,7 @@
           roleName: undefined,
           remark: undefined,
           uuid: undefined,
-          user_type: '3'
+          userType: undefined
         }
         this.$refs[form].resetFields()
         this.$emit('listenToAddEvent', this.form)

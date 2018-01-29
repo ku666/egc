@@ -8,7 +8,7 @@
     </el-tabs>
     <el-container style="margin-top:20px">
     <!-- Tab 角色概要 -->
-    <el-form  ref='form' v-show="showSummary" label-width='70px' :model='form' :rules="rules">
+    <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules">
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
@@ -26,7 +26,10 @@
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" v-model='form.remark' placeholder='请输入角色说明' rows="3" style="width:650px"></el-input>
       </el-form-item>
-      <el-button class='action-btn' style='margin-left: 30px; float: right' @click="handleSave('form')" type='primary'>保存</el-button>
+      <div style="float:right">
+      <el-button class='cancel-btn' type='primary' @click="handleCancel('form')">取消</el-button>
+      <el-button class='action-btn' style='margin-left: 10px' @click="handleSave('form')" type='primary'>保存</el-button>
+      </div>
     </el-form>
     </el-container>
 
@@ -398,17 +401,17 @@ export default {
       this.showUser = tab.name === '2'
       this.showResource = tab.name === '3'
     },
-    gridDeleteEvent (data) {
-      console.log('role delete：删除了第' + data + '行')
-      this.$emit('gridDeleteEvent', data)
-    },
     userGroupDeleteEvent (data) {
       this.usergroupRoleUuid = data.usergroupRoleUuid
-      this.$emit('userGroupDeleteEvent', data)
       deleteRoleUserGroup(this.usergroupRoleUuid)
         .then(
           function (result) {
+            this.$emit('userGroupDeleteEvent', data)
             this.query.roleId = this.form.uuid
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
             updateRoleUserGroupList(this.query)
               .then(
                 function (result) {
@@ -424,15 +427,20 @@ export default {
         )
         .catch(function (error) {
           console.log(error)
+          this.$message.error(error.response.data.message)
         })
     },
     userDeleteEvent (data) {
       this.userRoleUuid = data.userRoleUuid
-      this.$emit('userDeleteEvent', data)
       deleteRoleUser(this.userRoleUuid)
         .then(
           function (result) {
+            this.$emit('userDeleteEvent', data)
             this.query.roleId = this.form.uuid
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
             updateRoleUserList(this.query)
               .then(
                 function (result) {
@@ -448,24 +456,33 @@ export default {
         )
         .catch(function (error) {
           console.log(error)
+          this.$message.error(error.response.data.message)
         })
     },
     resourceDeleteEvent (data) {
       this.authorityUuid = data.authorityUuid
-      this.$emit('resourceDeleteEvent', data)
       deleteRoleResource(this.authorityUuid)
         .then(
           function (result) {
+            this.$emit('resourceDeleteEvent', data)
             this.query.roleId = this.form.uuid
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
             updateRoleResourceList(this.query)
               .then(
                 function (result) {
                   this.roleResourceData = result
+                  this.$refs.addapp.refresh()
+                  this.$refs.addservice.refresh()
+                  this.$refs.adddevice.refresh()
                 }.bind(this)
               )
               .catch(
                 function (error) {
                   console.log(error)
+                  this.$message.error(error.response.data.message)
                 }
               )
           }.bind(this)
@@ -504,8 +521,9 @@ export default {
             .then(
               function (result) {
                 this.$emit('listenToEditEvent', this.formData)
+                this.$emit('listenToCloseEvent')
                 this.$message({
-                  message: '编辑成功',
+                  message: '保存成功！',
                   type: 'success'
                 })
               }.bind(this)
@@ -518,13 +536,16 @@ export default {
         }
       })
     },
+    handleCancel (form) {
+      this.$emit('listenToCloseEvent')
+    },
     createAppEvent (data) {
       console.log('createAppEvent Start')
       createAuthority(data)
         .then(
           function (result) {
             this.$message({
-              message: '保存成功',
+              message: '保存成功！',
               type: 'success'
             })
             this.$refs.addapp.refresh()
@@ -559,7 +580,7 @@ export default {
           .then(
             function (result) {
               this.$message({
-                message: '保存成功',
+                message: '保存成功！',
                 type: 'success'
               })
               this.$refs.addservice.refresh()
@@ -589,7 +610,7 @@ export default {
           .then(
             function (result) {
               this.$message({
-                message: '保存成功',
+                message: '保存成功！',
                 type: 'success'
               })
               this.$refs.adddevice.refresh()
@@ -798,56 +819,56 @@ export default {
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 300px
+    width: 30%
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 600px
+    width: 60%
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 135px
+    width: 10%
   }
 
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 120px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 185px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 185px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 230px
+    width: 21%
   }
   #userTable >>> colgroup col:nth-child(7) {
-    width: 90px
+    width: 10%
   }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 150px
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 200px
+    width: 18%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 250px
+    width: 28%
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    width: 130px
+    width: 11%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 130px
+    width: 9%
   }
   #resourceTable >>> colgroup col:nth-child(6) {
-    width: 130px
+    width: 9%
   }
   #resourceTable >>> colgroup col:nth-child(7) {
-    width: 85px
+    width: 10%
   }
 </style>
