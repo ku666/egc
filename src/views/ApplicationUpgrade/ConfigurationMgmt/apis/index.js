@@ -4,7 +4,7 @@ let contextPath = '/scp-upgradecomponent'
 // 接口地址
 const BASE_PATH = '/egc-applicationupgradecomponent'
 
-const ADDR_BASE_PATH = '/egc-mdmcomponent'
+// const ADDR_BASE_PATH = '/egc-mdmcomponent'
 
 /** 以下定义的方法是用于调用Mock的数据 */
 
@@ -47,28 +47,32 @@ export const getauServersHistoryList1 = (id) => {
 
 /** ***************************以下定义的方法是用于调用真实环境的数据********************************* */
 
-// 获取省份
+// 省
 export const getProvinceDataList = (params) => {
-  console.log('->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(ADDR_BASE_PATH + '/api/court/getProvinceList', params
-  ).then(res => res.data)
+  // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  // return Axios.post(ADDR_BASE_PATH + '/court/getProvinceList', params
+  // ).then(res => res.data)
+  return Axios.post('/court/getProvinceList', params
+  ).then(res => {
+    return res.data
+  })
 
   // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
-// 获取市份
+// 市
 export const getCityDataList = (params) => {
   console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(ADDR_BASE_PATH + '/api/court/getCityList', params
+  return Axios.post('/court/getCityList', params
   ).then(res => res.data)
 
   // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
-// 获取区份
+// 区
 export const getDisctrictDataList = (params) => {
-  console.log(' districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(ADDR_BASE_PATH + '/api/court/getDistrictList', params
+  console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post('/court/getDistrictList', params
   ).then(res => res.data)
 
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
@@ -76,11 +80,22 @@ export const getDisctrictDataList = (params) => {
 
 // 下载查询结果
 export const downSearchResult = (params) => {
-  console.log(' districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(ADDR_BASE_PATH + '/api/court/getDistrictList', params
+  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/common/generateExcel', params
   ).then(res => res.data)
+}
 
-  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+export const downloadExcelFile = (params) => {
+  console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
+  ).then(res => {
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    let link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = params
+    link.click()
+    return res.data
+  })
 }
 
 /** =================硬件服务器信息================================ */
@@ -90,8 +105,6 @@ export const getauServersByPage = (params) => {
   console.log('<<<<<au servers params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auServers/queryPageData', params
   ).then(res => {
-    console.info('au server return data: ')
-    console.info(JSON.stringify(res.data))
     return res.data
   })
 
@@ -137,7 +150,6 @@ export const getauServersHistoryList = (id) => {
 /** =================应用&服务信息================================ */
 // 查询应用&服务信息列表信息
 export const getAppServiceByPage = (params) => {
-  console.log('<<<<<application & services params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auServices/queryPageData', params
   ).then(res => res.data)
 
@@ -146,7 +158,6 @@ export const getAppServiceByPage = (params) => {
 
 // 获取应用&服务信息单条信息的详细信息
 export const getAppServiceDetails = (id) => {
-  console.log('services id  -- > ' + id)
   return Axios.get(BASE_PATH + '/auServices/getServiceInfo?id=' + id
   ).then(res => res.data)
 
@@ -155,7 +166,6 @@ export const getAppServiceDetails = (id) => {
 
 // 更新应用&服务信息
 export const updateAppServiceInfo = (params) => {
-  console.log('9999999999 ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auServices/update', params
   ).then(res => res.data)
 
@@ -164,14 +174,13 @@ export const updateAppServiceInfo = (params) => {
 
 // 刷新应用&服务
 export const syncAppServiceData = (params) => {
-  // return Axios.get(BASE_PATH + '/auServers/syncServerDataById/{id}', params
-  // ).then(res => res.data)
-  return Axios.get(contextPath + '/auServers/syncServerDataById/{id}').then(res => res.data)
+  return Axios.get(BASE_PATH + '/auServers/syncServerDataById/{id}', params
+  ).then(res => res.data)
+  // return Axios.get(contextPath + '/auServers/syncServerDataById/{id}').then(res => res.data)
 }
 
 // 获取应用&服务历史记录信息
 export const getAppServiceHistoryList = (id) => {
-  console.log('id ---- >' + id)
   return Axios.get(BASE_PATH + '/auServices/queryHistoryById?id=' + id
   ).then(res => res.data)
 
@@ -182,10 +191,7 @@ export const getAppServiceHistoryList = (id) => {
 
 // 获取操作系统列表数据
 export const getOSInfoByPage = (params) => {
-  // return Axios.get(BASE_PATH + '/auOss/queryPageData?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit + '&courtArea=' + listQuery.courtArea + '&queryCondition=' + listQuery.queryCondition
-  // ).then(res => res.data)
-
-  console.log('<<<<<api params data :' + JSON.stringify(params))
+  // console.log('<<<<<api params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auOss/queryPageData', params
   ).then(res => res.data)
 
@@ -194,7 +200,7 @@ export const getOSInfoByPage = (params) => {
 
 // 获取操作系统信息单条信息的详细信息
 export const getOSDetails = (id) => {
-  console.log('services id  -- > ' + id)
+  // console.log('services id  -- > ' + id)
   return Axios.get(BASE_PATH + '/auOss/get?id=' + id
   ).then(res => res.data)
 
@@ -219,7 +225,7 @@ export const syncOSData = (id) => {
 
 // 获取操作系统历史记录信息
 export const getOSHistoryList = (id) => {
-  console.log('os history id ---- >' + id)
+  // console.log('os history id ---- >' + id)
   return Axios.get(BASE_PATH + '/auOss/queryHistoryById?id=' + id
   ).then(res => res.data)
 
@@ -230,25 +236,25 @@ export const getOSHistoryList = (id) => {
 
 // 获取操作系统列表数据
 export const getDatabaseInfoByPage = (params) => {
-  console.log('<<<<database params data :' + JSON.stringify(params))
+  // console.log('<<<<database params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auDbms/queryPageData', params
   ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auServers/queryPageData').then(res => res.data)
+  // return Axios.get(contextPath + '/auServers/querydatabasePageData').then(res => res.data)
 }
 
 // 获取操作系统信息单条信息的详细信息
 export const getDatabaseDetails = (id) => {
-  console.log('database id  -- > ' + id)
+  // console.log('database id  -- > ' + id)
   return Axios.get(BASE_PATH + '/auDbms/get?id=' + id
   ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auServers/get/id').then(res => res.data)
+  // return Axios.get(contextPath + '/databasequery/get/id').then(res => res.data)
 }
 
 // 更新数据库信息
 export const updateDatabaseInfo = (params) => {
-  console.log('5555555555555555  ' + JSON.stringify(params))
+  // console.log('5555555555555555  ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auDbms/update', params
   ).then(res => res.data)
 
@@ -275,21 +281,21 @@ export const getDatabaseHistoryList = (id) => {
 
 // 获取中间件列表数据
 export const getMiddlewareInfoByPage = (params) => {
-  console.log('<<<<<middleware params data :' + JSON.stringify(params))
+  // console.log('<<<<<middleware params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auMiddleware/queryPageData', params
   ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auServers/queryPageData'
+  // return Axios.get(contextPath + '/auMiddleware/queryPageData'
   // ).then(res => res.data)
 }
 
 // 获取中间件信息单条信息的详细信息
 export const getMiddlewareDetails = (id) => {
-  console.log('services id  -- > ' + id)
+  // console.log('services id  -- > ' + id)
   return Axios.get(BASE_PATH + '/auMiddleware/get?id=' + id
   ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auServers/get/id').then(res => res.data)
+  // return Axios.get(contextPath + '/auMiddlewaredetails/get/id').then(res => res.data)
 }
 
 // 更新中间件信息
@@ -308,7 +314,7 @@ export const syncMiddlewareInfo = (params) => {
 
 // 获取中间件历史记录信息
 export const getMiddlewareHistoryList = (id) => {
-  console.log('os history id ---- >' + id)
+  // console.log('os history id ---- >' + id)
   return Axios.get(BASE_PATH + '/auMiddleware/queryHistoryById?id=' + id
     ).then(res => res.data)
 
@@ -319,10 +325,11 @@ export const getMiddlewareHistoryList = (id) => {
 
 // 获取网络设备列表数据
 export const getNetDeviceInfoByPage = (params) => {
-  console.log('<<<<<netdevice params data :' + JSON.stringify(params))
+  // console.log('<<<<<netdevice params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auNetequip/queryPageData', params
   ).then(res => res.data)
-  // return Axios.get(contextPath + '/auServers/queryPageData').then(res => res.data)
+
+  // return Axios.get(contextPath + '/auNetEquip/queryPageData').then(res => res.data)
 }
 
 // 获取网络设备信息单条信息的详细信息
@@ -330,7 +337,8 @@ export const getNetDeviceDetails = (id) => {
   console.log('net equipment id  -- > ' + id)
   return Axios.get(BASE_PATH + '/auNetequip/get?id=' + id
   ).then(res => res.data)
-  // return Axios.get(contextPath + '/auServers/get/id').then(res => res.data)
+
+  // return Axios.get(contextPath + '/auNetEquip/get/id').then(res => res.data)
 }
 
 // 更新网络设备信息
@@ -341,7 +349,7 @@ export const updateNetDeviceInfo = (params) => {
   // return Axios.post(contextPath + '/osServices/update', params).then(res => res.data)
 }
 
-// 刷网络设备
+// 刷新网络设备
 export const syncNetDeviceData = (params) => {
   return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
   ).then(res => res.data)
@@ -349,43 +357,9 @@ export const syncNetDeviceData = (params) => {
 
 // 获取网络设备历史记录信息
 export const getNetDeviceHistoryList = (id) => {
-  console.log('os history id ---- >' + id)
+  // console.log('os history id ---- >' + id)
   return Axios.get(BASE_PATH + '/auNetequip/queryHistoryById/' + id
     ).then(res => res.data)
 
   // return Axios.get(BASE_PATH + '/osServices/queryHistoryById/{id}').then(res => res.data)
 }
-
-/***
- * fdafda
- * fdafdafa
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * a
- * aaaa
- * a
- * a
- * a
- * aa
- */

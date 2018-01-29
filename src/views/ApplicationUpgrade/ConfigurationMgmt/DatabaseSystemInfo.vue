@@ -5,7 +5,7 @@
       <el-col :span="24">
         <div>
           <el-table :data="databaseListData" stripe border>
-            <el-table-column  type="index" label="序号" width="50">
+            <el-table-column  type="index" label="序号" width="50" v-loading="loading">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
@@ -42,8 +42,6 @@
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
         <database-edit :databaseEditDetails="databaseEditDetails" @saveDatabaseInfoEvent="_updateDatabaseInfo"></database-edit>
-        <!-- <database-edit :databaseEditDetails="databaseEditDetails" @saveDatabaseInfoEvent="_updateDatabaseInfo" ref='editDB'></database-edit> -->
-        <!-- <database-edit @saveDatabaseInfoEvent="_updateDatabaseInfo" ref='editDB'></database-edit> -->
       </el-dialog>
     </div>
     <div>
@@ -86,6 +84,7 @@ export default {
       databaseHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
+      loading: true,
       searchConditionList: {
         'city': '',
         'condition': '',
@@ -150,18 +149,21 @@ export default {
   methods: {
     // 查询
     _handleFilter () {
+      this.loading = true
       getDatabaseInfoByPage(this.searchConditionList)
         .then(
           function (result) {
             console.log('database by page --- > ' + JSON.stringify(result))
             this.databaseListData = result.dbmsList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
             console.log(error)
-          }
+            this.loading = false
+          }.bind(this)
         )
     },
 
@@ -193,10 +195,6 @@ export default {
           .then(
             function (result) {
               this.databaseEditDetails = result.auDbms
-              // alert(JSON.stringify(result.auDbms))
-              // if (this.$refs.editDB) {
-              //   this.$refs.editDB.refreshPageData(this.databaseEditDetails)
-              // }
               this.dialogEditVisible = true
             }.bind(this)
           )
@@ -308,12 +306,14 @@ export default {
             console.log('database by page --- > ' + JSON.stringify(result))
             this.databaseListData = result.dbmsList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
             console.log(error)
-          }
+            this.loading = false
+          }.bind(this)
         )
     },
 
@@ -329,13 +329,12 @@ export default {
       this.loadData()
     }
   },
-
   mounted () {
     this.loadData()
   }
 }
 </script>
 
-<<style>
-@import "assets/css/upgrademgmt.less";
+<style scoped>
+@import "assets/css/upgrademgmt.less"
 </style>

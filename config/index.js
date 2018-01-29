@@ -34,7 +34,12 @@ module.exports = {
       '/scp-usermgmtcomponent': {
         target: 'http://192.168.0.242:30940',  // 242线上用户管理
         changeOrigin: true
+      },
+      '/egc-logservicecomponent': {
+        target: 'http://172.16.30.9:8082/',  // 日志组件管理
+        changeOrigin: true
       }
+      
     },
 
     // Various Dev Server settings

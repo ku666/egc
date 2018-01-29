@@ -12,7 +12,7 @@
           <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">重置</el-button><br>
           <el-button class="action-btn" style="margin-top: 15px;" @click="handleCreate" type="primary" >添加</el-button>
         </div>
-        <grid-list 
+        <grid-list id="usergroupTable"
           :editable="true" 
           :deletable="true" 
           :showOperation="true" 
@@ -36,12 +36,11 @@
       </div>
       <el-dialog :title="dialogAddStatus" 
       :close-on-click-modal="false"
-      :show-close="false"
+      :show-close="true"
+      :before-close="userGroupAddEvent"
       :visible.sync="dialogFormAddVisible">
         <user-group-create
           @listenToAddEvent="userGroupAddEvent"
-          @gridDeleteEvent="userGroupDeleteEvent" 
-          @gridEditEvent="userGroupEditEvent"
           v-show="showCreate"
         ></user-group-create>
       </el-dialog>
@@ -55,45 +54,12 @@
           :editForm="userGroupForm" 
           @listenToChildEditEvent="childEditEvent"
           @listenToChildDeleteEvent="childDeleteEvent"
+          @listenToChildCloseEvent="childCloseEvent"
           v-show="showEdit"
           :usergroupUuid="usergroupUuid"
         ></user-group-edit>
       </el-dialog>
     </div>
-    <!-- <div v-show="showGrid == false">
-      <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
-          <el-input
-            placeholder="输入关键字进行过滤"
-            v-model="filterText">
-          </el-input>
-          <el-tree style='margin-top:10px;'
-                   class="filter-tree"
-                   :data="treeData"
-                   node-key="id"
-                   :highlight-current="treeHighlight"
-                   :filter-node-method="filterNode"
-                   ref="menuTree"
-                   @node-click="handleNodeClick"
-                   default-expand-all
-          >
-          </el-tree>
-          <div style="margin-top: 30px" v-show="showSubGrid==true">
-            <el-button class="filter-item" @click="handleTreeCreate" type="primary">
-              添加
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleTreeDelete" type="primary">
-              删除
-            </el-button>
-          </div>
-        </el-col>
-        <el-col :span="16" style='margin-top:15px;' v-show="showSubGrid==true">
-          <el-card class="box-card" style='margin-left:10px;'>
-            <user-group-edit :userGroupDetailData="subUserGroupData" :form="userGroupForm" @gridDeleteEvent="userGroupDeleteEvent" @gridEditEvent="userGroupEditEvent"> </user-group-edit>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div> -->
   </div>
 </template>
 
@@ -148,6 +114,11 @@
           pageSize: 5,
           usergroupUuid: undefined,
           userGroupName: undefined
+        },
+        queryEdit: {
+          currentPage: 1,
+          pageSize: 5,
+          usergroupUuid: undefined
         }
       }
     },
@@ -165,18 +136,6 @@
           title: '用户组说明',
           prop: 'remark'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '用户类别',
-        //   prop: 'type'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirUsersName'
@@ -281,20 +240,6 @@
       handleNodeClick (data) {
         console.log('node data : *******************************************' + data.label)
         this.showSubGrid = true
-        // getUserGroupDetail()
-        //   .then(
-        //     function (result) {
-        //       this.subUserGroupData = result.userDetailList
-        //       this.userGroupForm.code = result.code
-        //       this.userGroupForm.type = result.type
-        //       this.userGroupForm.description = result.desc
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
       },
       handleTreeCreate () {
         this.handleCreate()
@@ -344,6 +289,10 @@
         deleteUserGroup(this.usergroupUuid)
           .then(
             function (result) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
               getUserGroupList(this.query)
                 .then(
                   function (result) {
@@ -361,6 +310,7 @@
           .catch(
             function (error) {
               console.log(error)
+              this.$message.error(error.response.data.message)
             }
           )
       },
@@ -402,9 +352,8 @@
         this.query.usergroupUuid = this.usergroupUuid
         console.log(this.query.usergroupUuid)
         console.log(JSON.stringify(this.query))
-        this.query.currentPage = 1
-        this.query.pageSize = 5
-        getUserGroupData(this.query)
+        this.queryEdit.usergroupUuid = this.usergroupUuid
+        getUserGroupData(this.queryEdit)
             .then(
               function (result) {
                 this.subUserGroupData = result
@@ -474,6 +423,9 @@
           )
         this.dialogFormAddVisible = false
         this.showCreate = false
+      },
+      childCloseEvent () {
+        this.dialogFormEditVisible = false
       }
     },
     created () {
@@ -488,4 +440,16 @@
 </script>
 
 <style scoped>
+  #usergroupTable >>> colgroup col:nth-child(1) {
+    width: 20%
+  }
+  #usergroupTable >>> colgroup col:nth-child(2) {
+    width: 30%
+  }
+  #usergroupTable >>> colgroup col:nth-child(3) {
+    width: 42%
+  }
+  #usergroupTable >>> colgroup col:nth-child(4) {
+    width: 8%
+  }
 </style>

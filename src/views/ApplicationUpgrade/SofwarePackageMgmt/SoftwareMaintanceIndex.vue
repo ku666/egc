@@ -40,7 +40,7 @@
     <el-row>
       <el-col :span="24">
         <div>
-          <el-table :data="softwarePackListData" stripe border height="100%">
+          <el-table :data="softwarePackListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -189,6 +189,7 @@ export default {
       softwarePackListData: undefined,
       softwarePckDetails: undefined,
       softwarePckHistory: undefined,
+      loading: true,
       softwareDetails: {
         name: '',
         version: '',
@@ -269,6 +270,7 @@ export default {
   methods: {
     // 查询
     _handleFilter () {
+      this.loading = false
       if (this.validateInput()) {
         this.loadData()
       }
@@ -311,15 +313,16 @@ export default {
             .then((res) => {
               console.log('===>' + res)
               if (res.code === '200') {
-                this.$message({
-                  message: '上传成功',
-                  type: 'success',
-                  duration: 2000,
-                  center: true,
-                  showClose: true
-                }).bind(this)
+                this.$message.success('上传成功', 2000)
+                // this.$message({
+                //   message: '上传成功',
+                //   type: 'success',
+                //   center: true,
+                //   showClose: true
+                // }).bind(this)
                 this.dialogRegisterVisible = false
                 this.$refs[formName].resetFields()
+                this.fileList = []
                 this.loadData()
               }
             }).catch(
@@ -423,7 +426,7 @@ export default {
           )
     },
 
-    // 更新每条软件包信息
+    // 编辑每条软件包信息
     _updateSofwareInfo (params) {
       console.info('update software package!')
       updateSoftwarePackage(params)
@@ -431,13 +434,7 @@ export default {
           function (result) {
             console.log('update response --- >' + JSON.stringify(result))
             if (result.code === '200') {
-              this.$message({
-                message: result.message,
-                type: 'success',
-                duration: 2000,
-                center: true,
-                showClose: true
-              })
+              this.$message.success(result.message, 2000)
               this.dialogEditVisible = false
               // 再次加载列表的数据
               this.loadData()
@@ -470,21 +467,11 @@ export default {
           function (result) {
             console.info('delete software package-->' + JSON.stringify(result))
             if (result.code === '200') {
-              this.$message({
-                message: result.message,
-                type: 'success',
-                showClose: true,
-                duration: 2000
-              })
+              this.$message.success(result.message, 2000)
               // 再次加载列表数据
               this.loadData()
             } else {
-              this.$message({
-                message: result.message,
-                type: 'error',
-                showClose: true,
-                duration: 2000
-              })
+              this.$message.success(result.message, 2000)
               // 再次加载列表数据
               this.loadData()
             }
@@ -492,12 +479,7 @@ export default {
         )
         .catch(
           function (error) {
-            this.$message({
-              message: error.message,
-              type: 'error',
-              showClose: true,
-              duration: 2000
-            })
+            this.$message.error(error.message)
             console.log(error)
           }.bind(this)
         )
@@ -546,8 +528,8 @@ export default {
           function (result) {
             console.log('result result  = >>>> ' + JSON.stringify(result))
             this.softwarePackListData = result.data.data
-            console.log('this.softwarePackListData  = >>>> ' + JSON.stringify(this.softwarePackListData))
             this.total = result.data.totalCount
+            this.loading = false
           }.bind(this)
         )
         .catch(

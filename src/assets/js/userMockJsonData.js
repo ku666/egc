@@ -265,6 +265,22 @@ export default {
             //   'items': null
             // }
           ]
+        },
+        {
+          'id': '11',
+          'title': '日志管理',
+          'icon': 'el-icon-menu',
+          'url': '33',
+          'submenus': [
+            {
+              'id': null,
+              'title': '日志管理',
+              'url': '/logservicecomponent/logserviceindex',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            }
+          ]
         }
       ]
     }

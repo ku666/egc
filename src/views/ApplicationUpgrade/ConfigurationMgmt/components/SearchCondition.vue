@@ -7,10 +7,9 @@
         <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable  @change="loadCityData">
           <el-option
             v-for="item in provinces"
-            :key="item"
-            :label="item"
-            :value="item">
-            <span style="float: left">{{ item }}</span>
+            :key="item.label"
+            :label="item.label"
+            :value="item.label">
           </el-option>
         </el-select>
       </div>
@@ -21,10 +20,9 @@
         <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable  @change="loadDistrictData">
           <el-option
             v-for="item in cities"
-            :key="item"
-            :label="item"
-            :value="item">
-            <span style="float: left">{{ item }}</span>
+            :key="item.label"
+            :label="item.label"
+            :value="item.label">
           </el-option>
         </el-select>
       </div>
@@ -35,10 +33,9 @@
         <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
           <el-option
             v-for="item in districts"
-            :key="item"
-            :label="item"
-            :value="item">
-            <span style="float: left">{{ item }}</span>
+            :key="item.label"
+            :label="item.label"
+            :value="item.label">
           </el-option>
         </el-select>
       </div>
@@ -61,7 +58,7 @@
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult">下载查询结果</el-button>
+      <el-button type="primary" @click="_callHanderDownLoadResult">导出</el-button>
       </div>
     </el-col>
   </el-row>
@@ -81,35 +78,7 @@ export default {
       provinces: [],
       cities: [],
       districts: [],
-      addrDataList: {
-        'data': {
-          'businessId': 'egc-applicationupgradecomponent',
-          'city': '',
-          'cityAbbr': '',
-          'currentPage': 1,
-          'district': '',
-          'districtAbbr': '',
-          'extAttributes': {},
-          'name': '',
-          'nameAbbr': '',
-          'pageSize': 10,
-          'platformFlag': 1,
-          'province': '',
-          'provinceAbbr': '',
-          'sourceSysId': 'egc-applicationupgradecomponent',
-          'targetSysId': 'egc-mdmcomponent',
-          'uuid': ''
-        },
-        'header': {
-          'businessId': 'egc-applicationupgradecomponent',
-          'charset': 'utf-8',
-          'contentType': 'application/json',
-          'createTimestamp': 0,
-          'extAttributes': {},
-          'sourceSysId': 'egc-applicationupgradecomponent',
-          'targetSysId': 'egc-mdmcomponent'
-        }
-      },
+      provParams: {},
       maxlength: 30
     }
   },
@@ -132,91 +101,90 @@ export default {
     // 验证输入内容是否为空
     validateInput () {
       if (this.searchConDetails.province === '' && this.searchConDetails.city === '' && this.searchConDetails.district === '' && this.searchConDetails.condition === '') {
-        this.$message({
-          message: '请选择省/市/区或者输入查询关键字',
-          center: true,
-          showClose: true,
-          type: 'error',
-          duration: 2000
-        })
+        this.$message.warning('请选择省/市/区或输入查询关键字')
         return false
       }
       return true
     },
     loadProvinceData () {
-      getProvinceDataList(this.addrDataList)
+      var that = this
+      getProvinceDataList(that.provParams)
           .then(
             function (result) {
-              console.log('>>>>>>>>>>>>>>>>procince result :  ' + JSON.stringify(result))
-              this.provinces = result.data
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$message({
-                message: '查询省信息失败',
-                type: 'error',
-                duration: 2000
-              })
-              console.info(error)
-            }.bind(this)
+              let provinceArr = result.data
+              for (let i = 0; i < provinceArr.length; i++) {
+                that.provinces.push(
+                  {
+                    label: provinceArr[i].province,
+                    value: provinceArr[i].provinceAbbr
+                  }
+                )
+              }
+            }
+          ).catch(
+            function () {
+              that.$message.error('查询省信息失败')
+            }
           )
     },
     loadCityData () {
-      console.log('selected city data: ===>' + this.searchConDetails.province)
-      if (this.searchConDetails.city !== '') {
-        this.searchConDetails.city = ''
+      var that = this
+      if (that.searchConDetails.city !== '') {
+        that.searchConDetails.city = ''
       }
-      if (this.searchConDetails.district !== '') {
-        this.searchConDetails.district = ''
+      if (that.searchConDetails.district !== '') {
+        that.searchConDetails.district = ''
       }
-      this.addrDataList.data.province = this.searchConDetails.province
-      getCityDataList(this.addrDataList)
+      that.cities = []
+      that.districts = []
+      that.provParams.province = that.searchConDetails.province
+      getCityDataList(that.provParams)
           .then(
             function (result) {
-              console.log('>>>>>>>>>>>>>>>> city result :  ' + JSON.stringify(result))
-              this.cities = result.data
-            }.bind(this)
+              let cityArr = result.data
+              for (let i = 0; i < cityArr.length; i++) {
+                that.cities.push(
+                  {
+                    label: cityArr[i].city,
+                    value: cityArr[i].cityAbbr
+                  }
+                )
+              }
+            }
           )
           .catch(
-            function (error) {
-              this.$message({
-                message: '查询市信息失败',
-                type: 'error',
-                duration: 2000
-              })
-              console.info(error)
-            }.bind(this)
+            function () {
+              that.$message.error('查询市信息失败')
+            }
           )
     },
     loadDistrictData () {
-      var tempCity = this.searchConDetails.city
-      console.log('tempcity -> ' + tempCity)
-      console.log('selected province data: ===>' + this.searchConDetails.province)
-      console.log('selected city data: ===>' + this.searchConDetails.city)
-      this.addrDataList.data.province = this.searchConDetails.province
-      this.addrDataList.data.city = this.searchConDetails.city
-      if (this.addrDataList.data.city !== '') {
-        this.searchConDetails.district = ''
-        getDisctrictDataList(this.addrDataList)
+      var that = this
+      that.provParams.province = that.searchConDetails.province
+      that.provParams.city = that.searchConDetails.city
+      if (that.searchConDetails.city !== '') {
+        that.searchConDetails.district = ''
+        that.districts = []
+        getDisctrictDataList(that.provParams)
           .then(
             function (result) {
-              console.log('>>>>>>>>>>>>>>>> district result :  ' + JSON.stringify(result))
-              this.districts = result.data
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.$message({
-                message: '查询市信息失败',
-                type: 'error',
-                duration: 2000
-              })
-              console.info(error)
-            }.bind(this)
+              let districtsArr = result.data
+              for (let i = 0; i < districtsArr.length; i++) {
+                that.districts.push(
+                  {
+                    label: districtsArr[i].district,
+                    value: districtsArr[i].districtAbbr
+                  }
+                )
+              }
+            }
+          ).catch(
+            function () {
+              that.$message.error('查询区信息失败')
+            }
           )
       } else {
-        this.searchConDetails.district = ''
+        that.searchConDetails.district = ''
       }
     }
   },
@@ -225,3 +193,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.download-template {
+  cursor: pointer;
+}
+.icon-download {
+  color: #fff;
+  background-color: #409EFF;
+  border-color: #409EFF;
+}
+</style>

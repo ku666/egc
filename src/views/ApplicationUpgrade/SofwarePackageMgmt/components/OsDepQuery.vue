@@ -33,7 +33,7 @@
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <server-hardware-details :osDepDetails="osDepDetails"></server-hardware-details>
+        <os-dep-details :osDepDetails="osDepDetails"></os-dep-details>
       </el-dialog>
     </div>
   </div>
@@ -41,10 +41,12 @@
 
 <script>
 import searchDepCondition from './SearchDepCondition'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
+import osDepDetails from './OsDepDetails'
+import { getOsDepByPage, getOsDepDetails } from '../apis/index'
 export default {
   components: {
-    searchDepCondition
+    searchDepCondition,
+    osDepDetails
   },
   data () {
     return {
@@ -97,7 +99,7 @@ export default {
           width: 120
         }, {
           colName: '备注',
-          prop: 'uuid'
+          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
@@ -107,7 +109,7 @@ export default {
   methods: {
     // 查询
     _handleFilter (params) {
-      getHardwareDepByCondition(params)
+      getOsDepByPage(params)
         .then(
           function (result) {
             this.osDepListData = result.data.data
@@ -129,16 +131,15 @@ export default {
 
     // 查看硬件依赖每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '服硬件运行环境依赖信息详情'
+      this.dialogStatus = '操作系统运行环境依赖信息详情'
       var rowData = this.osDepListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
-      getHardwareDepDetails(eachRowUUID)
+      getOsDepDetails(eachRowUUID)
           .then(
             function (result) {
-              this.osDepDetails = result.auServers
+              this.osDepDetails = result.data
               this.dialogDetailsVisible = true
-              console.log('server details -----------> ' + JSON.stringify(this.osDepDetails))
             }.bind(this)
           )
           .catch()
@@ -146,7 +147,7 @@ export default {
 
     // 初始加载硬件依赖的信息
     loadData () {
-      getHardwareDepByPage(this.searchConditionList)
+      getOsDepByPage(this.searchConditionList)
         .then(
           function (result) {
             this.osDepListData = result.data.data

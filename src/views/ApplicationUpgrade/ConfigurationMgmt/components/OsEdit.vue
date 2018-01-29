@@ -36,19 +36,19 @@
       </el-form-item>
 
 
-      <div>
+      <!-- <div>
         <template v-if="osDetails.newItems.length !== 0" v-for="(item, index) in osDetails.newItems">
           <el-form-item :key="index" :label="item.newLabel" :label-width="formLabelWidth">
             <el-input class="upgrade_el-input" v-model="item.newValue"></el-input>
           </el-form-item>
         </template>
-      </div>
+      </div> -->
 
 
       <div>
         <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
 
-        <el-popover
+        <!-- <el-popover
             ref="newCIEventPop"
             visible="showAddNewCIPop"
             placement="right"
@@ -64,7 +64,7 @@
               <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
             </div>
           </el-popover>
-      <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a>
+      <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a> -->
 
       </div>
 

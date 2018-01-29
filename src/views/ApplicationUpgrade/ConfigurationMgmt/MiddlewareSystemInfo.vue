@@ -4,7 +4,7 @@
     <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <el-col :span="24">
         <div>
-          <el-table :data="middlewareListData" stripe border>
+          <el-table :data="middlewareListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -83,6 +83,7 @@ export default {
       middlewareHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
+      loading: true,
       searchConditionList: {
         'city': '',
         'condition': '',
@@ -107,19 +108,19 @@ export default {
       tableTitleList: [
         {
           colName: '省（直辖市）',
-          prop: 'location',
+          prop: 'courtDto.province',
           width: 120
         }, {
           colName: '市',
-          prop: 'location',
+          prop: 'courtDto.city',
           width: 100
         }, {
           colName: '区',
-          prop: 'location',
+          prop: 'courtDto.district',
           width: 100
         }, {
           colName: '小区名称',
-          prop: 'location',
+          prop: 'courtDto.memo',
           width: 120
         }, {
           colName: '中间件名称',
@@ -135,7 +136,7 @@ export default {
           width: 120
         }, {
           colName: '服务器主机名称',
-          prop: 'hostname',
+          prop: 'server.hostname',
           width: 150
         }, {
           colName: '描述',
@@ -147,16 +148,19 @@ export default {
   methods: {
     // 查询
     _handleFilter () {
+      this.loading = true
       getMiddlewareInfoByPage(this.searchConditionList)
         .then(
           function (result) {
             this.middlewareListData = result.middlewareList
             this.total = result.pageCount
+            this.loading = true
           }.bind(this)
         )
         .catch(
           function (error) {
             console.log(error)
+            this.loading = false
           }
         )
     },
@@ -294,13 +298,14 @@ export default {
       getMiddlewareInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('get data by page')
             this.middlewareListData = result.middlewareList
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
+            this.loading = false
             console.log(error)
           }
         )
@@ -318,9 +323,7 @@ export default {
       this.loadData()
     }
   },
-
   mounted () {
-    // 加载小区数据
     this.loadData()
   }
 }

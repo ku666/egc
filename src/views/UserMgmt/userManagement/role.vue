@@ -29,7 +29,8 @@
         </el-col>
         <el-dialog :title="dialogStatus" 
         :close-on-click-modal="false"
-        :show-close="false"
+        :show-close="true"
+        :before-close="roleAddEvent"
         :visible.sync="dialogFormVisible">
             <role-add 
               :form="roleForm"
@@ -41,6 +42,7 @@
           <el-card class="box-card" style='margin-left:10px; margin-top:15px'>
             <role-edit ref="roleedit"
               @listenToEditEvent="roleBaseVoEditEvent"
+              @listenToCloseEvent="roleCloseEvent"
               :roleUserData = 'subUserData'
               :roleUsergroupData="subUsergroupData"
               :roleResourceData="subResourceData"
@@ -143,16 +145,34 @@
           )
       },
       roleDeleteEvent (data) {
-        console.log('role：删除了第' + data.name + '行')
+        console.log(data)
+        console.log('role：删除了第' + data.roleName + '行')
         this.roleId = data.uuid
-        deleteRole(this.roleId)
+        deleteRole(data.uuid)
           .then(
             function (result) {
-            }
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.showGrid = false
+              getRoleList(this.query)
+                .then(
+                  function (result) {
+                    this.roleData = result
+                  }.bind(this)
+                )
+                .catch(
+                  function (error) {
+                    console.log(error)
+                  }
+                )
+            }.bind(this)
           )
           .catch(
             function (error) {
-              console.log(error)
+              this.$message.error(error.response.data.message)
+              console.log('error:' + JSON.stringify(error.response.data.message))
             }
           )
       },
@@ -186,13 +206,6 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              // this.roleListParam = [{
-              //   title: '角色名称',
-              //   prop: 'roleName'
-              // }, {
-              //   title: '角色说明',
-              //   prop: 'remark'
-              // }]
               this.roleData = result
             }.bind(this)
           )
@@ -208,13 +221,6 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              // this.roleListParam = [{
-              //   title: '角色名称',
-              //   prop: 'roleName'
-              // }, {
-              //   title: '角色说明',
-              //   prop: 'remark'
-              // }]
               this.roleData = result
             }.bind(this)
           )
@@ -223,6 +229,9 @@
               console.log(error)
             }
           )
+      },
+      roleCloseEvent () {
+        this.showGrid = false
       },
       handleRoleCurrentChange (val) {
         this.query.currentPage = val
@@ -273,15 +282,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-      width: 110px
-    }
+    width: 30%
+  }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 110px
+    width: 50%
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 220px
-  }
-  #usergroupTable >>> colgroup col:nth-child(4) {
-    width: 80px
+    width: 20%
   }
 </style>

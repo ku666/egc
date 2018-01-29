@@ -33,7 +33,7 @@
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <server-hardware-details :middlewareDepDetails="middlewareDepDetails"></server-hardware-details>
+        <middleware-dep-details-com :middlewareDepDetails="middlewareDepDetails"></middleware-dep-details-com>
       </el-dialog>
     </div>
   </div>
@@ -41,10 +41,12 @@
 
 <script>
 import searchDepCondition from './SearchDepCondition'
-import { getHardwareDepDetails, getHardwareDepByPage, getHardwareDepByCondition } from '../apis/index'
+import middlewareDepDetailsCom from './MiddlewareDepDetails'
+import { getMiddlewareDepDetails, getMiddlewareDepByPage } from '../apis/index'
 export default {
   components: {
-    searchDepCondition
+    searchDepCondition,
+    middlewareDepDetailsCom
   },
   data () {
     return {
@@ -97,7 +99,7 @@ export default {
           width: 120
         }, {
           colName: '备注',
-          prop: 'uuid'
+          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
@@ -107,7 +109,7 @@ export default {
   methods: {
     // 查询
     _handleFilter (params) {
-      getHardwareDepByCondition(params)
+      getMiddlewareDepByPage(params)
         .then(
           function (result) {
             this.middlewareDepListData = result.data.data
@@ -129,16 +131,17 @@ export default {
 
     // 查看中间件依赖每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '服硬件运行环境依赖信息详情'
+      this.dialogStatus = '操作系统环境依赖信息详情'
       var rowData = this.middlewareDepListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
-      getHardwareDepDetails(eachRowUUID)
+      getMiddlewareDepDetails(eachRowUUID)
           .then(
             function (result) {
-              this.middlewareDepDetails = result.auServers
+              console.info('result -->' + JSON.stringify(result))
+              this.middlewareDepDetails = result.data
               this.dialogDetailsVisible = true
-              console.log('server details -----------> ' + JSON.stringify(this.middlewareDepDetails))
+              console.log('middleware dep details -----------> ' + JSON.stringify(this.middlewareDepDetails))
             }.bind(this)
           )
           .catch()
@@ -146,9 +149,10 @@ export default {
 
     // 初始加载中间件依赖的信息
     loadData () {
-      getHardwareDepByPage(this.searchConditionList)
+      getMiddlewareDepByPage(this.searchConditionList)
         .then(
           function (result) {
+            console.log('init middleware data -- >' + JSON.stringify(result))
             this.middlewareDepListData = result.data.data
             this.total = result.data.totalCount
           }.bind(this)

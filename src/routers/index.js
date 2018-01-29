@@ -16,7 +16,8 @@ import MdmApp from '@/views/MdmApp/routers/index'
 import upgradeMgmt from '@/views/ApplicationUpgrade/ConfigurationMgmt/routers/index'
 import sofwarePackageMgmt from '@/views/ApplicationUpgrade/SofwarePackageMgmt/routers/index'
 import sofwarePackageDispatch from '@/views/ApplicationUpgrade/SoftwarePackageDispatch/routers/index'
-
+// 引入日志服务组件路由数据
+import logServiceComponentrouters from '@/views/LogServiceComponent/routers/index'
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -49,6 +50,7 @@ export default new Router({
         ...MapAnalysisApp,
         ...MdmApp,
         ...upgradeMgmt,
+        ...logServiceComponentrouters,
         ...sofwarePackageMgmt,
         ...sofwarePackageDispatch
       ]

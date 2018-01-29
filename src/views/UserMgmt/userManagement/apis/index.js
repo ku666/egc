@@ -142,6 +142,11 @@ export const getRoleListAll = () => {
   return Axios.get(contextPath + '/usermgmt/role/listAll'
   ).then(res => res.data)
 }
+// 从Maindata查询角色完整清单
+export const getRoleListAllMaindata = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole'
+  ).then(res => res.data)
+}
 // 新建角色
 export const createRole = (data) => {
   console.log('新建角色数据：' + data)
@@ -496,6 +501,14 @@ export const getResourceRoleList = (listQuery) => {
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=' +
   listQuery.page + '&pageSize=' + listQuery.limit
+  ).then(res => res.data)
+}
+// 获取资源角色列表信息
+export const getResourceRoleNoPageList = (listQuery) => {
+  console.log('<<<noPage<<userUuid:' + listQuery.resourceUuid)
+  console.log('<<<noPage<<listQuery.page:' + listQuery.page)
+  console.log('<<<noPage<<listQuery.limit:' + listQuery.limit)
+  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=1&pageSize=100000'
   ).then(res => res.data)
 }
 // 新增资源角色

@@ -23,7 +23,7 @@
           <img :src="deleteImg" style="width: 20px">
         </span>
         <span v-if="viewable" @click="handleClickView(scope.$index)" style="cursor:pointer" class="el-icon-view"></span>
-      </template>
+        </template>
     </el-table-column>
   </el-table>
 </div>
@@ -56,12 +56,6 @@
         })
         .then(() => {
           this.$emit('listenToDeleteEvent', this.tableData[row])
-          this.tableData.splice(row, 1)
-          this.$message({
-            type: 'success',
-            message: '删除成功'
-          }
-        )
         })
         .catch(() => {
           this.$message({

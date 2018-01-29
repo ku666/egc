@@ -4,7 +4,7 @@
     <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <el-col :span="24">
         <div>
-          <el-table :data="appServiceListData" stripe border>
+          <el-table :data="appServiceListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -82,6 +82,7 @@ export default {
       auappServiceHistory: undefined,
       synDataLoading: false,
       syncDataStatus: '',
+      loading: true,
       searchConditionList: {
         'city': '',
         'condition': '',
@@ -146,16 +147,19 @@ export default {
   methods: {
     // 查询
     _handleFilter () {
+      this.loading = true
       getAppServiceByPage(this.searchConditionList)
         .then(
           function (result) {
             this.appServiceListData = result.auServicesList
             console.log('get data by page -- >' + JSON.stringify(result))
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
+            this.loading = false
             console.log(error)
           }
         )
@@ -299,10 +303,12 @@ export default {
             this.appServiceListData = result.auServicesList
             console.log('get data by page -- >' + JSON.stringify(result))
             this.total = result.pageCount
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
+            this.loading = false
             console.log(error)
           }
         )
@@ -320,7 +326,6 @@ export default {
       this.loadData()
     }
   },
-
   mounted () {
     this.loadData()
   }
