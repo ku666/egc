@@ -333,11 +333,11 @@ export default {
       } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
         this.form.endDate = new Date() // 结束时间
-        this.form.startDate = new Date(new Date().setDate(1))
+        this.form.startDate = new Date(new Date() - 86400000 * 30)
       } else {
         this.formDatePickType = 'month'
         this.form.endDate = new Date() // 结束时间
-        this.form.startDate = new Date(new Date().getFullYear() - 1 + ' 01 01')// 开始时间
+        this.form.startDate = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
       }
     },
     handleSizeChange: function (val) {
