@@ -232,13 +232,16 @@ export default {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
-        getCourtInfo({ courtId: courtId }).then(res => {
+        getCourtInfo({ courtUuid: courtId }).then(res => {
           this.cellDetailsList = res.data.data
+          console.log('cellDetailsList')
           console.log(this.cellDetailsList)
         })
         let equiData = {}
         equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
+          console.log('getListDeviceType')
+          console.log(res)
           // if (res.data.code === '00000') {
           this.tableData = res.data
           // console.log(111111)
