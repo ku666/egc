@@ -301,7 +301,7 @@ export default {
         .then(
           function (result) {
             this.appServiceListData = result.auServicesList
-            console.log('get data by page -- >' + JSON.stringify(result))
+            console.log('application service result -- >' + JSON.stringify(result))
             this.total = result.pageCount
             this.loading = false
           }.bind(this)

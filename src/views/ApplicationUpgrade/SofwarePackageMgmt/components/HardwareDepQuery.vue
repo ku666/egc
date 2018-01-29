@@ -141,7 +141,7 @@ export default {
               console.log(JSON.stringify(result))
               this.hardwareDepDetails = result.data
               this.dialogDetailsVisible = true
-              console.log('harware dep details -----------> ' + JSON.stringify(this.hardwareDepDetails))
+              console.log('harware dep details -----------> ' + JSON.stringify(result))
             }.bind(this)
           )
           .catch()
@@ -152,7 +152,7 @@ export default {
       getHardwareDepByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log(JSON.stringify(result))
+            console.log('hardware running env result ==== >  ' + JSON.stringify(result))
             this.hardwareDepListData = result.data.data
             this.total = result.data.totalCount
           }.bind(this)

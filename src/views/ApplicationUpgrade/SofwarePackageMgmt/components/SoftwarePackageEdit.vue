@@ -24,12 +24,16 @@
       <el-form-item label="Git仓库名" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
-      <el-form-item label="Maven工程名" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item>
-      <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item>
+      
+      <template v-if="softwarePckDetails.extData !== null ">
+        <el-form-item label="Maven工程名" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        </el-form-item>
+        <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        </el-form-item>
+      </template>
+
       <el-form-item label="client包名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>

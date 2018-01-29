@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 软件包名称	软件包版本	开发者	应用&组件名称	前续软件包版本	依赖的应用&组件名称	依赖的应用&组件最低版本	依赖的应用&组件最高版本	备注	依赖的应用&组件英文名称	？？	？？	？？ -->
     <el-form :inline="true" :model="softpackDepDetails">
       <el-form-item label="软件包名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
@@ -13,16 +14,16 @@
       <el-form-item label="应用&组件名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
       </el-form-item>
-       <el-form-item label="前续软件包版本" :label-width="formLabelWidth">
+       <el-form-item label="依赖的应用&组件名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
       </el-form-item>
-       <el-form-item label="CPU要求（核数）" :label-width="formLabelWidth">
+       <el-form-item label="依赖的应用&组件最低版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
       </el-form-item>
-       <el-form-item label="内存要求（G） " :label-width="formLabelWidth">
+       <el-form-item label="依赖的应用&组件最高版本 " :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
       </el-form-item>
-       <el-form-item label="硬盘要求" :label-width="formLabelWidth">
+       <el-form-item label="依赖的应用&组件英文名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softpackDepDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">

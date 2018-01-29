@@ -420,6 +420,7 @@ export default {
       getOSInfoByPage(this.searchConditionList)
         .then(
           function (result) {
+            console.log('operating system result === > ' + JSON.stringify(result))
             this.osListData = result.ossList
             this.total = result.pageCount
             this.loading = false

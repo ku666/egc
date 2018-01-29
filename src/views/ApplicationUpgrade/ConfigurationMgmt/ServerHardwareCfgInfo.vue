@@ -115,21 +115,21 @@ export default {
           prop: 'courtDto.name',
           width: 120
         }, {
-          colName: 'CPU型号',
-          prop: 'cpuModel',
+          colName: '服务器产品名称',
+          prop: 'name',
+          width: 200
+        }, {
+          colName: '服务器SN',
+          prop: 'serialNo',
           width: 120
         }, {
-          colName: 'CPU核数',
-          prop: 'numberOfCore',
+          colName: '服务器厂商',
+          prop: 'vendor',
           width: 120
         }, {
-          colName: '内存容量',
-          prop: 'ram',
-          width: 120
-        }, {
-          colName: '硬盘容量',
-          prop: 'phdSpaceTotal',
-          width: 150
+          colName: '服务器类型/型号',
+          prop: 'model',
+          width: 340
         }, {
           colName: '描述',
           prop: 'remark'

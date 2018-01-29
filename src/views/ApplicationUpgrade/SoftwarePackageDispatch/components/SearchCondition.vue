@@ -1,6 +1,20 @@
 <template>
 <div>
   <el-row :gutter="40">
+    <el-col :span="8">
+      <div class="item-container">
+        <span class="sub-title">选择日期</span>
+        <el-date-picker
+          v-model="dataValue"
+          type="datetimerange"
+          :picker-options="pickerOptions"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          align="right">
+        </el-date-picker>
+      </div>
+    </el-col>
     <el-col :span="4">
       <div class="item-container">
       <span class="sub-title">选择省</span>
@@ -38,20 +52,6 @@
             :value="item.label">
           </el-option>
         </el-select>
-      </div>
-    </el-col>
-    <el-col :span="8">
-      <div class="item-container">
-        <span class="sub-title">选择日期</span>
-        <el-date-picker
-          v-model="dataValue"
-          type="datetimerange"
-          :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="right">
-        </el-date-picker>
       </div>
     </el-col>
     <el-col :span="4">
