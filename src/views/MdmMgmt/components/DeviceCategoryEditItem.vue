@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='40%'>
+  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='750px'>
     <!-- <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item> -->
 
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
@@ -17,7 +17,7 @@
             <el-input v-model='deviceCategoryDetail.typeDesc' :disabled='viewFlag'></el-input>
           </el-form-item>
           <el-form-item label='父设备' prop='parentUuid'>
-            <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlag'>
+            <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
               <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeName' :value='parent.uuid'>
               </el-option>
             </el-select>
@@ -74,7 +74,7 @@
 </template>
 
 <<script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -118,6 +118,7 @@ export default {
       selectAttr: [],
       transferData: [],
       deviceSaved: false,
+      viewFlagParent: true,
       rules: {
         typeCode: [
           { required: true, message: '请输入类别编码', trigger: 'blur' },
@@ -172,8 +173,12 @@ export default {
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
       this.deviceCategoryDetailVisible = true
       this.deviceSaved = true
+      this.viewFlagParent = true
       this.getAllAttr()
       this.getDeviceAttr()
+      console.log('++++++++++++++++++++++++++++++++++++++++++++++++')
+      console.log(this.selectAttr)
+      console.log('++++++++++++++++++++++++++++++++++++++++++++++++')
       // this.$parent.getParents()
     },
     // 添加设备信息
@@ -188,6 +193,7 @@ export default {
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
       this.deviceCategoryDetailVisible = true
+      this.viewFlagParent = false
       this.getAllAttr()
       // this.$parent.getParents()
     },
@@ -215,10 +221,12 @@ export default {
     getDeviceAttr: function () {
       getDeviceAttributeList({'typeCode': this.deviceCategoryDetail.typeCode})
       .then(res => {
+        let temp = []
         res.data.forEach(element => {
-          this.selectAttr = []
-          this.selectAttr.push(element.uuid)
+          temp.push(element.uuid)
         })
+        this.selectAttr = []
+        this.selectAttr = temp
       })
     },
     // 保存设备基本信息
@@ -228,14 +236,14 @@ export default {
           var func
           func = this.deviceCategoryDetail.uuid ? updateDeviceCategory : insertDeviceCategory
           func(Object.assign({}, this.deviceCategoryDetail)).then(res => {
-            this.$message({
-              message: '设备类别保存成功!',
-              type: 'success'
-            })
             // this.deviceCategoryDetailVisible = false
             this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
             this.deviceSaved = true
+            this.$message({
+              message: '设备类别保存成功!',
+              type: 'success'
+            })
           })
         } else {
           this.$message({
@@ -248,14 +256,13 @@ export default {
     },
     // 保存设备属性信息
     saveMapping: function () {
-      if (this.selectAttr.length === 0) {
-        this.$message({
-          message: '请选择设备属性',
-          type: 'warning'
-        })
-        return false
-      } else {
-      }
+      batchInsert({'typeUUID': this.deviceCategoryDetail.uuid, 'value': this.selectAttr})
+      .then(res => {
+        this.$parent.search({})
+        this.getDeviceAttr()
+        this.deviceCategoryDetailVisible = false
+        this.activeTab = 'basic'
+      })
     },
     // 清除验证信息
     clearValidate: function () {
