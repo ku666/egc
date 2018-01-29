@@ -92,8 +92,8 @@ export default {
         let condition = {}
         condition.courtUuid = node.data.uuid
         getAllOrgTreeByCourtUuid(condition).then(res => {
-          if (res.data.data != null) {
-            resolve(res.data.data)
+          if (res.data.data != null && res.data.data.children != null) {
+            resolve(res.data.data.children)
           } else {
             resolve([])
           }
