@@ -52,11 +52,11 @@
         <el-table-column prop='attrType' label='属性类型' show-overflow-tooltip></el-table-column>
         <el-table-column prop='attrDataType' label='数据类型' show-overflow-tooltip></el-table-column>
         <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='unitCode' label='单位编码' ></el-table-column>
+        <el-table-column prop='unitCode' label='单位编码' show-overflow-tooltip></el-table-column>
         <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='createUser' label='创建人'></el-table-column>
+        <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
         <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='updateUser' label='修改人'></el-table-column>
+        <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
         <el-table-column label='操作'>
           <template slot-scope='scope'>
             <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->

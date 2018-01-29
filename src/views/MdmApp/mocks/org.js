@@ -1,15 +1,17 @@
 export default {
   getAllOrgTreeByCourtUuid: config => {
-    var data = [
-      {
-        uuid: '235jklgdsj4543',
-        name: '1幢'
-      },
-      {
-        uuid: '235jkl54gdsj4543',
-        name: '2幢'
-      }
-    ]
+    var data = {
+      'children': [
+        {
+          uuid: '235jklgdsj4543',
+          name: '1幢'
+        },
+        {
+          uuid: '235jkl54gdsj4543',
+          name: '2幢'
+        }
+      ]
+    }
     return {
       data: data,
       code: '0000',
@@ -37,12 +39,10 @@ export default {
     }
   },
   getOrgTree: config => {
-    var data = [
-      {
+    var data = [{
         uuid: '234dsgsfd43534',
         name: '恒大小区一',
-        children: [
-          {
+        children: [{
             uuid: '235jklgdsj4543',
             name: '1幢',
             children: [{
@@ -63,8 +63,7 @@ export default {
       {
         uuid: '234dsgsfd43534',
         name: '恒大小区二',
-        children: [
-          {
+        children: [{
             uuid: '235jklgdsj4543',
             name: '1幢',
             children: [{
@@ -85,8 +84,7 @@ export default {
       {
         uuid: '234dsgsfd43534',
         name: '恒大小区三',
-        children: [
-          {
+        children: [{
             uuid: '235jklgdsj4543',
             name: '1幢',
             children: [{
