@@ -35,17 +35,17 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <middleware-details :middlewareDetails="middlewareDetails"></middleware-details >
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
         <middleware-edit :middlewareDetails="middlewareDetails" @saveMiddlewareInfoEvent="_updateMiddlewareInfo"></middleware-edit>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <middleware-history :middlewareHistoryData="middlewareHistoryData"></middleware-history>
       </el-dialog>
     </div>

@@ -35,17 +35,17 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <database-details :databaseDetails="databaseDetails"></database-details >
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
         <database-edit :databaseEditDetails="databaseEditDetails" @saveDatabaseInfoEvent="_updateDatabaseInfo"></database-edit>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <database-history :databaseHistoryData="databaseHistoryData"></database-history>
       </el-dialog>
     </div>

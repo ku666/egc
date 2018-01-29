@@ -35,17 +35,17 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <app-service-details :auappServiceDetails="auappServiceData"></app-service-details>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
         <app-service-edit :auappServiceDetails="auappServiceData" @saveAppServiceInfoEvent="_updateAppServiceInfo"></app-service-edit>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <app-service-history :auappServiceHistory="auappServiceHistory"></app-service-history>
       </el-dialog>
     </div>
