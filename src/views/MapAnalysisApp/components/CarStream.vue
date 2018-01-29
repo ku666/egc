@@ -110,7 +110,7 @@ export default {
       form: {
         courtID: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
         reportType: '1', // 报表类型
-        startDate: new Date(new Date().setDate(new Date().getDate() - 1)), // 开始时间
+        startDate: new Date(new Date().setDate(new Date('2018-01-25').getDate() - 1)), // 开始时间
         endDate: new Date('2018-01-25') // 结束时间
       },
       courtInfo: {},
@@ -346,16 +346,7 @@ export default {
       // 分页获取数据，发送请求 初始化状态
       console.log('触发了吗')
       this.currentPage = val
-      var queryParam = this.queryParam()
-      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
-      getCarAccessPageList(queryParam).then(res => {
-        if (res.status === 200) {
-          console.log('分页查询')
-          this.carStreamData = res.data.result
-        } else {
-          this.errMessage()
-        }
-      })
+      this.getCarAccessPageList()
     },
     submitForm: function (formName) {
       // 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
@@ -373,6 +364,7 @@ export default {
     },
     getCourtCarAccessInfo: function () {
       console.log('获取时间段内所有数据,增加catch')
+      if (this.datePickRangeConfrim()) return
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
         if (res.status === 200) {
@@ -386,6 +378,7 @@ export default {
       })
     },
     getCarAccessPageList: function () {
+      if (this.datePickRangeConfrim()) return
       var queryParam = this.queryParam()
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
