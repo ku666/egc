@@ -216,6 +216,13 @@ export default {
           prop: 'newFunction',
           width: 120
         }, {
+          colName: '前续软件包名称',
+          prop: 'latestPreVer',
+          width: 150
+        }, {
+          colName: '前续软件包版本',
+          prop: 'latestPreVer'
+        }, {
           colName: '软件包登记日期/时间',
           prop: 'createTime',
           width: 160
@@ -223,13 +230,6 @@ export default {
           colName: '软件包登记者',
           prop: 'createUser',
           width: 120
-        }, {
-          colName: '前续软件包名称',
-          prop: 'latestPreVer',
-          width: 150
-        }, {
-          colName: '前续软件包版本',
-          prop: 'latestPreVer'
         }, {
           colName: '备注',
           prop: 'uuid'
@@ -526,7 +526,7 @@ export default {
       getSoftwarePackageByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('result result  = >>>> ' + JSON.stringify(result))
+            console.log('softwaremaintance result  = >>>>  ' + JSON.stringify(result))
             this.softwarePackListData = result.data.data
             this.total = result.data.totalCount
             this.loading = false

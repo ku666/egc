@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-form :inline="true" :model="middlewareDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" middlewareDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="中间件名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.name"></el-input>
       </el-form-item>
@@ -26,7 +28,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.server.name"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.serverId"></el-input>
       </el-form-item>
       <el-form-item label="中间件提供者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.provider"></el-input>

@@ -17,13 +17,13 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.uuid"></el-input>
       </el-form-item>
        <el-form-item label="CPU要求（核数）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.cpuFrequency"></el-input>
       </el-form-item>
        <el-form-item label="内存要求（G） " :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.ram"></el-input>
       </el-form-item>
        <el-form-item label="硬盘要求" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.storage"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="hardwareDepDetails.uuid"></el-input>

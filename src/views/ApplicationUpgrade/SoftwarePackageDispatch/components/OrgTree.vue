@@ -21,7 +21,7 @@
       </el-tree>
     </div>
     <div class="dispatch-btn">
-      <el-button type="primary" @click="_confirmSelectdOrg" >确定</el-button>
+      <el-button type="primary" @click="_confirmSelectdOrg" >下发</el-button>
     </div>
 </div>
 </template>

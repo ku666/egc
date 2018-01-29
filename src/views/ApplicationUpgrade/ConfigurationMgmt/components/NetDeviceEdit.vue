@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-form :inline="true" :model="netDeviceDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" netDeviceDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="设备名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.name"></el-input>
       </el-form-item>

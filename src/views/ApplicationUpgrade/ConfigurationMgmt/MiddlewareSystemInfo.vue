@@ -298,6 +298,7 @@ export default {
       getMiddlewareInfoByPage(this.searchConditionList)
         .then(
           function (result) {
+            console.log('middleware result -- >' + JSON.stringify(result))
             this.middlewareListData = result.middlewareList
             this.total = result.pageCount
             this.loading = false

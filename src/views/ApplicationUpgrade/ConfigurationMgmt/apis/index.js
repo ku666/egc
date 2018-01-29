@@ -1,51 +1,11 @@
 import Axios from '@/assets/js/AxiosPlugin'
 
-let contextPath = '/scp-upgradecomponent'
 // 接口地址
+let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-
 // const ADDR_BASE_PATH = '/egc-mdmcomponent'
 
-/** 以下定义的方法是用于调用Mock的数据 */
-
-/** =================硬件服务器信息================================ */
-// 获取小区数据信息
-export const getAddressData = () => {
-  return Axios.get(contextPath + '/auAddrData/queryAddrData'
-  ).then(res => res.data)
-}
-
-// 获取服务器列表数据
-export const getauServersList = () => {
-  return Axios.get(contextPath + '/auServers/queryPageData'
-  ).then(res => res.data)
-}
-
-// 获取服务器单条信息的详细信息
-export const getauServersDetails1 = () => {
-  return Axios.get(contextPath + '/auServers/get/id'
-  ).then(res => res.data)
-}
-
-// 更新硬件信息
-export const updateAuServerInfor1 = (params) => {
-  return Axios.post(contextPath + '/auServers/update', params
-  ).then(res => res.data)
-}
-
-// 刷新设备
-export const syncauServersData = (params) => {
-  return Axios.get(contextPath + '/auServers/syncServerDataById/{id}'
-  ).then(res => res.data)
-}
-
-// 获取历史记录信息
-export const getauServersHistoryList1 = (id) => {
-  return Axios.get(contextPath + '/auServers/queryHistoryById/{id}'
-  ).then(res => res.data)
-}
-
-/** ***************************以下定义的方法是用于调用真实环境的数据********************************* */
+/** 主数据 */
 
 // 省
 export const getProvinceDataList = (params) => {
@@ -131,7 +91,7 @@ export const updateAuServerInfor = (params) => {
 }
 
 // 刷新硬件服务器信息
-export const syncauServersData1 = (params) => {
+export const syncauServersData = (params) => {
   return Axios.get(BASE_PATH + '/auServers/refreshById/id', params
   ).then(res => res.data)
 

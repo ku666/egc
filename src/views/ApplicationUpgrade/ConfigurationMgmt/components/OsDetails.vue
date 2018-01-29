@@ -1,20 +1,22 @@
 <template>
   <div>
-    <!-- 操作系统名称	操作系统版本（服务包）	操作系统位数	服务器主机名称	描述	所在服务器UUID	操作系统提供者 -->
-    <!-- name	version	dataLength	hostname		uuid	updateUser -->
+    <!-- 操作系统	序号	省（直辖市）	市/区	小区名称	操作系统名称	操作系统版本（服务包）	操作系统位数	服务器主机名称	描述	
+        所在服务器UUID	操作系统提供者 -->
     <el-form :inline="true" :model="osDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" osDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="操作系统名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.name"></el-input>
       </el-form-item>

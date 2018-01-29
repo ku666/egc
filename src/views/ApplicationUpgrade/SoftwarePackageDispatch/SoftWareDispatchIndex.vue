@@ -7,6 +7,9 @@
         一致性 Consistency {{ item.softDesc }}
         </div>
       </template>
+      <div style="margin-top: 20px; text-align: right">
+        <el-button @click="_selectOrg" type="primary" plain>选择组织</el-button>
+      </div>
       <div>
         <template>
           <el-table
@@ -32,9 +35,6 @@
           layout="total, sizes, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
-      </div>
-      <div style="margin-top: 20px; text-align: right">
-        <el-button @click="_selectOrg" plain>选择组织</el-button>
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -105,164 +105,6 @@ export default {
         }
       ],
       testData: [{
-        softDesc: '这是一个测试版本的软件包',
-        tableData3: [{
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }, {
-          softName: '测试软件包 1.0',
-          softVersion: '1.0',
-          sourcePath: 'd:\\test\\pack',
-          soruceName: 'test package',
-          date: '2016-05-03',
-          devName: '王小虎',
-          operator: 'system admin',
-          preName: '开发版本测试包',
-          preVersion: '0.09',
-          desc: '这是一个测试版本的软件包， 为了测试'
-        }]
-      },
-      {
         softDesc: '这是一个测试版本的软件包',
         tableData3: [{
           softName: '测试软件包 1.0',

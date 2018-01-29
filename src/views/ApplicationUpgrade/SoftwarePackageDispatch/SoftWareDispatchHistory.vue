@@ -80,7 +80,11 @@ export default {
           prop: 'uuid',
           width: 120
         }, {
-          colName: '市/区',
+          colName: '市',
+          prop: 'uuid',
+          width: 120
+        }, {
+          colName: '区',
           prop: 'uuid',
           width: 120
         }, {
