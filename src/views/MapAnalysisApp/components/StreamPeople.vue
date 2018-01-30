@@ -398,7 +398,7 @@ export default {
       if (this.isRequest) this.getPgingData()
     },
     // 判断选择的时间是否符合要求
-    timeJudgment: function (val) {
+    timeJudgment: function () {
       switch (this.parameter.reportType) {
         case '0':
           if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) { // 一个月2851200000
@@ -451,7 +451,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: res.statusText
+            message: res.data.message
           })
         }
       }).catch(err => {
@@ -479,7 +479,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: res.statusText
+            message: res.data.message
           })
         }
       }).catch(err => {
