@@ -66,8 +66,8 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo">保 存</el-button>
     </div>
     </el-form>
   </div>

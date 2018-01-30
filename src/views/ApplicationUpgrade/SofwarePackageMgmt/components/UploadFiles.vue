@@ -15,7 +15,7 @@
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
       </el-upload>
-      <el-button type="primary" @click="_submitUpload">上传服务器</el-button>
+      <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
     </div>
 </template>
 

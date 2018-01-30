@@ -45,8 +45,8 @@
       </div> -->
 
 
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo">保 存</el-button>
 
         <!-- <el-popover
             ref="newCIEventPop"
