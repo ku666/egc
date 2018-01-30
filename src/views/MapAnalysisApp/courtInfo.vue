@@ -103,10 +103,16 @@ export default {
       let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
         // console.log(res)
+        let msgType = 'warning'
         if (res.data.code === '00000') {
+          msgType = 'success'
           let list = res.data.data
           this.courtInfo = Object.assign({}, list)
         }
+        this.$message({
+          type: msgType,
+          message: res.data.message
+        })
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -117,33 +123,38 @@ export default {
     /** 获取最近一个月内的人员流量日报数据 */
     getPeopleStreamData: function () {
       let param = {
-        courtUuid: this.courtInfo.courtUuid, // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
-        // if (res.data.code === '00000') {
-        let data = res.data
-        data = data.reverse()
-        let timeDate = []
-        let perInCount = []
-        let perOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
-          if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
-          perInCount.push(parseFloat(item.perInCount))
-          perOutCount.push(parseFloat(item.perOutCount))
-        })
-        peopleOption.updateTimeData(timeDate)
-        peopleOption.updateInData(perInCount)
-        peopleOption.updateOutData(perOutCount)
-        // console.log('人流信息：')
-        // console.log(peopleOption.option)
-        this.getMyCharts(2).setOption(peopleOption.option)
-        // }
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data
+          data = data.reverse()
+          let timeDate = []
+          let perInCount = []
+          let perOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
+            if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
+            perInCount.push(parseFloat(item.perInCount))
+            perOutCount.push(parseFloat(item.perOutCount))
+          })
+          peopleOption.updateTimeData(timeDate)
+          peopleOption.updateInData(perInCount)
+          peopleOption.updateOutData(perOutCount)
+          this.getMyCharts(2).setOption(peopleOption.option)
+        } else {
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -154,33 +165,39 @@ export default {
     /** 获取最近一个月内的车行流量日报数据 */
     getCarStreamData: function () {
       let param = {
-        courtUuid: this.courtInfo.courtUuid, // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
       }
       getCourtCarAccessInfo(param).then(res => {
-        console.log('车流信息：')
         // console.log(res)
-        // if (res.data.code === '00000') {
-        let data = res.data
-        data = data.reverse()
-        let timeDate = []
-        let carInCount = []
-        let carOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
-          if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
-          carInCount.push(parseFloat(item.carInCount))
-          carOutCount.push(parseFloat(item.carOutCount))
-        })
-        carOption.updateTimeData(timeDate)
-        carOption.updateInData(carInCount)
-        carOption.updateOutData(carOutCount)
-        console.log(carOption.option)
-        this.getMyCharts(3).setOption(carOption.option)
-        // }
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data
+          data = data.reverse()
+          let timeDate = []
+          let carInCount = []
+          let carOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
+            if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
+            carInCount.push(parseFloat(item.carInCount))
+            carOutCount.push(parseFloat(item.carOutCount))
+          })
+          carOption.updateTimeData(timeDate)
+          carOption.updateInData(carInCount)
+          carOption.updateOutData(carOutCount)
+          // console.log(carOption.option)
+          this.getMyCharts(3).setOption(carOption.option)
+        } else {
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -188,27 +205,33 @@ export default {
         })
       })
     },
-    /** 获取小区设置种类数据 */
+    /** 获取小区设备种类数据 */
     getEquipKindsData: function () {
       let param = {
-        courtUuid: this.courtInfo.courtUuid // 'c69aeede4f6341929721e2892beec3cb'
+        courtUuid: this.courtInfo.courtUuid
       }
       getListDeviceType(param).then(res => {
-        console.log(res)
-        // if (res.data.code === '00000') {
-        //   // let list = res.data.data
-        // }
-        let data = res.data // .slice(0, 10)
-        let equipData = []
-        data.map(function (item, index) {
-          let obj = {
-            name: item.deviceTypeDesc,
-            value: item.deviceCount
-          }
-          equipData.push(obj)
-        })
-        equipKind.updateData(equipData)
-        this.getMyCharts(4).setOption(equipKind.option)
+        // console.log(res)
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data // .slice(0, 10)
+          let equipData = []
+          data.map(function (item, index) {
+            let obj = {
+              name: item.deviceTypeDesc,
+              value: item.deviceCount
+            }
+            equipData.push(obj)
+          })
+          equipKind.updateData(equipData)
+          this.getMyCharts(4).setOption(equipKind.option)
+        } else {
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -218,26 +241,34 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-      // '222b79f4a7b44d03b6f55f028992851f'
       let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
         // console.log(res)
-        let ageData = []
-        let ageLevelData = []
-        let list = res.data
-        if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
-        if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
-        let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
-        list = res.data.ageGroupInfo
-        list.map(function (item, index) {
-          ageLevelData.push(item.group)
-          ageData.push(item.countNum)
-        })
-        ownerOption.updateSexData(sexData)
-        ownerOption.updateAgeLevelData(ageLevelData)
-        ownerOption.updateAgeData(ageData)
-        this.getMyCharts(0).setOption(ownerOption.optionSex)
-        this.getMyCharts(1).setOption(ownerOption.optionAge)
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let ageData = []
+          let ageLevelData = []
+          let list = res.data.data
+          if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
+          if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
+          let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
+          list = list.ageGroupInfo
+          list.map(function (item, index) {
+            ageLevelData.push(item.group)
+            ageData.push(item.countNum)
+          })
+          ownerOption.updateSexData(sexData)
+          ownerOption.updateAgeLevelData(ageLevelData)
+          ownerOption.updateAgeData(ageData)
+          this.getMyCharts(0).setOption(ownerOption.optionSex)
+          this.getMyCharts(1).setOption(ownerOption.optionAge)
+        } else {
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
         this.$message({
           type: 'warning',

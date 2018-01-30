@@ -78,7 +78,9 @@ export default {
     // 查询小区列表数据，初始化全国小区列表点位
     getCourtList().then(res => {
       // console.log(res)
+      let msgType = 'warning'
       if (res.data.code === '00000') {
+        msgType = 'success'
         let list = res.data.data
         this.courtList = list
         let test = [[113.619942, 23.304629],[108.93,34.27],[116.4,39.9],[121.47,31.23],[120.19,30.26],[113.5611,28.4445]] // 广州 西安  北京  上海  杭州
@@ -105,6 +107,10 @@ export default {
           }
         }, this)
       }
+      this.$message({
+        type: msgType,
+        message: res.data.message
+      })
     }).catch(err => {
       this.$message({
         type: 'warning',

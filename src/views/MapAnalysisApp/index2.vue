@@ -46,7 +46,9 @@ export default {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
       getCourtList({courtName:this.searchCourtName}).then(res => {
         // console.log(res)
+        let msgType = 'warning'
         if (res.data.code === '00000') {
+          msgType = 'success'
           let list = res.data.data
           this.courtList = list
           let pointdata = []
@@ -74,6 +76,10 @@ export default {
           }
           this.getMyCharts.setOption(mapData.option)
         }
+        this.$message({
+          type: msgType,
+          message: res.data.message
+        })
       }).catch(err => {
         this.$message({
           type: 'warning',
