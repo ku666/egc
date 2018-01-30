@@ -8,16 +8,16 @@
       <div class="person-list">
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='姓名'>
-            <el-input placeholder='输入姓名' v-model='searchCondition.name'></el-input>
+            <el-input placeholder='输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='证件号码'>
-            <el-input placeholder='输入证件号码' v-model='searchCondition.idenNum'></el-input>
+            <el-input placeholder='输入证件号码' v-model='searchCondition.idenNum' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电话'>
-            <el-input placeholder='输入电话' v-model='searchCondition.phone'></el-input>
+            <el-input placeholder='输入电话' v-model='searchCondition.phone' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电子邮箱'>
-            <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail'></el-input>
+            <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item>
             <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>

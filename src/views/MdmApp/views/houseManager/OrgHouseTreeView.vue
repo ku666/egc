@@ -19,7 +19,8 @@
   </div>
 </template>
 <script>
-import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+// import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+import { getOrgTreeNextLevel } from '../../apis/orgManager'
 import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   props: {
@@ -90,8 +91,8 @@ export default {
       if (node.level > 0) {
         this.loading = true
         let condition = {}
-        condition.courtUuid = node.data.uuid
-        getAllOrgTreeByCourtUuid(condition).then(res => {
+        condition.uuid = node.data.uuid
+        getOrgTreeNextLevel(condition).then(res => {
           if (res.data.data != null && res.data.data.children != null) {
             resolve(res.data.data.children)
           } else {
