@@ -23,17 +23,18 @@
 
     <div>
       <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">新增</el-button>
+      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
       <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
       <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
     </div>
 
     <!-- <hr/> -->
-    <div class="flex-1">
+
       <el-table stripe
         ref = 'providerTable'
         :data='providerList'
         tooltip-effect='dark'
+        height="100%"
         v-loading='providerListLoading'
         @selection-change = 'getSelections'
         @row-dblclick = 'editProviderdbl'
@@ -67,7 +68,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+
     <el-pagination
       background
       :current-page = 'searchProviderForm.currentPage'

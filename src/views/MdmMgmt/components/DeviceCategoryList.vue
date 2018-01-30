@@ -7,57 +7,55 @@
       <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
       <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
     </el-breadcrumb> -->
-    <div class="search-container">
-      <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
-        <el-form-item label='设备编码'>
-          <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
-        </el-form-item>
-        <el-form-item label='设备名称'>
-          <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
-        </el-form-item>
-        <el-form-item label='设备描述'>
-          <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
-        </el-form-item>
-        <el-form-item label='设备型号'>
-          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
-        </el-form-item>
-        <el-form-item label='供应商'>
-          <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
-            <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <div class="btn-container">
-            <el-button @click='clear' type='primary' class="cancel-btn">清空</el-button>
-            <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
-          </div>
-        </el-form-item>
-      </el-form>
+    <div>
+      <el-row>
+        <el-col :span = '24'>
+          <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
+            <el-form-item label='设备型号'>
+              <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
+            </el-form-item>
+            <el-form-item label='设备编码'>
+              <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+            </el-form-item>
+            <el-form-item label='设备名称'>
+              <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
+            </el-form-item>
+            <el-form-item label='设备描述'>
+              <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
+            </el-form-item>
+            <el-form-item label='供应商'>
+              <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
+                <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+      <div align="right">
+        <el-button @click='clear' type='primary' class="cancel-btn">清空</el-button>
+        <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+      </div>
     </div>
 
-    <el-row>
-      <el-col :span='22'>
-        <!-- <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-        <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">新增</el-button>
-        <!-- <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-        <!-- <el-button @click='deleteDeviceBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-        <!-- <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>编辑设备属性</el-button> -->
-      </el-col>
-      <el-col :span='2'>
+    <div style="margin-top: 15px">
+      <div style="float: left">
+        <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
+      </div>
+      <div style="float: right">
         <el-button icon='el-icon-d-arrow-right' style="margin-center: 10px" plain type="primary" @click="gotoattrmgnt">设备属性管理</el-button>
-      </el-col>
-    </el-row>
-
+      </div>
+    </div>
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
-    <div class="flex-1">
+
       <el-table stripe
         ref='deviceTable'
         :data='tableData'
         v-loading='loading'
         @row-dblclick='editDevicedbl'
         element-loading-text='拼命加载中'
+        height="100%"
         style='margin-top: 15px'>
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column type="expand">
@@ -144,7 +142,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+
 
     <el-pagination background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>

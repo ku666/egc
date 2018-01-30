@@ -22,21 +22,16 @@
       </el-form>
     </div>
 
-    <el-row>
-      <el-col :span = '22'>
-          <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-          <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">新增</el-button>
-          <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-          <!-- <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-          <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
-      </el-col>
-      <el-col :span = '2'>
+    <div style="margin-top: 15px">
+      <div style="float: left">
+        <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
+      </div>
+      <div style="float: right">
         <el-button icon='el-icon-d-arrow-left' style="margin-center: 10px" plain type="primary" @click="gotodevicemgnt">设备主数据</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
 
     <!-- <hr/> -->
-    <div class="flex-1">
       <el-table stripe
         ref = 'attrTable'
         :data='attrList'
@@ -45,6 +40,7 @@
         @selection-change = 'getSelections'
         @row-dblclick = 'editAttrdbl'
         @row-click = 'checkrow'
+        height="100%"
         element-loading-text='拼命加载中'
         style='margin-top: 15px'>
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
@@ -69,7 +65,7 @@
         </el-table-column>
 
       </el-table>
-    </div>
+
     <el-pagination
       background
       :current-page = 'searchAttrForm.currentPage'
