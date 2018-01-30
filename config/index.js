@@ -39,7 +39,7 @@ module.exports = {
       //  "/egc-applicationupgradecomponent": {
       //    target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
       //    changeOrigin: true
-       },
+      //  },
        "/egc-applicationupgradecomponent": {
         target: 'http://172.16.30.98:8080/',  // 孙飞翔(更新升级)
         changeOrigin: true
