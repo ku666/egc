@@ -1,35 +1,44 @@
 <template>
   <div>
     <el-form ref='resourceMenuVue' :inline="true" :model="resourceMenuVue" :rules="rules">
+
       <el-form-item label="资源名称" :label-width="formLabelWidth" prop="resourceName">  
         <el-input v-model="resourceMenuVue.resourceName" auto-complete="off" placeholder="请输入资源名称" class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label="资源URL" :label-width="formLabelWidth">
-        <el-input v-model="resourceMenuVue.resourceUrl" auto-complete="off" placeholder="请输入资源URL" class="user_el-input"></el-input>
+
+      <el-form-item label="资源代码" :label-width="formLabelWidth">
+          <el-input v-model="resourceMenuVue.menuCode" auto-complete="off" placeholder="请输入资源代码" class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label="应用程序" :label-width="formLabelWidth" prop="appCode">
-        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择" disabled class="user_el-select" v-if="isAddFlagParm">
-          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
-        </el-select>
-        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择" @change="changeAppCode" class="user_el-select" v-else>
-          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
-        </el-select>
+
+      <el-form-item label="资源URI" :label-width="formLabelWidth">
+        <el-input v-model="resourceMenuVue.resourceUrl" auto-complete="off" placeholder="请输入资源URI" class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label="菜单代码" :label-width="formLabelWidth">
-          <el-input v-model="resourceMenuVue.menuCode" auto-complete="off" placeholder="请输入菜单代码" class="user_el-input"></el-input>
-      </el-form-item>
-      <el-form-item label="上级菜单" :label-width="formLabelWidth">
-        <el-input v-model="resourceMenuVue.parentResourceName" auto-complete="off" placeholder="请从菜单树选择" :disabled="true" class="user_el-input"></el-input>
-        <el-input v-show="false" v-model="resourceMenuVue.parentResourceUuid" auto-complete="off" placeholder="请从菜单树选择"></el-input>
-      </el-form-item>
-      <el-button @click="_selectMenuTree" class='cancel-btn'>从菜单树选择</el-button>
-      <el-button @click="_cleanParentResource" class='cancel-btn'>清除上级菜单</el-button>
-      <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-        <el-input v-model.number="resourceMenuVue.sort" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
-      </el-form-item>
+
       <el-form-item label="ICON" :label-width="formLabelWidth">  
         <el-input v-model="resourceMenuVue.icon" auto-complete="off" placeholder="请输入ICON" class="user_el-input"></el-input>
       </el-form-item>
+
+      <el-form-item label="所属应用程序" :label-width="formLabelWidth" prop="appCode">
+        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用程序" disabled class="user_el-select" v-if="isAddFlagParm">
+          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
+        </el-select>
+        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用程序" @change="changeAppCode" class="user_el-select" v-else>
+          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="上级菜单" :label-width="formLabelWidth">
+        <el-input v-model="resourceMenuVue.parentResourceName" auto-complete="off" placeholder="请选择上级菜单" :disabled="true" style="width: 200px"></el-input>
+        <el-input v-show="false" v-model="resourceMenuVue.parentResourceUuid" auto-complete="off" placeholder="请选择上级菜单"></el-input>
+      </el-form-item>
+
+      <el-button @click="_selectMenuTree">选择</el-button>
+      <el-button @click="_cleanParentResource">清除</el-button>
+
+      <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
+        <el-input v-model.number="resourceMenuVue.sort" type="number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
+      </el-form-item>
+
       <el-form-item label="是否按钮" :label-width="formLabelWidth">
         <el-switch v-model="resourceMenuVue.button"></el-switch>
       </el-form-item>
@@ -38,21 +47,22 @@
         :visible.sync="showMenuDialog"
         :modal="false"
         :modal-append-to-body="true"
-        width="40%">
+        width="40%"
+        >
         <el-tree :data="menuTreeData" :props="defaultProps" node-key="uuid" ref="tree" highlight-current default-expand-all @node-click="handleNodeClick"></el-tree>
         <div class="user-button" align="center">
           <el-row align="right">
             <el-col align="right">
               <span class="dialog-footer">
-                <el-button @click="getCheckedNodes" type="primary" class='action-btn'>确 定</el-button>
+                <el-button @click="getCheckedNodes" type="primary">确 定</el-button>
               </span>
             </el-col>
-        </el-row>
-      </div>
+          </el-row>
+        </div>
       </el-dialog>
       <div class="user-button" align="center">
-          <el-row align="right">
-            <el-col align="right">
+          <el-row align="center">
+            <el-col align="center">
               <span class="dialog-footer">
                 <el-button class='cancel-btn' @click="handelCancel('resourceMenuVue')" type='primary'>取消</el-button>
                 <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceMenuVue')" class='action-btn'>保 存</el-button>
@@ -110,12 +120,12 @@ export default {
     // 检查排序
     var validateSort = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入排序值'))
+        callback(new Error('请输入数字型排序值'))
       } else {
         let numberPatten = /^[1-9]\d*$/
         console.log(value)
         if (!new RegExp(numberPatten).test(value)) {
-          callback(new Error('请输入数字值'))
+          callback(new Error('请输入数字型排序值'))
         } else {
           callback()
         }
@@ -124,7 +134,7 @@ export default {
     // 应用程序是否为空
     var validateAppCode = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请选择应用程序'))
+        callback(new Error('请选择所属应用程序'))
       } else {
         callback()
       }
@@ -147,13 +157,13 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur,change', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName }
         ],
         appCode: [
-          { required: true, validator: validateAppCode, trigger: 'blur,change' }
+          { required: true, validator: validateAppCode, trigger: 'blur' }
         ],
         sort: [
-          { required: true, validator: validateSort, trigger: 'blur,change' }
+          { required: true, validator: validateSort, trigger: 'blur' }
         ]
       }
     }

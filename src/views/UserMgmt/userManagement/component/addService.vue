@@ -1,5 +1,5 @@
 <template>
-  <div class = "usermgn">
+  <div class = "ui-common">
     <el-row align="left">
         <el-form align="left" :inline="true">
           <el-form-item label="应用程序 ">
@@ -9,7 +9,7 @@
          </el-form-item>
           <el-form-item label="服务名称">
             <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="选择服务名称"></el-input>
-            <el-button class="search-btn" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+            <el-button class="search-btn" type="primary" @click="handleFilter">搜索</el-button>
           </el-form-item>
         </el-form>
     </el-row>
@@ -41,8 +41,8 @@
                    :page-size="pageSize"
                    :current-page="currentPage">
     </el-pagination>
-    <el-row align="right">
-      <el-col align="right">
+    <el-row align="center">
+      <el-col align="center">
         <span class="dialog-footer">
           <el-button class='cancel-btn' style='margin-left: 10px; ' @click='cancelEvent' type='primary'>取消</el-button>
           <el-button class='action-btn' style='margin-top: 15px; ' @click='handleSave' type='primary'>保存</el-button>
