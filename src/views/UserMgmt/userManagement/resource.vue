@@ -33,7 +33,7 @@
 
     <div class="border-divide"></div>
 
-    <div class="flex-1">
+    <div class="table-container">
     <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
       @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
     </resource-list>
