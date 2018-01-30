@@ -1,15 +1,13 @@
 
 <template>
-  <div class='ui-common'>
-    <div>
-      <template v-if="!authorityFlag">
-        <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createResourceRole" type="primary">添加</el-button>
-      </template>
-      <template v-else>
-        <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelResourceRole" type="primary">取消添加</el-button>
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="saveResourceRole('authority')" type="primary">保存</el-button>
-      </template>
-    </div>
+  <div>
+    <template v-if="!authorityFlag">
+      <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createResourceRole" type="primary">添加</el-button>
+    </template>
+    <template v-else>
+      <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelResourceRole" type="primary">取消添加</el-button>
+      <el-button class="action-btn" style="margin-bottom: 10px" @click="saveResourceRole('authority')" type="primary">保存</el-button>
+    </template>
     <el-form :model="authority" :inline="true" v-if="authorityFlag" ref="authority" :rules="rules">
       <el-form-item label="选择角色" prop="roleUuid">
         <el-select v-model="authority.roleUuid" placeholder="请选择" class="user_el-select" filterable>

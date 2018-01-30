@@ -1,6 +1,7 @@
 <template>
   <el-table
     :data="tableData"
+    height="100%"
     >
     <!-- <el-table-column label="序号" type="index" width="50"></el-table-column> -->
     <el-table-column

@@ -7,11 +7,11 @@
       <el-tab-pane label="关联角色" name="3" v-if="isAddFlag"></el-tab-pane>
     </el-tabs>
     <el-form ref='user' v-show='gridUser' :inline="true" :rules="rules" :model="user">
-      <el-form-item label="登录名" :label-width="formLabelWidth" prop="userName" v-if="isAddFlag">
-        <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录名" class="user_el-input" :disabled="true"></el-input>
+      <el-form-item label="登录 ID" :label-width="formLabelWidth" prop="userName" v-if="isAddFlag">
+        <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input" :disabled="true"></el-input>
       </el-form-item>
-      <el-form-item label="登录名" :label-width="formLabelWidth" prop="userName" v-else>
-        <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录名" class="user_el-input"></el-input>
+      <el-form-item label="登录 ID" :label-width="formLabelWidth" prop="userName" v-else>
+        <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input"></el-input>
       </el-form-item>
       <el-form-item label="姓名" :label-width="formLabelWidth" prop="fullName">
         <el-input v-model="user.fullName" auto-complete="off" placeholder="请输入姓名" class="user_el-input"></el-input>
@@ -44,7 +44,7 @@
           <el-option v-for="department in departmentSelect" :key="department.uuid" :label="department.departmentName" :value="department.uuid"> </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="职务" :label-width="formLabelWidth" >
+      <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
         <el-input v-model="user.position" auto-complete="off" placeholder="请输入职务名称" class="user_el-select"></el-input>
       </el-form-item>
       <el-form-item label="状态" :label-width="formLabelWidth" prop="userAccStatus">
@@ -82,7 +82,9 @@
       </div>
     </el-form>
     <div v-show="gridContact">
-      <contact-list ref="userContactVue" :contactTypeOptionsProp="contactTypeSelect" :userUuidValue="curUserUuidParm"></contact-list>
+      <div class="flex-1">
+        <contact-list ref="userContactVue" :contactTypeOptionsProp="contactTypeSelect" :userUuidValue="curUserUuidParm"></contact-list>
+      </div>
     </div>
     <div v-show="gridUserGroup">
       <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm"></ass-user-group>
@@ -244,7 +246,10 @@ export default {
         idenNum: [
           { validator: validateIdenNum, trigger: 'blur,change' }
         ],
-        primaryEmail: [{ type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' }],
+        primaryEmail: [
+          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' },
+          { max: 128, message: '长度不能超过128个字符' }
+        ],
 
         primaryPhone: [
           { required: true, message: '请输入有效的手机号', trigger: 'blur' },
@@ -252,6 +257,9 @@ export default {
         ],
         effectiveDate: [
           { required: true, message: '请选择生效日期', trigger: 'blur,change' }
+        ],
+        position: [
+          { min: 0, max: 16, message: '长度在 0 到 16 个字符', trigger: 'blur' }
         ]
       },
       listQueryUserEditVue: {
