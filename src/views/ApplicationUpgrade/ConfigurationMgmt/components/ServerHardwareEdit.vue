@@ -113,10 +113,16 @@ export default {
       formLabelWidth: '150px',
       isInptDisabled: true,
       maxlength: 30,
+      tempAeestNo: undefined,
+      tempMgmtIp: undefined,
       tempFunctionName: undefined,
       tempDeployment: undefined,
       tempCabinet: undefined,
       tempCabu: undefined,
+      tempStatus: undefined,
+      tempOperator: undefined,
+      tempServiceLevel: undefined,
+      tempServiceDuring: undefined,
       tempRemark: undefined
     }
   },
@@ -148,8 +154,11 @@ export default {
     // 校验数据是否更改
     validateDetailsChanged () {
       if (this.tempRemark === this.auServerDetails.remark && this.tempFunctionName === this.auServerDetails.roles &&
-      this.tempDeployment === this.auServerDetails.deployment && this.tempDeployment === this.auServerDetails.deployment &&
-      this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU) {
+          this.tempDeployment === this.auServerDetails.deployment && this.tempDeployment === this.auServerDetails.deployment &&
+          this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU &&
+          this.tempAeestNo === this.auServerDetails.aeestNo && this.tempMgmtIp === this.auServerDetails.mgmtIp &&
+          this.tempOperator === this.auServerDetails.operator && this.tempServiceLevel === this.auServerDetails.serviceLevel &&
+          this.tempServiceDuring === this.auServerDetails.serviceDuring) {
         return false
       }
       return true
@@ -166,6 +175,11 @@ export default {
     this.tempCabinet = this.auServerDetails.cabinet
     this.tempCabu = this.auServerDetails.cabU
     this.tempRemark = this.auServerDetails.remark
+    this.tempAeestNo = this.auServerDetails.aeestNo
+    this.tempMgmtIp = this.auServerDetails.mgmtIp
+    this.tempOperator = this.auServerDetails.operator
+    this.tempServiceLevel = this.auServerDetails.serviceLevel
+    this.tempServiceDuring = this.auServerDetails.serviceDuring
   }
 }
 </script>

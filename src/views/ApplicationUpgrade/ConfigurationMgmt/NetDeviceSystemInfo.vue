@@ -35,17 +35,17 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <net-device-details :netDeviceDetails="netDeviceDetails"></net-device-details >
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
         <net-device-edit :netDeviceDetails="netDeviceDetails" @saveOsInfoEvent="_updateOsInfo"></net-device-edit>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <net-device-history :netDeviceHistoryData="netDeviceHistoryData"></net-device-history>
       </el-dialog>
     </div>

@@ -71,7 +71,7 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogRegisterVisible" top="8vh" :before-close="closeDialog" :close-on-click-modal=false>
+      <el-dialog :title="dialogTitle" :visible.sync="dialogRegisterVisible" top="8vh" :before-close="closeDialog">
         <div>
           <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
             <el-row>
