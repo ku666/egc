@@ -9,6 +9,21 @@
     <el-container style="margin-top:20px; text-align:center">
     <!-- Tab 角色概要 -->
     <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='form.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in form.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
@@ -142,7 +157,8 @@ import {
   createService,
   createDevice,
   checkRoleName,
-  getRoleAssResource
+  getRoleAssResource,
+  listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -162,7 +178,8 @@ export default {
     form: {
       roleName: undefined,
       remark: undefined,
-      uuid: undefined
+      uuid: undefined,
+      userType: undefined
     }
   },
   components: {
@@ -172,6 +189,19 @@ export default {
     addDevice
   },
   methods: {
+    getUserTypeList () {
+      listUserType()
+        .then(
+          function (result) {
+            this.form.userTypeList = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
+          }
+        )
+    },
     getRoleUserGroupList () {
       getRoleUserGroup()
         .then(

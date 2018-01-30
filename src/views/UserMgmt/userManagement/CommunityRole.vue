@@ -1,9 +1,10 @@
 
 <template>
-  <div class='usermgn'>
+  <div class='ui-common'>
      <div>
       <el-row>
         <el-col :span="8" style='margin-top:15px;'>
+          <div class="table-container" style="margin-top:20px">
           <grid-list id="usergroupTable"
             :viewable="true" 
             :deletable="false"
@@ -11,8 +12,9 @@
             :tableData="roleData.roleBaseVoList" 
             :params="roleListParam" 
             style="margin-top: 15px" 
-            @listenToEditEvent="roleEditEvent"
+            @listenToViewEvent="roleViewEvent"
           ></grid-list>
+          </div>
           <el-pagination
             @size-change="handleRoleSizeChange"
             @current-change="handleRoleCurrentChange"
@@ -24,7 +26,7 @@
           </el-pagination>
         </el-col>
         <el-col :span="16" style='margin-top:15px;' v-show="showGrid">
-          <el-card class="box-card" style='margin-left:10px; margin-top:15px'>
+          <el-card class="box-card" style='margin-left:10px; margin-top:35px'>
             <role-view 
               :roleUserData = 'subUserData'
               :roleUsergroupData="subUsergroupData"
@@ -121,7 +123,7 @@
             }
           )
       },
-      roleEditEvent (data) {
+      roleViewEvent (data) {
         console.log(data)
         console.log('role：编辑了第' + data.roleName + '行')
         this.showCreate = false

@@ -2,6 +2,21 @@
   <div style="text-align:center">
     <el-container style="text-align: center">
     <el-form ref='form' label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='form.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in form.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
@@ -20,7 +35,8 @@
 <script>
   import {
     createRole,
-    checkRoleName
+    checkRoleName,
+    listUserType
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     data () {
@@ -54,11 +70,24 @@
           roleName: undefined,
           remark: undefined,
           uuid: undefined,
-          userType: '1'
+          userType: undefined
         }
       }
     },
     methods: {
+      getUserTypeList () {
+        listUserType()
+          .then(
+            function (result) {
+              this.form.userTypeList = result
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log('错误：' + error)
+            }
+          )
+      },
       // 校验角色名的唯一性
       validateName (roleUuid, roleName) {
         console.log('start validating...' + roleUuid + roleName)
@@ -105,7 +134,7 @@
           roleName: undefined,
           remark: undefined,
           uuid: undefined,
-          userType: '1'
+          userType: undefined
         }
         this.$refs[form].resetFields()
         this.$emit('listenToAddEvent', this.form)

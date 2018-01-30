@@ -1,26 +1,32 @@
 <template>
-  <div class='usermgn'>
+  <div class='ui-common'>
     <div class="app-container" calendar-list-container>
       <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="用户组列表" name="0"></el-tab-pane>
         <el-tab-pane label="用户组树形结构" name="1"></el-tab-pane>
       </el-tabs> -->
       <div v-show="showGrid == true">
-        <div class="filter-container">
-          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户组名称" v-model="searchText"></el-input>
-          <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
-          <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">重置</el-button><br>
-          <!-- <el-button class="action-btn" style="margin-top: 15px;" @click="handleCreate" type="primary" >添加</el-button> -->
+        <div style="display:block">
+          <span>
+            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
+            <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
+          </span>
         </div>
-        <grid-list 
+
+        <!-- <div class="border-divide"></div> -->
+
+        <div class="table-container" style="margin-top:20px">
+        <grid-list id="usergroupTable"
           :viewable="true" 
           :deletable="false" 
           :showOperation="true" 
           :tableData="userGroupList" 
           :params="userGroupListParam" 
           style="margin-top: 15px" 
-          @listenToEditEvent="gridEditEvent"
+          @listenToViewEvent="gridViewEvent"
         ></grid-list>
+        </div>
         <div class="pagination-container">
           <el-pagination 
             :page-sizes="[5,10,20,30]" 
@@ -33,17 +39,7 @@
           ></el-pagination>
         </div>
       </div>
-      <!-- <el-dialog :title="dialogAddStatus" 
-      :close-on-click-modal="false"
-      :show-close="false"
-      :visible.sync="dialogFormAddVisible">
-        <user-group-create
-          @listenToAddEvent="userGroupAddEvent"
-          @gridDeleteEvent="userGroupDeleteEvent" 
-          @gridEditEvent="userGroupEditEvent"
-          v-show="showCreate"
-        ></user-group-create>
-      </el-dialog> -->
+
       <el-dialog :title="dialogEditStatus" 
       :visible.sync="dialogFormEditVisible" :close-on-click-modal="false">
         <user-group-view
@@ -59,40 +55,6 @@
         ></user-group-view>
       </el-dialog>
     </div>
-    <!-- <div v-show="showGrid == false">
-      <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
-          <el-input
-            placeholder="输入关键字进行过滤"
-            v-model="filterText">
-          </el-input>
-          <el-tree style='margin-top:10px;'
-                   class="filter-tree"
-                   :data="treeData"
-                   node-key="id"
-                   :highlight-current="treeHighlight"
-                   :filter-node-method="filterNode"
-                   ref="menuTree"
-                   @node-click="handleNodeClick"
-                   default-expand-all
-          >
-          </el-tree>
-          <div style="margin-top: 30px" v-show="showSubGrid==true">
-            <el-button class="filter-item" @click="handleTreeCreate" type="primary">
-              添加
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleTreeDelete" type="primary">
-              删除
-            </el-button>
-          </div>
-        </el-col>
-        <el-col :span="16" style='margin-top:15px;' v-show="showSubGrid==true">
-          <el-card class="box-card" style='margin-left:10px;'>
-            <user-group-edit :userGroupDetailData="subUserGroupData" :form="userGroupForm" @gridDeleteEvent="userGroupDeleteEvent" @gridEditEvent="userGroupEditEvent"> </user-group-edit>
-          </el-card>
-        </el-col>
-      </el-row>
-    </div> -->
   </div>
 </template>
 
@@ -144,7 +106,7 @@
         dialogEditStatus: undefined,
         query: {
           currentPage: 1,
-          pageSize: 5,
+          pageSize: 10,
           usergroupUuid: undefined,
           userGroupName: undefined
         }
@@ -390,7 +352,7 @@
               }
             )
       },
-      gridEditEvent (data) {
+      gridViewEvent (data) {
         console.log('userGroup：编辑了第' + data.uuid + '行')
         this.dialogFormEditVisible = true
         this.showEdit = true

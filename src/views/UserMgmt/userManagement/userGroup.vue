@@ -18,10 +18,11 @@
 
         <div class="border-divide"></div>
 
-        <div class="flex-1 flex-c">
+        <div class="table-container" >
           <grid-list id="usergroupTable"
             :editable="true"
             :deletable="true"
+            :showOperation="true"
             :tableData="userGroupList"
             :params="userGroupListParam"
             style="margin-top: 15px"
@@ -139,7 +140,12 @@
         this.userGroupListParam = [{
           title: '用户组名称',
           prop: 'usergroupName'
-        }, {
+        },
+        {
+          title: '用户类型',
+          prop: 'userTypeName'
+        },
+        {
           title: '用户组说明',
           prop: 'remark'
         },
@@ -449,15 +455,19 @@
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
     /* width: 20% */
-    width: 300px;
+    width: 200px;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
     /* width: 25% */
-    width: 380px;
+    width: 200px;
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
     /* width: 35% */
-    width: 500px;
+    width: 300px;
+  }
+  #usergroupTable >>> colgroup col:nth-child(4) {
+    /* width: 35% */
+    width: 450px;
   }
   /* #usergroupTable >>> colgroup col:nth-child(4) {
     width: 8%

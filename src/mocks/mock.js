@@ -19,3 +19,5 @@ import '@/views/LogServiceComponent/mocks/mock.js'
 
 // 引用用户权限管理模块的mock文件
 import '@/views/UserMgmt/userManagement/mocks/mock.js'
+// 短信网关
+import '@/views/IsmgApp/mocks/mock.js'

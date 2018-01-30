@@ -1,9 +1,10 @@
 <template>
-<div class=''>
+<!-- <div > -->
   <el-table
     :highlight-current-row="true"
     :data="tableData"
     stripe
+    height="100%"
     >
     <el-table-column
       v-for="(item, index) in params"
@@ -14,6 +15,7 @@
     </el-table-column>
     <el-table-column
       label="操作"
+      v-if="showOperation"
       align="center"
       width="100"
       >
@@ -21,13 +23,16 @@
         <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
           <span v-if="editable" @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
+        <el-tooltip class="item" effect="light" content="删除" placement="top-start">
           <span v-if="deletable" @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete"></span>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="查看" placement="top-start">
+          <span v-if="viewable" @click="handleClickView(scope.$index)" style="cursor:pointer" class="el-icon-view"></span>
         </el-tooltip>
       </template>
     </el-table-column>
   </el-table>
-</div>
+<!-- </div> -->
 </template>
 
 <script>
@@ -38,6 +43,8 @@
       tableData: undefined,
       editable: false,
       deletable: true,
+      viewable: false,
+      showOperation: true,
       total: undefined
     },
     data () {
@@ -66,6 +73,10 @@
       handleClickEdit (rowIndex) {
         this.$emit('listenToEditEvent', this.tableData[rowIndex])
         console.log('gridlist 编辑' + rowIndex + '行')
+      },
+      handleClickView (rowIndex) {
+        this.$emit('listenToViewEvent', this.tableData[rowIndex])
+        console.log('gridlist 查看' + rowIndex + '行')
       },
       handleClickSelect (row) {
         this.$emit('listenToClickEvent', this.tableData[row])

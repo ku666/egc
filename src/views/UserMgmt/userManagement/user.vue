@@ -25,7 +25,7 @@
 
     <div class="border-divide"></div>
 
-    <div class="flex-1">
+    <div class="table-container">
       <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
                  @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
       </user-list>
@@ -119,7 +119,7 @@ export default {
       title: '用户姓名',
       prop: 'fullName'
     }, {
-      title: '登陆 ID',
+      title: '登录 ID',
       prop: 'userName'
     }, {
       title: '职务',

@@ -1,20 +1,27 @@
 <template>
   <div>
     <el-container style="margin-top: 20px; margin-bottom: 20px; text-align: center">
+
     <el-form ref='createForm' label-width='100px' :model='createForm' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='createForm.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in createForm.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='用户组名称' prop='usergroupName' class='is-required'>
         <el-input v-model='createForm.usergroupName' placeholder='请输入用户组名称'></el-input>
       </el-form-item>
-      <!-- <el-form-item label='上级用户组' prop='parentUsergroupName'>
-        <el-select v-model='createForm.parentUsergroupName' placeholder='请选择'>
-          <el-option
-            v-for='item in createForm.type'
-            :key='item'
-            :label='item'
-            :value='item'>
-          </el-option>
-       </el-select>
-      </el-form-item> -->
+
       <el-form-item label='用户组说明' prop='remark'>
         <el-input type='textarea' rows='3' v-model='createForm.remark' placeholder='请输入用户组说明' style="width:650px"></el-input>
       </el-form-item>
@@ -30,7 +37,8 @@
 <script>
 import {
   createUserGroup,
-  checkUserGroupName
+  checkUserGroupName,
+  listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -50,6 +58,7 @@ export default {
                 this.$emit('listenToAddEvent', this.formData)
                 this.createForm.usergroupName = ''
                 this.createForm.remark = ''
+                this.createForm.userType = ''
               }.bind(this)
             )
             .catch(
@@ -66,32 +75,24 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        userType: '1'
+        userType: undefined
       }
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
     },
-      // if (this.createForm.usergroupName) {
-      //   this.createForm = JSON.parse(JSON.stringify(this.createForm))
-      //   createUserGroup(this.createForm)
-      //     .then(
-      //       function (result) {
-      //         this.$message({
-      //           message: '添加成功',
-      //           type: 'success'
-      //         })
-      //         this.createForm = []
-      //         this.$emit('listenToAddEvent', this.createForm)
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      // } else {
-      //   alert('请填写用户组名称')
-      // }
+    getUserTypeList () {
+      listUserType()
+        .then(
+          function (result) {
+            this.createForm.userTypeList = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
+          }
+        )
+    },
 
     // 校验用户组名的唯一性
     validateName (usergroupUuid, usergroupName) {
@@ -144,7 +145,7 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        userType: '1'
+        userType: undefined
       },
       formData: undefined
     }
