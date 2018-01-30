@@ -1,50 +1,52 @@
 <template>
-  <div class='out'>
-    <div class='out-container'>
-      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据</el-breadcrumb-item>
-        <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
-      </el-breadcrumb>
-
+  <div class='ui-common'>
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据</el-breadcrumb-item>
+      <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
+    </el-breadcrumb> -->
+    <div class="search-container">
       <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
-          <el-input placeholder='属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
         </el-form-item>
         <el-form-item label='属性描述'>
-          <el-input placeholder='属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button @click='reset' type='primary' class = 'btn-reset'>清空</el-button>
-          <el-button @click='search' type='primary' class = 'btn-plain'>查询</el-button>
+          <div class="btn-container">
+            <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
+            <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+          </div>
         </el-form-item>
       </el-form>
+    </div>
 
-      <el-row>
-        <el-col :span = '22'>
-            <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-            <el-button @click='addAttr' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-            <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-            <!-- <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-            <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
-        </el-col>
-        <el-col :span = '2'>
-          <el-button icon='el-icon-d-arrow-left' type="text" class='btn-text' @click="gotodevicemgnt">设备主数据</el-button>
-        </el-col>
-      </el-row>
+    <el-row>
+      <el-col :span = '22'>
+          <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
+          <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">新增</el-button>
+          <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+          <!-- <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
+          <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
+      </el-col>
+      <el-col :span = '2'>
+        <el-button icon='el-icon-d-arrow-left' style="margin-center: 10px" plain type="primary" @click="gotodevicemgnt">设备主数据</el-button>
+      </el-col>
+    </el-row>
 
-      <hr/>
+    <!-- <hr/> -->
+    <div class="flex-1">
       <el-table stripe
         ref = 'attrTable'
         :data='attrList'
         tooltip-effect='dark'
         v-loading='attrListLoading'
-        height="100%"
         @selection-change = 'getSelections'
         @row-dblclick = 'editAttrdbl'
         @row-click = 'checkrow'
         element-loading-text='拼命加载中'
-        style='width: 99%'>
+        style='margin-top: 15px'>
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
         <el-table-column prop='attrCode' label='属性编码'></el-table-column>
@@ -67,85 +69,85 @@
         </el-table-column>
 
       </el-table>
-      <el-pagination class = 'table-pager'
-        background
-        :current-page = 'searchAttrForm.currentPage'
-        :page-sizes = '[10, 20, 50, 100]'
-        :page-size = 'searchAttrForm.pageSize'
-        layout = 'total, sizes, prev, pager, next, jumper'
-        :total = 'searchAttrForm.total'
-        @size-change = 'sizeChange'
-        @current-change = 'currentChange'>
-      </el-pagination>
-
-      <el-dialog :visible.sync='attrDialogVisible'
-        :modal-append-to-body = 'false'
-        :before-close='closedialog'
-        width='750px'>
-        <!-- <div slot='title'>
-          <span class = 'head-text'>{{title}}</span>
-        </div> -->
-        <!-- <el-steps :active='1' simple>
-          <el-step :title="title" icon="el-icon-edit"></el-step>
-        </el-steps> -->
-        <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-        <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
-          <el-tab-pane label="属性基本信息" name = 'basic'>
-            <div>
-              <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
-                <el-row>
-                  <el-col :span = '12'>
-                    <el-form-item label='属性编码' prop='attrCode' >
-                      <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span = '12'>
-                    <el-form-item label='属性描述' prop='attrDesc'>
-                      <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span = '12'>
-                    <el-form-item label='属性类型' prop='attrType'>
-                      <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
-                        <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span = '12'>
-                    <el-form-item label='数据类型' prop='attrDataType'>
-                      <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
-                        <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <el-row>
-                  <el-col :span = '12'>
-                      <el-form-item label='单位描述' prop='unitDesc'>
-                      <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span = '12'>
-                    <el-form-item label='单位编码' prop='unitCode'>
-                        <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-                <div style='text-align: center'>
-                    <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-                    <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
-                </div>
-              </el-form>
-            </div>
-          </el-tab-pane>
-          <el-tab-pane label="属性域信息" name = 'domain' v-if = 'attrSaved'>
-            <attr-domain-item ref='openAttrDomainDialog' v-bind:attrUuid = 'attrForm.uuid'></attr-domain-item>
-          </el-tab-pane>
-        </el-tabs>
-      </el-dialog>
     </div>
+    <el-pagination
+      background
+      :current-page = 'searchAttrForm.currentPage'
+      :page-sizes = '[10, 20, 50, 100]'
+      :page-size = 'searchAttrForm.pageSize'
+      layout = 'total, sizes, prev, pager, next, jumper'
+      :total = 'searchAttrForm.total'
+      @size-change = 'sizeChange'
+      @current-change = 'currentChange'>
+    </el-pagination>
+
+    <el-dialog :visible.sync='attrDialogVisible'
+      :modal-append-to-body = 'false'
+      :before-close='closedialog'
+      width='750px'>
+      <!-- <div slot='title'>
+        <span class = 'head-text'>{{title}}</span>
+      </div> -->
+      <!-- <el-steps :active='1' simple>
+        <el-step :title="title" icon="el-icon-edit"></el-step>
+      </el-steps> -->
+      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
+      <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
+        <el-tab-pane label="属性基本信息" name = 'basic'>
+          <div>
+            <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
+              <el-row>
+                <el-col :span = '12'>
+                  <el-form-item label='属性编码' prop='attrCode' >
+                    <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='属性描述' prop='attrDesc'>
+                    <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span = '12'>
+                  <el-form-item label='属性类型' prop='attrType'>
+                    <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
+                      <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='数据类型' prop='attrDataType'>
+                    <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
+                      <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <el-row>
+                <el-col :span = '12'>
+                    <el-form-item label='单位描述' prop='unitDesc'>
+                    <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+                <el-col :span = '12'>
+                  <el-form-item label='单位编码' prop='unitCode'>
+                      <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+              <div style='text-align: center'>
+                  <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
+                  <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+              </div>
+            </el-form>
+          </div>
+        </el-tab-pane>
+        <el-tab-pane label="属性域信息" name = 'domain' v-if = 'attrSaved'>
+          <attr-domain-item ref='openAttrDomainDialog' v-bind:attrUuid = 'attrForm.uuid'></attr-domain-item>
+        </el-tab-pane>
+      </el-tabs>
+    </el-dialog>
   </div>
 </template>
 

@@ -1,55 +1,64 @@
 <template>
-  <div class='out'>
-    <div class='out-container'>
-      <device-category-edit-item ref='deviceCategoryEditDiag' v-bind:providers='providers' v-bind:mode='mode' v-bind:parents='parents'></device-category-edit-item>
-      <!-- <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item> -->
+  <div class='ui-common'>
+    <device-category-edit-item ref='deviceCategoryEditDiag' v-bind:providers='providers' v-bind:mode='mode' v-bind:parents='parents'></device-category-edit-item>
+    <!-- <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item> -->
 
-      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-        <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
-      </el-breadcrumb>
-
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
+    </el-breadcrumb> -->
+    <div class="search-container">
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
         <el-form-item label='设备编码'>
-          <el-input placeholder='设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备名称'>
-          <el-input placeholder='设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备描述'>
-          <el-input placeholder='设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备型号'>
-          <el-input placeholder='设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='供应商'>
-          <el-select clearable filterable v-model='searchForm.providerCode'>
+          <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
             <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
             </el-option>
           </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button @click='clear' type='primary' class='btn-reset'>清空</el-button>
-          <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+          <div class="btn-container">
+            <el-button @click='clear' type='primary' class="cancel-btn">清空</el-button>
+            <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+          </div>
         </el-form-item>
       </el-form>
+    </div>
 
-      <el-row>
-        <el-col :span='22'>
-          <!-- <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-          <el-button @click='addDevice' icon='el-icon-circle-plus-outline' type="text" class='btn-text'>新增</el-button>
-          <!-- <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-          <!-- <el-button @click='deleteDeviceBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-          <!-- <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>编辑设备属性</el-button> -->
-        </el-col>
-        <el-col :span='2'>
-          <el-button icon='el-icon-d-arrow-right' type="text" class='btn-text' @click="gotoattrmgnt">设备属性管理</el-button>
-        </el-col>
-      </el-row>
+    <el-row>
+      <el-col :span='22'>
+        <!-- <el-button @click='viewDeviceClick' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
+        <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">新增</el-button>
+        <!-- <el-button @click='editDevice' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
+        <!-- <el-button @click='deleteDeviceBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
+        <!-- <el-button @click='openDeviceAttrDialog' icon='el-icon-setting' type="text" class='btn-text'>编辑设备属性</el-button> -->
+      </el-col>
+      <el-col :span='2'>
+        <el-button icon='el-icon-d-arrow-right' style="margin-center: 10px" plain type="primary" @click="gotoattrmgnt">设备属性管理</el-button>
+      </el-col>
+    </el-row>
 
-      <hr/>
-      <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
-      <el-table stripe ref='deviceTable' :data='tableData' v-loading='loading' height="100%" @row-dblclick='editDevicedbl' element-loading-text='拼命加载中' style='width: 100%'>
+    <!-- <hr/> -->
+    <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
+    <div class="flex-1">
+      <el-table stripe
+        ref='deviceTable'
+        :data='tableData'
+        v-loading='loading'
+        @row-dblclick='editDevicedbl'
+        element-loading-text='拼命加载中'
+        style='margin-top: 15px'>
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column type="expand">
           <template slot-scope="props">
@@ -135,10 +144,10 @@
           </template>
         </el-table-column>
       </el-table>
-
-      <el-pagination class='table-pager' background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
-      </el-pagination>
     </div>
+
+    <el-pagination background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
+    </el-pagination>
   </div>
 </template>
 

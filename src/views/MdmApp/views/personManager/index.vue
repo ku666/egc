@@ -1,54 +1,57 @@
 <template>
-  <div class="person-manager">
-    <div class="tree-view-container">
-      <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-        <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-        <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
-      </el-breadcrumb>
-      <div class="person-list">
+  <div class='ui-common'>
+    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
+      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
+      <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
+    </el-breadcrumb> -->
+
+    <div class="person-list">
+      <div class="search-container">
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='姓名'>
-            <el-input placeholder='输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='证件号码'>
-            <el-input placeholder='输入证件号码' v-model='searchCondition.idenNum' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入证件号码' v-model='searchCondition.idenNum' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电话'>
-            <el-input placeholder='输入电话' v-model='searchCondition.phone' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入电话' v-model='searchCondition.phone' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电子邮箱'>
-            <el-input placeholder='输入电子邮箱' v-model='searchCondition.mail' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入电子邮箱' v-model='searchCondition.mail' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item>
-            <el-button @click='reset' type='primary' class='btn-reset'>清空</el-button>
-            <el-button @click='search' type='primary' class='btn-plain'>查询</el-button>
+            <div class="btn-container">
+              <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
+              <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+            </div>
           </el-form-item>
         </el-form>
-
-        <!-- 带分页表格 -->
-        <hr/>
-        <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading">
-          <el-table-column type="index"></el-table-column>
-          <el-table-column label="姓名" prop="name">
-          </el-table-column>
-          <el-table-column label="人员类型" prop="userTypeStr">
-          </el-table-column>
-          <el-table-column label="性别" prop="sexStr">
-          </el-table-column>
-          <el-table-column label="生日" prop="birth">
-          </el-table-column>
-          <el-table-column label="证件类型" prop="idenTypeStr">
-          </el-table-column>
-          <el-table-column label="证件号码" prop="idenNum" width="170">
-          </el-table-column>
-          <el-table-column label="联系电话" prop="phone">
-          </el-table-column>
-          <el-table-column label="电子邮箱" prop="mail">
-          </el-table-column>
-        </el-table>
-        <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
-        </el-pagination>
       </div>
+
+      <!-- 带分页表格 -->
+      <!-- <hr/> -->
+      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading">
+        <el-table-column type="index"></el-table-column>
+        <el-table-column label="姓名" prop="name">
+        </el-table-column>
+        <el-table-column label="人员类型" prop="userTypeStr">
+        </el-table-column>
+        <el-table-column label="性别" prop="sexStr">
+        </el-table-column>
+        <el-table-column label="生日" prop="birth">
+        </el-table-column>
+        <el-table-column label="证件类型" prop="idenTypeStr">
+        </el-table-column>
+        <el-table-column label="证件号码" prop="idenNum" width="170">
+        </el-table-column>
+        <el-table-column label="联系电话" prop="phone">
+        </el-table-column>
+        <el-table-column label="电子邮箱" prop="mail">
+        </el-table-column>
+      </el-table>
+      <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+      </el-pagination>
     </div>
 
     <!-- 弹出新窗口 -->
