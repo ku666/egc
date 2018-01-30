@@ -11,6 +11,7 @@
           <grid-list id="usergroupTable"
             :editable="true"
             :deletable="true"
+            :showOperation="true"
             :tableData="roleData.roleBaseVoList"
             :params="roleListParam"
             style="margin-top: 15px; max-height: 100%;"
@@ -39,7 +40,7 @@
               v-show="showCreate"
             ></role-add>
         </el-dialog>
-        <el-col :span="16" style='margin-top:65px;' v-show="showGrid">
+        <el-col :span="16" style='margin-top:40px;' v-show="showGrid">
           <el-card class="box-card" style='margin-left:10px; margin-top:15px'>
             <role-edit ref="roleedit"
               @listenToEditEvent="roleBaseVoEditEvent"
@@ -126,7 +127,12 @@
         this.roleListParam = [{
           title: '角色名称',
           prop: 'roleName'
-        }, {
+        },
+        {
+          title: '用户类型',
+          prop: 'userType'
+        },
+        {
           title: '角色说明',
           prop: 'remark'
         }]
@@ -204,13 +210,6 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              this.roleListParam = [{
-                title: '角色名称',
-                prop: 'roleName'
-              }, {
-                title: '角色说明',
-                prop: 'remark'
-              }]
               this.roleData = result
             }.bind(this)
           )
@@ -226,13 +225,6 @@
         getRoleList(this.query)
           .then(
             function (result) {
-              this.roleListParam = [{
-                title: '角色名称',
-                prop: 'roleName'
-              }, {
-                title: '角色说明',
-                prop: 'remark'
-              }]
               this.roleData = result
             }.bind(this)
           )
@@ -295,11 +287,15 @@
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
     /* width: 30% */
-    width: 180px;
+    width: 100px;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
     /* width: 50% */
-    width: 250px;
+    width: 100px;
+  }
+  #usergroupTable >>> colgroup col:nth-child(3) {
+    /* width: 50% */
+    width: 150px;
   }
   /* #usergroupTable >>> colgroup col:nth-child(3) {
     width: 20%
