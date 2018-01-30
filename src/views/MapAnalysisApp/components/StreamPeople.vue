@@ -451,7 +451,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: res.statusText
+            message: res.data.message
           })
         }
       }).catch(err => {
@@ -479,7 +479,7 @@ export default {
         } else {
           this.$message({
             type: 'error',
-            message: res.statusText
+            message: res.data.message
           })
         }
       }).catch(err => {
