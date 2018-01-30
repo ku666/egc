@@ -88,8 +88,8 @@
           </div>
         </div>
         <!-- 图表展示 -->
-        <div class="canvas" style="width:98%" v-show="isChartShow">
-          <div id="flowInformation"></div>
+        <div class="canvas1" style="width:98%" v-show="isChartShow">
+          <div id="flowInformation1"></div>
         </div>
       </el-col>
     </el-row>
@@ -268,8 +268,8 @@ export default {
         this.myChart.resize()
       })
       // echarts图表出入频率
-      this.myChartNode = document.querySelector('#flowInformation')
-      this.canvasNode = document.querySelector('.canvas')
+      this.myChartNode = document.querySelector('#flowInformation1')
+      this.canvasNode = document.querySelector('.canvas1')
       this.myChart = this.$echarts.init(this.myChartNode)
       // if (this.classValue === '1') {
       //   console.log(this.echartsData())
