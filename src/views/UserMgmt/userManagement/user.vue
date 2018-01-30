@@ -1,7 +1,7 @@
 <template>
-  <div class='usermgn'>
+  <div class='ui-common'>
     <el-form :inline="true" :model="listQuery" ref="listQuery">
-      <div>
+      <div class="search-container">
         <el-form-item label="用户姓名">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
         </el-form-item>
@@ -11,19 +11,26 @@
         <el-form-item label="手机号" :label-width="formLabelWidth">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
         </el-form-item>
-        <el-form-item>
-          <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
-          <el-button @click="resetForm" type="primary" class="cancel-btn">重置</el-button>
-        </el-form-item>
+        <div class="btn-container">
+          <el-form-item>
+            <el-button @click="resetForm" type="primary" class="cancel-btn">清空</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+          </el-form-item>
+        </div>
       </div>
       <div>
-         <el-button class="action-btn" style="margin-center: 10px" @click="handleCreate" type="primary">添加</el-button>
+         <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleCreate" plain type="primary">添加</el-button>
       </div>
     </el-form>
 
-    <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px" 
-      @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
-    </user-list>
+    <div class="border-divide"></div>
+
+    <div class="flex-1">
+      <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
+                 @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
+      </user-list>
+
+    </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <user-edit ref="userEditVue" :tableData="userList" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
@@ -260,7 +267,6 @@ export default {
         .then(
           function (result) {
             console.log('删除成功:' + uuid)
-            // this.userList.splice(row, 1)
             this.loadData()
             this.$message({
               type: 'success',
@@ -276,17 +282,15 @@ export default {
     },
     userCreateEvent (data) {
       console.log('新增用户')
-      data.userType = 3
+      data.userType = 1
       createUser(data)
         .then(
           function (result) {
             this.dialogFormVisible = false
             this.loadData()
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
+            this.$message({
+              message: '保存成功！',
+              type: 'success'
             })
           }.bind(this)
         )
@@ -302,11 +306,9 @@ export default {
           function (result) {
             this.dialogFormVisible = false
             this.loadData()
-            this.$notify({
-              title: '成功',
-              message: '保存成功',
-              type: 'success',
-              duration: 2000
+            this.$message({
+              message: '保存成功！',
+              type: 'success'
             })
           }.bind(this)
         )
@@ -335,15 +337,9 @@ export default {
             console.log(error)
           }
         )
-      // if (this.$refs.userEditVue) {
-      //   console.log('user---11111：编辑了第' + data.uuid + '行')
-      //   // 调用子组件方法(用户组、用户关联角色)
-      //   this.$refs.userEditVue.getChildComponentMethod()
-      // }
     },
     handleClose () {
       this.$refs.userEditVue.changeContanctFlag()
-      // this.userForm = undefined
       this.initUserInfo()
       this.dialogFormVisible = false
     }

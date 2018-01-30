@@ -70,8 +70,8 @@
         </el-date-picker>
       </el-form-item>
       <div class="user-button" align="center">
-        <el-row align="right">
-          <el-col align="right">
+        <el-row>
+          <el-col>
             <span class="dialog-footer">
               <el-button class='cancel-btn' @click="cancelEvent('user')" type='primary'>取消</el-button>
               <el-button v-if="isAddFlag" type="primary" @click="update('user')" class='action-btn'>保 存</el-button>

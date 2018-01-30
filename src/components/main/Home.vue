@@ -8,13 +8,13 @@
         <egsc-sidebar :checkedTitle="selectedTitle"></egsc-sidebar>
       </el-aside>
       <el-container>
-        <el-main :style="screeHeight">
+        <el-main>
           <!--
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item v-text="this.$router.currentRoute.name"></el-breadcrumb-item>
           </el-breadcrumb>
-          
+
             <transition name="move" mode="out-in">
               <router-view></router-view>
             </transition>
