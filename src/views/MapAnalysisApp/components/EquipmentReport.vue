@@ -233,53 +233,63 @@ export default {
       this.$nextTick(() => {
         // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {
-          this.cellDetailsList = res.data.data
-          console.log('cellDetailsList')
-          console.log(this.cellDetailsList)
+          if (res.data.code === '00000') {
+            this.cellDetailsList = res.data.data
+          } else {
+            this.$message.error({
+              message: res.data.message,
+              duration: 1500
+            })
+          }
         })
         let equiData = {}
         equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
           console.log('getListDeviceType')
           console.log(res)
-          // if (res.data.code === '00000') {
-          this.tableData = res.data
-          // console.log(111111)
-          console.log(this.tableData)
-          this.onlinedata = []
-          this.totaldata = []
-          for (let i in this.tableData) {
-            this.names.push(this.tableData[i].deviceTypeDesc)
-            if (this.tableData[i].onlineCount !== 0) {
-              this.onlinenames.push(this.tableData[i].deviceTypeDesc)
-            }
-            // console.log(this.onlinenames)
-            this.onlinedata.push(
-              {
-                name: this.tableData[i].deviceTypeDesc,
-                value: this.tableData[i].onlineCount,
-                itemStyle: {
-                  normal: {
-                    label: {
-                      show: true,
-                      formatter: function (params, option) {
-                        if (params.data.value === 0) {
-                          params.data.label.normal.show = false
-                          params.data.labelLine.normal.show = false
+          if (res.data.code === '00000') {
+            this.tableData = res.data.data
+            // console.log(111111)
+            console.log(this.tableData)
+            this.onlinedata = []
+            this.totaldata = []
+            for (let i in this.tableData) {
+              this.names.push(this.tableData[i].deviceTypeDesc)
+              if (this.tableData[i].onlineCount !== 0) {
+                this.onlinenames.push(this.tableData[i].deviceTypeDesc)
+              }
+              // console.log(this.onlinenames)
+              this.onlinedata.push(
+                {
+                  name: this.tableData[i].deviceTypeDesc,
+                  value: this.tableData[i].onlineCount,
+                  itemStyle: {
+                    normal: {
+                      label: {
+                        show: true,
+                        formatter: function (params, option) {
+                          if (params.data.value === 0) {
+                            params.data.label.normal.show = false
+                            params.data.labelLine.normal.show = false
+                          }
                         }
+                      },
+                      labelLine: {
+                        show: true
                       }
-                    },
-                    labelLine: {
-                      show: true
                     }
                   }
-                }
-              })
-            this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
+                })
+              this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
+            }
+            this.chartInit()
+            console.log(this.onlinedata)
+          } else {
+            this.$message.error({
+              message: res.data.message,
+              duration: 1500
+            })
           }
-          this.chartInit()
-          console.log(this.onlinedata)
-          // }
         })
       })
     }
@@ -296,7 +306,6 @@ export default {
   font-weight: bold;
   margin: -30px 0 35px;
   text-align: center;
-
 }
 .chartContainer {
   display: flex;

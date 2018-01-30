@@ -329,14 +329,11 @@ export default {
       if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
         this.form.startDate = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
-        this.form.endDate = new Date() // 结束时间
       } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
-        this.form.endDate = new Date() // 结束时间
         this.form.startDate = new Date(new Date() - 86400000 * 30)
       } else {
         this.formDatePickType = 'month'
-        this.form.endDate = new Date() // 结束时间
         this.form.startDate = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
       }
     },
@@ -372,12 +369,12 @@ export default {
       var data = this.queryParam()
       console.log(data)
       getCourtCarAccessInfo(data).then((res) => {
-        if (res.status === 200) {
+        if (res.data.code === '00000') {
           var data = res.data.data
           this.sortData(data)
           this.chartInit()
         } else {
-          this.errMessage()
+          this.errMessage(res.data.message)
         }
       })
     },
@@ -388,18 +385,23 @@ export default {
       console.log('getCarAccessPageList')
       console.log(queryParam)
       getCarAccessPageList(queryParam).then(res => {
-        if (res.status === 200) {
+        console.log(res)
+        if (res.data.code === '00000') {
           this.totalRows = res.data.data.totalRows
           this.carStreamData = res.data.data.result
         } else {
-          this.errMessage()
+          this.errMessage(res.data.message)
         }
       })
     },
     getCourtInfo: function () {
       getCourtInfo({ courtUuid: this.form.courtUuid }).then(res => {
         console.log('小区信息')
-        this.courtInfo = res.data.data
+        if (res.data.code === '00000') {
+          this.courtInfo = res.data.data
+        } else {
+          this.errMessage(res.data.message)
+        }
       })
     },
     queryParam: function () {
@@ -447,9 +449,9 @@ export default {
           break
       }
     },
-    errMessage: function () {
+    errMessage: function (err) {
       this.$message.error({
-        message: '出错了',
+        message: err,
         duration: 1500
       })
     }
