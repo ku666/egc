@@ -454,6 +454,11 @@ export default {
             message: res.statusText
           })
         }
+      }).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err
+        })
       })
     },
     // 处理日期对象
@@ -477,11 +482,18 @@ export default {
             message: res.statusText
           })
         }
+      }).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err
+        })
       })
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.num = 0
+      this.chartClickNum = 0
+      this.isChartShow = false
+      this.isTableShow = true
     }
   },
   mounted: function () { }
