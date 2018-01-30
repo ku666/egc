@@ -272,6 +272,7 @@ export default {
       this.canvasNode = document.querySelector('.canvas')
       this.myChart = this.$echarts.init(this.myChartNode)
       // if (this.classValue === '1') {
+      //   console.log(this.echartsData())
       //   this.myChart.setOption(this.echartsData())
       // } else {
       //   this.myChart.setOption(this.echartsDataOwner())
