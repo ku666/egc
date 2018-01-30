@@ -373,7 +373,7 @@ export default {
       console.log(data)
       getCourtCarAccessInfo(data).then((res) => {
         if (res.status === 200) {
-          var data = res.data
+          var data = res.data.data
           this.sortData(data)
           this.chartInit()
         } else {
@@ -389,8 +389,8 @@ export default {
       console.log(queryParam)
       getCarAccessPageList(queryParam).then(res => {
         if (res.status === 200) {
-          this.totalRows = res.data.totalRows
-          this.carStreamData = res.data.result
+          this.totalRows = res.data.data.totalRows
+          this.carStreamData = res.data.data.result
         } else {
           this.errMessage()
         }
