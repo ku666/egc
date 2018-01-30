@@ -66,7 +66,7 @@
               <el-table-column prop="perOutCount" label="出园人数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -114,7 +114,7 @@ export default {
       },
       cellDetailsList: {}, // 小区详细信息
       timeType: 'date', // 日期type属性
-      total: 10, // 数据条数
+      totalRows: 10, // 数据条数
       tableData: [], // 表格数据
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
@@ -432,8 +432,8 @@ export default {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
       getCourtPerAccessInfo(this.parameter).then(res => {
-        if (res.status === 200) {
-          let perData = res.data
+        if (res.data.code === '00000') {
+          let perData = res.data.data
           // 添加前先清空
           this.form.dateList = []
           this.form.perInCountList = []
@@ -467,11 +467,10 @@ export default {
     getPgingData: function () {
       this.parameter.startDate = this.processingDate(this.starTime)
       this.parameter.endDate = this.processingDate(this.endTime)
-      console.log(this.parameter)
       getPerAccessPageList(this.parameter).then(res => {
-        if (res.status === 200) {
-          this.tableData = res.data.result
-          this.total = res.data.totalRows
+        if (res.data.code === '00000') {
+          this.tableData = res.data.data.result
+          this.totalRows = res.data.data.totalRows
         } else {
           this.$message({
             type: 'error',
@@ -528,18 +527,18 @@ export default {
   /deep/.el-dialog__body {
     padding: 0px 20px;
   }
-  /deep/.el-dialog__header {
-    span {
-      font-weight: 600;
-    }
-  }
+  // /deep/.el-dialog__header {
+  //   span {
+  //     font-weight: 600;
+  //   }
+  // }
   .leftText {
-    height: 585px;
+    // height: 585px;
     padding: 5px 10px;
-    background-color: #f6faff;
+    // background-color: #f6faff;
     div {
       line-height: 30px;
-      font-size: 14px;
+      font-size: 12px;
       span {
         width: 65px;
         font-size: 15px;
