@@ -106,7 +106,7 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtUuid: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
+        courtUuid: '', // 小区ID
         reportType: '0', // 报表类型
         startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
         endDate: new Date() // 结束时间
@@ -136,8 +136,6 @@ export default {
         }
       }
     }
-  },
-  mounted: function () {
   },
   methods: {
     goToCarStreamPage: function (courtUuid) {
@@ -451,14 +449,10 @@ export default {
     },
     errMessage: function (err) {
       this.$message.error({
-        message: err,
-        duration: 1500
+        type: 'warning',
+        message: err
       })
     }
-  },
-  computed: {
-  },
-  watch: {
   }
 }
 </script>

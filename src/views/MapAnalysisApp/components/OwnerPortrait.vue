@@ -268,7 +268,7 @@ export default {
         this.myChart.resize()
       })
       // echarts图表出入频率
-      this.myChartNode = document.querySelector('#flowInformation')
+      this.myChartNode = document.querySelector('#flowInformation1')
       this.canvasNode = document.querySelector('.canvas')
       this.myChart = this.$echarts.init(this.myChartNode)
       // if (this.classValue === '1') {
