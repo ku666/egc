@@ -1,20 +1,20 @@
 <template>
-<div>
+<div class="ui-common">
   <el-row :gutter="50">
     <el-col :span="6">
       <div class="item-container">
-        <span class="sub-title">查询条件</span>
-        <el-input v-model="searchConDetails.key" placeholder="请输入查询关键字" clearable :maxlength="maxlength"></el-input>
+        <span class="sub-title">搜索条件</span>
+        <el-input v-model="searchConDetails.key" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-        <el-button @click="_handleClearQuery">清空</el-button>
+        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHandleFilter">查询</el-button>
+      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 40px">搜索</el-button>
       </div>
     </el-col>
   </el-row>

@@ -1,5 +1,5 @@
 <template>
-<div id="softwaredispatch">
+<div class="ui-common">
   <el-collapse accordion >
     <el-collapse-item v-for="(item , index) in testData" :key="index">
       <template slot="title" >
@@ -7,10 +7,10 @@
         一致性 Consistency {{ item.softDesc }}
         </div>
       </template>
-      <div style="margin-top: 20px; text-align: right">
-        <el-button @click="_selectOrg" type="primary" plain>选择组织</el-button>
+      <div style="margin-top: 10px; text-align: right">
+        <el-button @click="_selectOrg" class="action-btn">选择组织</el-button>
       </div>
-      <div>
+      <div style="margin-top:10px">
         <template>
           <el-table
             ref="multipleTable"
@@ -24,17 +24,6 @@
             <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
           </el-table>
         </template>
-      </div>
-      <div>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="searchConditionList.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="searchConditionList.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-        </el-pagination>
       </div>
     </el-collapse-item>
   </el-collapse>
@@ -50,6 +39,7 @@
 
 <script>
 import orgTree from './components/OrgTree'
+import { getAllRegisterPackages } from './apis/index'
 export default {
   components: {
     orgTree
@@ -446,7 +436,20 @@ export default {
       this.searchConditionList.currentPage = val
     },
     loadData () {
-      console.log('init data!')
+      getAllRegisterPackages(this.searchConditionList)
+        .then(
+          function (result) {
+            console.log('operating system result === > ' + JSON.stringify(result))
+            this.osListData = result.ossList
+            this.total = result.pageCount
+            this.loading = false
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     }
   },
   mounted () {

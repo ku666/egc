@@ -36,20 +36,24 @@ module.exports = {
         target: 'http://127.0.0.1:9040/'
       },
       //更新升级模块接口
-       "/egc-applicationupgradecomponent": {
-         target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
-         changeOrigin: true
-       },
       //  "/egc-applicationupgradecomponent": {
-      //   target: 'http://172.16.30.98:8080/',  // 孙飞翔(更新升级)
-      //   changeOrigin: true
-      // },
+      //    target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
+      //    changeOrigin: true
+       },
+       "/egc-applicationupgradecomponent": {
+        target: 'http://172.16.30.98:8080/',  // 孙飞翔(更新升级)
+        changeOrigin: true
+      },
        "/egc-mdmcomponent": {
         target: 'http://172.16.30.67:8083/',  // 朱秀红(省市区数据)
         changeOrigin: true
       },
       '/scp-usermgmtcomponent': {
         target: 'http://192.168.0.242:30940',  // 242线上用户管理
+        changeOrigin: true
+      },
+      '/egc-applicationupgradecomponent': {
+        target: 'http://172.16.30.112:8080',  // 
         changeOrigin: true
       },
       '/egc-logservicecomponent': {

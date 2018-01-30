@@ -66,8 +66,8 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align:center;">
+        <el-button @click="updateAppServiceInfo" class="action-btn">保 存</el-button>
     </div>
     </el-form>
   </div>
