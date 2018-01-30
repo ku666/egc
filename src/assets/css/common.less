@@ -1,143 +1,212 @@
 // -----------------CSS------usermgn--only------------------
 :root {
-    --font-size:                       12px;
-    --font-size-el-table:              12px;
-    // 文本label
-    --font-size-el-form-item__label:   12px;
-    // 文本输入框
-    --font-size-el-input__inner:       12px;
-    --font-size-el-textarea__inner:    12px;
-    // 文本输入框
-    --font-size-el-dialog-title:       16px;
-    // 文本字体
-    --font-family:       PingFang-SC-Regular;
-    // 分页样式及位置 右对齐
-    --button-align:                   Right;
+  --font-size:                       12px;
+  --font-size-el-table:              12px;
+  // 文本label
+  --font-size-el-form-item__label:   12px;
+  // 文本输入框
+  --font-size-el-input__inner:       12px;
+  --font-size-el-textarea__inner:    12px;
+  // 对外框 title
+  --font-size-el-dialog-title:       16px;
+  // 文本字体
+  --font-family:       PingFang-SC-Regular;
+  // 分页样式及位置 右对齐
+  --button-align:                   Right;
+}
+.flex-c {
+display: flex;
+flex-direction: column;
+}
+.flex-1 {
+flex: 1;
+}
+#app {
+.flex-c;
+}
+
+.el-container .el-main {
+.flex-c;
+.flex-1;
+}
+.el-main {
+padding: 20px 40px !important;
+}
+.ui-common {
+.flex-c;
+.flex-1;
+
+.el-dialog {
+  min-width: 900px;
+}
+
+.search-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+
+  .btn-container {
+    flex: 1;
+    text-align: right;
+    min-width: 300px;
   }
-  .ui-common {
-    // 用于保存等动作类按钮
-    .action-btn{
-      width: 138px;
-      height: 40px;
-      background: #0078f4;
-      border-radius: 4px;
-      font: #000000;
-    }
-    // 用于个别小按钮（比如 一览页上面的 +添加之类）
-    .action-btn_small{
-      width: 69px;
-      height: 20px;
-      background: #0078f4;
-      border-radius: 4px;
-      font: #000000;
-    }
-    // 用于取消，重置等撤销类动作类按钮
-    .cancel-btn{
-      width: 138px;
-      height: 40px;
-      background: #fffcfc;
-      color: #0078f4;
-      border-radius: 4px;
-    }
-    // 用于搜索等按钮
-    .search-btn{
-      width: 138px;
-      height: 40px;
-      background: #0078f4;
-      font: #000000;
-      border-radius: 4px;
-    }
-    // 按钮对齐
-    .button-align{
-      text-align: var(--button-align);
-    }
-    // 翻页组对齐
-    .el-pagination-align{
-      text-align: left; // layout="total, sizes, prev, pager, next, jumper"
-    }
-    p,span{
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-table);
-    }
-    .egsc-admin-sidebar.el-submenu .el-menu .el-menu-item{
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-table);
-    }
-    // table上的icon的大小(删除,编辑）
-    .el-table__row img{
-      width: 20px;
-    }
-    .el-table__header-wrapper{
-      height: 40px;
-      background: #8a8787;
-      // background: #f4f4f4;
-      opacity: 0.95;
-      font-size: var(--font-size-el-table);
-      color: #333333;
-    }
-    .el-table__header{
-      height: 40px;
-      background:#F4F4F4; 
-      opacity: 0.9;
-      font-size: var(--font-size-el-table);
-      color: #333333;
-    }
-    .el-table thead {
-      background:#F4F4F4; 
-      opacity: 0.9;
-      color: #333333;
-    }
-    .el-table__row{
-      height: 40px;
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-table);
-      color: #333333;
-    }
-    .el-form-item__label{
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-form-item__label);
-    }
-    .el-input__inner
-    {
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-input__inner);
-    }
-    .el-textarea__inner
-    {
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-textarea__inner);
-    }
-    .el-table__empty-text
-    {
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-form-item__label);
-    }
-    .el-pagination,.el-pagination__total,.el-pagination__sizes,.el-pagination__jump
-    {
-      font-family: var(--font-family);
-      font-size: var(30px);
-    }
-    .el-dialog__title
-    {
-      font-family: var(--font-family);
-      font-size: var(--font-size-el-dialog-title);
-    }
-    .el-tree
-    {
-      border: solid 1px lightgray;
-      height: 200px;
-      overflow-x: scroll;
-    }
-    .el-textarea
-    {
-      display: inline-block;
-      width: 100%;
-      vertical-align: bottom;
-      font-size: 14px;
-    }
-    span.sub-title{
-      width: 120px;
-      color: #7b6f6f;
-      font-size: var(--font-size-el-table);
-    }
-  }
+}
+
+.border-divide {
+  height: 1px;
+  background-color: #F1F0F0;
+  margin: 20px 0;
+}
+// 用于保存等动作类按钮
+.action-btn{
+  width: 138px;
+  height: 40px;
+  background: #0078f4;
+  border-radius: 4px;
+}
+// 用于个别小按钮（比如 一览页上面的 +添加之类）
+.action-btn_small{
+  width: 69px;
+  height: 20px;
+  background: #0078f4;
+  border-radius: 4px;
+}
+// 用于取消，重置等撤销类动作类按钮
+.cancel-btn{
+  width: 138px;
+  height: 40px;
+  background: #fffcfc;
+  color: #0078f4;
+  border-radius: 4px;
+}
+// 用于搜索等按钮
+.search-btn{
+  width: 138px;
+  height: 40px;
+  background: #0078f4;
+  border-radius: 4px;
+}
+// 按钮对齐
+.button-align{
+  text-align: var(--button-align);
+}
+// 翻页组对齐
+.el-pagination-align{
+  text-align: left; // layout="total, sizes, prev, pager, next, jumper"
+}
+p,span{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-table);
+}
+.egsc-admin-sidebar .el-submenu .el-menu .el-menu-item .el-submenu__title{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-table);
+}
+.el-submenu__title{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-table);
+}
+// table上的icon的大小(删除,编辑）
+.el-icon-edit {
+  font-size: 15px;
+  color: #0078f4;
+}
+.el-icon-delete {
+  font-size: 15px;
+  color: #0078f4;
+}
+.el-table__row img{
+  width: 20px;
+}
+.el-table__header-wrapper{
+  height: 40px;
+  //border-style: outset none none none;
+  // background: #8a8787;
+  // opacity: 0.95;
+  // font-size: var(--font-size-el-table);
+  // color: #8a8787;
+}
+.el-table__header{
+  height: 40px;
+  background:#8a8787;
+  opacity: 0.9;
+  font-size: var(--font-size-el-table);
+  color: #333333;
+}
+.el-table thead {
+  background:#8a8787;
+  opacity: 0.9;
+  color: #333333;
+}
+.el-table__row{
+  height: 20px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-table);
+  color: #333333;
+}
+.el-form-item__label{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-form-item__label);
+}
+.el-input__inner
+{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-input__inner);
+}
+.el-textarea__inner
+{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-textarea__inner);
+}
+.el-table__empty-text
+{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-form-item__label);
+}
+.el-pagination,.el-pagination__total,.el-pagination__sizes,.el-pagination__jump
+{
+  font-family: var(--font-family);
+  font-size: var(30px);
+}
+.el-dialog__title
+{
+  font-family: var(--font-family);
+  font-size: var(--font-size-el-dialog-title);
+}
+.el-textarea
+{
+  display: inline-block;
+  width: 100%;
+  vertical-align: bottom;
+  font-size: 14px;
+}
+span.sub-title{
+  width: 120px;
+  color: #7b6f6f;
+  font-size: var(--font-size-el-table);
+}
+// --------private----------
+.tree{
+  overflow:auto;
+  height:200px;
+  width:278px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+}
+.el-org-tree{
+  width: 100%;
+  height:199px;
+  overflow-x: scroll;
+}
+.el-menu-tree{
+  border: solid 1px lightgray;
+  height:199px;
+  overflow-x: scroll;
+}
+.el-tree>.el-tree-node{
+  display: inline-block !important;
+}
+}
+
+// table stripe = true
