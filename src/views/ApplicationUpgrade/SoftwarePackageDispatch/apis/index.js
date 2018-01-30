@@ -1,6 +1,7 @@
 import Axios from '@/assets/js/AxiosPlugin'
 
 // 接口地址
+let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/scp-usermgmtcomponent'
 const ADDR_BASE_PATH = '/egc-mdmcomponent'
 const ORGTREE_BASE_PATH = '/egc-applicationupgradecomponent'
@@ -44,8 +45,10 @@ export const getAllOrgs = () => {
 export const getAllRegisterPackages = () => {
   // return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
   // ).then(res => res.data)
-  return Axios.get(ORGTREE_BASE_PATH + '/aupackagedispatches/listCourts'
-  ).then(res => res.data)
+  // return Axios.get(ORGTREE_BASE_PATH + '/aupackagedispatches/listCourts'
+  // ).then(res => res.data)
+
+  return Axios.get(contextPath + '/aupackagedispatches/listCourts').then(res => res.data)
 }
 
 /** 下发历史查询 */

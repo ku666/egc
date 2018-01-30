@@ -133,7 +133,8 @@ export default {
         }, {
           colName: '服务器主机名称',
           prop: 'hostname',
-          width: 150
+          width: 220
+
         }, {
           colName: '描述',
           prop: 'remark'
