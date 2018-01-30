@@ -18,7 +18,7 @@
 
         <div class="border-divide"></div>
 
-        <div class="flex-1 flex-c">
+        <div class="table-container" >
           <grid-list id="usergroupTable"
             :editable="true"
             :deletable="true"

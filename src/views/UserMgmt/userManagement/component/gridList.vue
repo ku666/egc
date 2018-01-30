@@ -1,9 +1,10 @@
 <template>
-<div class=''>
+<!-- <div > -->
   <el-table
     :highlight-current-row="true"
     :data="tableData"
     stripe
+    height="100%"
     >
     <el-table-column
       v-for="(item, index) in params"
@@ -21,13 +22,13 @@
         <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
           <span v-if="editable" @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
         </el-tooltip>
-        <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
+        <el-tooltip class="item" effect="light" content="删除" placement="top-start">
           <span v-if="deletable" @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete"></span>
         </el-tooltip>
       </template>
     </el-table-column>
   </el-table>
-</div>
+<!-- </div> -->
 </template>
 
 <script>
