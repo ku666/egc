@@ -17,6 +17,24 @@ export default {
       msg: 'success'
     }
   },
+  getOrgTreeNextLevel: config => {
+    var data = {
+      'children': [{
+        uuid: '235jklgdsj4543',
+        name: '1幢'
+      },
+      {
+        uuid: '235jkl54gdsj4543',
+        name: '2幢'
+      }
+      ]
+    }
+    return {
+      data: data,
+      code: '0000',
+      msg: 'success'
+    }
+  },
   getOrgList: config => {
     var data = []
     for (let i = 0; i < 2; i++) {
