@@ -1,6 +1,6 @@
 
 <template>
-  <div class='usermgn'>
+  <div class='ui-common'>
     <div>
       <template v-if="!contactFlag">
         <el-button class="action-btn" style="margin-bottom: 10px" @click="createContact" type="primary">添加</el-button>
@@ -29,8 +29,8 @@
         <el-table-column prop="userContact" label="联系方式" width="498"></el-table-column>
         <el-table-column label="操作" width="70" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-                <img :src="deleteImg" style="width:20px">
+              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+                <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>
         </el-table-column>
@@ -181,11 +181,9 @@
                   this.contactFlag = false
                   // 添加完contact对象后，重置contact对象
                   this.initContactInfo()
-                  this.$notify({
-                    title: '成功',
-                    message: '创建成功',
-                    type: 'success',
-                    duration: 2000
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success'
                   })
                 }.bind(this)
               )

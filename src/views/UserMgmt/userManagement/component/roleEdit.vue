@@ -6,27 +6,16 @@
       <el-tab-pane label='关联用户' name='2'></el-tab-pane>
       <el-tab-pane label='资源权限' name='3'></el-tab-pane>
     </el-tabs>
-    <el-container style="margin-top:20px">
+    <el-container style="margin-top:20px; text-align:center">
     <!-- Tab 角色概要 -->
-    <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules">
+    <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
-      </el-form-item>
-      <el-form-item label="用户类型" prop="userType" class="is-required">
-        <el-select placeholder="请选择用户类型" @visible-change='getUserTypeList' @change='userTypeSelected' style='float:left; width: 650px' v-model='form.userType'>
-          <el-option
-            v-for='(item, index) in userTypeList'
-            :key='index'
-            :label='item.userType'
-            :value='item.uuid'
-            :userGroupId='item.uuid'>
-          </el-option>
-        </el-select>      
       </el-form-item>
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" v-model='form.remark' placeholder='请输入角色说明' rows="3" style="width:650px"></el-input>
       </el-form-item>
-      <div style="float:right">
+      <div style="text-align:center">
       <el-button class='cancel-btn' type='primary' @click="handleCancel('form')">取消</el-button>
       <el-button class='action-btn' style='margin-left: 10px' @click="handleSave('form')" type='primary'>保存</el-button>
       </div>
@@ -51,7 +40,7 @@
         :params='userGroupParams' 
         :editable='false' 
         :deletable='true' 
-        style='margin-top: 20px'
+        style='margin-top: 20px; height: 100%'
       ></grid-list>
       <el-pagination
         @size-change="handleUserGroupSizeChange"
@@ -173,8 +162,7 @@ export default {
     form: {
       roleName: undefined,
       remark: undefined,
-      uuid: undefined,
-      userType: undefined
+      uuid: undefined
     }
   },
   components: {
@@ -645,6 +633,15 @@ export default {
       this.showApp = false
       this.showService = false
       this.showDevice = false
+      if (this.$refs.addapp != null && this.$refs.addapp !== undefined) {
+        this.$refs.addapp.reset()
+      }
+      if (this.$refs.adddevice != null && this.$refs.adddevice !== undefined) {
+        this.$refs.adddevice.reset()
+      }
+      if (this.$refs.addservice != null && this.$refs.addservice !== undefined) {
+        this.$refs.addservice.reset()
+      }
       console.log('dialog cancelEvent End')
     },
     changeRoleEditDiaLogEvent () {
@@ -696,9 +693,6 @@ export default {
           { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
           { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '角色名只能为字母、数字和汉字' },
           { validator: validateRoleName }
-        ],
-        userType: [
-          {required: true, message: '请选择用户类型', trigger: 'blur'}
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
@@ -819,56 +813,64 @@ export default {
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 30%
+    /* width: 30% */
+    width: 250px;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 60%
+    /* width: 60% */
+    width: 550px;
   }
-  #usergroupTable >>> colgroup col:nth-child(3) {
+  /* #usergroupTable >>> colgroup col:nth-child(3) {
     width: 10%
-  }
+  } */
 
   #userTable >>> colgroup col:nth-child(1) {
-    width: 12%
+    width: 120px
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 12%
+    width: 120px
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 15%
+    width: 130px
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 15%
+    width: 130px
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 15%
+    width: 150px
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 21%
+    width: 200px
   }
-  #userTable >>> colgroup col:nth-child(7) {
+  /* #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  }
+  } */
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 15%
+    /* width: 15% */
+    width: 120px;
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 18%
+    /* width: 18% */
+    width: 180px;
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 28%
+    /* width: 28% */
+    width: 200px;
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    width: 11%
+    /* width: 11% */
+    width: 100px;
   }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 9%
+    /* width: 9% */
+    width: 100px;
   }
   #resourceTable >>> colgroup col:nth-child(6) {
-    width: 9%
+    /* width: 9% */
+    width: 100px;
   }
-  #resourceTable >>> colgroup col:nth-child(7) {
+  /* #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
-  }
+  } */
 </style>

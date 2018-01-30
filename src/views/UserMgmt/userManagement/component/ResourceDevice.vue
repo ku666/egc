@@ -11,8 +11,8 @@
         <el-input v-model="resourceDeviceVue.logicalAddress" auto-complete="off" placeholder="请输入逻辑(IP)地址" class="user_el-input"></el-input>
       </el-form-item>
       <div class="user-button" align="center">
-          <el-row align="right">
-            <el-col align="right">
+          <el-row align="center">
+            <el-col align="center">
               <span class="dialog-footer">
                 <el-button class='cancel-btn' @click="handelCancel('resourceDeviceVue')" type='primary'>取消</el-button>
                 <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceDeviceVue')" class='action-btn'>保 存</el-button>

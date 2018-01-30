@@ -74,9 +74,8 @@ export default {
       let userInfo = this.$store.getters.getUserInfo
       if (userInfo !== null && userInfo.uiResources !== null && userInfo.uiResources.length > 0) {
         this.titleList = []
-        let i = 0
         let uilength = userInfo.uiResources.length
-        for (i = 0; i < uilength; i++) {
+        for (let i = 0; i < uilength; i++) {
           let uiResTemp = userInfo.uiResources[i]
           let temp = { 'id': uiResTemp.id, 'title': uiResTemp.title, 'icon': '', 'url': uiResTemp.url }
           this.titleList.push(temp)
