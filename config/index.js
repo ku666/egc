@@ -33,7 +33,12 @@ module.exports = {
         changeOrigin: true
        },
       "/egc-mdmmgmtapp": {
-        target: 'http://127.0.0.1:9040/'
+        target: 'http://127.0.0.1:9040/',
+        changeOrigin: true
+      },
+      "/egc-ismgcomponent": {
+        target: 'http://127.0.0.1:9040/',
+        changeOrigin: true
       },
       //更新升级模块接口
       //  "/egc-applicationupgradecomponent": {
@@ -53,14 +58,14 @@ module.exports = {
         changeOrigin: true
       },
       '/egc-applicationupgradecomponent': {
-        target: 'http://172.16.30.112:8080',  // 
+        target: 'http://172.16.30.112:8080',  //
         changeOrigin: true
       },
       '/egc-logservicecomponent': {
         target: 'http://172.16.30.9:8082/',  // 日志组件管理
         changeOrigin: true
       }
-      
+
     },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

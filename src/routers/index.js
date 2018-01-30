@@ -20,6 +20,9 @@ import sofwarePackageMgmt from '@/views/ApplicationUpgrade/SofwarePackageMgmt/ro
 import sofwarePackageDispatch from '@/views/ApplicationUpgrade/SoftwarePackageDispatch/routers/index'
 // 引入日志服务组件路由数据
 import logServiceComponentrouters from '@/views/LogServiceComponent/routers/index'
+// 引入短信网关模块路由数据
+import ismgAppIsmgRouters from '@/views/IsmgApp/routers/index'
+
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -55,7 +58,8 @@ export default new Router({
         ...upgradeMgmt,
         ...logServiceComponentrouters,
         ...sofwarePackageMgmt,
-        ...sofwarePackageDispatch
+        ...sofwarePackageDispatch,
+        ...ismgAppIsmgRouters
       ]
     }
   ]

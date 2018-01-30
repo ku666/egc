@@ -284,6 +284,28 @@ export default {
           },
           {
             'id': '11',
+            'title': '短信网关',
+            'icon': 'el-icon-menu',
+            'url': '33',
+            'submenus': [{
+              'id': null,
+              'title': '发送短信',
+              'url': '/ismgapp/sendsms',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
+              'title': '发送历史记录查询',
+              'url': '/ismgapp/searchsms',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            }]
+          },
+          {
+            'id': '12',
             'title': '日志管理',
             'icon': 'el-icon-menu',
             'url': '33',
