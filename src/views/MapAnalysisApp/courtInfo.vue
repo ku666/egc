@@ -211,7 +211,7 @@ export default {
         courtUuid: this.courtInfo.courtUuid
       }
       getListDeviceType(param).then(res => {
-        // console.log(res)
+        console.log(res)
         let msgType = 'warning'
         if (res.data.code === '00000') {
           msgType = 'success'

@@ -112,6 +112,7 @@ export default {
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
+  /* border: 1px solid #ccc; */
 }
 .searchBox{
   width: 50%;
@@ -120,4 +121,7 @@ export default {
   flex-flow: row nowrap;
   align-items: center;
 }
+/* #mapECarts{
+  border: 1px solid #ccc;
+} */
 </style>
