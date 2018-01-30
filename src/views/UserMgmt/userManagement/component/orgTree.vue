@@ -1,13 +1,13 @@
 <template>
-<div class="usermgn">
+<div class="ui-common">
   <el-input
-        placeholder="输入关键字进行过滤"
+        placeholder="请输入查询关键字"
         class="user_el-select"
         v-model="filterText">
       </el-input>
-    <div>
+    <div class="tree">
       <el-tree
-        class="filter-tree"
+        class="el-org-tree"
         node-key="uuid"
         :data="orgsData"
         :props="defaultProps"
@@ -39,7 +39,8 @@ export default {
       dialogTableVisible: false,
       expandedKeys: [],
       defaultChecked: [],
-      houseOrgCodeList: []
+      houseOrgCodeList: [],
+      isfilterNode: false
     }
   },
   watch: {
@@ -93,11 +94,18 @@ export default {
       this.defaultChecked = nodes
     },
     filterNode (value, data) {
-      if (!value) return true
-      return data.name.indexOf(value) !== -1
+      if (!value) {
+        this.isfilterNode = false
+        return true
+      } else {
+        this.isfilterNode = true
+        return data.name.indexOf(value) !== -1
+      }
     },
     handleCheckChange: function (data, checked, indeterminate) {
-      this.deepChangeCheckedJsonData(data.children, checked)
+      if (!this.isfilterNode) {
+        this.deepChangeCheckedJsonData(data.children, checked)
+      }
     },
     deepChangeCheckedJsonData: function (json, checked) {
       if (json instanceof Array) {

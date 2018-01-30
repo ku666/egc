@@ -1,20 +1,20 @@
 <template>
   <div>
     <el-form ref='resourceServiceVue' :inline="true" :model="resourceServiceVue" :rules="rules">
-      <el-form-item label="应用程序" :label-width="formLabelWidth" prop="appCode">
-        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择" class="user_el-select">
+      <el-form-item label="所属应用程序" :label-width="formLabelWidth" prop="appCode">
+        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择所属应用程序" class="user_el-select">
           <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务名称" :label-width="formLabelWidth" prop="resourceName">  
         <el-input v-model="resourceServiceVue.resourceName" auto-complete="off" placeholder="请输入服务名称" class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label="服务URL" :label-width="formLabelWidth">
-        <el-input v-model="resourceServiceVue.resourceUrl" auto-complete="off" placeholder="请输入应用程序URL" class="user_el-input"></el-input>
+      <el-form-item label="服务URI" :label-width="formLabelWidth" prop="resourceUrl">
+        <el-input v-model="resourceServiceVue.resourceUrl" auto-complete="off" placeholder="请输入服务URI" class="user_el-input"></el-input>
       </el-form-item>
       <div class="user-button" align="center">
-          <el-row align="right">
-            <el-col align="right">
+          <el-row align="center">
+            <el-col align="center">
               <span class="dialog-footer">
                 <el-button class='cancel-btn' @click="handelCancel('resourceServiceVue')" type='primary'>取消</el-button>
                 <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceServiceVue')" class='action-btn'>保 存</el-button>
@@ -65,7 +65,7 @@ export default {
     // 检查资源名称唯一性
     var validateResourceName = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入应用程序名称'))
+        callback(new Error('请输入服务名称'))
       } else {
         this.listParm.resourceType = '3'
         this.listParm.uuid = this.resourceServiceVue.uuid
@@ -88,10 +88,13 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur,change', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName }
         ],
         appCode: [
-          { required: true, message: '请选择应用程序', trigger: 'blur,change' }
+          { required: true, message: '请选择所属应用程序', trigger: 'blur' }
+        ],
+        resourceUrl: [
+          { required: true, message: '请输入服务URI', trigger: 'blur' }
         ]
       }
     }

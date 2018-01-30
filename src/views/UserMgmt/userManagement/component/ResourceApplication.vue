@@ -8,15 +8,15 @@
         <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用程序代码" class="user_el-input" disabled v-if="isAddFlagParm"></el-input>
         <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用程序代码" class="user_el-input" v-else></el-input>
       </el-form-item>
-      <el-form-item label="应用程序URL" :label-width="formLabelWidth">
+      <!-- <el-form-item label="应用程序URL" :label-width="formLabelWidth">
         <el-input v-model="resourceAppVue.resourceUrl" auto-complete="off" placeholder="请输入应用程序URL" class="user_el-input"></el-input>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-        <el-input v-model.number="resourceAppVue.sort" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
+        <el-input v-model.number="resourceAppVue.sort" type="number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
       </el-form-item>
       <div class="user-button" align="center">
-          <el-row align="right">
-            <el-col align="right">
+          <el-row align="center">
+            <el-col align="center">
               <span class="dialog-footer">
                 <el-button class='cancel-btn' @click="handelCancel('resourceAppVue')" type='primary'>取消</el-button>
                 <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceAppVue')" class='action-btn'>保 存</el-button>
@@ -100,12 +100,12 @@ export default {
     // 检查排序
     var validateSort = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入排序值'))
+        callback(new Error('请输入数字型排序值'))
       } else {
-        let numberPatten = /^[1-9]\d*$/
+        let numberPatten = /^[0-9]*$/
         console.log(value)
         if (!new RegExp(numberPatten).test(value)) {
-          callback(new Error('请输入数字值'))
+          callback(new Error('请输入数字型排序值'))
         } else {
           callback()
         }
@@ -123,13 +123,13 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur,change', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName }
         ],
         appCode: [
-          { required: true, validator: validateAppCode, trigger: 'blur,change' }
+          { required: true, validator: validateAppCode, trigger: 'blur' }
         ],
         sort: [
-          { required: true, validator: validateSort, trigger: 'blur,change' }
+          { required: true, validator: validateSort, trigger: 'blur' }
         ]
       }
     }
@@ -170,6 +170,8 @@ export default {
         if (valid) {
           this.resourceAppVue.resourceType = '1'
           this.$emit('createDialogEvent', this.resourceAppVue)
+          // this.$refs[formName].clearValidate()
+          // this.$refs[formName].resetFields()
         } else {
           return false
         }
@@ -180,6 +182,8 @@ export default {
         if (valid) {
           this.resourceAppVue.resourceType = '1'
           this.$emit('saveDialogEvent', this.resourceAppVue)
+          // this.$refs[formName].clearValidate()
+          // this.$refs[formName].resetFields()
         } else {
           return false
         }

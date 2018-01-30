@@ -1,22 +1,23 @@
 
 <template>
-  <div class='usermgn'>
-     <div>
-      <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
-          <div style="margin-top: 10px">
-            <el-button class='action-btn' @click="handleCreate" type="primary">添加</el-button>
+  <div class='ui-common'>
+     <div class="flex-c flex-1">
+      <el-row style="height: 100%;">
+        <el-col :span="8" style='height: 100%;' class="flex-c">
+          <div>
+            <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary">添加</el-button>
           </div>
+          <div class="flex-1 flex-c">
           <grid-list id="usergroupTable"
-            :editable="true" 
-            :deletable="true" 
-            :showOperation="true" 
-            :tableData="roleData.roleBaseVoList" 
-            :params="roleListParam" 
-            style="margin-top: 15px" 
-            @listenToDeleteEvent="roleDeleteEvent" 
+            :editable="true"
+            :deletable="true"
+            :tableData="roleData.roleBaseVoList"
+            :params="roleListParam"
+            style="margin-top: 15px; max-height: 100%;"
+            @listenToDeleteEvent="roleDeleteEvent"
             @listenToEditEvent="roleEditEvent"
           ></grid-list>
+          </div>
           <el-pagination
             @size-change="handleRoleSizeChange"
             @current-change="handleRoleCurrentChange"
@@ -27,12 +28,12 @@
             style="margin-top:15px; margin-bottom:20px">
           </el-pagination>
         </el-col>
-        <el-dialog :title="dialogStatus" 
+        <el-dialog :title="dialogStatus"
         :close-on-click-modal="false"
         :show-close="true"
         :before-close="roleAddEvent"
         :visible.sync="dialogFormVisible">
-            <role-add 
+            <role-add
               :form="roleForm"
               @listenToAddEvent="roleAddEvent"
               v-show="showCreate"
@@ -50,7 +51,7 @@
               style='margin-top: 20px'
             ></role-edit>
           </el-card>
-        </el-col>     
+        </el-col>
       </el-row>
     </div>
   </div>
@@ -125,9 +126,6 @@
         this.roleListParam = [{
           title: '角色名称',
           prop: 'roleName'
-        }, {
-          title: '用户类型',
-          prop: 'userType'
         }, {
           title: '角色说明',
           prop: 'remark'
@@ -206,6 +204,13 @@
         getRoleList(this.query)
           .then(
             function (result) {
+              this.roleListParam = [{
+                title: '角色名称',
+                prop: 'roleName'
+              }, {
+                title: '角色说明',
+                prop: 'remark'
+              }]
               this.roleData = result
             }.bind(this)
           )
@@ -221,6 +226,13 @@
         getRoleList(this.query)
           .then(
             function (result) {
+              this.roleListParam = [{
+                title: '角色名称',
+                prop: 'roleName'
+              }, {
+                title: '角色说明',
+                prop: 'remark'
+              }]
               this.roleData = result
             }.bind(this)
           )
@@ -282,12 +294,14 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 30%
+    /* width: 30% */
+    width: 180px;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 50%
+    /* width: 50% */
+    width: 250px;
   }
-  #usergroupTable >>> colgroup col:nth-child(3) {
+  /* #usergroupTable >>> colgroup col:nth-child(3) {
     width: 20%
-  }
+  } */
 </style>
