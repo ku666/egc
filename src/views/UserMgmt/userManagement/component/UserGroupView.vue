@@ -639,7 +639,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '登陆 ID',
+          title: '登录 ID',
           prop: 'userName'
         },
         {

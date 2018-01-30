@@ -143,7 +143,7 @@
         },
         {
           title: '用户类型',
-          prop: 'userType'
+          prop: 'userTypeName'
         },
         {
           title: '用户组说明',

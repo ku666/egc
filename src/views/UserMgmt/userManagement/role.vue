@@ -130,7 +130,7 @@
         },
         {
           title: '用户类型',
-          prop: 'userType'
+          prop: 'userTypeName'
         },
         {
           title: '角色说明',
