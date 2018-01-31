@@ -235,7 +235,7 @@ export default {
           }
           this.$message({
             message: '刪除成功!',
-            type: 'warning'
+            type: 'success'
           })
           this.search()
         })
@@ -254,12 +254,9 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(() => {
         deleteDeviceCategory({ 'value': [device.uuid] }).then(res => {
-          // if (res.data.code !== '0000') {
-          //   return
-          // }
           this.$message({
             message: '刪除成功!',
-            type: 'warning'
+            type: 'success'
           })
           this.search()
         })
@@ -447,31 +444,10 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
-div.cell i.el-icon-arrow-right::before {
-  /* font: normal normal normal 14px/1 FontAwesome;
-  color: #66b1ff;
-  width:0px; */
-  /* margin-left: -1000px; */
-  /* content: "\f1cd"; */
-}
-.el-table__expanded-cell {
-  /* padding: 0 5px; */
-}
 .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
 }
-.el-table .cell {
-  /* padding-left: 0; */
-}
-.el-table .child-row {
-  /* color:#999; */
-  /* font-size: 90%; */
-  /* background: #f5f7fa; */
-}
 .el-table .child-row td {
   padding: 0px;
-}
-.el-table__expand-icon {
-  /* color: red; */
 }
 </style>

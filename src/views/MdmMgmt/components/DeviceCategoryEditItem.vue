@@ -45,25 +45,27 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="设备属性信息" name = 'attr' v-if = 'deviceSaved'>
-        <el-form>
-          <el-form-item>
-            <el-row type = 'flex' justify = 'center'>
-              <el-col :span = '19'>
-                <el-transfer
-                  filterable
-                  :titles="['可添加属性', '当前设备属性']"
-                  :button-texts="['删除属性', '添加属性']"
-                  :props= '{
-                    key: "uuid",
-                    label: "attrDesc"
-                  }'
-                  v-model='selectAttr'
-                  :data="transferData">
-                </el-transfer>
-              </el-col>
-            </el-row>
-          </el-form-item>
-        </el-form>
+        <div>
+          <el-form>
+            <el-form-item>
+              <el-row type = 'flex'>
+                <el-col :span = '24'>
+                  <el-transfer style="padding-left: 150px;"
+                    filterable
+                    :titles="['可添加属性', '当前设备属性']"
+                    :button-texts="['删除属性', '添加属性']"
+                    :props= '{
+                      key: "uuid",
+                      label: "attrDesc"
+                    }'
+                    v-model='selectAttr'
+                    :data="transferData">
+                  </el-transfer>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </div>
         <div style='text-align: center; margin-top: 20px'>
           <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
           <el-button type='primary' @click='saveMapping' class='btn-plain' :disabled='viewFlag'>保存</el-button>
@@ -121,7 +123,7 @@ export default {
       viewFlagParent: true,
       rules: {
         typeCode: [
-          { required: true, message: '请输入类别编码', trigger: 'blur' },
+          {required: true, message: '请输入类别编码', trigger: 'blur'},
           {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
         ],
         typeName: [
@@ -229,9 +231,6 @@ export default {
     },
     // 保存设备基本信息
     save: function () {
-      console.log('this.deviceCategoryDetail.uuid')
-      console.log(this.deviceCategoryDetail.uuid)
-      console.log('this.deviceCategoryDetail.uuid')
       this.$refs['deviceCategoryDetail'].validate((valid) => {
         if (valid) {
           var func
@@ -263,6 +262,10 @@ export default {
         this.getDeviceAttr()
         this.deviceCategoryDetailVisible = false
         this.activeTab = 'basic'
+        this.$message({
+          message: '设备类别属性保存成功!',
+          type: 'success'
+        })
       })
     },
     // 清除验证信息
