@@ -19,11 +19,11 @@
         width = "100%"
         v-loading = 'domainListLoading'
         element-loading-text = '拼命加载中'>
-        <el-table-column type='index' label='序号' width="100px"></el-table-column>
+        <el-table-column type='index' label='序号' width="150px"></el-table-column>
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column prop='domainValue' label='域取值' width="300px"></el-table-column>
         <el-table-column prop='domainValueCode' label='域取值编码' width="300px"></el-table-column>
-        <el-table-column label='操作' width="140px">
+        <el-table-column label='操作' width="150px">
           <template slot-scope='scope'>
             <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
             <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
@@ -48,8 +48,8 @@
         </el-row>
       </el-form>
       <div style='text-align: center'>
-          <el-button type='primary' @click='clear' class='btn-reset'>清空</el-button>
-          <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
+          <el-button type='primary' @click='clear' class="cancel-btn">清空</el-button>
+          <el-button type='primary' @click='save' class="action-btn">保存</el-button>
       </div>
     </div>
   </div>
@@ -212,7 +212,7 @@ export default {
 <style lang='less' scoped>
   @import '~@/views/MdmMgmt/assets/css/index.less';
 </style>
-<style>
+<style scoped>
 div.cell {
   padding-left: 10px;
 }

@@ -1,12 +1,13 @@
 <template>
-  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' width='750px'>
+  <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' style="min-width: 750px">
     <!-- <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item> -->
 
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
 
     <el-tabs style="height: 430px; margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name = 'basic'>
-        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='150px' :rules='rules' :inline='true' >
+        <div style="padding-left: 30px">
+        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
           <el-form-item label='设备编码' prop='typeCode'>
             <el-input v-model='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
           </el-form-item>
@@ -38,10 +39,11 @@
             <el-input v-model='deviceCategoryDetail.softwareVersion' :disabled='viewFlag'></el-input>
           </el-form-item>
         </el-form>
+        </div>
         <div style='text-align: center; margin-top: 20px'>
-          <el-button type='primary' @click='clear' class='btn-reset' :disabled='viewFlag'>清空</el-button>
+          <el-button type='primary' @click='clear' class="cancel-btn" :disabled='viewFlag'>清空</el-button>
           <!-- <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button> -->
-          <el-button type='primary' @click='save' class='btn-plain'>保存</el-button>
+          <el-button type='primary' @click='save' class="action-btn">保存</el-button>
         </div>
       </el-tab-pane>
       <el-tab-pane label="设备属性信息" name = 'attr' v-if = 'deviceSaved'>
@@ -50,7 +52,7 @@
             <el-form-item>
               <el-row type = 'flex'>
                 <el-col :span = '24'>
-                  <el-transfer style="padding-left: 150px;"
+                  <el-transfer style="padding-left: 190px;"
                     filterable
                     :titles="['可添加属性', '当前设备属性']"
                     :button-texts="['删除属性', '添加属性']"
@@ -66,9 +68,9 @@
             </el-form-item>
           </el-form>
         </div>
-        <div style='text-align: center; margin-top: 20px'>
+        <div style='text-align: center'>
           <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
-          <el-button type='primary' @click='saveMapping' class='btn-plain' :disabled='viewFlag'>保存</el-button>
+          <el-button @click='saveMapping' type='primary' class="action-btn" :disabled='viewFlag'>保存</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>

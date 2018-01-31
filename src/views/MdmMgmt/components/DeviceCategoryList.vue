@@ -49,100 +49,99 @@
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
 
-      <el-table stripe
-        ref='deviceTable'
-        :data='tableData'
-        v-loading='loading'
-        @row-dblclick='editDevicedbl'
-        element-loading-text='拼命加载中'
-        height="100%"
-        style='margin-top: 15px'>
-        <!-- <el-table-column type='selection' width='50'></el-table-column> -->
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
-              <!-- style = 'color: #0078F4;'  -->
-              <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-              <el-table-column prop='typeCode' label='设备编码'>
-                <template slot-scope="scope">
-                  <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
-                  <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
-                  <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
-                  <div style='padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
-                  <!-- </div> -->
-                </template>
-              </el-table-column>
-              <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-              <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <div v-for='device in parents' v-bind:key='device.uuid'>
-                    {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
-                  </div>
-                </template>
-              </el-table-column> -->
-              <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-              <el-table-column label='供应商' show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <div v-for='provider in providers' v-bind:key='provider.providerCode'>
-                    {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
-                  </div>
-                </template>
-              </el-table-column>
-              <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-              <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
-              <el-table-column label='操作'>
-                <template slot-scope='scope'>
-                  <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
-                  <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
-                  <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-          </template>
-        </el-table-column>
-        <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-        <el-table-column prop='typeCode' label='设备编码'></el-table-column>
-        <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-        <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <div v-for='device in parents' v-bind:key='device.uuid'>
-              {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
-            </div>
-          </template>
-        </el-table-column> -->
-        <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-        <el-table-column label='供应商' show-overflow-tooltip>
-          <template slot-scope="scope">
-            <div v-for='provider in providers' v-bind:key='provider.providerCode'>
-              {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
-        <el-table-column label='操作'>
-          <template slot-scope='scope'>
-            <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
-            <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
-            <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-
+    <el-table stripe
+      ref='deviceTable'
+      :data='tableData'
+      v-loading='loading'
+      @row-dblclick='editDevicedbl'
+      element-loading-text='拼命加载中'
+      height="100%"
+      style='margin-top: 15px'>
+      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
+            <!-- style = 'color: #0078F4;'  -->
+            <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
+            <el-table-column prop='typeCode' label='设备编码'>
+              <template slot-scope="scope">
+                <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
+                <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
+                <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
+                <div style='padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
+                <!-- </div> -->
+              </template>
+            </el-table-column>
+            <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
+            <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
+              <template slot-scope="scope">
+                <div v-for='device in parents' v-bind:key='device.uuid'>
+                  {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
+                </div>
+              </template>
+            </el-table-column> -->
+            <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
+            <el-table-column label='供应商' show-overflow-tooltip>
+              <template slot-scope="scope">
+                <div v-for='provider in providers' v-bind:key='provider.providerCode'>
+                  {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
+                </div>
+              </template>
+            </el-table-column>
+            <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+            <el-table-column label='操作'>
+              <template slot-scope='scope'>
+                <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+                <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+                <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </template>
+      </el-table-column>
+      <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
+      <el-table-column prop='typeCode' label='设备编码'></el-table-column>
+      <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
+      <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <div v-for='device in parents' v-bind:key='device.uuid'>
+            {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
+          </div>
+        </template>
+      </el-table-column> -->
+      <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
+      <el-table-column label='供应商' show-overflow-tooltip>
+        <template slot-scope="scope">
+          <div v-for='provider in providers' v-bind:key='provider.providerCode'>
+            {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+      <el-table-column label='操作'>
+        <template slot-scope='scope'>
+          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
+          <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
     <el-pagination background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
