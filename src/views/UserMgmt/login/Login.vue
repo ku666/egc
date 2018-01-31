@@ -4,13 +4,13 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px" class="demo-ruleForm">
         <div class="ms-title">恒大集团智慧云平台</div>
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" value="admin" placeholder="username"></el-input>
+          <el-input v-model="ruleForm.username" placeholder="username"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="password" value="admin" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
-          <el-button type="primary" @click="submitForm('ruleForm')">登录</el-button>
+          <el-button type="primary" @click.native="submitForm('ruleForm')" :loading="isBtnLoading">{{btnText}}</el-button>
         </div>
       </el-form>
     </div>
@@ -19,63 +19,80 @@
 
 <script>
 // import { login } from '@/views/UserMgmt/login/apis'
+// , catchError
+import { getPermission } from '@/assets/js/util.js'
+// import CryptoJS from 'crypto-js'
 
 export default {
   data: function () {
     return {
       ruleForm: {
-        username: '',
-        password: ''
+        username: 'test',
+        password: 'test'
       },
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+      },
+      isBtnLoading: false
+    }
+  },
+  computed: {
+    btnText () {
+      if (this.isBtnLoading) {
+        return '登录中...'
       }
+      return '登录'
     }
   },
   methods: {
     submitForm (formName) {
       const self = this
-      self.$router.push('/home')
+      var qs = require('qs')
       // begin 20171212
       /*
-       self.$refs[formName].validate(valid => {
-         if (valid) {
-           var qs = require('qs')
-           var params = qs.stringify({
-             username: self.ruleForm.username,
-             password: self.ruleForm.password
-           })
-           login(params)
-            .then(result => {
-              if (result.status) {
-                sessionStorage.setItem(
-                  'login_username',
-                  self.ruleForm.username
-                )
-                sessionStorage.setItem('token', result.data.token)
-                sessionStorage.setItem(
-                  'meuns',
-                  qs.stringify(result.data.meuns)
-                )
-                sessionStorage.setItem('routers', result.data.routers)
-                self.$router.push('/home')
-              } else {
-                // response.data.message
-                console.log(result.status + ' ' + result.data.message)
-                // self.$message.error(result.data.message)
-                self.$message.error('登录不成功，请重试。。。')
-              }
-            })
-            .catch(function (error) {
-              console.log(error)
-            })
-         } else {
-           console.log('error submit!!')
-           return false
-         }
-       })
-       */
+      self.$refs[formName].validate(valid => {
+        if (valid) {
+          // let words = CryptoJS.enc.Utf8.parse(self.ruleForm.password)
+          // let param_base64 = CryptoJS.enc.Base64.stringify(words)
+          // console.log(' base64: ' + param_base64)
+          var params = qs.stringify({
+            username: self.ruleForm.username,
+            password: self.ruleForm.password
+          })
+          this.isBtnLoading = true
+          login(params).then(result => {
+            this.isBtnLoading = false
+            console.log(result)
+            if (result.data.token) {
+              sessionStorage.setItem('login_username', self.ruleForm.username)
+              sessionStorage.setItem('token', result.data.token)
+              // localStorage.setItem('meuns', qs.stringify(result.data.meuns))
+              // localStorage.setItem('routers', result.data.routers)
+              console.log(result.data)
+              this.$store.dispatch('setUserInfo', result.data)
+              */
+      // no login 20180118
+      let userResourcePermission = {}
+      let userRouters = ''
+      userRouters = getPermission(this.$store.getters.getUserInfo, userResourcePermission)
+
+      sessionStorage.setItem('userRouters', qs.stringify(userRouters))
+      sessionStorage.setItem('userResourcePermission', qs.stringify(userResourcePermission))
+      self.$router.push('/home')
+      //  no login 20180118
+      /*
+    } else {
+      this.isBtnLoading = true
+      self.$message.error('登录不成功，请重试。。。')
+    }
+  }).catch(catchError)
+} else {
+  console.log('error submit!!')
+  return false
+}
+})
+*/
       // end 20171212
     }
 

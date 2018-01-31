@@ -1,0 +1,136 @@
+<template>
+  <div>
+    <el-form :inline="true" :model="osDetails">
+      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
+      </el-form-item>
+      <el-form-item label="市" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.city"></el-input>
+      </el-form-item>
+      <el-form-item label="区" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.district"></el-input>
+      </el-form-item>
+      <el-form-item label="小区名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
+      </el-form-item>
+       <el-form-item label="操作系统名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.name"></el-input>
+      </el-form-item>
+       <el-form-item label="操作系统版本（服务包）" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.version"></el-input>
+      </el-form-item>
+       <el-form-item label="操作系统位数" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.dataLength"></el-input>
+      </el-form-item>
+       <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.hostname"></el-input>
+      </el-form-item>
+      <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.uuid"></el-input>
+      </el-form-item>
+      <el-form-item label="操作系统提供者" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.updateUser"></el-input>
+      </el-form-item>
+      <el-form-item label="描述" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input"  v-model="osDetails.remark" :maxlength="maxlength"></el-input>
+      </el-form-item>
+
+
+      <div>
+        <template v-if="osDetails.newItems.length !== 0" v-for="(item, index) in osDetails.newItems">
+          <el-form-item :key="index" :label="item.newLabel" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" v-model="item.newValue"></el-input>
+          </el-form-item>
+        </template>
+      </div>
+
+
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
+
+        <el-popover
+            ref="newCIEventPop"
+            visible="showAddNewCIPop"
+            placement="right"
+            width="160"
+            :hide="clearData"
+            v-model="showAddNewEvent">
+            <div>
+              <div><el-input :autofocus="true" placeholder="请输入新CI名称" size="small" v-model="newLabel"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新CI值" size="small" v-model="newValue"></el-input></div>
+            </div>
+            <div class="text-right margin-top-5">
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
+              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            </div>
+          </el-popover>
+      <!-- <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a> -->
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
+
+      </div>
+
+    </el-form>
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    osDetails: undefined
+  },
+  data () {
+    return {
+      formLabelWidth: '160px',
+      isInptDisabled: true,
+      maxlength: 30,
+      tempRemark: undefined,
+      showAddNewCIPop: false,
+      newLabel: '',
+      newValue: '',
+      showAddNewEvent: false,
+      osDetailsTemp: []
+    }
+  },
+  methods: {
+    updateAppServiceInfo () {
+      console.log(JSON.stringify(this.osDetails))
+      if (this.tempRemark !== this.osDetails.remark) {
+        this.$emit('saveOsInfoEvent', this.osDetails)
+      } else {
+        this.$notify({
+          title: '数据更新',
+          message: '请更改数据后再提交',
+          type: 'error',
+          duration: 2000
+        })
+      }
+    },
+    addNewEvent () {
+      console.info('add new item')
+      if (this.newLabel.trim() === '') {
+        this.$message.error('请输入标签名')
+      } else if (this.newValue.trim() === '') {
+        this.$message.error('请输入值！')
+      } else {
+        this.osDetails.newItems.push({'newValue': this.newValue, 'newLabel': this.newLabel})
+        console.info(JSON.stringify(this.osDetails))
+      }
+    },
+    clearData () {
+      console.info('clear data')
+      this.showAddNewEvent = false
+      this.newLabel = ''
+      this.newValue = ''
+    }
+  },
+  watch: {
+    osDetails (newValue, oldValue) {
+      this.osDetails = newValue
+    }
+  },
+  mounted () {
+    this.tempRemark = this.osDetails.remark
+    this.osDetailsTemp = this.osDetails
+  }
+}
+</script>

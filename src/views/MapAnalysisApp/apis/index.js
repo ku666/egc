@@ -1,5 +1,10 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/scp-mapanalysis'
+let contextPath = '/egcmapanalysis'
+// let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
+let personPath = '/mapAnalysis'
+let devicePath = '/device'
+let ownertPath = '/profile'
+
 /**
  * 条件查询小区列表
  * @param orgID 所属组织编码
@@ -33,9 +38,9 @@ export const getCourtInfo = data => {
 export const getCourtCarAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCourtCarAccessInfo',
+    url: personPath + '/listCarFlowInfo',
     params: data
-  }).then(res => res.data)
+  })
 }
 /**
  * 条件查询车辆出入统计信息（分页获取）
@@ -50,9 +55,9 @@ export const getCourtCarAccessInfo = data => {
 export const getCarAccessPageList = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCarAccessPageList',
+    url: personPath + '/listCarFlowPage',
     params: data
-  }).then(res => res.data)
+  })
 }
 /**
  * 条件查询人员出入统计信息
@@ -64,7 +69,7 @@ export const getCarAccessPageList = data => {
 export const getCourtPerAccessInfo = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getCourtPerAccessInfo',
+    url: personPath + '/listHumanFlowInfo',
     params: data
   })
 }
@@ -81,7 +86,7 @@ export const getCourtPerAccessInfo = data => {
 export const getPerAccessPageList = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getPerAccessPageList',
+    url: personPath + '/listHumanFlowPage',
     params: data
   })
 }
@@ -96,14 +101,56 @@ export const getOrgList = data => {
     params: data
   })
 }
+
 /**
  *  获取设备数列表
- * @param orgCode 区划组织code
+ * @param orgCode 设备数code
+ * @param deviceType 设备种类ID
+ * @param deviceTypeDesc 设备名称
+ * @param deviceCount 设备数量
+ * @param onlineCount 设备在网
+ *
  */
-export const getEquipmentInfo = data => {
+export const getListDeviceType = data => {
   return Axios({
     method: 'get',
-    url: contextPath + '/getOrgList',
+    url: devicePath + '/listDeviceType',
+    params: data
+  })
+}
+export const getListDeviceForPage = data => {
+  return Axios({
+    method: 'get',
+    url: devicePath + '/listDeviceForPage',
+    params: data
+  })
+}
+/**
+ *  获取业主画像列表
+ * @param orgCode 业主画像code
+ */
+export const getBuildProfile = data => {
+  return Axios({
+    url: ownertPath + '/getBuildProfile',
+    // url: contextPath + '/getBuildProfile',
+    method: 'get',
+    params: data
+  })
+}
+export const getPerProfile = data => {
+  return Axios({
+    url: ownertPath + '/getCourtAgeFlowData',
+    // url: contextPath + '/getBuildProfile',
+    method: 'get',
+    params: data
+  })
+}
+export const getListDevice = data => {
+  // 分页
+  return Axios({
+    url: ownertPath + '/getBuildProfileList',
+    // url: contextPath + '/getBuildProfile',
+    method: 'get',
     params: data
   })
 }

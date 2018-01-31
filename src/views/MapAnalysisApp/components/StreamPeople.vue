@@ -1,67 +1,63 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback">
+  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
     <el-row>
-      <el-col :span="4">
+      <el-col :span="4" class="leftText">
         <div>
           <div>
-            <span>小区地址：</span>{{cellDetailsList.regionName}}</div>
+            <span>小区名称</span>
+            <i></i>：{{cellDetailsList.courtName}}</div>
           <div>
-            <span>楼栋：</span>{{cellDetailsList.homeCount}}栋</div>
+            <span>小区地址</span>
+            <i></i>：{{cellDetailsList.regionName}}</div>
           <div>
-            <span>房屋：</span>{{cellDetailsList.houseCount}}间</div>
+            <span>户数</span>
+            <i></i>：{{cellDetailsList.homeCount}}户</div>
           <div>
-            <span>占地面积：</span>{{cellDetailsList.floorArea}}平方米</div>
+            <span>房屋总数</span>
+            <i></i>：{{cellDetailsList.houseCount}}间</div>
           <div>
-            <span>建筑面积：</span>{{cellDetailsList.buildArea}}平方米</div>
+            <span>占地面积</span>
+            <i></i>：{{cellDetailsList.floorArea}}平方米</div>
+          <div>
+            <span>建筑面积</span>
+            <i></i>：{{cellDetailsList.buildArea}}平方米</div>
         </div>
       </el-col>
       <!-- 表格展示 -->
       <el-col :span="19" style="height:600px">
-        <div class="tblHeader">
-          <el-tabs type="border-card" @tab-click="reportSwitch" v-model="reportType">
-            <!-- 报表类型tab切换 -->
-            <el-tab-pane>
-              <!-- 日报表 -->
-              <span slot="label">日报表</span>
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" type="datetime" placeholder="开始时间" :picker-options="forbiddenDatetime" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" type="datetime" placeholder="结束时间" size="small">
+        <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
+          <el-row>
+            <el-col :span="8">
+              <el-form-item label="报表类型">
+                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" style="width:95%">
+                  <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="开始时间">
+                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <!-- 月报表 -->
-            <el-tab-pane label="月报表">
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" type="month" placeholder="开始月份" :picker-options="forbiddenMonth" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" type="month" placeholder="结束月份" size="small">
+              </el-form-item>
+            </el-col>
+            <el-col :span="8">
+              <el-form-item label="结束时间">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <!-- 年报表 -->
-            <el-tab-pane label="年报表">
-              <div class="block">
-                <span class="demonstration"></span>
-                <el-date-picker v-model="startDatetimeSelection" align="right" type="year" placeholder="开始年份" :picker-options="forbiddenYear" size="small">
-                </el-date-picker>至
-                <el-date-picker v-model="endDatetimeSelection" align="right" type="year" placeholder="结束年份" size="small">
-                </el-date-picker>
-              </div>
-            </el-tab-pane>
-            <el-button type="primary" @click="timeQuery">查询</el-button>
-            <div class="chart">
-              <el-button type="warning" @click="tableSwitch">表单</el-button>
-              <el-button type="danger" @click="chartSwitch">图表</el-button>
-            </div>
-          </el-tabs>
-        </div>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" style="text-align:right">
+              <el-button type="primary" @click="timeQuery">查询</el-button>
+              <el-button type="success" @click="tableSwitch" plain>表单</el-button>
+              <el-button type="danger" @click="chartSwitch" plain>图表</el-button>
+            </el-col>
+          </el-row>
+        </el-form>
         <div class="show">
           <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" max-height="380" class="tableWidth" stripe>
-              <el-table-column prop="date" label="日期">
+            <el-table :data="tableData" width="100%" height="380" class="tableWidth" stripe border>
+              <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
               </el-table-column>
@@ -70,7 +66,7 @@
               <el-table-column prop="perOutCount" label="出园人数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.pageNum" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
@@ -80,82 +76,119 @@
         </div>
       </el-col>
     </el-row>
-    <span slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
-    </span>
+    <!-- <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
+    </span> -->
   </el-dialog>
 </template>
 <script>
-import { getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-// import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
       form: {
         date: '', // 日期
-        dateList: [],
+        dateList: [], // 日期集合
         courtId: '', // 小区id
         courtName: '', // 小区名称
         perInCount: '', // 入园人数
-        carInRegedCount: '',
         perInCountList: [], // 入园人数集合
-        perOutCount: '', // 出园人数
-        carOutRegedCount: '',
+        perOutCount: '', // 出园人数,
         perOutCountList: [] // 出园人数集合
       },
-      cellDetailsList: {},
-      tableData: [],
-      isChartShow: false,
-      isTableShow: true,
-      currentPage: 1, // 多少页
-      pageSize: 10, // 多少条数据
-      total: 20, // 数据条数
-      dateSelection: [],
+      reportTypeList: [{
+        value: '1',
+        label: '日报'
+      }, {
+        value: '2',
+        label: '月报'
+      }, {
+        value: '3',
+        label: '年报'
+      }],
+      parameter: {
+        courtID: 'c69aeede4f6341929721e2892beec3cb',
+        pageNum: 1, // 多少页
+        pageSize: 10, // 多少条数据
+        reportType: '1', // 报表类型（日、月、年）
+        startDate: null, // 开始时间
+        endDate: null // 结束时间
+      },
+      cellDetailsList: {}, // 小区详细信息
+      timeType: 'date', // 日期type属性
+      total: 10, // 数据条数
+      tableData: [], // 表格数据
+      isChartShow: false, // 是否显示图表
+      isTableShow: true, // 是否显示表格
       dialogVisible: false,
-      reportType: '0', // 报表类型（日、月、年）
-      startDatetimeSelection: '', // 开始时间
-      endDatetimeSelection: new Date(), // 结束时间
-      options: {}, // echarts对象
-      // 限制开始时间不能大于结束时间
-      forbiddenDatetime: {
+      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
+      endTime: new Date(), // 结束时间
+      myChart: null,
+      myChartNode: null,
+      canvasNode: null,
+      isRequest: true, // 判断时间选择是否正确
+      num: 0, // 图表点击计数
+      myChartContainer: null,
+      // 限制开始时间与结束时间
+      starForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > this.endDatetimeSelection
+          return time.getTime() > this.endTime
         }
       },
-      // 限制开始月份不能大于结束月份
-      forbiddenMonth: {
+      endForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > this.endMonthSelection
-        }
-      },
-      // 限制开始年限不能大于结束年限
-      forbiddenYear: {
-        disabledDate: (time) => {
-          return time.getTime() > this.endYearSelection
+          return time.getTime() > new Date()
         }
       }
     }
   },
   methods: {
+    // 选择报表
+    reportTypeEvent: function (val) {
+      if (val === '1') {
+        this.timeType = 'date' // 1年31622400000  1个月2764800000 7天604800000
+        this.starTime = new Date(this.endTime.getTime() - 604800000)
+      } else if (val === '2') {
+        this.timeType = 'date'
+        this.starTime = new Date(this.endTime.getTime() - 2764800000)
+      } else {
+        this.timeType = 'month'
+        this.starTime = new Date(this.endTime.getTime() - 31622400000)
+      }
+    },
     // 点击切换图表展示
     chartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
-      // echarts图表
-      var myCharts = document.getElementById('flowInformation')
-      let canvas = document.getElementsByClassName('canvas')[0]
-      // 自适应宽高
-      var myChartContainer
-      setTimeout(function () {
-        myChartContainer = function () {
-          myCharts.style.width = canvas.offsetWidth + 'px'
+      // 自适应宽
+      setTimeout(() => {
+        this.myChartContainer = function () {
+          // 处理IE获取不到canvas.offsetWidth的问题
+          this.myChartNode.style.width = this.canvasNode.offsetWidth === 0 ? '900px' : this.canvasNode.offsetWidth + 'px'
         }
-        myChartContainer()
-        myChart.resize()
+        this.myChartContainer()
+        this.myChart.resize()
       })
-      var myChart = this.$echarts.init(myCharts)
-      this.options = {
+      // echarts图表
+      this.myChartNode = document.querySelector('#flowInformation')
+      this.canvasNode = document.querySelector('.canvas')
+      this.myChart = this.$echarts.init(this.myChartNode)
+      this.myChart.setOption(this.echartsData())
+      // 屏幕宽度发生改变时重置容器高宽
+      window.onresize = () => {
+        this.myChartContainer()
+        this.myChart.resize()
+      }
+      // 多次点击
+      if (this.num > 0) {
+        return
+      }
+      this.num++
+      this.getData()
+    },
+    // echart图表数据
+    echartsData: function () {
+      let options = {
         title: {
           text: '人员流量'
         },
@@ -173,7 +206,16 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: [],
+        dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
+          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+          start: 0, // 左边在 10% 的位置。
+          end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
+        },
+        { // 这个dataZoom组件，也控制x轴。
+          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+          start: 10, // 左边在 10% 的位置。
+          end: 60 // 右边在 60% 的位置。
+        }],
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -182,7 +224,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: [],
+          data: this.form.dateList,
           boundaryGap: false,
           splitLine: {
             show: true,
@@ -235,12 +277,12 @@ export default {
           showSymbol: false,
           symbol: 'circle',
           symbolSize: 6,
-          data: [],
+          data: this.form.perInCountList,
           areaStyle: {
             normal: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(59, 242, 16,0.7)'
+                color: 'rgba(199, 237, 250,0.7)'
               }, {
                 offset: 1,
                 color: 'rgba(199, 237, 250,0.5)'
@@ -249,7 +291,7 @@ export default {
           },
           itemStyle: {
             normal: {
-              color: '#3bf210'
+              color: '#f7b851'
             }
           },
           lineStyle: {
@@ -260,7 +302,7 @@ export default {
         }, {
           name: '出园人数',
           type: 'line',
-          data: [],
+          data: this.form.perOutCountList,
           smooth: true,
           showSymbol: false,
           symbol: 'circle',
@@ -269,16 +311,16 @@ export default {
             normal: {
               color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
                 offset: 0,
-                color: 'rgba(240, 166, 17 ,1)'
+                color: 'rgba(216, 244, 247,1)'
               }, {
                 offset: 1,
-                color: 'rgba(240, 230, 17,1)'
+                color: 'rgba(216, 244, 247,1)'
               }], false)
             }
           },
           itemStyle: {
             normal: {
-              color: '#f08a11'
+              color: '#58c8da'
             }
           },
           lineStyle: {
@@ -288,149 +330,225 @@ export default {
           }
         }]
       }
-      // 当日报表数量大于31的时候添加滚动条
-      if (this.form.dateList.length > 31) {
-        this.options.dataZoom.push({ // 这个dataZoom组件，默认控制x轴。
-          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
-          start: 0, // 左边在 10% 的位置。
-          end: 10 // 右边在 60% 的位置。
-        },
-          { // 这个dataZoom组件，也控制x轴。
-            type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
-            start: 10, // 左边在 10% 的位置。
-            end: 60 // 右边在 60% 的位置。
-          })
-      }
-      this.options.xAxis[0].data = this.form.dateList // 日期
-      this.options.series[0].data = this.form.perInCountList // 入园人数
-      this.options.series[1].data = this.form.perOutCountList // 出园人数
-      myChart.setOption(this.options)
-      // 屏幕宽度发生改变时重置容器高宽
-      window.onresize = function () {
-        myChartContainer()
-        myChart.resize()
-      }
+      return options
     },
     // 点击切换表格展示
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      let tableWidth = document.getElementsByClassName('tableWidth')[0]
-      // 隐藏后重置table宽度
-      setTimeout(function () {
-        let tableBodyWidth = tableWidth.getElementsByClassName('el-table__body')[0]
-        let tableHeadeWidth = tableWidth.getElementsByClassName('el-table__header')[0]
-        tableBodyWidth.style.width = tableWidth.offsetWidth + 'px'
-        tableHeadeWidth.style.width = tableWidth.offsetWidth + 'px'
-      })
+      // 请求数据后重置表格宽度
+      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      let elTableBody = document.querySelector('.el-table__body')
+      if (belTableHeaderbb) {
+        belTableHeaderbb.style.width = '100%'
+        elTableBody.style.width = '100%'
+      }
+      let elTable = document.querySelector('.el-table')
+      elTable.style.maxHeight = '381px'
     },
-    // 小区详细信息
-    streamPeople: function () {
+    // 打开组件的回调
+    streamPeople: function (_courtId) {
+      this.reportTypeEvent('1') // 重置表报时间
+      this.getPgingData()
+      this.getData()
       // 获取小区详细信息
-      getCourtInfo().then(res => {
-        this.cellDetailsList = res.data.data[0]
+      getCourtInfo({ courtId: _courtId }).then(res => {
+        this.cellDetailsList = res.data.data
       })
       this.dialogVisible = true
     },
-    // 按报表类型展示
-    reportSwitch: function (label) {
-      // console.log(label.index)
-    },
     // 按时间（报表类型）查询
     timeQuery: function () {
-      console.log(this.endDatetimeSelection)
+      // 查询时页面初始化到第一页
+      this.parameter.pageNum = 1
+      if (this.isRequest) {
+        this.getData()
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
+      this.num = 0
     },
     // 分页组件单页总数变化
     sizeChange: function (val) {
-      this.pageSize = val
-      // this.getPaging()
+      this.parameter.pageSize = val
+      this.getPgingData()
     },
     // 分页组件当前页变化
     currentChange: function (val) {
-      this.currentPage = val
-      // this.getPaging()
+      this.parameter.pageNum = val
+      this.getPgingData()
     },
-    // 分页
-    getPaging: function () {
-      let pagingParameters = {}
-      pagingParameters.currentPage = this.currentPage
-      pagingParameters.pageSize = this.pageSize
-      pagingParameters.reportType = this.reportType
-      console.log(pagingParameters)
-      // getPerAccessPageList(pagingParameters).then(res => {
-      getPerAccessPageList().then(res => {
-        this.tableData = res.data.data.pageData
-        this.total = res.data.data.total
-        for (let i = 0; i < this.tableData.length; i++) {
-          this.form.dateList.push(this.tableData[i].date)
-          this.form.perInCountList.push(Number(this.tableData[i].perInCount))
-          this.form.perOutCountList.push(Number(this.tableData[i].perOutCount))
+    // 判断选择的时间是否符合要求
+    timeJudgment: function (val) {
+      switch (this.parameter.reportType) {
+        case '1':
+          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '日报查询范围为1个月'
+            })
+          } else {
+            this.isRequest = true
+          }
+          break
+        case '2':
+          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) {
+            this.isRequest = false
+            this.$message({
+              type: 'error',
+              message: '月报查询范围为1年'
+            })
+          } else {
+            this.isRequest = true
+          }
+          break
+        case '3':
+          this.isRequest = true
+          break
+      }
+    },
+    // 获取人流信息
+    getData: function () {
+      let perData = {}
+      perData.courtID = 'c69aeede4f6341929721e2892beec3cb'
+      perData.endDate = this.processingDate(this.endTime)
+      perData.startDate = this.processingDate(this.starTime)
+      perData.reportType = this.parameter.reportType
+      getCourtPerAccessInfo(perData).then(res => {
+        if (res.status === 200) {
+          let perData = res.data
+          // 添加前先清空
+          this.form.dateList = []
+          this.form.perInCountList = []
+          this.form.perOutCountList = []
+          for (let i = 0; i < perData.length; i++) {
+            this.form.dateList.push(perData[i].date)
+            this.form.perInCountList.push(perData[i].perInCount - 0 + parseInt(Math.random() * 1000))
+            this.form.perOutCountList.push(perData[i].perOutCount - 0 + parseInt(Math.random() * 1000))
+          }
+          // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.myChart = this.$echarts.init(this.myChartNode)
+            this.myChart.setOption(this.echartsData())
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.statusText
+          })
+        }
+      })
+    },
+    // 处理日期对象
+    processingDate: function (date) {
+      let year = date.getFullYear()
+      let month = date.getMonth() + 1
+      let day = date.getDate()
+      return year + '-' + month + '-' + day
+    },
+    // 获取人流分页信息
+    getPgingData: function () {
+      this.parameter.startDate = this.processingDate(this.starTime)
+      this.parameter.endDate = this.processingDate(this.endTime)
+      getPerAccessPageList(this.parameter).then(res => {
+        if (res.status === 200) {
+          this.tableData = res.data.result
+          this.total = res.data.totalRows
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.statusText
+          })
         }
       })
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.form.dateList = []
-      this.form.perInCountList = []
-      this.form.perOutCountList = []
-      this.reportType = '0'
-      this.getPaging()
+      this.parameter.reportType = '1'
+      this.isChartShow = false
+      this.isTableShow = true
+      this.num = 0
     }
   },
-  mounted: function () {
-    getPerAccessPageList().then(res => {
-      this.tableData = res.data.data.pageData
-      this.total = res.data.data.total
-      for (let i = 0; i < this.tableData.length; i++) {
-        this.form.dateList.push(this.tableData[i].date)
-        this.form.perInCountList.push(Number(this.tableData[i].perInCount))
-        this.form.perOutCountList.push(Number(this.tableData[i].perOutCount))
-      }
-    })
-  }
+  mounted: function () { }
 }
 </script>
-<style scoped>
-.table-pager {
-  padding: 0;
-  padding-right: 10px;
-  margin-top: 10px;
-  text-align: right;
-}
-.sidebar {
-  border: 1px solid #ccc;
-  height: 620px;
-  margin-right: 20px;
-  padding: 10px;
-}
-.block {
-  float: left;
-  margin-right: 40px;
-}
-.reporttype {
-  float: left;
-}
-.chart {
-  float: right;
-}
-.tblHeader {
-  margin-bottom: 20px;
-  overflow: hidden;
-}
-.show {
-  border: 1px solid #eee;
-  padding: 10px 0 5px 5px;
-  height: 430px;
-}
-.tblHeader {
-  border: 1px solid #eee;
-  padding: 10px;
-}
-.el-date-editor.el-input {
-  width: 200px;
-}
-#flowInformation {
-  height: 420px;
+<style scoped lang='less'>
+.popup {
+  /deep/.el-dialog {
+    min-width: 710px;
+  }
+  /deep/.table-pager {
+    padding: 0;
+    padding-right: 10px;
+    text-align: right;
+    position: absolute;
+    right: 60px;
+    bottom: 35px;
+  }
+  /deep/.block {
+    float: left;
+    margin-right: 40px;
+  }
+  /deep/.el-form-item__label {
+    padding: 0;
+    font-size: 16px;
+    font-weight: 540;
+  }
+  /deep/.el-form-item {
+    margin-bottom: 10px;
+  }
+  /deep/.show {
+    padding: 10px 0 5px 5px;
+    height: 430px;
+    margin-top: 10px;
+  }
+  .canvas {
+    border: 1px solid #ccc;
+    padding: 10px 8px 5px 5px;
+  }
+  #flowInformation {
+    height: 420px;
+  }
+  /deep/.el-dialog__body {
+    padding: 0px 20px;
+  }
+  /deep/.el-dialog__header {
+    span {
+      font-weight: 600;
+      font-size: 20px;
+    }
+  }
+  .leftText {
+    height: 585px;
+    padding: 5px 10px;
+    background-color: #f6faff;
+    div {
+      line-height: 30px;
+      font-size: 15px;
+      span {
+        // font-weight: 550;
+        width: 65px;
+        font-size: 14px;
+        color: #999;
+        text-align: justify;
+        text-align-last: justify;
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: top;
+        i {
+          display: inline-block;
+          width: 100%;
+          height: 0;
+        }
+      }
+    }
+  }
 }
 </style>
 

@@ -1,12 +1,27 @@
 <template>
   <div class="tree-container" v-loading="loading">
-    <el-input placeholder="按组织名称进行过滤" @keypress.enter.native="filterOrg" prefix-icon="el-icon-search" v-model="searchKey" class="fuzzy-search">
-    </el-input>
-    <el-tree ref="tree" :data="treeData" :props="defaultProps" :expand-on-click-node="false" @node-click="clickNode" default-expand-all :filter-node-method="filterNode"></el-tree>
+    <div>
+      <el-input placeholder="请输入小区名称" @keyup.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      </el-input>
+      <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
+    </div>
+    <el-tree ref="tree"
+      :data="treeData"
+      node-key="uuid"
+      :props="defaultProps"
+      :load="getTree"
+      :expand-on-click-node="false"
+      lazy
+      @node-click="clickNode">
+    </el-tree>
+    <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="total" @size-change="sizeChange" @current-change="currentChange">
+    </el-pagination>
   </div>
 </template>
 <script>
-import { getOrgTree } from '../../apis/orgManager'
+// import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+import { getOrgTreeNextLevel } from '../../apis/orgManager'
+import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   props: {
     search: {
@@ -16,6 +31,10 @@ export default {
   data () {
     return {
       searchKey: '',
+      // filterText: '',
+      total: 0,
+      currentPage: 1,
+      pageSize: 25,
       treeData: [],
       loading: false,
       defaultProps: {
@@ -25,61 +44,67 @@ export default {
     }
   },
   methods: {
-    addHouse: function () {
-      this.$message({
-        message: '添加房屋',
-        type: 'success'
-      })
-    },
-    delOrg: function () {
-      this.$message({
-        message: '删除组织',
-        type: 'warning'
-      })
-    },
     clickNode: function (data, node) {
-      this.search({ uuid: data.uuid })
+      if (node.level === 1) {
+        this.search({ 'courtUuid': node.data.uuid })
+      } else if (node.level > 1) {
+        this.search({ 'orgUuid': node.data.uuid })
+      }
     },
-    // 获取组织树数据
-    getOrgTree: function () {
+    /**
+     * @description 分页组件单页总数变化
+     * @param Number val 选择的单页总数得值
+     */
+    sizeChange: function (val) {
+      this.pageSize = val
+      this.currentPage = 1
+      this.getCourts()
+    },
+    /**
+     * @description 分页组件当前页变化
+     * @param Number val 选择当前页的值
+     */
+    currentChange: function (val) {
+      this.currentPage = val
+      this.getCourts()
+    },
+    getCourts: function () {
       this.loading = true
-      getOrgTree({ uuid: this.searchKey }).then(res => {
-        this.treeData.splice(0, this.treeData.length)
+      let condition = {}
+      condition.name = this.searchKey
+      condition.platformFlag = 1
+      condition.pageSize = this.pageSize
+      condition.currentPage = this.currentPage
+      getCourtsByConditions(condition).then(res => {
+        this.total = res.data.data.totalCount
         setTimeout(() => {
-          this.treeData.push(res.data.data)
+          this.treeData = res.data.data.result
           this.loading = false
         }, 1000)
       })
     },
-    filterNode: function (value, data) {
-      if (!value) return true
-      return data.name.indexOf(value) !== -1
-    },
-    filterOrg: function () {
-      this.$refs.tree.filter(this.searchKey)
+    // 获取组织树数据
+    getTree: function (node, resolve) {
+      if (this.treeData.length === 0) {
+        this.getCourts()
+      }
+      if (node.level > 0) {
+        this.loading = true
+        let condition = {}
+        condition.uuid = node.data.uuid
+        getOrgTreeNextLevel(condition).then(res => {
+          if (res.data.data != null && res.data.data.children != null) {
+            resolve(res.data.data.children)
+          } else {
+            resolve([])
+          }
+          this.loading = false
+        })
+      }
     }
-    // renderContent: function (h, { node, data, store }) {
-    //   return (
-    //     <span>
-    //       <span style="margin-right:8px">{node.label}</span>
-    //       <i
-    //         class="el-icon-plus"
-    //         title="添加"
-    //         on-click={() => {
-    //           this.addHouse()
-    //         }}
-    //       />
-    //       <i class="el-icon-close"
-    //         on-click={() => {
-    //           this.delOrg()
-    //         }}
-    //       />
-    //     </span>
-    //   )
-    // }
   },
   mounted: function () {
-    this.getOrgTree()
+    // this.getTree()
   }
 }
 </script>
