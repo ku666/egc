@@ -366,7 +366,6 @@ export default {
 }
 #equipmentonlinecharts {
   height: 600px;
-  margin-top: 150px;
 }
 .clear {
   clear: both;
