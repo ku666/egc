@@ -67,7 +67,7 @@
   float: right;
 }
 </style>
-<script type="text/javascript">
+<script>
 import { getUserListByPage, addUser, deleteUser, updateUser } from '@/views/demo/apis'
 
 export default {

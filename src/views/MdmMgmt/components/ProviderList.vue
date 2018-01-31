@@ -82,7 +82,7 @@
 
     <el-dialog :visible.sync='providerDialogVisible'
       :modal-append-to-body = 'false'
-      width='750px'>
+      style="min-width: 750px">
       <!-- <div slot='title' class='head-text'>
         <span>{{title}}</span>
       </div> -->
@@ -126,8 +126,8 @@
             </el-col>
           </el-row>
           <div style='text-align: center'>
-            <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-            <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+            <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button>
+            <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
           </div>
         </el-form>
       </div>
