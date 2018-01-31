@@ -55,7 +55,7 @@ var option = {
     min: 0,
     max: 500,
     left: '90%',
-    top: '60%',
+    top: '40%',
     text: ['High', 'Low'],
     seriesIndex: [1],
     inRange: {
@@ -67,11 +67,16 @@ var option = {
   geo: {
     map: 'china',
     roam: true,
+    zoom: 1.2,
+    scaleLimit: {
+      min: 1,
+      max: 6
+    },
     label: {
       normal: {
         show: true,
         textStyle: {
-          color: 'rgba(0,0,0,0.4)'
+          color: 'rgba(0,0,0,0.6)'
         }
       }
     },
