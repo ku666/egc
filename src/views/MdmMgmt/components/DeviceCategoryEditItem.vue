@@ -77,7 +77,7 @@
   </el-dialog>
 </template>
 
-<<script>
+<script>
 import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert} from '@/views/MdmMgmt/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
