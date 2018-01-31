@@ -340,6 +340,6 @@ export default {
 }
 </script>
 
-<<style>
+<style>
 @import "assets/css/upgrademgmt.less";
 </style>
