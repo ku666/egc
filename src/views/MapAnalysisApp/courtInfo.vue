@@ -9,38 +9,52 @@
         </div>
         <div class="itemCl">
           <span class="itemlabel">房屋总数：</span>
-          <span class="itemvalue">{{courtInfo.houseCount}}</span>
+          <span class="itemvalue">{{courtInfo.houseCount}}栋</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">户数总数：</span>
-          <span class="itemvalue">{{courtInfo.homeCount}}</span>
+          <span class="itemvalue">{{courtInfo.homeCount}}户</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">建筑面积：</span>
-          <span class="itemvalue">{{courtInfo.buildArea}}</span>
+          <span class="itemvalue">{{courtInfo.buildArea}}平方米</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">占地面积：</span>
-          <span class="itemvalue">{{courtInfo.floorArea}}</span>
+          <span class="itemvalue">{{courtInfo.floorArea}}平方米</span>
         </div>
       </div>
       <!-- end infoCon -->
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
-        <div id="mapECarts0" class="smallBox" style="width:230px; height:300px"></div>
-        <div id="mapECarts1" class="smallBox" style="width:240px; height:300px"></div>
-      </el-card>
-      <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
         <div id="mapECarts2" style="width:480px; height:300px"></div>
+        <div v-show="isPerErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
         <div id="mapECarts3" style="width:480px; height:300px"></div>
+        <div v-show="isCarErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
+      <el-card class="echartsBox1">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
+        <div id="mapECarts0" class="smallBox" style="width:420px; height:300px"></div>
+        <div id="mapECarts1" class="smallBox" style="width:570px; height:300px"></div>
+        <div v-show="isOwnerErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      </el-card>
+      <!-- <el-card class="echartsBox">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
+        <div id="mapECarts2" style="width:480px; height:300px"></div>
+        <div v-show="isPerErrInfo" class="errInfo">数据加载不成功</div>
+      </el-card>
+      <el-card class="echartsBox">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
+        <div id="mapECarts3" style="width:480px; height:300px"></div>
+        <div v-show="isCarErrInfo" class="errInfo">数据加载不成功</div>
+      </el-card> -->
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
         <div id="mapECarts4" style="width:480px; height:300px"></div>
+        <div v-show="isEquiErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <car-stream ref="carStream"></car-stream>
       <stream-people ref="streamPeople"></stream-people>
@@ -59,6 +73,7 @@ import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
+import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   components: {
     StreamPeople,
@@ -80,8 +95,13 @@ export default {
         floorArea: ''
       },
       startDate: '',
+      isOwnerErrInfo: false, // 业主错误提提
+      isPerErrInfo: false, // 人流错误提示
+      isCarErrInfo: false, // 车流错误提示
+      isEquiErrInfo: false, // 设备错误提示
       endDate: '',
-      reportType: '1' // 报表类型：1日报 2月报 3年报
+      perErrImg: errImg,
+      reportType: '0' // 报表类型：0日报 1月报 2年报
     }
   },
   mounted: function () {
@@ -103,16 +123,15 @@ export default {
       let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
         // console.log(res)
-        let msgType = 'warning'
         if (res.data.code === '00000') {
-          msgType = 'success'
           let list = res.data.data
           this.courtInfo = Object.assign({}, list)
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.data.message
+          })
         }
-        this.$message({
-          type: msgType,
-          message: res.data.message
-        })
       }).catch(err => {
         this.$message({
           type: 'warning',
@@ -148,14 +167,22 @@ export default {
           peopleOption.updateTimeData(timeDate)
           peopleOption.updateInData(perInCount)
           peopleOption.updateOutData(perOutCount)
-          this.getMyCharts(2).setOption(peopleOption.option)
+          // 判断人流数据是否为空
+          if (timeDate.length <= 0 || perInCount.length <= 0 || perOutCount.length <= 0) {
+            this.isPerErrInfo = true
+          } else {
+            this.isPerErrInfo = false
+            this.getMyCharts(2).setOption(peopleOption.option)
+          }
         } else {
+          this.isPerErrInfo = true
           this.$message({
             type: msgType,
             message: res.data.message
           })
         }
       }).catch(err => {
+        this.isPerErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -190,15 +217,22 @@ export default {
           carOption.updateTimeData(timeDate)
           carOption.updateInData(carInCount)
           carOption.updateOutData(carOutCount)
-          // console.log(carOption.option)
-          this.getMyCharts(3).setOption(carOption.option)
+          // 判断车流数据是否为空
+          if (timeDate.length <= 0 || carInCount.length <= 0 || carOutCount.length <= 0) {
+            this.isCarErrInfo = true
+          } else {
+            this.isCarErrInfo = false
+            this.getMyCharts(3).setOption(carOption.option)
+          }
         } else {
+          this.isCarErrInfo = true
           this.$message({
             type: msgType,
             message: res.data.message
           })
         }
       }).catch(err => {
+        this.isCarErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -211,7 +245,10 @@ export default {
         courtUuid: this.courtInfo.courtUuid
       }
       getListDeviceType(param).then(res => {
+<<<<<<< HEAD
         console.log(res)
+=======
+>>>>>>> mydev
         let msgType = 'warning'
         if (res.data.code === '00000') {
           msgType = 'success'
@@ -224,15 +261,24 @@ export default {
             }
             equipData.push(obj)
           })
+          equipData.splice(7)
           equipKind.updateData(equipData)
-          this.getMyCharts(4).setOption(equipKind.option)
+          // 判断设备数据是否为空
+          if (equipData.length <= 0) {
+            this.isEquiErrInfo = true
+          } else {
+            this.isEquiErrInfo = false
+            this.getMyCharts(4).setOption(equipKind.option)
+          }
         } else {
+          this.isEquiErrInfo = true
           this.$message({
             type: msgType,
             message: res.data.message
           })
         }
       }).catch(err => {
+        this.isEquiErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -261,15 +307,22 @@ export default {
           ownerOption.updateSexData(sexData)
           ownerOption.updateAgeLevelData(ageLevelData)
           ownerOption.updateAgeData(ageData)
-          this.getMyCharts(0).setOption(ownerOption.optionSex)
-          this.getMyCharts(1).setOption(ownerOption.optionAge)
+          if (sexData.length <= 0 || ageLevelData.length <= 0 || ageData.length <= 0) {
+            this.isOwnerErrInfo = true
+          } else {
+            this.isOwnerErrInfo = false
+            this.getMyCharts(0).setOption(ownerOption.optionSex)
+            this.getMyCharts(1).setOption(ownerOption.optionAge)
+          }
         } else {
           this.$message({
             type: msgType,
             message: res.data.message
           })
+          this.isOwnerErrInfo = true
         }
       }).catch(err => {
+        this.isOwnerErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -303,8 +356,8 @@ export default {
 <style lang="less" scoped>
 .mapCon {
   width: 100%;
-  /* height: 800px; */
-  min-width: 1400px;
+  height: 800px;
+  min-width: 1650px;
   padding: 15px 0px;
   color: #374258;
   background-color: #fee;
@@ -317,8 +370,9 @@ export default {
 }
 .infoCon {
   display: inline-block;
-  width: 1080px;
+  width: 520px;
   text-align: center;
+  vertical-align: middle;
 }
 .itemCl {
   margin: 35px 0px;
@@ -333,16 +387,36 @@ export default {
   padding-left: 10px;
   border-bottom: 1px solid #ccc;
 }
-
+.echartsBox1 {
+  position: relative;
+  display: inline-block;
+  width: 1045px;
+  height: 330px;
+  margin: 10px 0px 10px 15px;
+  vertical-align: middle;
+}
 .echartsBox {
   position: relative;
   display: inline-block;
   width: 520px;
   height: 330px;
   margin: 10px 0px 10px 15px;
+  vertical-align: middle;
 }
 .smallBox {
   display: inline-block;
+}
+.errInfo {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+  line-height: 300px;
+  font-size: 20px;
+  font-weight: bold;
 }
 .checkmoreBtn {
   display: inline-block;
@@ -351,7 +425,7 @@ export default {
   line-height: 30px;
   position: absolute;
   top: 6px;
-  right: 60px;
+  right: 70px;
   padding: 0px;
   z-index: 10;
   border-bottom: 2px solid rgb(228, 140, 10);

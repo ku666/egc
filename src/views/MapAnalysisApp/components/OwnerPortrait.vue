@@ -559,9 +559,15 @@ export default {
       this.parameter.currentPage = 1
       this.echartsClickNum = 0
       if (this.parameter.reportType === '0' && parseInt(Math.abs(this.endTime - this.startTime) / 1000 / 60 / 60 / 24) > 30) {
-        alert('查询日期间隔不能超过一个月')
+        this.message({
+          type: 'error',
+          message: '查询日期间隔不能超过一个月'
+        })
       } else if (this.parameter.reportType === '1' && parseInt(Math.abs(this.endTime - this.startTime) / 1000 / 60 / 60 / 24) > 366) {
-        alert('查询日期间隔不能超过一年')
+        this.message({
+          type: 'error',
+          message: '查询日期间隔不能超过一年'
+        })
       } else {
         if (this.classValue === '1') {
           if (this.residentialId === this.parameter.courtUuid) {

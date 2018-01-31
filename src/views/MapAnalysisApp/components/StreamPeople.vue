@@ -70,8 +70,9 @@
             </el-pagination>
           </div>
           <!-- 图表展示 -->
-          <div class="canvas" style="width:98%" v-show="isChartShow">
+          <div class="canvas" style="width:100%" v-show="isChartShow">
             <div id="flowInformation"></div>
+            <div v-show="isPerErrInfo" class="perErrInfo"><img :src="perErrImg"></div>
           </div>
         </div>
       </el-col>
@@ -80,6 +81,7 @@
 </template>
 <script>
 import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   data () {
     return {
@@ -104,7 +106,6 @@ export default {
         label: '年报'
       }],
       parameter: {
-        // courtUuid: '222b79f4a7b44d03b6f55f028992851f',
         courtUuid: '',
         currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
@@ -118,7 +119,9 @@ export default {
       tableData: [], // 表格数据
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
-      dialogVisible: false,
+      isPerErrInfo: false, // 图表不显示时的错误提示
+      dialogVisible: false, // 弹窗开关
+      perErrImg: errImg, // 图表错误提示
       starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
       endTime: new Date(), // 结束时间
       myChart: null,
@@ -443,18 +446,24 @@ export default {
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
-          // 数据改变时 初始化图表数据
-          if (this.isChartShow) {
-            this.myChart = this.$echarts.init(this.myChartNode)
-            this.myChart.setOption(this.echartsData())
+          if (this.form.dateList.length <= 0 || this.form.perInCountList.length <= 0 || this.form.perOutCountList.length <= 0) {
+            this.isPerErrInfo = true
+          } else {
+            // 数据改变时 初始化图表数据
+            if (this.isChartShow) {
+              this.isPerErrInfo = false
+              this.myChart.setOption(this.echartsData())
+            }
           }
         } else {
+          this.isPerErrInfo = true
           this.$message({
             type: 'error',
             message: res.data.message
           })
         }
       }).catch(err => {
+        this.isPerErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -535,19 +544,13 @@ export default {
   }
   #flowInformation {
     height: 420px;
+    position: relative;
   }
   /deep/.el-dialog__body {
     padding: 0px 20px;
   }
-  // /deep/.el-dialog__header {
-  //   span {
-  //     font-weight: 600;
-  //   }
-  // }
   .leftText {
-    // height: 585px;
     padding: 5px 10px;
-    // background-color: #f6faff;
     div {
       line-height: 30px;
       font-size: 12px;
@@ -561,6 +564,16 @@ export default {
         vertical-align: top;
       }
     }
+  }
+  .perErrInfo {
+    position: absolute;
+    top: 290px;
+    left: 190px;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bolder;
   }
 }
 </style>
