@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="1300px" @close="closeCallback" class='popup'>
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
     <el-row>
       <el-col :span="4">
         <div>
@@ -18,146 +18,119 @@
         </div>
       </el-col>
       <!-- 表格展示 -->
-      <el-col :span="19" style="height:600px">
+      <el-col :span="20" style="height:600px">
         <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
-          <el-row class="tblHeader">
-            <div class="wrap-class">
-              <el-col :span="3">
-                <el-form-item label="小区楼栋选择">
-                  <el-select v-model="buildValue" placeholder="请选择" size="small">
-                    <el-option v-for="item in buildList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="3">
-                <el-form-item label="查询项">
-                  <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
-                    <el-option v-for="item in classList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-            </div>
-            <div class="wrap-date">
-              <el-col :span="6">
-                <el-form-item label="报表类型">
-                  <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
-                    <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6" class="stime">
-                <el-form-item label="开始时间">
-                  <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-              <el-col :span="6">
-                <el-form-item label="结束时间">
-                  <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
-                  </el-date-picker>
-                </el-form-item>
-              </el-col>
-            </div>
-            <el-col :span="24" style="text-align:right" v-show="rateShow">
-              <el-button type="primary" @click="timeQuery">查询</el-button>
-              <el-button type="success" @click="tableSwitch" plain>表单出入</el-button>
-              <el-button type="danger" @click="chartSwitch" plain>图表出入</el-button>
+          <el-row class="tblHeader" :span="24">
+            <el-col :span="4">
+              <el-form-item label="楼栋选择">
+                <el-select v-model="residentialId" placeholder="请选择" size="small" @change="buildingSelection">
+                  <el-option v-for="item in buildList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
             </el-col>
-            <el-col :span="24" style="text-align:right" v-show="ownerShow">
+            <el-col :span="4">
+              <el-form-item label="查询项">
+                <el-select v-model="classValue" placeholder="请选择" size="small" @change="classEvent">
+                  <el-option v-for="item in classList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="4">
+              <el-form-item label="报表类型">
+                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" size="small" :disabled="disabled">
+                  <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6" class="stime">
+              <el-form-item label="开始时间">
+                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled="disabled">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <el-col :span="6">
+              <el-form-item label="结束时间">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled="disabled">
+                </el-date-picker>
+              </el-form-item>
+            </el-col>
+            <!-- </div> -->
+            <el-col :span="24" style="text-align:right">
               <el-button type="primary" @click="timeQuery">查询</el-button>
-              <el-button type="success" @click="tableSwitch" plain>表单业主</el-button>
-              <el-button type="danger" @click="chartSwitch1" plain>图表业主</el-button>
+              <el-button type="success" @click="tableSwitch" plain>表单</el-button>
+              <el-button type="danger" @click="chartSwitch" plain>图表</el-button>
             </el-col>
           </el-row>
         </el-form>
-        <div class="show" v-show="rateBoxshow">
-          <div v-show="isTableShow">
+        <div class="show" v-show="isTableShow">
+          <div v-show="isTableShowRate">
             <el-table :data="tableRateData" width="100%" max-height="380" class="tableWidth" stripe>
-              <el-table-column width="326px" prop="timeGroup" label="时间">
+              <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
-              <!-- <el-table-column width="243px" prop="name" label="小区名称">
-              </el-table-column> -->
-              <el-table-column width="324px" prop="inCount" label="进入次数">
+              <el-table-column style="width:100%" prop="inCount" label="进入次数">
               </el-table-column>
-              <el-table-column width="324px" prop="outCount" label="出去次数">
+              <el-table-column style="width:100%" prop="outCount" label="出去次数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination @size-change="sizeChange" @current-change="currentChange" class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
             </el-pagination>
           </div>
-          <!-- 图表展示 -->
-          <div class="canvas" style="width:98%" v-show="isChartShow">
-            <div id="flowInformation"></div>
-          </div>
-        </div>
-        <div class="show" v-show="ownerBoxShow">
-          <div v-show="isTableShow">
-            <el-table :data="tableOwnerData" width="100%" max-height="440" class="tableWidth" stripe>
-              <!-- <el-table-column prop="name" label="小区名称">
-              </el-table-column> -->
-              <el-table-column width="487px" prop="age" label="年龄段">
+          <div v-show="isTableShowOwner">
+            <el-table :data="tableOwnerData" style="width:100%" max-height="440" class="tableWidth" stripe>
+              <el-table-column prop="group" label="年龄段">
               </el-table-column>
-              <el-table-column width="487px" prop="num" label="人数">
+              <el-table-column prop="countNum" label="人数">
               </el-table-column>
             </el-table>
-            <!-- <el-pagination class="table-pager" :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
-            </el-pagination> -->
           </div>
-          <!-- 图表展示 -->
-          <div class="canvas" style="width:98%" v-show="isChartShow">
-            <div id="flowInformation1"></div>
-          </div>
+        </div>
+        <!-- 图表展示 -->
+        <div class="canvas1" style="width:98%" v-show="isChartShow">
+          <div id="flowInformation1"></div>
         </div>
       </el-col>
     </el-row>
-    <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogVisible = false">关闭</el-button>
-      <!-- <el-button type="primary" @click="dialogVisible = false">确 定</el-button> -->
-    </span>
   </el-dialog>
 </template>
 <script>
-// import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-import { getBuildProfile, getListDevice, getPerProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+/* eslint-disable */
+/*  小区ID传参 = this.courtUuid
+    楼栋ID传参 = this.buildId
+    开始时间传参 = queryParamStart
+    结束时间传参 = queryParamEnd
+    报表类型传参 = this.parameter.reportType
+    出入率与人数数据字段 = 0/1/2  */
+import { getCourtProfile, getCourtListDevice, getCourtRateProfile, getBuildProfile, getBuildListDevice, getBuildRateProfile, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
 export default {
   data () {
     return {
       form: {
         date: '', // 日期
         dateList: [], // 日期集合
-        dateListAge: [], // 临时年龄段集合
-        dateListPeople: [], // 临时年龄段以及人数集合饼图数据
-        dateListRate: [], // 临时出入时间段集合
-        mailData: [], // 临时男女人数集合
-        courtId: '', // 小区id
+        dateListAge: [], // 年龄段集合
+        dateListPeople: [], // 年龄段以及人数集合饼图数据
+        dateListRate: [], // 出入时间段集合
+        mailData: [], // 男女人数集合
+        // courtId: '', // 小区id
+        buildId: '',
         courtName: '', // 小区名称
-        perInCount: '', // 进入次数
-        carInRegedCount: '',
         perInCountList: [], // 进入次数集合
-        perInCountListRate: [], // 临时进入次数集合
-        perOutCount: '', // 出去次数
-        carOutRegedCount: '',
+        perInCountListRate: [], // 进入次数集合
         perOutCountList: [], // 出去次数集合
-        perOutCountListRate: [] // 临时出去次数集合
+        perOutCountListRate: [] // 出去次数集合
       },
-      rateBoxshow: true,
+      // fixCourtId: '',
       disabled: false,
-      ownerBoxShow: false,
-      rateShow: true,
-      ownerShow: false,
-      buildList: [{
-        value: '222b79f4a7b44d03b6f55f028992851f',
-        label: '恒大山水城'
-      }, {
-        value: '4c12aee6d522412fa8d9d47d6a39cc82',
-        label: '#1'
-      }, {
-        value: '3',
-        label: '#2'
-      }],
+      isTableShow: true, // 表单显示隐藏
+      isChartShow: false,// 图表显示隐藏
+      isTableShowRate: true, // 出入率表单显示隐藏
+      isTableShowOwner: false, // 总人数表单显示隐藏
+      buildList: [],
+      residentialId: '', // 小区楼栋初始ID
+      echartsClickNum: 0,// 切换图表点击量
       classList: [{
         value: '1',
         label: '出入频率'
@@ -165,44 +138,34 @@ export default {
         value: '2',
         label: '业主人数'
       }],
-      buildValue: '222b79f4a7b44d03b6f55f028992851f',
-      classValue: '出入频率',
+      courtIdValue: '', //传入的小区ID
+      classValue: '1',
       reportTypeList: [{
-        value: '1',
+        value: '0',
         label: '日报'
       }, {
-        value: '2',
+        value: '1',
         label: '月报'
       }, {
-        value: '3',
+        value: '2',
         label: '年报'
       }],
-      parameter: {
-        // courtID: 'c69aeede4f6341929721e2892beec3cb',
-        currentPage: 1, // 多少页
-        pageSize: 10 // 多少条数据
-        // reportType: '1', // 报表类型（日、月、年）
-        // startDate: null, // 开始时间
-        // endDate: null // 结束时间
+      parameter: { // 小区分页信息
+        courtUuid: '',
+        reportType: '0',
+        currentPage: 1,
+        pageSize: 10
       },
-      cellDetailsList: {},
-      rateData: {},
+      cellDetailsList: {}, // 小区详细信息
       timeType: 'date',
-      // reportType: '',
-      total: 10, // 数据条数
-      tableData: [],
-      tableRateData: [],
-      tableOwnerData: [],
-      isChartShow: false,
-      isTableShow: true,
-      dateSelection: [],
+      total: 0, // 数据条数
+      tableRateData: [], // 出入率表单数据
+      tableOwnerData: [], // 业主总数表单数据
       dialogVisible: false,
-      starTime: new Date(new Date().setDate(new Date().getDate() - 15)),
+      startTime: new Date(new Date().setDate(new Date().getDate() - 7)),
       endTime: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
-      myChart1: null,
-      myChartNode1: null,
       canvasNode: null,
       myChartContainer: null,
       // 限制开始时间与结束时间
@@ -213,7 +176,7 @@ export default {
       },
       endForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > new Date()
+          return time.getTime() > new Date() || time.getTime() < this.starTime
         }
       }
     }
@@ -221,41 +184,81 @@ export default {
   methods: {
     // 选择报表
     reportTypeEvent: function (val) {
-      if (val === '1') {
+      if (val === '0' || val === '1') { // 1年31622400000  7天604800000
         this.timeType = 'date'
-        this.starTime = new Date(new Date().setDate(new Date().getDate() - 15))
-      } else if (val === '2') {
-        this.timeType = 'month'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 1))
+        this.starTime = new Date(this.endTime.getTime() - 604800000)
       } else {
-        this.timeType = 'year'
-        this.starTime = new Date(new Date().setDate(new Date().getMonth() - 12))
+        this.timeType = 'month'
+        this.starTime = new Date(this.endTime.getTime() - 31622400000)
       }
     },
     // 选择项改变业主人数与出入频率切换
     classEvent: function (val) {
+      // 请求数据后重置表格宽度
+      let belTableHeaderbb = document.querySelector('.el-table__header')
+      let elTableBody = document.querySelector('.el-table__body')
+      if (belTableHeaderbb) {
+        belTableHeaderbb.style.width = '100%'
+        elTableBody.style.width = '100%'
+      }
+      if (this.residentialId === this.parameter.courtUuid && this.classValue === '1') {
+        this.getRateData() // 获取小区出入率总数据
+        // this.getCourtPerData()
+      } else if (this.residentialId !== this.parameter.courtUuid && this.classValue === '1') {
+        this.getRateBuildData()// 获取楼栋出入率总数据
+        // this.getBuildPerData()
+      } else if (this.residentialId === this.parameter.courtUuid && this.classValue === '2') {
+        // this.getRateBuildData()// 获取楼栋出入率总数据
+        this.getCourtPerData()
+      } else if (this.residentialId !== this.parameter.courtUuid && this.classValue === '2') {
+        // this.getRateBuildData()// 获取楼栋出入率总数据
+        this.getBuildPerData()
+      }
       if (val === '1') {
-        this.rateBoxshow = true
         this.disabled = false
-        this.ownerBoxShow = false
-        this.rateShow = true
-        this.ownerShow = false
+        this.isTableShowRate = true
+        this.isTableShowOwner = false
+        if (this.isChartShow) {
+          this.myChart.setOption(this.echartsData())
+        }
       } else {
-        this.rateBoxshow = false
         this.disabled = true
-        this.ownerBoxShow = true
-        this.rateShow = false
-        this.ownerShow = true
-        // this.chartSwitch1()
+        this.isTableShowRate = false
+        this.isTableShowOwner = true
+        if (this.isChartShow) {
+          this.myChart.setOption(this.echartsDataOwner())
+        }
       }
     },
-    // 点击切换图表展示
+    // 楼栋小区切换
+    buildingSelection: function (val) {
+      if (val !== this.parameter.courtUuid) {
+        this.buildId = val
+      } else {
+        this.parameter.courtUuid = val
+      }
+    },
+    // 点击切换出入率图表展示
     chartSwitch: function () {
-      this.getData()
-      this.getPerData()
       this.isChartShow = true
       this.isTableShow = false
-      // 自适应宽
+      // 多次点击
+      if (this.echartsClickNum > 0) return
+      this.echartsClickNum++
+      if (this.residentialId === this.parameter.courtUuid && this.classValue === '1') {
+        this.getRateData() // 获取小区出入率总数据
+        // this.getCourtPerData()
+      } else if (this.residentialId !== this.parameter.courtUuid && this.classValue === '1') {
+        this.getRateBuildData()// 获取楼栋出入率总数据
+        // this.getBuildPerData()
+      } else if (this.residentialId === this.parameter.courtUuid && this.classValue === '2') {
+        // this.getRateBuildData()// 获取楼栋出入率总数据
+        this.getCourtPerData()
+      } else if (this.residentialId !== this.parameter.courtUuid && this.classValue === '2') {
+        // this.getRateBuildData()// 获取楼栋出入率总数据
+        this.getBuildPerData()
+      }
+      // 出入率折线图自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
           // 处理IE获取不到canvas.offsetWidth的问题
@@ -265,33 +268,27 @@ export default {
         this.myChart.resize()
       })
       // echarts图表出入频率
-      this.myChartNode = document.querySelector('#flowInformation')
-      this.canvasNode = document.querySelector('.canvas')
+      this.myChartNode = document.querySelector('#flowInformation1')
+      this.canvasNode = document.querySelector('.canvas1')
       this.myChart = this.$echarts.init(this.myChartNode)
-      this.myChart.setOption(this.echartsData())
+      // if (this.classValue === '1') {
+      //   console.log(this.echartsData())
+      //   this.myChart.setOption(this.echartsData())
+      // } else {
+      //   this.myChart.setOption(this.echartsDataOwner())
+      // }
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
         this.myChartContainer()
         this.myChart.resize()
       }
     },
-    // echarts图表业主人数配比
-    chartSwitch1: function () {
-      this.getData()
-      this.getPerData()
-      this.isChartShow = true
-      this.isTableShow = false
-      this.myChartNode1 = document.querySelector('#flowInformation1')
-      this.canvasNode1 = document.querySelector('.canvas')
-      this.myChart1 = this.$echarts.init(this.myChartNode1)
-      this.myChart1.setOption(this.echartsData1())
-    },
     // echart图表出入频率数据
     echartsData: function () {
       // 出入频率echarts
       let options = {
         title: {
-          text: '人员流量'
+          text: '业主出入率'
         },
         tooltip: {
           trigger: 'axis',
@@ -307,7 +304,17 @@ export default {
           },
           extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
         },
-        dataZoom: [],
+        dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
+          show: true,
+          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+          start: 0, // 左边在 10% 的位置。
+          end: this.form.perInCountListRate.length > 31 ? 20 : 100  // 右边在 60% 的位置。
+        },
+        { // 这个dataZoom组件，也控制x轴。
+          type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
+          start: 10, // 左边在 10% 的位置。
+          end: 20// 滑块结束位置设置。
+        }],
         legend: {
           x: 'right', // 默认在上面，
           right: 20,
@@ -316,6 +323,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
+          show: true,
           data: this.form.dateListRate,
           // data: ['00:00', '2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
           boundaryGap: false,
@@ -343,6 +351,7 @@ export default {
         }],
         yAxis: [{
           type: 'value',
+          show: true,
           splitLine: {
             lineStyle: {
               color: ['#D4DFF5']
@@ -425,23 +434,10 @@ export default {
           }
         }]
       }
-      // 当日报表数量大于31的时候添加滚动条
-      if (this.form.dateListRate.length > 31) {
-        options.dataZoom.push({ // 这个dataZoom组件，默认控制x轴。
-          type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
-          start: 0, // 左边在 10% 的位置。
-          end: 10 // 右边在 60% 的位置。
-        },
-          { // 这个dataZoom组件，也控制x轴。
-            type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
-            start: 10, // 左边在 10% 的位置。
-            end: 60 // 右边在 60% 的位置。
-          })
-      }
       return options
     },
     // echart图表业主人员配比
-    echartsData1: function () {
+    echartsDataOwner: function () {
       // 业主人员配比echarts
       let options = {
         title: {
@@ -458,7 +454,13 @@ export default {
           x: 'left',
           y: 'top',
           data: this.form.dateListAge// 图例年龄数据
-          // data: ['20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90']
+        },
+        dataZoom: [{ show: false }],
+        xAxis: {
+          show: false,
+        },
+        yAxis: {
+          show: false,
         },
         series: [
           {
@@ -477,10 +479,6 @@ export default {
               }
             },
             data: this.form.mailData
-            // data: [
-            //   { value: 1200, name: '女', selected: true },
-            //   { value: 1464, name: '男' }
-            // ]
           },
           {
             name: '参数',
@@ -520,15 +518,6 @@ export default {
               }
             },
             data: this.form.dateListPeople
-            // data: [
-            //   { value: 335, name: '20-30' },
-            //   { value: 310, name: '30-40' },
-            //   { value: 234, name: '40-50' },
-            //   { value: 135, name: '50-60' },
-            //   { value: 1048, name: '60-70' },
-            //   { value: 251, name: '70-80' },
-            //   { value: 147, name: '80-90' }
-            // ]
           }
         ]
       }
@@ -538,82 +527,113 @@ export default {
     tableSwitch: function () {
       this.isChartShow = false
       this.isTableShow = true
-      // 点击切换表格时 重置表格宽高
-      let elTable = document.querySelector('.el-table')
-      let belTableHeaderbb = document.getElementsByClassName('el-table__header')[0]
+      // 请求数据后重置表格宽度
+      let belTableHeaderbb = document.querySelector('.el-table__header')
       let elTableBody = document.querySelector('.el-table__body')
       if (belTableHeaderbb) {
         belTableHeaderbb.style.width = '100%'
         elTableBody.style.width = '100%'
       }
-      elTable.style.maxHeight = '381px'
+      let elTable = document.querySelector('.el-table')
+      elTable.style.height = '382px'
     },
     // 小区详细信息
     // 打开组件的回调
     OwnerPortrait: function (_courtId) {
-      this.getPgingData()
-      this.getData()
-      this.getPerData()
+      this.buildId = _courtId
+      this.parameter.courtUuid = _courtId
+      this.residentialId = _courtId
       // 获取小区详细信息
-      getCourtInfo({ courtId: _courtId }).then(res => {
+      getCourtInfo({ courtUuid: _courtId }).then(res => {
         this.cellDetailsList = res.data.data
+        this.buildList = []
+        this.buildList.unshift({ label: this.cellDetailsList.courtName, value: this.cellDetailsList.courtUuid })
       })
+      this.getPgingData()
+      this.getCourtPerData()
+      this.getCourtSelect()
       this.dialogVisible = true
     },
-    // 按时间（报表类型）查询
+    // （报表类型）查询出入率
     timeQuery: function () {
-      // 切换到图表时 查询加载图表
-      console.log(3333)
-      console.log(this.buildValue)
-      this.getData()
-      this.getPerData()
-      this.getPgingData()
+      this.parameter.currentPage = 1
+      this.echartsClickNum = 0
+      if (this.parameter.reportType === '0' && parseInt(Math.abs(this.endTime - this.startTime) / 1000 / 60 / 60 / 24) > 30) {
+        this.message({
+          type: 'error',
+          message: '查询日期间隔不能超过一个月'
+        })
+      } else if (this.parameter.reportType === '1' && parseInt(Math.abs(this.endTime - this.startTime) / 1000 / 60 / 60 / 24) > 366) {
+        this.message({
+          type: 'error',
+          message: '查询日期间隔不能超过一年'
+        })
+      } else {
+        if (this.classValue === '1') {
+          if (this.residentialId === this.parameter.courtUuid) {
+            this.getPgingData() // 小区出入率分页数据方法
+            this.getRateData() //小区出入率总数据方法
+          } else {
+            this.getPgingBuildData() // 楼栋出入率分页数据方法
+            this.getRateBuildData() // 楼栋出入率图表
+          }
+        } else {
+          if (this.residentialId === this.parameter.courtUuid) {
+            this.getCourtPerData() // 小区业主人数总数据方法
+          } else {
+            this.getBuildPerData() // 楼栋业主人数总数据方法
+          }
+        }
+      }
     },
-    // 分页组件单页总数变化
+    // 分页组件单页显示的总数变化
     sizeChange: function (val) {
       this.parameter.pageSize = val
-      this.getPgingData()
+      this.parameterBuild.pageSize = val
+      if (this.classValue === '1') {
+        if (this.residentialId === this.parameter.courtUuid) {
+          this.getPgingData()
+        } else {
+          this.getPgingBuildData()
+        }
+      }
     },
     // 分页组件当前页变化
     currentChange: function (val) {
       this.parameter.currentPage = val
-      this.getPgingData()
+      if (this.classValue === '1') {
+        if (this.residentialId === this.parameter.courtUuid) {
+          this.getPgingData()
+        } else {
+          this.getPgingBuildData()
+        }
+      }
     },
-    // 获取楼栋信息(暂时为业主年龄段数据)
-    getData: function () {
+    // 获取小区业主年龄人数数据
+    getCourtPerData: function () {
       let perData = {}
-      perData.businessId = '1'
-      perData.sourceSysId = '1'
-      perData.targetSysId = '1'
-      perData.courtUuid = '1'
-      // perData.endDate = this.processingDate(this.endTime)
-      // perData.startDate = this.processingDate(this.starTime)
-      // perData.buildType = this.parameter.reportType
-      perData.buildId = '111'
-      perData.buildId = '111'
-      perData.buildType = '1'
-      // 业主人数接口数据
-      getBuildProfile(perData).then(res => {
-        // getCourtPerAccessInfo().then(res => {
+      perData.courtUuid = this.parameter.courtUuid
+      perData.reportType = this.parameter.reportType // 报表类型
+      perData.type = 1
+      // 小区业主人数接口数据
+      getCourtProfile(perData).then(res => {
         if (res.data.code === '00000') {
-          // let buildAllData = res.data.data
-          this.tableOwnerData = JSON.parse(res.data.data[0].ageRange)
-          let manData = res.data.data[0].maleOwner
-          let womanData = res.data.data[0].femaleOwner
+          this.tableOwnerData = res.data.data.ageGroupInfo
           // 添加前先清空
           this.form.dateListAge = []
           this.form.dateListPeople = []
           this.form.mailData = []
           for (let i = 0; i < this.tableOwnerData.length; i++) {
-            this.form.dateListAge.push(this.tableOwnerData[i].age)
-            this.form.dateListPeople.push({ name: this.tableOwnerData[i].age, value: this.tableOwnerData[i].num })// 转成echarts数据结构
+            this.form.dateListAge.push(this.tableOwnerData[i].group)
+            this.form.dateListPeople.push({ name: this.tableOwnerData[i].group, value: this.tableOwnerData[i].countNum })// 转成echarts数据结构
           }
+          let womanData = res.data.data.sexInfo[0].femaleOwner
+          let manData = res.data.data.sexInfo[0].maleOwner
           this.form.mailData.push({ value: womanData, name: '女', selected: true }, { value: manData, name: '男' })
-          // 数据改变时 初始化图表数据
-          // if (this.isChartShow) {
-          //   this.myChart.setOption(this.echartsData())
-          //   this.myChart1.setOption(this.echartsData1())
-          // }
+          // // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsDataOwner())
+          }
         } else {
           this.$message({
             type: 'error',
@@ -622,37 +642,66 @@ export default {
         }
       })
     },
-    // 获取业主人数信息（暂时为出入频率数据）
-    getPerData: function () {
-      // let rateData = {}
-      // rateData.courtUuid = '222b79f4a7b44d03b6f55f028992851f'
-      this.rateData.courtUuid = this.buildValue
-      // perData.endDate = this.processingDate(this.endTime)
-      // perData.startDate = this.processingDate(this.starTime)
-      // perData.buildType = this.parameter.reportType
-      // 出入频率接口
-      getPerProfile(this.rateData).then(res => {
+    // 获取楼栋业主年龄人数数据
+    getBuildPerData: function () {
+      let perDataBuild = {}
+      perDataBuild.courtUuid = this.parameter.courtUuid
+      perDataBuild.buildId = this.residentialId
+      perDataBuild.reportType = this.parameter.reportType
+      perDataBuild.type = 1
+      // 业主人数接口数据
+      getBuildProfile(perDataBuild).then(res => {
         if (res.data.code === '00000') {
-          // let rateAllData = res.data.data
-          this.tableRateData = res.data.data.flow
-          // 自定义添加小区名字
-          // for (let i in this.tableRateData) {
-          //   this.tableRateData[i].name = '恒大山水城'
-          // }
+          this.tableOwnerData = res.data.data.ageGroupInfo
+          // 添加前先清空
+          this.form.dateListAge = []
+          this.form.dateListPeople = []
+          this.form.mailData = []
+          for (let i = 0; i < this.tableOwnerData.length; i++) {
+            this.form.dateListAge.push(this.tableOwnerData[i].group)
+            this.form.dateListPeople.push({ name: this.tableOwnerData[i].group, value: this.tableOwnerData[i].countNum })// 转成echarts数据结构
+          }
+          let womanData = res.data.data.sexInfo[0].femaleOwner
+          let manData = res.data.data.sexInfo[0].maleOwner
+          this.form.mailData.push({ value: womanData, name: '女', selected: true }, { value: manData, name: '男' })
+          // // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsDataOwner())
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
+    },
+    // 获取小区出入率总数据（图表展示）
+    getRateData: function () {
+      let rateDataCourt = {}
+      rateDataCourt.courtUuid = this.parameter.courtUuid
+      rateDataCourt.startTime = this.timeFomate(this.startTime)
+      rateDataCourt.endTime = this.timeFomate(this.endTime)
+      rateDataCourt.reportType = this.parameter.reportType
+      rateDataCourt.currentPage = 1
+      rateDataCourt.type = 0
+      // 小区出入频率接口
+      getCourtRateProfile(rateDataCourt).then(res => {
+        if (res.data.code === '00000') {
+          let tableRateAllData = res.data.data.flow
           // 添加前先清空
           this.form.dateListRate = []
           this.form.perInCountListRate = []
           this.form.perOutCountListRate = []
-          for (let i = 0; i < this.tableRateData.length; i++) {
-            this.form.dateListRate.push(this.tableRateData[i].timeGroup)
-            this.form.perInCountListRate.push(this.tableRateData[i].inCount)
-            this.form.perOutCountListRate.push(this.tableRateData[i].outCount)
+          for (let i = 0; i < tableRateAllData.length; i++) {
+            this.form.dateListRate.push(tableRateAllData[i].timeGroup)
+            this.form.perInCountListRate.push(tableRateAllData[i].inCount)
+            this.form.perOutCountListRate.push(tableRateAllData[i].outCount)
           }
           // 数据改变时 初始化图表数据
-          // if (this.isChartShow) {
-          //   this.myChart.setOption(this.echartsData())
-          //   this.myChart1.setOption(this.echartsData1())
-          // }
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsData())
+          }
         } else {
           this.$message({
             type: 'error',
@@ -661,37 +710,113 @@ export default {
         }
       })
     },
-    // 处理日期对象
-    processingDate: function (date) {
-      let year = date.getFullYear()
-      let month = date.getMonth() + 1
-      let day = date.getDate()
-      return year + '-' + month + '-' + day
-    },
-    // 获取出入频率分页信息
-    getPgingData: function () {
-      // this.parameter.startDate = this.processingDate(this.starTime)
-      // this.parameter.endDate = this.processingDate(this.endTime)
-      getListDevice(this.parameter).then(res => {
-        // getPerAccessPageList().then(res => {
+    // 获取楼栋出入率总数据（图表展示）
+    getRateBuildData: function () {
+      let parameterBuild = {}
+      parameterBuild.buildId = this.residentialId
+      parameterBuild.courtUuid = this.parameter.courtUuid
+      parameterBuild.startTime = this.timeFomate(this.startTime)
+      parameterBuild.endTime = this.timeFomate(this.endTime)
+      parameterBuild.reportType = this.parameter.reportType
+      parameterBuild.currentPage = this.parameter.currentPage
+      parameterBuild.pageSize = this.parameter.pageSize
+      parameterBuild.type = 0
+      // 楼栋出入频率接口
+      getBuildRateProfile(parameterBuild).then(res => {
         if (res.data.code === '00000') {
-          this.tableData = res.data.data.result
-          // this.total = res.data.data.totalCount
+          let tableRateAllData = res.data.data.flow
+          // 添加前先清空
+          this.form.dateListRate = []
+          this.form.perInCountListRate = []
+          this.form.perOutCountListRate = []
+          for (let i = 0; i < tableRateAllData.length; i++) {
+            this.form.dateListRate.push(tableRateAllData[i].timeGroup)
+            this.form.perInCountListRate.push(tableRateAllData[i].inCount)
+            this.form.perOutCountListRate.push(tableRateAllData[i].outCount)
+          }
+          // // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.myChart.setOption(this.echartsData())
+          }
         } else {
           this.$message({
             type: 'error',
             message: res.data.message
           })
         }
-        console.log(33333)
-        console.log(this.tableData)
+      })
+    },
+    // 获取小区出入频率分页信息
+    getPgingData: function () {
+      this.parameter.startTime = this.timeFomate(this.startTime)
+      this.parameter.endTime = this.timeFomate(this.endTime)
+      this.parameter.reportType = this.parameter.reportType
+      this.parameter.type = 0
+      getCourtListDevice(this.parameter).then(res => {
+        if (res.data.code === '00000') {
+          this.tableRateData = res.data.data.flow
+          this.total = res.data.data.totalRows
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
+    },
+    // 获取小区楼栋列表数据传入选择项
+    getCourtSelect: function () {
+      this.parameter.startTime = this.timeFomate(this.startTime)
+      this.parameter.endTime = this.timeFomate(this.endTime)
+      this.parameter.type = 0
+      getCourtListDevice(this.parameter).then(res => {
+        if (res.data.code === '00000') {
+          let build = res.data.data.buildInfo
+          for (let i in build) {
+            this.buildList.push({ value: build[i].uuid, label: build[i].name })
+          }
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
+      })
+    },
+    // 报表传的日期参数
+    timeFomate: function (date) {
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      var day = date.getDate()
+      return year + '-' + month + '-' + day
+    },
+    // 获取楼栋出入频率分页信息
+    getPgingBuildData: function () {
+      let parameterBuild = {}
+      parameterBuild.buildId = this.residentialId
+      parameterBuild.courtUuid = this.parameter.courtUuid
+      parameterBuild.startTime = this.timeFomate(this.startTime)
+      parameterBuild.endTime = this.timeFomate(this.endTime)
+      parameterBuild.reportType = this.parameter.reportType
+      parameterBuild.type = 0
+      getBuildListDevice(parameterBuild).then(res => {
+        if (res.data.code === '00000') {
+          this.tableRateData = res.data.data.flow
+          this.total = res.data.data.totalRows
+        } else {
+          this.$message({
+            type: 'error',
+            message: res.data.message
+          })
+        }
       })
     },
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
-      this.parameter.reportType = '1'
+      this.parameter.reportType = '0'
       this.isChartShow = false
       this.isTableShow = true
+      this.buildList = []
     }
   },
   mounted: function () { }
@@ -699,7 +824,9 @@ export default {
 </script>
 <style scoped lang='less'>
 .popup {
-  min-width: 710px;
+  /deep/.el-dialog {
+    min-width: 710px;
+  }
   /deep/.table-pager {
     padding: 0;
     padding-right: 10px;
@@ -724,6 +851,13 @@ export default {
     height: 430px;
     margin-top: 10px;
   }
+  /deep/.tblHeader .el-col {
+    padding-right: 10px;
+    vertical-align: top;
+  }
+  /deep/.tblHeader .el-input__inner {
+    vertical-align: middle;
+  }
   #flowInformation {
     height: 420px;
   }
@@ -732,9 +866,5 @@ export default {
   width: 970px;
   height: 430px;
 }
-// .tblHeader:nth-child(3),.tblHeader:nth-child(4),.tblHeader:nth-child(5){
-//   display: inline-block;
-//   text-align: right;
-// }
 </style>
 

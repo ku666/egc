@@ -129,27 +129,46 @@ export const getListDeviceForPage = data => {
  *  获取业主画像列表
  * @param orgCode 业主画像code
  */
-export const getBuildProfile = data => {
-  return Axios({
-    url: ownertPath + '/getBuildProfile',
-    // url: contextPath + '/getBuildProfile',
-    method: 'get',
-    params: data
-  })
-}
-export const getPerProfile = data => {
+export const getCourtProfile = data => { // 小区业主人数接口
   return Axios({
     url: ownertPath + '/getCourtAgeFlowData',
-    // url: contextPath + '/getBuildProfile',
     method: 'get',
     params: data
   })
 }
-export const getListDevice = data => {
+export const getCourtRateProfile = data => { // 小区出入率接口
+  return Axios({
+    url: ownertPath + '/getCourtAgeFlowData',
+    method: 'get',
+    params: data
+  })
+}
+export const getCourtListDevice = data => { // 小区的出入率分页数据
+  return Axios({
+    url: ownertPath + '/getCourtAgeFlowData',
+    method: 'get',
+    params: data
+  })
+}
+export const getBuildProfile = data => { // 楼栋业主人数接口
+  return Axios({
+    url: ownertPath + '/getBuildAgeFlowData',
+    method: 'get',
+    params: data
+  })
+}
+export const getBuildRateProfile = data => { // 楼栋出入率接口
+  return Axios({
+    url: ownertPath + '/getBuildAgeFlowData',
+    method: 'get',
+    params: data
+  })
+}
+export const getBuildListDevice = data => { // 楼栋的出入率分页数据
+// export const getListDevice = data => {
   // 分页
   return Axios({
-    url: ownertPath + '/getBuildProfileList',
-    // url: contextPath + '/getBuildProfile',
+    url: ownertPath + '/getBuildAgeFlowData',
     method: 'get',
     params: data
   })

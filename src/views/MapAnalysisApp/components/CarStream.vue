@@ -5,22 +5,22 @@
         <el-col :span="4">
           <div class="description">
             <div>
-              <p>小区地址</p>：广州市中心镇
+              <p>小区名称</p>：{{courtInfo.courtName}}
             </div>
             <div>
-              <p>小区名称</p>：恒大山水城
+              <p>小区地址</p>：{{courtInfo.regionName}}
             </div>
             <div>
-              <p>楼 栋</p>：108栋
+              <p>户 数</p>：{{courtInfo.homeCount}}栋
             </div>
             <div>
-              <p>房 屋</p>：1024间
+              <p>房屋总数</p>：{{courtInfo.houseCount}}间
             </div>
             <div>
-              <p>占地面积</p>：12306平方米
+              <p>占地面积</p>：{{courtInfo.floorArea}}平方米
             </div>
             <div>
-              <p>建筑面积</p>：118118118平方米
+              <p>建筑面积</p>：{{courtInfo.buildArea}}平方米
             </div>
           </div>
         </el-col>
@@ -31,9 +31,9 @@
               <el-col :span="8">
                 <el-form-item label="报表类型">
                   <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
-                    <el-option label="日报表" value="1"></el-option>
-                    <el-option label="月报表" value="2"></el-option>
-                    <el-option label="年报表" value="3"></el-option>
+                    <el-option label="日报表" value="0"></el-option>
+                    <el-option label="月报表" value="1"></el-option>
+                    <el-option label="年报表" value="2"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -64,8 +64,6 @@
             <div class="carInfoTable" v-show="isShowTable" v-loading="loading">
               <!-- 展示表格开始 -->
               <el-table stripe :data="carStreamData" height="400" border style="width: 100%">
-                <!-- <el-table-column prop="courtID" label="小区ID" width="180">
-            </el-table-column> -->
                 <el-table-column prop="date" label="日期">
                 </el-table-column>
                 <el-table-column prop="carInCount" label="进入总车辆">
@@ -79,7 +77,7 @@
               </el-table>
               <!-- 展示表格结束 -->
               <!-- 分页显示控件开始 -->
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10, 20, 30, 40]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalDataNum" background small>
+              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10,20,30,50,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" background small>
               </el-pagination>
             </div>
             <!-- 地图展示 -->
@@ -94,7 +92,7 @@
 </template>
   
 <script>
-import { getCourtCarAccessInfo, getCarAccessPageList } from '../apis/index'
+import { getCourtCarAccessInfo, getCarAccessPageList, getCourtInfo } from '../apis/index'
 export default {
   name: 'CarStream',
   data () {
@@ -108,11 +106,12 @@ export default {
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtID: '4c12aee6d522412fa8d9d47d6a39cc82', // 小区ID
-        reportType: '1', // 报表类型
-        startDate: new Date(new Date().setDate(new Date().getDate() - 15)), // 开始时间
+        courtUuid: '', // 小区ID
+        reportType: '0', // 报表类型
+        startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
         endDate: new Date() // 结束时间
       },
+      courtInfo: {},
       carStreamData: [], // 后端请求回的车流信息
       mapDataList: { // 车流信息映射到echarts的数据
         date: [],
@@ -123,7 +122,7 @@ export default {
       },
       currentPage: 1, // 分页显示当前第几页
       pageSize: 10, // 每页显示多少条数据
-      totalDataNum: 0, // 总共有几条数据
+      totalRows: 0, // 总共有几条数据
       myChart: '', // eCharts实例
       loading: false,
       forbiddenStartDatetime: { // 限制开始时间选择器
@@ -138,15 +137,14 @@ export default {
       }
     }
   },
-  mounted: function () {
-  },
   methods: {
-    goToCarStreamPage: function (courtId) {
+    goToCarStreamPage: function (courtUuid) {
       // 进入车流查询页面，小区ID改变，isShowChart=false
-      if (courtId) {
-        this.form.courtID = courtId
+      if (courtUuid) {
+        this.form.courtUuid = courtUuid
       }
       console.log('进入页面')
+      this.getCourtInfo()
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
         this.$nextTick(function () {
@@ -307,22 +305,34 @@ export default {
         carInRegedCourt: [], // 注册车辆数
         carOutRegedCourt: [] // 临时车辆数
       }
-      data.forEach(element => {
-        this.mapDataList.date.push(element.date)
-        this.mapDataList.carInCourt.push(element.carInCount)
-        this.mapDataList.carOutCourt.push(element.carOutCount)
-        this.mapDataList.carInRegedCourt.push(element.carInRegedCount)
-        this.mapDataList.carOutRegedCourt.push(element.carOutRegedCount)
-      })
+      // data.forEach(element => {
+      //   this.mapDataList.date.push(element.date)
+      //   this.mapDataList.carInCourt.push(element.carInCount)
+      //   this.mapDataList.carOutCourt.push(element.carOutCount)
+      //   this.mapDataList.carInRegedCourt.push(element.carInRegedCount)
+      //   this.mapDataList.carOutRegedCourt.push(element.carOutRegedCount)
+      // })
+      console.log('data')
+      console.log(data)
+      for (let i = data.length - 1; i >= 0; i--) {
+        this.mapDataList.date.push(data[i].date)
+        this.mapDataList.carInCourt.push(data[i].carInCount)
+        this.mapDataList.carOutCourt.push(data[i].carOutCount)
+        this.mapDataList.carInRegedCourt.push(data[i].carInRegedCount)
+        this.mapDataList.carOutRegedCourt.push(data[i].carOutRegedCount)
+      }
     },
     reportTypeSelected: function () {
       // 该表报表类型，年报表或月报表等
-      if (this.form.reportType === '1') {
+      if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
-      } else if (this.form.reportType === '2') {
+        this.form.startDate = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
+      } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
+        this.form.startDate = new Date(new Date() - 86400000 * 30)
       } else {
         this.formDatePickType = 'month'
+        this.form.startDate = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
       }
     },
     handleSizeChange: function (val) {
@@ -335,22 +345,12 @@ export default {
       // 分页获取数据，发送请求 初始化状态
       console.log('触发了吗')
       this.currentPage = val
-      var queryParam = this.queryParam()
-      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
-      getCarAccessPageList(queryParam).then(res => {
-        if (res.status === 200) {
-          console.log('分页查询')
-          this.carStreamData = res.data.result
-        } else {
-          this.errMessage()
-        }
-      })
+      this.getCarAccessPageList()
     },
     submitForm: function (formName) {
       // 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
       if (this.datePickRangeConfrim() === 1) return
       console.log('日期区间通过验证')
-      console.log(this.isShowTable)
       if (this.isShowTable) {
         this.pageSize = 10
         this.currentPage = 1
@@ -362,31 +362,43 @@ export default {
       this.clickCount = 0
     },
     getCourtCarAccessInfo: function () {
-      console.log('获取时间段内所有数据,增加catch')
+      console.log('getCourtCarAccessInfo')
+      if (this.datePickRangeConfrim()) return
       var data = this.queryParam()
+      console.log(data)
       getCourtCarAccessInfo(data).then((res) => {
-        if (res.status === 200) {
-          var data = res.data
-          console.log('caraccessinfo')
+        if (res.data.code === '00000') {
+          var data = res.data.data
           this.sortData(data)
           this.chartInit()
         } else {
-          this.errMessage()
+          this.errMessage(res.data.message)
         }
       })
     },
     getCarAccessPageList: function () {
+      if (this.datePickRangeConfrim()) return
       var queryParam = this.queryParam()
-      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, pageNum: this.currentPage })
+      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, currentPage: this.currentPage })
+      console.log('getCarAccessPageList')
+      console.log(queryParam)
       getCarAccessPageList(queryParam).then(res => {
-        console.log('分页查询数据')
         console.log(res)
-        if (res.status === 200) {
-          this.totalDataNum = res.data.totalRows
-          this.carStreamData = res.data.result
+        if (res.data.code === '00000') {
+          this.totalRows = res.data.data.totalRows
+          this.carStreamData = res.data.data.result
         } else {
-          console.log('dd')
-          this.errMessage()
+          this.errMessage(res.data.message)
+        }
+      })
+    },
+    getCourtInfo: function () {
+      getCourtInfo({ courtUuid: this.form.courtUuid }).then(res => {
+        console.log('小区信息')
+        if (res.data.code === '00000') {
+          this.courtInfo = res.data.data
+        } else {
+          this.errMessage(res.data.message)
         }
       })
     },
@@ -400,20 +412,20 @@ export default {
       var year = date.getFullYear()
       var month = date.getMonth() + 1
       var day = date.getDate()
-      if (this.form.reportType === '1') {
-        return year + '-' + month + '-' + day
-      } else if (this.form.reportType === '2') {
-        return year + '-' + month + '-' + day
-      } else {
-        return year + '-' + month
-      }
+      // if (this.form.reportType === '0') {
+      return year + '-' + month + '-' + day
+      // } else if (this.form.reportType === '1') {
+      //   return year + '-' + month + '-' + day
+      // } else {
+      //   return year + '-' + month
+      // }
     },
     closeDialog: function () {
       this.clickCount = 0
     },
     datePickRangeConfrim () {
       switch (this.form.reportType) {
-        case '1':
+        case '0':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000) + '天')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000) > 31) {
             this.$message.error({
@@ -423,7 +435,7 @@ export default {
             return 1
           }
           break
-        case '2':
+        case '1':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) + '月')
           if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) > 12) {
             this.$message.error({
@@ -435,16 +447,12 @@ export default {
           break
       }
     },
-    errMessage: function () {
+    errMessage: function (err) {
       this.$message.error({
-        message: '出错了',
-        duration: 1500
+        type: 'warning',
+        message: err
       })
     }
-  },
-  computed: {
-  },
-  watch: {
   }
 }
 </script>
