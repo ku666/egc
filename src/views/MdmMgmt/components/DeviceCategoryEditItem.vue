@@ -51,7 +51,7 @@
               <el-col :span = '19'>
                 <el-transfer
                   filterable
-                  :titles="['全部属性', '当前设备属性']"
+                  :titles="['可添加属性', '当前设备属性']"
                   :button-texts="['删除属性', '添加属性']"
                   :props= '{
                     key: "uuid",
@@ -176,14 +176,12 @@ export default {
       this.viewFlagParent = true
       this.getAllAttr()
       this.getDeviceAttr()
-      console.log('++++++++++++++++++++++++++++++++++++++++++++++++')
-      console.log(this.selectAttr)
-      console.log('++++++++++++++++++++++++++++++++++++++++++++++++')
       // this.$parent.getParents()
     },
     // 添加设备信息
     addDeviceCategoryDialog: function () {
       this.viewFlag = false
+      this.deviceCategoryDetail.uuid = ''
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''
       this.deviceCategoryDetail.typeName = ''
@@ -231,6 +229,9 @@ export default {
     },
     // 保存设备基本信息
     save: function () {
+      console.log('this.deviceCategoryDetail.uuid')
+      console.log(this.deviceCategoryDetail.uuid)
+      console.log('this.deviceCategoryDetail.uuid')
       this.$refs['deviceCategoryDetail'].validate((valid) => {
         if (valid) {
           var func

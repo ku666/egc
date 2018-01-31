@@ -232,9 +232,6 @@ export default {
       }
       getPersonList(condition)
         .then(res => {
-          console.log('res')
-          console.log(res)
-          console.log('res')
           var self = this
           this.total = res.data.totalCount
           const timeOut = setTimeout(function () {

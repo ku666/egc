@@ -254,9 +254,9 @@ export default {
         dangerouslyUseHTMLString: true
       }).then(() => {
         deleteDeviceCategory({ 'value': [device.uuid] }).then(res => {
-          if (res.code !== '0000') {
-            return
-          }
+          // if (res.data.code !== '0000') {
+          //   return
+          // }
           this.$message({
             message: '刪除成功!',
             type: 'warning'
