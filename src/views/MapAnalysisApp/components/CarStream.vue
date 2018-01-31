@@ -82,7 +82,10 @@
             </div>
             <!-- 地图展示 -->
             <!-- <div v-show="isShowChart"> -->
-            <div id="carInfoMap" v-show="isShowChart"></div>
+            <div id="carInfoMapBox" v-show="isShowChart">
+              <img v-show="isReponseData" src="../assets/images/err.png">
+              <div id="carInfoMap" v-show="isShowChart"></div>
+            </div>
             <!-- </div> -->
           </div>
         </el-col>
@@ -100,6 +103,7 @@ export default {
       isShowCarInfoMap: false, // 是否显示弹框
       isShowTable: true, // 是否显示表格
       isShowChart: false, // 是否显示echarts图表
+      isReponseData: false,
       clickCount: 0,
       preTableShowStatus: '', // 判断是否第一次进入echarts图表页面
       formDatePickType: 'date', // 报表类型
@@ -365,15 +369,19 @@ export default {
       console.log('getCourtCarAccessInfo')
       if (this.datePickRangeConfrim()) return
       var data = this.queryParam()
-      console.log(data)
       getCourtCarAccessInfo(data).then((res) => {
         if (res.data.code === '00000') {
+          this.isReponseData = false
           var data = res.data.data
           this.sortData(data)
           this.chartInit()
+
         } else {
+          this.isReponseData = true
           this.errMessage(res.data.message)
         }
+      }).catch(() => {
+        this.isReponseData = true
       })
     },
     getCarAccessPageList: function () {
@@ -422,6 +430,7 @@ export default {
     },
     closeDialog: function () {
       this.clickCount = 0
+      this.myChart.dispose()
     },
     datePickRangeConfrim () {
       switch (this.form.reportType) {
@@ -460,9 +469,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <!--  lang="less" -->
 <style lang="less"  scoped>
-#carInfoMap {
+#carInfoMapBox {
   height: 436px;
   border: 1px solid #dcdfe6;
+  text-align: center;
+  img {
+    margin-top: 120px;
+  }
+}
+#carInfoMap {
+  height: 436px;
 }
 .carInfo {
   .description {

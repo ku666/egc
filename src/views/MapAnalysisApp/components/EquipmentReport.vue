@@ -8,8 +8,14 @@
       <el-button type="success" @click="tableSwitch">表格</el-button>
       <div class="courtName">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chartContainer">
-        <div id="equipmentcharts"></div>
-        <div id="equipmentonlinecharts"></div>
+        <div id="equipmentchartsbox">
+          <img v-show="isReponseData" src="../assets/images/err.png">
+          <div id="equipmentcharts"></div>
+        </div>
+        <div id="equipmentonlinechartsbox">
+          <img v-show="isOnlineReponseData" src="../assets/images/err.png">
+          <div id="equipmentonlinecharts"></div>
+        </div>
         <!-- <div class="clear"></div> -->
       </div>
       <div v-show="isTableShow">
@@ -40,6 +46,8 @@ export default {
       dialogReportVisible: false,
       isChartShow: true,
       isTableShow: false,
+      isReponseData: false,
+      isOnlineReponseData: false,
       tableData: [],
       names: [],
       onlinenames: [],
@@ -242,13 +250,17 @@ export default {
         // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {
           if (res.data.code === '00000') {
+            this.isReponseData = false
             this.cellDetailsList = res.data.data
           } else {
+            this.isReponseData = true
             this.$message.error({
               message: res.data.message,
               duration: 1500
             })
           }
+        }).catch(() => {
+          this.isReponseData = true
         })
         let equiData = {}
         equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
@@ -256,6 +268,7 @@ export default {
           console.log('getListDeviceType')
           console.log(res)
           if (res.data.code === '00000') {
+            this.isOnlineReponseData = false
             this.tableData = res.data.data
             // console.log(111111)
             console.log(this.tableData)
@@ -293,11 +306,14 @@ export default {
             this.chartInit()
             console.log(this.onlinedata)
           } else {
+            this.isOnlineReponseData = true
             this.$message.error({
               message: res.data.message,
               duration: 1500
             })
           }
+        }).catch(() => {
+          this.isOnlineReponseData = true
         })
       })
     }
@@ -322,20 +338,35 @@ export default {
   justify-content: center;
   margin-top: 10px;
 }
-#equipmentcharts {
+#equipmentchartsbox {
   /* float: left; */
   /* margin-top: 10px; */
   width: 640px;
   /* width: 49.5%; */
   height: 600px;
   border: 1px solid #ccc;
+  text-align: center;
 }
-#equipmentonlinecharts {
+#equipmentchartsbox img {
+  margin-top: 200px;
+}
+#equipmentcharts {
+  height: 600px;
+}
+#equipmentonlinechartsbox {
   /* float: right; */
   /* margin-top: 10px; */
   width: 640px;
   height: 600px;
   border: 1px solid #ccc;
+  text-align: center;
+}
+#equipmentonlinechartsbox img {
+  margin-top: 200px;
+}
+#equipmentonlinecharts {
+  height: 600px;
+  margin-top: 150px;
 }
 .clear {
   clear: both;
