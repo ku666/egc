@@ -10,8 +10,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/demo': {
-        target: 'http://172.16.30.46:8082/'
+       "/demo": {
+         target: 'http://172.16.30.46:8082/'
+       },
+      "/egc-devicemgmtcomponent": {
+        target: 'http://172.16.30.106:8082/',  // 王珂(设备管理)
+        changeOrigin: true
       },
       '/egcmapanalysis': {
       // '/egc-mapanalysiscomponent': {
@@ -60,8 +64,7 @@ module.exports = {
         target: 'http://172.16.30.9:8082/',  // 日志组件管理
         changeOrigin: true
       }
-      
-    },
+      },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.HOST, if port is in use, a free one will be determined

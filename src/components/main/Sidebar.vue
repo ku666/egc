@@ -40,7 +40,92 @@
 export default {
   data () {
     return {
-      items: []
+      items: [
+        {
+          'icon': 'el-icon-setting',
+          'index': '/home',
+          'title': '首页',
+          'subs': null
+        },
+        {
+          'icon': 'el-icon-menu',
+          'index': '/mdmmgmt/mdmmgmtindex',
+          'title': '主数据管理',
+          'subs': [
+            {
+              'icon': null,
+              'index': '/mdmmgmt/devicecategorylist',
+              'title': '设备分类管理',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/mdmmgmt/deviceattrlist',
+              'title': '设备属性管理',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/mdmmgmt/providerlist',
+              'title': '供应商管理',
+              'subs': null
+            }]
+        },
+        {
+          'icon': 'el-icon-menu',
+          'index': '/mapanalysisapp/mapanalysisappindex',
+          'title': '地图分析',
+          'subs': [{
+            'icon': null,
+            'index': '/mapanalysisapp/index',
+            'title': '地图分析',
+            'subs': null
+          }]
+        },
+        {
+          'icon': 'el-icon-menu',
+          'index': '/MdmApp/MdmAppindex',
+          'title': '小区信息',
+          'subs': [
+            {
+              'icon': null,
+              'index': '/MdmApp/personManager',
+              'title': '人员信息',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/MdmApp/orgManager',
+              'title': '组织信息',
+              'subs': null
+            },
+            {
+              'icon': null,
+              'index': '/MdmApp/houseManager',
+              'title': '房屋信息',
+              'subs': null
+            }]
+        },
+        {
+          'title': '设备管理',
+          'icon': 'el-icon-menu',
+          'index': '/devicemgmt/devicemgmtindex',
+          'subs': [
+            {
+              'title': '设备基本维护',
+              'index': '/devicemgmt/deviceInfoMaintain',
+              'icon': null,
+              'items': null
+            },
+            {
+              'title': '固件升级',
+              'index': '/devicemgmt/devicefirmwareupdate',
+              'icon': null,
+              'items': null
+            }
+          ]
+        }
+      ]
     }
   },
   props: {

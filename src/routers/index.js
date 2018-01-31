@@ -14,6 +14,9 @@ import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 import HouseAllApp from '@/views/HouseAllApp/routers/index'
 import MdmApp from '@/views/MdmApp/routers/index'
 
+// 引入设备管理模块路由数据
+import deviceInfoMaintain from '@/views/DeviceMgmt/deviceInfoMaintain/routers/index'
+import firmwareUpdate from '@/views/DeviceMgmt/firmwareUpdate/routers/index'
 // 引入模型管理模块路由数据
 import modelManagementrouters from '@/views/modelManagement/routers/index'
 
@@ -56,8 +59,10 @@ export default new Router({
         ...userManagementRouters,
         ...mdmMgmtrouters,
         ...MapAnalysisApp,
-        ...HouseAllApp,
         ...MdmApp,
+        ...deviceInfoMaintain,
+        ...firmwareUpdate,
+        ...HouseAllApp,
         ...upgradeMgmt,
         ...modelManagementrouters,
         ...logServiceComponentrouters,

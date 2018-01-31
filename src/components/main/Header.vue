@@ -28,6 +28,9 @@ export default {
       name: '',
       titleList: [
         {title: '主数据管理'},
+        {title: '地图分析'},
+        {title: '小区信息'},
+        {title: '设备管理'},
         {title: '智慧社区'}
       ]
 
