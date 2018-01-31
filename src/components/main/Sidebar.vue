@@ -99,6 +99,25 @@ export default {
               'title': '房屋信息',
               'subs': null
             }]
+        },
+        {
+          'title': '设备管理',
+          'icon': 'el-icon-menu',
+          'index': '/devicemgmt/devicemgmtindex',
+          'subs': [
+            {
+              'title': '设备基本维护',
+              'index': '/devicemgmt/deviceInfoMaintain',
+              'icon': null,
+              'items': null
+            },
+            {
+              'title': '固件升级',
+              'index': '/devicemgmt/devicefirmwareupdate',
+              'icon': null,
+              'items': null
+            }
+          ]
         }
       ]
     }

@@ -14,7 +14,11 @@ module.exports = {
     proxyTable: {
        "/demo": {
          target: 'http://172.16.30.46:8082/'
-       }
+       },
+      "/egc-devicemgmtcomponent": {
+        target: 'http://172.16.30.106:8082/',  // 王珂(设备管理)
+        changeOrigin: true
+      }
     },
 
     // Various Dev Server settings
