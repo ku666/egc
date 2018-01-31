@@ -1,18 +1,16 @@
 
 <template>
-  <div class='usermgn'>
-    <div>
-      <template v-if="!authorityFlag">
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="createResourceRole" type="primary">添加</el-button>
-      </template>
-      <template v-else>
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="cancelResourceRole" type="primary">取消添加</el-button>
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="saveResourceRole('authority')" type="primary">保存</el-button>
-      </template>
-    </div>
+  <div>
+    <template v-if="!authorityFlag">
+      <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createResourceRole" type="primary">添加</el-button>
+    </template>
+    <template v-else>
+      <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelResourceRole" type="primary">取消添加</el-button>
+      <el-button class="action-btn" style="margin-bottom: 10px" @click="saveResourceRole('authority')" type="primary">保存</el-button>
+    </template>
     <el-form :model="authority" :inline="true" v-if="authorityFlag" ref="authority" :rules="rules">
       <el-form-item label="选择角色" prop="roleUuid">
-        <el-select v-model="authority.roleUuid" placeholder="请选择" class="user_el-select">
+        <el-select v-model="authority.roleUuid" placeholder="请选择" class="user_el-select" filterable>
           <el-option v-for="roleType in roleSelectOptions" :key="roleType.uuid" :label="roleType.roleName" :value="roleType.uuid"> </el-option>
         </el-select>
       </el-form-item>
@@ -29,8 +27,7 @@
         <el-table-column prop="actionTypeName" label="操作类型" width="355"></el-table-column>
         <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-                <img :src="deleteImg" style="width:20px">
+              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
               </span>
             </template>
         </el-table-column>
@@ -57,8 +54,9 @@
     deleteResourceRole,
     createResourceRole,
     getResourceRoleList,
-    getRoleListAll,
-    createDevice
+    getRoleListAllMaindata,
+    createDevice,
+    getResourceRoleNoPageList
   } from '@/views/UserMgmt/userManagement/apis'
 
   export default {
@@ -165,16 +163,40 @@
       // 获取角色下拉框信息
       handResourceRoleSelect () {
       // 角色下拉框信息
-        getRoleListAll()
+        getRoleListAllMaindata()
         .then(
           function (result) {
-            console.log('<<<<<getRoleListAll:' + result)
-            this.roleSelectOptions = result.roleBaseVoList
+            this.tmpRoleList = result
+            getResourceRoleNoPageList(this.authority)
+              .then(
+                function (result) {
+                  let roleFilterList = result.authorityExt
+                  if (result.pageCount > 0) {
+                    for (var i = 0; i < roleFilterList.length; i++) {
+                      this.disableRole(roleFilterList[i].roleUuid)
+                    }
+                  }
+                  this.roleSelectOptions = this.tmpRoleList.filter(function (item) { return !item.isDisabled })
+                }.bind(this)
+              )
+              .catch(function (error) {
+                console.log(error)
+              })
           }.bind(this)
         )
-        .catch(function (error) {
-          console.log(error)
-        })
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+      },
+      disableRole (roleUuid) {
+        for (var i = 0; i < this.tmpRoleList.length; i++) {
+          if (roleUuid === this.tmpRoleList[i].uuid) {
+            this.tmpRoleList[i].isDisabled = true
+            console.log('success')
+          }
+        }
       },
       saveResourceRole (formName) {
         console.log('this.authority.resourceUuid:' + this.authority.resourceUuid)
@@ -191,9 +213,9 @@
                   this.authorityFlag = false
                     // 添加完authority对象后，重置authority对象
                   this.initResourceRole()
-                  this.$notify({
-                    title: '成功1111',
-                    message: '创建成功111',
+                  this.$message({
+                    title: '成功',
+                    message: '保存成功',
                     type: 'success',
                     duration: 2000
                   })
@@ -207,9 +229,9 @@
                   this.authorityFlag = false
                   // 添加完authority对象后，重置authority对象
                   this.initResourceRole()
-                  this.$notify({
+                  this.$message({
                     title: '成功',
-                    message: '创建成功',
+                    message: '保存成功',
                     type: 'success',
                     duration: 2000
                   })

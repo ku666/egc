@@ -1,7 +1,7 @@
 export default {
   getAllOrgTreeByCourtUuid: config => {
-    var data = [
-      {
+    var data = {
+      'children': [{
         uuid: '235jklgdsj4543',
         name: '1幢'
       },
@@ -9,7 +9,26 @@ export default {
         uuid: '235jkl54gdsj4543',
         name: '2幢'
       }
-    ]
+      ]
+    }
+    return {
+      data: data,
+      code: '0000',
+      msg: 'success'
+    }
+  },
+  getOrgTreeNextLevel: config => {
+    var data = {
+      'children': [{
+        uuid: '235jklgdsj4543',
+        name: '1幢'
+      },
+      {
+        uuid: '235jkl54gdsj4543',
+        name: '2幢'
+      }
+      ]
+    }
     return {
       data: data,
       code: '0000',
@@ -37,73 +56,69 @@ export default {
     }
   },
   getOrgTree: config => {
-    var data = [
-      {
-        uuid: '234dsgsfd43534',
-        name: '恒大小区一',
-        children: [
-          {
-            uuid: '235jklgdsj4543',
-            name: '1幢',
-            children: [{
-              uuid: '235432432jklgdsj4543',
-              name: '1单元'
-            }]
-          },
-          {
-            uuid: '235jkl54gdsj4543',
-            name: '2幢',
-            children: [{
-              uuid: '235432435432jklgdsj4543',
-              name: '1单元'
-            }]
-          }
-        ]
+    var data = [{
+      uuid: '234dsgsfd43534',
+      name: '恒大小区一',
+      children: [{
+        uuid: '235jklgdsj4543',
+        name: '1幢',
+        children: [{
+          uuid: '235432432jklgdsj4543',
+          name: '1单元'
+        }]
       },
       {
-        uuid: '234dsgsfd43534',
-        name: '恒大小区二',
-        children: [
-          {
-            uuid: '235jklgdsj4543',
-            name: '1幢',
-            children: [{
-              uuid: '235432432jklgdsj4543',
-              name: '1单元'
-            }]
-          },
-          {
-            uuid: '235jkl54gdsj4543',
-            name: '2幢',
-            children: [{
-              uuid: '235432435432jklgdsj4543',
-              name: '1单元'
-            }]
-          }
-        ]
-      },
-      {
-        uuid: '234dsgsfd43534',
-        name: '恒大小区三',
-        children: [
-          {
-            uuid: '235jklgdsj4543',
-            name: '1幢',
-            children: [{
-              uuid: '235432432jklgdsj4543',
-              name: '1单元'
-            }]
-          },
-          {
-            uuid: '235jkl54gdsj4543',
-            name: '2幢',
-            children: [{
-              uuid: '235432435432jklgdsj4543',
-              name: '1单元'
-            }]
-          }
-        ]
+        uuid: '235jkl54gdsj4543',
+        name: '2幢',
+        children: [{
+          uuid: '235432435432jklgdsj4543',
+          name: '1单元'
+        }]
       }
+      ]
+    },
+    {
+      uuid: '234dsgsfd43534',
+      name: '恒大小区二',
+      children: [{
+        uuid: '235jklgdsj4543',
+        name: '1幢',
+        children: [{
+          uuid: '235432432jklgdsj4543',
+          name: '1单元'
+        }]
+      },
+      {
+        uuid: '235jkl54gdsj4543',
+        name: '2幢',
+        children: [{
+          uuid: '235432435432jklgdsj4543',
+          name: '1单元'
+        }]
+      }
+      ]
+    },
+    {
+      uuid: '234dsgsfd43534',
+      name: '恒大小区三',
+      children: [{
+        uuid: '235jklgdsj4543',
+        name: '1幢',
+        children: [{
+          uuid: '235432432jklgdsj4543',
+          name: '1单元'
+        }]
+      },
+      {
+        uuid: '235jkl54gdsj4543',
+        name: '2幢',
+        children: [{
+          uuid: '235432435432jklgdsj4543',
+          name: '1单元'
+        }]
+      }
+      ]
+    }
     ]
     return {
       data: {

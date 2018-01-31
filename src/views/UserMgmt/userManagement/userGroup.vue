@@ -1,32 +1,39 @@
 <template>
-  <div class='usermgn'>
-    <div class="app-container" calendar-list-container>
+  <div class='ui-common'>
+    <div class="app-container flex-1 flex-c" calendar-list-container>
       <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="用户组列表" name="0"></el-tab-pane>
         <el-tab-pane label="用户组树形结构" name="1"></el-tab-pane>
       </el-tabs> -->
-      <div v-show="showGrid == true">
-        <div class="filter-container">
-          <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item" placeholder="用户组名称" v-model="searchText"></el-input>
+      <div v-show="showGrid == true" class="flex-1 flex-c">
+        
+      <div>
+        <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
+        <span style="float:right">
+          <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
+          <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
           <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
-          <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">重置</el-button><br>
-          <el-button class="action-btn" style="margin-top: 15px;" @click="handleCreate" type="primary" >添加</el-button>
+        </span>
+      </div>
+
+        <div class="border-divide"></div>
+
+        <div class="table-container" >
+          <grid-list id="usergroupTable"
+            :editable="true"
+            :deletable="true"
+            :tableData="userGroupList"
+            :params="userGroupListParam"
+            style="margin-top: 15px"
+            @listenToDeleteEvent="userGroupDeleteEvent"
+            @listenToEditEvent="gridEditEvent"
+          ></grid-list>
         </div>
-        <grid-list id="usergroupTable"
-          :editable="true" 
-          :deletable="true" 
-          :showOperation="true" 
-          :tableData="userGroupList" 
-          :params="userGroupListParam" 
-          style="margin-top: 15px" 
-          @listenToDeleteEvent="userGroupDeleteEvent" 
-          @listenToEditEvent="gridEditEvent"
-        ></grid-list>
-        <div class="pagination-container">
-          <el-pagination 
-            :page-sizes="[5,10,20,30]" 
-            layout="total, sizes, prev, pager, next, jumper" 
-            :total="total" 
+        <div>
+          <el-pagination
+            :page-sizes="[5,10,20,30]"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total"
             style="margin-top:10px"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
@@ -34,7 +41,7 @@
           ></el-pagination>
         </div>
       </div>
-      <el-dialog :title="dialogAddStatus" 
+      <el-dialog :title="dialogAddStatus"
       :close-on-click-modal="false"
       :show-close="true"
       :before-close="userGroupAddEvent"
@@ -44,14 +51,14 @@
           v-show="showCreate"
         ></user-group-create>
       </el-dialog>
-      <el-dialog :title="dialogEditStatus" 
+      <el-dialog :title="dialogEditStatus"
       :visible.sync="dialogFormEditVisible" :close-on-click-modal="false">
-        <user-group-edit 
-          :userGroupDetailData="subUserGroupData" 
+        <user-group-edit
+          :userGroupDetailData="subUserGroupData"
           :dirUsergroupDetailData="dirChildrenUserGroupData"
           :dirUserDetailData="userData"
           :roleDetailData="roleData"
-          :editForm="userGroupForm" 
+          :editForm="userGroupForm"
           @listenToChildEditEvent="childEditEvent"
           @listenToChildDeleteEvent="childDeleteEvent"
           @listenToChildCloseEvent="childCloseEvent"
@@ -111,7 +118,7 @@
         dialogEditStatus: undefined,
         query: {
           currentPage: 1,
-          pageSize: 5,
+          pageSize: 10,
           usergroupUuid: undefined,
           userGroupName: undefined
         },
@@ -441,15 +448,18 @@
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 20%
+    /* width: 20% */
+    width: 300px;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 30%
+    /* width: 25% */
+    width: 380px;
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 42%
+    /* width: 35% */
+    width: 500px;
   }
-  #usergroupTable >>> colgroup col:nth-child(4) {
+  /* #usergroupTable >>> colgroup col:nth-child(4) {
     width: 8%
-  }
+  } */
 </style>

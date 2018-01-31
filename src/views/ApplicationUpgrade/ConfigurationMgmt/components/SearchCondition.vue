@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="ui-common">
   <el-row :gutter="40">
     <el-col :span="4">
       <div class="item-container">
@@ -48,17 +48,17 @@
     </el-col>
     <el-col :span="2">
       <div>
-        <el-button @click="_handleClearQuery">清空</el-button>
+        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHandleFilter">查询</el-button>
+      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 40px">搜索</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult">导出</el-button>
+      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 80px">导出</el-button>
       </div>
     </el-col>
   </el-row>

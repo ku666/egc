@@ -1,15 +1,15 @@
 
 <template>
-  <div class='usermgn'>
-    <div>
-      <template v-if="!contactFlag">
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="createContact" type="primary">添加</el-button>
-      </template>
-      <template v-else>
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="cancelContact" type="primary">取消添加</el-button>
-        <el-button class="action-btn" style="margin-bottom: 10px" @click="saveContact('contact')" type="primary">保存</el-button>
-      </template>
-    </div>
+  <div>
+
+    <template v-if="!contactFlag">
+      <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createContact" type="primary">添加</el-button>
+    </template>
+    <template v-else>
+      <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelContact" type="primary">取消添加</el-button>
+      <el-button class="action-btn" style="margin-bottom: 10px" @click="saveContact('contact')" type="primary">保存</el-button>
+    </template>
+  
     <el-form :model="contact" :inline="true" v-if="contactFlag" ref="contact" :rules="rules">
         <el-form-item label="联系类别" prop="contactType">
             <el-select v-model="contact.contactType" placeholder="请选择" class="user_el-select">
@@ -29,8 +29,8 @@
         <el-table-column prop="userContact" label="联系方式" width="498"></el-table-column>
         <el-table-column label="操作" width="70" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-                <img :src="deleteImg" style="width:20px">
+              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+                <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>
         </el-table-column>
@@ -114,6 +114,7 @@
           ],
           userContact: [
             { required: true, message: '请输入联系方式', trigger: 'blur,change' },
+            { max: 200, message: '长度不能超过200个字符' },
             { validator: validateUserContact }
           ]
         }
@@ -181,11 +182,9 @@
                   this.contactFlag = false
                   // 添加完contact对象后，重置contact对象
                   this.initContactInfo()
-                  this.$notify({
-                    title: '成功',
-                    message: '创建成功',
-                    type: 'success',
-                    duration: 2000
+                  this.$message({
+                    message: '保存成功！',
+                    type: 'success'
                   })
                 }.bind(this)
               )

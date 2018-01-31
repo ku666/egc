@@ -11,12 +11,12 @@
     <el-table :data="associtedUserRoleData" style="width: 100%" max-height="580" element-loading-text="拼命加载中" border>
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="roleName" label="角色名称" width="160"></el-table-column>
-        <el-table-column prop="roleUsers" label="角色已有成员" width="370"></el-table-column>
         <el-table-column prop="roleRemark" label="角色说明" width="289"></el-table-column>
+        <el-table-column prop="roleUsers" label="角色已有成员" width="370"></el-table-column>
         <el-table-column label="操作" width="100" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-                <img :src="deleteImg" style="width:20px">
+              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+                <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>
         </el-table-column>

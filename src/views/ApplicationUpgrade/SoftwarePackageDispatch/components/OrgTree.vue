@@ -1,13 +1,13 @@
 <template>
-<div id="softwaredispatchorg">
+<div class="ui-common">
   <el-input
-        placeholder="输入关键字进行过滤"
-        class="user_el-select"
-        v-model="filterText">
-      </el-input>
-    <div>
+    placeholder="输入关键字进行过滤"
+    class="user_el-select"
+    v-model="filterText">
+  </el-input>
+    <div class="tree">
       <el-tree
-        class="filter-tree"
+        class="el-org-tree"
         node-key="uuid"
         :data="orgsData"
         :props="defaultProps"
@@ -20,8 +20,8 @@
         :default-checked-keys="defaultChecked">
       </el-tree>
     </div>
-    <div class="dispatch-btn">
-      <el-button type="primary" @click="_confirmSelectdOrg" >确定</el-button>
+    <div style="margin-top: 20px; text-align: right;">
+      <el-button type="primary" @click="_confirmSelectdOrg" class="action-btn">下发</el-button>
     </div>
 </div>
 </template>
@@ -57,6 +57,7 @@ export default {
       getAllOrgs()
         .then(
           function (result) {
+            console.log(JSON.stringify(result))
             this.orgsDataTree = []
             this.expandedKeys = []
             this.expandedKeys.push(result.uuid)
@@ -115,5 +116,22 @@ export default {
 </script>
 
 <style scoped>
-
+.tree{
+  overflow:auto;
+  height:200px;
+  width:920px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+}
+.el-org-tree{
+  width: 100%;
+  height:199px;
+  overflow-x: scroll;
+}
+.el-tree>.el-tree-node{
+  display: inline-block !important;
+}
+.user_el-select {
+  width: 920px;
+}
 </style>

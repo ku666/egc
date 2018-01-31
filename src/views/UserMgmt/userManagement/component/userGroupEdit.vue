@@ -14,7 +14,7 @@
       <el-form-item label='用户组说明' prop='remark'>
         <el-input type='textarea' rows="3" v-model='editForm.remark' style="width:650px"></el-input>
       </el-form-item>
-      <div style="float:right">
+      <div style="text-align:center">
       <el-button class='cancel-btn' type='primary' @click="handleCancel('editForm')">取消</el-button>
       <el-button class='action-btn' style='margin-left: 10px' type='primary' @click="handleSave('editForm')">保存</el-button>
       </div>
@@ -712,41 +712,50 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 16%
+    /* width: 16% */
+    width: 120px;
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 14%
+    /* width: 14% */
+    width: 120px;
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 15%
+    /* width: 15% */
+    width: 140px;
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 15%
+    /* width: 15% */
+    width: 140px;
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 12%
+    /* width: 12% */
+    width: 100px;
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 18%
+    /* width: 18% */
+    width: 150px;
   }
-  #userTable >>> colgroup col:nth-child(7) {
+  /* #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  }
+  } */
   #userTable {
     margin-top: 15px
   }
   #roleTable >>> colgroup col:nth-child(1) {
-    width: 20%
+    /* width: 20% */
+    width: 200px;
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    width: 30%
+    /* width: 30% */
+    width: 220px;
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    width: 40%
+    /* width: 40% */
+    width: 250px;
   }
-  #roleTable >>> colgroup col:nth-child(4) {
+  /* #roleTable >>> colgroup col:nth-child(4) {
     width: 10%
-  }
+  } */
   #roleTable {
     margin-top: 15px
   }

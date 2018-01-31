@@ -2,7 +2,6 @@
   <div class="house-manager">
     <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view>
     <div class="tree-view-container">
-      <div class="house-list">
         <!-- 带分页表格 -->
         <div class="house-table">
           <el-table :data="tableData" stripe height="100%" v-loading="loading">
@@ -26,11 +25,10 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+        <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
         </el-pagination>
       </div>
     </div>
-  </div>
 </template>
 <script>
 import OrgHouseTreeView from './OrgHouseTreeView'

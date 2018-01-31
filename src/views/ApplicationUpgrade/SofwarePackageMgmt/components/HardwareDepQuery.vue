@@ -1,17 +1,21 @@
 <template>
-  <div id="hardware-info" >
-    <search-dep-condition  @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-dep-condition>
-    <el-row>
-      <el-col :span="24">
-        <div>
+  <div class="ui-common">
+    <div>
+      <search-dep-condition  @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-dep-condition>
+    </div>
+    <el-row class="flex-c" style="height: 100%">
+      <el-col :span="24" class="flex-1 flex-c">
+        <div style="margin-top: 20px" class="flex-1">
           <el-table :data="hardwareDepListData" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" size="small" :title="detailsTitle"><img :src="detailsImg"/></el-button>
+                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+                  <!-- <img :src="detailsImg"/> -->
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -68,7 +72,7 @@ export default {
         {
           colName: '软件包名称',
           prop: 'package_name',
-          width: 120
+          width: 200
         }, {
           colName: '软件包版本',
           prop: 'package_version',
@@ -80,7 +84,7 @@ export default {
         }, {
           colName: '应用&组件名称',
           prop: 'uuid',
-          width: 120
+          width: 300
         }, {
           colName: '前续软件包版本',
           prop: 'uuid',
@@ -141,7 +145,7 @@ export default {
               console.log(JSON.stringify(result))
               this.hardwareDepDetails = result.data
               this.dialogDetailsVisible = true
-              console.log('harware dep details -----------> ' + JSON.stringify(this.hardwareDepDetails))
+              console.log('harware dep details -----------> ' + JSON.stringify(result))
             }.bind(this)
           )
           .catch()
@@ -152,7 +156,7 @@ export default {
       getHardwareDepByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log(JSON.stringify(result))
+            console.log('hardware running env result ==== >  ' + JSON.stringify(result))
             this.hardwareDepListData = result.data.data
             this.total = result.data.totalCount
           }.bind(this)

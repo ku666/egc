@@ -129,7 +129,7 @@ export const getProviders = (data) => {
 
 // 5. 获取所有的供应商信息
 export const getAllProviders = () => {
-  return Axios.get(PROVIDER_PATH + '/getAllEnableProviders').then(res => res.data)
+  return Axios.get(PROVIDER_PATH + '/getAllProviders').then(res => res.data)
 }
 
 // 设备分类属性映射管理

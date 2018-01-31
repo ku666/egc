@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container" v-loading="loading">
     <div>
-      <el-input placeholder="小区名称" prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      <el-input placeholder="请输入小区名称" @keyup.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
       </el-input>
       <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
     </div>
@@ -19,7 +19,8 @@
   </div>
 </template>
 <script>
-import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+// import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
+import { getOrgTreeNextLevel } from '../../apis/orgManager'
 import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   props: {
@@ -90,10 +91,10 @@ export default {
       if (node.level > 0) {
         this.loading = true
         let condition = {}
-        condition.courtUuid = node.data.uuid
-        getAllOrgTreeByCourtUuid(condition).then(res => {
-          if (res.data.data != null) {
-            resolve(res.data.data)
+        condition.uuid = node.data.uuid
+        getOrgTreeNextLevel(condition).then(res => {
+          if (res.data.data != null && res.data.data.children != null) {
+            resolve(res.data.data.children)
           } else {
             resolve([])
           }

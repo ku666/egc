@@ -6,7 +6,7 @@
 
     <el-tabs style="height: 430px; margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name = 'basic'>
-        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='110px' :rules='rules' :inline='true' >
+        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='150px' :rules='rules' :inline='true' >
           <el-form-item label='设备编码' prop='typeCode'>
             <el-input v-model='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
           </el-form-item>

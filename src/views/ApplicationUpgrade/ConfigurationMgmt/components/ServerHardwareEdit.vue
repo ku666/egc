@@ -1,9 +1,9 @@
 <template>
   <div>
-    <!-- 服务器硬件	省（直辖市）	市/区	小区名称
-    CPU型号	CPU核数	内存容量	硬盘容量	描述	服务器UUID	BIOS版本	CPU主频（GHz）
-    服务器用途	物理机房	安装的机柜	安装的机柜位置（U）
-    物理网卡1名称？	物理网卡1 MAC？	物理网卡2名称？	物理网卡2 MAC？	硬盘1序列号SN？	硬盘1容量？	硬盘2序列号SN？	硬盘2序列号SN？	 -->
+    <!-- 服务器硬件	序号	省（直辖市）	市/区	小区名称	服务器产品名称	服务器SN	服务器厂商	服务器类型/型号	描述	
+    CPU型号	CPU核数	CPU主频（GHz）	服务器UUID	BIOS版本	内存容量	硬盘容量	
+    物理网卡1名称？	物理网卡1 MAC？	物理网卡2名称？	物理网卡2 MAC？	硬盘1序列号SN？	硬盘1容量？	硬盘2序列号SN？	硬盘2序列号SN？	
+    服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
     <el-form :inline="true" :model="auServerDetails">
       <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
@@ -23,11 +23,8 @@
       <el-form-item label="CPU核数" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfCore"></el-input>
       </el-form-item>
-      <el-form-item label="内存容量" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfLhd"></el-input>
-      </el-form-item>
-      <el-form-item label="硬盘容量" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfPhd"></el-input>
+       <el-form-item label="CPU主频（GHz）" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.cpuFreq"></el-input>
       </el-form-item>
       <el-form-item label="服务器UUID" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.uuid"></el-input>
@@ -35,9 +32,13 @@
       <el-form-item label="BIOS版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.biosVersion"></el-input>
       </el-form-item>
-      <el-form-item label="CPU主频（GHz）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.cpuFreq"></el-input>
+      <el-form-item label="内存容量" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfLhd"></el-input>
       </el-form-item>
+      <el-form-item label="硬盘容量" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfPhd"></el-input>
+      </el-form-item>
+     
 
       <template v-if=" auServerDetails.auNetAdapters !== null">
         <div v-for="(detail, index) in auServerDetails.auNetAdapters" :key="detail.uuid">
@@ -59,7 +60,12 @@
         </el-form-item>
         </div>
        </template>
-
+       <el-form-item label="固资编号" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.aeestNo"></el-input>
+      </el-form-item>
+      <el-form-item label="管理IP" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.mgmtIp"></el-input>
+      </el-form-item>
        <el-form-item label="服务器用途" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.roles" :maxlength="maxlength"></el-input>
       </el-form-item>
@@ -72,12 +78,24 @@
       <el-form-item label="安装的机柜位置（U）" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.cabU" :maxlength="maxlength"></el-input>
       </el-form-item>
+       <el-form-item label="运行状态" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.status"></el-input>
+      </el-form-item>
+      <el-form-item label="维护人" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.operator"></el-input>
+      </el-form-item>
+      <el-form-item label="维保服务" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.serviceLevel"></el-input>
+      </el-form-item>
+      <el-form-item label="服务到期时间" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="auServerDetails.serviceDuring"></el-input>
+      </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
 
-      <div>
-        <el-button type="primary" @click="callBackSaveEvent">保 存</el-button>
+      <div style="text-align: center">
+        <el-button @click="callBackSaveEvent" class="action-btn">保 存</el-button>
       </div>
     </el-form>
   </div>
@@ -95,10 +113,16 @@ export default {
       formLabelWidth: '150px',
       isInptDisabled: true,
       maxlength: 30,
+      tempAeestNo: undefined,
+      tempMgmtIp: undefined,
       tempFunctionName: undefined,
       tempDeployment: undefined,
       tempCabinet: undefined,
       tempCabu: undefined,
+      tempStatus: undefined,
+      tempOperator: undefined,
+      tempServiceLevel: undefined,
+      tempServiceDuring: undefined,
       tempRemark: undefined
     }
   },
@@ -130,8 +154,11 @@ export default {
     // 校验数据是否更改
     validateDetailsChanged () {
       if (this.tempRemark === this.auServerDetails.remark && this.tempFunctionName === this.auServerDetails.roles &&
-      this.tempDeployment === this.auServerDetails.deployment && this.tempDeployment === this.auServerDetails.deployment &&
-      this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU) {
+          this.tempDeployment === this.auServerDetails.deployment && this.tempDeployment === this.auServerDetails.deployment &&
+          this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU &&
+          this.tempAeestNo === this.auServerDetails.aeestNo && this.tempMgmtIp === this.auServerDetails.mgmtIp &&
+          this.tempOperator === this.auServerDetails.operator && this.tempServiceLevel === this.auServerDetails.serviceLevel &&
+          this.tempServiceDuring === this.auServerDetails.serviceDuring) {
         return false
       }
       return true
@@ -148,6 +175,11 @@ export default {
     this.tempCabinet = this.auServerDetails.cabinet
     this.tempCabu = this.auServerDetails.cabU
     this.tempRemark = this.auServerDetails.remark
+    this.tempAeestNo = this.auServerDetails.aeestNo
+    this.tempMgmtIp = this.auServerDetails.mgmtIp
+    this.tempOperator = this.auServerDetails.operator
+    this.tempServiceLevel = this.auServerDetails.serviceLevel
+    this.tempServiceDuring = this.auServerDetails.serviceDuring
   }
 }
 </script>

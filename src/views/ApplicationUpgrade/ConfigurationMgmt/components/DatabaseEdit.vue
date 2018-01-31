@@ -26,7 +26,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.server.name"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.serverId"></el-input>
       </el-form-item>
       <el-form-item label="操作系统提供者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="databaseEditDetails.provider" :maxlength="maxlength"></el-input>
@@ -36,8 +36,8 @@
         <el-input class="upgrade_el-input" v-model="databaseEditDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
 
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo">保 存</el-button>
       </div>
     </el-form>
   </div>

@@ -528,8 +528,8 @@ Mock.mock(/\/egc-mdmmgmtapp\/deviceAttrDomain.*/, function () {
 
 const PROVIDER_PATH = '/egc-mdmmgmtapp/provider'
 
-Mock.mock(PROVIDER_PATH + '/getAllEnableProviders', function () {
-  console.log('mock getAllEnableProviders')
+Mock.mock(PROVIDER_PATH + '/getAllProviders', function () {
+  console.log('mock getAllProviders')
   return {
     'message': 'success!',
     'code': '00000',

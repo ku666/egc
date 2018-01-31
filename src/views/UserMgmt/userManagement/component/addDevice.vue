@@ -1,5 +1,5 @@
 <template>
-  <div class = "usermgn">
+  <div class = "ui-common">
     <div>
       <!-- 资源类别 -->
       <el-form align="left" :inline="true">
@@ -10,14 +10,14 @@
           </el-form-item>
           <el-form-item label="设备类型">
               <el-select v-model="device" @visible-change='getDeviceList' placeholder="请选择">
-                  <el-option v-for="deviceOpt in deviceList" :key="deviceOpt.deviceTypeCode" :label="deviceOpt.deviceTypeName" :value="deviceOpt.deviceTypeCode"> </el-option>
+                  <el-option v-for="deviceOpt in deviceList" :key="deviceOpt.itemCode" :label="deviceOpt.itemName" :value="deviceOpt.itemCode"> </el-option>
               </el-select>
           </el-form-item>
           <el-form-item label="供应商">
               <el-select v-model="provider" @visible-change='getProviders' placeholder="请选择">
                   <el-option v-for="providerOpt in providerList" :key="providerOpt.itemCode" :label="providerOpt.itemName" :value="providerOpt.itemCode"> </el-option>
               </el-select>
-              <el-button class="search-btn" type="primary" icon="el-icon-search" @click="handleSearch" style="margin-left:10px">搜索</el-button>
+              <el-button class="search-btn" type="primary" @click="handleSearch" style="margin-left:10px">搜索</el-button>
           </el-form-item>
        </el-form>
     </div>
@@ -42,7 +42,6 @@
 
       <!-- 设备清单 -->
       <div v-show="showGrid">
-        <p>所选范围内共有 {{ this.total }} 台设备。</p>
         <el-table
           ref="multipleTable"
           :data="tableData"
@@ -63,34 +62,27 @@
                       :total="total"
                       @size-change="handleSizeChange"
                       @current-change="handleCurrentChange"
-                      :page-sizes="[10,20,30]"
+                      :page-sizes="[5,10,20]"
                       :page-size="pageSize"
                       :current-page="currentPage"
                       style="margin-top:10px">
         </el-pagination>
+
         <!-- 操作类型清单 -->
-        <p style="margin-top:15px">请选择操作类型</p>
-        <el-table
-          style="margin-top:10px"
-          id = "typeTable"
-          ref="multipleTableHandleType"
-          :data="tableDataHandleType" 
-          border
-          @selection-change="handleTypeSelectionChange">
-          <el-table-column
-            label="选择"
-            type="selection">
-          </el-table-column>
-          <el-table-column        
-            v-for="(item, index) in paramsType"
-            :label="item.title"
-            :prop="item.prop"
-            :key="index">
-          </el-table-column>
-        </el-table>
+         <el-row style="margin-top:20px" >
+          <el-col>
+            <el-form align="left" :inline="true">
+              <el-form-item label="添加操作类型">
+                <el-select v-model="actionSelectedType" placeholder="请选择设备资源的操作类型" multiple style="width: 240px;">
+                  <el-option v-for="action in tableDataHandleType" :key="action.itemCode" :label="action.itemName" :value="action.itemCode"> </el-option>
+                </el-select>
+              </el-form-item>
+            </el-form>
+          </el-col>
+        </el-row>
         <!-- 操作 -->
-        <el-row align="right">
-          <el-col align="right">
+        <el-row align="center">
+          <el-col align="center">
           <span class="dialog-footer">
             <el-button class='cancel-btn' @click='cancelEvent' type='primary'>取消</el-button>
             <el-button class='action-btn' @click='handleSave' type='primary'>保存</el-button>
@@ -104,7 +96,7 @@
 <script>
 import {
   getResourceTypeOptions,
-  getHandelTypeOptions,
+  getActionTypeOptions,
   getProviderList,
   getDeviceList,
   getDeviceListPage
@@ -138,12 +130,13 @@ export default {
       selectedName: null,
       tableData: undefined,
       tableDataHandleType: undefined,
+      actionSelectedType: undefined,
       deviceCount: undefined,
       roleServiceList: undefined,
       defaultAppResourceCode: '',
       total: 0,
       currentPage: 1,
-      pageSize: 10,
+      pageSize: 5,
       providerVal: '5',
       treeProps: {
         label: 'label',
@@ -151,14 +144,14 @@ export default {
       },
       dictData: {
         resourceTypeDict: 'RESC_TYPE',
-        actTypeDict: 'ACT_TYPE'
+        actionType: 'ACT_TYPE'
       },
       listParam: {
         currentPage: '1',
-        pageSize: '10',
+        pageSize: '5',
         roleDeviceQueryRequestVo: {
           resourceType: '',
-          deviceCode: '',
+          deviceType: '',
           providerCode: '',
           roleUuid: this.form.uuid
         }
@@ -168,8 +161,8 @@ export default {
         itemItem: ''
       },
       emptydeviceTypeData: {
-        deviceTypeCode: '',
-        deviceTypeName: ''
+        itemCode: '',
+        itemItem: ''
       },
       paramsType: [
         {
@@ -179,12 +172,12 @@ export default {
       ],
       params: [
         {
-          title: '设备类型',
-          prop: 'deviceTypeName'
+          title: '设备资源名称',
+          prop: 'resourceName'
         },
         {
-          title: '设备名称',
-          prop: 'resourceName'
+          title: '设备类型',
+          prop: 'deviceTypeName'
         },
         {
           title: '供应商',
@@ -209,7 +202,7 @@ export default {
       this.getResourceTypeList()
       this.getDeviceList()
       this.getProviders()
-      this.getHandelTypeList()
+      this.getActionTypeOptionsList()
     },
     // 资源类型
     getResourceTypeList () {
@@ -235,13 +228,14 @@ export default {
       console.log('loadData getResourceTypeList end')
     },
     // 操作类型
-    getHandelTypeList () {
+    getActionTypeOptionsList () {
       console.log('loadData getHandelTypeList Start : ' + this.dictData.actTypeDict)
-      getHandelTypeOptions(this.dictData)
+      getActionTypeOptions(this.dictData)
         .then(
           function (result) {
             this.tableDataHandleType = result
-            console.log('loadData getHandelTypeList successfully')
+            console.log('loadData getActionTypeOptions successfully')
+            console.log(result)
           }.bind(this)
         )
         .catch(function (error) {
@@ -254,7 +248,7 @@ export default {
       getDeviceList()
         .then(
           function (result) {
-            this.deviceList = result.deviceTypeList
+            this.deviceList = result
             result.unshift(this.emptydeviceTypeData)
             console.log('loadData getDeviceList successfully')
           }.bind(this)
@@ -286,7 +280,6 @@ export default {
         roleUuid: this.form.uuid
       }
       this.items = []
-      var actionType = []
 
       // 保存选择的设备
       console.log('保存选择的设备 SaveData....')
@@ -297,18 +290,15 @@ export default {
           this.items.push(node.uuid.toString())
         }
       } else {
-        this.$msgbox('请选择至少一个服务')
+        if (this.appResource === '4') {
+          this.$msgbox('请选择至少一个设备组')
+        } else {
+          this.$msgbox('请选择至少一个指定设备')
+        }
         return
       }
       // 保存所选择的操作权限
-      if (this.multipleTableHandleType && (this.multipleTableHandleType.length > 0)) {
-        for (let index = 0; index < this.multipleTableHandleType.length; index++) {
-          var tmpHandelData = this.multipleTableHandleType[index]
-          actionType.push(tmpHandelData['itemCode'].toString())
-        }
-      }
-
-      savedata.actionTypeList = actionType
+      savedata.actionTypeList = this.actionSelectedType
       savedata.resourceUuidList = this.items
       console.log('call savedata....')
       console.log(savedata)
@@ -323,12 +313,12 @@ export default {
       console.log('uuid start:' + this.form.uuid)
       console.log('resource type:')
       console.log('resourceType:' + this.appResource)
-      console.log('deviceCode:' + this.device)
+      console.log('deviceType:' + this.device)
       console.log('providerCode:' + this.provider)
       this.listParam.roleDeviceQueryRequestVo.uuid = this.form.uuid
       this.listParam.roleDeviceQueryRequestVo.roleUuid = this.form.uuid
       this.listParam.roleDeviceQueryRequestVo.resourceType = this.appResource
-      this.listParam.roleDeviceQueryRequestVo.deviceCode = this.device
+      this.listParam.roleDeviceQueryRequestVo.deviceType = this.device
       this.listParam.roleDeviceQueryRequestVo.providerCode = this.provider
       this.listParam.pageSize = this.pageSize
       this.listParam.currentPage = this.currentPage
@@ -388,7 +378,7 @@ export default {
     refresh () {
       console.log('refresh uuid:' + this.form.uuid)
       this.handleSearch()
-      this.$refs.multipleTableHandleType.clearSelection()
+      this.actionSelectedType = []
     },
     reset () {
       console.log('addDevice reset')
@@ -398,7 +388,7 @@ export default {
       if (this.tableData.length > 0) {
         this.tableData = []
       }
-      this.$refs.multipleTableHandleType.clearSelection()
+      this.actionSelectedType = []
     }
   },
   created: function () {

@@ -1,6 +1,23 @@
 <template>
-<div>
+<div class="ui-common">
+  <div>
+
+  
   <el-row :gutter="40">
+    <el-col :span="6">
+      <div class="item-container">
+        <span class="sub-title">选择日期</span>
+        <el-date-picker
+          v-model="dataValue"
+          type="datetimerange"
+          :picker-options="pickerOptions"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          align="right">
+        </el-date-picker>
+      </div>
+    </el-col>
     <el-col :span="4">
       <div class="item-container">
       <span class="sub-title">选择省</span>
@@ -40,20 +57,6 @@
         </el-select>
       </div>
     </el-col>
-    <el-col :span="8">
-      <div class="item-container">
-        <span class="sub-title">选择日期</span>
-        <el-date-picker
-          v-model="dataValue"
-          type="datetimerange"
-          :picker-options="pickerOptions"
-          range-separator="至"
-          start-placeholder="开始日期"
-          end-placeholder="结束日期"
-          align="right">
-        </el-date-picker>
-      </div>
-    </el-col>
     <el-col :span="4">
       <div class="item-container">
         <span class="sub-title">版本</span>
@@ -61,20 +64,24 @@
       </div>
     </el-col>
   </el-row>
-  <el-row :gutter="40">
+
+  </div>
+
+  <div style="margin-top: 20px">
+  <el-row :gutter="20">
     <el-col :span="6">
       <div class="item-container">
         <span class="sub-title">软件包名称</span>
         <el-input v-model="searchConDetails.condition" placeholder="请输入软件包名称" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="4">
       <div class="item-container">
-        <span class="sub-title">查询条件</span>
-        <el-input v-model="searchConDetails.condition" placeholder="请输入查询关键字" clearable :maxlength="maxlength"></el-input>
+        <span class="sub-title">搜索条件</span>
+        <el-input v-model="searchConDetails.condition" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
-    <el-col :span="6">
+    <el-col :span="4">
       <div class="item-container">
         <span class="sub-title">开发者</span>
         <el-input v-model="searchConDetails.condition" placeholder="请输入开发者名称" clearable :maxlength="maxlength"></el-input>
@@ -83,21 +90,24 @@
     <div>
     <el-col :span="2">
       <div>
-        <el-button @click="_handleClearQuery">清空</el-button>
+        <el-button @click="_handleClearQuery" class="cancel-btn" style="margin-left: 40px">清空</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHandleFilter">查询</el-button>
+      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 80px">搜索</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult">下载</el-button>
+      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 120px">导出</el-button>
       </div>
     </el-col>
     </div>
   </el-row>
+
+  </div>
+
 </div>
 </template>
 

@@ -18,7 +18,7 @@
       <el-form-item label='用户组说明' prop='remark'>
         <el-input type='textarea' rows='3' v-model='createForm.remark' placeholder='请输入用户组说明' style="width:650px"></el-input>
       </el-form-item>
-      <div style="float:right">
+      <div style="text-align:center">
       <el-button class='cancel-btn' type='primary' @click="handleCancel('createForm')">取消</el-button>
       <el-button class='action-btn' style='margin-left: 10px' type='primary' @click="handleSave('createForm')">保存</el-button>
       </div>
@@ -66,7 +66,7 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        userType: undefined
+        userType: '1'
       }
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
@@ -144,7 +144,7 @@ export default {
         parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
-        userType: undefined
+        userType: '1'
       },
       formData: undefined
     }

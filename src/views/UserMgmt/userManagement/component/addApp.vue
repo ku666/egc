@@ -1,5 +1,5 @@
 <template>
-  <div class = "usermgn">
+  <div class = "ui-common">
     <el-form>
         <el-row>
            <el-col v-if="isShowAppType">
@@ -15,8 +15,8 @@
         <el-row>
           <el-col v-if="isShowTree">
                   <span>菜单树</span>
-                  <div class = "div_Tree">
-                    <el-tree 
+                  <div>
+                    <el-tree class="el-menu-tree"
                               :data="treeData"
                               node-key="uuid"
                               :check-strictly = "true"
@@ -27,19 +27,18 @@
                               @check-change="handleCheckChange"
                               show-checkbox
                               ref="tree"
-                              class="app_tree"
                               default-expand-all>
                     </el-tree>
                 </div>
               </el-col>
           </el-row>
         <!-- 按钮区域 -->
-        <el-row align="right">
-          <el-col align="right">
-            <el-button class="cancel-btn" @click="cancelEvent" type="primary" icon="edit">
+        <el-row align="center">
+          <el-col align="center">
+            <el-button class="cancel-btn" @click="cancelEvent" type="primary" >
               取消
             </el-button>
-            <el-button class="action-btn" @click="saveData" type="primary" icon="edit">
+            <el-button class="action-btn" @click="saveData" type="primary" >
               保存
             </el-button>
           </el-col>
@@ -229,6 +228,7 @@ export default {
     },
     refresh () {
       console.log('refresh uuid:' + this.form.uuid)
+      this.handleChange()
     },
     reset () {
       console.log('addApp reset')

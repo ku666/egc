@@ -1,9 +1,11 @@
 <template>
-  <div id="hardware-info" >
-    <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
-    <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24">
-        <div>
+  <div class="ui-common">
+    <div>
+      <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
+    </div>
+    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+      <el-col :span="24" class="flex-1 flex-c">
+        <div style="margin-top: 20px" class="flex-1">
           <el-table :data="databaseListData" stripe border>
             <el-table-column  type="index" label="序号" width="50" v-loading="loading">
             </el-table-column>
@@ -11,10 +13,18 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" size="small" :title="detailsTitle"><img :src="details" /></el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" size="small" :title="editTitle"><img :src="edit" /></el-button>
-                <el-button @click="_handleSynData(scope.$index)" type="text" size="small" :title="refreshTitle"><img :src="refresh"/></el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" size="small" :title="historyTitle"><img :src="history"/></el-button>
+                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+                  <!-- <img :src="details" /> -->
+                </el-button>
+                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                  <!-- <img :src="edit" /> -->
+                </el-button>
+                <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
+                  <!-- <img :src="refresh"/> -->
+                </el-button>
+                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+                  <!-- <img :src="history"/> -->
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -35,17 +45,17 @@
       </el-col>
     </el-row>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <database-details :databaseDetails="databaseDetails"></database-details >
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
         <database-edit :databaseEditDetails="databaseEditDetails" @saveDatabaseInfoEvent="_updateDatabaseInfo"></database-edit>
       </el-dialog>
     </div>
     <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%" :close-on-click-modal=false>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <database-history :databaseHistoryData="databaseHistoryData"></database-history>
       </el-dialog>
     </div>
