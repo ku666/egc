@@ -410,6 +410,26 @@ export default {
             }]
           }
         ]
+      },
+      {
+        id: '6',
+        title: '设备管理',
+        icon: 'el-icon-menu',
+        url: '/devicemgmt/devicemgmtindex',
+        menus: [
+          {
+            title: '设备基本维护',
+            url: '/devicemgmt/deviceInfoMaintain',
+            icon: null,
+            subs: null
+          },
+          {
+            title: '固件升级',
+            url: '/devicemgmt/devicefirmwareupdate',
+            icon: null,
+            subs: null
+          }
+        ]
       }
     ],
     token: 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJsaW56aG9uZzEyMyIsImV4cCI6MTUxNTQ5NDI0Mn0.ERXV7NOoodRngLCVSemsxxJ_pdj3TxF92z5hkb7NMeKMPxJ3HCy4rogD-ndCDLw3A1AhTMxOgfLNCRYZG_vQfLwaFIlbNInmk0Q2wetMgN0EgwIt2LWDjEXkFfIst7aIS_0j6dAQHWnpEiKloyBUWWO-RGbgbbXjqdbaBfFIF98'
