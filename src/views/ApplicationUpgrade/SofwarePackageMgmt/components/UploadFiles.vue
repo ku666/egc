@@ -44,17 +44,12 @@ export default {
       if (fileLength > 0) {
         uploadExcelFiles(this.uploadFiles)
         .then((res) => {
-          console.info('res code ' + res.code)
-          if (res.code === '200') {
-            this.$message({
-              message: '上传成功',
-              type: 'success',
-              duration: 2000,
-              center: true,
-              showClose: true
-            }).bind(this)
-          }
-        }).catch(
+          this.$message({
+            message: '上传成功!',
+            type: 'success'
+          }).bind(this)
+        }
+        ).catch(
           function (error) {
             this.$message({
               message: error.message,

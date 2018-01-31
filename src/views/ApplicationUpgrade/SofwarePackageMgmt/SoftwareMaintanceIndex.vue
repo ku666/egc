@@ -3,7 +3,7 @@
     <el-row :gutter="40">
       <el-col :span="4">
         <div class="item-container">
-          <span class="sub-title">软件名名称</span>
+          <span class="sub-title">软件名称</span>
           <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
         </div>
       </el-col>
@@ -279,9 +279,9 @@ export default {
     // 查询
     _handleFilter () {
       this.loading = false
-      if (this.validateInput()) {
-        this.loadData()
-      }
+      // if (this.validateInput()) {
+      this.loadData()
+      // }
     },
 
     // 验证查询输入内容是否为空

@@ -8,6 +8,21 @@
     </el-tabs>
     <el-container style="margin-top:20px; text-align:center">
     <el-form ref='editForm' v-show='showSummary' label-width='100px' :model='editForm' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='editForm.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in editForm.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='用户组名称' prop='usergroupName' class='is-required'>
         <el-input v-model='editForm.usergroupName' placeholder='请输入用户组名称'></el-input>
       </el-form-item>
@@ -108,7 +123,8 @@ import {
   // deleteDirUserGroup,
   deleteDirUser,
   deleteAssRole,
-  checkUserGroupName
+  checkUserGroupName,
+  listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -121,7 +137,7 @@ export default {
     editForm: {
       usergroupName: undefined,
       remark: undefined,
-      // parentUsergroupName: undefined,
+      userType: undefined,
       uuid: undefined
     }
   },
@@ -129,6 +145,19 @@ export default {
     gridList
   },
   methods: {
+    getUserTypeList () {
+      listUserType()
+        .then(
+          function (result) {
+            this.createForm.userTypeList = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
+          }
+        )
+    },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
@@ -550,23 +579,7 @@ export default {
         )
     },
     handleCancel (editForm) {
-      // this.queryCancel.currentPage = 1
-      // this.queryCancel.pageSize = 5
-      // this.queryCancel.usergroupUuid = this.usergroupUuid
-      // console.log(this.queryCancel)
       this.$emit('listenToChildCloseEvent')
-      // getUserGroupData(this.queryCancel)
-      //   .then(
-      //     function (result) {
-      //       this.editForm.usergroupName = result.usergroupBaseVo.usergroupName
-      //       this.editForm.remark = result.usergroupBaseVo.remark
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
     }
   },
     // watch: {
@@ -671,7 +684,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '登陆 ID',
+          title: '登录 ID',
           prop: 'userName'
         },
         {

@@ -21,7 +21,7 @@
       </el-tree>
     </div>
     <div style="margin-top: 20px; text-align: right;">
-      <el-button type="primary" @click="_confirmSelectdOrg" class="action-btn">下发</el-button>
+      <el-button @click="_confirmSelectdOrg" class="action-btn" type="primary">下发</el-button>
     </div>
 </div>
 </template>

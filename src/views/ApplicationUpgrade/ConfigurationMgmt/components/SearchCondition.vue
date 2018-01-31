@@ -42,7 +42,7 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-        <span class="sub-title">查询条件</span>
+        <span class="sub-title">搜索条件</span>
         <el-input v-model="searchConDetails.condition" placeholder="请输入查询关键字" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
