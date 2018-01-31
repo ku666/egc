@@ -1,8 +1,6 @@
 <template>
 <div class="ui-common">
   <div>
-
-  
   <el-row :gutter="40">
     <el-col :span="6">
       <div class="item-container">
@@ -64,11 +62,10 @@
       </div>
     </el-col>
   </el-row>
-
   </div>
 
   <div style="margin-top: 20px">
-  <el-row :gutter="20">
+  <el-row :gutter="40">
     <el-col :span="6">
       <div class="item-container">
         <span class="sub-title">软件包名称</span>
@@ -81,12 +78,7 @@
         <el-input v-model="searchConDetails.condition" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
-    <el-col :span="4">
-      <div class="item-container">
-        <span class="sub-title">开发者</span>
-        <el-input v-model="searchConDetails.condition" placeholder="请输入开发者名称" clearable :maxlength="maxlength"></el-input>
-      </div>
-    </el-col>
+    
     <div>
     <el-col :span="2">
       <div>

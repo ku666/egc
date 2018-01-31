@@ -4,7 +4,7 @@ import Axios from '@/assets/js/AxiosPlugin'
 let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/scp-usermgmtcomponent'
 const ADDR_BASE_PATH = '/egc-mdmcomponent'
-const ORGTREE_BASE_PATH = '/egc-applicationupgradecomponent'
+// const ORGTREE_BASE_PATH = '/egc-applicationupgradecomponent'
 // 获取省份
 export const getProvinceDataList = (params) => {
   console.log('->>>>>>>>>>>>>   ' + JSON.stringify(params))
@@ -34,9 +34,10 @@ export const getDisctrictDataList = (params) => {
 
 // 主数据根节点
 export const getAllOrgs = () => {
-  // return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
+  // return Axios.get(ORGTREE_BASE_PATH + '/aupackagedispatches/listCourts'
   // ).then(res => res.data)
-  return Axios.get(ORGTREE_BASE_PATH + '/aupackagedispatches/listCourts'
+
+  return Axios.get(contextPath + '/aupackagedispatches/listOrgTree'
   ).then(res => res.data)
 }
 

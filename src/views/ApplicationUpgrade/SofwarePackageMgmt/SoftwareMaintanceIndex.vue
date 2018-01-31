@@ -1,7 +1,7 @@
 <template>
   <div class="ui-common">
     <el-row :gutter="40">
-      <el-col :span="4">
+      <el-col :span="6">
         <div class="item-container">
           <span class="sub-title">软件名称</span>
           <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
@@ -10,30 +10,30 @@
 
       <el-col :span="4">
         <div class="item-container">
-          <span class="sub-title">版本号</span>
+          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;版本号</span>
           <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
         </div>
       </el-col>
 
       <el-col :span="4">
         <div class="item-container">
-          <span class="sub-title">开发者</span>
+          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
           <el-input v-model="searchConditionList.updateUser" placeholder="请输入开发者姓名" clearable></el-input>
         </div>
       </el-col>
 
-      <el-col :span="2">
+      <el-col :span="3">
         <div>
           <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
         </div>
       </el-col>
 
-      <el-col :span="2">
-        <el-button type="primary" @click="_handleFilter" class="search-btn" style="margin-left: 40px">查询</el-button>
+      <el-col :span="3">
+        <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
       </el-col>
 
       <el-col :span="2">
-        <el-button type="info" @click="_handleRegister" class="action-btn" style="margin-left: 80px">注册</el-button>
+        <el-button type="info" @click="_handleRegister" class="action-btn">注册</el-button>
       </el-col>
 
     </el-row>
