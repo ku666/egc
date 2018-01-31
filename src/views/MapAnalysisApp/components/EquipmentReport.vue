@@ -46,6 +46,12 @@ export default {
       tableData1: [],
       onlinedata: [],
       totaldata: [],
+      color: [
+        '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
+        '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
+        '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
+        '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
+      ], // 饼图颜色
       cellDetailsList: {} // 小区详细信息
       // currentPage: 1, // 当前页
       // pageSize: 10, // 多少条数据
@@ -145,12 +151,13 @@ export default {
           {
             name: '设备总数量',
             type: 'pie',
-            radius: '50%',
+            radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
             data: this.totaldata,
             // roseType: 'radius',
+            color: this.color,
             label: {
               emphasis: {
                 show: true,
@@ -198,12 +205,13 @@ export default {
           type: 'scroll',
           data: this.onlinenames
         },
+        color: this.color,
         calculable: true,
         series: [
           {
             name: '实时在网数量',
             type: 'pie',
-            radius: [100, 155],
+            radius: [100, 160],
             center: ['50%', '50%'],
             selectedMode: 'single',
             avoidLabelOverlap: false,
