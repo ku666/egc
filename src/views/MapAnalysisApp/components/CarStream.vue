@@ -375,7 +375,6 @@ export default {
           var data = res.data.data
           this.sortData(data)
           this.chartInit()
-
         } else {
           this.isReponseData = true
           this.errMessage(res.data.message)

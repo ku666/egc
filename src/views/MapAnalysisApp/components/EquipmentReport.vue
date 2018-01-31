@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="closeDialog">
     <!-- <div slot="title">
       <span class="pull-left">设备数报表</span>
     </div> -->
@@ -60,10 +60,9 @@ export default {
         '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
         '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
       ], // 饼图颜色
-      cellDetailsList: {} // 小区详细信息
-      // currentPage: 1, // 当前页
-      // pageSize: 10, // 多少条数据
-      // total: 20 // 数据条数
+      cellDetailsList: {}, // 小区详细信息
+      equipmentcharts: {},
+      equipmentonlinecharts: {}
     }
   },
   methods: {
@@ -103,35 +102,11 @@ export default {
       this.isTableShow = true
       this.tableData1 = this.tableData
     },
-    // sizeChange: function (val) {
-    //   this.pageSize = val
-    //   // this.getPaging()
-    // },
-    // // 分页组件当前页变化
-    // currentChange: function (val) {
-    //   this.currentPage = val
-    //   // this.getPaging()
-    // },
-    // getData (params = {}) {
-    //   let condition = {}
-    //   condition.pageNo = this.currentPage
-    //   condition.pageSize = this.pageSize
-    //   getListDeviceForPage(Object.assign({}, condition, params))
-    //     .then(res => {
-    //       if (res.data.code === '00000') {
-    //         let tableD = res.data.data.audioClip
-    //         tableD.map(function (item, index, arr) {
-    //           let d = new Date(item.createTime)
-    //           item.createTime = d.toLocaleString()
-    //         }, this)
-    //         this.tableData = tableD
-    //         this.total = res.data.data.total
-    //       }
-    //     })
-    // },
     chartInit () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
       let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      this.equipmentcharts = equipmentcharts
+      this.equipmentonlinecharts = equipmentonlinecharts
       // 设备数量数据
       let option = {
         backgroundColor: 'rgba(0,0,20,0.1)',
@@ -316,6 +291,10 @@ export default {
           this.isOnlineReponseData = true
         })
       })
+    },
+    closeDialog () {
+      this.equipmentcharts.dispose()
+      this.equipmentonlinecharts.dispose()
     }
   }
 }
