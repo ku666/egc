@@ -66,11 +66,11 @@
                 </el-col>
               </el-row>
             </el-form-item>
+            <div style='text-align: center'>
+              <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
+              <el-button @click='saveMapping' type='primary' class="action-btn" :disabled='viewFlag'>保存</el-button>
+            </div>
           </el-form>
-        </div>
-        <div style='text-align: center'>
-          <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
-          <el-button @click='saveMapping' type='primary' class="action-btn" :disabled='viewFlag'>保存</el-button>
         </div>
       </el-tab-pane>
     </el-tabs>
