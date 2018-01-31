@@ -159,7 +159,7 @@ export default {
         deleteDeviceAttrDomain(domain.uuid).then(res => {
           this.$message({
             message: '刪除成功!',
-            type: 'warning'
+            type: 'success'
           })
           this.getDomains({})
         })
