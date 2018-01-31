@@ -14,8 +14,8 @@ module.exports = {
         target: 'http://172.16.30.46:8082/'
       },
       '/egcmapanalysis': {
-      // '/egc-mapanalysiscomponent': {
-        // target: 'http://172.16.30.73:8082/' //
+      // '/egc-mapanalysiscomponent/egcmapanalysis': {
+        // target: 'http://172.16.30.74:8082/' //
         target: 'http://192.168.0.186:9033/' //
       },
       '/profile': {

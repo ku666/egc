@@ -1,8 +1,8 @@
 <template>
-  <div class="mapcontainer">
+  <div class="mapcontainer ui-common">
     <div class="searchBox">
       <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-      <el-button type="primary" @click="searchCourt">查询</el-button>
+      <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
     </div>
     <car-stream ref="carStream"></car-stream>
     <stream-people ref="streamPeople"></stream-people>
@@ -29,7 +29,7 @@
 </template>
 <script>
 /* eslint-disable */
-import { getCourtList,getCourtInfo } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import chooseImg from '@/views/MapAnalysisApp/assets/images/u346.png'
 import hdmap from 'hdmap'
@@ -53,7 +53,7 @@ export default {
       chooseList: [],// 按照搜索的出来的小区列表数据
       textHtml: '',
       showCourtName: '',// 当前选中的小区名字
-      courtId: '',// 当前选中的小区id
+      courtUuid: '',// 当前选中的小区id
       searchCourtName: ''
     }
   },
@@ -78,7 +78,9 @@ export default {
     // 查询小区列表数据，初始化全国小区列表点位
     getCourtList().then(res => {
       // console.log(res)
+      let msgType = 'warning'
       if (res.data.code === '00000') {
+        msgType = 'success'
         let list = res.data.data
         this.courtList = list
         let test = [[113.619942, 23.304629],[108.93,34.27],[116.4,39.9],[121.47,31.23],[120.19,30.26],[113.5611,28.4445]] // 广州 西安  北京  上海  杭州
@@ -94,7 +96,7 @@ export default {
             item.gpsLat = tran[1]
             if(item.gpsLat && item.gpsLon){
               this.map.addMarker({
-                id: item.courtID,
+                id: item.courtUuid,
                 position: [item.gpsLon, item.gpsLat],
                 markerType: 'common',
                 name: item.courtName,
@@ -105,6 +107,10 @@ export default {
           }
         }, this)
       }
+      this.$message({
+        type: msgType,
+        message: res.data.message
+      })
     }).catch(err => {
       this.$message({
         type: 'warning',
@@ -118,7 +124,7 @@ export default {
       if (e.feature && e.feature.markerType === 'common') {
           this.map.showPopup('tipWin', e.coordinate)
           this.showCourtName = e.feature.name
-          this.courtId = e.feature.id_
+          this.courtUuid = e.feature.id
         }else{
           // 关闭弹窗
           this.map.closePopup()
@@ -127,19 +133,19 @@ export default {
     },
     // 查看小区人流信息
     openCourtPeo: function () {
-      this.$refs['streamPeople'].streamPeople(this.courtId)
+      this.$refs['streamPeople'].streamPeople(this.courtUuid)
     },
     // 查看小区车流信息
     openCourtCar: function () {
-      this.$refs.carStream.goToCarStreamPage(this.courtId)
+      this.$refs.carStream.goToCarStreamPage(this.courtUuid)
     },
     // 查看小区业主信息
     openCourtOwner: function () {
-      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtId)
+      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtUuid)
     },
     // 查看小区设备信息
     openCourtEquip: function () {
-      this.$refs['equipmentReport'].equipmentReport(this.courtId)
+      this.$refs['equipmentReport'].equipmentReport(this.courtUuid)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
@@ -175,7 +181,7 @@ export default {
     setMarkers: function (unArr,activeArr) {
       if(unArr){
         unArr.map(function (item,index) {
-          let feat = this.map.getMarkerBylayerKey(item.courtID,'commonLayer')
+          let feat = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
           if(feat){
             this.setMarkerStyle(feat,markerImg)
           }
@@ -184,12 +190,12 @@ export default {
       }
       if(activeArr){
         activeArr.map(function (item,index) {
-          let feat2 = this.map.getMarkerBylayerKey(item.courtID,'commonLayer')
+          let feat2 = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
           if(feat2){
             this.setMarkerStyle(feat2,chooseImg)
             // this.map.showPopup('tipWin', feat2.getGeometry().getCoordinates()) //暂时去掉弹窗提示
             // this.showCourtName = item.courtName
-            // this.courtId = feat2.id_
+            // this.courtUuid = feat2.id_
           }
         },this)
         this.chooseList = activeArr
