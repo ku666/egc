@@ -51,19 +51,19 @@
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
-        <el-table-column label="人员类型">
+        <el-table-column label="人员类型" props="userType">
           <template slot-scope="scope">
             {{scope.row.userType === '1' ? '业主' : '租户'}}
           </template>
         </el-table-column>
-        <el-table-column label="性别" prop="sexStr">
+        <el-table-column label="性别" prop="sex">
           <template slot-scope="scope">
             {{scope.row.sex === '1' ? '男' : '女'}}
           </template>
         </el-table-column>
         <el-table-column label="生日" prop="birth">
         </el-table-column>
-        <el-table-column label="证件类型">
+        <el-table-column label="证件类型" prop="idenType">
           <template slot-scope="scope">
           <div v-for='idType in idTypes' v-bind:key='idType.value'>
             {{scope.row.idenType === idType.value ? idType.label : ''}}
@@ -95,13 +95,13 @@
                 </el-col>
                 <el-col :span="12">
                   <label>人员类型：</label>
-                  <label>{{this.modelDetailForm.userTypeStr}}</label>
+                  <label>{{this.modelDetailForm.userType === '1' ? '业主' : '租户'}}</label>
                 </el-col>
               </el-row>
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>性别：</label>
-                  <label>{{this.modelDetailForm.sexStr}}</label>
+                  <label>{{this.modelDetailForm.sex === '1' ? '男' : '女'}}</label>
                 </el-col>
                 <el-col :span="12">
                   <label>生日：</label>
@@ -111,7 +111,7 @@
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>证件类型：</label>
-                  <label>{{this.modelDetailForm.idenTypeStr}}</label>
+                  {{this.modelDetailForm.idenType}}
                 </el-col>
                 <el-col :span="12">
                   <label>证件号码：</label>
@@ -125,7 +125,7 @@
                 </el-col>
                 <el-col :span="12">
                   <label>电子邮箱：</label>
-                  <label>{{this.modelDetailForm.mail}}</label>
+                  <label>{{this.modelDetailForm.email}}</label>
                 </el-col>
               </el-row>
             </el-form>
@@ -385,7 +385,7 @@ div:hover {
   height: 40px;
 }
 .line-one {
-  line-height: 40px;
+  /* line-height: 40px; */
 }
 .header_style {
   padding: 13px 3%;
