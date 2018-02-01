@@ -60,7 +60,15 @@ var option = {
     seriesIndex: [1],
     inRange: {
       // color: ['#e0ffff', '#006edd']
-      color: ['#e0ffff', 'lightgreen', 'gold', 'yellow', 'green', 'orangered'] // lightgrey
+      // color: ['LightSkyBlue', 'lightgreen']
+      color: [
+        'LightSkyBlue',
+        'lightgreen',
+        'DeepSkyBlue',
+        // 'yellow',
+        'MediumSlateBlue',
+        'yellow'
+      ] // lightgrey
     },
     calculable: true
   },
