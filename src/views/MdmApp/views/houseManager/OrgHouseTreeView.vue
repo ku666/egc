@@ -38,6 +38,7 @@ export default {
       pageSize: 25,
       treeData: [],
       loading: false,
+      searchOption: null,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -47,10 +48,13 @@ export default {
   methods: {
     clickNode: function (data, node) {
       if (node.level === 1) {
-        this.search({ 'courtUuid': node.data.uuid })
+        this.searchOption = { 'courtUuid': node.data.uuid }
+        this.search(this.searchOption)
       } else if (node.level > 1) {
-        this.search({ 'orgUuid': node.data.uuid })
+        this.searchOption = { 'orgUuid': node.data.uuid }
+        this.search(this.searchOption)
       }
+      this.$emit('searchOptionChange', this.searchOption)
     },
     /**
      * @description 分页组件单页总数变化

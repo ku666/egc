@@ -1,6 +1,6 @@
 <template>
   <div class="house-manager">
-    <org-house-tree-view :search="search" class="org-view-tree"></org-house-tree-view>
+    <org-house-tree-view :search="search" class="org-view-tree" @searchOptionChange = 'setSearchOption'></org-house-tree-view>
     <div class="tree-view-container">
         <!-- 带分页表格 -->
         <div class="house-table">
@@ -42,7 +42,8 @@ export default {
       currentPage: 1,
       pageSize: 10,
       tableData: [],
-      loading: false
+      loading: false,
+      searchOption: {}
     }
   },
   components: {
@@ -58,6 +59,9 @@ export default {
     // handleSelectionChange: function (val) {
     //   this.selections = val
     // },
+    setSearchOption: function (data) {
+      this.searchOption = data
+    },
     /**
      * @description 分页组件单页总数变化
      * @param Number val 选择的单页总数得值
@@ -65,7 +69,7 @@ export default {
     sizeChange: function (val) {
       this.pageSize = val
       this.currentPage = 1
-      this.search({})
+      this.search(this.searchOption)
     },
     /**
      * @description 分页组件当前页变化
@@ -73,7 +77,7 @@ export default {
      */
     currentChange: function (val) {
       this.currentPage = val
-      this.search({})
+      this.search(this.searchOption)
     },
     search: function (options) {
       this.loading = true
