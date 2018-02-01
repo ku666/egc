@@ -9,7 +9,21 @@
       <div>
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='小区名称'>
-            <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input>
+            <!-- <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input> -->
+            <el-select
+              v-model='searchCondition.courtUuid'
+              :remote-method="getCourts"
+              :loading="getCourtsLoading"
+              placeholder="请输入小区名称"
+              remote
+              filterable>
+              <el-option
+                v-for="court in courts"
+                :key="court.uuid"
+                :label="court.name"
+                :value="court.uuid">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label='姓名'>
             <el-input placeholder='请输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
@@ -34,21 +48,33 @@
       <!-- <hr/> -->
       <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
+        <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
-        <el-table-column label="人员类型" prop="userTypeStr">
+        <el-table-column label="人员类型" props="userType">
+          <template slot-scope="scope">
+            {{scope.row.userType === '1' ? '业主' : '租户'}}
+          </template>
         </el-table-column>
-        <el-table-column label="性别" prop="sexStr">
+        <el-table-column label="性别" prop="sex">
+          <template slot-scope="scope">
+            {{scope.row.sex === '1' ? '男' : '女'}}
+          </template>
         </el-table-column>
         <el-table-column label="生日" prop="birth">
         </el-table-column>
-        <el-table-column label="证件类型" prop="idenTypeStr">
+        <el-table-column label="证件类型" prop="idenType">
+          <template slot-scope="scope">
+          <div v-for='idType in idTypes' v-bind:key='idType.value'>
+            {{scope.row.idenType === idType.value ? idType.label : ''}}
+          </div>
+        </template>
         </el-table-column>
         <el-table-column label="证件号码" prop="idenNum" width="170">
         </el-table-column>
         <el-table-column label="联系电话" prop="phone">
         </el-table-column>
-        <el-table-column label="电子邮箱" prop="mail">
+        <el-table-column label="电子邮箱" prop="email">
         </el-table-column>
       </el-table>
       <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
@@ -56,9 +82,9 @@
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='750px'>
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 750px">
       <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
-      <el-tabs style="height: 350px; margin-top:-20px;" v-model='activeName'>
+      <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
           <div>
             <el-form :model='modelDetailForm' ref='detailForm' label-width='100px'>
@@ -69,13 +95,13 @@
                 </el-col>
                 <el-col :span="12">
                   <label>人员类型：</label>
-                  <label>{{this.modelDetailForm.userTypeStr}}</label>
+                  <label>{{this.modelDetailForm.userType === '1' ? '业主' : '租户'}}</label>
                 </el-col>
               </el-row>
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>性别：</label>
-                  <label>{{this.modelDetailForm.sexStr}}</label>
+                  <label>{{this.modelDetailForm.sex === '1' ? '男' : '女'}}</label>
                 </el-col>
                 <el-col :span="12">
                   <label>生日：</label>
@@ -85,7 +111,7 @@
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>证件类型：</label>
-                  <label>{{this.modelDetailForm.idenTypeStr}}</label>
+                  {{this.modelDetailForm.idenType}}
                 </el-col>
                 <el-col :span="12">
                   <label>证件号码：</label>
@@ -99,17 +125,17 @@
                 </el-col>
                 <el-col :span="12">
                   <label>电子邮箱：</label>
-                  <label>{{this.modelDetailForm.mail}}</label>
+                  <label>{{this.modelDetailForm.email}}</label>
                 </el-col>
               </el-row>
             </el-form>
           </div>
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
-          <el-table :data="this.modelDetailForm.detail" stripe height="100%" width="100%">
+          <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
             <el-table-column label="小区" prop="courtName"></el-table-column>
             <el-table-column label="房屋" prop="houseAddress"></el-table-column>
-            <el-table-column label="备注" prop="description"></el-table-column>
+            <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -121,21 +147,27 @@
 </template>
 <script>
 import { getPersonList } from '../../apis/personManager'
+import { getHousesByUserUuid } from '../../apis/houseManager'
+import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   data () {
     return {
       uuid: null,
+      uuidshow: false,
       selections: [],
       total: 0,
       currentPage: 1,
       pageSize: 10,
       tableData: [],
       loading: false,
+      getCourtsLoading: false,
+      courts: [],
       detailDialogVisible: false,
       title: '人员详细信息',
       activeName: 'basic',
       modelDetailForm: {},
       searchCondition: {
+        courtUuid: '',
         name: '',
         idenNum: '',
         phone: '',
@@ -143,22 +175,22 @@ export default {
       },
       idTypes: [
         {
-          value: 1,
+          value: '1',
           label: '身份证' // 1-身份证（默认）;2-驾驶证;3-学生证;4-军官证;5-护照;6-其它
         }, {
-          value: 2,
+          value: '2',
           label: '驾驶证'
         }, {
-          value: 3,
+          value: '3',
           label: '学生证'
         }, {
-          value: 4,
+          value: '4',
           label: '军官证'
         }, {
-          value: 5,
+          value: '5',
           label: '护照'
         }, {
-          value: 6,
+          value: '6',
           label: '其它'
         }
       ]
@@ -170,7 +202,27 @@ export default {
     showPersonDetail: function (rowData = {}) {
       this.detailDialogVisible = true
       this.modelDetailForm = rowData
+      // 根据人员的uuid获取该人员的房产信息
+      getHousesByUserUuid({'userUuid': rowData.uuid})
+      .then(res => {
+        this.modelDetailForm.detail = res.data.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
       // console.log(JSON.stringify(rowData))
+    },
+    getCourts: function (query) {
+      this.getCourtsLoading = true
+      getCourtsByConditions({'name': query, 'pageSize': 1000, 'currentPage': 1})
+        .then(res => {
+          this.getCourtsLoading = false
+          this.courts = res.data.data.result
+        })
+        .catch(err => {
+          console.log(err)
+          this.getCourtsLoading = false
+        })
     },
     closeDetailDialog: function () {
       this.detailDialogVisible = false
@@ -219,6 +271,7 @@ export default {
       let condition = {}
       this.loading = true
       // 查询条件
+      condition.courtUuid = this.searchCondition.courtUuid
       condition.name = this.searchCondition.name
       condition.idenNum = this.searchCondition.idenNum
       condition.phone = this.searchCondition.phone
@@ -332,7 +385,7 @@ div:hover {
   height: 40px;
 }
 .line-one {
-  line-height: 40px;
+  /* line-height: 40px; */
 }
 .header_style {
   padding: 13px 3%;

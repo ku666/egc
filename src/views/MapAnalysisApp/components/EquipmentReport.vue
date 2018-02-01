@@ -6,6 +6,7 @@
     <div class="container">
       <el-button type="primary" @click="chartSwitch">图表</el-button>
       <el-button type="success" @click="tableSwitch">表格</el-button>
+      <div class="courtName">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chartContainer">
         <div id="equipmentcharts"></div>
         <div id="equipmentonlinecharts"></div>
@@ -45,6 +46,12 @@ export default {
       tableData1: [],
       onlinedata: [],
       totaldata: [],
+      color: [
+        '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
+        '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
+        '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
+        '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
+      ], // 饼图颜色
       cellDetailsList: {} // 小区详细信息
       // currentPage: 1, // 当前页
       // pageSize: 10, // 多少条数据
@@ -122,13 +129,13 @@ export default {
         backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          subtext: this.cellDetailsList.courtName,
-          x: 'center',
-          subtextStyle: {
-            color: '#333',
-            fontSize: 16,
-            fontWeight: 'bolder'
-          }
+          // subtext: this.cellDetailsList.courtName,
+          x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -144,12 +151,13 @@ export default {
           {
             name: '设备总数量',
             type: 'pie',
-            radius: '50%',
+            radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
             // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
             data: this.totaldata,
             // roseType: 'radius',
+            color: this.color,
             label: {
               emphasis: {
                 show: true,
@@ -179,13 +187,13 @@ export default {
         backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          subtext: this.cellDetailsList.courtName,
-          x: 'center',
-          subtextStyle: {
-            color: '#333',
-            fontSize: 16,
-            fontWeight: 'bolder'
-          }
+          // subtext: this.cellDetailsList.courtName,
+          x: 'center'
+          // subtextStyle: {
+          //   color: '#333',
+          //   fontSize: 16,
+          //   fontWeight: 'bolder'
+          // }
         },
         tooltip: {
           trigger: 'item',
@@ -197,12 +205,13 @@ export default {
           type: 'scroll',
           data: this.onlinenames
         },
+        color: this.color,
         calculable: true,
         series: [
           {
             name: '实时在网数量',
             type: 'pie',
-            radius: [100, 155],
+            radius: [100, 160],
             center: ['50%', '50%'],
             selectedMode: 'single',
             avoidLabelOverlap: false,
@@ -231,51 +240,64 @@ export default {
       this.dialogReportVisible = true
       this.$nextTick(() => {
         // this.getData()
-        getCourtInfo({ courtId: courtId }).then(res => {
-          this.cellDetailsList = res.data.data
-          console.log(this.cellDetailsList)
+        getCourtInfo({ courtUuid: courtId }).then(res => {
+          if (res.data.code === '00000') {
+            this.cellDetailsList = res.data.data
+          } else {
+            this.$message.error({
+              message: res.data.message,
+              duration: 1500
+            })
+          }
         })
         let equiData = {}
-        equiData.courtUuid = 'c69aeede4f6341929721e2892beec3cb'
+        equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
-          // if (res.data.code === '00000') {
-          this.tableData = res.data
-          // console.log(111111)
-          console.log(this.tableData)
-          this.onlinedata = []
-          this.totaldata = []
-          for (let i in this.tableData) {
-            this.names.push(this.tableData[i].deviceTypeDesc)
-            if (this.tableData[i].onlineCount !== 0) {
-              this.onlinenames.push(this.tableData[i].deviceTypeDesc)
-            }
-            // console.log(this.onlinenames)
-            this.onlinedata.push(
-              {
-                name: this.tableData[i].deviceTypeDesc,
-                value: this.tableData[i].onlineCount,
-                itemStyle: {
-                  normal: {
-                    label: {
-                      show: true,
-                      formatter: function (params, option) {
-                        if (params.data.value === 0) {
-                          params.data.label.normal.show = false
-                          params.data.labelLine.normal.show = false
+          console.log('getListDeviceType')
+          console.log(res)
+          if (res.data.code === '00000') {
+            this.tableData = res.data.data
+            // console.log(111111)
+            console.log(this.tableData)
+            this.onlinedata = []
+            this.totaldata = []
+            for (let i in this.tableData) {
+              this.names.push(this.tableData[i].deviceTypeDesc)
+              if (this.tableData[i].onlineCount !== 0) {
+                this.onlinenames.push(this.tableData[i].deviceTypeDesc)
+              }
+              // console.log(this.onlinenames)
+              this.onlinedata.push(
+                {
+                  name: this.tableData[i].deviceTypeDesc,
+                  value: this.tableData[i].onlineCount,
+                  itemStyle: {
+                    normal: {
+                      label: {
+                        show: true,
+                        formatter: function (params, option) {
+                          if (params.data.value === 0) {
+                            params.data.label.normal.show = false
+                            params.data.labelLine.normal.show = false
+                          }
                         }
+                      },
+                      labelLine: {
+                        show: true
                       }
-                    },
-                    labelLine: {
-                      show: true
                     }
                   }
-                }
-              })
-            this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
+                })
+              this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
+            }
+            this.chartInit()
+            console.log(this.onlinedata)
+          } else {
+            this.$message.error({
+              message: res.data.message,
+              duration: 1500
+            })
           }
-          this.chartInit()
-          console.log(this.onlinedata)
-          // }
         })
       })
     }
@@ -283,10 +305,17 @@ export default {
 }
 </script>
 <style scoped>
-.container{
+.container {
   margin-top: -25px;
 }
-.chartContainer{
+.courtName {
+  color: #000;
+  font-size: 20px;
+  font-weight: bold;
+  margin: -30px 0 35px;
+  text-align: center;
+}
+.chartContainer {
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -297,7 +326,7 @@ export default {
   /* float: left; */
   /* margin-top: 10px; */
   width: 640px;
-   /* width: 49.5%; */
+  /* width: 49.5%; */
   height: 600px;
   border: 1px solid #ccc;
 }

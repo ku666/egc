@@ -67,6 +67,7 @@ export default new Router({
         ...upgradeMgmt,
         ...modelManagementrouters,
         ...logServiceComponentrouters,
+        ...modelManagementrouters,
         ...sofwarePackageMgmt,
         ...sofwarePackageDispatch,
         ...metaDataMaintance,

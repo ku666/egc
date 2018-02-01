@@ -83,7 +83,7 @@
           </el-table-column>
         </el-table>
         <div class="pagination-container">
-          <el-pagination :page-sizes="[10, 20, 30, 50]" layout="total, sizes, prev, pager, next, jumper" 
+          <el-pagination :page-sizes="[10, 20, 30, 50]" layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
           :current-page="currentPage"
@@ -103,12 +103,12 @@
           <el-row>
           <el-col :span="24">
           <span>扩展号码：{{detailRow.addSerial}}</span>
-           </el-col> 
+           </el-col>
           </el-row>
           <el-row>
             <el-col :span="11">
               <span>短信等级：{{detailRow.smsPriority}}</span>
-            </el-col> 
+            </el-col>
             <el-col :span="2" style="width:5px">&nbsp;</el-col>
             <el-col :span="11" style="float:right">
               <span>字符编码：{{detailRow.srcCharset}}</span>
@@ -122,7 +122,7 @@
               :rows="2"
               readonly
               v-model="detailRow.mobiles">
-            </el-input> 
+            </el-input>
              </el-col>
           </el-row>
           <el-row>
@@ -234,7 +234,7 @@ export default {
       if (this.searchInSendChk !== '') paramStr = paramStr + 'searchInSendChk=' + this.searchInSendChk + '&'
       if (this.searchFixSendChk !== '') paramStr = paramStr + 'searchFixSendChk=' + this.searchFixSendChk + '&'
       if (this.searchSendTime !== '') paramStr = paramStr + 'searchSendTime=' + this.searchSendTime + '&'
-      if (this.searchSMSCx !== '') paramStr = paramStr + 'searchSMSCx=' + this.searchSMSCx + '&'
+      if (this.searchSMSCx !== '') paramStr = paramStr + 'searchSMSCx=' + encodeURI(this.searchSMSCx) + '&'
       if (pagesize !== '') paramStr = paramStr + 'pagesize=' + pagesize + '&'
       if (this.currentPage !== '') paramStr = paramStr + 'currentPage=' + this.currentPage
       getSMSList(paramStr)
@@ -258,5 +258,5 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="less" scoped>
 @import '~@/views/IsmgApp/assets/css/IsmgApp.less';
- 
+
 </style>

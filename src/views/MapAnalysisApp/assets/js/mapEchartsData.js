@@ -53,9 +53,9 @@ var option = {
   },
   visualMap: {
     min: 0,
-    max: 1500,
-    left: '20%',
-    top: 'bottom',
+    max: 500,
+    left: '90%',
+    top: '40%',
     text: ['High', 'Low'],
     seriesIndex: [1],
     inRange: {
@@ -67,11 +67,16 @@ var option = {
   geo: {
     map: 'china',
     roam: true,
+    zoom: 1.2,
+    scaleLimit: {
+      min: 1,
+      max: 6
+    },
     label: {
       normal: {
         show: true,
         textStyle: {
-          color: 'rgba(0,0,0,0.4)'
+          color: 'rgba(0,0,0,0.6)'
         }
       }
     },
@@ -105,7 +110,7 @@ var option = {
         normal: {
           formatter: '{b}',
           position: 'right',
-          show: true // 是否显示该散点的名称(这里为小区名称)
+          show: false // 是否显示该散点的名称(这里为小区名称)
         },
         emphasis: {
           show: true
@@ -196,7 +201,7 @@ var mapData = {
 
 function randomValue () {
   // return 0
-  return Math.round(Math.random() * 1000)
+  return Math.round(Math.random() * 500)
 }
 
 // window.mapData = mapData

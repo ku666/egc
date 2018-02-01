@@ -9,38 +9,52 @@
         </div>
         <div class="itemCl">
           <span class="itemlabel">房屋总数：</span>
-          <span class="itemvalue">{{courtInfo.houseCount}}</span>
+          <span class="itemvalue">{{courtInfo.houseCount}}栋</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">户数总数：</span>
-          <span class="itemvalue">{{courtInfo.homeCount}}</span>
+          <span class="itemvalue">{{courtInfo.homeCount}}户</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">建筑面积：</span>
-          <span class="itemvalue">{{courtInfo.buildArea}}</span>
+          <span class="itemvalue">{{courtInfo.buildArea}}平方米</span>
         </div>
         <div class="itemCl">
           <span class="itemlabel">占地面积：</span>
-          <span class="itemvalue">{{courtInfo.floorArea}}</span>
+          <span class="itemvalue">{{courtInfo.floorArea}}平方米</span>
         </div>
       </div>
       <!-- end infoCon -->
       <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
-        <div id="mapECarts0" class="smallBox" style="width:230px; height:300px"></div>
-        <div id="mapECarts1" class="smallBox" style="width:240px; height:300px"></div>
-      </el-card>
-      <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
         <div id="mapECarts2" style="width:480px; height:300px"></div>
+        <div v-show="isPerErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
         <div id="mapECarts3" style="width:480px; height:300px"></div>
+        <div v-show="isCarErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
+      <el-card class="echartsBox1">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
+        <div id="mapECarts0" class="smallBox" style="width:420px; height:300px"></div>
+        <div id="mapECarts1" class="smallBox" style="width:570px; height:300px"></div>
+        <div v-show="isOwnerErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      </el-card>
+      <!-- <el-card class="echartsBox">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
+        <div id="mapECarts2" style="width:480px; height:300px"></div>
+        <div v-show="isPerErrInfo" class="errInfo">数据加载不成功</div>
+      </el-card>
+      <el-card class="echartsBox">
+        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
+        <div id="mapECarts3" style="width:480px; height:300px"></div>
+        <div v-show="isCarErrInfo" class="errInfo">数据加载不成功</div>
+      </el-card> -->
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
         <div id="mapECarts4" style="width:480px; height:300px"></div>
+        <div v-show="isEquiErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <car-stream ref="carStream"></car-stream>
       <stream-people ref="streamPeople"></stream-people>
@@ -50,7 +64,7 @@
   </el-container>
 </template>
 <script>
-import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getPerProfile } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getCourtProfile } from '@/views/MapAnalysisApp/apis/index.js'
 import peopleOption from '@/views/MapAnalysisApp/assets/js/peopleStream.js'
 import carOption from '@/views/MapAnalysisApp/assets/js/carStream.js'
 import equipKind from '@/views/MapAnalysisApp/assets/js/equipKind.js'
@@ -59,6 +73,7 @@ import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
+import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   components: {
     StreamPeople,
@@ -70,7 +85,7 @@ export default {
     return {
       echartsList: [],
       courtInfo: {
-        courtId: '',
+        courtUuid: '',
         courtName: '',
         org: '',
         regionName: '',
@@ -80,16 +95,21 @@ export default {
         floorArea: ''
       },
       startDate: '',
+      isOwnerErrInfo: false, // 业主错误提提
+      isPerErrInfo: false, // 人流错误提示
+      isCarErrInfo: false, // 车流错误提示
+      isEquiErrInfo: false, // 设备错误提示
       endDate: '',
-      reportType: '1' // 报表类型：1日报 2月报 3年报
+      perErrImg: errImg,
+      reportType: '0' // 报表类型：0日报 1月报 2年报
     }
   },
   mounted: function () {
-    this.courtInfo.courtId = this.$route.params.courtID
+    this.courtInfo.courtUuid = this.$route.params.courtUuid
     this.getCourtInfoData()
     var sDate = new Date()
     var eDate = new Date()
-    sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7)
+    sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7) //
     this.startDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
     this.endDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
     this.getPeopleStreamData()
@@ -100,12 +120,17 @@ export default {
   methods: {
     /** 获取小区详情信息 */
     getCourtInfoData: function () {
-      let param = {courtID: this.courtInfo.courtId}
+      let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
           let list = res.data.data
           this.courtInfo = Object.assign({}, list)
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.data.message
+          })
         }
       }).catch(err => {
         this.$message({
@@ -117,33 +142,47 @@ export default {
     /** 获取最近一个月内的人员流量日报数据 */
     getPeopleStreamData: function () {
       let param = {
-        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
+        courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
-        // if (res.data.code === '00000') {
-        let data = res.data
-        let timeDate = []
-        let perInCount = []
-        let perOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.perInCount === '0')item.perInCount = Math.round(Math.random() * 1000)
-          if (item.perOutCount === '0')item.perOutCount = Math.round(Math.random() * 1000)
-          perInCount.push(parseFloat(item.perInCount))
-          perOutCount.push(parseFloat(item.perOutCount))
-        })
-        peopleOption.updateTimeData(timeDate)
-        peopleOption.updateInData(perInCount)
-        peopleOption.updateOutData(perOutCount)
-        // console.log('人流信息：')
-        // console.log(peopleOption.option)
-        this.getMyCharts(2).setOption(peopleOption.option)
-        // }
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data
+          data = data.reverse()
+          let timeDate = []
+          let perInCount = []
+          let perOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
+            if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
+            perInCount.push(parseFloat(item.perInCount))
+            perOutCount.push(parseFloat(item.perOutCount))
+          })
+          peopleOption.updateTimeData(timeDate)
+          peopleOption.updateInData(perInCount)
+          peopleOption.updateOutData(perOutCount)
+          // 判断人流数据是否为空
+          if (timeDate.length <= 0 || perInCount.length <= 0 || perOutCount.length <= 0) {
+            this.isPerErrInfo = true
+          } else {
+            this.isPerErrInfo = false
+            this.getMyCharts(2).setOption(peopleOption.option)
+          }
+        } else {
+          this.isPerErrInfo = true
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
+        this.isPerErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -153,61 +192,89 @@ export default {
     /** 获取最近一个月内的车行流量日报数据 */
     getCarStreamData: function () {
       let param = {
-        courtID: 'c69aeede4f6341929721e2892beec3cb', // this.courtInfo.courtId
+        courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
         startDate: this.startDate,
         endDate: this.endDate
       }
       getCourtCarAccessInfo(param).then(res => {
-        console.log('车流信息：')
         // console.log(res)
-        // if (res.data.code === '00000') {
-        let data = res.data
-        let timeDate = []
-        let carInCount = []
-        let carOutCount = []
-        data.map(function (item, index) {
-          timeDate.push(item.date.substr(0, 13) + '点')
-          if (item.carInCount === '0')item.carInCount = Math.round(Math.random() * 1000)
-          if (item.carOutCount === '0')item.carOutCount = Math.round(Math.random() * 1000)
-          carInCount.push(parseFloat(item.carInCount))
-          carOutCount.push(parseFloat(item.carOutCount))
-        })
-        carOption.updateTimeData(timeDate)
-        carOption.updateInData(carInCount)
-        carOption.updateOutData(carOutCount)
-        console.log(carOption.option)
-        this.getMyCharts(3).setOption(carOption.option)
-        // }
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data
+          data = data.reverse()
+          let timeDate = []
+          let carInCount = []
+          let carOutCount = []
+          data.map(function (item, index) {
+            timeDate.push(item.date.substr(0, 13) + '点')
+            if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
+            if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
+            carInCount.push(parseFloat(item.carInCount))
+            carOutCount.push(parseFloat(item.carOutCount))
+          })
+          carOption.updateTimeData(timeDate)
+          carOption.updateInData(carInCount)
+          carOption.updateOutData(carOutCount)
+          // 判断车流数据是否为空
+          if (timeDate.length <= 0 || carInCount.length <= 0 || carOutCount.length <= 0) {
+            this.isCarErrInfo = true
+          } else {
+            this.isCarErrInfo = false
+            this.getMyCharts(3).setOption(carOption.option)
+          }
+        } else {
+          this.isCarErrInfo = true
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
+        this.isCarErrInfo = true
         this.$message({
           type: 'warning',
           message: err
         })
       })
     },
-    /** 获取小区设置种类数据 */
+    /** 获取小区设备种类数据 */
     getEquipKindsData: function () {
       let param = {
-        courtUuid: 'c69aeede4f6341929721e2892beec3cb' // this.courtInfo.courtId
+        courtUuid: this.courtInfo.courtUuid
       }
       getListDeviceType(param).then(res => {
-        console.log(res)
-        // if (res.data.code === '00000') {
-        //   // let list = res.data.data
-        // }
-        let data = res.data
-        let equipData = []
-        data.map(function (item, index) {
-          let obj = {
-            name: item.deviceTypeDesc,
-            value: item.deviceCount
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let data = res.data.data // .slice(0, 10)
+          let equipData = []
+          data.map(function (item, index) {
+            let obj = {
+              name: item.deviceTypeDesc,
+              value: item.deviceCount
+            }
+            equipData.push(obj)
+          })
+          equipData.splice(7)
+          equipKind.updateData(equipData)
+          // 判断设备数据是否为空
+          if (equipData.length <= 0) {
+            this.isEquiErrInfo = true
+          } else {
+            this.isEquiErrInfo = false
+            this.getMyCharts(4).setOption(equipKind.option)
           }
-          equipData.push(obj)
-        })
-        equipKind.updateData(equipData)
-        this.getMyCharts(4).setOption(equipKind.option)
+        } else {
+          this.isEquiErrInfo = true
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+        }
       }).catch(err => {
+        this.isEquiErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -216,27 +283,42 @@ export default {
     },
     /** 获取小区业主年龄、性别占比数据 */
     getCourtOwnerData: function () {
-       // this.courtInfo.courtId
-      let param = {courtUuid: '222b79f4a7b44d03b6f55f028992851f', queryType: '0', type: '1'}
-      getPerProfile(param).then(res => {
+      let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
+      getCourtProfile(param).then(res => {
         // console.log(res)
-        let ageData = []
-        let ageLevelData = []
-        let list = res.data
-        if (!list.sexInfo)list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
-        if (!list.sexInfo)list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
-        let sexData = [{value: list.sexInfo[0].maleOwner, name: '男'}, {value: list.sexInfo[0].femaleOwner, name: '女'}]
-        list = res.data.ageGroupInfo
-        list.map(function (item, index) {
-          ageLevelData.push(item.group)
-          ageData.push(item.countNum)
-        })
-        ownerOption.updateSexData(sexData)
-        ownerOption.updateAgeLevelData(ageLevelData)
-        ownerOption.updateAgeData(ageData)
-        this.getMyCharts(0).setOption(ownerOption.optionSex)
-        this.getMyCharts(1).setOption(ownerOption.optionAge)
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          let ageData = []
+          let ageLevelData = []
+          let list = res.data.data
+          if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
+          if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
+          let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
+          list = list.ageGroupInfo
+          list.map(function (item, index) {
+            ageLevelData.push(item.group)
+            ageData.push(item.countNum)
+          })
+          ownerOption.updateSexData(sexData)
+          ownerOption.updateAgeLevelData(ageLevelData)
+          ownerOption.updateAgeData(ageData)
+          if (sexData.length <= 0 || ageLevelData.length <= 0 || ageData.length <= 0) {
+            this.isOwnerErrInfo = true
+          } else {
+            this.isOwnerErrInfo = false
+            this.getMyCharts(0).setOption(ownerOption.optionSex)
+            this.getMyCharts(1).setOption(ownerOption.optionAge)
+          }
+        } else {
+          this.$message({
+            type: msgType,
+            message: res.data.message
+          })
+          this.isOwnerErrInfo = true
+        }
       }).catch(err => {
+        this.isOwnerErrInfo = true
         this.$message({
           type: 'warning',
           message: err
@@ -248,16 +330,16 @@ export default {
       // console.log('查看各个报表的详情 ' + index)
       switch (index) {
         case 0:
-          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtId)
+          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtUuid)
           break
         case 1:
-          this.$refs['streamPeople'].streamPeople(this.courtInfo.courtId)
+          this.$refs['streamPeople'].streamPeople(this.courtInfo.courtUuid)
           break
         case 2:
-          this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtId)
+          this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtUuid)
           break
         case 3:
-          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtId)
+          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtUuid)
           break
       }
     },
@@ -270,55 +352,76 @@ export default {
 <style lang="less" scoped>
 .mapCon {
   width: 100%;
-  /* height: 800px; */
-  min-width: 1400px;
+  height: 800px;
+  min-width: 1650px;
   padding: 15px 0px;
   color: #374258;
   background-color: #fee;
-  /deep/.el-card__body{
+  /deep/.el-card__body {
     padding: 10px 20px;
   }
-  /deep/.el-card__header{
+  /deep/.el-card__header {
     padding: 10px 20px;
   }
 }
-.infoCon{
+.infoCon {
   display: inline-block;
-  width: 1080px;
+  width: 520px;
   text-align: center;
+  vertical-align: middle;
 }
-.itemCl{
+.itemCl {
   margin: 35px 0px;
 }
-.itemlabel{
+.itemlabel {
   color: rgb(180, 154, 154);
 }
-.itemvalue{
+.itemvalue {
   display: inline-block;
   width: 300px;
   text-align: left;
   padding-left: 10px;
   border-bottom: 1px solid #ccc;
 }
-
-.echartsBox{
+.echartsBox1 {
+  position: relative;
+  display: inline-block;
+  width: 1045px;
+  height: 330px;
+  margin: 10px 0px 10px 15px;
+  vertical-align: middle;
+}
+.echartsBox {
   position: relative;
   display: inline-block;
   width: 520px;
   height: 330px;
   margin: 10px 0px 10px 15px;
+  vertical-align: middle;
 }
-.smallBox{
+.smallBox {
   display: inline-block;
 }
-.checkmoreBtn{
+.errInfo {
+  position: absolute;
+  top: 60px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  text-align: center;
+  line-height: 300px;
+  font-size: 20px;
+  font-weight: bold;
+}
+.checkmoreBtn {
   display: inline-block;
   width: 70px;
   height: 30px;
   line-height: 30px;
   position: absolute;
   top: 6px;
-  right: 60px;
+  right: 70px;
   padding: 0px;
   z-index: 10;
   border-bottom: 2px solid rgb(228, 140, 10);

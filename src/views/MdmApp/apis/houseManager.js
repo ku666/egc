@@ -7,3 +7,11 @@ export function getHouseList (data) {
     data: data
   })
 }
+
+export function getHousesByUserUuid (data) {
+  return fetch({
+    url: '/egc-mdmmgmtapp/house/getHousesByUserUuid',
+    method: 'POST',
+    data: data
+  })
+}

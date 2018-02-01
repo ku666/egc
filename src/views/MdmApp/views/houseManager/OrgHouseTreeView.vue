@@ -1,9 +1,9 @@
 <template>
   <div class="tree-container" v-loading="loading">
     <div>
-      <el-input placeholder="请输入小区名称" @keyup.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      <el-input placeholder="请输入小区名称" @keypress.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:168px" v-model="searchKey" class="fuzzy-search">
       </el-input>
-      <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
+      <!-- <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button> -->
     </div>
     <el-tree ref="tree"
       :data="treeData"
@@ -12,6 +12,7 @@
       :load="getTree"
       :expand-on-click-node="false"
       lazy
+      style="max-height: 800px; overflow: auto; font-size: 14px"
       @node-click="clickNode">
     </el-tree>
     <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="total" @size-change="sizeChange" @current-change="currentChange">
@@ -37,6 +38,7 @@ export default {
       pageSize: 25,
       treeData: [],
       loading: false,
+      searchOption: null,
       defaultProps: {
         children: 'children',
         label: 'name'
@@ -46,10 +48,13 @@ export default {
   methods: {
     clickNode: function (data, node) {
       if (node.level === 1) {
-        this.search({ 'courtUuid': node.data.uuid })
+        this.searchOption = { 'courtUuid': node.data.uuid }
+        this.search(this.searchOption)
       } else if (node.level > 1) {
-        this.search({ 'orgUuid': node.data.uuid })
+        this.searchOption = { 'orgUuid': node.data.uuid }
+        this.search(this.searchOption)
       }
+      this.$emit('searchOptionChange', this.searchOption)
     },
     /**
      * @description 分页组件单页总数变化

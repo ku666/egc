@@ -38,13 +38,13 @@ var option = {
       show: true,
       xAxisIndex: [0],
       start: 1,
-      end: 10
+      end: 30
     },
     {
       type: 'inside',
       xAxisIndex: [0],
       start: 1,
-      end: 10
+      end: 30
     }
   ],
   xAxis: {
