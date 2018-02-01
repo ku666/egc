@@ -7,7 +7,7 @@
           <el-table :data="tableData" stripe height="100%" v-loading="loading">
             <el-table-column label="房屋号" prop="houseNum">
             </el-table-column>
-            <el-table-column label="房屋名称" prop="houseName">
+            <el-table-column label="房屋名称" prop="houseAddress">
             </el-table-column>
             <el-table-column label="房屋用途" prop="houseUseFor">
             </el-table-column>
