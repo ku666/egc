@@ -13,7 +13,7 @@
           <div id="equipmentcharts"></div>
         </div>
         <div id="equipmentonlinechartsbox">
-          <img v-show="isOnlineReponseData" src="../assets/images/err.png">
+          <img v-show="isReponseData" src="../assets/images/err.png">
           <div id="equipmentonlinecharts"></div>
         </div>
         <!-- <div class="clear"></div> -->
@@ -47,19 +47,12 @@ export default {
       isChartShow: true,
       isTableShow: false,
       isReponseData: false,
-      isOnlineReponseData: false,
       tableData: [],
       names: [],
       onlinenames: [],
       tableData1: [],
       onlinedata: [],
       totaldata: [],
-      color: [
-        '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
-        '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
-        '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
-        '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
-      ], // 饼图颜色
       cellDetailsList: {}, // 小区详细信息
       equipmentcharts: {},
       equipmentonlinecharts: {}
@@ -104,21 +97,14 @@ export default {
     },
     chartInit () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
-      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      console.log(equipmentcharts)
       this.equipmentcharts = equipmentcharts
-      this.equipmentonlinecharts = equipmentonlinecharts
       // 设备数量数据
       let option = {
-        backgroundColor: 'rgba(0,0,20,0.1)',
+        // backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          // subtext: this.cellDetailsList.courtName,
           x: 'center'
-          // subtextStyle: {
-          //   color: '#333',
-          //   fontSize: 16,
-          //   fontWeight: 'bolder'
-          // }
         },
         tooltip: {
           trigger: 'item',
@@ -137,10 +123,7 @@ export default {
             radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
-            // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
             data: this.totaldata,
-            // roseType: 'radius',
-            color: this.color,
             label: {
               emphasis: {
                 show: true,
@@ -165,18 +148,16 @@ export default {
           }
         ]
       }
-      // 设备实时在网数量数据
+      equipmentcharts.setOption(option)
+    },
+    onlineChartInit () {
+      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      this.equipmentonlinecharts = equipmentonlinecharts
       let option1 = {
-        backgroundColor: 'rgba(0,0,33,0.1)',
+        // backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          // subtext: this.cellDetailsList.courtName,
           x: 'center'
-          // subtextStyle: {
-          //   color: '#333',
-          //   fontSize: 16,
-          //   fontWeight: 'bolder'
-          // }
         },
         tooltip: {
           trigger: 'item',
@@ -188,7 +169,6 @@ export default {
           type: 'scroll',
           data: this.onlinenames
         },
-        color: this.color,
         calculable: true,
         series: [
           {
@@ -199,10 +179,6 @@ export default {
             selectedMode: 'single',
             avoidLabelOverlap: false,
             label: {
-              // normal: {
-              //   show: true,
-              //   position: 'center'
-              // },
               emphasis: {
                 show: true,
                 textStyle: {
@@ -211,12 +187,10 @@ export default {
                 }
               }
             },
-            // roseType: 'radius',
             data: this.onlinedata
           }
         ]
       }
-      equipmentcharts.setOption(option)
       equipmentonlinecharts.setOption(option1)
     },
     equipmentReport (courtId) {
@@ -225,28 +199,25 @@ export default {
         // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {
           if (res.data.code === '00000') {
-            this.isReponseData = false
             this.cellDetailsList = res.data.data
           } else {
-            this.isReponseData = true
             this.$message.error({
               message: res.data.message,
               duration: 1500
             })
           }
         }).catch(() => {
-          this.isReponseData = true
         })
         let equiData = {}
-        equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
+        equiData.courtUuid = courtId// 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
-          console.log('getListDeviceType')
+          console.log('执行了getListDeviceType')
           console.log(res)
           if (res.data.code === '00000') {
+            console.log('deviceinfo我的错')
             this.isOnlineReponseData = false
             this.tableData = res.data.data
-            // console.log(111111)
-            console.log(this.tableData)
+
             this.onlinedata = []
             this.totaldata = []
             for (let i in this.tableData) {
@@ -278,23 +249,35 @@ export default {
                 })
               this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
             }
-            this.chartInit()
+            // 初始化echarts
+            console.log(this.tableData)
             console.log(this.onlinedata)
+            if (this.tableData.length === 0) {
+              this.isReponseData = true
+            } else {
+              this.isReponseData = false
+              this.chartInit()
+              this.onlineChartInit()
+            }
           } else {
-            this.isOnlineReponseData = true
+            this.isReponseData = true
             this.$message.error({
               message: res.data.message,
               duration: 1500
             })
           }
         }).catch(() => {
-          this.isOnlineReponseData = true
+          this.isReponseData = true
         })
       })
     },
     closeDialog () {
-      this.equipmentcharts.dispose()
-      this.equipmentonlinecharts.dispose()
+      this.isReponseData = false
+      this.onlinedata = []
+      this.totaldata = []
+      console.log(this.equipmentcharts)
+      if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
+      if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     }
   }
 }
@@ -318,13 +301,11 @@ export default {
   margin-top: 10px;
 }
 #equipmentchartsbox {
-  /* float: left; */
-  /* margin-top: 10px; */
   width: 640px;
-  /* width: 49.5%; */
   height: 600px;
   border: 1px solid #ccc;
   text-align: center;
+  overflow: hidden;
 }
 #equipmentchartsbox img {
   margin-top: 200px;
@@ -333,12 +314,11 @@ export default {
   height: 600px;
 }
 #equipmentonlinechartsbox {
-  /* float: right; */
-  /* margin-top: 10px; */
   width: 640px;
   height: 600px;
   border: 1px solid #ccc;
   text-align: center;
+  overflow: hidden;
 }
 #equipmentonlinechartsbox img {
   margin-top: 200px;

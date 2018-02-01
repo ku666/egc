@@ -369,17 +369,25 @@ export default {
       console.log('getCourtCarAccessInfo')
       if (this.datePickRangeConfrim()) return
       var data = this.queryParam()
+      data.courtUuid = data.courtUuid
       getCourtCarAccessInfo(data).then((res) => {
+        console.log('啦啦啦啦啦')
+        console.log(res)
         if (res.data.code === '00000') {
-          this.isReponseData = false
-          var data = res.data.data
-          this.sortData(data)
-          this.chartInit()
+          if (res.data.data.length === 0) {
+            this.isReponseData = true
+          } else {
+            this.isReponseData = false
+            var data = res.data.data
+            this.sortData(data)
+            this.chartInit()
+          }
         } else {
           this.isReponseData = true
           this.errMessage(res.data.message)
         }
       }).catch(() => {
+        console.log('出错了o')
         this.isReponseData = true
       })
     },
@@ -419,17 +427,11 @@ export default {
       var year = date.getFullYear()
       var month = date.getMonth() + 1
       var day = date.getDate()
-      // if (this.form.reportType === '0') {
       return year + '-' + month + '-' + day
-      // } else if (this.form.reportType === '1') {
-      //   return year + '-' + month + '-' + day
-      // } else {
-      //   return year + '-' + month
-      // }
     },
     closeDialog: function () {
       this.clickCount = 0
-      this.myChart.dispose()
+      if (this.myChart.dispose) { this.myChart.dispose() }
     },
     datePickRangeConfrim () {
       switch (this.form.reportType) {
