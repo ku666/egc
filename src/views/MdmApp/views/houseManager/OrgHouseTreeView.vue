@@ -1,9 +1,9 @@
 <template>
   <div class="tree-container" v-loading="loading">
     <div>
-      <el-input placeholder="请输入小区名称" @keyup.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:150px" v-model="searchKey" class="fuzzy-search">
+      <el-input placeholder="请输入小区名称" @keypress.enter.native='getCourts' prefix-icon="el-icon-search" style="float:left; width:168px" v-model="searchKey" class="fuzzy-search">
       </el-input>
-      <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button>
+      <!-- <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button> -->
     </div>
     <el-tree ref="tree"
       :data="treeData"
@@ -117,6 +117,8 @@ export default {
   height: 100%;
   border: 1px solid #dddee1;
   box-sizing: border-box;
+  overflow:auto;
+  max-height: 800px;
 }
 
 .el-tree {
