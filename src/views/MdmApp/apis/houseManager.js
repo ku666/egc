@@ -8,9 +8,9 @@ export function getHouseList (data) {
   })
 }
 
-export function getHouseDetailByUuid (data) {
+export function getHousesByUserUuid (data) {
   return fetch({
-    url: '/egc-mdmmgmtapp/house/getHouseDetailByUuid',
+    url: '/egc-mdmmgmtapp/house/getHousesByUserUuid',
     method: 'POST',
     data: data
   })

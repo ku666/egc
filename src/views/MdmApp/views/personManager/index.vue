@@ -147,7 +147,7 @@
 </template>
 <script>
 import { getPersonList } from '../../apis/personManager'
-import { getHouseDetailByUuid } from '../../apis/houseManager'
+import { getHousesByUserUuid } from '../../apis/houseManager'
 import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   data () {
@@ -203,7 +203,7 @@ export default {
       this.detailDialogVisible = true
       this.modelDetailForm = rowData
       // 根据人员的uuid获取该人员的房产信息
-      getHouseDetailByUuid({'userUuid': rowData.uuid})
+      getHousesByUserUuid({'userUuid': rowData.uuid})
       .then(res => {
         this.modelDetailForm.detail = res.data.data
       })
