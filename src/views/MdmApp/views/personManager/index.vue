@@ -51,19 +51,30 @@
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
-        <el-table-column label="人员类型" prop="userTypeStr">
+        <el-table-column label="人员类型">
+          <template slot-scope="scope">
+            {{scope.row.userType === '1' ? '业主' : '租户'}}
+          </template>
         </el-table-column>
         <el-table-column label="性别" prop="sexStr">
+          <template slot-scope="scope">
+            {{scope.row.sex === '1' ? '男' : '女'}}
+          </template>
         </el-table-column>
         <el-table-column label="生日" prop="birth">
         </el-table-column>
-        <el-table-column label="证件类型" prop="idenTypeStr">
+        <el-table-column label="证件类型">
+          <template slot-scope="scope">
+          <div v-for='idType in idTypes' v-bind:key='idType.value'>
+            {{scope.row.idenType === idType.value ? idType.label : ''}}
+          </div>
+        </template>
         </el-table-column>
         <el-table-column label="证件号码" prop="idenNum" width="170">
         </el-table-column>
         <el-table-column label="联系电话" prop="phone">
         </el-table-column>
-        <el-table-column label="电子邮箱" prop="mail">
+        <el-table-column label="电子邮箱" prop="email">
         </el-table-column>
       </el-table>
       <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
@@ -164,22 +175,22 @@ export default {
       },
       idTypes: [
         {
-          value: 1,
+          value: '1',
           label: '身份证' // 1-身份证（默认）;2-驾驶证;3-学生证;4-军官证;5-护照;6-其它
         }, {
-          value: 2,
+          value: '2',
           label: '驾驶证'
         }, {
-          value: 3,
+          value: '3',
           label: '学生证'
         }, {
-          value: 4,
+          value: '4',
           label: '军官证'
         }, {
-          value: 5,
+          value: '5',
           label: '护照'
         }, {
-          value: 6,
+          value: '6',
           label: '其它'
         }
       ]

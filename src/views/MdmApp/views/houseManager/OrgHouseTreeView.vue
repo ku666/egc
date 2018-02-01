@@ -12,6 +12,7 @@
       :load="getTree"
       :expand-on-click-node="false"
       lazy
+      style="max-height: 800px; overflow: auto"
       @node-click="clickNode">
     </el-tree>
     <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="total" @size-change="sizeChange" @current-change="currentChange">
@@ -117,8 +118,6 @@ export default {
   height: 100%;
   border: 1px solid #dddee1;
   box-sizing: border-box;
-  overflow:auto;
-  max-height: 800px;
 }
 
 .el-tree {

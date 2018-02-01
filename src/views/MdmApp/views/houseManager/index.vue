@@ -9,7 +9,7 @@
             </el-table-column>
             <el-table-column label="房屋名称" prop="houseName">
             </el-table-column>
-            <el-table-column label="房屋用途" prop="houseUseForStr">
+            <el-table-column label="房屋用途" prop="houseUseFor">
             </el-table-column>
             <el-table-column label="居住人数" prop="residentNum">
             </el-table-column>
