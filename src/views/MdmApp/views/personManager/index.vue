@@ -9,7 +9,21 @@
       <div>
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='小区名称'>
-            <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input>
+            <!-- <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input> -->
+            <el-select
+              v-model='searchCondition.courtUuid'
+              :remote-method="getCourts"
+              :loading="getCourtsLoading"
+              placeholder="请输入小区名称"
+              remote
+              filterable>
+              <el-option
+                v-for="court in courts"
+                :key="court.uuid"
+                :label="court.name"
+                :value="court.uuid">
+              </el-option>
+            </el-select>
           </el-form-item>
           <el-form-item label='姓名'>
             <el-input placeholder='请输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
@@ -123,6 +137,7 @@
 <script>
 import { getPersonList } from '../../apis/personManager'
 import { getHouseDetailByUuid } from '../../apis/houseManager'
+import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
   data () {
     return {
@@ -134,11 +149,14 @@ export default {
       pageSize: 10,
       tableData: [],
       loading: false,
+      getCourtsLoading: false,
+      courts: [],
       detailDialogVisible: false,
       title: '人员详细信息',
       activeName: 'basic',
       modelDetailForm: {},
       searchCondition: {
+        courtUuid: '',
         name: '',
         idenNum: '',
         phone: '',
@@ -176,15 +194,24 @@ export default {
       // 根据人员的uuid获取该人员的房产信息
       getHouseDetailByUuid({'userUuid': rowData.uuid})
       .then(res => {
-        console.log('!!!!!!!!!!!')
-        console.log(res.data.data)
-        console.log('!!!!!!!!!!!')
         this.modelDetailForm.detail = res.data.data
       })
       .catch(err => {
         console.log(err)
       })
       // console.log(JSON.stringify(rowData))
+    },
+    getCourts: function (query) {
+      this.getCourtsLoading = true
+      getCourtsByConditions({'name': query, 'pageSize': 1000, 'currentPage': 1})
+        .then(res => {
+          this.getCourtsLoading = false
+          this.courts = res.data.data.result
+        })
+        .catch(err => {
+          console.log(err)
+          this.getCourtsLoading = false
+        })
     },
     closeDetailDialog: function () {
       this.detailDialogVisible = false
@@ -233,6 +260,7 @@ export default {
       let condition = {}
       this.loading = true
       // 查询条件
+      condition.courtUuid = this.searchCondition.courtUuid
       condition.name = this.searchCondition.name
       condition.idenNum = this.searchCondition.idenNum
       condition.phone = this.searchCondition.phone
