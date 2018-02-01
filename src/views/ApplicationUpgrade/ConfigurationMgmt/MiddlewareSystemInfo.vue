@@ -133,21 +133,21 @@ export default {
           prop: 'courtDto.memo',
           width: 120
         }, {
-          colName: '中间件名称',
+          colName: '软件名称',
           prop: 'name',
           width: 120
         }, {
-          colName: '中间件版本',
+          colName: '软件版本',
           prop: 'version',
           width: 120
         }, {
-          colName: '中间件安装路径',
+          colName: '软件安装路径',
           prop: 'path',
-          width: 120
+          width: 200
         }, {
           colName: '服务器主机名称',
           prop: 'server.hostname',
-          width: 150
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'

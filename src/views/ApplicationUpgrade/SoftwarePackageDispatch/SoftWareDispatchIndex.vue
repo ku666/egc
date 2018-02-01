@@ -1,32 +1,62 @@
 <template>
 <div class="ui-common">
-  <el-collapse accordion >
-    <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index">
-      <template slot="title" >
-        <div class="el-collapse-item__header">
-        一致性 Consistency {{ item.batchName }}
+
+  <div class="item-container">
+    <el-row :gutter="50">
+      <el-col :span="6">
+        <div class="item-container">
+          <span class="sub-title">软件包名称</span>
+          <el-input v-model="searchCondition.name" placeholder="请输入软件包名称" clearable></el-input>
         </div>
-      </template>
-      <div style="margin-top: 10px; text-align: right">
-        <el-button @click="_selectOrg" class="action-btn" type="primary">选择组织</el-button>
-      </div>
-      <div style="margin-top:10px">
-        <template>
+      </el-col>
+      <el-col :span="4">
+        <div class="item-container">
+          <span class="sub-title">软件包版本</span>
+          <el-input v-model="searchCondition.version" placeholder="请输入软件包版本" clearable></el-input>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="item-container">
+          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
+          <el-input v-model="searchCondition.developer" placeholder="请输入开发者" clearable></el-input>
+        </div>
+      </el-col>
+      <el-col :span="3">
+        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+      </el-col>
+      <el-col :span="2">
+        <el-button @click="_callHandleFilter" class="search-btn" type="primary">搜索</el-button>
+      </el-col>
+      <el-col :span="2">
+        <el-button @click="_selectOrg" class="action-btn" type="primary" style="margin-left:60px;">选择组织</el-button>
+      </el-col>
+    </el-row>
+  </div>
+
+
+  <div style="margin-top: 20px">
+    <el-collapse accordion v-model="activeNames" v-for="(item , index) in dispatchDataList" :key="index" @change="handleChange ([item.packageDataList[0]])">
+      <el-collapse-item  :name="item.batchName" >
+        <template slot="title" >
+          <div class="el-collapse-item__header" style="text-align:center; font-size; 18px;">
+          {{ item.batchName }}
+          </div>
+        </template>        
           <el-table
             ref="multipleTable"
             :data="item.packageDataList"
             tooltip-effect="dark"
             style="width: 100%"
-            @selection-change="handleSelectionChange">
+            @selection-change="handleSelectionChange"
+            stripe border>
 
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column  type="index" label="编号" width="50"></el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
           </el-table>
-        </template>
-      </div>
-    </el-collapse-item>
-  </el-collapse>
+      </el-collapse-item>
+    </el-collapse>
+  </div>
 
   <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
     <org-tree></org-tree>
@@ -48,6 +78,14 @@ export default {
     return {
       selectOrgVisible: false,
       dialogTittle: '选择组织',
+      activeNames: '',
+      multipleSelection: [],
+      formLabelWidth: '160px',
+      searchCondition: {
+        name: '',
+        version: '',
+        developer: ''
+      },
       tableTitleList: [
         {
           colName: '软件包名称',
@@ -83,7 +121,8 @@ export default {
           width: 150
         }, {
           colName: '前续软件包版本',
-          prop: 'latestPreVer'
+          prop: 'latestPreVer',
+          width: 120
         }, {
           colName: '备注',
           prop: 'remark'
@@ -94,13 +133,31 @@ export default {
   },
 
   methods: {
+    _handleClearQuery () {
+      this.searchCondition = {name: '', version: '', developer: ''}
+    },
+    _callHandleFilter () {
+      console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
+    },
+    handleChange (rows, val) {
+      console.log('rows --- >' + JSON.stringify(rows))
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row, true)
+        })
+      } else {
+        this.$refs.multipleTable.clearSelection()
+      }
+      // console.log(this.$refs.multipleTable)
+      // this.$refs.multipleTable.clearSelection()
+    },
     loadData () {
-      console.log('- get dispatch softwares -- > ')
       getAllRegisterPackages()
         .then(
           function (result) {
             console.log('operating system result === > ' + JSON.stringify(result))
             this.dispatchDataList = result.testData
+            this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
         )
         .catch(
@@ -111,8 +168,7 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
-      console.log(this.multipleSelection)
-      this.currentRow = val
+      console.log(JSON.stringify(this.multipleSelection))
     },
     _selectOrg () {
       this.selectOrgVisible = true
@@ -125,5 +181,17 @@ export default {
 </script>
 
 <style scoped>
-  @import "assets/css/softwaredispatch.less"
+div.item-container{
+  display: flex;
+}
+.detail-span {
+  width: 200px;
+}
+.ui-common span.sub-title {
+  width: 140px;
+  color: #7b6f6f;
+  font-size: var(--font-size-el-table);
+  padding-top: 13px;
+}
+
 </style>

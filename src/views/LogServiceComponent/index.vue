@@ -214,7 +214,7 @@ export default {
       this.formInline.endDate = ''
       this.formInline.ip = ''
       this.formInline.url = ''
-      this.selectedSystemCodeOptions = []
+      this.value = ''
     },
     // 改变分页大小
     handleSizeChange (val) {

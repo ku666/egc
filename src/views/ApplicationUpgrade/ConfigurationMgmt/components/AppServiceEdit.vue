@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-form :inline="true" :model="auappServiceDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" auappServiceDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.name"></el-input>
       </el-form-item>
@@ -51,23 +53,25 @@
       <el-form-item label="服务域名" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input"  v-model="auappServiceDetails.domainName" :maxlength="maxlength"></el-input>
       </el-form-item>
-      <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.publicIp" :maxlength="maxlength"></el-input>
-      </el-form-item>
-      <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.domainName" :maxlength="maxlength"></el-input>
-      </el-form-item>
-      <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.hostname" :maxlength="maxlength"></el-input>
-      </el-form-item>
-      <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.intranetIp" :maxlength="maxlength"></el-input>
-      </el-form-item>
+      <template v-if=" auappServiceDetails.upgradeServers !== null">
+        <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.publicIp" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.domainName" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.hostname" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.intranetIp" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
       <div style="text-align:center;">
-        <el-button @click="updateAppServiceInfo" class="action-btn">保 存</el-button>
+        <el-button @click="updateAppServiceInfo" class="action-btn" type="primary">保 存</el-button>
     </div>
     </el-form>
   </div>

@@ -3,7 +3,7 @@
   <el-row :gutter="40">
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择省</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择省</span>
         <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable  @change="loadCityData">
           <el-option
             v-for="item in provinces"
@@ -16,7 +16,7 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择市</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择市</span>
         <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable  @change="loadDistrictData">
           <el-option
             v-for="item in cities"
@@ -29,7 +29,7 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择区</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区</span>
         <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
           <el-option
             v-for="item in districts"
@@ -53,12 +53,12 @@
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 40px">搜索</el-button>
+      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 15px">搜索</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 80px">导出</el-button>
+      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 30px">导出</el-button>
       </div>
     </el-col>
   </el-row>

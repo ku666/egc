@@ -329,8 +329,8 @@ export default {
           }.bind(this)
         ).catch(
           function (error) {
-            console.log(error)
             this.loading = false
+            console.log(error)
           }
         )
     },

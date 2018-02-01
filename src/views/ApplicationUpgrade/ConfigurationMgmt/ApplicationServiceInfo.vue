@@ -184,6 +184,7 @@ export default {
       getAppServiceDetails(eachRowUUID)
           .then(
             function (result) {
+              console.log('app service details --- >  ' + JSON.stringify(result))
               this.auappServiceData = result.auServices
               this.dialogDetailsVisible = true
             }.bind(this)
@@ -254,17 +255,8 @@ export default {
             // 再次加载列表的数据
             // this.loadData()
               this.$message({
-                title: '数据更新成功',
                 message: '数据更新成功',
-                type: 'success',
-                duration: 2000
-              })
-            } else {
-              this.$message({
-                title: '数据更新失败',
-                message: '数据更新失败',
-                type: 'success',
-                duration: 2000
+                type: 'success'
               })
             }
           }.bind(this)
