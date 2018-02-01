@@ -14,9 +14,9 @@ module.exports = function (config) {
     browsers: ['PhantomJS'],
     frameworks: ['mocha', 'sinon-chai', 'phantomjs-shim'],
     reporters: ['spec', 'coverage'],
-    files: ['./index.js'],
+    files: ['./specs/**/*.js'],
     preprocessors: {
-      './index.js': ['webpack', 'sourcemap']
+      './specs/**/*.js': ['webpack', 'sourcemap']
     },
     webpack: webpackConfig,
     webpackMiddleware: {
@@ -24,10 +24,13 @@ module.exports = function (config) {
     },
     coverageReporter: {
       dir: './coverage',
-      reporters: [
-        { type: 'lcov', subdir: '.' },
-        { type: 'text-summary' }
-      ]
-    }
+      reporters: [{ type: 'lcov', subdir: '.' }, { type: 'text-summary' }]
+    },
+    port: 9876,
+    colors: true,
+    autoWatch: true,
+    singleRun: false,
+    logLevel: config.LOG_INFO,
+    concurrency: Infinity
   })
 }
