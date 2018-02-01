@@ -53,14 +53,14 @@ var option = {
   },
   visualMap: {
     min: 0,
-    max: 500,
+    max: 100,
     left: '90%',
     top: '40%',
     text: ['High', 'Low'],
     seriesIndex: [1],
     inRange: {
-      color: ['#e0ffff', '#006edd']
-      // color: ['orangered', 'gold', 'yellow', 'green', 'lightgreen', 'lightgrey']
+      // color: ['#e0ffff', '#006edd']
+      color: ['#e0ffff', 'lightgreen', 'gold', 'yellow', 'green', 'orangered'] // lightgrey
     },
     calculable: true
   },
@@ -192,16 +192,40 @@ var updateChooseData = function (data) {
   }
 }
 
+/**
+ * 更新全国各省拥有的小区数量
+ * @param {*} data
+ * {
+ *  name: '广东',
+ *  value: 小区数量
+ */
+var updateProvinceData = function (data) {
+  if (data instanceof Object) {
+    var max = 0
+    for (var i = 0, len = provinceData.length; i < len; i++) {
+      for (var key in data) {
+        if (key === provinceData[i].name) {
+          provinceData[i].value = data[key].value
+          provinceData[i].courts = data[key].courts
+          if (data[key].value > max) max = data[key].value
+        }
+      }
+    }
+    option.series[1].data = provinceData
+    option.visualMap.max = max
+  }
+}
+
 var mapData = {
   updateData: updateData,
-  provinceData: provinceData,
   updateChooseData: updateChooseData,
-  option: option
+  option: option,
+  updateProvinceData: updateProvinceData
 }
 
 function randomValue () {
-  // return 0
-  return Math.round(Math.random() * 500)
+  return 0
+  // return Math.round(Math.random() * 100)
 }
 
 // window.mapData = mapData
