@@ -34,6 +34,7 @@
       <!-- <hr/> -->
       <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
+        <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
         <el-table-column label="人员类型" prop="userTypeStr">
@@ -56,9 +57,9 @@
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" width='750px'>
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 750px">
       <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
-      <el-tabs style="height: 350px; margin-top:-20px;" v-model='activeName'>
+      <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
           <div>
             <el-form :model='modelDetailForm' ref='detailForm' label-width='100px'>
@@ -106,10 +107,10 @@
           </div>
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
-          <el-table :data="this.modelDetailForm.detail" stripe height="100%" width="100%">
+          <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
             <el-table-column label="小区" prop="courtName"></el-table-column>
             <el-table-column label="房屋" prop="houseAddress"></el-table-column>
-            <el-table-column label="备注" prop="description"></el-table-column>
+            <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
       </el-tabs>
@@ -121,10 +122,12 @@
 </template>
 <script>
 import { getPersonList } from '../../apis/personManager'
+import { getHouseDetailByUuid } from '../../apis/houseManager'
 export default {
   data () {
     return {
       uuid: null,
+      uuidshow: false,
       selections: [],
       total: 0,
       currentPage: 1,
@@ -170,6 +173,17 @@ export default {
     showPersonDetail: function (rowData = {}) {
       this.detailDialogVisible = true
       this.modelDetailForm = rowData
+      // 根据人员的uuid获取该人员的房产信息
+      getHouseDetailByUuid({'userUuid': rowData.uuid})
+      .then(res => {
+        console.log('!!!!!!!!!!!')
+        console.log(res.data.data)
+        console.log('!!!!!!!!!!!')
+        this.modelDetailForm.detail = res.data.data
+      })
+      .catch(err => {
+        console.log(err)
+      })
       // console.log(JSON.stringify(rowData))
     },
     closeDetailDialog: function () {
