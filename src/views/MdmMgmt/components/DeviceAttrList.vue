@@ -22,54 +22,49 @@
       </el-form>
     </div>
 
-    <el-row>
-      <el-col :span = '22'>
-          <!-- <el-button @click='viewAttr' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-          <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">新增</el-button>
-          <!-- <el-button @click='editAttr' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-          <!-- <el-button @click='delAttrBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
-          <!-- <el-button @click='deleteCategory' icon='el-icon-setting' type="text" class='btn-text'>设备属性</el-button> -->
-      </el-col>
-      <el-col :span = '2'>
+    <div style="margin-top: 15px">
+      <div style="float: left">
+        <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
+      </div>
+      <div style="float: right">
         <el-button icon='el-icon-d-arrow-left' style="margin-center: 10px" plain type="primary" @click="gotodevicemgnt">设备主数据</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
 
     <!-- <hr/> -->
-    <div class="flex-1">
-      <el-table stripe
-        ref = 'attrTable'
-        :data='attrList'
-        tooltip-effect='dark'
-        v-loading='attrListLoading'
-        @selection-change = 'getSelections'
-        @row-dblclick = 'editAttrdbl'
-        @row-click = 'checkrow'
-        element-loading-text='拼命加载中'
-        style='margin-top: 15px'>
-        <!-- <el-table-column type='selection' width='50'></el-table-column> -->
-        <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-        <el-table-column prop='attrCode' label='属性编码'></el-table-column>
-        <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='attrType' label='属性类型' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='attrDataType' label='数据类型' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='unitCode' label='单位编码' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-        <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
-        <el-table-column label='操作'>
-          <template slot-scope='scope'>
-            <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
-            <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
-            <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
-            <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
-          </template>
-        </el-table-column>
+    <el-table stripe
+      ref = 'attrTable'
+      :data='attrList'
+      tooltip-effect='dark'
+      v-loading='attrListLoading'
+      @selection-change = 'getSelections'
+      @row-dblclick = 'editAttrdbl'
+      @row-click = 'checkrow'
+      height="100%"
+      element-loading-text='拼命加载中'
+      style='margin-top: 15px'>
+      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
+      <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
+      <el-table-column prop='attrCode' label='属性编码'></el-table-column>
+      <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='attrType' label='属性类型' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='attrDataType' label='数据类型' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='unitCode' label='单位编码' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+      <el-table-column label='操作'>
+        <template slot-scope='scope'>
+          <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
+          <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
+          <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
+          <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-      </el-table>
-    </div>
     <el-pagination
       background
       :current-page = 'searchAttrForm.currentPage'
@@ -84,7 +79,7 @@
     <el-dialog :visible.sync='attrDialogVisible'
       :modal-append-to-body = 'false'
       :before-close='closedialog'
-      width='750px'>
+      style="min-width: 750px">
       <!-- <div slot='title'>
         <span class = 'head-text'>{{title}}</span>
       </div> -->
@@ -94,8 +89,8 @@
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
         <el-tab-pane label="属性基本信息" name = 'basic'>
-          <div>
-            <el-form :model='attrForm' ref='attrForm' label-width='100px' :rules='attrFormRules'>
+          <div style="padding-left: 30px">
+            <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules'>
               <el-row>
                 <el-col :span = '12'>
                   <el-form-item label='属性编码' prop='attrCode' >
@@ -136,11 +131,12 @@
                   </el-form-item>
                 </el-col>
               </el-row>
-              <div style='text-align: center'>
-                  <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-                  <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
-              </div>
+
             </el-form>
+            <div style='text-align: center; '>
+              <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button>
+              <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
+            </div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="属性域信息" name = 'domain' v-if = 'attrSaved'>
@@ -436,7 +432,7 @@ export default {
         deleteDeviceAttribute({'value': uuidList}).then(res => {
           this.$message({
             message: '刪除成功!',
-            type: 'warning'
+            type: 'success'
           })
           this.search({})
         })

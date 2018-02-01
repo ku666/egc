@@ -1,7 +1,7 @@
 <template>
-  <div class='usermgn'>
+  <div class='ui-common'>
     <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
-      <div>
+      <div class="search-container">
         <el-form-item label="资源类别">
           <el-select v-model="listQuery.q_resourceType" placeholder="请选择" @change="changeResourceType" class="user_el-select">
             <el-option v-for="resourceType in resourceTypeOptions" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
@@ -19,24 +19,35 @@
         <!-- <el-form-item label="逻辑地址" :label-width="formLabelWidth">
           <el-input @keyup.enter.native="handleFilter" class="user_el-input" placeholder="逻辑地址" v-model="listQuery.q_logicalAddress"> </el-input>
         </el-form-item> -->
+        <div class="btn-container">
         <el-form-item>
           <el-button class="action-btn" @click="handleFilter" type="primary">搜索</el-button>
           <el-button @click="resetForm('listQuery')" class="cancel-btn" type="primary" >重置</el-button>
         </el-form-item>
+        </div>
       </div>
       <div>
-        <el-button class="action-btn" @click="handleCreate" type="primary">添加</el-button>
+        <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px"  @click="handleCreate" plain type="primary">添加</el-button>
       </div>
     </el-form>
 
+    <div class="border-divide"></div>
+
+    <div class="table-container">
     <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
       @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
     </resource-list>
+    </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-edit ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
       :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
       @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-edit>
+    </el-dialog>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+      <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
+      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-create>
     </el-dialog>
 
     <div>
@@ -56,6 +67,7 @@
 <script>
 import resourceList from './component/resourceList.vue'
 import resourceEdit from './component/resourceEdit.vue'
+import resourceCreate from './component/resourceCreate.vue'
 import {
   getResourceListByPage,
   createResource,
@@ -76,6 +88,7 @@ export default {
       resourceListParam: undefined,
       total: 0,
       dialogFormVisible: false,
+      dialogCreateFormVisible: false,
       dialogStatus: undefined,
       resourceForm: {
         resourceType: '',       // 资源类别
@@ -133,7 +146,8 @@ export default {
   },
   components: {
     resourceList,
-    resourceEdit
+    resourceEdit,
+    resourceCreate
   },
   mounted () {
     this.loadData()
@@ -143,29 +157,37 @@ export default {
   methods: {
     initListParm () {
       this.menuListParm = [{
+        title: '应用程序',
+        prop: 'appName',
+        width: 180
+      }, {
         title: '菜单名称',
-        prop: 'resourceName'
+        prop: 'resourceName',
+        width: 210
       }, {
         title: '菜单代码',
-        prop: 'menuCode'
-      }, {
-        title: '应用程序',
-        prop: 'appName'
+        prop: 'menuCode',
+        width: 270
       }, {
         title: 'URL',
-        prop: 'resourceUrl'
+        prop: 'resourceUrl',
+        width: 250
       }, {
         title: 'ICON',
-        prop: 'icon'
+        prop: 'icon',
+        width: 110
       }, {
         title: '是否按钮',
-        prop: 'button'
+        prop: 'button',
+        width: 77
       }, {
         title: '排序',
-        prop: 'sort'
+        prop: 'sort',
+        width: 77
       }, {
         title: '已授权角色',
-        prop: 'roleNames'
+        prop: 'roleNames',
+        width: 400
       }]
 
       this.appCodeListParm = [{
@@ -344,7 +366,7 @@ export default {
         'q_logicalAddress': '',
         'q_appCode': ''
       }
-      this.loadData()
+      this.handleFilter()
     },
     // 改变分页大小
     handleSizeChange (val) {
@@ -385,12 +407,13 @@ export default {
     handleCreate () {
       this.initResourceInfo()  // 调用初始信息
       this.resourceForm.resourceType = '1'
-      if (this.$refs.resourceEditVue) {
-        this.$refs.resourceEditVue.initCreateResource()
-        this.$refs.resourceEditVue.handleChange(this.resourceForm.resourceType)
+      if (this.$refs.resourCreateVue) {
+        this.$refs.resourCreateVue.initCreateResource()
+        this.$refs.resourCreateVue.handleChange(this.resourceForm.resourceType)
       }
       this.dialogStatus = '添加资源'
-      this.dialogFormVisible = true
+      this.dialogFormVisible = false
+      this.dialogCreateFormVisible = true
       this.addFlag = false
     },
     resourceDeleteEvent (row) {
@@ -401,7 +424,6 @@ export default {
         type: 'warning'
       })
         .then(() => {
-          console.log('删除操作')
           this.delete(dataResourse.uuid, row)
         })
         .catch(() => {
@@ -413,12 +435,11 @@ export default {
     },
     // 删除资源实体
     delete (uuid, row) {
-      console.log('删除操作:' + uuid)
       deleteResource(uuid)
         .then(
           function (result) {
             console.log(uuid)
-            this.loadData()
+            this.handleFilter()
             this.$message({
               type: 'success',
               message: '删除成功!'
@@ -458,6 +479,7 @@ export default {
             }
             this.dialogStatus = '编辑资源'
             this.dialogFormVisible = true
+            this.dialogCreateFormVisible = false
             this.addFlag = true
           }.bind(this)
         )
@@ -473,12 +495,11 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
-            this.loadData()
-            this.$notify({
-              title: '成功',
-              message: '保存成功',
-              type: 'success',
-              duration: 2000
+            this.dialogCreateFormVisible = false
+            this.handleFilter()
+            this.$message({
+              message: '保存成功！',
+              type: 'success'
             })
           }.bind(this)
         )
@@ -494,18 +515,17 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
-            var item = {}
-            for (var key in data) {
-              item[key] = data[key]
-            }
-            console.log('createResource:' + JSON.stringify(item))
-            this.$set(this.resourceList, 0, item)
-            this.loadData()
-            this.$notify({
-              title: '成功',
-              message: '创建成功',
-              type: 'success',
-              duration: 2000
+            this.dialogCreateFormVisible = false
+            // var item = {}
+            // for (var key in data) {
+            //   item[key] = data[key]
+            // }
+            // this.$set(this.resourceList, 0, item)
+            console.log('createResource:' + JSON.stringify(result))
+            this.handleFilter()
+            this.$message({
+              message: '保存成功！',
+              type: 'success'
             })
           }.bind(this)
         )
@@ -516,12 +536,15 @@ export default {
         )
     },
     handleClose () {
-      this.$refs.resourceEditVue.changeResourceRoleVueFlag()
+      if (this.addFlag) {
+        this.$refs.resourceEditVue.changeResourceRoleVueFlag()
+      }
       console.log('关闭窗口。。。。')
       // this.resourceForm = undefined
       this.initResourceInfo()
       this.dialogFormVisible = false
-      // this.loadData()
+      this.dialogCreateFormVisible = false
+      this.handleFilter()
     },
     changeResourceType () {
       if (this.listQuery.q_resourceType === '1') {
@@ -530,15 +553,19 @@ export default {
       } else if (this.listQuery.q_resourceType === '2') {
         this.labelTitle = '菜单名称'
         this.showQueryParm = true
+        this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '3') {
         this.labelTitle = '服务名称'
         this.showQueryParm = true
+        this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '4') {
         this.labelTitle = '设备组名称'
         this.showQueryParm = true
+        this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '99') {
         this.labelTitle = '设备名称'
         this.showQueryParm = true
+        this.listQuery.q_resourceName = ''
       }
     }
   }

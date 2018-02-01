@@ -22,9 +22,7 @@
                   </el-menu-item>
                 </template>
               </template>
-              <!--
               </el-menu-item>
-              -->
             </el-submenu>
           </template>
         </template>
@@ -42,63 +40,7 @@
 export default {
   data () {
     return {
-      items: [
-        {
-          'icon': 'el-icon-setting',
-          'index': '/home',
-          'title': '首页',
-          'subs': null
-        },
-        {
-          'icon': 'el-icon-menu',
-          'index': '/mdmmgmt/mdmmgmtindex',
-          'title': '主数据管理',
-          'subs': [
-            {
-              'icon': null,
-              'index': '/mdmmgmt/devicecategorylist',
-              'title': '设备分类管理',
-              'subs': null
-            },
-            {
-              'icon': null,
-              'index': '/mdmmgmt/deviceattrlist',
-              'title': '设备属性管理',
-              'subs': null
-            },
-            {
-              'icon': null,
-              'index': '/mdmmgmt/providerlist',
-              'title': '供应商管理',
-              'subs': null
-            }]
-        },
-        {
-          'icon': 'el-icon-menu',
-          'index': '/mapanalysisapp/mapanalysisappindex',
-          'title': '智慧社区',
-          'subs': [
-            {
-              'icon': null,
-              'index': '/mapanalysisapp/index',
-              'title': '地图分析',
-              'subs': null
-            },
-            {
-              'icon': null,
-              'index': '/mapanalysisapp/index2',
-              'title': '首页2',
-              'subs': null
-            },
-            {
-              'icon': null,
-              'index': '/houseallapp/index',
-              'title': '全国小区',
-              'subs': null
-            }
-          ]
-        }
-      ]
+      items: []
     }
   },
   props: {
@@ -108,6 +50,7 @@ export default {
     }
   },
   beforeMount () {
+    console.log('sidebar.vue_beforeMount_  is active')
     // 暂时取消获取菜单的列表数据   20171208 begin
     /*
     var meuns = localStorage.getItem('meuns')
@@ -118,6 +61,7 @@ export default {
   },
   methods: {
     showSelectedTitle () {
+      console.log('sidebar.vue_methods_showSelectedTitle  is active')
       console.log(this.checkedTitle)
     },
     loadData () {
@@ -127,12 +71,14 @@ export default {
   },
   computed: {
     onRoutes () {
+      console.log('sidebar.vue_computed_onRoutes  is active')
       console.log(this.$route.path)
       return this.$route.path
     }
   },
   watch: {
     checkedTitle (curVal, oldVal) {
+      console.log('sidebar.vue_watch_checkedTitle  is active')
       if (curVal) {
         this.checkedTitle = curVal
       }
@@ -163,5 +109,8 @@ export default {
   min-width: 180px;
   font-size: 12px;
 }
+.egsc-admin-sidebar .el-submenu__title {
+  min-width: 180px;
+  font-size: 12px;
+}
 </style>
-

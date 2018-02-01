@@ -8,13 +8,28 @@
     </el-tabs>
     <el-container style="margin-top:20px; text-align:center">
     <el-form ref='editForm' v-show='showSummary' label-width='100px' :model='editForm' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='editForm.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in editForm.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='用户组名称' prop='usergroupName' class='is-required'>
         <el-input v-model='editForm.usergroupName' placeholder='请输入用户组名称'></el-input>
       </el-form-item>
       <el-form-item label='用户组说明' prop='remark'>
         <el-input type='textarea' rows="3" v-model='editForm.remark' style="width:650px"></el-input>
       </el-form-item>
-      <div style="float:right">
+      <div style="text-align:center">
       <el-button class='cancel-btn' type='primary' @click="handleCancel('editForm')">取消</el-button>
       <el-button class='action-btn' style='margin-left: 10px' type='primary' @click="handleSave('editForm')">保存</el-button>
       </div>
@@ -108,7 +123,8 @@ import {
   // deleteDirUserGroup,
   deleteDirUser,
   deleteAssRole,
-  checkUserGroupName
+  checkUserGroupName,
+  listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -121,7 +137,7 @@ export default {
     editForm: {
       usergroupName: undefined,
       remark: undefined,
-      // parentUsergroupName: undefined,
+      userType: undefined,
       uuid: undefined
     }
   },
@@ -129,6 +145,19 @@ export default {
     gridList
   },
   methods: {
+    getUserTypeList () {
+      listUserType()
+        .then(
+          function (result) {
+            this.createForm.userTypeList = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
+          }
+        )
+    },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
@@ -550,23 +579,7 @@ export default {
         )
     },
     handleCancel (editForm) {
-      // this.queryCancel.currentPage = 1
-      // this.queryCancel.pageSize = 5
-      // this.queryCancel.usergroupUuid = this.usergroupUuid
-      // console.log(this.queryCancel)
       this.$emit('listenToChildCloseEvent')
-      // getUserGroupData(this.queryCancel)
-      //   .then(
-      //     function (result) {
-      //       this.editForm.usergroupName = result.usergroupBaseVo.usergroupName
-      //       this.editForm.remark = result.usergroupBaseVo.remark
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
     }
   },
     // watch: {
@@ -671,7 +684,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '登陆 ID',
+          title: '登录 ID',
           prop: 'userName'
         },
         {
@@ -712,41 +725,50 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 16%
+    /* width: 16% */
+    width: 120px;
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 14%
+    /* width: 14% */
+    width: 120px;
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 15%
+    /* width: 15% */
+    width: 140px;
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 15%
+    /* width: 15% */
+    width: 140px;
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 12%
+    /* width: 12% */
+    width: 100px;
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 18%
+    /* width: 18% */
+    width: 150px;
   }
-  #userTable >>> colgroup col:nth-child(7) {
+  /* #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  }
+  } */
   #userTable {
     margin-top: 15px
   }
   #roleTable >>> colgroup col:nth-child(1) {
-    width: 20%
+    /* width: 20% */
+    width: 200px;
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    width: 30%
+    /* width: 30% */
+    width: 220px;
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    width: 40%
+    /* width: 40% */
+    width: 250px;
   }
-  #roleTable >>> colgroup col:nth-child(4) {
+  /* #roleTable >>> colgroup col:nth-child(4) {
     width: 10%
-  }
+  } */
   #roleTable {
     margin-top: 15px
   }

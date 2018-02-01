@@ -6,8 +6,11 @@
     </el-breadcrumb> -->
 
     <div class="person-list">
-      <div class="search-container">
+      <div>
         <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
+          <el-form-item label='小区名称'>
+            <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input>
+          </el-form-item>
           <el-form-item label='姓名'>
             <el-input placeholder='请输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
           </el-form-item>
@@ -20,18 +23,16 @@
           <el-form-item label='电子邮箱'>
             <el-input placeholder='请输入电子邮箱' v-model='searchCondition.mail' @keyup.enter.native='search'></el-input>
           </el-form-item>
-          <el-form-item>
-            <div class="btn-container">
-              <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
-              <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
-            </div>
-          </el-form-item>
+          <div align="right">
+            <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
+            <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+          </div>
         </el-form>
       </div>
 
       <!-- 带分页表格 -->
       <!-- <hr/> -->
-      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading">
+      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
         <el-table-column label="姓名" prop="name">
         </el-table-column>
@@ -181,6 +182,7 @@ export default {
     },
     reset: function () {
       this.searchCondition = {
+        courtName: '',
         name: '',
         // pageSize: 10,
         // currentPage: 1,
@@ -230,9 +232,6 @@ export default {
       }
       getPersonList(condition)
         .then(res => {
-          console.log('res')
-          console.log(res)
-          console.log('res')
           var self = this
           this.total = res.data.totalCount
           const timeOut = setTimeout(function () {

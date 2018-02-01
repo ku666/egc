@@ -23,17 +23,18 @@
 
     <div>
       <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
-      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">新增</el-button>
+      <el-button @click='addProvider' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
       <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
       <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
     </div>
 
     <!-- <hr/> -->
-    <div class="flex-1">
+
       <el-table stripe
         ref = 'providerTable'
         :data='providerList'
         tooltip-effect='dark'
+        height="100%"
         v-loading='providerListLoading'
         @selection-change = 'getSelections'
         @row-dblclick = 'editProviderdbl'
@@ -67,7 +68,7 @@
           </template>
         </el-table-column>
       </el-table>
-    </div>
+
     <el-pagination
       background
       :current-page = 'searchProviderForm.currentPage'
@@ -81,7 +82,7 @@
 
     <el-dialog :visible.sync='providerDialogVisible'
       :modal-append-to-body = 'false'
-      width='750px'>
+      style="min-width: 750px">
       <!-- <div slot='title' class='head-text'>
         <span>{{title}}</span>
       </div> -->
@@ -125,8 +126,8 @@
             </el-col>
           </el-row>
           <div style='text-align: center'>
-            <el-button type='primary' @click='clear' class='btn-reset' :disabled = 'disabledflag'>清空</el-button>
-            <el-button type='primary' @click='save' class='btn-plain' :disabled = 'disabledflag'>保存</el-button>
+            <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button>
+            <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
           </div>
         </el-form>
       </div>

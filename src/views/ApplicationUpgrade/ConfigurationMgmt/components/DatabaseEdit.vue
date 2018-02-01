@@ -1,18 +1,20 @@
 <template>
   <div>
     <el-form :inline="true" :model="databaseEditDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" databaseEditDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="数据库名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.name"></el-input>
       </el-form-item>
@@ -36,8 +38,8 @@
         <el-input class="upgrade_el-input" v-model="databaseEditDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
 
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
       </div>
     </el-form>
   </div>

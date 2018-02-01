@@ -12,9 +12,14 @@ import '@/views/MdmApp/mocks/mock.js'
 // 引用更新升级模块的mock文件
 import '@/views/ApplicationUpgrade/ConfigurationMgmt/mocks/mock.js'
 import '@/views/ApplicationUpgrade/SofwarePackageMgmt/mocks/mock.js'
+import '@/views/ApplicationUpgrade/SoftwarePackageDispatch/mocks/mock.js'
 
+// 引用模型管理模块的mock文件
+import '@/views/modelManagement/mocks/mock.js'
 // 引用日志管理模块的mock文件
 import '@/views/LogServiceComponent/mocks/mock.js'
 
 // 引用用户权限管理模块的mock文件
 import '@/views/UserMgmt/userManagement/mocks/mock.js'
+// 短信网关
+import '@/views/IsmgApp/mocks/mock.js'

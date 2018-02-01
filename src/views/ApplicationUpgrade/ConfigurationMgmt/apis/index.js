@@ -12,30 +12,30 @@ export const getProvinceDataList = (params) => {
   // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   // return Axios.post(ADDR_BASE_PATH + '/court/getProvinceList', params
   // ).then(res => res.data)
-  return Axios.post('/court/getProvinceList', params
-  ).then(res => {
-    return res.data
-  })
+  // return Axios.post('/court/getProvinceList', params
+  // ).then(res => {
+  //   return res.data
+  // })
 
-  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 市
 export const getCityDataList = (params) => {
-  console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post('/court/getCityList', params
-  ).then(res => res.data)
+  // console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  // return Axios.post('/court/getCityList', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
-  console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post('/court/getDistrictList', params
-  ).then(res => res.data)
+  // console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  // return Axios.post('/court/getDistrictList', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 
 // 下载查询结果
@@ -126,10 +126,10 @@ export const getAppServiceDetails = (id) => {
 
 // 更新应用&服务信息
 export const updateAppServiceInfo = (params) => {
-  return Axios.post(BASE_PATH + '/auServices/update', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/auServices/update', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/auServices/update', params).then(res => res.data)
+  return Axios.post(contextPath + '/auServices/update', params).then(res => res.data)
 }
 
 // 刷新应用&服务

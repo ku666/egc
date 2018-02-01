@@ -1,8 +1,7 @@
 <template>
   <el-table
     :data="tableData"
-    border
-    max-height="670"
+    max-height="680"
     >
     <!-- <el-table-column label="序号" type="index" width="50"></el-table-column> -->
     <el-table-column
@@ -16,11 +15,11 @@
       label="操作"
       width="80">
       <template slot-scope="scope">
-        <span @click="handleClickEdit(scope.$index)" style="cursor:pointer">
-          <img :src="editImg" style="width: 20px; margin-right:10px">
+        <span @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit">
+          <!-- <img :src="editImg" style="width: 20px; margin-right:10px"> -->
         </span>
-        <span @click="handleClickDelete(scope.$index)" style="cursor:pointer">
-          <img :src="deleteImg" style="width: 20px">
+        <span @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+          <!-- <img :src="deleteImg" style="width: 20px"> -->
         </span>
       </template>
     </el-table-column>

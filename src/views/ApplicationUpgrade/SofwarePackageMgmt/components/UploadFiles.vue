@@ -15,7 +15,7 @@
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
           <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
       </el-upload>
-      <el-button type="primary" @click="_submitUpload">上传服务器</el-button>
+      <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
     </div>
 </template>
 
@@ -44,17 +44,12 @@ export default {
       if (fileLength > 0) {
         uploadExcelFiles(this.uploadFiles)
         .then((res) => {
-          console.info('res code ' + res.code)
-          if (res.code === '200') {
-            this.$message({
-              message: '上传成功',
-              type: 'success',
-              duration: 2000,
-              center: true,
-              showClose: true
-            }).bind(this)
-          }
-        }).catch(
+          this.$message({
+            message: '上传成功!',
+            type: 'success'
+          }).bind(this)
+        }
+        ).catch(
           function (error) {
             this.$message({
               message: error.message,

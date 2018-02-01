@@ -1,9 +1,9 @@
 <template>
-<div>
+<div class="ui-common">
   <el-row :gutter="40">
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择省</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择省</span>
         <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable  @change="loadCityData">
           <el-option
             v-for="item in provinces"
@@ -16,7 +16,7 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择市</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择市</span>
         <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable  @change="loadDistrictData">
           <el-option
             v-for="item in cities"
@@ -29,7 +29,7 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-      <span class="sub-title">选择区</span>
+      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区</span>
         <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
           <el-option
             v-for="item in districts"
@@ -42,23 +42,23 @@
     </el-col>
     <el-col :span="4">
       <div class="item-container">
-        <span class="sub-title">查询条件</span>
+        <span class="sub-title">搜索条件</span>
         <el-input v-model="searchConDetails.condition" placeholder="请输入查询关键字" clearable :maxlength="maxlength"></el-input>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-        <el-button @click="_handleClearQuery">清空</el-button>
+        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHandleFilter">查询</el-button>
+      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 15px">搜索</el-button>
       </div>
     </el-col>
     <el-col :span="2">
       <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult">导出</el-button>
+      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 30px">导出</el-button>
       </div>
     </el-col>
   </el-row>

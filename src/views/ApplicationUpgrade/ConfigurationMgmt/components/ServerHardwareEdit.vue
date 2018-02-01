@@ -5,18 +5,20 @@
     物理网卡1名称？	物理网卡1 MAC？	物理网卡2名称？	物理网卡2 MAC？	硬盘1序列号SN？	硬盘1容量？	硬盘2序列号SN？	硬盘2序列号SN？	
     服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
     <el-form :inline="true" :model="auServerDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" auServerDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="CPU型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.cpuModel"></el-input>
       </el-form-item>
@@ -94,8 +96,8 @@
         <el-input class="upgrade_el-input" v-model="auServerDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
 
-      <div>
-        <el-button type="primary" @click="callBackSaveEvent">保 存</el-button>
+      <div style="text-align: center">
+        <el-button @click="callBackSaveEvent" class="action-btn" type="primary">保 存</el-button>
       </div>
     </el-form>
   </div>

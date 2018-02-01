@@ -1,5 +1,5 @@
 <template>
-  <div id="software-info" >
+  <div class="ui-common">
     <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick'>
       <el-tab-pane label='依赖导入' name='0'>
         <div>
@@ -91,6 +91,7 @@ export default {
 </script>
 
 <style scoped>
-  @import "assets/css/softwaremgmt.less"
+  /* @import "assets/css/softwaremgmt.less" */
+  @import "../ConfigurationMgmt/assets/css/upgrademgmt.less"
 </style>
 

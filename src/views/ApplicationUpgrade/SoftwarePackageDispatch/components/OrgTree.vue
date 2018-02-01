@@ -1,29 +1,28 @@
 <template>
-<div id="softwaredispatchorg">
-  <el-input
-        placeholder="输入关键字进行过滤"
-        class="user_el-select"
-        v-model="filterText">
-      </el-input>
-    <div>
-      <el-tree
-        class="filter-tree"
-        node-key="uuid"
-        :data="orgsData"
-        :props="defaultProps"
-        ref="tree"
-        show-checkbox
-        :check-strictly = "true"
-        @check-change="handleCheckChange"
-        :filter-node-method="filterNode"
-        :default-expanded-keys="expandedKeys"
-        :default-checked-keys="defaultChecked">
-      </el-tree>
-    </div>
-    <div class="dispatch-btn">
-      <el-button type="primary" @click="_confirmSelectdOrg" >下发</el-button>
-    </div>
-</div>
+  <div class="ui-common">
+    <el-input
+      placeholder="输入关键字进行过滤"
+      class="user_el-select"
+      v-model="filterText">
+    </el-input>
+      <div class="tree">
+        <el-tree
+          class="filter-tree"
+          node-key="uuid"
+          :data="orgsData"
+          :props="defaultProps"
+          ref="tree"
+          show-checkbox
+          @check-change="handleCheckChange"
+          :filter-node-method="filterNode"
+          :default-expanded-keys="expandedKeys"
+          :default-checked-keys="defaultChecked">
+        </el-tree>
+      </div>
+      <div style="margin-top: 20px; text-align: right;">
+        <el-button @click="_confirmDispatch" class="action-btn" type="primary">下发</el-button>
+      </div>
+  </div>
 </template>
 
 <script>
@@ -33,13 +32,12 @@ export default {
     return {
       orgsData: [],
       orgsDataTree: [],
+      expandedKeys: [],
       defaultProps: {
         children: 'children',
-        label: 'name'
+        label: 'label'
       },
       filterText: '',
-      dialogTableVisible: false,
-      expandedKeys: [],
       defaultChecked: [],
       houseOrgCodeList: []
     }
@@ -57,11 +55,14 @@ export default {
       getAllOrgs()
         .then(
           function (result) {
-            this.orgsDataTree = []
-            this.expandedKeys = []
-            this.expandedKeys.push(result.uuid)
-            this.orgsDataTree.push(result)
-            this.orgsData = this.orgsDataTree
+            console.log('org tree --- >   ' + JSON.stringify(result.testData))
+            // this.orgsDataTree = []
+            // for (let i = 0; i < result.testData.length; i++) {
+            //   const element = result.testData[i]
+            //   this.orgsDataTree.push(element)
+            // }
+            // this.orgsData = this.orgsDataTree
+            this.orgsData = result.testData
           }.bind(this)
         )
         .catch(
@@ -70,8 +71,11 @@ export default {
           }
         )
     },
-    _confirmSelectdOrg () {
+    _confirmDispatch () {
       console('confirm selected org')
+    },
+    handleNodeClick (orgsData) {
+      console.log(orgsData)
     },
     _onSubmit () {
       console.log('获取树节点值：=-----------------')
@@ -88,7 +92,7 @@ export default {
     },
     filterNode (value, data) {
       if (!value) return true
-      return data.name.indexOf(value) !== -1
+      return data.labelAbbr.indexOf(value) !== -1
     },
     handleCheckChange: function (data, checked, indeterminate) {
       this.deepChangeCheckedJsonData(data.children, checked)
@@ -115,5 +119,22 @@ export default {
 </script>
 
 <style scoped>
-
+.tree{
+  overflow:auto;
+  height:200px;
+  width:920px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+}
+.el-org-tree{
+  width: 100%;
+  height:199px;
+  overflow-x: scroll;
+}
+.el-tree>.el-tree-node{
+  display: inline-block !important;
+}
+.user_el-select {
+  width: 920px;
+}
 </style>

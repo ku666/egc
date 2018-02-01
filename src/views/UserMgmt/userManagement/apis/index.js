@@ -4,6 +4,13 @@ let contextPath = '/scp-usermgmtcomponent'
 // 接口地址
 // const BASE_PATH = '/scp-devicemgmtcomponent/register/'
 
+// ----------------- 云端专用接口 ----------------
+// 获取下属用户组数据
+export const listUserType = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  ).then(res => res.data)
+}
+
 // -----------------  用户组接口 ----------------
 
 // 获取所有用户组清单

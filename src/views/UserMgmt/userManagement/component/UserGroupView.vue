@@ -13,10 +13,7 @@
     </el-container>
       <div v-show="showUser" style="margin-top:-5px">
         <grid-list id='userTable'
-          :editable='false'
-          :deletable='true'
           :showOperation="false" 
-          @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'>
         </grid-list>
@@ -642,7 +639,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '登陆 ID',
+          title: '登录 ID',
           prop: 'userName'
         },
         {

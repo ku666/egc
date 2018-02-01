@@ -7,18 +7,20 @@
     domain_name	public_ip	domain_name	hostname	public_ip
     -->
     <el-form :inline="true" :model="auappServiceDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.district"></el-input>
-      </el-form-item>
-      <el-form-item label="小区名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
-      </el-form-item>
+      <template v-if=" auappServiceDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.district"></el-input>
+        </el-form-item>
+        <el-form-item label="小区名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
+        </el-form-item>
+      </template>
        <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.name"></el-input>
       </el-form-item>
@@ -37,7 +39,7 @@
       <el-form-item label="服务进程名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.processName"></el-input>
       </el-form-item>
-      <template v-if="auappServiceDetails.applications">
+      <template v-if="auappServiceDetails.applications !== null ">
         <el-form-item label="服务安装目录" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.applications.path"></el-input>
         </el-form-item>
@@ -60,18 +62,20 @@
       <el-form-item label="服务域名" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.domainName"></el-input>
       </el-form-item>
-      <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.publicIp"></el-input>
-      </el-form-item>
-      <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.domainName"></el-input>
-      </el-form-item>
-      <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.hostname"></el-input>
-      </el-form-item>
-      <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.intranetIp"></el-input>
-      </el-form-item>
+      <template v-if=" auappServiceDetails.upgradeServers !== null">
+        <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.publicIp"></el-input>
+        </el-form-item>
+        <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.domainName"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.hostname"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.intranetIp"></el-input>
+        </el-form-item>
+      </template>
     </el-form>
 
   </div>

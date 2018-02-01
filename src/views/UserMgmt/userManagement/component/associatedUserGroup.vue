@@ -15,8 +15,8 @@
         <el-table-column prop="usergroupUsers" label="组成员" width="559"></el-table-column>
         <el-table-column label="操作" width="100" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-                <img :src="deleteImg" style="width:20px">
+              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+                <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>
         </el-table-column>

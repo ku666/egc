@@ -1,6 +1,7 @@
 <template>
   <el-table
     :data="tableData"
+    height="100%"
     >
     <!-- <el-table-column label="序号" type="index" width="50"></el-table-column> -->
     <el-table-column
@@ -12,7 +13,6 @@
     <el-table-column
       label="操作"
       align="center"
-      fixed="right"
       width="80">
       <template slot-scope="scope">
         <el-tooltip class="item" effect="light" content="编辑" placement="top-start">

@@ -10,8 +10,12 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/demo': {
-        target: 'http://172.16.30.46:8082/'
+       "/demo": {
+         target: 'http://172.16.30.46:8082/'
+       },
+      "/egc-devicemgmtcomponent": {
+        target: 'http://172.16.30.106:8082/',  // 王珂(设备管理)
+        changeOrigin: true
       },
       '/egcmapanalysis': {
       // '/egc-mapanalysiscomponent': {
@@ -41,7 +45,7 @@ module.exports = {
          changeOrigin: true
        },
       //  "/egc-applicationupgradecomponent": {
-      //   target: 'http://172.16.30.98:8080/',  // 孙飞翔(更新升级)
+      //   target: 'http://172.16.30.98:8081/',  // 孙飞翔(更新升级)
       //   changeOrigin: true
       // },
        "/egc-mdmcomponent": {
@@ -52,12 +56,15 @@ module.exports = {
         target: 'http://192.168.0.242:30940',  // 242线上用户管理
         changeOrigin: true
       },
+      // '/egc-applicationupgradecomponent': {
+      //   target: 'http://172.16.30.112:8080',  // 李世杰
+      //   changeOrigin: true
+      // },
       '/egc-logservicecomponent': {
         target: 'http://172.16.30.9:8082/',  // 日志组件管理
         changeOrigin: true
       }
-      
-    },
+      },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.HOST, if port is in use, a free one will be determined

@@ -17,7 +17,7 @@
     "axios": "^0.17.1",
     "crypto-js": "^3.1.9-1",
     "echarts": "^3.8.5",
-    "element-ui": "^2.0.7",
+    "element-ui": "^2.0.9",
     "hdmap": "git+http://gitlab/xiaxuanyin/UI-mapcomponent.git#master",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",

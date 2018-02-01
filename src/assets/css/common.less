@@ -29,6 +29,11 @@ flex: 1;
 .flex-c;
 .flex-1;
 }
+.table-container {
+  .flex-1;
+  .flex-c;
+  min-height: 700px;
+}
 .el-main {
 padding: 20px 40px !important;
 }
@@ -49,7 +54,7 @@ padding: 20px 40px !important;
   .btn-container {
     flex: 1;
     text-align: right;
-    min-width: 300px;
+    min-width: 20px;
   }
 }
 
@@ -79,6 +84,7 @@ padding: 20px 40px !important;
   background: #fffcfc;
   color: #0078f4;
   border-radius: 4px;
+  border-color: #0078f4;
 }
 // 用于搜索等按钮
 .search-btn{
@@ -116,6 +122,10 @@ p,span{
   font-size: 15px;
   color: #0078f4;
 }
+.el-icon-view {
+  font-size: 15px;
+  color: #0078f4;
+}
 .el-table__row img{
   width: 20px;
 }
@@ -129,14 +139,13 @@ p,span{
 }
 .el-table__header{
   height: 40px;
-  background:#8a8787;
-  opacity: 0.9;
+  // background:#8a8787;
+  // opacity: 0.9;
   font-size: var(--font-size-el-table);
   color: #333333;
 }
-.el-table thead {
-  background:#8a8787;
-  opacity: 0.9;
+.el-table thead tr{
+  background-color:rgba(243, 243, 243, 0.9);
   color: #333333;
 }
 .el-table__row{

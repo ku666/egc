@@ -1,9 +1,11 @@
 <template>
-  <div id="hardware-info" >
-    <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
-    <el-row v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24">
-        <div>
+  <div class="ui-common">
+    <div>
+      <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
+    </div>
+    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+      <el-col :span="24" class="flex-1 flex-c">
+        <div style="margin-top: 20px" class="flex-1">
           <el-table :data="middlewareListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
@@ -11,10 +13,18 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" size="small" :title="detailsTitle"><img :src="details"/></el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" size="small" :title="editTitle"><img :src="edit" /></el-button>
-                <el-button @click="_handleSynData(scope.$index)" type="text" size="small" :title="refreshTitle"><img :src="refresh"/></el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" size="small" :title="historyTitle"><img :src="history"/></el-button>
+                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+                  <!-- <img :src="details"/> -->
+                </el-button>
+                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                  <!-- <img :src="edit" /> -->
+                </el-button>
+                <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
+                  <!-- <img :src="refresh"/> -->
+                </el-button>
+                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+                  <!-- <img :src="history"/> -->
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -123,21 +133,21 @@ export default {
           prop: 'courtDto.memo',
           width: 120
         }, {
-          colName: '中间件名称',
+          colName: '软件名称',
           prop: 'name',
           width: 120
         }, {
-          colName: '中间件版本',
+          colName: '软件版本',
           prop: 'version',
           width: 120
         }, {
-          colName: '中间件安装路径',
+          colName: '软件安装路径',
           prop: 'path',
-          width: 120
+          width: 200
         }, {
           colName: '服务器主机名称',
           prop: 'server.hostname',
-          width: 150
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'
@@ -330,6 +340,6 @@ export default {
 }
 </script>
 
-<<style>
+<style>
 @import "assets/css/upgrademgmt.less";
 </style>

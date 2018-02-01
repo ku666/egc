@@ -28,6 +28,9 @@ export default {
       name: '',
       titleList: [
         {title: '主数据管理'},
+        {title: '地图分析'},
+        {title: '小区信息'},
+        {title: '设备管理'},
         {title: '智慧社区'}
       ]
 
@@ -74,9 +77,8 @@ export default {
       let userInfo = this.$store.getters.getUserInfo
       if (userInfo !== null && userInfo.uiResources !== null && userInfo.uiResources.length > 0) {
         this.titleList = []
-        let i = 0
         let uilength = userInfo.uiResources.length
-        for (i = 0; i < uilength; i++) {
+        for (let i = 0; i < uilength; i++) {
           let uiResTemp = userInfo.uiResources[i]
           let temp = { 'id': uiResTemp.id, 'title': uiResTemp.title, 'icon': '', 'url': uiResTemp.url }
           this.titleList.push(temp)

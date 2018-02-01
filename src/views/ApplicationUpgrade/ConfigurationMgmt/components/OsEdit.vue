@@ -1,15 +1,17 @@
 <template>
   <div>
     <el-form :inline="true" :model="osDetails">
-      <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
-      </el-form-item>
-      <el-form-item label="市" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.city"></el-input>
-      </el-form-item>
-      <el-form-item label="区" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.district"></el-input>
-      </el-form-item>
+      <template v-if=" osDetails.courtDto !== null">
+        <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
+        </el-form-item>
+        <el-form-item label="市" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.city"></el-input>
+        </el-form-item>
+        <el-form-item label="区" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.district"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="小区名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
       </el-form-item>
@@ -36,19 +38,19 @@
       </el-form-item>
 
 
-      <!-- <div>
+      <div>
         <template v-if="osDetails.newItems.length !== 0" v-for="(item, index) in osDetails.newItems">
           <el-form-item :key="index" :label="item.newLabel" :label-width="formLabelWidth">
             <el-input class="upgrade_el-input" v-model="item.newValue"></el-input>
           </el-form-item>
         </template>
-      </div> -->
+      </div>
 
 
-      <div>
-        <el-button type="primary" @click="updateAppServiceInfo">保 存</el-button>
+      <div style="text-align: center">
+        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
 
-        <!-- <el-popover
+        <el-popover
             ref="newCIEventPop"
             visible="showAddNewCIPop"
             placement="right"
@@ -60,11 +62,12 @@
               <div class="margin-top-5"><el-input placeholder="请输入新CI值" size="small" v-model="newValue"></el-input></div>
             </div>
             <div class="text-right margin-top-5">
-              <el-button size="mini" type="text" @click="showAddNewEvent = false">取消</el-button>
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
               <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
             </div>
           </el-popover>
-      <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a> -->
+      <!-- <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a> -->
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
 
       </div>
 
@@ -92,6 +95,7 @@ export default {
   },
   methods: {
     updateAppServiceInfo () {
+      console.log(JSON.stringify(this.osDetails))
       if (this.tempRemark !== this.osDetails.remark) {
         this.$emit('saveOsInfoEvent', this.osDetails)
       } else {
@@ -105,11 +109,18 @@ export default {
     },
     addNewEvent () {
       console.info('add new item')
-      this.osDetails.newItems.push({'newValue': this.newValue, 'newLabel': this.newLabel})
-      console.info(JSON.stringify(this.osDetails))
+      if (this.newLabel.trim() === '') {
+        this.$message.error('请输入标签名')
+      } else if (this.newValue.trim() === '') {
+        this.$message.error('请输入值！')
+      } else {
+        this.osDetails.newItems.push({'newValue': this.newValue, 'newLabel': this.newLabel})
+        console.info(JSON.stringify(this.osDetails))
+      }
     },
     clearData () {
       console.info('clear data')
+      this.showAddNewEvent = false
       this.newLabel = ''
       this.newValue = ''
     }

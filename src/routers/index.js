@@ -14,12 +14,21 @@ import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 import HouseAllApp from '@/views/HouseAllApp/routers/index'
 import MdmApp from '@/views/MdmApp/routers/index'
 
+// 引入设备管理模块路由数据
+import deviceInfoMaintain from '@/views/DeviceMgmt/deviceInfoMaintain/routers/index'
+import firmwareUpdate from '@/views/DeviceMgmt/firmwareUpdate/routers/index'
+// 引入模型管理模块路由数据
+import modelManagementrouters from '@/views/modelManagement/routers/index'
+
 // 引入更新升级模块路由数据
 import upgradeMgmt from '@/views/ApplicationUpgrade/ConfigurationMgmt/routers/index'
 import sofwarePackageMgmt from '@/views/ApplicationUpgrade/SofwarePackageMgmt/routers/index'
 import sofwarePackageDispatch from '@/views/ApplicationUpgrade/SoftwarePackageDispatch/routers/index'
 // 引入日志服务组件路由数据
 import logServiceComponentrouters from '@/views/LogServiceComponent/routers/index'
+// 引入短信网关模块路由数据
+import ismgAppIsmgRouters from '@/views/IsmgApp/routers/index'
+
 // 配置路由
 Vue.use(Router)
 // 定义路由实例
@@ -50,12 +59,16 @@ export default new Router({
         ...userManagementRouters,
         ...mdmMgmtrouters,
         ...MapAnalysisApp,
-        ...HouseAllApp,
         ...MdmApp,
+        ...deviceInfoMaintain,
+        ...firmwareUpdate,
+        ...HouseAllApp,
         ...upgradeMgmt,
+        ...modelManagementrouters,
         ...logServiceComponentrouters,
         ...sofwarePackageMgmt,
-        ...sofwarePackageDispatch
+        ...sofwarePackageDispatch,
+        ...ismgAppIsmgRouters
       ]
     }
   ]

@@ -2,24 +2,28 @@
   <div style="text-align:center">
     <el-container style="text-align: center">
     <el-form ref='form' label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
+      <el-form-item label='用户类型' prop='userType' class="is-required">
+        <el-select 
+        v-model='form.userType' 
+        placeholder='请选择用户类型' 
+        style="width:650px" 
+        @visible-change='getUserTypeList'
+        >
+          <el-option
+            v-for='item in form.userTypeList'
+            :key='item'
+            :label='item.userTypeName'
+            :value='item.userType'>
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
-      </el-form-item>
-      <el-form-item label="用户类型" prop="userType" class="is-required">
-        <el-select placeholder="请选择用户类型" @visible-change='getUserTypeList' @change='userTypeSelected' style='float:left; width: 650px'  v-model='form.userType'>
-          <el-option
-            v-for='(item, index) in userTypeList'
-            :key='index'
-            :label='item.userType'
-            :value='item.uuid'
-            :userGroupId='item.uuid'>
-          </el-option>
-        </el-select>      
       </el-form-item>
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" rows='3' v-model='form.remark' placeholder='请输入角色说明' style="width:650px"></el-input>
       </el-form-item>
-      <div style="float:right">
+      <div style="text-align:center">
       <el-button class='cancel-btn' type='primary' @click="handleCancel('form')">取消</el-button>  
       <el-button class='action-btn' style='margin-left: 10px' @click="handleSave('form')" type='primary'>保存</el-button>
       </div>
@@ -31,7 +35,8 @@
 <script>
   import {
     createRole,
-    checkRoleName
+    checkRoleName,
+    listUserType
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     data () {
@@ -55,9 +60,6 @@
             { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '角色名只能为字母、数字和汉字' },
             { validator: validateRoleName }
           ],
-          userType: [
-            {required: true, message: '请选择用户类型', trigger: 'blur'}
-          ],
           remark: [
             { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
           ]
@@ -73,6 +75,19 @@
       }
     },
     methods: {
+      getUserTypeList () {
+        listUserType()
+          .then(
+            function (result) {
+              this.form.userTypeList = result
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log('错误：' + error)
+            }
+          )
+      },
       // 校验角色名的唯一性
       validateName (roleUuid, roleName) {
         console.log('start validating...' + roleUuid + roleName)

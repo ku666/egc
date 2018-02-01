@@ -124,7 +124,7 @@
   float: right;
 }
 </style>
-<script type="text/javascript">
+<script>
 import { getLogservicelogListByPage, getLogserviceListSysCode } from '@/views/LogServiceComponent/apis'
 
 export default {

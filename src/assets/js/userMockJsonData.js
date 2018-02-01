@@ -90,6 +90,97 @@ export default {
         ]
       },
       {
+        'id': '2',
+        'title': '模型管理',
+        'icon': 'el-icon-menu',
+        'url': '/modelmgmt/modelmgmtindex',
+        'menus': [
+          {
+            'id': null,
+            'title': '模型算法管理',
+            'url': '/modelmgmt/modelalgorithmmgmt',
+            'icon': null,
+            'submenus': [
+              {
+                'id': null,
+                'title': '基本信息管理',
+                'url': '/modelmgmt/baseinfomgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              }
+            ],
+            'items': null
+          },
+          {
+            'id': null,
+            'title': '模型执行管理',
+            'url': '/modelmgmt/modelexcutionmgmt',
+            'icon': null,
+            'submenus': [
+              {
+                'id': null,
+                'title': '计划管理',
+                'url': '/modelmgmt/planmgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '任务管理',
+                'url': '/modelmgmt/taskmgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              }
+            ],
+            'items': null
+          },
+          {
+            'id': null,
+            'title': '系统管理',
+            'url': '/modelmgmt/systemmgmt',
+            'icon': null,
+            'submenus': [
+              {
+                'id': null,
+                'title': '系统参数管理',
+                'url': '/modelmgmt/baseConfigMgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '元数据管理',
+                'url': '/modelmgmt/metacatmgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '节点管理',
+                'url': '/modelmgmt/dispatchnodemgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '数据同步管理',
+                'url': '/modelmgmt/datasyncmgmt',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              }
+            ],
+            'items': null
+          }
+        ]
+      },
+      {
         'id': '4',
         'title': '更新升级',
         'icon': 'el-icon-menu',
@@ -135,7 +226,7 @@ export default {
               },
               {
                 'id': null,
-                'title': '中间件系统',
+                'title': '中间件&运维管理',
                 'url': '/applicationupgrade/middlewaresysinfo',
                 'icon': null,
                 'submenus': null,
@@ -271,19 +362,41 @@ export default {
                 'icon': null,
                 'submenus': null,
                 'items': null
+              },
+              {
+                'id': null,
+                'title': '修改密码',
+                'url': '/usermgmt/userManagement/pwdedit',
+                'icon': null,
+                'submenus': null,
+                'items': null
               }
-              // {
-              //   'id': null,
-              //   'title': '修改密码',
-              //   'url': '/usermgmt/userManagement/pwdedit',
-              //   'icon': null,
-              //   'submenus': null,
-              //   'items': null
-              // }
             ]
           },
           {
             'id': '11',
+            'title': '短信网关',
+            'icon': 'el-icon-menu',
+            'url': '33',
+            'submenus': [{
+              'id': null,
+              'title': '发送短信',
+              'url': '/ismgapp/sendsms',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            },
+            {
+              'id': null,
+              'title': '发送历史记录查询',
+              'url': '/ismgapp/searchsms',
+              'icon': null,
+              'submenus': null,
+              'items': null
+            }]
+          },
+          {
+            'id': '12',
             'title': '日志管理',
             'icon': 'el-icon-menu',
             'url': '33',
@@ -295,6 +408,26 @@ export default {
               'submenus': null,
               'items': null
             }]
+          }
+        ]
+      },
+      {
+        id: '6',
+        title: '设备管理',
+        icon: 'el-icon-menu',
+        url: '/devicemgmt/devicemgmtindex',
+        menus: [
+          {
+            title: '设备基本维护',
+            url: '/devicemgmt/deviceInfoMaintain',
+            icon: null,
+            subs: null
+          },
+          {
+            title: '固件升级',
+            url: '/devicemgmt/devicefirmwareupdate',
+            icon: null,
+            subs: null
           }
         ]
       }

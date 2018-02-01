@@ -29,14 +29,14 @@
        <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.hostname"></el-input>
       </el-form-item>
-      <el-form-item label="描述" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.remark"></el-input>
-      </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="操作系统提供者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.updateUser"></el-input>
+      </el-form-item>
+      <el-form-item label="描述" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.remark"></el-input>
       </el-form-item>
     </el-form>
 

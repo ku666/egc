@@ -1,45 +1,45 @@
 <template>
-  <div id="software-info" >
+  <div class="ui-common">
     <el-row :gutter="40">
       <el-col :span="6">
         <div class="item-container">
-          <span class="sub-title">软件名名称</span>
+          <span class="sub-title">软件名称</span>
           <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="4">
         <div class="item-container">
-          <span class="sub-title">版本号</span>
+          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;版本号</span>
           <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
         </div>
       </el-col>
 
-      <el-col :span="6">
+      <el-col :span="4">
         <div class="item-container">
-          <span class="sub-title">开发者</span>
+          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
           <el-input v-model="searchConditionList.updateUser" placeholder="请输入开发者姓名" clearable></el-input>
         </div>
       </el-col>
 
-      <el-col :span="2">
+      <el-col :span="3">
         <div>
-          <el-button @click="_handleClearQuery">清空</el-button>
+          <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
         </div>
       </el-col>
 
-      <el-col :span="2">
-        <el-button type="primary" @click="_handleFilter">查询</el-button>
+      <el-col :span="3">
+        <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
       </el-col>
 
       <el-col :span="2">
-        <el-button type="info" @click="_handleRegister" round>注册</el-button>
+        <el-button type="info" @click="_handleRegister" class="action-btn">注册</el-button>
       </el-col>
 
     </el-row>
-    <el-row>
-      <el-col :span="24">
-        <div>
+    <el-row class="flex-c" style="height: 100%">
+      <el-col :span="24"  class="flex-1 flex-c">
+        <div style="margin-top: 20px" class="flex-1">
           <el-table :data="softwarePackListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
@@ -47,10 +47,18 @@
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" size="small" :title="detailsTitle"><img :src="details"/></el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" size="small" :title="editTitle"><img :src="edit" /></el-button>
-                <el-button @click="_handleDeleteData(scope.$index)" type="text" size="small" :title="deleteTitle"><img :src="deleteImg"/></el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" size="small" :title="historyTitle"><img :src="history"/></el-button>
+                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+                  <!-- <img :src="details"/> -->
+                </el-button>
+                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                  <!-- <img :src="edit" /> -->
+                </el-button>
+                <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
+                  <!-- <img :src="deleteImg"/> -->
+                </el-button>
+                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+                  <!-- <img :src="history"/> -->
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -271,9 +279,9 @@ export default {
     // 查询
     _handleFilter () {
       this.loading = false
-      if (this.validateInput()) {
-        this.loadData()
-      }
+      // if (this.validateInput()) {
+      this.loadData()
+      // }
     },
 
     // 验证查询输入内容是否为空
@@ -312,19 +320,11 @@ export default {
             registerSoftwarePackage(this.softwareDetails, this.uploadFiles)
             .then((res) => {
               console.log('===>' + res)
-              if (res.code === '200') {
-                this.$message.success('上传成功', 2000)
-                // this.$message({
-                //   message: '上传成功',
-                //   type: 'success',
-                //   center: true,
-                //   showClose: true
-                // }).bind(this)
-                this.dialogRegisterVisible = false
-                this.$refs[formName].resetFields()
-                this.fileList = []
-                this.loadData()
-              }
+              this.$message.success('上传成功', 2000)
+              this.dialogRegisterVisible = false
+              this.$refs[formName].resetFields()
+              this.fileList = []
+              this.loadData()
             }).catch(
               function (error) {
                 this.$message({
@@ -433,12 +433,12 @@ export default {
         .then(
           function (result) {
             console.log('update response --- >' + JSON.stringify(result))
-            if (result.code === '200') {
-              this.$message.success(result.message, 2000)
-              this.dialogEditVisible = false
-              // 再次加载列表的数据
-              this.loadData()
-            }
+            // if (result.code === '200') {
+            this.$message.success(result.message, 2000)
+            this.dialogEditVisible = false
+            // 再次加载列表的数据
+            this.loadData()
+            // }
           }.bind(this)
         )
         .catch(
@@ -466,15 +466,9 @@ export default {
         .then(
           function (result) {
             console.info('delete software package-->' + JSON.stringify(result))
-            if (result.code === '200') {
-              this.$message.success(result.message, 2000)
-              // 再次加载列表数据
-              this.loadData()
-            } else {
-              this.$message.success(result.message, 2000)
-              // 再次加载列表数据
-              this.loadData()
-            }
+            this.$message.success(result.message, 2000)
+            // 再次加载列表数据
+            this.loadData()
           }.bind(this)
         )
         .catch(
@@ -558,5 +552,6 @@ export default {
 </script>
 
 <style scoped>
- @import 'assets/css/softwaremgmt.less'
+ /* @import 'assets/css/softwaremgmt.less' */
+ @import '../ConfigurationMgmt/assets/css/upgrademgmt.less'
 </style>

@@ -32,7 +32,10 @@
     @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource"></resource-device-group>
 
     <div v-show="gridResourceRole">
-      <resource-role-list ref="resourceRoleVue" :actionTypeOptionsProp="actionTypeSelect" :resourceUuidValue="curResourceUuid" :resourceType="curResourceType"></resource-role-list>
+      <div class="flex-1">
+        <resource-role-list ref="resourceRoleVue" :actionTypeOptionsProp="actionTypeSelect"
+        :resourceUuidValue="curResourceUuid" :resourceType="curResourceType"></resource-role-list>
+      </div>
     </div>
   </div>
 </template>

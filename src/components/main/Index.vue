@@ -5,7 +5,7 @@
     </div>
   </div>
 </template>
-<script type="text/javascript">
+<script>
 export default {
   mounted () {
     this.open()
