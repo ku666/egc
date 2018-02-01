@@ -562,7 +562,7 @@ Mock.mock(contextPath + '/provinceData/queryProvinceData', function () {
   }
 })
 /** ====================市================================ */
-Mock.mock(contextPath + 'cityData/queryProvinceData', function () {
+Mock.mock(contextPath + '/cityData/queryProvinceData', function () {
   console.log('mock getauServersList')
   return {
     'code': '00000',
@@ -831,7 +831,7 @@ Mock.mock(contextPath + 'cityData/queryProvinceData', function () {
   }
 })
 /** ====================区================================ */
-Mock.mock(contextPath + 'districtData/queryProvinceData', function () {
+Mock.mock(contextPath + '/districtData/queryProvinceData', function () {
   console.log('mock getauServersList')
   return {
     'code': '00000',

@@ -29,9 +29,6 @@
       <el-form-item label="软件包登记者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.createUser"></el-input>
       </el-form-item>
-      <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item>
       <el-form-item label="软件包英文名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
@@ -62,6 +59,9 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
       <el-form-item label="软件包源路径名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.path"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
     </el-form>

@@ -35,29 +35,28 @@
 
 
   <div style="margin-top: 20px">
-    <el-collapse accordion v-model="activeNames" v-for="(item , index) in dispatchDataList" :key="index" @change="handleChange ([item.packageDataList[0]])">
-      <el-collapse-item  :name="item.batchName" >
+    <el-collapse ref="colls" accordion v-model="activeNames"  @change="handleChange">
+      <el-collapse-item ref="colitems" v-for="(item , index) in dispatchDataList" :key="index" :name="item.batchName">
         <template slot="title" >
           <div class="el-collapse-item__header" style="text-align:center; font-size; 18px;">
-          {{ item.batchName }}
+            {{ item.batchName }}
           </div>
-        </template>        
-          <el-table
-            ref="multipleTable"
-            :data="item.packageDataList"
-            tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            stripe border>
-
-            <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column  type="index" label="编号" width="50"></el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
-          </el-table>
+        </template>
+        <!-- <test-table ref="test" :pckTableList="item.packageDataList"></test-table> -->
+        <el-table
+          ref="multipleTable"
+          :data="item.packageDataList"
+          tooltip-effect="dark"
+          style="width: 100%"
+          @selection-change="handleSelectionChange"
+          stripe border>
+          <el-table-column type="selection" width="55"></el-table-column>
+          <el-table-column  type="index" label="编号" width="50"></el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
+        </el-table>
       </el-collapse-item>
     </el-collapse>
   </div>
-
   <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
     <org-tree></org-tree>
   </el-dialog>
@@ -135,20 +134,17 @@ export default {
   methods: {
     _handleClearQuery () {
       this.searchCondition = {name: '', version: '', developer: ''}
+      // this.$refs.colls.$refs.multipleTable.clearSelection()
     },
     _callHandleFilter () {
       console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
     },
-    handleChange (rows, val) {
-      console.log('rows --- >' + JSON.stringify(rows))
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row, true)
-        })
-      } else {
-        this.$refs.multipleTable.clearSelection()
-      }
-      // console.log(this.$refs.multipleTable)
+    handleChange (val) {
+      // console.log(this.$refs.colls)
+      // console.log(this.$refs.colitems)
+      console.log(this.$refs.multipleTable)
+      // this.$refs.multipleTable.toggleRowSelection()
+      // this.$refs.test.toggleSelection()
       // this.$refs.multipleTable.clearSelection()
     },
     loadData () {
@@ -171,7 +167,11 @@ export default {
       console.log(JSON.stringify(this.multipleSelection))
     },
     _selectOrg () {
-      this.selectOrgVisible = true
+      if (this.multipleSelection.length > 0) {
+        this.selectOrgVisible = true
+      } else {
+        this.$message.error('请选择软件包!')
+      }
     }
   },
   mounted () {

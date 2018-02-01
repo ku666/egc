@@ -26,7 +26,7 @@ export const getCityDataList = (params) => {
   // return Axios.post('/court/getCityList', params
   // ).then(res => res.data)
 
-  return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区

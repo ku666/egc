@@ -77,7 +77,7 @@ export default {
       console.log('Xls[1] --- > ' + Xls)
       const isExcel = (Xls[Xls.length - 1] === 'xls' || Xls[Xls.length - 1] === 'xlsx')
       console.log('Xls[Xls.length - 1] --- > ' + Xls[1])
-      const isLt10M = file.size / 1024 / 1024 < 10
+      const isLt10M = file.size / 1024 / 1024 < 1000
       if (!isExcel) {
         this.$message.error('上传文件只能是 xls/xlsx 格式!')
         this.fileList = []

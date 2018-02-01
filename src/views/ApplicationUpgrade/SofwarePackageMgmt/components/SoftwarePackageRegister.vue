@@ -3,6 +3,11 @@
     <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
       <el-row>
         <el-col :span="12">
+          <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
+            <el-input class="upgrade_el-input" v-model="softwareDetails.batchesName"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
           <el-form-item label="软件名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
             <el-input class="upgrade_el-input" v-model="softwareDetails.name"></el-input>
           </el-form-item>
@@ -18,6 +23,11 @@
         <el-col :span="12">
           <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
             <el-input class="upgrade_el-input" v-model="softwareDetails.developer"></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="latestPreVer">
+            <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
