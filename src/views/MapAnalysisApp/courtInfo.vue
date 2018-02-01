@@ -27,18 +27,18 @@
       <!-- end infoCon -->
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
-        <div id="mapECarts2" style="width:480px; height:300px"></div>
+        <div id="mapECarts2" style="width:480px; height:330px"></div>
         <div v-show="isPerErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
-        <div id="mapECarts3" style="width:480px; height:300px"></div>
+        <div id="mapECarts3" style="width:480px; height:330px"></div>
         <div v-show="isCarErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echartsBox1">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
-        <div id="mapECarts0" class="smallBox" style="width:420px; height:300px"></div>
-        <div id="mapECarts1" class="smallBox" style="width:570px; height:300px"></div>
+        <div id="mapECarts0" class="smallBox" style="width:420px; height:330px"></div>
+        <div id="mapECarts1" class="smallBox" style="width:570px; height:330px"></div>
         <div v-show="isOwnerErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <!-- <el-card class="echartsBox">
@@ -53,7 +53,7 @@
       </el-card> -->
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
-        <div id="mapECarts4" style="width:480px; height:300px"></div>
+        <div id="mapECarts4" style="width:480px; height:330px"></div>
         <div v-show="isEquiErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
       <car-stream ref="carStream"></car-stream>
@@ -149,9 +149,8 @@ export default {
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
-        let msgType = 'warning'
+        let isEmpty = true // 人流报表数据是否为空
         if (res.data.code === '00000') {
-          msgType = 'success'
           let data = res.data.data
           data = data.reverse()
           let timeDate = []
@@ -168,19 +167,17 @@ export default {
           peopleOption.updateInData(perInCount)
           peopleOption.updateOutData(perOutCount)
           // 判断人流数据是否为空
-          if (timeDate.length <= 0 || perInCount.length <= 0 || perOutCount.length <= 0) {
-            this.isPerErrInfo = true
-          } else {
-            this.isPerErrInfo = false
+          if (timeDate.length > 0 && perInCount.length > 0 && perOutCount.length > 0) {
+            isEmpty = false
             this.getMyCharts(2).setOption(peopleOption.option)
           }
         } else {
-          this.isPerErrInfo = true
           this.$message({
-            type: msgType,
+            type: 'warning',
             message: res.data.message
           })
         }
+        this.isPerErrInfo = isEmpty
       }).catch(err => {
         this.isPerErrInfo = true
         this.$message({
@@ -199,9 +196,7 @@ export default {
       }
       getCourtCarAccessInfo(param).then(res => {
         // console.log(res)
-        let msgType = 'warning'
         if (res.data.code === '00000') {
-          msgType = 'success'
           let data = res.data.data
           data = data.reverse()
           let timeDate = []
@@ -227,7 +222,7 @@ export default {
         } else {
           this.isCarErrInfo = true
           this.$message({
-            type: msgType,
+            type: 'warning',
             message: res.data.message
           })
         }
@@ -245,9 +240,7 @@ export default {
         courtUuid: this.courtInfo.courtUuid
       }
       getListDeviceType(param).then(res => {
-        let msgType = 'warning'
         if (res.data.code === '00000') {
-          msgType = 'success'
           let data = res.data.data // .slice(0, 10)
           let equipData = []
           data.map(function (item, index) {
@@ -269,7 +262,7 @@ export default {
         } else {
           this.isEquiErrInfo = true
           this.$message({
-            type: msgType,
+            type: 'warning',
             message: res.data.message
           })
         }
@@ -286,9 +279,7 @@ export default {
       let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
         // console.log(res)
-        let msgType = 'warning'
         if (res.data.code === '00000') {
-          msgType = 'success'
           let ageData = []
           let ageLevelData = []
           let list = res.data.data
@@ -312,7 +303,7 @@ export default {
           }
         } else {
           this.$message({
-            type: msgType,
+            type: 'warning',
             message: res.data.message
           })
           this.isOwnerErrInfo = true
@@ -387,16 +378,16 @@ export default {
   position: relative;
   display: inline-block;
   width: 1045px;
-  height: 330px;
-  margin: 10px 0px 10px 15px;
+  height: 360px;
+  margin: 15px 0px 10px 15px;
   vertical-align: middle;
 }
 .echartsBox {
   position: relative;
   display: inline-block;
   width: 520px;
-  height: 330px;
-  margin: 10px 0px 10px 15px;
+  height: 360px;
+  margin: 15px 0px 10px 15px;
   vertical-align: middle;
 }
 .smallBox {

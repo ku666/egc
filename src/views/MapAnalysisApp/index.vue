@@ -50,10 +50,10 @@ export default {
       chartData: {
       },
       courtList: [],
-      chooseList: [],// 按照搜索的出来的小区列表数据
+      chooseList: [], // 按照搜索的出来的小区列表数据
       textHtml: '',
-      showCourtName: '',// 当前选中的小区名字
-      courtUuid: '',// 当前选中的小区id
+      showCourtName: '', // 当前选中的小区名字
+      courtUuid: '', // 当前选中的小区id
       searchCourtName: ''
     }
   },
@@ -65,7 +65,7 @@ export default {
       mapUrl: 'http://online1.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&p=1&scaler=1&udt=20171115',
       sat: 0,
       zoom: 5,
-      center: [108,34],// 113.619942, 23.304629
+      center: [108, 34], // 113.619942, 23.304629
       popupDom: {
         popup: 'popup',
         popupcloser: 'popup-closer',
@@ -78,23 +78,21 @@ export default {
     // 查询小区列表数据，初始化全国小区列表点位
     getCourtList().then(res => {
       // console.log(res)
-      let msgType = 'warning'
       if (res.data.code === '00000') {
-        msgType = 'success'
         let list = res.data.data
         this.courtList = list
-        let test = [[113.619942, 23.304629],[108.93,34.27],[116.4,39.9],[121.47,31.23],[120.19,30.26],[113.5611,28.4445]] // 广州 西安  北京  上海  杭州
+        let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
         list.map(function (item, index) {
-          if((item.gpsLat && item.gpsLon) ||index<test.length){
-            if(!item.gpsLat){
+          if ((item.gpsLat && item.gpsLon) || index < test.length) {
+            if (!item.gpsLat) {
               item.gpsLon = test[index][0]
               item.gpsLat = test[index][1]
             }
-            let tran = this.map.translate_4326_to_bd09([item.gpsLon,item.gpsLat])
+            let tran = this.map.translate_4326_to_bd09([item.gpsLon, item.gpsLat])
             tran = this.map.translate_4326_to_3857(tran)
             item.gpsLon = tran[0]
             item.gpsLat = tran[1]
-            if(item.gpsLat && item.gpsLon){
+            if (item.gpsLat && item.gpsLon) {
               this.map.addMarker({
                 id: item.courtUuid,
                 position: [item.gpsLon, item.gpsLat],
@@ -106,11 +104,12 @@ export default {
             }
           }
         }, this)
+      } else {
+        this.$message({
+          type: 'warning',
+          message: res.data.message
+        })
       }
-      this.$message({
-        type: msgType,
-        message: res.data.message
-      })
     }).catch(err => {
       this.$message({
         type: 'warning',
@@ -122,14 +121,14 @@ export default {
     // 点击地图
     handleSingleClick: function (e) {
       if (e.feature && e.feature.markerType === 'common') {
-          this.map.showPopup('tipWin', e.coordinate)
-          this.showCourtName = e.feature.name
-          this.courtUuid = e.feature.id
-        }else{
-          // 关闭弹窗
-          this.map.closePopup()
-          this.setMarkers(this.chooseList,[])
-        }
+        this.map.showPopup('tipWin', e.coordinate)
+        this.showCourtName = e.feature.name
+        this.courtUuid = e.feature.id
+      } else {
+        // 关闭弹窗
+        this.map.closePopup()
+        this.setMarkers(this.chooseList, [])
+      }
     },
     // 查看小区人流信息
     openCourtPeo: function () {
@@ -151,8 +150,8 @@ export default {
     searchCourt: function () {
       let str = this.searchCourtName // 把多个空格合并成一个空格
       str = str.trim() // 去掉字符串前后的空格
-      str = str.replace(/s+/g, " ")
-      if(str === ''){
+      str = str.replace(/s+/g, ' ')
+      if (str === '') {
         this.searchCourtName = str
         this.$message({
           type: 'warning',
@@ -160,11 +159,11 @@ export default {
         })
         return
       }
-      getCourtList({courtName:this.searchCourtName}).then(res => {
+      getCourtList({courtName: this.searchCourtName}).then(res => {
         let msgType = 'warning'
-        if (res.data.code === '00000'){
+        if (res.data.code === '00000') {
           msgType = 'success'
-          this.setMarkers(this.chooseList,res.data.data)
+          this.setMarkers(this.chooseList, res.data.data)
         }
         this.$message({
           type: msgType,
@@ -177,33 +176,32 @@ export default {
         })
       })
     },
-    /**设置小区点位的强调显示 @augments flag为true强调显示，为false去掉强调显示*/
-    setMarkers: function (unArr,activeArr) {
-      if(unArr){
-        unArr.map(function (item,index) {
-          let feat = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
-          if(feat){
-            this.setMarkerStyle(feat,markerImg)
+    /** 设置小区点位的强调显示 @augments flag为true强调显示，为false去掉强调显示 */
+    setMarkers: function (unArr, activeArr) {
+      if (unArr) {
+        unArr.map(function (item, index) {
+          let feat = this.map.getMarkerBylayerKey(item.courtUuid, 'commonLayer')
+          if (feat) {
+            this.setMarkerStyle(feat, markerImg)
           }
-        },this)
+        }, this)
         // this.map.closePopup()// 关闭弹窗
       }
-      if(activeArr){
-        activeArr.map(function (item,index) {
-          let feat2 = this.map.getMarkerBylayerKey(item.courtUuid,'commonLayer')
-          if(feat2){
-            this.setMarkerStyle(feat2,chooseImg)
+      if (activeArr) {
+        activeArr.map(function (item, index) {
+          let feat2 = this.map.getMarkerBylayerKey(item.courtUuid, 'commonLayer')
+          if (feat2) {
+            this.setMarkerStyle(feat2, chooseImg)
             // this.map.showPopup('tipWin', feat2.getGeometry().getCoordinates()) //暂时去掉弹窗提示
             // this.showCourtName = item.courtName
             // this.courtUuid = feat2.id_
           }
-        },this)
+        }, this)
         this.chooseList = activeArr
       }
-      
     },
-    setMarkerStyle: function(feat,_img){
-      if(feat){
+    setMarkerStyle: function (feat, _img) {
+      if (feat) {
         feat.setStyle(
           new ol.style.Style({
             image: new ol.style.Icon(
@@ -212,8 +210,8 @@ export default {
           })
         )// end setStyle
       }
-    }//end func 
   }
+    } // end func
 }
 </script>
 <style scoped>

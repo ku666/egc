@@ -7,39 +7,34 @@
       </div>
       <div id="mapECarts" style="width:1000px; height:800px"></div>
     </div>
-    <el-table class="listTB" :data="courtListTB" height="790" style="width: 100%" @row-dblclick="handleRowClick" stripe :row-class-name="tableRowClassName">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="建筑面积">
-              <span>{{ props.row.buildArea }}</span>
-            </el-form-item>
-            <el-form-item label="占地面积">
-              <span>{{ props.row.floorArea }}</span>
-            </el-form-item>
-            <el-form-item label="详细地址">
-              <span>{{ props.row.regionName }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
-      <el-table-column prop="courtName" label="小区名称">
-      </el-table-column>
-      <el-table-column prop="houseCount" label="房屋总数">
-      </el-table-column>
-      <el-table-column prop="homeCount" label="户数总数">
-      </el-table-column>
-      <!-- <el-table-column prop="buildArea" label="建筑面积">
-      </el-table-column>
-      <el-table-column prop="floorArea" label="占地面积">
-      </el-table-column>
-      <el-table-column prop="regionName" label="详细地址">
-      </el-table-column> -->
-    </el-table>
+    <div class="listTB">
+      <el-table :data="courtListTB" height="790" @row-dblclick="handleRowClick" stripe :row-class-name="tableRowClassName">
+        <el-table-column type="expand">
+          <template slot-scope="props">
+            <el-form label-position="left" inline class="demo-table-expand">
+              <el-form-item label="建筑面积">
+                <span>{{ props.row.buildArea }}</span>
+              </el-form-item>
+              <el-form-item label="占地面积">
+                <span>{{ props.row.floorArea }}</span>
+              </el-form-item>
+              <el-form-item label="详细地址" class="itemlarge">
+                <span>{{ props.row.regionName }}</span>
+              </el-form-item>
+            </el-form>
+          </template>
+        </el-table-column>
+        <el-table-column prop="courtName" label="小区名称">
+        </el-table-column>
+        <el-table-column prop="houseCount" label="房屋总数">
+        </el-table-column>
+        <el-table-column prop="homeCount" label="户数总数">
+        </el-table-column>
+      </el-table>
+    </div>
   </div>
 </template>
 <script>
-/* eslint-disable */
 import { getCourtList, getOrgList } from '@/views/MapAnalysisApp/apis/index.js'
 import mapData from '@/views/MapAnalysisApp/assets/js/mapEchartsData.js'
 require('echarts/map/js/china')
@@ -49,8 +44,7 @@ export default {
     return {
       mycharts: null,
       searchCourtName: '',
-      flag: false,
-      courtListTB : [],
+      courtListTB: [],
       rowkeys: [0]
     }
   },
@@ -58,6 +52,7 @@ export default {
     this.getCourtListData()
     // this.getOrgListFn()
     this.getMyCharts.setOption(mapData.option)
+    this.getMyCharts.on('click', this.handleClickMap)
   },
   computed: {
     getMyCharts: function () {
@@ -69,22 +64,25 @@ export default {
     handleClickMap: function (e) {
       mapData.updateChooseData([]) // 清空‘强调显示’的小区信息
       this.getMyCharts.setOption(mapData.option)
+      console.log('点击地图')
+      console.log(e)
       if (e.seriesType === 'scatter' || e.seriesType === 'effectScatter') {
         // 跳转到指定的小区的详情页
-        this.$router.push('/mapanalysisapp/courtinfo/'+e.data.courtUuid)
+        this.$router.push('/mapanalysisapp/courtinfo/' + e.data.courtUuid)
+      } else if (e.seriesType === 'map') {
+        this.courtListTB = e.data.courts
       }
     },
     // 获取小区列表数据
     getCourtListData: function (isSearch) {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
-      getCourtList({courtName:this.searchCourtName}).then(res => {
+      getCourtList({courtName: this.searchCourtName}).then(res => {
         // console.log(res)
-        let msgType = 'warning'
         if (res.data.code === '00000') {
-          msgType = 'success'
           let list = res.data.data
           this.courtList = list
           let pointdata = []
+          let proObj = {}
           // console.log(list)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
           list.map(function (item, index) {
@@ -93,7 +91,6 @@ export default {
                 item.gpsLon = test[index][0]
                 item.gpsLat = test[index][1]
               }
-              // let kk = Math.round(Math.random() * 100)
               let obj = {
                 name: item.courtName,
                 value: [item.gpsLon, item.gpsLat],
@@ -101,22 +98,31 @@ export default {
               }
               pointdata.push(obj)
             }
+            if (!isSearch) {
+              let pname = item.org.replace('省', '')
+              if (!proObj[pname]) {
+                proObj[pname] = {}
+                proObj[pname].value = 0
+                proObj[pname].courts = []
+              }
+              proObj[pname].value += 1
+              proObj[pname].courts.push(item)
+            }
           }, this)
-          this.courtListTB = list.slice(0,10)
+          // console.log(proObj)
+          this.courtListTB = list.slice(0, 10)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
           } else {
             mapData.updateData(pointdata)
+            mapData.updateProvinceData(proObj)
           }
           this.getMyCharts.setOption(mapData.option)
-        }
-        this.$message({
-          type: msgType,
-          message: res.data.message
-        })
-        if(!this.flag){
-          this.getMyCharts.on('click', this.handleClickMap)
-          this.flag = true
+        } else {
+          this.$message({
+            type: 'warning',
+            message: res.data.message
+          })
         }
       }).catch(err => {
         this.$message({
@@ -147,10 +153,9 @@ export default {
     },
     handleRowClick: function (row, e) {
       // console.log(row)
-      this.$router.push('/mapanalysisapp/courtinfo/'+ row.courtUuid)
+      this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     },
     tableRowClassName: function (row, rowIndex) {
-      
     }
   }
 }
@@ -160,16 +165,19 @@ export default {
   width: 100%;
   height: 800px;
   min-width: 1500px;
+  min-height: 800px;
   display: flex;
+  display: -webkit-flex;
   flex-flow: row nowrap;
-  /* justify-content: center; */
+  box-sizing: border-box;
+  /* justify-content: space-between; */
   /* align-items: center; */
   // border: 1px solid #ccc;
   /deep/ .listTB{
-    width: 480px;
+    width: 500px;
     overflow: auto;
-    margin: 7px 0px 0px 20px;
-    
+    margin: 7px 0px 0px 0px;
+    box-sizing: border-box;
     .el-table__row {
       height: 60px;
     }
@@ -188,23 +196,24 @@ export default {
       margin-bottom: 0;
       width: 50%;
     }
-
+    .demo-table-expand .el-form-item.itemlarge{
+      width: 100%;
+    }
   }
 }
 .mapCl{
   display: flex;
+  display: -webkit-flex;
   flex-flow: column nowrap;
   align-items: center;
+  box-sizing: border-box;
 }
 .searchBox{
   width: 50%;
   height: 60px;
   display: flex;
+  display: -webkit-flex;
   flex-flow: row nowrap;
   align-items: center;
 }
-// #mapECarts{
-//   border-right: 1px solid #ccc;
-// }
-
 </style>
