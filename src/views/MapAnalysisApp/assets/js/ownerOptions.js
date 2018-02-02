@@ -68,18 +68,13 @@ let owenrOptionData = {
         }
       }
     },
-    // data: [{value: 335, name: '20-30' }, {value: 310, name: '30-40' }, { value: 234, name: '40-50'}
-    // { value: 135, name: '50-60' }, {value: 1048,name: '60-70' }, { value: 251, name: '70-80'}
-    // { value: 147, name: '80-90' }, { value: 200, name: '90-100' }]
-    data: []
+    data: [] // data: [{value: 335, name: '20-30' }, {value: 310, name: '30-40' }, { value: 234, name: '40-50'}]
   }]
 }
 // 出入频率图表数据
 let rateOptionData = {
   title: {
-    text: '业主出入率',
-    left: '50%',
-    textAlign: 'center'
+    text: '业主出入率'
   },
   tooltip: {
     trigger: 'axis',
@@ -95,20 +90,31 @@ let rateOptionData = {
     },
     extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
   },
+  toolbox: {
+    right: '15',
+    feature: {
+      magicType: {
+        type: ['line', 'bar']
+      },
+      saveAsImage: {
+        show: true,
+        right: '20'
+      }
+    }
+  },
   dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
     type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
-    start: 10, // 左边在 10% 的位置。
+    start: 0, // 左边在 10% 的位置。
     // end: 10 // 滑块结束位置设置。
     // end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
-    end: 60
+    end: 20
   }, { // 这个dataZoom组件，也控制x轴。
     type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
     start: 10, // 左边在 10% 的位置。
     end: 60 // 右边在 60% 的位置。
   }],
   legend: {
-    right: 20,
-    orient: 'vertical',
+    x: 'center',
     data: ['进入次数', '出去次数']
   },
   xAxis: {
