@@ -278,7 +278,7 @@ export default {
     },
     // 清除表单信息
     clear: function () {
-      this.deviceCategoryDetail.uuid = ''
+      // this.deviceCategoryDetail.uuid = ''
       this.deviceCategoryDetail.parentUuid = ''
       this.deviceCategoryDetail.typeCode = ''
       this.deviceCategoryDetail.typeName = ''

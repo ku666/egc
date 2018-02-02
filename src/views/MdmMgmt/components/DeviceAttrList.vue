@@ -475,7 +475,7 @@ export default {
     // 清空新增和修改属性表单
     clear: function () {
       this.attrForm = {
-        uuid: '',
+        // uuid: '',
         attrCode: '',
         attrDesc: '',
         attrType: '',

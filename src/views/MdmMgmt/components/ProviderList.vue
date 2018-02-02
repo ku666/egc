@@ -433,7 +433,7 @@ export default {
     },
     clear: function () {
       this.providerForm = {
-        uuid: '',
+        // uuid: '',
         category: '',
         providerCode: '',
         providerName: '',
