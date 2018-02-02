@@ -133,8 +133,8 @@
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
           <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
-            <el-table-column label="小区" prop="courtName"></el-table-column>
-            <el-table-column label="房屋" prop="houseAddress"></el-table-column>
+            <el-table-column label="小区" prop="courtName" min-width="420px"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress" min-width="420px"></el-table-column>
             <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
