@@ -50,8 +50,8 @@
         <div>
           <el-form>
             <el-form-item>
-              <el-row type = 'flex'>
-                <el-col :span = '24'>
+              <!-- <el-row type = 'flex'>
+                <el-col :span = '24'> -->
                   <el-transfer style="padding-left: 190px;"
                     filterable
                     :titles="['可添加属性', '当前设备属性']"
@@ -63,8 +63,8 @@
                     v-model='selectAttr'
                     :data="transferData">
                   </el-transfer>
-                </el-col>
-              </el-row>
+                <!-- </el-col>
+              </el-row> -->
             </el-form-item>
             <div style='text-align: center'>
               <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
@@ -279,7 +279,9 @@ export default {
     // 清除表单信息
     clear: function () {
       // this.deviceCategoryDetail.uuid = ''
-      this.deviceCategoryDetail.parentUuid = ''
+      if (this.mode !== 3) {
+        this.deviceCategoryDetail.parentUuid = ''
+      }
       this.deviceCategoryDetail.typeCode = ''
       this.deviceCategoryDetail.typeName = ''
       this.deviceCategoryDetail.typeDesc = ''
