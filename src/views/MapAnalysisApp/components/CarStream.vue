@@ -418,6 +418,7 @@ export default {
     closeDialog: function () {
       // 关闭dialog弹窗
       this.clickCount = 0
+      this.isReponseData = false
       if (this.myChart.dispose) { this.myChart.dispose() }
     },
     datePickRangeConfrim () {
