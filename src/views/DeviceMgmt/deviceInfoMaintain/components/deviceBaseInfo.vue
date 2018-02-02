@@ -37,10 +37,10 @@
         <div class="grid-content bg-purple">
           <input-box style="margin-right: 20px"
                      title="所属小区"
-                     code="districtName"
-                     :value="screeningData.districtName"
+                     code="name"
+                     :value="screeningData.courtName"
                      :disabled=true
-                     ref="districtName">
+                     ref="name">
           </input-box>
           <el-button plain @click="_selectDistrict">选择小区</el-button>
           <el-dialog
@@ -84,7 +84,7 @@
             :modal="false"
             :modal-append-to-body="true"
             width="35%">
-            <org-tree @changeDialogStatus="_changeSatus" ref="orgTree"></org-tree>
+            <org-tree @changeDialogStatus="_changeSatus" ref="orgTree" :parentUuid="screeningData.courtUuid"></org-tree>
           </el-dialog>
         </div>
       </el-col>
@@ -108,16 +108,6 @@
                     @listenToInput="_saveDeviceData"
                     :maxlength=32>
           </inputBox>
-        </div>
-      </el-col>
-      <el-col :span="8">
-        <div class="grid-content bg-purple">
-          <select-box title="网关服务标识"
-                      code="gatewayId"
-                      ref="gatewayId"
-                      :options="gatewayType"
-                      @listenToInput="_saveDeviceData">
-          </select-box>
         </div>
       </el-col>
     </el-row>
@@ -192,7 +182,7 @@
               for (let i = 0; i < this.providerList.length; i++) {
                 list.push({
                   value: this.providerList[i].providerCode,
-                  label: this.providerList[i].providerCode
+                  label: this.providerList[i].providerName
                 })
               }
               this.providerType = list
@@ -220,10 +210,12 @@
         //   .catch()
       },
       _selectOrgani () {
-        alert(JSON.stringify(this.screeningData))
-        if (this.screeningData['districtName'] === '' || this.screeningData['districtName'] === undefined) {
+        if (this.screeningData['courtName'] === '' || this.screeningData['courtName'] === undefined) {
           this.$message.error('请先选择小区信息')
         } else {
+          if (this.$refs.orgTree) {
+            this.$refs.orgTree.loadOrgs(this.screeningData['courtUuid'])
+          }
           this.showOrgDialog = true
         }
       },
@@ -266,7 +258,8 @@
       },
       _setDistrictInfo (data) {
         this.showDistrictDialog = false
-        this.screeningData['districtName'] = data.name
+        this.screeningData['courtName'] = data.name
+        this.screeningData['courtUuid'] = data.uuid
       },
       _pageResult (val) {
         this.pageSize = val

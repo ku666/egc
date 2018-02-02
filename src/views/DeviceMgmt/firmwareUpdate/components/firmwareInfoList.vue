@@ -49,6 +49,11 @@
           property="providerCode"
           label="厂商编码">
         </el-table-column>
+        <el-table-column fixed="right" label="操作" width="110">
+          <template slot-scope="scope">
+            <el-button type="text" size="medium"  @click="_deleteFirmware(scope.$index, scope.row)"><i class="el-icon-delete"></i></el-button>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
     <div class="block" style="margin-top: 20px">
@@ -68,42 +73,75 @@
 </template>
 
 <script>
-    export default {
-      data () {
-        return {
-          currentPage: 1,
-          total: 0,
-          pageSize: 10,
-          firmwareInfoData: [],
-          selectData: {}
-        }
-      },
-      methods: {
-        _loadFirmwareInfoData (currentPage, pageSize, selectData) {
-        },
-        _getCurRow (selection, row) {
-          this.$emit('listenToRowSelected', selection)
-        },
-        _handlePageChange (val) {
-          this._loadFirmwareInfoData(val, this.pageSize, this.selectData)
-        },
-        _handleSizeChange (val) {
-          this.pageSize = val
-          this.currentPage = 1
-          if (!this.selectData) {
-            this._loadFirmwareInfoData(1, val)
-          } else {
-            this._loadFirmwareInfoData(1, val, this.selectData)
-          }
-          this.$emit('listenCountOfPage', val)
-        }
-      },
-      mounted () {
-        this._loadFirmwareInfoData(1, this.pageSize)
+  import {getFotaFileList, deleteDmFotaFile, selectFotaFileList} from '../apis/index.js'
+
+  export default {
+    data () {
+      return {
+        currentPage: 1,
+        total: 0,
+        pageSize: 10,
+        firmwareInfoData: [],
+        selectData: {}
       }
+    },
+    methods: {
+      loadFirmwareInfoData (currentPage, pageSize, selectData) {
+        this.currentPage = currentPage
+        if (!selectData) {
+          getFotaFileList(currentPage, pageSize)
+            .then(
+              function (result) {
+                this.firmwareInfoData = result.listDmFotaFile
+                this.total = result.totalCount
+              }.bind(this)
+            )
+            .catch(
+              () => {
+                this.firmwareInfoData = []
+              }
+            )
+        } else {
+          this.selectData['currentPage'] = currentPage
+          this.selectData['pageSize'] = pageSize
+          selectFotaFileList(this.selectData)
+            .then(result => {
+              this.firmwareInfoData = result.listDmFotaFile
+              this.total = result.totalCount
+            })
+            .catch(
+              () => {
+                this.firmwareInfoData = []
+              }
+            )
+        }
+      },
+      _getCurRow (selection, row) {
+        this.$emit('listenToRowSelected', selection)
+      },
+      _handlePageChange (val) {
+        this.loadFirmwareInfoData(val, this.pageSize, this.selectData)
+      },
+      _handleSizeChange (val) {
+        this.pageSize = val
+        this.currentPage = 1
+        if (!this.selectData) {
+          this.loadFirmwareInfoData(1, val)
+        } else {
+          this.loadFirmwareInfoData(1, val, this.selectData)
+        }
+        this.$emit('listenCountOfPage', val)
+      },
+      _deleteFirmware (index, row) {
+        // 删除固件
+        deleteDmFotaFile({'fotaFileViewVo': row})
+          .then(result => {
+            this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
+          })
+      }
+    },
+    mounted () {
+      this.loadFirmwareInfoData(1, this.pageSize)
     }
+  }
 </script>
-
-<style scoped>
-
-</style>

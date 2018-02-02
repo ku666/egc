@@ -1,6 +1,6 @@
 <template>
 <div class="main">
-    <div class="grid-content bg-purple">
+    <div class="orgTreeContent">
       <el-tree
       node-key="uuid"
       :data="orgsData"
@@ -25,9 +25,14 @@
 
 <script>
 import inputBox from './inputBox.vue'
-import {getAllOrgs, getOrgNextLevel} from '../apis/index.js'
+import {getOrg, getOrgNextLevel} from '../apis/index.js'
 
 export default {
+  props: {
+    parentUuid: {
+      type: String
+    }
+  },
   components: {
     inputBox
   },
@@ -45,11 +50,11 @@ export default {
     }
   },
   mounted () {
-    this._loadALlOrgs()
+    this.loadOrgs(this.parentUuid)
   },
   methods: {
-    _loadALlOrgs () {
-      getAllOrgs()
+    loadOrgs (param) {
+      getOrg(param)
         .then(
           function (result) {
             this.$set(this.expandedKeys, 0, result.uuid)
@@ -77,9 +82,8 @@ export default {
       this.orgName = ''
       this.orgId = node.data.uuid
       var nodeLeaf = node
-      var param = {'type': node.data.type, 'isParent': node.data.isParent, 'uuid': node.data.uuid}
       // 请求下级子数据
-      getOrgNextLevel(param)
+      getOrgNextLevel(node.data.uuid)
         .then((result) => {
           this.expandedKeys.push(node.data.uuid)
           this.$refs.tree.updateKeyChildren(node.data.uuid, result)
