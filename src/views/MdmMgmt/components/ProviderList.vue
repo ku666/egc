@@ -94,15 +94,15 @@
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
             <el-col :span='12'>
+              <el-form-item label='供应商编码' prop='providerCode'>
+                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span='12'>
               <el-form-item label='供应商类别' prop='category'>
                 <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
                   <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span='12'>
-              <el-form-item label='供应商编码' prop='providerCode'>
-                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -126,7 +126,7 @@
             </el-col>
           </el-row>
           <div style='text-align: center'>
-            <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button>
+            <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
             <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
           </div>
         </el-form>
@@ -432,14 +432,11 @@ export default {
       }
     },
     clear: function () {
-      this.providerForm = {
-        uuid: '',
-        category: '',
-        providerCode: '',
-        providerName: '',
-        contact: '',
-        providerDesc: ''
-      }
+      this.providerForm.category = ''
+      this.providerForm.providerCode = ''
+      this.providerForm.providerName = ''
+      this.providerForm.contact = ''
+      this.providerForm.providerDesc = ''
       this.clearValidate()
     },
     clearValidate: function () {

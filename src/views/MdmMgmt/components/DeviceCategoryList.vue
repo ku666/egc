@@ -8,34 +8,30 @@
       <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
     </el-breadcrumb> -->
     <div>
-      <el-row>
-        <el-col :span = '24'>
-          <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
-            <el-form-item label='设备型号'>
-              <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
-            </el-form-item>
-            <el-form-item label='设备编码'>
-              <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
-            </el-form-item>
-            <el-form-item label='设备名称'>
-              <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
-            </el-form-item>
-            <el-form-item label='设备描述'>
-              <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
-            </el-form-item>
-            <el-form-item label='供应商'>
-              <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
-                <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <div align="right">
-        <el-button @click='clear' type='primary' class="cancel-btn">清空</el-button>
-        <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
-      </div>
+      <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
+        <el-form-item label='设备型号'>
+          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='设备编码'>
+          <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='设备名称'>
+          <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='设备描述'>
+          <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='供应商'>
+          <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
+            <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <div align="right">
+          <el-button @click.stop='clear' type='primary' class="cancel-btn">清空</el-button>
+          <el-button @click='search' type='primary' class="action-btn">搜索</el-button>
+        </div>
+      </el-form>
     </div>
 
     <div style="margin-top: 15px">

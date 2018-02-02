@@ -49,7 +49,15 @@
               border
               highlight-current-row
               :show-footer="false"
+              @select="_getCurRow"
+              @select-all="_getCurRow"
               @current-change="_getCurRow">
+      <el-table-column
+        v-if="dialogType"
+        :resizable="false"
+        type="selection"
+        width="55">
+      </el-table-column>
       <el-table-column prop="name" label="小区名称">
       </el-table-column>
       <el-table-column prop="province" label="省">
@@ -72,6 +80,7 @@
         </el-pagination>
       </div>
     </div>
+    <el-button v-if="dialogType" type="primary" @click="_confirm" style="margin-left: 90%">提交</el-button>
   </div>
 </template>
 
@@ -83,6 +92,11 @@
   import {getProvinceList, getCityList, getDistrictList, getCourtList} from '../../common/apis/index'
 
   export default {
+    props: {
+      dialogType: {
+        type: Boolean
+      }
+    },
     components: {
       ElButton,
       ElRow,
@@ -98,7 +112,8 @@
         cityType: [],
         districtType: [],
         tableList: [],
-        screeningData: {}
+        screeningData: {},
+        listRows: []
       }
     },
     methods: {
@@ -174,8 +189,17 @@
         this.tableList = []
       },
       _getCurRow (row) {
-        if (row) {
-          this.$emit('listenToRowSelected', row)
+        if (this.dialogType) {
+          this.listRows = row
+        } else {
+          if (row) {
+            this.$emit('listenToRowSelected', row)
+          }
+        }
+      },
+      _confirm () {
+        if (this.listRows.length > 0) {
+          this.$emit('listenToRowSelected', this.listRows)
         }
       }
     },

@@ -37,7 +37,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          prop="providerCode"
+          prop="providerName"
           label="设备厂商"
           width="80">
         </el-table-column>
@@ -48,12 +48,12 @@
           width="150"
           show-overflow-tooltip>
         </el-table-column>
-        <el-table-column
-          :resizable="false"
-          prop="gatewayId"
-          label="接入网关服务标识"
-          width="140">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--:resizable="false"-->
+          <!--prop="gatewayId"-->
+          <!--label="接入网关服务标识"-->
+          <!--width="140">-->
+        <!--</el-table-column>-->
         <el-table-column
           :resizable="false"
           prop="deviceIp"
@@ -160,7 +160,7 @@
                   tableData[i]['updateTime'] = getLocalTime(tableData[i]['updateTime'])
                 }
                 this.mainDeviceTableData = tableData
-                this.total = result.pageCount
+                this.total = result.countTotal
               }.bind(this)
             )
             .catch(
@@ -171,6 +171,7 @@
         } else {
           // 请求查找主设备列表信息
           this.isChildShow = false
+          this.isSlaveShow = false
           this.selectData = selectData
           selectData['currentPage'] = page
           selectData['pageSize'] = pageSize
@@ -189,7 +190,7 @@
                 } else {
                   this.mainDeviceTableData = []
                 }
-                this.total = result.pageCount
+                this.total = result.countTotal
               }.bind(this)
             )
             .catch(

@@ -48,8 +48,8 @@
         </el-row>
       </el-form>
       <div style='text-align: center'>
-          <el-button type='primary' @click='clear' class="cancel-btn">清空</el-button>
-          <el-button type='primary' @click='save' class="action-btn">保存</el-button>
+        <!-- <el-button type='primary' @click='clear' class="cancel-btn">清空</el-button> -->
+        <el-button type='primary' @click='save' class="action-btn">保存</el-button>
       </div>
     </div>
   </div>
@@ -188,6 +188,7 @@ export default {
               type: 'success'
             })
             this.getDomains({})
+            this.domainForm.uuid = ''
             this.domainForm.domainValue = ''
             this.domainForm.domainValueCode = ''
           })
@@ -201,6 +202,7 @@ export default {
       })
     },
     clear: function () {
+      // this.domainForm.uuid = ''
       this.domainForm.domainValue = ''
       this.domainForm.domainValueCode = ''
       this.clearValidate()

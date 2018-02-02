@@ -48,10 +48,10 @@ export default {
   methods: {
     clickNode: function (data, node) {
       if (node.level === 1) {
-        this.searchOption = { 'courtUuid': node.data.uuid }
+        this.searchOption = { 'courtUuid': node.data.uuid, 'nodeLevel': node.level }
         this.search(this.searchOption)
       } else if (node.level > 1) {
-        this.searchOption = { 'orgUuid': node.data.uuid }
+        this.searchOption = { 'uuid': node.data.uuid, 'nodeLevel': node.level }
         this.search(this.searchOption)
       }
       this.$emit('searchOptionChange', this.searchOption)
@@ -77,7 +77,7 @@ export default {
       this.loading = true
       let condition = {}
       condition.name = this.searchKey
-      condition.platformFlag = 1
+      condition.platformFlag = 0
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
       getCourtsByConditions(condition).then(res => {

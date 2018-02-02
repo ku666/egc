@@ -95,13 +95,13 @@
                 </el-col>
                 <el-col :span="12">
                   <label>人员类型：</label>
-                  <label>{{this.modelDetailForm.userType === '1' ? '业主' : '租户'}}</label>
+                  <label>{{this.userTypeName}}</label>
                 </el-col>
               </el-row>
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>性别：</label>
-                  <label>{{this.modelDetailForm.sex === '1' ? '男' : '女'}}</label>
+                  <label>{{this.sexName}}</label>
                 </el-col>
                 <el-col :span="12">
                   <label>生日：</label>
@@ -111,7 +111,7 @@
               <el-row class="line-one">
                 <el-col :span="12">
                   <label>证件类型：</label>
-                  {{this.modelDetailForm.idenType}}
+                  {{this.idenTypeName}}
                 </el-col>
                 <el-col :span="12">
                   <label>证件号码：</label>
@@ -133,8 +133,8 @@
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
           <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
-            <el-table-column label="小区" prop="courtName"></el-table-column>
-            <el-table-column label="房屋" prop="houseAddress"></el-table-column>
+            <el-table-column label="小区" prop="courtName" min-width="420px"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress" min-width="420px"></el-table-column>
             <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
@@ -165,7 +165,17 @@ export default {
       detailDialogVisible: false,
       title: '人员详细信息',
       activeName: 'basic',
-      modelDetailForm: {},
+      modelDetailForm: {
+        name: '',
+        userType: '',
+        sex: '',
+        birth: '',
+        idenType: '',
+        idenNum: '',
+        phone: '',
+        email: '',
+        detail: []
+      },
       searchCondition: {
         courtUuid: '',
         name: '',
@@ -198,10 +208,36 @@ export default {
   },
   components: {
   },
+  computed: {
+    userTypeName: function () {
+      return this.modelDetailForm.userType === '1' ? '业主' : '租户'
+    },
+    sexName: function () {
+      return this.modelDetailForm.sex === '1' ? '男' : '女'
+    },
+    idenTypeName: function () {
+      let that = this
+      let idenType = that.modelDetailForm.idenType
+      let temp = that.idTypes.find(e => e.value === idenType)
+      if (temp) {
+        return temp.label
+      } else {
+        return ''
+      }
+    }
+  },
   methods: {
     showPersonDetail: function (rowData = {}) {
       this.detailDialogVisible = true
-      this.modelDetailForm = rowData
+      this.modelDetailForm.name = rowData.name
+      this.modelDetailForm.userType = rowData.userType
+      this.modelDetailForm.sex = rowData.sex
+      this.modelDetailForm.birth = rowData.birth
+      this.modelDetailForm.idenType = rowData.idenType
+      this.modelDetailForm.idenNum = rowData.idenNum
+      this.modelDetailForm.phone = rowData.phone
+      this.modelDetailForm.email = rowData.email
+
       // 根据人员的uuid获取该人员的房产信息
       getHousesByUserUuid({'userUuid': rowData.uuid})
       .then(res => {

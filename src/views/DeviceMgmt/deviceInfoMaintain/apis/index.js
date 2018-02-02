@@ -4,14 +4,14 @@ import Axios from '@/assets/js/AxiosPlugin'
 const BASE_PATH = '/egc-devicemgmtcomponent/info/'
 
 // 主数据根节点
-export const getAllOrgs = () => {
-  return Axios.get(BASE_PATH + 'getOrg/'
+export const getOrg = (param) => {
+  return Axios.get(BASE_PATH + 'getOrg?id=' + param
   ).then(res => res.data)
 }
 
 // 主数据子节点
 export const getOrgNextLevel = (param) => {
-  return Axios.get(BASE_PATH + 'getOrgNextLevel?id=' + param.uuid + '&type=' + param.type + '&isParent=' + param.isParent
+  return Axios.get(BASE_PATH + 'getOrgNextLevel?id=' + param
   ).then(res => res.data)
 }
 

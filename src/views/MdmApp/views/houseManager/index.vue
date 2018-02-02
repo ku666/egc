@@ -32,7 +32,8 @@
 </template>
 <script>
 import OrgHouseTreeView from './OrgHouseTreeView'
-import { getHouseList } from '../../apis/houseManager'
+import { getHousesByConditions } from '../../apis/houseManager'
+import { getHousesByOrgUuid } from '../../apis/orgManager'
 export default {
   data () {
     return {
@@ -83,7 +84,13 @@ export default {
       this.loading = true
       options.pageSize = this.pageSize
       options.currentPage = this.currentPage
-      getHouseList(options)
+      let func = null
+      if (options.nodeLevel === 1) {
+        func = getHousesByConditions
+      } else {
+        func = getHousesByOrgUuid
+      }
+      func(options)
         .then(res => {
           var self = this
           this.total = res.data.data.totalCount
