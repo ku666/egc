@@ -68,14 +68,12 @@
 <script>
 import orgTree from './components/OrgTree'
 import DispatchedSoftwareResults from './components/DispatchedSoftwareResults'
-import testColle from './testColle'
 // import { getAllRegisterPackages, dispatchSoftwarePackage } from './apis/index'
 import { getAllRegisterPackages, downloadDispatchResult } from './apis/index'
 export default {
   components: {
     orgTree,
-    DispatchedSoftwareResults,
-    testColle
+    DispatchedSoftwareResults
   },
   data () {
     return {
