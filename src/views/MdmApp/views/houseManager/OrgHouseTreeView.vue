@@ -77,7 +77,7 @@ export default {
       this.loading = true
       let condition = {}
       condition.name = this.searchKey
-      condition.platformFlag = 1
+      condition.platformFlag = 0
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
       getCourtsByConditions(condition).then(res => {
