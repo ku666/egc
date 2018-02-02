@@ -474,15 +474,12 @@ export default {
     },
     // 清空新增和修改属性表单
     clear: function () {
-      this.attrForm = {
-        // uuid: '',
-        attrCode: '',
-        attrDesc: '',
-        attrType: '',
-        attrDataType: '',
-        unitDesc: '',
-        unitCode: ''
-      }
+      this.attrForm.attrCode = ''
+      this.attrForm.attrDesc = ''
+      this.attrForm.attrType = ''
+      this.attrForm.attrDataType = ''
+      this.attrForm.unitDesc = ''
+      this.attrForm.unitCode = ''
       this.clearValidate()
     },
     // 清空查询表单

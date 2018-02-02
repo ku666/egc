@@ -432,14 +432,11 @@ export default {
       }
     },
     clear: function () {
-      this.providerForm = {
-        // uuid: '',
-        category: '',
-        providerCode: '',
-        providerName: '',
-        contact: '',
-        providerDesc: ''
-      }
+      this.providerForm.category = ''
+      this.providerForm.providerCode = ''
+      this.providerForm.providerName = ''
+      this.providerForm.contact = ''
+      this.providerForm.providerDesc = ''
       this.clearValidate()
     },
     clearValidate: function () {
