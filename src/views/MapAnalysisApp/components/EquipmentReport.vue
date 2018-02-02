@@ -299,17 +299,18 @@ export default {
 .chartContainer {
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   margin-top: 10px;
 }
 #equipmentchartsbox {
-  width: 640px;
+  width: 620px;
   height: 600px;
   border: 1px solid #ccc;
   text-align: center;
   line-height: 600px;
   overflow: hidden;
+  margin: 0 2px 2px 2px;
 }
 #equipmentchartsbox img {
   margin-top: 200px;
@@ -318,10 +319,9 @@ export default {
   height: 600px;
 }
 #equipmentonlinechartsbox {
-  width: 640px;
+  width: 620px;
   height: 600px;
   border: 1px solid #ccc;
-  border-top: none;
   text-align: center;
   line-height: 600px;
   overflow: hidden;
