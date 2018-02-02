@@ -3,39 +3,47 @@ import Axios from '@/assets/js/AxiosPlugin'
 // 接口地址
 let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-// const ADDR_BASE_PATH = '/egc-mdmcomponent'
+const MDM_BASE_PATH = '/egc-mdmcomponent'
 
 /** 主数据 */
 
 // 省
 export const getProvinceDataList = (params) => {
   // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  // return Axios.post(ADDR_BASE_PATH + '/court/getProvinceList', params
-  // ).then(res => res.data)
+  return Axios.post(MDM_BASE_PATH + '/court/getProvinceList', params
+  ).then(res => res.data)
+
   // return Axios.post('/court/getProvinceList', params
   // ).then(res => {
   //   return res.data
   // })
 
-  return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 市
 export const getCityDataList = (params) => {
   // console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+
+  return Axios.post(MDM_BASE_PATH + '/court/getCityList', params
+  ).then(res => res.data)
+
   // return Axios.post('/court/getCityList', params
   // ).then(res => res.data)
 
-  return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
+  // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
   // console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(MDM_BASE_PATH + '/court/getDistrictList', params
+  ).then(res => res.data)
+
   // return Axios.post('/court/getDistrictList', params
   // ).then(res => res.data)
 
-  return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 
 // 下载查询结果
@@ -126,10 +134,10 @@ export const getAppServiceDetails = (id) => {
 
 // 更新应用&服务信息
 export const updateAppServiceInfo = (params) => {
-  // return Axios.post(BASE_PATH + '/auServices/update', params
-  // ).then(res => res.data)
+  return Axios.post(BASE_PATH + '/auServices/update', params
+  ).then(res => res.data)
 
-  return Axios.post(contextPath + '/auServices/update', params).then(res => res.data)
+  // return Axios.post(contextPath + '/auServices/update', params).then(res => res.data)
 }
 
 // 刷新应用&服务
@@ -152,19 +160,19 @@ export const getAppServiceHistoryList = (id) => {
 // 获取操作系统列表数据
 export const getOSInfoByPage = (params) => {
   // console.log('<<<<<api params data :' + JSON.stringify(params))
-  // return Axios.post(BASE_PATH + '/auOss/queryPageData', params
-  // ).then(res => res.data)
+  return Axios.post(BASE_PATH + '/auOss/queryPageData', params
+  ).then(res => res.data)
 
-  return Axios.get(contextPath + '/auOss/queryPageData').then(res => res.data)
+  // return Axios.get(contextPath + '/auOss/queryPageData').then(res => res.data)
 }
 
 // 获取操作系统信息单条信息的详细信息
 export const getOSDetails = (id) => {
   // console.log('services id  -- > ' + id)
-  // return Axios.get(BASE_PATH + '/auOss/get?id=' + id
-  // ).then(res => res.data)
+  return Axios.get(BASE_PATH + '/auOss/get?id=' + id
+  ).then(res => res.data)
 
-  return Axios.get(contextPath + '/auOss/get?id=').then(res => res.data)
+  // return Axios.get(contextPath + '/auOss/get?id=').then(res => res.data)
 }
 
 // 更新操作系统信息
@@ -214,7 +222,7 @@ export const getDatabaseDetails = (id) => {
 
 // 更新数据库信息
 export const updateDatabaseInfo = (params) => {
-  // console.log('5555555555555555  ' + JSON.stringify(params))
+  // console.log('update database--->  ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auDbms/update', params
   ).then(res => res.data)
 
