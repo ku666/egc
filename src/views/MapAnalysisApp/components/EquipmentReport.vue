@@ -9,10 +9,12 @@
       <div class="courtName">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chartContainer">
         <div id="equipmentchartsbox">
+          <span v-show="noDataTips">暂无数据 </span>
           <img v-show="isReponseData" src="../assets/images/err.png">
           <div id="equipmentcharts"></div>
         </div>
         <div id="equipmentonlinechartsbox">
+          <span v-show="noDataTips">暂无数据 </span>
           <img v-show="isReponseData" src="../assets/images/err.png">
           <div id="equipmentonlinecharts"></div>
         </div>
@@ -20,7 +22,7 @@
       </div>
       <div v-show="isTableShow">
         <div class="equipmentTable">
-          <el-table :data="tableData1" :summary-method="getSummaries" border max-height="550" show-summary style="width: 100%; margin-top: 20px">
+          <el-table :data="tableData1" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
             <el-table-column prop="deviceType" label="设备ID" align="center">
             </el-table-column>
             <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
@@ -47,6 +49,7 @@ export default {
       isChartShow: true,
       isTableShow: false,
       isReponseData: false,
+      noDataTips: false,
       tableData: [],
       names: [],
       onlinenames: [],
@@ -211,10 +214,7 @@ export default {
         let equiData = {}
         equiData.courtUuid = courtId// 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
-          console.log('执行了getListDeviceType')
-          console.log(res)
           if (res.data.code === '00000') {
-            console.log('deviceinfo我的错')
             this.isOnlineReponseData = false
             this.tableData = res.data.data
 
@@ -250,12 +250,13 @@ export default {
               this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
             }
             // 初始化echarts
-            console.log(this.tableData)
-            console.log(this.onlinedata)
             if (this.tableData.length === 0) {
-              this.isReponseData = true
-            } else {
               this.isReponseData = false
+              this.noDataTips = true
+            } else {
+              this.noDataTips = false
+              this.isReponseData = false
+              console.log('执行图表')
               this.chartInit()
               this.onlineChartInit()
             }
@@ -268,14 +269,16 @@ export default {
           }
         }).catch(() => {
           this.isReponseData = true
+          this.noDataTips = false
         })
       })
     },
     closeDialog () {
+      this.isChartShow = true
+      this.isTableShow = false
       this.isReponseData = false
       this.onlinedata = []
       this.totaldata = []
-      console.log(this.equipmentcharts)
       if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
       if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     }
@@ -305,6 +308,7 @@ export default {
   height: 600px;
   border: 1px solid #ccc;
   text-align: center;
+  line-height: 600px;
   overflow: hidden;
 }
 #equipmentchartsbox img {
@@ -317,7 +321,9 @@ export default {
   width: 640px;
   height: 600px;
   border: 1px solid #ccc;
+  border-top: none;
   text-align: center;
+  line-height: 600px;
   overflow: hidden;
 }
 #equipmentonlinechartsbox img {
@@ -329,9 +335,4 @@ export default {
 .clear {
   clear: both;
 }
-/* .table-pager {
-  padding: 0;
-  margin-top: 20px;
-  text-align: right;
-} */
 </style>
