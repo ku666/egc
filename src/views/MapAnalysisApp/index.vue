@@ -107,14 +107,14 @@ export default {
             }
           }, this)
           // console.log(proObj)
-          this.courtListTB = list.slice(0, 10)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
-            this.searchListTB = list
             this.activeName = 'third'
+            this.searchListTB = list
           } else {
             mapData.updateData(pointdata)
             mapData.updateProvinceData(proObj)
+            this.courtListTB = list.slice(0, 10)
           }
           this.getMyCharts.setOption(mapData.option)
         } else {
@@ -164,7 +164,7 @@ export default {
   width: 100%;
   // height: 800px;
   min-width: 1500px;
-  min-height: 800px;
+  min-height: 860px;
   display: flex;
   display: -webkit-flex;
   flex-flow: row nowrap;
