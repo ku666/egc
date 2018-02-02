@@ -302,21 +302,6 @@
             function (result) {
               // 刷新视图
               this.attrList = result.listDmDeviceAttrValue
-              this.attrDomainList = result.attrDomainList
-              for (let i = 0; i < this.attrList.length; i++) {
-                if (this.attrList[i].attrDataType === 'select') {
-                  var list = []
-                  for (let j = 0; j < this.attrDomainList.length; j++) {
-                    var attr = this.attrList[i]
-                    var attrDomain = this.attrDomainList[j]
-                    if (attr['attrUuid'] === attrDomain['attrUuid']) {
-                      attrDomain['value'] = attrDomain.domainValue
-                      list.push(attrDomain)
-                      this.attrList[i]['selectData'] = list
-                    }
-                  }
-                }
-              }
               this.mainDeviceData = result
             }.bind(this)
           )

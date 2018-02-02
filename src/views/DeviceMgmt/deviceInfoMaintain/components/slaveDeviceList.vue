@@ -8,7 +8,7 @@
       stripe
       border
       @current-change="handleCurrentChange">
-      <el-table-column label="子设备信息列表：">
+      <el-table-column label="从属设备信息列表：">
         <el-table-column
           :resizable="false"
           prop="deviceCode"
@@ -29,12 +29,12 @@
           show-overflow-tooltip
           width="150">
         </el-table-column>
-        <el-table-column
-          :resizable="false"
-          property="gatewayId"
-          label="接入网关服务标识"
-          width="150">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--:resizable="false"-->
+          <!--property="gatewayId"-->
+          <!--label="接入网关服务标识"-->
+          <!--width="150">-->
+        <!--</el-table-column>-->
         <el-table-column
           :resizable="false"
           property="deviceIp"
@@ -119,7 +119,7 @@
                 } else {
                   this.slaveDeviceTableData = []
                 }
-                this.total = result.pageCount
+                this.total = result.countTotal
               }.bind(this)
             )
             .catch(

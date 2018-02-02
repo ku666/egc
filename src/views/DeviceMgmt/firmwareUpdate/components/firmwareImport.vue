@@ -5,20 +5,12 @@
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="固件名称"
+                       class="uploadInput"
                        code="fileName"
+                       :disabled="true"
                        @listenToInput="_saveDeviceData"
-                       :value="fileName"
+                       :value="importData.fileName"
                        ref="fileName">
-            </input-box>
-          </div>
-        </el-col>
-        <el-col :span="6">
-          <div class="grid-content bg-purple">
-            <input-box class="uploadInput"
-                       title="本地路径"
-                       code="filePath"
-                       @listenToInput="_saveDeviceData"
-                       ref="filePath">
             </input-box>
             <el-upload
               style="margin-left: 10px"
@@ -94,7 +86,7 @@
   import selectBox from '../../deviceInfoMaintain/components/selectBox'
   import inputBox from '../../deviceInfoMaintain/components/inputBox'
   import ElButton from 'element-ui/packages/button/src/button.vue'
-  // import {readBlobAsDataURL} from '../../deviceInfoMaintain/assets/js/tool.js'
+  import {readBlobAsDataURL} from '../../deviceInfoMaintain/assets/js/tool.js'
   import {getDeviceTypeList, getProviderList} from '../../deviceInfoMaintain/apis/index.js'
   import {importDmFotaFile} from '../apis/index'
   import firmwareMaintain from './firmwareMaintain'
@@ -112,8 +104,7 @@
         deviceType: [{value: '', label: ''}],
         deviceTypeList: [],
         providerType: [],
-        importData: {},
-        fileName: ''
+        importData: {}
       }
     },
     methods: {
@@ -154,22 +145,22 @@
       },
       _importFile () {
         this.importData['deviceType'] = '2002'
-        this.importData['providerCode'] = '1003'
+        this.importData['provideCode'] = '1003'
         importDmFotaFile(this.importData)
           .then(result => {
 
           })
       },
       _handleUploadFile (file, fileList) {
-        this.importData['fileData'] = file
+        // this.importData['fileData'] = file
+        // this.importData['fileName'] = file.name
+        if (fileList.length === 2) {
+          fileList.shift()
+        }
         this.importData['fileName'] = file.name
-        // if (fileList.length === 2) {
-        //   fileList.shift()
-        // }
-        // this.fileName = file.name
-        // readBlobAsDataURL(file.raw, (result) => {
-        //   this.importData['fileData'] = result
-        // })
+        readBlobAsDataURL(file.raw, (result) => {
+          this.importData['fileData'] = result
+        })
       },
       _saveDeviceData (data) {
         for (var key in data) {

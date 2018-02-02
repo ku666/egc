@@ -30,12 +30,12 @@
           show-overflow-tooltip
           width="150">
         </el-table-column>
-        <el-table-column
-          :resizable="false"
-          property="gatewayId"
-          label="接入网关服务标识"
-          width="150">
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--:resizable="false"-->
+          <!--property="gatewayId"-->
+          <!--label="接入网关服务标识"-->
+          <!--width="150">-->
+        <!--</el-table-column>-->
         <el-table-column
           :resizable="false"
           property="deviceIp"
@@ -120,7 +120,7 @@
                 } else {
                   this.childDeviceTableData = []
                 }
-                this.total = result.pageCount
+                this.total = result.countTotal
               }.bind(this)
             )
             .catch(
