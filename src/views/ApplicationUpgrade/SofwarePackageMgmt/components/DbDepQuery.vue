@@ -37,7 +37,7 @@
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <hardware-dep-details :dbDepDetails="dbDepDetails"></hardware-dep-details>
+        <db-dep-details :dbDepDetails="dbDepDetails"></db-dep-details>
       </el-dialog>
     </div>
   </div>
@@ -135,7 +135,7 @@ export default {
 
     // 查看硬件依赖每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '硬件运行环境依赖信息详情'
+      this.dialogStatus = '数据库运行环境依赖信息详情'
       var rowData = this.dbDepListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)

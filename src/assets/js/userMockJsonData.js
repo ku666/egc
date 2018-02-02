@@ -293,6 +293,47 @@ export default {
               }
             ],
             'items': null
+          },
+          {
+            'id': null,
+            'title': '元数据维护',
+            'url': 'applicationupgrade/metadatamaintance',
+            'icon': null,
+            'submenus': [
+              {
+                'id': null,
+                'title': '公共代码维护',
+                'url': '/applicationupgrade/commcodemaintance',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '代码实例维护',
+                'url': '/applicationupgrade/codeinstancemaintance',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '软件包批次维护',
+                'url': '/applicationupgrade/softwarepckbatchmaintance',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '配置信息维护',
+                'url': '/applicationupgrade/configinfomaintance',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              }
+            ],
+            'items': null
           }
         ]
       },

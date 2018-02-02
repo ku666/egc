@@ -84,26 +84,45 @@
           <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
             <el-row>
               <el-col :span="12">
+                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesName" :autofocus="true">
+                  <el-select v-model="softwareDetails.batchesName" placeholder="请选择">
+                    <el-option
+                      v-for="item in batchs"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.developer" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12">
                 <el-form-item label="软件名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.name"></el-input>
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.name" :maxlength="maxlength"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
                 <el-form-item label="版本号" :label-width="formLabelWidth" prop="version">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.version"></el-input>
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.version" :maxlength="maxlength"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
 
             <el-row>
               <el-col :span="12">
-                <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.developer"></el-input>
+                <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="latestPreName">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreName" :maxlength="maxlength"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="前续版本" :label-width="formLabelWidth" prop="latestPreVer">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreVer"></el-input>
+                <el-form-item label="前续软件包版本" :label-width="formLabelWidth" prop="latestPreVer">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreVer" :maxlength="maxlength"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -138,8 +157,8 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <div>
-              <el-button type="primary" @click="_registerSoftware('softwareDetails')">注 册</el-button>
+            <div style="text-align:center;">
+              <el-button type="primary" @click="_registerSoftware('softwareDetails')" class="search-btn">注 册</el-button>
             </div>
           </el-form>
         </div>
@@ -203,7 +222,9 @@ export default {
         version: '',
         developer: '',
         latestPreVer: '',
-        newFunction: ''
+        newFunction: '',
+        batchesName: '',
+        latestPreName: ''
       },
       uploadFiles: new FormData(),
       tableTitleList: [
@@ -221,38 +242,42 @@ export default {
           width: 120
         }, {
           colName: '软件包功能说明',
-          prop: 'newFunction',
+          prop: 'functionDesc',
           width: 120
         }, {
           colName: '前续软件包名称',
-          prop: 'latestPreVer',
+          prop: 'lastestPreName',
           width: 150
         }, {
           colName: '前续软件包版本',
           prop: 'latestPreVer'
         }, {
           colName: '软件包登记日期/时间',
-          prop: 'createTime',
+          prop: 'registerTime',
           width: 160
         }, {
           colName: '软件包登记者',
-          prop: 'createUser',
+          prop: 'register',
           width: 120
         }, {
           colName: '备注',
-          prop: 'uuid'
+          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
       editTitle: '编辑',
       deleteTitle: '删除',
       historyTitle: '历史信息',
-      details: require('./assets/images/details.png'),
-      edit: require('./assets/images/edit.png'),
-      deleteImg: require('./assets/images/delete.png'),
-      history: require('./assets/images/history.png'),
       formLabelWidth: '160px',
       fileList: [],
+      maxlength: 30,
+      batchs: [{
+        value: '恒大智慧小区平台1.0',
+        label: '恒大智慧小区平台1.0'
+      }, {
+        value: '恒大智慧小区平台1.1',
+        label: '恒大智慧小区平台1.1'
+      }],
       rules: {
         name: [
           { required: true, message: '请输入软件名称', trigger: 'blur,change' }
@@ -271,6 +296,9 @@ export default {
         ],
         uploadFiles: [
           {}
+        ],
+        batchesName: [
+          { required: true, message: '请选择注册软件包批次', trigger: 'blur,change' }
         ]
       }
     }
@@ -398,9 +426,9 @@ export default {
           .then(
             function (result) {
               console.log(JSON.stringify(result))
-              this.softwarePckDetails = result.data
+              this.softwarePckDetails = result
               this.dialogDetailsVisible = true
-              console.log(' check software details -----------> ' + JSON.stringify(this.softwarePckDetails))
+              console.log(' check software details -----------> ' + JSON.stringify(this.softwarePckDetails, null, ' '))
             }.bind(this)
           )
           .catch()
@@ -414,7 +442,7 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              this.softwarePckDetails = result.data
+              this.softwarePckDetails = result
               this.dialogEditVisible = true
               console.log('edit software details ----------->   ' + JSON.stringify(this.softwarePckDetails))
             }.bind(this)
@@ -433,25 +461,19 @@ export default {
         .then(
           function (result) {
             console.log('update response --- >' + JSON.stringify(result))
-            // if (result.code === '200') {
-            this.$message.success(result.message, 2000)
             this.dialogEditVisible = false
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
             // 再次加载列表的数据
             this.loadData()
-            // }
           }.bind(this)
         )
         .catch(
           function (error) {
-            this.$message({
-              message: '上传失败',
-              type: 'error',
-              duration: 2000,
-              center: true,
-              showClose: true
-            })
             console.log(error)
-          }.bind(this)
+          }
         )
     },
 
@@ -460,22 +482,25 @@ export default {
       var rowData = this.softwarePackListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.info('111-->' + eachRowUUID)
-      this.$confirm('确认删除？')
+      this.$confirm("确定要删除软件包'" + rowData.name + "'?', '提示'", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
       .then(() => {
         deleteSoftwarePack(eachRowUUID)
         .then(
           function (result) {
             console.info('delete software package-->' + JSON.stringify(result))
-            this.$message.success(result.message, 2000)
+            this.$message.success('删除成功')
             // 再次加载列表数据
             this.loadData()
           }.bind(this)
         )
         .catch(
           function (error) {
-            this.$message.error(error.message)
             console.log(error)
-          }.bind(this)
+          }
         )
       })
     },
@@ -490,28 +515,14 @@ export default {
           .then(
             function (result) {
               console.log('get history result -- >' + result)
-              if (result.code === '200') {
-                this.softwarePckHistory = result.data.data
-                this.dialogHistoryVisible = true
-                this.$message({
-                  message: result.message,
-                  type: 'success',
-                  showClose: true,
-                  duration: 2000
-                })
-              }
+              this.softwarePckHistory = result.softwarePckHistoryList
+              this.dialogHistoryVisible = true
             }.bind(this)
           )
           .catch(
             function (error) {
-              this.$message({
-                message: '查询失败',
-                type: 'error',
-                showClose: true,
-                duration: 2000
-              })
               console.log(error)
-            }.bind(this)
+            }
           )
     },
 

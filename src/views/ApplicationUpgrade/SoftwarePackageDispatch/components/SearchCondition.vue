@@ -195,8 +195,8 @@ export default {
               }
             }
           ).catch(
-            function () {
-              that.$message.error('查询省信息失败')
+            function (error) {
+              console.log(error)
             }
           )
     },

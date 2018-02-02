@@ -73,8 +73,10 @@ export const deleteSoftwarePack = (id) => {
 export const getSoftwarePackageHistoryList = (params) => {
   console.log('get softwre package history ---- >' + params)
 
-  return Axios.post(BASE_PATH + '/package/queryPackageHisList?pageNo=1&pageSize=10'
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/queryPackageHisList?pageNo=1&pageSize=10'
+  // ).then(res => res.data)
+
+  return Axios.post(contextPath + '/package/queryPackageHisList/get/id', params).then(res => res.data)
 }
 
 export const uploadSoftwarePackageFiles = (params) => {
@@ -104,89 +106,89 @@ export const register = (params) => {
 // 硬件依赖关系
 export const getHardwareDepByPage = (params) => {
   console.log('get hardware dependency params---- >' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/package/dependence/hw/likeQuery', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/dependence/hw/likeQuery', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/hw/likeQuery', params).then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/hw/likeQuery', params).then(res => res.data)
 }
 
 // 获取硬件依赖关系详细信息
 export const getHardwareDepDetails = (id) => {
   console.log('get hardware dep details id -- > ' + id)
-  return Axios.get(BASE_PATH + '/package/dependence/hw/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/package/dependence/hw/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
 }
 
 // 操作系统依赖关系
 export const getOsDepByPage = (params) => {
   console.log('get hardware dependency ---- >' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/package/dependence/os/likeQuery', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/dependence/os/likeQuery', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/os/likeQuery', params).then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/os/likeQuery', params).then(res => res.data)
 }
 
 // 操作系统依赖关系详细信息
 export const getOsDepDetails = (id) => {
   console.log('get os dep details id -- > ' + id)
-  return Axios.get(BASE_PATH + '/package/dependence/os/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/package/dependence/os/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
 }
 
 // 中间件依赖关系
 export const getMiddlewareDepByPage = (params) => {
   console.log('get middleware dependency ---- >' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/package/dependence/mw/likeQuery', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/dependence/mw/likeQuery', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/mw/likeQuery', params).then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/mw/likeQuery', params).then(res => res.data)
 }
 
 // 中间件依赖关系详细信息
 export const getMiddlewareDepDetails = (id) => {
   console.log('delete software package id -- > ' + id)
-  return Axios.get(BASE_PATH + '/package/dependence/mw/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/package/dependence/mw/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
 }
 
 // 数据库依赖关系
 export const getDatabaseDepByPage = (params) => {
   console.log('get database dependency ---- >' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/package/dependence/dbms/likeQuery', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/dependence/dbms/likeQuery', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/dbms/likeQuery', params).then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/dbms/likeQuery', params).then(res => res.data)
 }
 
 // 数据库依赖关系详细信息
 export const getdbDepDetails = (id) => {
   console.log('get database dep details id  -- > ' + id)
-  return Axios.get(BASE_PATH + '/package/dependence/dbms/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/package/dependence/dbms/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
 }
 
 // 软件包依赖关系
 export const getSoftPackDepByPage = (params) => {
   console.log('get software dependency params ---- >' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/package/dependencies/pkg/likeQuery', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/package/dependencies/pkg/likeQuery', params
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/pkg/likeQuery', params).then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/pkg/likeQuery', params).then(res => res.data)
 }
 
 // 软件包依赖关系详细信息
 export const getSoftPackDepDetails = (id) => {
   console.log('get  software dep details id  -- > ' + id)
-  return Axios.get(BASE_PATH + '/package/dependencies/pkg/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/package/dependencies/pkg/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
+  return Axios.post(contextPath + '/package/dependence/details').then(res => res.data)
 }

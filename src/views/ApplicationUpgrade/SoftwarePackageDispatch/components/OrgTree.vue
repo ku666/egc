@@ -16,11 +16,12 @@
           @check-change="handleCheckChange"
           :filter-node-method="filterNode"
           :default-expanded-keys="expandedKeys"
-          :default-checked-keys="defaultChecked">
+          :default-checked-keys="defaultChecked"
+          @node-click="_handleNodeClick">
         </el-tree>
       </div>
       <div style="margin-top: 20px; text-align: right;">
-        <el-button @click="_confirmDispatch" class="action-btn" type="primary">下发</el-button>
+        <el-button @click="_confirmDispatch" class="action-btn" type="primary">下发到小区</el-button>
       </div>
   </div>
 </template>
@@ -95,7 +96,8 @@ export default {
       return data.labelAbbr.indexOf(value) !== -1
     },
     handleCheckChange: function (data, checked, indeterminate) {
-      this.deepChangeCheckedJsonData(data.children, checked)
+      // this.deepChangeCheckedJsonData(data.children, checked)
+      console.log(JSON.stringify(checked))
     },
     deepChangeCheckedJsonData: function (json, checked) {
       if (json instanceof Array) {

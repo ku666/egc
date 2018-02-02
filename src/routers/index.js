@@ -24,6 +24,7 @@ import modelManagementrouters from '@/views/modelManagement/routers/index'
 import upgradeMgmt from '@/views/ApplicationUpgrade/ConfigurationMgmt/routers/index'
 import sofwarePackageMgmt from '@/views/ApplicationUpgrade/SofwarePackageMgmt/routers/index'
 import sofwarePackageDispatch from '@/views/ApplicationUpgrade/SoftwarePackageDispatch/routers/index'
+import metaDataMaintance from '@/views/ApplicationUpgrade/MetaDataMaintance/routers/index'
 // 引入日志服务组件路由数据
 import logServiceComponentrouters from '@/views/LogServiceComponent/routers/index'
 // 引入短信网关模块路由数据
@@ -69,6 +70,7 @@ export default new Router({
         ...modelManagementrouters,
         ...sofwarePackageMgmt,
         ...sofwarePackageDispatch,
+        ...metaDataMaintance,
         ...ismgAppIsmgRouters
       ]
     }
