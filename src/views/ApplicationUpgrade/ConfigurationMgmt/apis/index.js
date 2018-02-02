@@ -152,19 +152,19 @@ export const getAppServiceHistoryList = (id) => {
 // 获取操作系统列表数据
 export const getOSInfoByPage = (params) => {
   // console.log('<<<<<api params data :' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/auOss/queryPageData', params
-  ).then(res => res.data)
+  // return Axios.post(BASE_PATH + '/auOss/queryPageData', params
+  // ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auOss/queryPageData').then(res => res.data)
+  return Axios.get(contextPath + '/auOss/queryPageData').then(res => res.data)
 }
 
 // 获取操作系统信息单条信息的详细信息
 export const getOSDetails = (id) => {
   // console.log('services id  -- > ' + id)
-  return Axios.get(BASE_PATH + '/auOss/get?id=' + id
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/auOss/get?id=' + id
+  // ).then(res => res.data)
 
-  // return Axios.get(contextPath + '/auOss/get?id=').then(res => res.data)
+  return Axios.get(contextPath + '/auOss/get?id=').then(res => res.data)
 }
 
 // 更新操作系统信息
