@@ -159,12 +159,6 @@ export default {
     chartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
-      // 多次点击
-      if (this.chartClickNum > 0) return
-      this.chartClickNum++
-      if (this.isChartShow) {
-        this.getData()
-      }
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -178,6 +172,12 @@ export default {
       this.myChartNode = document.querySelector('#flowInformation')
       this.canvasNode = document.querySelector('.canvas')
       this.myChart = this.$echarts.init(this.myChartNode)
+      // 多次点击
+      if (this.chartClickNum > 0) return
+      this.chartClickNum++
+      if (this.isChartShow) {
+        this.getData()
+      }
       this.myChart.setOption(this.echartsData())
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
@@ -404,7 +404,7 @@ export default {
     timeJudgment: function () {
       switch (this.parameter.reportType) {
         case '0':
-          if (this.endTime.getTime() - this.starTime.getTime() > 2851200000) { // 一个月2851200000
+          if (this.endTime.getTime() - this.starTime.getTime() > 31 * 24 * 60 * 60 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -415,7 +415,7 @@ export default {
           }
           break
         case '1':
-          if (this.endTime.getTime() - this.starTime.getTime() > 31622400000) { // 一年31622400000
+          if (this.endTime.getTime() - this.starTime.getTime() > 366 * 24 * 60 * 60 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -441,7 +441,7 @@ export default {
           this.form.dateList = []
           this.form.perInCountList = []
           this.form.perOutCountList = []
-          for (let i = perData.length - 1; i > 0; i--) {
+          for (let i = perData.length - 1; i >= 0; i--) {
             this.form.dateList.push(perData[i].date)
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
@@ -501,8 +501,8 @@ export default {
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
       this.chartClickNum = 0
-      this.isChartShow = false
-      this.isTableShow = true
+      // this.isChartShow = false
+      // this.isTableShow = true
     }
   },
   mounted: function () { }
