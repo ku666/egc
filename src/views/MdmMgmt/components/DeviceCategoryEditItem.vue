@@ -41,7 +41,7 @@
         </el-form>
         </div>
         <div style='text-align: center; margin-top: 20px'>
-          <el-button type='primary' @click='clear' class="cancel-btn" :disabled='viewFlag'>清空</el-button>
+          <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled='viewFlag'>清空</el-button> -->
           <!-- <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button> -->
           <el-button type='primary' @click='save' class="action-btn">保存</el-button>
         </div>

@@ -134,7 +134,7 @@
 
             </el-form>
             <div style='text-align: center; '>
-              <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button>
+              <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
               <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
             </div>
           </div>
