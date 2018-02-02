@@ -130,14 +130,14 @@ export const getListDeviceForPage = data => {
  * @param orgCode 业主画像code
  */
 
-export const getCourtProfile = data => { // 小区
+export const getCourtProfile = data => {
   return Axios({
     url: ownertPath + '/getCourtAgeFlowData',
     method: 'get',
     params: data
   })
 }
-export const getBuildProfile = data => { // 楼栋业主人数接口
+export const getBuildProfile = data => {
   return Axios({
     url: ownertPath + '/getBuildAgeFlowData',
     method: 'get',

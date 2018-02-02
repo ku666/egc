@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup'>
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup' @close="closeDialog">
     <el-row>
       <el-col :span="4">
         <div class='court-info'>
@@ -57,7 +57,7 @@
                 </el-date-picker>
               </el-form-item>
             </el-col>
-            <el-col :span="24" style="text-align:right">
+            <el-col :span="24" style="text-align:right;margin-top:10px;">
               <el-button type="primary" @click.native="inquireData">查询</el-button>
               <el-button type="success" plain @click.native="goToTable">表单</el-button>
               <el-button type="danger" plain @click.native="goToMap">图表</el-button>
@@ -68,11 +68,11 @@
         <!-- 业主人数显示 -->
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
-          <div v-show="isOwenrTable">
-            <el-table :data="ownerTableData" width="100%" max-height="500" class="tableWidth" stripe>
-              <el-table-column prop="group" label="年龄段">
+          <div v-show="isOwenrTable" style="width:100%">
+            <el-table :data="ownerTableData" width="100%" max-height="470" class="tableWidth" stripe fit>
+              <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
-              <el-table-column prop="countNum" label="人数">
+              <el-table-column style="width:100%" prop="countNum" label="人数">
               </el-table-column>
             </el-table>
           </div>
@@ -84,7 +84,7 @@
         <!-- 出入频率显示 -->
         <div class="show" v-show='isRate'>
           <!-- 表格展示 -->
-          <div v-show='isRateTable'>
+          <div v-show='isRateTable' width="100%">
             <el-table :data='rateTableData' width="100%" max-height="380" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
@@ -168,22 +168,22 @@ export default {
       rateTableData: [], // 出入频率表格数据
       rateMapData: { // 出入频率图表数据
         dateList: [], // 日期集合
-        // courtUuid: '', // 小区id
-        // courtName: '', // 小区名称
-        // perInCount: '', // 进入次数
         perInCountList: [], // 入园人数集合
-        // perOutCount: '', // 出去次数,
         perOutCountList: [] // 出园人数集合
       },
       isOwner: true, // 默认显示业主人数
       isRate: false, // 显示出入频率
       isOwenrTable: true, // 默认显示业主表格
       isOwenrMap: false, // 显示业主图表
-      isRateTable: true, // 默认显示出入频率表格
+      isRateTable: false, // 显示出入频率表格
       isRateMap: false, // 显示出入频率图表
       isRequest: true, // 时间选择是否正确,
-      clickTap: false, // 控制数据未变重复点击
-      myChartContainer: null
+      clickTap: false, // 控制数据未变重复点击(图表)
+      clickTable: false, // 控制数据未变重复点击(表格)
+      myChartContainer: null,
+      tableOrMap: 0, // 控制当前是表格还是图表
+      flagVal: '1', // 业主或出入频率条件
+      flag: false // 开关
     }
   },
   methods: {
@@ -257,14 +257,37 @@ export default {
       }
     },
     goToTable () { // 切换到表格显示
-      switch (this.parameter.classValue) {
+      this.tableOrMap = '0'
+      let tableHeader = document.querySelector('.el-table__header')
+      let tableBody = document.querySelector('.el-table__body')
+      tableHeader.style.width = '100%'
+      tableBody.style.width = '100%'
+      switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwenrTable = true
           this.isOwenrMap = false
+          if (!this.clickTable) { // 控制多次点击
+            return
+          }
+          this.clickTable = false
+          if (this.tempId !== this.courtId && this.tempId !== '') {
+            this.getBuildOwnerTableData() // 获取楼栋表格
+          } else { // 获取小区表格
+            this.getCourtTableData(this.courtId)
+          }
           break
         case '2': // 选择出入频率
           this.isRateTable = true
           this.isRateMap = false
+          if (!this.clickTable) { // 控制多次点击
+            return
+          }
+          this.clickTable = false
+          if (this.tempId !== this.courtId && this.tempId !== '') {
+            this.getBuildRateTableData() // 获取楼栋表格
+          } else {
+            this.getRateTableData(this.courtId) // 获取小区表格
+          }
           break
         default:
           break
@@ -280,10 +303,20 @@ export default {
       this.getRateTableData()
     },
     goToMap () { // 切换到图表显示
-      switch (this.parameter.classValue) {
+      this.tableOrMap = '1'
+      switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwenrTable = false
           this.isOwenrMap = true
+          if (this.flag) { // 控制多次点击
+            return
+          }
+          this.flag = true
+          if (this.tempId !== this.courtId && this.tempId !== '') {
+            this.getBuildOwnerTableData() // 获取楼栋图表数据
+          } else {
+            this.getCourtTableData(this.courtId) // 获取小区图表数据
+          }
           this.$nextTick(() => { // 图表赋值
             optionsData.owenrOptionData.legend.data = this.owerMapData.ageGroupInfo.map(item => {
               return item.group
@@ -353,7 +386,6 @@ export default {
           this.disabled = false
           this.parameter.startDate = this.processingDate(this.startTime) // 对日期赋值
           this.parameter.endDate = this.processingDate(this.endTime)
-          console.log(this.parameter.startDate, this.parameter.endDate)
           break
         default:
           break
@@ -416,42 +448,55 @@ export default {
     },
     inquireData () { // 点击查询
       this.clickTap = true // 控制重复点击图表
+      this.clickTable = true
+      this.flagVal = this.parameter.classValue
+      this.flag = false
       this.parameter.currentPage = 1 // 重置第一页
-      if (!this.isRequest) {
-        this.$message({
-          type: 'error',
-          message: '请选择正确的时间'
-        })
-        return
-      }
-      switch (this.parameter.classValue) {
+      switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwner = true
           this.isRate = false
-          this.isOwenrTable = true // 默认显示表格
-          this.isOwenrMap = false
-          if (this.tempId !== this.courtId && this.tempId !== '') {
-            this.getBuildOwnerTableData() // 获取楼栋表格
-          } else { // 获取小区表格
-            this.getCourtTableData(this.courtId)
+          if (this.tableOrMap === '0') { // 当前是表格
+            this.goToTable()
+          } else { // 当前是图表
+            this.goToMap()
           }
           break
         case '2': // 选择出入频率
+          if (!this.isRequest) {
+            this.$message({
+              type: 'error',
+              message: '请选择正确的时间'
+            })
+            return
+          }
           this.isRate = true
           this.isOwner = false
-          this.isRateTable = true // 默认显示表格
-          this.isRateMap = false
           this.parameter.startDate = this.processingDate(this.startTime)
           this.parameter.endDate = this.processingDate(this.endTime)
-          if (this.tempId !== this.courtId && this.tempId !== '') {
-            this.getBuildRateTableData() // 获取楼栋表格
-          } else {
-            this.getRateTableData(this.courtId) // 获取小区表格
+          if (this.tableOrMap === '0') { // 当前是表格
+            this.goToTable()
+          } else { // 当前是图表
+            this.goToMap()
           }
           break
         default:
           break
       }
+    },
+    closeDialog () { // 关闭弹窗（初始化数据）
+      this.isOwner = true
+      this.isRate = false
+      this.isOwenrTable = true
+      this.isOwenrMap = false
+      this.isRateTable = false
+      this.isRateMap = false
+      this.isRequest = true
+      this.clickTap = false
+      this.clickTable = false
+      this.tableOrMap = 0
+      this.flagVal = '1'
+      this.flag = false
     },
     getCourtTableData (courtId) { // 获取小区表格（业主人数）
       getCourtProfile({ courtUuid: courtId, type: 1 })
@@ -613,7 +658,7 @@ export default {
     text-align: right;
     position: absolute;
     right: 60px;
-    bottom: 45px;
+    bottom: 35px;
   }
   /deep/.el-dialog__header {
     /deep/.el-dialog__title {
@@ -626,12 +671,15 @@ export default {
   /deep/.court-info {
     padding: 0 10px;
     margin-right: 10px;
-    background: #f6faff;
     line-height: 30px;
     font-size: 14px;
     div {
       span {
         color: #150e0e;
+        text-align-last: justify;
+        display: inline-block;
+        text-align: justify;
+        width: 75px;
       }
     }
   }
@@ -657,9 +705,6 @@ export default {
   }
   /deep/.tblHeader .el-input__inner {
     vertical-align: middle;
-  }
-  /deep/.el-form-item__label {
-    line-height: 25px;
   }
 }
 #ownerFormation {
