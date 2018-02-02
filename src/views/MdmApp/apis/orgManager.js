@@ -8,6 +8,14 @@ export function getAllOrgTreeByCourtUuid (data) {
   })
 }
 
+export function getHousesByOrgUuid (data) {
+  return fetch({
+    url: '/egc-mdmmgmtapp/org/getHousesByOrgUuid',
+    method: 'POST',
+    data: data
+  })
+}
+
 export function getOrgTreeNextLevel (data) {
   return fetch({
     url: '/egc-mdmmgmtapp/org/getOrgTreeNextLevel',

@@ -1,6 +1,6 @@
 import fetch from '../utils/fetch'
 
-export function getHouseList (data) {
+export function getHousesByConditions (data) {
   return fetch({
     url: '/egc-mdmmgmtapp/house/getHousesByConditions',
     method: 'POST',

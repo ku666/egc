@@ -48,10 +48,10 @@ export default {
   methods: {
     clickNode: function (data, node) {
       if (node.level === 1) {
-        this.searchOption = { 'courtUuid': node.data.uuid }
+        this.searchOption = { 'courtUuid': node.data.uuid, 'nodeLevel': node.level }
         this.search(this.searchOption)
       } else if (node.level > 1) {
-        this.searchOption = { 'orgUuid': node.data.uuid }
+        this.searchOption = { 'uuid': node.data.uuid, 'nodeLevel': node.level }
         this.search(this.searchOption)
       }
       this.$emit('searchOptionChange', this.searchOption)
