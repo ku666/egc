@@ -66,8 +66,8 @@ var option = {
         'lightgreen',
         'DeepSkyBlue',
         // 'yellow',
-        'MediumSlateBlue',
-        'yellow'
+        'LimeGreen'
+        // 'yellow'
       ] // lightgrey
     },
     calculable: true

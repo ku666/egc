@@ -10,73 +10,37 @@
     <div class="listTB">
       <el-tabs v-model="activeName">
         <el-tab-pane label="推荐小区" name="first">
-          <el-table :data="courtListTB" height="735" @row-dblclick="handleRowClick" stripe :row-class-name="tableRowClassName">
-            <el-table-column type="expand">
-              <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item label="建筑面积">
-                    <span>{{ props.row.buildArea }}</span>
-                  </el-form-item>
-                  <el-form-item label="占地面积">
-                    <span>{{ props.row.floorArea }}</span>
-                  </el-form-item>
-                  <el-form-item label="详细地址" class="itemlarge">
-                    <span>{{ props.row.regionName }}</span>
-                  </el-form-item>
-                </el-form>
-              </template>
-            </el-table-column>
-            <el-table-column prop="courtName" label="小区名称">
-            </el-table-column>
-            <el-table-column prop="houseCount" label="房屋总数">
-            </el-table-column>
-            <el-table-column prop="homeCount" label="户数总数">
-            </el-table-column>
-          </el-table>
+          <court-table :tableData="courtListTB"></court-table>
         </el-tab-pane>
-        <el-tab-pane label="全省小区" name="second">
-          <el-table :data="provinceListTB" height="735" @row-dblclick="handleRowClick" stripe :row-class-name="tableRowClassName">
-            <el-table-column type="expand">
-              <template slot-scope="props">
-                <el-form label-position="left" inline class="demo-table-expand">
-                  <el-form-item label="建筑面积">
-                    <span>{{ props.row.buildArea }}</span>
-                  </el-form-item>
-                  <el-form-item label="占地面积">
-                    <span>{{ props.row.floorArea }}</span>
-                  </el-form-item>
-                  <el-form-item label="详细地址" class="itemlarge">
-                    <span>{{ props.row.regionName }}</span>
-                  </el-form-item>
-                </el-form>
-              </template>
-            </el-table-column>
-            <el-table-column prop="courtName" label="小区名称">
-            </el-table-column>
-            <el-table-column prop="houseCount" label="房屋总数">
-            </el-table-column>
-            <el-table-column prop="homeCount" label="户数总数">
-            </el-table-column>
-          </el-table>
+        <el-tab-pane :label="provinceName" name="second">
+          <court-table :tableData="provinceListTB"></court-table>
+        </el-tab-pane>
+        <el-tab-pane label="搜索结果小区" name="third">
+          <court-table :tableData="searchListTB"></court-table>
         </el-tab-pane>
       </el-tabs>
     </div>
   </div>
 </template>
 <script>
+import CourtTable from '@/views/MapAnalysisApp/components/CourtTable'
 import { getCourtList, getOrgList } from '@/views/MapAnalysisApp/apis/index.js'
 import mapData from '@/views/MapAnalysisApp/assets/js/mapEchartsData.js'
 require('echarts/map/js/china')
 export default {
-  components: {},
+  components: {
+    CourtTable
+  },
   data () {
     return {
       mycharts: null,
       searchCourtName: '',
       courtListTB: [],
       provinceListTB: [],
+      searchListTB: [],
       rowkeys: [0],
-      activeName: 'first'
+      activeName: 'first',
+      provinceName: '全省小区'
     }
   },
   mounted: function () {
@@ -102,6 +66,7 @@ export default {
         this.$router.push('/mapanalysisapp/courtinfo/' + e.data.courtUuid)
       } else if (e.seriesType === 'map') {
         this.activeName = 'second'
+        this.provinceName = e.data.name + '小区'
         this.provinceListTB = e.data.courts
       }
     },
@@ -145,6 +110,8 @@ export default {
           this.courtListTB = list.slice(0, 10)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
+            this.searchListTB = list
+            this.activeName = 'third'
           } else {
             mapData.updateData(pointdata)
             mapData.updateProvinceData(proObj)
