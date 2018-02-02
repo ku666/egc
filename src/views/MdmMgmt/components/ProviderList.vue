@@ -94,15 +94,15 @@
         <el-form :model='providerForm' ref='providerForm' label-width='100px' :rules='providerFormRules'>
           <el-row>
             <el-col :span='12'>
+              <el-form-item label='供应商编码' prop='providerCode'>
+                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span='12'>
               <el-form-item label='供应商类别' prop='category'>
                 <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
                   <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span='12'>
-              <el-form-item label='供应商编码' prop='providerCode'>
-                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
