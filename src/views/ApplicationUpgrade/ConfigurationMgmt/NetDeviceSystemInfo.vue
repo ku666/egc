@@ -203,6 +203,7 @@ export default {
           .then(
             function (result) {
               this.netDeviceDetails = result.auNetequip
+              console.log('edit net details --- > ' + JSON.stringify(this.netDeviceDetails))
               this.dialogEditVisible = true
             }.bind(this)
           )

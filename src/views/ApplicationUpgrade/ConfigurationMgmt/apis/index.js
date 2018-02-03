@@ -3,47 +3,45 @@ import Axios from '@/assets/js/AxiosPlugin'
 // 接口地址
 let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-const MDM_BASE_PATH = '/egc-mdmcomponent'
+// const MDM_BASE_PATH = '/egc-mdmcomponent'
 
 /** 主数据 */
 
 // 省
 export const getProvinceDataList = (params) => {
   // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getProvinceList', params
-  ).then(res => res.data)
+  // return Axios.post(MDM_BASE_PATH + '/court/getProvinceList', params
+  // ).then(res => res.data)
 
   // return Axios.post('/court/getProvinceList', params
-  // ).then(res => {
-  //   return res.data
-  // })
+  // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 市
 export const getCityDataList = (params) => {
   // console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
 
-  return Axios.post(MDM_BASE_PATH + '/court/getCityList', params
-  ).then(res => res.data)
+  // return Axios.post(MDM_BASE_PATH + '/court/getCityList', params
+  // ).then(res => res.data)
 
   // return Axios.post('/court/getCityList', params
   // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
   // console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getDistrictList', params
-  ).then(res => res.data)
+  // return Axios.post(MDM_BASE_PATH + '/court/getDistrictList', params
+  // ).then(res => res.data)
 
   // return Axios.post('/court/getDistrictList', params
   // ).then(res => res.data)
 
-  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+  return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 
 // 下载查询结果
