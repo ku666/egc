@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="closeDialog">
     <!-- <div slot="title">
       <span class="pull-left">设备数报表</span>
     </div> -->
@@ -8,13 +8,21 @@
       <el-button type="success" @click="tableSwitch">表格</el-button>
       <div class="courtName">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chartContainer">
-        <div id="equipmentcharts"></div>
-        <div id="equipmentonlinecharts"></div>
+        <div id="equipmentchartsbox">
+          <span v-show="noDataTips">暂无数据 </span>
+          <img v-show="isReponseData" src="../assets/images/err.png">
+          <div id="equipmentcharts"></div>
+        </div>
+        <div id="equipmentonlinechartsbox">
+          <span v-show="noDataTips">暂无数据 </span>
+          <img v-show="isReponseData" src="../assets/images/err.png">
+          <div id="equipmentonlinecharts"></div>
+        </div>
         <!-- <div class="clear"></div> -->
       </div>
       <div v-show="isTableShow">
         <div class="equipmentTable">
-          <el-table :data="tableData1" :summary-method="getSummaries" border max-height="550" show-summary style="width: 100%; margin-top: 20px">
+          <el-table :data="tableData1" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
             <el-table-column prop="deviceType" label="设备ID" align="center">
             </el-table-column>
             <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
@@ -40,22 +48,17 @@ export default {
       dialogReportVisible: false,
       isChartShow: true,
       isTableShow: false,
+      isReponseData: false,
+      noDataTips: false,
       tableData: [],
       names: [],
       onlinenames: [],
       tableData1: [],
       onlinedata: [],
       totaldata: [],
-      color: [
-        '#ff7f50', '#87cefa', '#da70d6', '#32cd32', '#6495ed',
-        '#ff69b4', '#ba55d3', '#cd5c5c', '#ffa500', '#40e0d0',
-        '#1e90ff', '#ff6347', '#7b68ee', '#00fa9a', '#ffd700',
-        '#6b8e23', '#ff00ff', '#3cb371', '#b8860b', '#30e0e0'
-      ], // 饼图颜色
-      cellDetailsList: {} // 小区详细信息
-      // currentPage: 1, // 当前页
-      // pageSize: 10, // 多少条数据
-      // total: 20 // 数据条数
+      cellDetailsList: {}, // 小区详细信息
+      equipmentcharts: {},
+      equipmentonlinecharts: {}
     }
   },
   methods: {
@@ -95,47 +98,16 @@ export default {
       this.isTableShow = true
       this.tableData1 = this.tableData
     },
-    // sizeChange: function (val) {
-    //   this.pageSize = val
-    //   // this.getPaging()
-    // },
-    // // 分页组件当前页变化
-    // currentChange: function (val) {
-    //   this.currentPage = val
-    //   // this.getPaging()
-    // },
-    // getData (params = {}) {
-    //   let condition = {}
-    //   condition.pageNo = this.currentPage
-    //   condition.pageSize = this.pageSize
-    //   getListDeviceForPage(Object.assign({}, condition, params))
-    //     .then(res => {
-    //       if (res.data.code === '00000') {
-    //         let tableD = res.data.data.audioClip
-    //         tableD.map(function (item, index, arr) {
-    //           let d = new Date(item.createTime)
-    //           item.createTime = d.toLocaleString()
-    //         }, this)
-    //         this.tableData = tableD
-    //         this.total = res.data.data.total
-    //       }
-    //     })
-    // },
     chartInit () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
-      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      console.log(equipmentcharts)
+      this.equipmentcharts = equipmentcharts
       // 设备数量数据
       let option = {
-        backgroundColor: 'rgba(0,0,20,0.1)',
+        // backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
-          // subtext: this.cellDetailsList.courtName,
           x: 'center'
-          // subtextStyle: {
-          //   color: '#333',
-          //   fontSize: 16,
-          //   fontWeight: 'bolder'
-          // }
         },
         tooltip: {
           trigger: 'item',
@@ -154,10 +126,7 @@ export default {
             radius: '55%',
             center: ['50%', '50%'],
             selectedMode: 'single',
-            // data: this.totaldata.sort(function (a, b) { return a.value - b.value }),
             data: this.totaldata,
-            // roseType: 'radius',
-            color: this.color,
             label: {
               emphasis: {
                 show: true,
@@ -182,18 +151,16 @@ export default {
           }
         ]
       }
-      // 设备实时在网数量数据
+      equipmentcharts.setOption(option)
+    },
+    onlineChartInit () {
+      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      this.equipmentonlinecharts = equipmentonlinecharts
       let option1 = {
-        backgroundColor: 'rgba(0,0,33,0.1)',
+        // backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
-          // subtext: this.cellDetailsList.courtName,
           x: 'center'
-          // subtextStyle: {
-          //   color: '#333',
-          //   fontSize: 16,
-          //   fontWeight: 'bolder'
-          // }
         },
         tooltip: {
           trigger: 'item',
@@ -205,7 +172,6 @@ export default {
           type: 'scroll',
           data: this.onlinenames
         },
-        color: this.color,
         calculable: true,
         series: [
           {
@@ -216,10 +182,6 @@ export default {
             selectedMode: 'single',
             avoidLabelOverlap: false,
             label: {
-              // normal: {
-              //   show: true,
-              //   position: 'center'
-              // },
               emphasis: {
                 show: true,
                 textStyle: {
@@ -228,12 +190,10 @@ export default {
                 }
               }
             },
-            // roseType: 'radius',
             data: this.onlinedata
           }
         ]
       }
-      equipmentcharts.setOption(option)
       equipmentonlinecharts.setOption(option1)
     },
     equipmentReport (courtId) {
@@ -249,16 +209,15 @@ export default {
               duration: 1500
             })
           }
+        }).catch(() => {
         })
         let equiData = {}
-        equiData.courtUuid = courtId // 'c69aeede4f6341929721e2892beec3cb'
+        equiData.courtUuid = courtId// 'c69aeede4f6341929721e2892beec3cb'
         getListDeviceType(equiData).then(res => {
-          console.log('getListDeviceType')
-          console.log(res)
           if (res.data.code === '00000') {
+            this.isOnlineReponseData = false
             this.tableData = res.data.data
-            // console.log(111111)
-            console.log(this.tableData)
+
             this.onlinedata = []
             this.totaldata = []
             for (let i in this.tableData) {
@@ -290,16 +249,38 @@ export default {
                 })
               this.totaldata.push({ name: this.tableData[i].deviceTypeDesc, value: this.tableData[i].deviceCount })
             }
-            this.chartInit()
-            console.log(this.onlinedata)
+            // 初始化echarts
+            if (this.tableData.length === 0) {
+              this.isReponseData = false
+              this.noDataTips = true
+            } else {
+              this.noDataTips = false
+              this.isReponseData = false
+              console.log('执行图表')
+              this.chartInit()
+              this.onlineChartInit()
+            }
           } else {
+            this.isReponseData = true
             this.$message.error({
               message: res.data.message,
               duration: 1500
             })
           }
+        }).catch(() => {
+          this.isReponseData = true
+          this.noDataTips = false
         })
       })
+    },
+    closeDialog () {
+      this.isChartShow = true
+      this.isTableShow = false
+      this.isReponseData = false
+      this.onlinedata = []
+      this.totaldata = []
+      if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
+      if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     }
   }
 }
@@ -318,31 +299,40 @@ export default {
 .chartContainer {
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   margin-top: 10px;
 }
-#equipmentcharts {
-  /* float: left; */
-  /* margin-top: 10px; */
-  width: 640px;
-  /* width: 49.5%; */
+#equipmentchartsbox {
+  width: 620px;
   height: 600px;
   border: 1px solid #ccc;
+  text-align: center;
+  line-height: 600px;
+  overflow: hidden;
+  margin: 0 2px 2px 2px;
+}
+#equipmentchartsbox img {
+  margin-top: 200px;
+}
+#equipmentcharts {
+  height: 600px;
+}
+#equipmentonlinechartsbox {
+  width: 620px;
+  height: 600px;
+  border: 1px solid #ccc;
+  text-align: center;
+  line-height: 600px;
+  overflow: hidden;
+}
+#equipmentonlinechartsbox img {
+  margin-top: 200px;
 }
 #equipmentonlinecharts {
-  /* float: right; */
-  /* margin-top: 10px; */
-  width: 640px;
   height: 600px;
-  border: 1px solid #ccc;
 }
 .clear {
   clear: both;
 }
-/* .table-pager {
-  padding: 0;
-  margin-top: 20px;
-  text-align: right;
-} */
 </style>

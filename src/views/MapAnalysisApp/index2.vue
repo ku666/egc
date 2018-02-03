@@ -1,129 +1,150 @@
 <template>
-  <div class="mapCon">
-    <div class="mapCl ui-common">
-      <div class="searchBox">
-        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-        <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
-      </div>
-      <div id="mapECarts" style="width:1000px; height:800px"></div>
+  <div class="mapcontainer ui-common">
+    <div class="searchBox">
+      <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
+      <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
     </div>
-    <el-table class="listTB" :data="courtListTB" height="790" style="width: 100%" @row-dblclick="handleRowClick" stripe :row-class-name="tableRowClassName">
-      <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="建筑面积">
-              <span>{{ props.row.buildArea }}</span>
-            </el-form-item>
-            <el-form-item label="占地面积">
-              <span>{{ props.row.floorArea }}</span>
-            </el-form-item>
-            <el-form-item label="详细地址">
-              <span>{{ props.row.regionName }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-      </el-table-column>
-      <el-table-column prop="courtName" label="小区名称">
-      </el-table-column>
-      <el-table-column prop="houseCount" label="房屋总数">
-      </el-table-column>
-      <el-table-column prop="homeCount" label="户数总数">
-      </el-table-column>
-      <!-- <el-table-column prop="buildArea" label="建筑面积">
-      </el-table-column>
-      <el-table-column prop="floorArea" label="占地面积">
-      </el-table-column>
-      <el-table-column prop="regionName" label="详细地址">
-      </el-table-column> -->
-    </el-table>
+    <car-stream ref="carStream"></car-stream>
+    <stream-people ref="streamPeople"></stream-people>
+    <owner-portrait ref="OwnerPortrait"></owner-portrait>
+    <equipment-report ref="equipmentReport"></equipment-report>
+
+    <div id="map">
+      <div id="popup">
+        <a href="#" id="popup-closer"></a>
+        <div id="popup-content"></div>
+      </div>
+    </div>
+    <!--小区信息弹窗 -->
+    <div id="tipWin" class="courtTipclass">
+      <div class="courtNameCl">{{showCourtName}}</div>
+      <div class="btnCl">
+        <el-button type="primary" size="mini" @click="openCourtPeo" class="checkBtn">查看小区人流信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtCar" class="checkBtn">查看小区车流信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtOwner" class="checkBtn">查看小区业主信息</el-button>
+        <el-button type="primary" size="mini" @click="openCourtEquip" class="checkBtn">查看小区设备信息</el-button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 /* eslint-disable */
-import { getCourtList, getOrgList } from '@/views/MapAnalysisApp/apis/index.js'
-import mapData from '@/views/MapAnalysisApp/assets/js/mapEchartsData.js'
-require('echarts/map/js/china')
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
+import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
+import chooseImg from '@/views/MapAnalysisApp/assets/images/u346.png'
+import hdmap from 'hdmap'
+import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
+import CarStream from '@/views/MapAnalysisApp/components/CarStream'
+import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
+import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
 export default {
-  components: {},
+  components: {
+    StreamPeople,
+    CarStream,
+    EquipmentReport,
+    OwnerPortrait
+  },
   data () {
     return {
-      mycharts: null,
-      searchCourtName: '',
-      flag: false,
-      courtListTB : [],
-      rowkeys: [0]
+      map: null,
+      chartData: {
+      },
+      courtList: [],
+      chooseList: [], // 按照搜索的出来的小区列表数据
+      textHtml: '',
+      showCourtName: '', // 当前选中的小区名字
+      courtUuid: '', // 当前选中的小区id
+      searchCourtName: ''
     }
   },
   mounted: function () {
-    this.getCourtListData()
-    // this.getOrgListFn()
-    this.getMyCharts.setOption(mapData.option)
-  },
-  computed: {
-    getMyCharts: function () {
-      return this.mycharts ? this.mycharts : this.$echarts.init(document.getElementById('mapECarts'))
-    }
-  },
-  methods: {
-    // 点击小区点位事件
-    handleClickMap: function (e) {
-      mapData.updateChooseData([]) // 清空‘强调显示’的小区信息
-      this.getMyCharts.setOption(mapData.option)
-      if (e.seriesType === 'scatter' || e.seriesType === 'effectScatter') {
-        // 跳转到指定的小区的详情页
-        this.$router.push('/mapanalysisapp/courtinfo/'+e.data.courtUuid)
+    // 初始化地图
+    this.map = new hdmap.initMap({
+      gisEngine: 'baidu',
+      domId: 'map',
+      mapUrl: 'http://online1.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&p=1&scaler=1&udt=20171115',
+      sat: 0,
+      zoom: 5,
+      center: [108, 34], // 113.619942, 23.304629
+      popupDom: {
+        popup: 'popup',
+        popupcloser: 'popup-closer',
+        popupcontent: 'popup-content'
       }
-    },
-    // 获取小区列表数据
-    getCourtListData: function (isSearch) {
-      // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
-      getCourtList({courtName:this.searchCourtName}).then(res => {
-        // console.log(res)
-        let msgType = 'warning'
-        if (res.data.code === '00000') {
-          msgType = 'success'
-          let list = res.data.data
-          this.courtList = list
-          let pointdata = []
-          // console.log(list)
-          let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
-          list.map(function (item, index) {
-            if ((item.gpsLat && item.gpsLon) || index < test.length) {
-              if (!item.gpsLat) {
-                item.gpsLon = test[index][0]
-                item.gpsLat = test[index][1]
-              }
-              // let kk = Math.round(Math.random() * 100)
-              let obj = {
-                name: item.courtName,
-                value: [item.gpsLon, item.gpsLat],
-                courtUuid: item.courtUuid
-              }
-              pointdata.push(obj)
+    })
+    // 添加弹窗
+    this.map.addPopup('tipWin')
+    this.map.regEventListener('singleclick', this.handleSingleClick)
+    // 查询小区列表数据，初始化全国小区列表点位
+    getCourtList().then(res => {
+      // console.log(res)
+      if (res.data.code === '00000') {
+        let list = res.data.data
+        this.courtList = list
+        let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
+        list.map(function (item, index) {
+          if ((item.gpsLat && item.gpsLon) || index < test.length) {
+            if (!item.gpsLat) {
+              item.gpsLon = test[index][0]
+              item.gpsLat = test[index][1]
             }
-          }, this)
-          this.courtListTB = list.slice(0,10)
-          if (isSearch && isSearch === 'search') {
-            mapData.updateChooseData(pointdata)
-          } else {
-            mapData.updateData(pointdata)
+            let tran = this.map.translate_4326_to_bd09([item.gpsLon, item.gpsLat])
+            tran = this.map.translate_4326_to_3857(tran)
+            item.gpsLon = tran[0]
+            item.gpsLat = tran[1]
+            if (item.gpsLat && item.gpsLon) {
+              this.map.addMarker({
+                id: item.courtUuid,
+                position: [item.gpsLon, item.gpsLat],
+                markerType: 'common',
+                name: item.courtName,
+                imgUrl: markerImg,
+                size: [32, 48]
+              })
+            }
           }
-          this.getMyCharts.setOption(mapData.option)
-        }
-        this.$message({
-          type: msgType,
-          message: res.data.message
-        })
-        if(!this.flag){
-          this.getMyCharts.on('click', this.handleClickMap)
-          this.flag = true
-        }
-      }).catch(err => {
+        }, this)
+      } else {
         this.$message({
           type: 'warning',
-          message: err
+          message: res.data.message
         })
+      }
+    }).catch(err => {
+      this.$message({
+        type: 'warning',
+        message: err
       })
+    })
+  },
+  methods: {
+    // 点击地图
+    handleSingleClick: function (e) {
+      if (e.feature && e.feature.markerType === 'common') {
+        this.map.showPopup('tipWin', e.coordinate)
+        this.showCourtName = e.feature.name
+        this.courtUuid = e.feature.id
+      } else {
+        // 关闭弹窗
+        this.map.closePopup()
+        this.setMarkers(this.chooseList, [])
+      }
+    },
+    // 查看小区人流信息
+    openCourtPeo: function () {
+      this.$refs['streamPeople'].streamPeople(this.courtUuid)
+    },
+    // 查看小区车流信息
+    openCourtCar: function () {
+      this.$refs.carStream.goToCarStreamPage(this.courtUuid)
+    },
+    // 查看小区业主信息
+    openCourtOwner: function () {
+      this.$refs['OwnerPortrait'].OwnerPortrait(this.courtUuid)
+    },
+    // 查看小区设备信息
+    openCourtEquip: function () {
+      this.$refs['equipmentReport'].equipmentReport(this.courtUuid)
     },
     /** 按条件查询小区列表 */
     searchCourt: function () {
@@ -138,60 +159,63 @@ export default {
         })
         return
       }
-      this.getCourtListData('search')
-    },
-    getOrgListFn: function () {
-      getOrgList().then(res => {
-        console.log(res)
+      getCourtList({courtName: this.searchCourtName}).then(res => {
+        let msgType = 'warning'
+        if (res.data.code === '00000') {
+          msgType = 'success'
+          this.setMarkers(this.chooseList, res.data.data)
+        }
+        this.$message({
+          type: msgType,
+          message: res.data.message
+        })
+      }).catch(err => {
+        this.$message({
+          type: 'warning',
+          message: err
+        })
       })
     },
-    handleRowClick: function (row, e) {
-      // console.log(row)
-      this.$router.push('/mapanalysisapp/courtinfo/'+ row.courtUuid)
+    /** 设置小区点位的强调显示 @augments flag为true强调显示，为false去掉强调显示 */
+    setMarkers: function (unArr, activeArr) {
+      if (unArr) {
+        unArr.map(function (item, index) {
+          let feat = this.map.getMarkerBylayerKey(item.courtUuid, 'commonLayer')
+          if (feat) {
+            this.setMarkerStyle(feat, markerImg)
+          }
+        }, this)
+        // this.map.closePopup()// 关闭弹窗
+      }
+      if (activeArr) {
+        activeArr.map(function (item, index) {
+          let feat2 = this.map.getMarkerBylayerKey(item.courtUuid, 'commonLayer')
+          if (feat2) {
+            this.setMarkerStyle(feat2, chooseImg)
+            // this.map.showPopup('tipWin', feat2.getGeometry().getCoordinates()) //暂时去掉弹窗提示
+            // this.showCourtName = item.courtName
+            // this.courtUuid = feat2.id_
+          }
+        }, this)
+        this.chooseList = activeArr
+      }
     },
-    tableRowClassName: function (row, rowIndex) {
-      
-    }
+    setMarkerStyle: function (feat, _img) {
+      if (feat) {
+        feat.setStyle(
+          new ol.style.Style({
+            image: new ol.style.Icon(
+              /** @type {olx.style.IconOptions} */ ({src: _img})
+            )
+          })
+        )// end setStyle
+      }
   }
+    } // end func
 }
 </script>
-<style lang="less" scoped>
-.mapCon {
-  width: 100%;
-  height: 800px;
-  min-width: 1500px;
-  display: flex;
-  flex-flow: row nowrap;
-  /* justify-content: center; */
-  /* align-items: center; */
-  // border: 1px solid #ccc;
-  /deep/ .listTB{
-    width: 480px;
-    overflow: auto;
-    margin: 7px 0px 0px 20px;
-    
-    .el-table__row {
-      height: 60px;
-    }
-    .demo-table-expand {
-      font-size: 0;
-    }
-    .demo-table-expand label {
-      width: 90px;
-      color: #999;
-    }
-    .demo-table-expand span {
-      color: rgb(224, 127, 15);
-    }
-    .demo-table-expand .el-form-item {
-      margin-right: 0;
-      margin-bottom: 0;
-      width: 50%;
-    }
-
-  }
-}
-.mapCl{
+<style scoped>
+.mapcontainer{
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
@@ -203,8 +227,29 @@ export default {
   flex-flow: row nowrap;
   align-items: center;
 }
-// #mapECarts{
-//   border-right: 1px solid #ccc;
-// }
-
+#map {
+  /* float: left; */
+  width: 100%;
+  height: 750px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+}
+.courtTipclass {
+  height: 150px;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  background-color: rgb(192, 221, 155);
+}
+.courtNameCl{
+  width: 120px;
+  padding-left: 10px;
+}
+.btnCl{
+  width: 140px;
+}
+.checkBtn {
+  display: block;
+  margin: 5px;
+}
 </style>
