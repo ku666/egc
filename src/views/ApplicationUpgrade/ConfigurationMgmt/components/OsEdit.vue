@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :inline="true" :model="osDetails">
-      <template v-if=" osDetails.courtDto !== null">
+      <!-- <template v-if=" osDetails.courtDto !== null">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
         </el-form-item>
@@ -14,7 +14,7 @@
         <el-form-item label="小区名称" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
         </el-form-item>
-      </template>
+      </template> -->
        <el-form-item label="操作系统名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.name"></el-input>
       </el-form-item>
@@ -39,11 +39,11 @@
 
 
       <!-- <div> -->
-        <template v-if="osDetails.extDataList">
+        <!-- <template v-if="osDetails.extDataList">
         <el-form-item :label="item.fieldName" v-for="(item) in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
       </el-form-item>
-      </template>
+      </template> -->
       <!-- </div> -->
 
 
