@@ -7,7 +7,7 @@
 
     <div class="person-list">
       <div>
-        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
+        <el-form :inline='true' :model='searchCondition' ref='searchCondition' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='小区名称'>
             <!-- <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input> -->
             <el-select
@@ -77,7 +77,15 @@
         <el-table-column label="电子邮箱" prop="email">
         </el-table-column>
       </el-table>
-      <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+      <el-pagination
+        background
+        :current-page='searchCondition.currentPage'
+        :page-sizes='[10, 20, 50, 100]'
+        :page-size='searchCondition.pageSize'
+        layout='total, sizes, prev, pager, next, jumper'
+        :total='searchCondition.total'
+        @size-change='sizeChange'
+        @current-change='currentChange'>
       </el-pagination>
     </div>
 
@@ -155,9 +163,6 @@ export default {
       uuid: null,
       uuidshow: false,
       selections: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 10,
       tableData: [],
       loading: false,
       getCourtsLoading: false,
@@ -177,6 +182,9 @@ export default {
         detail: []
       },
       searchCondition: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10,
         courtUuid: '',
         name: '',
         idenNum: '',
@@ -237,7 +245,6 @@ export default {
       this.modelDetailForm.idenNum = rowData.idenNum
       this.modelDetailForm.phone = rowData.phone
       this.modelDetailForm.email = rowData.email
-
       // 根据人员的uuid获取该人员的房产信息
       getHousesByUserUuid({'userUuid': rowData.uuid})
       .then(res => {
@@ -246,7 +253,6 @@ export default {
       .catch(err => {
         console.log(err)
       })
-      // console.log(JSON.stringify(rowData))
     },
     getCourts: function (query) {
       this.getCourtsLoading = true
@@ -270,65 +276,38 @@ export default {
     },
     reset: function () {
       this.searchCondition = {
+        currentPage: 1,
+        pageSize: 10,
         courtName: '',
         name: '',
-        // pageSize: 10,
-        // currentPage: 1,
         idenNum: '',
         phone: '',
         mail: ''
       }
     },
-    /**
-     * @description 点击table组件复选框触发
-     * @param Array val 所有选中行数据
-     */
     handleSelectionChange: function (val) {
       this.selections = val
     },
-    /**
-     * @description 分页组件单页总数变化
-     * @param Number val 选择的单页总数得值
-     */
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      console.log('sizeChange')
+      this.searchCondition.pageSize = val
+      this.searchCondition.currentPage = 1
       this.search()
     },
-    /**
-     * @description 分页组件当前页变化
-     * @param Number val 选择当前页的值
-     */
     currentChange: function (val) {
-      this.currentPage = val
+      console.log('currentChange')
+      this.searchCondition.currentPage = val
       this.search()
     },
-    search: function (options) {
-      let condition = {}
+    search: function () {
+      console.log('search method')
       this.loading = true
-      // 查询条件
-      condition.courtUuid = this.searchCondition.courtUuid
-      condition.name = this.searchCondition.name
-      condition.idenNum = this.searchCondition.idenNum
-      condition.phone = this.searchCondition.phone
-      condition.mail = this.searchCondition.mail
-      // 分页
-      condition.pageSize = this.pageSize
-      condition.currentPage = this.currentPage
-      if (options) {
-        condition.currentPage = this.currentPage = 1
-        condition.uuid = options.uuid || this.uuid
-      }
-      getPersonList(condition)
-        .then(res => {
-          var self = this
-          this.total = res.data.totalCount
-          const timeOut = setTimeout(function () {
-            self.tableData = res.data.result
-            self.loading = false
-            clearTimeout(timeOut)
-          }, 1000)
-        })
+      getPersonList(this.searchCondition)
+        .then(function (result) {
+          this.searchCondition.total = result.data.totalCount
+          this.tableData = result.data.result
+          this.loading = false
+        }.bind(this))
         .catch(err => {
           console.log(err)
           this.loading = false

@@ -139,7 +139,15 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
+    <el-pagination
+      background
+      :current-page='searchForm.currentPage'
+      :page-sizes='[10, 20, 50, 100]'
+      :page-size='searchForm.pageSize'
+      layout='total, sizes, prev, pager, next, jumper'
+      :total='searchForm.totalCount'
+      @size-change='sizeChange'
+      @current-change='currentChange'>
     </el-pagination>
   </div>
 </template>
@@ -309,31 +317,33 @@ export default {
     // },
     // ********************查询设备********************
     search () {
+      console.log('search method')
       this.loading = true
       getDeviceCategoryList(this.searchForm)
         .then(
-        function (result) {
-          console.log(result)
-          this.tableData = result.data.result
-          this.searchForm.totalCount = result.data.totalCount
-          this.loading = false
-        }.bind(this)
+          function (result) {
+            this.tableData = result.data.result
+            this.searchForm.totalCount = result.data.totalCount
+            this.loading = false
+          }.bind(this)
         )
         .catch(
-        function (error) {
-          this.loading = false
-          console.log(error)
-        }.bind(this)
+          function (error) {
+            this.loading = false
+            console.log(error)
+          }.bind(this)
         )
     },
     // 改变分页大小
     sizeChange: function (val) {
+      console.log('sizeChange')
       this.searchForm.pageSize = val
       this.searchForm.currentPage = 1
       this.search()
     },
     // 改变当前显示页面
     currentChange: function (val) {
+      console.log('currentChange')
       this.searchForm.currentPage = val
       this.search()
     },
