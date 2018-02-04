@@ -40,7 +40,7 @@
 
       <!-- <div> -->
         <template v-if="osDetails.extDataList">
-        <el-form-item :label="item.fieldName" v-for="(item) in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+        <el-form-item :label="item.fieldName" v-for="item in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
       </el-form-item>
       </template>
