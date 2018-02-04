@@ -9,11 +9,11 @@
     </el-breadcrumb> -->
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
-        <el-form-item label='设备型号'>
-          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
-        </el-form-item>
         <el-form-item label='设备编码'>
           <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='设备型号'>
+          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备名称'>
           <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
