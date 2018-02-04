@@ -405,14 +405,7 @@ export default {
             })
             this.providerDialogVisible = false
             this.search({})
-          }).catch(
-            (e) => {
-              this.$message({
-                message: e.ErrorMsg,
-                type: 'warning'
-              })
-            }
-          )
+          })
         } else {
           this.$message({
             message: '请填写正确的内容',
