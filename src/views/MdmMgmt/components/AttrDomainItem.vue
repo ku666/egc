@@ -37,12 +37,12 @@
         <el-row>
           <el-col :span='12'>
             <el-form-item label='域取值' prop='domainValue' >
-              <el-input v-model='domainForm.domainValue'></el-input>
+              <el-input v-model.trim='domainForm.domainValue'></el-input>
             </el-form-item>
           </el-col>
           <el-col :span='12'>
             <el-form-item label='域取值编码' prop='domainValueCode'>
-              <el-input v-model='domainForm.domainValueCode'></el-input>
+              <el-input v-model.trim='domainForm.domainValueCode'></el-input>
             </el-form-item>
           </el-col>
         </el-row>
