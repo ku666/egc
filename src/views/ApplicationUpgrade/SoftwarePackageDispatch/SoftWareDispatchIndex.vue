@@ -28,23 +28,18 @@
         <el-button @click="_callHandleFilter" class="search-btn" type="primary">搜索</el-button>
       </el-col>
       <el-col :span="2">
-        <el-button @click="_selectOrg" class="action-btn" type="primary" style="margin-left:60px;">选择组织</el-button>
+        <el-button @click="_selectOrg" class="action-btn" type="primary" style="margin-left:60px;" :disabled="disabled">选择组织</el-button>
       </el-col>
     </el-row>
   </div>
 
 
   <div style="margin-top: 20px">
-    <el-collapse ref="colls" accordion v-model="activeNames"  @change="handleChange">
-      <el-collapse-item ref="colitems" v-for="(item , index) in dispatchDataList" :key="index" :name="item.batchName">
-        <template slot="title" >
-          <div class="el-collapse-item__header" style="text-align:center; font-size; 18px;">
-            {{ item.batchName }}
-          </div>
-        </template>
-        <!-- <test-table ref="test" :pckTableList="item.packageDataList"></test-table> -->
+    <el-collapse v-model="activeNames" accordion  @change="handleChange" >
+      <!-- <el-collapse-item :title="dispatchDataList[0].batchName" v-for="(item , index) in dispatchDataList" :key="index" :name="item.batchName"> -->
+      <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
         <el-table
-          ref="multipleTable"
+          :ref="'test' + index"
           :data="item.packageDataList"
           tooltip-effect="dark"
           style="width: 100%"
@@ -57,10 +52,14 @@
       </el-collapse-item>
     </el-collapse>
   </div>
+  <!-- <test-colle></test-colle> -->
   <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
-    <org-tree></org-tree>
+    <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
   </el-dialog>
 
+  <el-dialog :title="dispatchTittle" :visible.sync="downloadResultVisible">
+    <dispatched-software-results @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
+  </el-dialog>
 </div>
 
 
@@ -68,17 +67,23 @@
 
 <script>
 import orgTree from './components/OrgTree'
-import { getAllRegisterPackages } from './apis/index'
+import DispatchedSoftwareResults from './components/DispatchedSoftwareResults'
+// import { getAllRegisterPackages, dispatchSoftwarePackage } from './apis/index'
+import { getAllRegisterPackages, downloadDispatchResult } from './apis/index'
 export default {
   components: {
-    orgTree
+    orgTree,
+    DispatchedSoftwareResults
   },
   data () {
     return {
       selectOrgVisible: false,
+      downloadResultVisible: false,
       dialogTittle: '选择组织',
+      dispatchTittle: '下发结果详情',
       activeNames: '',
       multipleSelection: [],
+      disabled: true,
       formLabelWidth: '160px',
       searchCondition: {
         name: '',
@@ -127,32 +132,30 @@ export default {
           prop: 'remark'
         }
       ],
-      dispatchDataList: undefined
+      dispatchDataList: undefined,
+      operator: ''
     }
   },
 
   methods: {
     _handleClearQuery () {
       this.searchCondition = {name: '', version: '', developer: ''}
-      // this.$refs.colls.$refs.multipleTable.clearSelection()
     },
     _callHandleFilter () {
       console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
     },
     handleChange (val) {
-      // console.log(this.$refs.colls)
-      // console.log(this.$refs.colitems)
-      console.log(this.$refs.multipleTable)
-      // this.$refs.multipleTable.toggleRowSelection()
-      // this.$refs.test.toggleSelection()
-      // this.$refs.multipleTable.clearSelection()
+      console.log(this.$refs.test0)
+      // console.log(this.$refs.text1)
+      // this.$refs.text0.clearSelection()
     },
     loadData () {
       getAllRegisterPackages()
         .then(
           function (result) {
-            console.log('operating system result === > ' + JSON.stringify(result))
+            console.log('dispatch software packages result === > ' + JSON.stringify(result, null, ' '))
             this.dispatchDataList = result.testData
+            console.log('dispatch software packages dispatchDataList === > ' + JSON.stringify(this.dispatchDataList, null, ' '))
             this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
         )
@@ -164,6 +167,7 @@ export default {
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
+      this.disabled = false
       console.log(JSON.stringify(this.multipleSelection))
     },
     _selectOrg () {
@@ -172,6 +176,40 @@ export default {
       } else {
         this.$message.error('请选择软件包!')
       }
+    },
+    _dispatchSoftwareToCourt (houseData) {
+      this.selectOrgVisible = false
+      // 需要获取当前登录人的信息
+      this.operator = 'SystemAdmin'
+      this.downloadResultVisible = true
+      // dispatchSoftwarePackage(this.multipleSelection, houseData, this.operator)
+      //   .then(
+      //     function (result) {
+      //       this.dispatchResult = result
+      //       console.log('_dispatchSoftwareToCourt data === > ' + JSON.stringify(this.dispatchResult, null, ' '))
+      //       this.activeNames = this.dispatchDataList[0].batchName
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
+    },
+    _downloadDispatchResult () {
+      this.downloadResultVisible = false
+      console.log('download dispath results')
+      downloadDispatchResult()
+        .then(
+          function (result) {
+            this.$message.success('下载成功')
+          }
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     }
   },
   mounted () {

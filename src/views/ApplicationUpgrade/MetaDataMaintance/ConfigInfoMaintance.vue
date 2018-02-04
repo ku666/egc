@@ -5,7 +5,7 @@
           <el-form-item label="配置项名称">
             <el-input class="appupgrade_el-select" placeholder="请输入配置项名称" v-model="searchConditionList.condition"> </el-input>
           </el-form-item>
-          <el-form-item label="代码值">
+          <el-form-item label="代码值" :label-width="formLabelWidth">
             <el-input class="appupgrade_el-select" placeholder="请输入配置项的值" v-model="searchConditionList.condition"> </el-input>
           </el-form-item>
           <div class="btn-container">
@@ -73,7 +73,8 @@ export default {
         'currentPage': 1,
         'pageSize': 10,
         'condition': ''
-      }
+      },
+      formLabelWidth: '120px'
     }
   },
   methods: {

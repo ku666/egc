@@ -12,6 +12,7 @@ Mock.mock(contextPath + '/aupackagedispatches/listCourts', function () {
       'batchName': '软件包1.0更新',
       'packageDataList': [
         {
+          'tableName': 'multipleTable0',
           'pageNo': 1,
           'pageSize': 10,
           'packageId': null,
@@ -28,12 +29,54 @@ Mock.mock(contextPath + '/aupackagedispatches/listCourts', function () {
           'remark': '本版本纯粹为了测试，没有任何意义！'
         },
         {
+          'tableName': 'multipleTable1',
           'pageNo': 1,
           'pageSize': 10,
           'packageId': null,
           'packageDispNo': '2',
           'name': '霜之哀伤.jar',
           'version': '1.0.0',
+          'provider': 'Blizza Co. Ltd. ',
+          'hostname': 'server name 1',
+          'path': '/tmp/upgrade',
+          'registerTime': '2010-12-12 00:20:30',
+          'register': '系统管理员',
+          'lastestPreName': '绝地求生',
+          'latestPreVer': '0.02',
+          'remark': '本版本是为了SIT做准备，毫无任何意义！'
+        }
+      ]
+    }, {
+      'pageNo': 1,
+      'pageSize': 10,
+      'batchId': null,
+      'batchName': '软件包2.0更新',
+      'packageDataList': [
+        {
+          'tableName': 'multipleTable0',
+          'pageNo': 1,
+          'pageSize': 10,
+          'packageId': null,
+          'packageDispNo': '2',
+          'name': '王者荣耀2.0.jar',
+          'version': '2.0.0',
+          'provider': '腾讯有限公司',
+          'hostname': 'server name 1',
+          'path': '/tmp/upgrade',
+          'registerTime': '2017-01-02 12:30:00',
+          'register': 'SystemAdmin',
+          'lastestPreName': '仙剑奇缘',
+          'latestPreVer': '0.09',
+          'remark': '本版本纯粹为了测试，没有任何意义！'
+        },
+        {
+          'tableName': 'multipleTable1',
+          'pageNo': 1,
+          'pageSize': 10,
+          'packageId': null,
+          'packageDispNo': '2',
+          'name': '霜之哀伤11.0.jar',
+          'version': '2.0.0',
           'provider': 'Blizza Co. Ltd. ',
           'hostname': 'server name 1',
           'path': '/tmp/upgrade',
@@ -4473,5 +4516,76 @@ Mock.mock(contextPath + '/aupackagedispatches/listOrgTree', function () {
         ]
       }
     ]
+  }
+})
+
+Mock.mock(contextPath + '/upgradeapp/dispatchHis', function () {
+  console.log('软件下发mock数据 -->   ')
+  return {
+    'pageCount': 2,
+    'dataList': [
+      {
+        'pageNo': 1,
+        'pageSize': 10,
+        'uuid': '00000002',
+        'displayNo': '2',
+        'dispatchStartTime': '2017-02-12 12:20:36',
+        'packageName': 'test.jar',
+        'version': '1.0.0.2',
+        'province': '广东',
+        'city': '广州',
+        'district': '山后变',
+        'courtName': 'test court',
+        'hostName': 'GD-GZ-SH-XX-XX-XX',
+        'path': null,
+        'dispatcher': 'zhang san',
+        'remark': '测试用备考信息'
+      },
+      {
+        'pageNo': 1,
+        'pageSize': 10,
+        'uuid': '00000002',
+        'displayNo': '2',
+        'dispatchStartTime': '2017-02-12 12:20:36',
+        'packageName': 'test.jar',
+        'version': '1.0.0.2',
+        'province': '广东',
+        'city': '广州',
+        'district': '山后变',
+        'courtName': 'test court',
+        'hostName': 'GD-GZ-SH-XX-XX-XX',
+        'path': null,
+        'dispatcher': 'zhang san',
+        'remark': '测试用备考信息'
+      }
+    ]
+  }
+})
+
+Mock.mock(contextPath + '/upgradeapp/dispatchHisDetails', function () {
+  console.log('软件下发mock数据 -->   ')
+  return {
+    'pageNo': 1,
+    'pageSize': 10,
+    'uuid': '00000001',
+    'displayNo': '1',
+    'dispatchStartTime': '2017-02-12 12:20:36',
+    'packageName': 'test.jar',
+    'version': '1.0.0.2',
+    'province': '广东',
+    'city': '广州',
+    'district': '山后变',
+    'courtName': 'test court',
+    'hostName': 'GD-GZ-SH-XX-XX-XX',
+    'path': '/upt/temp/20150101123400',
+    'dispatcher': 'zhang san',
+    'remark': '测试用备考信息',
+    'provider': 'IBM',
+    'pkgOrigHostName': 'test.jar111',
+    'pkgOrigPath': '/test/temp',
+    'pkgPreName': 'test.jar',
+    'pkgPreVer': '1.0.0.2',
+    'dispatchEndTime': '2015-10-10 12:25:44',
+    'dispatchResult': '下发成功'
   }
 })

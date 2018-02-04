@@ -15,9 +15,7 @@
           show-checkbox
           @check-change="handleCheckChange"
           :filter-node-method="filterNode"
-          :default-expanded-keys="expandedKeys"
-          :default-checked-keys="defaultChecked"
-          @node-click="_handleNodeClick">
+          :default-expanded-keys="expandedKeys">
         </el-tree>
       </div>
       <div style="margin-top: 20px; text-align: right;">
@@ -39,7 +37,6 @@ export default {
         label: 'label'
       },
       filterText: '',
-      defaultChecked: [],
       houseOrgCodeList: []
     }
   },
@@ -48,21 +45,12 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  mounted () {
-    this._loadALlOrgs()
-  },
   methods: {
     _loadALlOrgs () {
       getAllOrgs()
         .then(
           function (result) {
-            console.log('org tree --- >   ' + JSON.stringify(result.testData))
-            // this.orgsDataTree = []
-            // for (let i = 0; i < result.testData.length; i++) {
-            //   const element = result.testData[i]
-            //   this.orgsDataTree.push(element)
-            // }
-            // this.orgsData = this.orgsDataTree
+            console.log('org tree data--- >   ' + JSON.stringify(result.testData))
             this.orgsData = result.testData
           }.bind(this)
         )
@@ -73,49 +61,34 @@ export default {
         )
     },
     _confirmDispatch () {
-      console('confirm selected org')
+      // console.log('confirm selected org --- >' + JSON.stringify(this.$refs.tree.getCheckedNodes(), null, ' '))
+      this.houseOrgCodeList = []
+      for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
+        let node = this.$refs.tree.getCheckedNodes()[index]
+        console.log('node.courtUid --->  ' + node.courtUid)
+        if (node.courtUid) {
+          this.houseOrgCodeList.push(node.courtUid)
+        }
+      }
+      console.log('selected leaf data --->  ' + this.houseOrgCodeList.toString())
+      this.$emit('handleDispatchEvent', this.houseOrgCodeList)
     },
     handleNodeClick (orgsData) {
       console.log(orgsData)
     },
-    _onSubmit () {
-      console.log('获取树节点值：=-----------------')
-      this.houseOrgCodeList = []
-      for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
-        let node = this.$refs.tree.getCheckedNodes()[index]
-        this.houseOrgCodeList.push(node.uuid)
-      }
-      this.$emit('changeDialogStatus', this.houseOrgCodeList)
-    },
     setCheckNodes (nodes) {
       this._loadALlOrgs()
-      this.defaultChecked = nodes
     },
     filterNode (value, data) {
       if (!value) return true
       return data.labelAbbr.indexOf(value) !== -1
     },
     handleCheckChange: function (data, checked, indeterminate) {
-      // this.deepChangeCheckedJsonData(data.children, checked)
-      console.log(JSON.stringify(checked))
-    },
-    deepChangeCheckedJsonData: function (json, checked) {
-      if (json instanceof Array) {
-        for (var i = 0; i < json.length; i++) {
-          var jsonObj = json[i]
-          this.deepChangeCheckedJsonData(jsonObj, checked)
-        }
-      } else if (json instanceof Object) {
-        for (var key in json) {
-          if (key === 'uuid') {
-            this.$refs.tree.setChecked(json['uuid'].toString(), checked, true)
-          }
-          if (key === 'children') {
-            this.deepChangeCheckedJsonData(json['children'], checked)
-          }
-        }
-      }
+      console.log(JSON.stringify(data, null, '  '))
     }
+  },
+  mounted () {
+    this._loadALlOrgs()
   }
 }
 </script>

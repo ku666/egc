@@ -216,7 +216,7 @@ export default {
       softwarePackListData: undefined,
       softwarePckDetails: undefined,
       softwarePckHistory: undefined,
-      loading: true,
+      loading: false,
       softwareDetails: {
         name: '',
         version: '',

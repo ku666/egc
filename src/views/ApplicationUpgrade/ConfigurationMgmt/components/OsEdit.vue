@@ -38,13 +38,13 @@
       </el-form-item>
 
 
-      <div>
-        <template v-if="osDetails.newItems.length !== 0" v-for="(item, index) in osDetails.newItems">
-          <el-form-item :key="index" :label="item.newLabel" :label-width="formLabelWidth">
-            <el-input class="upgrade_el-input" v-model="item.newValue"></el-input>
-          </el-form-item>
-        </template>
-      </div>
+      <!-- <div> -->
+        <template v-if="osDetails.extDataList">
+        <el-form-item :label="item.fieldName" v-for="(item) in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+      </el-form-item>
+      </template>
+      <!-- </div> -->
 
 
       <div style="text-align: center">
@@ -58,8 +58,8 @@
             :hide="clearData"
             v-model="showAddNewEvent">
             <div>
-              <div><el-input :autofocus="true" placeholder="请输入新CI名称" size="small" v-model="newLabel"></el-input></div>
-              <div class="margin-top-5"><el-input placeholder="请输入新CI值" size="small" v-model="newValue"></el-input></div>
+              <div><el-input :autofocus="true" placeholder="请输入新CI名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新CI值" size="small" v-model="fieldValue"></el-input></div>
             </div>
             <div class="text-right margin-top-5">
               <el-button size="mini" type="text" @click="clearData">取消</el-button>
@@ -87,8 +87,8 @@ export default {
       maxlength: 30,
       tempRemark: undefined,
       showAddNewCIPop: false,
-      newLabel: '',
-      newValue: '',
+      fieldName: '',
+      fieldValue: '',
       showAddNewEvent: false,
       osDetailsTemp: []
     }
@@ -99,22 +99,18 @@ export default {
       if (this.tempRemark !== this.osDetails.remark) {
         this.$emit('saveOsInfoEvent', this.osDetails)
       } else {
-        this.$notify({
-          title: '数据更新',
-          message: '请更改数据后再提交',
-          type: 'error',
-          duration: 2000
+        this.$message({
+          message: '请修改数据后再提交',
+          type: 'error'
         })
       }
     },
     addNewEvent () {
       console.info('add new item')
-      if (this.newLabel.trim() === '') {
-        this.$message.error('请输入标签名')
-      } else if (this.newValue.trim() === '') {
-        this.$message.error('请输入值！')
+      if (this.fieldName.trim() === '') {
+        this.$message.error('请输入新增项名称')
       } else {
-        this.osDetails.newItems.push({'newValue': this.newValue, 'newLabel': this.newLabel})
+        this.osDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
         console.info(JSON.stringify(this.osDetails))
       }
     },

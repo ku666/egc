@@ -270,7 +270,7 @@ export default {
                     }.bind(this)
                   ).catch({
                     function (error) {
-                      this.$message.error(error.message)
+                      console.log(error)
                     }
                   }.bind(this)
                   )
@@ -284,8 +284,8 @@ export default {
           }.bind(this)
           ).catch(
             function (error) {
-              this.$message.error(error.message)
-            }.bind(this)
+              console.log(error)
+            }
           )
       }
     },

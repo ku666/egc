@@ -1,67 +1,49 @@
 <template>
 <div class="ui-common">
-  <el-row :gutter="40">
-    <el-col :span="4">
-      <div class="item-container">
-      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择省</span>
-        <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable  @change="loadCityData">
-          <el-option
-            v-for="item in provinces"
-            :key="item.label"
-            :label="item.label"
-            :value="item.label">
-          </el-option>
-        </el-select>
-      </div>
-    </el-col>
-    <el-col :span="4">
-      <div class="item-container">
-      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择市</span>
-        <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable  @change="loadDistrictData">
-          <el-option
-            v-for="item in cities"
-            :key="item.label"
-            :label="item.label"
-            :value="item.label">
-          </el-option>
-        </el-select>
-      </div>
-    </el-col>
-    <el-col :span="4">
-      <div class="item-container">
-      <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;选择区</span>
-        <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
-          <el-option
-            v-for="item in districts"
-            :key="item.label"
-            :label="item.label"
-            :value="item.label">
-          </el-option>
-        </el-select>
-      </div>
-    </el-col>
-    <el-col :span="4">
-      <div class="item-container">
-        <span class="sub-title">搜索条件</span>
-        <el-input v-model="searchConDetails.condition" placeholder="请输入查询关键字" clearable :maxlength="maxlength"></el-input>
-      </div>
-    </el-col>
-    <el-col :span="2">
-      <div>
-        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-      </div>
-    </el-col>
-    <el-col :span="2">
-      <div>
-      <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 15px">搜索</el-button>
-      </div>
-    </el-col>
-    <el-col :span="2">
-      <div>
-      <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 30px">导出</el-button>
-      </div>
-    </el-col>
-  </el-row>
+  <el-form :inline="true" :model="searchConDetails">
+      <div class="search-container">
+          <el-form-item label="选择省">
+            <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable  @change="loadCityData">
+              <el-option
+                v-for="item in provinces"
+                :key="item.label"
+                :label="item.label"
+                :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="选择市" :label-width="formLabelWidth">
+            <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable  @change="loadDistrictData">
+              <el-option
+                v-for="item in cities"
+                :key="item.label"
+                :label="item.label"
+                :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="选择区" :label-width="formLabelWidth">
+            <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
+              <el-option
+                v-for="item in districts"
+                :key="item.label"
+                :label="item.label"
+                :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="搜索条件">
+            <el-input v-model="searchConDetails.condition"  class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 15px">搜索</el-button>
+              <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 30px">导出</el-button>
+            </el-form-item>
+          </div>
+        </div>
+    </el-form>
 </div>
 </template>
 
@@ -79,7 +61,8 @@ export default {
       cities: [],
       districts: [],
       provParams: {},
-      maxlength: 30
+      maxlength: 30,
+      formLabelWidth: '80px'
     }
   },
   methods: {

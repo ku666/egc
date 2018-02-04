@@ -223,10 +223,8 @@ export default {
             if (result === 'Success!') {
               this.dialogEditVisible = false
               this.$message({
-                title: '更新成功',
                 message: '保存成功',
-                type: 'success',
-                duration: 2000
+                type: 'success'
               })
               // 再次加载列表的数据
               this.loadData()
@@ -235,14 +233,8 @@ export default {
         )
         .catch(
           function (error) {
-            this.$message({
-              title: '更新失败',
-              message: '更新失败',
-              type: 'success',
-              duration: 2000
-            })
             console.log(error)
-          }.bind(this)
+          }
         )
     },
 
@@ -261,32 +253,17 @@ export default {
               // setTimeout(() => {
               // }, 12000)
               this.$message({
-                title: '数据更新成功',
                 message: '数据更新成功',
-                type: 'success',
-                duration: 2000
+                type: 'success'
               })
               // 再次加载列表的数据
               this.loadData()
-            } else {
-              this.$message({
-                title: '数据更新失败',
-                message: '数据更新失败',
-                type: 'success',
-                duration: 2000
-              })
             }
           }.bind(this)
         ).catch(
           function (error) {
             this.synDataLoading = false
             console.log(error)
-            this.$message({
-              title: '数据刷新失败',
-              message: '数据刷新失败',
-              type: 'error',
-              duration: 2000
-            })
           }
         )
     },
@@ -337,7 +314,7 @@ export default {
 
     // 改变分页大小
     handleSizeChange (val) {
-      this.searchConditionList.limit = val
+      this.searchConditionList.pageSize = val
       this.loadData()
     },
 

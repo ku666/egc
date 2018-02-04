@@ -3,13 +3,13 @@
     <el-form :inline="true" :model="searchConditionList">
       <div class="search-container">
           <el-form-item label="代码实例值">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.condition"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.codeValue"> </el-input>
           </el-form-item>
-          <el-form-item label="代码实例对应名称">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.condition"> </el-input>
+          <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
           </el-form-item>
-          <el-form-item label="提供商">
-            <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.condition"> </el-input>
+          <el-form-item label="提供商" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -19,13 +19,13 @@
           </div>
         </div>
     </el-form>
-    <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="middlewareListData" stripe border v-loading="loading">
+    <div style="margin-top: 10px" class="flex-1">
+          <el-table :data="codeInstList" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
                 </el-button>
@@ -44,13 +44,18 @@
           :total="total">
       </el-pagination>
     </div>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
+        <code-instance-edit :codeInstDetails="codeInstDetails" @saveCodeInstEvent="_updateCodeInstInfo"></code-instance-edit>
+      </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCommCodeByPage, getCommCodeDetails } from './apis/index'
+import CodeInstanceEdit from './components/CodeInstanceEdit'
+import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance } from './apis/index'
 export default {
   components: {
+    CodeInstanceEdit
   },
   data () {
     return {
@@ -79,17 +84,25 @@ export default {
       searchConditionList: {
         'currentPage': 1,
         'pageSize': 10,
-        'condition': ''
-      }
+        // 名称
+        'codeName': '',
+        // 值
+        'codeValue': '',
+        // 提供商
+        'vendor': ''
+      },
+      dialogEditVisible: false,
+      loading: true,
+      formLabelWidth: '120px'
     }
   },
   methods: {
     loadData () {
-      getCommCodeByPage(this.searchConditionList)
+      getCodeInstanceByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('middleware result -- >' + JSON.stringify(result))
-            this.middlewareListData = result.middlewareList
+            console.log('code instance -- >' + JSON.stringify(result, null, ' '))
+            this.codeInstList = result
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
@@ -102,21 +115,22 @@ export default {
         )
     },
     _handleFilter () {
-      console.log('search common code')
+      this.loadData()
     },
 
     _handleClearQuery () {
-      this.searchConDetails.condition = ''
+      this.searchConditionList = { 'currentPage': 1, 'pageSize': 10, 'codeName': '', 'code': '', 'vendor': '' }
     },
     _handleEdit (rowIdx) {
-      this.dialogStatus = '中间件修改'
-      var rowData = this.middlewareListData[rowIdx]
+      this.dialogStatus = '代码实例修改'
+      var rowData = this.codeInstList[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
-      getCommCodeDetails(eachRowUUID)
+      getCodeInstanceDetails(eachRowUUID)
           .then(
             function (result) {
-              this.middlewareDetails = result.auMiddleware
+              console.log('code instance  details -- >' + JSON.stringify(result, null, ' '))
+              this.codeInstDetails = result
               this.dialogEditVisible = true
             }.bind(this)
           )
@@ -125,6 +139,22 @@ export default {
               console.log(error)
             }
           )
+    },
+    _updateCodeInstInfo (params) {
+      updateCodeInstance(params)
+        .then(
+          function (result) {
+            this.dialogEditVisible = false
+            this.$message.success('保存成功')
+            // 再次加载列表的数据
+            this.loadData()
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     },
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
@@ -136,10 +166,11 @@ export default {
     }
   },
   mounted () {
+    this.loadData()
   }
 }
 </script>
 
 <style scoped>
- @import "../ConfigurationMgmt/assets/css/upgrademgmt.less";
+  @import "../ConfigurationMgmt/assets/css/upgrademgmt.less";
 </style>

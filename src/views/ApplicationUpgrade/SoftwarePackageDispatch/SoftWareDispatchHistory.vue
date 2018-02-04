@@ -1,12 +1,12 @@
 <template>
   <div class="ui-common">
     <div>
-      <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
+      <search-condition @handleFilterEvent="_handleFilter" :searchConditionList="searchConditionList"></search-condition>
     </div>
-    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+    <el-row class="flex-c" style="height: 100%">
       <el-col :span="24"  class="flex-1 flex-c">
         <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softDispatchListData" stripe border>
+          <el-table :data="softDispatchHisList" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -14,7 +14,6 @@
             <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="details"/> -->
                 </el-button>
               </template>
             </el-table-column>
@@ -61,7 +60,7 @@ export default {
       dialogStatus: '',
       addr: '',
       dialogDetailsVisible: false,
-      softDispatchListData: undefined,
+      softDispatchHisList: undefined,
       softDispDetails: undefined,
       osHistoryData: undefined,
       synDataLoading: false,
@@ -69,60 +68,60 @@ export default {
       tableTitleList: [
         {
           colName: '下发日期/时间',
-          prop: 'uuid',
+          prop: 'dispatchStartTime',
           width: 120
         }, {
           colName: '软件包名称',
-          prop: 'uuid',
+          prop: 'packageName',
           width: 100
         }, {
           colName: '软件包版本',
-          prop: 'uuid',
+          prop: 'version',
           width: 100
         }, {
           colName: '省（直辖市）',
-          prop: 'uuid',
+          prop: 'province',
           width: 120
         }, {
           colName: '市',
-          prop: 'uuid',
+          prop: 'city',
           width: 120
         }, {
           colName: '区',
-          prop: 'uuid',
+          prop: 'district',
           width: 120
         }, {
           colName: '目标小区名称',
-          prop: 'uuid',
+          prop: 'courtName',
           width: 180
         }, {
           colName: '目标服务器名称',
-          prop: 'uuid',
+          prop: 'hostName',
           width: 120
         }, {
           colName: '目标路径',
-          prop: 'uuid',
+          prop: 'path',
           width: 150
         }, {
           colName: '操作发起人',
-          prop: 'uuid'
+          prop: 'dispatcher'
         }, {
           colName: '备注',
-          prop: 'uuid'
+          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
-      editTitle: '编辑',
-      refreshTitle: '比对更新',
-      historyTitle: '历史信息',
-      details: require('./assets/images/details.png'),
       searchConditionList: {
         'city': '',
-        'condition': '',
-        'currentPage': 1,
         'district': '',
+        'endDate': '',
+        'keyWord': '',
+        'packageName': '',
+        'pageNo': 1,
         'pageSize': 10,
-        'province': ''
+        'province': '',
+        'startDate': '',
+        'version': ''
       }
     }
   },
@@ -134,7 +133,7 @@ export default {
         .then(
           function (result) {
             console.log('get data by page')
-            this.softDispatchListData = result.ossList
+            this.softDispatchHisList = result.dataList
             this.total = result.pageCount
           }.bind(this)
         ).catch(
@@ -154,14 +153,15 @@ export default {
     // 查看软件下发每条详细信息
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '软件下发历史信息详情'
-      var rowData = this.softDispatchListData[rowIdx]
+      var rowData = this.softDispatchHisList[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
       getDispatchHisDetails(eachRowUUID)
           .then(
             function (result) {
               console.log(result)
-              this.softDispDetails = result.auOss
+              this.softDispDetails = result
+              console.log('dispatch history details --- > ' + JSON.stringify(this.softDispDetails, null, ' '))
               this.dialogDetailsVisible = true
             }.bind(this)
           )
@@ -173,8 +173,7 @@ export default {
       getDispatchHisByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('get data by page')
-            this.softDispatchListData = result.ossList
+            this.softDispatchHisList = result.dataList
             this.total = result.pageCount
           }.bind(this)
         )

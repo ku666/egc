@@ -96,9 +96,38 @@
         <el-input class="upgrade_el-input" v-model="auServerDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
 
+      <template v-if="auServerDetails.extDataList">
+        <el-form-item :label="item.fieldName" v-for="(item) in auServerDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+      </el-form-item>
+      </template>
+
+      <!-- <div style="text-align: center">
+        <el-button @click="callBackSaveEvent" class="action-btn" type="primary">保 存</el-button>
+      </div> -->
+
       <div style="text-align: center">
         <el-button @click="callBackSaveEvent" class="action-btn" type="primary">保 存</el-button>
+
+        <el-popover
+            ref="newCIEventPop"
+            visible="showAddNewCIPop"
+            placement="right"
+            width="160"
+            :hide="clearData"
+            v-model="showAddNewEvent">
+            <div>
+              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+            </div>
+            <div class="text-right margin-top-5">
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
+              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            </div>
+          </el-popover>
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
       </div>
+
     </el-form>
   </div>
 </template>
@@ -125,7 +154,10 @@ export default {
       tempOperator: undefined,
       tempServiceLevel: undefined,
       tempServiceDuring: undefined,
-      tempRemark: undefined
+      tempRemark: undefined,
+      tempextDataList: undefined,
+      fieldName: '',
+      fieldValue: ''
     }
   },
   methods: {
@@ -133,11 +165,9 @@ export default {
       if (this.validateDetailsChanged()) {
         this.$emit('saveServInfoEvent', this.auServerDetails)
       } else {
-        this.$notify({
-          title: '数据更新',
-          message: '请更改数据后再提交',
-          type: 'error',
-          duration: 2000
+        this.$message({
+          message: '请修改数据后再保存',
+          type: 'error'
         })
       }
     },
@@ -160,10 +190,29 @@ export default {
           this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU &&
           this.tempAeestNo === this.auServerDetails.aeestNo && this.tempMgmtIp === this.auServerDetails.mgmtIp &&
           this.tempOperator === this.auServerDetails.operator && this.tempServiceLevel === this.auServerDetails.serviceLevel &&
-          this.tempServiceDuring === this.auServerDetails.serviceDuring) {
+          this.tempServiceDuring === this.auServerDetails.serviceDuring && this.tempextDataList === this.auServerDetails.tempextDataList) {
         return false
       }
       return true
+    },
+    addNewEvent () {
+      console.info('add new item')
+      if (this.fieldName.trim() === '') {
+        this.$message.error('请输入新增项名称')
+      } else {
+        // var extDataList = this.osDetails.extDataList
+        console.info(JSON.stringify(this.auServerDetails))
+        console.log('this.osDetails.extDataList --> ' + this.auServerDetails.extDataList)
+        if (this.auServerDetails.extDataList) {
+          this.auServerDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        }
+      }
+    },
+    clearData () {
+      console.info('clear data')
+      this.showAddNewEvent = false
+      this.fieldName = ''
+      this.fieldValue = ''
     }
   },
   watch: {
@@ -182,6 +231,7 @@ export default {
     this.tempOperator = this.auServerDetails.operator
     this.tempServiceLevel = this.auServerDetails.serviceLevel
     this.tempServiceDuring = this.auServerDetails.serviceDuring
+    this.tempextDataList = this.auServerDetails.extDataList
   }
 }
 </script>

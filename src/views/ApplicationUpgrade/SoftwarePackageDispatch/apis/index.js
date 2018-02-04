@@ -41,8 +41,7 @@ export const getAllOrgs = () => {
   ).then(res => res.data)
 }
 
-// 获取软件包
-
+// 下发软件包
 export const getAllRegisterPackages = () => {
   // return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
   // ).then(res => res.data)
@@ -52,13 +51,37 @@ export const getAllRegisterPackages = () => {
   return Axios.get(contextPath + '/aupackagedispatches/listCourts').then(res => res.data)
 }
 
-/** 下发历史查询 */
-export const getDispatchHisByPage = () => {
-  return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
+export const dispatchSoftwarePackage = (params1, params2, params3) => {
+  console.log(' dispatch software packages params1  --->   ' + JSON.stringify(params1) + JSON.stringify(params2) + params3)
+  return Axios.post(ADDR_BASE_PATH + '/api/court/getDistrictList', params1, params2, params3
   ).then(res => res.data)
+
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+}
+
+// 下发历史查询
+export const getDispatchHisByPage = (params) => {
+  // return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
+  // ).then(res => res.data)
+
+  return Axios.get(contextPath + '/upgradeapp/dispatchHis').then(res => res.data)
 }
 
 export const getDispatchHisDetails = () => {
-  return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
-  ).then(res => res.data)
+  // return Axios.get(BASE_PATH + '/usermgmt/maindata/getOrg'
+  // ).then(res => res.data)
+
+  return Axios.get(contextPath + '/upgradeapp/dispatchHisDetails').then(res => res.data)
+}
+
+export const downloadDispatchResult = (params) => {
+  return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
+  ).then(res => {
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    let link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = params
+    link.click()
+    return res.data
+  })
 }
