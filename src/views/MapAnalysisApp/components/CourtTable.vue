@@ -4,10 +4,10 @@
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
           <el-form-item label="建筑面积">
-            <span>{{ props.row.buildArea }}</span>
+            <span>{{ props.row.buildArea }} (平米)</span>
           </el-form-item>
           <el-form-item label="占地面积">
-            <span>{{ props.row.floorArea }}</span>
+            <span>{{ props.row.floorArea }} (平米)</span>
           </el-form-item>
           <el-form-item label="详细地址" class="itemlarge">
             <span>{{ props.row.regionName }}</span>

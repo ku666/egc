@@ -68,7 +68,8 @@ var optionAge = {
     trigger: 'axis',
     axisPointer: {
       type: 'shadow'
-    }
+    },
+    formatter: '{a}: {b}<br/>人数: {c}'
   },
   toolbox: {
     feature: {
