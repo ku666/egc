@@ -1,83 +1,94 @@
 <template>
-  <div>
-    <div class="app-container" calendar-list-container>
+  <div class='ui-common'>
+    <div calendar-list-container>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
       <div v-show="showGrid == true">
-        <div class="filter-container">
-          <!-- <el-input @keyup.enter.native="handleFilter" style="width: 200px;" class="filter-item"
-                    placeholder="部门名称" v-model="listQuery.q_departName"></el-input>
-          <el-button class="filter-item" type="primary" icon="search" @click="handleFilter">搜索</el-button> -->
-          <el-button class="filter-item" @click="handleCreate" type="primary" icon="edit">添加</el-button>
+        <div>
+          <el-form :model="listQuery" ref="listQuery">
+            <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
+            <span style="float:right">
+              <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称搜索" v-model="listQuery.q_departName"></el-input>
+              <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
+              <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
+            </span>
+          </el-form>
         </div>
-        <grid-list 
-          :editable="true" 
-          :deletable="true" 
-          :tableData="departmentList" 
-          :params="departmentListParam" 
-          style="margin-top: 15px" 
-          @listenToDeleteEvent="departmentDeleteEvent" 
-          @listenToEditEvent="departmentEditEvent"
-        ></grid-list>
-        <div class="block">
-          <div class="r_page">
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="listQuery.page"
-                :page-sizes="[10, 20, 50]"
-                :page-size="listQuery.limit"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-            </el-pagination>
-          </div>
+
+      <div class="border-divide"></div>
+      <div class="flex-1">
+          <grid-list
+            :editable="true" 
+            :deletable="true" 
+            :tableData="departmentList" 
+            :params="departmentListParam" 
+            style="margin-top: 15px" 
+            @listenToDeleteEvent="departmentDeleteEvent" 
+            @listenToEditEvent="departmentEditEvent"
+          ></grid-list>
+      </div>
+
+      <div>
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="listQuery.page"
+            :page-sizes="[10, 20, 50]"
+            :page-size="listQuery.limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+        </el-pagination>
       </div>
       </div>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible">
+        <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
+      </el-dialog>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-        <department-create 
-          @listenToAddEvent="deptAddEvent"
-          @gridDeleteEvent="deptDeleteEvent" 
-          @gridEditEvent="deptEditEvent"
-          v-show="showCreate"
-        ></department-create>
+        <department-edit ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
+        @gridSaveEvent="deptUpdateEvent"
+        :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
       </el-dialog>
     </div>
-    <!-- <div v-show="showGrid == false">
+    <div v-show="showGrid == false">
       <el-row>
         <el-col :span="8" style='margin-top:15px;'>
           <el-input
             placeholder="输入关键字进行过滤"
             v-model="filterText">
           </el-input>
-          <el-tree style='margin-top:10px;'
-                   class="filter-tree"
-                   :data="treeData"
-                   node-key="id"
-                   :highlight-current="treeHighlight"
-                   :filter-node-method="filterNode"
-                   ref="menuTree"
-                   @node-click="handleNodeClick"
-                   default-expand-all
-          >
-          </el-tree>
-          <div style="margin-top: 30px" v-show="showSubGrid==true">
-            <el-button class="filter-item" @click="handleTreeCreate" type="primary">
-              添加
-            </el-button>
-            <el-button class="filter-item" style="margin-left: 10px;" @click="handleTreeDelete" type="primary">
-              删除
-            </el-button>
+          <div class="departmentTree">
+            <el-tree style='margin-top:10px;'
+              class="el-department-tree"
+              :data="treeData"
+              :props="defaultProps"
+              node-key="id"
+              :filter-node-method="filterNode"
+              ref="departmentTree"
+              @node-click="handleNodeClick"
+              default-expand-all
+            >
+            </el-tree>
+          </div>
+          <div style="margin-top: 30px" v-show="showSubGrid">
+            <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleTreeCreate" plain type="primary">添加</el-button>
+            <el-button class="filter-item" style="margin-left: 10px;" @click="handleTreeDelete" type="primary">删除</el-button>
           </div>
         </el-col>
-        <el-col :span="16" style='margin-top:15px;' v-show="showSubGrid==true">
-          <el-card class="box-card" style='margin-left:10px;'>
-            <department-edit :departmentDetailData="subDepartmentData" :form="departmentForm" @gridDeleteEvent="departmentDeleteEvent" @gridEditEvent="departmentEditEvent"> </department-edit>
+        <el-col :span="16" style='margin-top:15px;' v-show="showSubGrid">
+          <el-card class="box-card" style='margin-left:10px;' v-show="showEditTree">
+            <department-edit ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
+            :departmentSelect="departmentOptions" @gridSaveEvent="deptUpdateEvent" @gridRefreshDir="loadDepartmentTree"
+            :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
+          </el-card>
+          <el-card class="box-card" style='margin-left:10px;' v-show="showCreateTree">
+            <department-create  ref="departmentCreateTreeVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent"
+            @canelDialogEvent="handleClose"></department-create>
           </el-card>
         </el-col>
       </el-row>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -86,50 +97,66 @@
   import departmentCreate from './component/DepartmentCreate.vue'
   import departmentEdit from './component/departmentEdit.vue'
   import {
-    // getDepartmentList,
-    // getTreeData,
-    // getDepartmentDetail
+    getDepartmentList,
+    getParenetDepartmentSelect,
+    getDepartmentTreeData,
+    getDepartmentDetail,
+    createDepartment,
+    updateDepartment,
+    deleteDepartment
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
-    name: 'department',
     data () {
       return {
         showCreate: false,
         departmentList: undefined,
         departmentListParam: [{
           title: '部门名称',
-          prop: 'name'
+          prop: 'departmentName'
         }, {
           title: '上级部门',
-          prop: 'superior'
+          prop: 'parentDepartmentName'
         }, {
           title: '下级部门',
-          prop: 'subordinate'
+          prop: 'childrenDepartments'
         }, {
           title: '直属员工',
-          prop: 'member'
+          prop: 'directUsers'
         }],
         listQuery: {
           page: 1,
           limit: 10,
           q_departName: ''
         },
+        defaultProps: {
+          children: 'children',
+          label: 'name'
+        },
         total: 0,
+        showEditTree: false,
+        showCreateTree: false,
+        selectDepartmentData: undefined,
         dialogFormVisible: false,
+        dialogCreateFormVisible: false,
         showGrid: true,
         showSubGrid: false,
         activeName: '0',
         departmentForm: {
-          code: undefined,
-          type: undefined,
-          description: undefined
+          departmentName: undefined,
+          parentDepartmentUuid: undefined,
+          remark: undefined,
+          departmentType: undefined,
+          userType: undefined,
+          uuid: ''
         },
-        treeData: undefined,
+        treeData: [],
         treeHighlight: true,
-        subDepartmentData: undefined,
         filterText: '',
         gridListTableData: undefined,
-        dialogStatus: undefined
+        dialogStatus: undefined,
+        addFlag: false,
+        departmentOptions: [],
+        curDepartmentUuid: ''
       }
     },
     components: {
@@ -137,34 +164,40 @@
       departmentEdit,
       departmentCreate
     },
+    mounted () {
+      this.loadData()
+    },
     methods: {
-      // loadData () {
-      //   getDepartmentList(this.listQuery)
-      //     .then(
-      //       function (result) {
-      //         this.departmentList = result.departmentList
-      //         this.total = result.departmentList.length
-      //         console.log('部门：' + JSON.stringify(result))
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      //   getTreeData()
-      //     .then(
-      //       function (result) {
-      //         this.treeData = result.treeData
-      //         console.log('部门树形数据：' + JSON.stringify(result))
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      // },
+      loadData () {
+        getDepartmentList(this.listQuery)
+          .then(
+            function (result) {
+              this.departmentList = result.childrenDepartmentVoList
+              this.total = result.pageCount
+              console.log('部门列表：' + JSON.stringify(result.childrenDepartmentVoList))
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+      },
+      loadDepartmentTree () {
+        getDepartmentTreeData()
+          .then(
+            function (result) {
+              this.treeData = []
+              this.treeData.push(result)
+              console.log('部门树形数据：' + JSON.stringify(result))
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+      },
       // 改变分页大小
       handleSizeChange (val) {
         this.listQuery.limit = val
@@ -177,101 +210,258 @@
       },
       filterNode (value, data) {
         if (!value) return true
-        return data.label.indexOf(value) !== -1
+        return data.name.indexOf(value) !== -1
       },
       handleFilter () {
+        this.listQuery.page = 1
         this.loadData()
       },
       handleCreate () {
-        this.dialogStatus = '创建部门'
+        this.dialogStatus = '添加部门'
         this.showCreate = true
         this.showEdit = false
-        this.dialogFormVisible = true
+        this.dialogFormVisible = false
+        this.dialogCreateFormVisible = true
+        this.addFlag = false
+        this.initDepartmentForm()
+        this.getDepartmentSelect(this.curDepartmentUuid)
+      },
+      getDepartmentSelect (uuid) {
+        // 获取部门信息
+        getParenetDepartmentSelect(uuid)
+          .then(
+              function (result) {
+                console.log('<<<<<departmentOptions:' + JSON.stringify(result))
+                let unChoose = {departmentName: '', disabled: false}
+                result.unshift(unChoose)
+                this.departmentOptions = result
+              }.bind(this)
+            )
+          .catch(function (error) {
+            console.log(error)
+          })
       },
       handleTabClick (tab, event) {
-        this.showGrid = (tab.name === '0')
-        // this.showSubGrid = (tab.name === '0')
-        console.log('*******************************************' + tab, event)
+        if (tab.name === '0') {
+          this.showGrid = true
+          this.showSubGrid = false
+        } else if (tab.name === '1') {
+          this.showGrid = false
+          this.loadDepartmentTree()
+        }
       },
-      // handleNodeClick (data) {
-      //   console.log('node data : *******************************************' + data.label)
-      //   this.showSubGrid = true
-      //   getDepartmentDetail()
-      //     .then(
-      //       function (result) {
-      //         this.subDepartmentData = result.departmentDetailList
-      //         this.departmentForm.code = result.code
-      //         this.departmentForm.type = result.type
-      //         this.departmentForm.description = result.desc
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      // },
+      handleNodeClick (data) {
+        console.log('data : *******************************************' + JSON.stringify(data))
+        this.departmentOptions = []
+        this.selectDepartmentData = data
+        this.showSubGrid = true
+        if (!data.pid) {
+          this.showEditTree = false
+          this.showCreateTree = false
+          return
+        }
+        this.showEditTree = true
+        this.showCreateTree = false
+        this.curDepartmentUuid = data.id
+        this.getDepartmentSelect(data.id)
+        getDepartmentDetail(data.id)
+          .then(
+            function (result) {
+              this.departmentForm = result.departmentBaseVo
+              if (result.departmentBaseVo.parentDepartmentUuid) {
+                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
+                this.departmentOptions.push(chooseParentName)
+              }
+              this.dialogStatus = '编辑部门'
+              this.addFlag = true
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
       handleTreeCreate () {
-        this.subDepartmentData = []
+        this.departmentOptions = []
+        this.departmentOptions.push({
+          uuid: this.selectDepartmentData.id,
+          departmentName: this.selectDepartmentData.name,
+          disabled: false
+        })
+        this.showEditTree = false
+        this.showCreateTree = true
+        this.$refs.departmentCreateTreeVue.initParentDepartmentUuid(this.selectDepartmentData.id)
       },
-      handleTreeSave () {
+      handleFilterReset () {
+        this.listQuery = {
+          page: 1,
+          limit: 10,
+          q_departName: ''
+        }
+        this.loadData()
       },
       handleTreeDelete () {
-        this.showSubGrid = false
-        this.treeHighlight = false
+        console.log('部门：删除了 ' + this.selectDepartmentData.id)
+        console.log('是否叶子节点 ' + this.selectDepartmentData.leaf)
+        if (this.selectDepartmentData.leaf) {
+          this.$confirm('确定删除此项？', '删除', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消'
+          })
+          .then(() => {
+            console.log('删除操作')
+            this.delete(this.selectDepartmentData.id)
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '已取消删除'
+            })
+          })
+        } else {
+          this.$message({
+            type: 'error',
+            message: '删除失败! 存在下级部门，请先删除下级部门！'
+          })
+        }
+      },
+      delete () {
+        deleteDepartment(this.selectDepartmentData.id)
+          .then(
+            function (result) {
+              this.showEditTree = false
+              this.showCreateTree = false
+              this.loadData()
+              this.loadDepartmentTree()
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      initDepartmentForm () {
+        this.departmentForm = {
+          departmentName: undefined,
+          parentDepartmentUuid: undefined,
+          remark: undefined,
+          departmentType: undefined,
+          userType: undefined,
+          uuid: ''
+        }
       },
       departmentDeleteEvent (data) {
-        console.log('department：删除了第' + data.name + '行')
+        this.deptDeleteEvent(data.uuid)
+      },
+      departmentEditEvent (data) {
+        console.log('department：编辑了第' + data.uuid)
+        this.curDepartmentUuid = data.uuid
+        this.getDepartmentSelect(data.uuid)
+        getDepartmentDetail(data.uuid)
+          .then(
+            function (result) {
+              console.log('<<<<<departmentOptions:' + JSON.stringify(this.departmentOptions))
+              this.departmentForm = result.departmentBaseVo
+              if (result.departmentBaseVo.parentDepartmentUuid) {
+                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
+                this.departmentOptions.push(chooseParentName)
+              }
+              this.dialogStatus = '编辑部门'
+              this.addFlag = true
+              this.dialogFormVisible = true
+              this.dialogCreateFormVisible = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+      },
+      deptDeleteEvent (data) {
+        console.log('部门：删除了 ' + data)
+        deleteDepartment(data)
+          .then(
+            function (result) {
+              this.dialogFormVisible = false
+              this.dialogCreateFormVisible = false
+              this.loadData()
+              this.loadDepartmentTree()
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      deptUpdateEvent (data) {
+        console.log('部门：修改了 ' + JSON.stringify(data))
+        // data.userType = 1
+        updateDepartment(data)
+          .then(
+            function (result) {
+              this.dialogFormVisible = false
+              this.dialogCreateFormVisible = false
+              this.loadData()
+              this.loadDepartmentTree()
+              this.$message({
+                message: '保存成功！',
+                type: 'success'
+              })
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      deptAddEvent (data) {
+        console.log('部门：添加了 ' + JSON.stringify(data))
+        data.userType = 1
+        if (data.parentDepartmentUuid === 'CREATION_VIRTUAL_UUID') {
+          data.parentDepartmentUuid = null
+        }
+        createDepartment(data)
+          .then(
+            function (result) {
+              this.dialogFormVisible = false
+              this.dialogCreateFormVisible = false
+              this.showEditTree = false
+              this.showCreateTree = false
+              this.loadData()
+              this.loadDepartmentTree()
+              this.$message({
+                message: '保存成功！',
+                type: 'success'
+              })
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      },
+      handleClose () {
+        this.dialogFormVisible = false
+        this.dialogCreateFormVisible = false
+        this.showEditTree = false
+        this.showCreateTree = false
+        this.filterText = ''
+        this.loadData()
+        this.loadDepartmentTree()
       }
-      // departmentEditEvent (data) {
-      //   console.log('department：编辑了第' + data.name + '行')
-      //   this.dialogFormVisible = this.showGrid
-      //   getDepartmentDetail()
-      //       .then(
-      //         function (result) {
-      //           this.subDepartmentData = result.departmentDetailList
-      //           this.departmentForm.code = result.code
-      //           this.departmentForm.type = result.type
-      //           this.departmentForm.description = result.desc
-      //           this.dialogStatus = '编辑部门'
-      //         }.bind(this)
-      //       )
-      //       .catch(
-      //         function (error) {
-      //           console.log(error)
-      //         }
-      //       )
-      // },
-      // deptAddEvent (data) {
-      //   console.log('部门：添加了 ' + data)
-      //   getDeptList(this.query)
-      //     .then(
-      //       function (result) {
-      //         this.userGroupList = result.usergroupBaseVoList
-      //         this.total = result.pageCount
-      //         console.log('用户组：' + JSON.stringify(result))
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      //   this.dialogFormVisible = false
-      //   this.showCreate = false
-      // }
     },
-    // created () {
-    //   this.loadData()
-    // },
     watch: {
       filterText (val) {
-        this.$refs.menuTree.filter(val)
+        this.$refs.departmentTree.filter(val)
       }
     }
   }
 </script>
 
 <style scoped>
-  @import "assets/css/usermanagement.less"
+    @import "assets/css/usermanagement.less"
 </style>
