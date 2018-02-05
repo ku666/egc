@@ -56,7 +56,7 @@ module.exports = {
       //更新升级模块接口
        "/egc-applicationupgradecomponent": {
         //  target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
-         target: 'http://192.168.0.186:9039/',  
+         target: 'http://192.168.0.186:9039/',
          changeOrigin: true
        },
       //  "/egc-applicationupgradecomponent": {
@@ -79,6 +79,12 @@ module.exports = {
       '/egc-logservicecomponent': {
         target: 'http://172.16.30.9:8082/',  // 日志组件管理
         changeOrigin: true
+      },
+      '/egc-ismgcomponent': {
+        target: 'http://192.168.0.186:9013/',  // 短信网关
+        changeOrigin: true,
+        pathRewrite: {
+          '/egc-ismgcomponent':'/'}
       }
       },
     // Various Dev Server settings
