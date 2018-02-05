@@ -243,14 +243,20 @@ export default {
         if (res.data.code === '00000') {
           let data = res.data.data // .slice(0, 10)
           let equipData = []
+          let oto = {name: '其他', value: 0}
           data.map(function (item, index) {
-            let obj = {
-              name: item.deviceTypeDesc,
-              value: item.deviceCount
+            if (index > 5) {
+              oto.value += item.deviceCount
+            } else {
+              let obj = {
+                name: item.deviceTypeDesc,
+                value: item.deviceCount
+              }
+              equipData.push(obj)
             }
-            equipData.push(obj)
           })
-          equipData.splice(7)
+          // equipData.splice(7)
+          equipData.push(oto)
           equipKind.updateData(equipData)
           // 判断设备数据是否为空
           if (equipData.length <= 0) {

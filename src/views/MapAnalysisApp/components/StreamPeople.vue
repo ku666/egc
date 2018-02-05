@@ -172,13 +172,11 @@ export default {
       this.myChartNode = document.querySelector('#flowInformation')
       this.canvasNode = document.querySelector('.canvas')
       this.myChart = this.$echarts.init(this.myChartNode)
+      this.myChart.setOption(this.echartsData())
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
-      if (this.isChartShow) {
-        this.getData()
-      }
-      this.myChart.setOption(this.echartsData())
+      this.getData()
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
         this.myChartContainer()
@@ -501,8 +499,6 @@ export default {
     // 关闭窗口(dialog)前重置数据
     closeCallback: function () {
       this.chartClickNum = 0
-      // this.isChartShow = false
-      // this.isTableShow = true
     }
   },
   mounted: function () { }
