@@ -508,7 +508,7 @@ export default {
         url: '/devicemgmt/devicemgmtindex',
         menus: [
           {
-            title: '设备基本维护',
+            title: '信息维护',
             url: '/devicemgmt/deviceInfoMaintain',
             icon: null,
             subs: null
