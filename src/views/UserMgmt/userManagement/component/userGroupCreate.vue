@@ -62,6 +62,7 @@ export default {
       this.$refs[createForm].validate((valid) => {
         if (valid) {
           this.formData = JSON.stringify(this.createForm)
+          console.log(this.formData)
           this.formData = JSON.parse(this.formData)
           createUserGroup(this.formData)
             .then(
