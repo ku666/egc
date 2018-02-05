@@ -23,13 +23,13 @@
             <el-input v-model="contact.userUuid" class="user_el-input" :disabled="true"></el-input>
         </el-form-item>
     </el-form>
-    <el-table :data="contactDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中" border>
+    <el-table :data="contactDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="75" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="contactType" label="类别" width="350" :formatter="contactTypeFormat"></el-table-column>
         <el-table-column prop="userContact" label="联系方式" width="498"></el-table-column>
         <el-table-column label="操作" width="70" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+              <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>

@@ -1,6 +1,7 @@
 <template>
   <div style="margin-top: 50px">
     <el-table
+      class="deviceMgmTable"
       :data="firmwareInfoData"
       style="width:100%"
       highlight-current-row
@@ -92,7 +93,7 @@
           getFotaFileList(currentPage, pageSize)
             .then(
               function (result) {
-                this.firmwareInfoData = result.listDmFotaFile
+                this.firmwareInfoData = result.listFotaFileVo
                 this.total = result.totalCount
               }.bind(this)
             )
@@ -102,11 +103,12 @@
               }
             )
         } else {
+          this.selectData = selectData
           this.selectData['currentPage'] = currentPage
           this.selectData['pageSize'] = pageSize
           selectFotaFileList(this.selectData)
             .then(result => {
-              this.firmwareInfoData = result.listDmFotaFile
+              this.firmwareInfoData = result.listFotaFileVo
               this.total = result.totalCount
             })
             .catch(

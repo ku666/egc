@@ -10,7 +10,7 @@
           <el-input v-model="resourceMenuVue.menuCode" auto-complete="off" placeholder="请输入资源代码" class="user_el-input"></el-input>
       </el-form-item>
 
-      <el-form-item label="资源URI" :label-width="formLabelWidth">
+      <el-form-item label="资源URI" :label-width="formLabelWidth" prop="resourceUrl">
         <el-input v-model="resourceMenuVue.resourceUrl" auto-complete="off" placeholder="请输入资源URI" class="user_el-input"></el-input>
       </el-form-item>
 
@@ -18,11 +18,11 @@
         <el-input v-model="resourceMenuVue.icon" auto-complete="off" placeholder="请输入ICON" class="user_el-input"></el-input>
       </el-form-item>
 
-      <el-form-item label="所属应用程序" :label-width="formLabelWidth" prop="appCode">
-        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用程序" disabled class="user_el-select" v-if="isAddFlagParm">
+      <el-form-item label="所属应用" :label-width="formLabelWidth" prop="appCode">
+        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用" disabled class="user_el-select" v-if="isAddFlagParm">
           <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
-        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用程序" @change="changeAppCode" class="user_el-select" v-else>
+        <el-select v-model="resourceMenuVue.appCode" placeholder="请选择所属应用" @change="changeAppCode" class="user_el-select" v-else>
           <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
       </el-form-item>
@@ -36,7 +36,7 @@
       <el-button @click="_cleanParentResource">清除</el-button>
 
       <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-        <el-input v-model.number="resourceMenuVue.sort" type="number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
+        <el-input v-model="resourceMenuVue.sort" type="Number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
       </el-form-item>
 
       <el-form-item label="是否按钮" :label-width="formLabelWidth">
@@ -119,22 +119,27 @@ export default {
   data () {
     // 检查排序
     var validateSort = (rule, value, callback) => {
+      // this.currentValue = ''
       if (value === '' || value === undefined) {
         callback(new Error('请输入数字型排序值'))
       } else {
-        let numberPatten = /^[1-9]\d*$/
         console.log(value)
-        if (!new RegExp(numberPatten).test(value)) {
-          callback(new Error('请输入数字型排序值'))
+        if (!this.isValueNumber(value)) {
+          this.resourceMenuVue.sort = this.currentValue
         } else {
-          callback()
+          if (value > 999) {
+            callback(new Error('不能超过3位有效数字'))
+          } else {
+            this.currentValue = value
+            callback()
+          }
         }
       }
     }
     // 应用程序是否为空
     var validateAppCode = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请选择所属应用程序'))
+        callback(new Error('请选择所属应用'))
       } else {
         callback()
       }
@@ -151,19 +156,25 @@ export default {
       showMenuDialog: false,
       menuTreeData: undefined,
       formLabelWidth: '120px',
+      currentValue: '',
       defaultProps: {
         children: 'children',
         label: 'resourceName'
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName },
+          { max: 20, message: '长度不能超过20个字符' }
         ],
         appCode: [
           { required: true, validator: validateAppCode, trigger: 'blur' }
         ],
         sort: [
           { required: true, validator: validateSort, trigger: 'blur' }
+        ],
+        resourceUrl: [
+          { required: true, message: '请输入资源URI', trigger: 'blur' },
+          { max: 100, message: '长度不能超过100个字符' }
         ]
       }
     }
@@ -223,6 +234,13 @@ export default {
     handleCreate (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if (this.resourceMenuVue.button && (this.resourceMenuVue.parentResourceName === undefined || this.resourceMenuVue.parentResourceName === '')) {
+            this.$msgbox({
+              title: '消息',
+              message: '由于打开了【是否按钮】，请选择上级菜单'}
+              )
+            return false
+          }
           this.resourceMenuVue.resourceType = '2'
           this.$emit('createDialogEvent', this.resourceMenuVue)
         } else {
@@ -233,6 +251,13 @@ export default {
     handleUpdate (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
+          if (this.resourceMenuVue.button && (this.resourceMenuVue.parentResourceName === undefined || this.resourceMenuVue.parentResourceName === '')) {
+            this.$msgbox({
+              title: '消息',
+              message: '由于打开了【是否按钮】，请选择上级菜单'}
+              )
+            return false
+          }
           this.resourceMenuVue.resourceType = '2'
           this.$emit('saveDialogEvent', this.resourceMenuVue)
         } else {
@@ -245,6 +270,9 @@ export default {
       this.$refs[resourceMenuVue].clearValidate()
       this.$refs[resourceMenuVue].resetFields()
       this.$emit('cancelDialogEvent')
+    },
+    isValueNumber (value) {
+      return (/^[0-9]*$/).test(value)
     }
   }
 }

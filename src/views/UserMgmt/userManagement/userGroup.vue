@@ -121,7 +121,8 @@
           currentPage: 1,
           pageSize: 10,
           usergroupUuid: undefined,
-          userGroupName: undefined
+          userGroupName: undefined,
+          cloudFlag: 1
         },
         queryEdit: {
           currentPage: 1,
@@ -153,6 +154,7 @@
           title: '直属用户',
           prop: 'dirUsersName'
         }]
+        console.log(this.query)
         getUserGroupList(this.query)
           .then(
             function (result) {

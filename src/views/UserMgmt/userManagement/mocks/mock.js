@@ -1,6 +1,6 @@
 import Mock from 'mockjs'
 
-let contextPath = '/scp-usermgmtcomponent'
+let contextPath = '/egc-usermgmtcomponent'
 
 Mock.mock(contextPath + '/usermgmt/usergroup/list', function () {
   console.log('mock getUserGroupList')

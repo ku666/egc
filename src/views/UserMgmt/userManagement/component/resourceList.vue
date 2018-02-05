@@ -15,10 +15,10 @@
       label="操作"
       width="80">
       <template slot-scope="scope">
-        <span @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit">
+        <span @click="handleClickEdit(scope.$index)" content="编辑" style="cursor:pointer; margin-right:10px" class="el-icon-edit">
           <!-- <img :src="editImg" style="width: 20px; margin-right:10px"> -->
         </span>
-        <span @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+        <span @click="handleClickDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
           <!-- <img :src="deleteImg" style="width: 20px"> -->
         </span>
       </template>

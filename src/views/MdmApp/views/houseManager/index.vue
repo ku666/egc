@@ -4,7 +4,7 @@
     <div class="tree-view-container">
         <!-- 带分页表格 -->
         <div class="house-table">
-          <el-table :data="tableData" stripe height="100%" v-loading="loading">
+          <el-table highlight-current-row :data="tableData" height="100%" v-loading="loading">
             <el-table-column label="房屋号" prop="houseNum">
             </el-table-column>
             <el-table-column label="房屋名称" prop="houseAddress">

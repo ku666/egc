@@ -103,7 +103,8 @@
         query: {
           roleId: undefined,
           currentPage: 1,
-          pageSize: 10
+          pageSize: 10,
+          cloudFlag: 1
         },
         editQuery: {
           roleId: undefined,

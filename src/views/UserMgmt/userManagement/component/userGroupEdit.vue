@@ -16,10 +16,10 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='item in editForm.userTypeList'
-            :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            v-for='(item, index) in userTypeList'
+            :key='index'
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -149,7 +149,7 @@ export default {
       listUserType()
         .then(
           function (result) {
-            this.createForm.userTypeList = result
+            this.userTypeList = result
           }.bind(this)
         )
         .catch(
@@ -612,6 +612,7 @@ export default {
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
         ]
       },
+      userTypeList: undefined,
       formData: undefined,
       userGroupNameFlag: true,
       userGroupFilterList: undefined,

@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form ref='resourceServiceVue' :inline="true" :model="resourceServiceVue" :rules="rules">
-      <el-form-item label="所属应用程序" :label-width="formLabelWidth" prop="appCode">
-        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择所属应用程序" class="user_el-select">
+      <el-form-item label="所属应用" :label-width="formLabelWidth" prop="appCode">
+        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择所属应用" class="user_el-select">
           <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
       </el-form-item>
@@ -88,13 +88,15 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName },
+          { max: 20, message: '长度不能超过20个字符' }
         ],
         appCode: [
-          { required: true, message: '请选择所属应用程序', trigger: 'blur' }
+          { required: true, message: '请选择所属应用', trigger: 'blur' }
         ],
         resourceUrl: [
-          { required: true, message: '请输入服务URI', trigger: 'blur' }
+          { required: true, message: '请输入服务URI', trigger: 'blur' },
+          { max: 100, message: '长度不能超过100个字符' }
         ]
       }
     }

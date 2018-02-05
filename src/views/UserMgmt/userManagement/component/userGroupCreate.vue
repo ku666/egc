@@ -11,10 +11,10 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='item in createForm.userTypeList'
-            :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            v-for='(item, index) in userTypeList'
+            :key='index'
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -43,10 +43,26 @@ import {
 
 export default {
   methods: {
+    // loadData () {
+    //   listUserType()
+    //     .then(
+    //       function (result) {
+    //         this.createForm.userTypeList = result
+    //         console.log(this.createForm.userTypeList[0].itemName)
+    //         console.log(this.createForm.userTypeList)
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log('错误：' + error)
+    //       }
+    //     )
+    // },
     handleSave (createForm) {
       this.$refs[createForm].validate((valid) => {
         if (valid) {
           this.formData = JSON.stringify(this.createForm)
+          console.log(this.formData)
           this.formData = JSON.parse(this.formData)
           createUserGroup(this.formData)
             .then(
@@ -81,10 +97,14 @@ export default {
       this.$emit('listenToAddEvent', this.createForm)
     },
     getUserTypeList () {
+      console.log('start')
       listUserType()
         .then(
           function (result) {
-            this.createForm.userTypeList = result
+            this.userTypeList = result
+            // this.userTypeList = result
+            console.log(this.userTypeList[0].itemName)
+            console.log(this.userTypeList)
           }.bind(this)
         )
         .catch(
@@ -111,6 +131,9 @@ export default {
         )
     }
   },
+  // mounted: function () {
+  //   this.loadData()
+  // },
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
@@ -135,6 +158,9 @@ export default {
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
+        ],
+        userType: [
+          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       fields: [],
@@ -147,6 +173,7 @@ export default {
         uuid: undefined,
         userType: undefined
       },
+      userTypeList: undefined,
       formData: undefined
     }
   }

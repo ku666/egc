@@ -45,7 +45,7 @@
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
 
-    <el-table stripe
+    <el-table
       ref='deviceTable'
       :data='tableData'
       v-loading='loading'

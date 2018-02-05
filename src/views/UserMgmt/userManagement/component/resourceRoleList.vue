@@ -20,14 +20,14 @@
         </el-select>
       </el-form-item>
     </el-form>
-    <el-table :data="resourceRoleDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中" border>
+    <el-table :data="resourceRoleDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="75" type="index" align="center" label="序号"></el-table-column> -->
         <el-table-column prop="roleName" label="角色名称" width="120"></el-table-column>
         <el-table-column prop="remark" label="角色说明" width="323"></el-table-column>
         <el-table-column prop="actionTypeName" label="操作类型" width="355"></el-table-column>
         <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+              <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
               </span>
             </template>
         </el-table-column>

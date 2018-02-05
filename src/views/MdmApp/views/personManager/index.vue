@@ -46,7 +46,7 @@
 
       <!-- 带分页表格 -->
       <!-- <hr/> -->
-      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
+      <el-table :data="tableData" @row-dblclick='showPersonDetail' height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
@@ -406,7 +406,7 @@ div:hover {
   padding: 13px 3%;
   border-radius: 4px;
   background: #f5f7fa;
-  width: 90%;
+  width: 92%;
   color: #0078F4;
   font-size: 18px;
 }

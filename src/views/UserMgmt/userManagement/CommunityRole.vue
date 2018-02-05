@@ -3,7 +3,21 @@
   <div class='ui-common'>
      <div>
       <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
+        <el-col :span="8"  style='height: 100%;' class="flex-c">
+          <el-select filterable
+            v-model='selectedCommunity' 
+            placeholder='请选择小区' 
+            style="width:360px; display: block" 
+            @visible-change='getCommunityList'
+            @change='communitySelected'
+            >
+              <el-option
+                v-for='(item, index) in communityList'
+                :key='index'
+                :label='item.name'
+                :value='item.uuid'>
+              </el-option>
+            </el-select>
           <div class="table-container" style="margin-top:20px">
           <grid-list id="usergroupTable"
             :viewable="true" 
@@ -26,7 +40,7 @@
           </el-pagination>
         </el-col>
         <el-col :span="16" style='margin-top:15px;' v-show="showGrid">
-          <el-card class="box-card" style='margin-left:10px; margin-top:35px'>
+          <el-card class="box-card" style='margin-left:10px; margin-top:20px'>
             <role-view 
               :roleUserData = 'subUserData'
               :roleUsergroupData="subUsergroupData"
@@ -46,7 +60,8 @@
   import RoleView from './component/RoleView.vue'
   import {
     getRoleList,
-    getRoleData
+    getRoleData,
+    listCommunity
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     name: 'CommunityRole',
@@ -55,6 +70,8 @@
     },
     data () {
       return {
+        selectedCommunity: undefined,
+        communityList: undefined,
         showCreate: false,
         showGrid: false,
         total: 0,
@@ -84,7 +101,8 @@
         query: {
           roleId: undefined,
           currentPage: 1,
-          pageSize: 10
+          pageSize: 10,
+          cloudFlag: 1
         },
         editQuery: {
           roleId: undefined,
@@ -111,10 +129,25 @@
           title: '角色说明',
           prop: 'remark'
         }]
-        getRoleList(this.query)
+        // getRoleList(this.query)
+        //   .then(
+        //     function (result) {
+        //       this.roleData = result
+        //     }.bind(this)
+        //   )
+        //   .catch(
+        //     function (error) {
+        //       console.log(error)
+        //     }
+        //   )
+      },
+      getCommunityList () {
+        listCommunity()
           .then(
             function (result) {
-              this.roleData = result
+              this.communityList = result
+              this.total = result.pageCount
+              console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -122,6 +155,22 @@
               console.log(error)
             }
           )
+      },
+      communitySelected (data) {
+        this.query.communityUuid = data.uuid
+        // getUserGroupList(this.query)
+        //   .then(
+        //     function (result) {
+        //       this.userGroupList = result.usergroupBaseVoList
+        //       this.total = result.pageCount
+        //       console.log('用户组：' + JSON.stringify(result))
+        //     }.bind(this)
+        //   )
+        //   .catch(
+        //     function (error) {
+        //       console.log(error)
+        //     }
+        //   )
       },
       roleViewEvent (data) {
         console.log(data)

@@ -32,7 +32,7 @@
     </div>
 
     <!-- <hr/> -->
-    <el-table stripe
+    <el-table
       ref = 'attrTable'
       :data='attrList'
       tooltip-effect='dark'

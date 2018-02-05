@@ -12,7 +12,6 @@
     <!-- <hr/> -->
     <div class="flex-1">
       <el-table
-        stripe
         :data='domainList'
         tooltip-effect='dark'
         height = '200'

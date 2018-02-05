@@ -30,7 +30,7 @@
 
     <!-- <hr/> -->
 
-      <el-table stripe
+      <el-table
         ref = 'providerTable'
         :data='providerList'
         tooltip-effect='dark'
