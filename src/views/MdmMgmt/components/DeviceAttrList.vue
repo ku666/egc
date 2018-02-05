@@ -32,7 +32,8 @@
     </div>
 
     <!-- <hr/> -->
-    <el-table stripe
+    <el-table
+      highlight-current-row
       ref = 'attrTable'
       :data='attrList'
       tooltip-effect='dark'

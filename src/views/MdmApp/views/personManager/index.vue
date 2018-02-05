@@ -46,7 +46,7 @@
 
       <!-- 带分页表格 -->
       <!-- <hr/> -->
-      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
+      <el-table highlight-current-row :data="tableData" @row-dblclick='showPersonDetail' height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">

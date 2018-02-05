@@ -12,7 +12,7 @@
     <!-- <hr/> -->
     <div class="flex-1">
       <el-table
-        stripe
+        highlight-current-row
         :data='domainList'
         tooltip-effect='dark'
         height = '200'
