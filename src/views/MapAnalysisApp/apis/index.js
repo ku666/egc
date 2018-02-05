@@ -1,9 +1,12 @@
 import Axios from '@/assets/js/AxiosPlugin'
-let contextPath = '/egcmapanalysis'
-// let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
-let personPath = '/mapAnalysis'
-let devicePath = '/device'
-let ownertPath = '/profile'
+// let contextPath = '/egcmapanalysis'
+let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
+// let personPath = '/mapAnalysis'
+let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
+// let devicePath = '/device'
+let devicePath = '/egc-smartcommunitymgmtapp/device'
+// let ownertPath = '/profile'
+let ownertPath = '/egc-smartcommunitymgmtapp/profile'
 
 /**
  * 条件查询小区列表
