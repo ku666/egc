@@ -3,44 +3,29 @@ import Axios from '@/assets/js/AxiosPlugin'
 // 接口地址
 let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-const MDM_BASE_PATH = '/egc-mdmcomponent/api'
 
 /** 主数据 */
 
 // 省
-export const getProvinceDataList = (params) => {
-  // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getProvinceList', params
+export const getProvinceDataList = () => {
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getProvince'
   ).then(res => res.data)
-
-  // return Axios.post('/court/getProvinceList', params
-  // ).then(res => res.data)
-
   // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 市
 export const getCityDataList = (params) => {
-  // console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-
-  return Axios.post(MDM_BASE_PATH + '/court/getCityList', params
-  ).then(res => res.data)
-
-  // return Axios.post('/court/getCityList', params
-  // ).then(res => res.data)
-
+  console.log(' cities api  param province ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getCity?province=' + params.province
+    ).then(res => res.data)
   // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
-  // console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getDistrictList', params
+  console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + params.province + '---- >' + params.city)
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getDistrict?province=' + params.province + '&city=' + params.city
   ).then(res => res.data)
-
-  // return Axios.post('/court/getDistrictList', params
-  // ).then(res => res.data)
-
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 

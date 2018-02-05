@@ -41,11 +41,11 @@ export default {
   },
   methods: {
     updateCodeInst () {
-      if (this.codeInstDetails.remark !== this.tempRemark) {
-        this.$emit('saveCodeInstEvent', this.codeInstDetails)
-      } else {
-        this.$message.error('请修改数据后再提交')
-      }
+      this.$emit('saveCodeInstEvent', this.codeInstDetails)
+      // if (this.codeInstDetails.remark !== this.tempRemark) {
+      // } else {
+      //   this.$message.error('请修改数据后再提交')
+      // }
     }
   },
   watch: {

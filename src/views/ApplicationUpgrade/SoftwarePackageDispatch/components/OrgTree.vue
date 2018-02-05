@@ -61,7 +61,6 @@ export default {
         )
     },
     _confirmDispatch () {
-      // console.log('confirm selected org --- >' + JSON.stringify(this.$refs.tree.getCheckedNodes(), null, ' '))
       this.houseOrgCodeList = []
       for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
         let node = this.$refs.tree.getCheckedNodes()[index]

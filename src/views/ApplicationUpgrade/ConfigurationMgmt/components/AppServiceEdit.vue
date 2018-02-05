@@ -70,8 +70,30 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
+      <template v-if="auappServiceDetails.extDataList !== null">
+        <el-form-item :label="item.fieldName" v-for="item in auappServiceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <div style="text-align:center;">
         <el-button @click="updateAppServiceInfo" class="action-btn" type="primary">保 存</el-button>
+        <el-popover
+            ref="newCIEventPop"
+            visible="showAddNewCIPop"
+            placement="right"
+            width="160"
+            :hide="clearData"
+            v-model="showAddNewEvent">
+            <div>
+              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+            </div>
+            <div class="text-right margin-top-5">
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
+              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            </div>
+          </el-popover>
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
     </div>
     </el-form>
   </div>
@@ -92,31 +114,58 @@ export default {
       tempUpgradeDomainName: '',
       tempUpgradeHostName: '',
       tempUpgradeIntranetIP: '',
-      tempRemark: ''
+      tempRemark: '',
+      showAddNewCIPop: false,
+      fieldName: '',
+      fieldValue: '',
+      showAddNewEvent: false,
+      tempExtDataList: undefined
     }
   },
   methods: {
     updateAppServiceInfo () {
-      if (this.validateDetailsChanged()) {
-        this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
-      } else {
-        this.$notify({
-          title: '数据更新',
-          message: '请更改数据后再提交',
-          type: 'error',
-          duration: 2000
-        })
-      }
+      this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
+      // if (this.validateDetailsChanged()) {
+      //   this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
+      // } else {
+      //   this.$message({
+      //     message: '请修改数据后再提交',
+      //     type: 'error'
+      //   })
+      // }
     },
 
     // 校验数据是否更改
     validateDetailsChanged () {
-      if (this.tempDomain === this.auappServiceDetails.domainName && this.tempUpgradePublicIP === this.auappServiceDetails.upgradeServers.publicIp &&
-      this.tempUpgradeDomainName === this.auappServiceDetails.upgradeServers.hostname && this.tempUpgradeHostName === this.auappServiceDetails.upgradeServers.hostname &&
-      this.tempUpgradeIntranetIP === this.auappServiceDetails.upgradeServers.intranetIp && this.tempRemark === this.auappServiceDetails.remark) {
+      if (this.auappServiceDetails.upgradeServers !== null) {
+        if (this.tempUpgradePublicIP === this.auappServiceDetails.upgradeServers.publicIp &&
+        this.tempUpgradeDomainName === this.auappServiceDetails.upgradeServers.hostname &&
+        this.tempUpgradeHostName === this.auappServiceDetails.upgradeServers.hostname &&
+        this.tempUpgradeIntranetIP === this.auappServiceDetails.upgradeServers.intranetIp) {
+          return false
+        }
+      } else if (this.tempDomain === this.auappServiceDetails.domainName && this.tempRemark === this.auappServiceDetails.remark && this.tempExtDataList === this.auappServiceDetails.extDataList) {
         return false
       }
       return true
+    },
+    addNewEvent () {
+      console.info('add new item')
+      if (this.fieldName.trim() === '') {
+        this.$message.error('请输入新增项名称')
+      } else {
+        if (this.auappServiceDetails.extDataList === null) {
+          this.auappServiceDetails.extDataList = []
+        }
+        this.auappServiceDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        console.info(JSON.stringify(this.auappServiceDetails))
+      }
+    },
+    clearData () {
+      console.info('clear data')
+      this.showAddNewEvent = false
+      this.newLabel = ''
+      this.newValue = ''
     }
   },
   watch: {
@@ -126,11 +175,14 @@ export default {
   },
   mounted () {
     this.tempDomain = this.auappServiceDetails.domainName
-    this.tempUpgradePublicIP = this.auappServiceDetails.upgradeServers.publicIp
-    this.tempUpgradeDomainName = this.auappServiceDetails.upgradeServers.hostname
-    this.tempUpgradeHostName = this.auappServiceDetails.upgradeServers.hostname
-    this.tempUpgradeIntranetIP = this.auappServiceDetails.upgradeServers.intranetIp
+    if (this.auappServiceDetails.upgradeServers !== null) {
+      this.tempUpgradePublicIP = this.auappServiceDetails.upgradeServers.publicIp
+      this.tempUpgradeDomainName = this.auappServiceDetails.upgradeServers.hostname
+      this.tempUpgradeHostName = this.auappServiceDetails.upgradeServers.hostname
+      this.tempUpgradeIntranetIP = this.auappServiceDetails.upgradeServers.intranetIp
+    }
     this.tempRemark = this.auappServiceDetails.remark
+    this.tempExtDataList = this.auappServiceDetails.extDataList
   }
 }
 </script>

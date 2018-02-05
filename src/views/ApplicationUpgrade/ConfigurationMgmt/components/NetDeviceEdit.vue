@@ -66,8 +66,30 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
+      <template v-if="netDeviceDetails.extDataList !== null">
+        <el-form-item :label="item.fieldName" v-for="item in netDeviceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <div style="text-align: center">
-        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
+        <el-button class="action-btn" @click="updateNetDeviceInfo" type="primary">保 存</el-button>
+        <el-popover
+            ref="newCIEventPop"
+            visible="showAddNewCIPop"
+            placement="right"
+            width="160"
+            :hide="clearData"
+            v-model="showAddNewEvent">
+            <div>
+              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+            </div>
+            <div class="text-right margin-top-5">
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
+              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            </div>
+          </el-popover>
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
     </div>
     </el-form>
   </div>
@@ -95,23 +117,26 @@ export default {
       tempOperator: '',
       tempServiceLevel: '',
       tempServiceDuring: '',
-      tempRemark: ''
+      tempRemark: '',
+      showAddNewCIPop: false,
+      fieldName: '',
+      fieldValue: '',
+      showAddNewEvent: false,
+      tempExtDataList: undefined
     }
   },
   methods: {
-    updateAppServiceInfo () {
-      if (this.validateDetailsChanged()) {
-        this.$emit('saveOsInfoEvent', this.netDeviceDetails)
-      } else {
-        this.$notify({
-          title: '数据更新',
-          message: '请更改数据后再提交',
-          type: 'error',
-          duration: 2000
-        })
-      }
+    updateNetDeviceInfo () {
+      this.$emit('saveOsInfoEvent', this.netDeviceDetails)
+      // if (this.validateDetailsChanged()) {
+      //   this.$emit('saveOsInfoEvent', this.netDeviceDetails)
+      // } else {
+      //   this.$message({
+      //     message: '请更改数据后再提交',
+      //     type: 'error'
+      //   })
+      // }
     },
-
     // 校验数据是否更改
     validateDetailsChanged () {
       if (this.tempStatus === this.netDeviceDetails.status && this.tempAssetNo === this.netDeviceDetails.aeestNo &&
@@ -120,12 +145,29 @@ export default {
       this.tempIntraIP === this.netDeviceDetails.internetIp && this.tempIntraPort === this.netDeviceDetails.internetPort &&
       this.tempBackIP === this.netDeviceDetails.backendIp && this.tempOperator === this.netDeviceDetails.operator &&
       this.tempServiceLevel === this.netDeviceDetails.serviceLevel && this.tempServiceDuring === this.netDeviceDetails.serviceDuring &&
-      this.tempRemark === this.netDeviceDetails.remark) {
+      this.tempRemark === this.netDeviceDetails.remark && this.tempExtDataList === this.netDeviceDetails.extDataList) {
         return false
       }
       return true
+    },
+    addNewEvent () {
+      console.info('add new item')
+      if (this.fieldName.trim() === '') {
+        this.$message.error('请输入新增项名称')
+      } else {
+        if (this.netDeviceDetails.extDataList === null) {
+          this.netDeviceDetails.extDataList = []
+        }
+        this.netDeviceDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        console.info(JSON.stringify(this.osDetails))
+      }
+    },
+    clearData () {
+      console.info('clear data')
+      this.showAddNewEvent = false
+      this.newLabel = ''
+      this.newValue = ''
     }
-
   },
   watch: {
     netDeviceDetails (newValue, oldValue) {
@@ -146,6 +188,7 @@ export default {
     this.tempServiceLevel = this.netDeviceDetails.serviceLevel
     this.tempServiceDuring = this.netDeviceDetails.serviceDuring
     this.tempRemark = this.netDeviceDetails.remark
+    this.tempExtDataList = this.netDeviceDetails.extDataList
   }
 }
 </script>

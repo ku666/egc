@@ -136,9 +136,9 @@ export default {
           prop: 'port',
           width: 120
         }, {
-          colName: '应用&服务启动用户',
-          prop: 'startUser',
-          width: 150
+          colName: '服务器主机名称',
+          prop: 'oss.hostname',
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'
@@ -202,6 +202,7 @@ export default {
           .then(
             function (result) {
               this.auappServiceData = result.auServices
+              console.log('app service edit details --- > ' + JSON.stringify(this.auappServiceData))
               this.dialogEditVisible = true
             }.bind(this)
           )

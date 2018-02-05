@@ -39,8 +39,30 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="middlewareDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
+      <template v-if="middlewareDetails.extDataList !== null">
+        <el-form-item :label="item.fieldName" v-for="item in middlewareDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <div style="text-align: center">
-        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
+        <el-button class="action-btn" @click="updateMiddlewareInfo" type="primary">保 存</el-button>
+        <el-popover
+            ref="newCIEventPop"
+            visible="showAddNewCIPop"
+            placement="right"
+            width="160"
+            :hide="clearData"
+            v-model="showAddNewEvent">
+            <div>
+              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+            </div>
+            <div class="text-right margin-top-5">
+              <el-button size="mini" type="text" @click="clearData">取消</el-button>
+              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            </div>
+          </el-popover>
+      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
     </div>
     </el-form>
   </div>
@@ -56,23 +78,44 @@ export default {
       formLabelWidth: '160px',
       isInptDisabled: true,
       maxlength: 30,
-      tempRemark: undefined
+      tempRemark: undefined,
+      showAddNewCIPop: false,
+      fieldName: '',
+      fieldValue: '',
+      showAddNewEvent: false,
+      tempExtDataList: undefined
     }
   },
   methods: {
-    updateAppServiceInfo () {
-      if (this.tempRemark !== this.middlewareDetails.remark) {
-        this.$emit('saveMiddlewareInfoEvent', this.middlewareDetails)
+    updateMiddlewareInfo () {
+      this.$emit('saveMiddlewareInfoEvent', this.middlewareDetails)
+      // if (this.tempRemark !== this.middlewareDetails.remark || this.tempExtDataList !== this.middlewareDetails.extDataList) {
+      //   this.$emit('saveMiddlewareInfoEvent', this.middlewareDetails)
+      // } else {
+      //   this.$message({
+      //     message: '请修改数据后再提交',
+      //     type: 'error'
+      //   })
+      // }
+    },
+    addNewEvent () {
+      console.info('add new item')
+      if (this.fieldName.trim() === '') {
+        this.$message.error('请输入新增项名称')
       } else {
-        this.$notify({
-          title: '数据更新',
-          message: '请更改数据后再提交',
-          type: 'error',
-          duration: 2000
-        })
+        if (this.middlewareDetails.extDataList === null) {
+          this.middlewareDetails.extDataList = []
+        }
+        this.middlewareDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        console.info(JSON.stringify(this.middlewareDetails))
       }
+    },
+    clearData () {
+      console.info('clear data')
+      this.showAddNewEvent = false
+      this.newLabel = ''
+      this.newValue = ''
     }
-
   },
   watch: {
     middlewareDetails (newValue, oldValue) {
@@ -81,6 +124,7 @@ export default {
   },
   mounted () {
     this.tempRemark = this.middlewareDetails.remark
+    this.tempExtDataList = this.middlewareDetails.extDataList
   }
 }
 </script>
