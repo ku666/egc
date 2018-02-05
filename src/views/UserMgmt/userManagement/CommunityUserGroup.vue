@@ -5,7 +5,7 @@
         <el-tab-pane label="用户组列表" name="0"></el-tab-pane>
         <el-tab-pane label="用户组树形结构" name="1"></el-tab-pane>
       </el-tabs> -->
-      <div v-show="showGrid == true">
+      <div v-show="showGrid == true" class="flex-1 flex-c">
         <div style="display:block">
           <span>
             <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
