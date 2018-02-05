@@ -103,10 +103,11 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName },
+          { max: 20, message: '长度不能超过20个字符' }
         ],
         appCode: [
-          { required: true, message: '请选择应用程序', trigger: 'blur' }
+          { required: true, message: '请选择所属应用', trigger: 'blur' }
         ]
       }
     }

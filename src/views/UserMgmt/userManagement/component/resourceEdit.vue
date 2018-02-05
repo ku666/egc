@@ -9,9 +9,6 @@
         <el-select v-model="resource.resourceType" placeholder="请选择" class="user_el-select" disabled v-if="isAddFlag">
           <el-option v-for="resourceType in resourceTypeSelect" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
         </el-select>
-        <el-select v-model="resource.resourceType" placeholder="请选择" @change="handleChange" class="user_el-select" v-else>
-          <el-option v-for="resourceType in resourceTypeSelect" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
-        </el-select>
       </el-form-item>
     </el-form>
 

@@ -32,7 +32,7 @@ flex: 1;
 .table-container {
   .flex-1;
   .flex-c;
-  min-height: 700px;
+  //min-height: 700px;
 }
 .el-main {
 padding: 20px 40px !important;
@@ -42,11 +42,12 @@ padding: 20px 40px !important;
 .flex-1;
 
 .el-dialog {
-  min-width: 900px;
+  min-width: 400px;
 }
 
 .search-container {
   display: flex;
+  height: auto;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content: flex-start;
@@ -54,14 +55,14 @@ padding: 20px 40px !important;
   .btn-container {
     flex: 1;
     text-align: right;
-    min-width: 20px;
+    min-width: 300px;
   }
 }
 
 .border-divide {
-  height: 1px;
+  height: 2px;
   background-color: #F1F0F0;
-  margin: 20px 0;
+  margin: 15px 0 10px 0;
 }
 // 用于保存等动作类按钮
 .action-btn{
@@ -122,10 +123,6 @@ p,span{
   font-size: 15px;
   color: #0078f4;
 }
-.el-icon-view {
-  font-size: 15px;
-  color: #0078f4;
-}
 .el-table__row img{
   width: 20px;
 }
@@ -139,13 +136,14 @@ p,span{
 }
 .el-table__header{
   height: 40px;
-  // background:#8a8787;
-  // opacity: 0.9;
+  background:#8a8787;
+  opacity: 0.9;
   font-size: var(--font-size-el-table);
   color: #333333;
 }
-.el-table th {
-  background-color:rgba(243, 243, 243, 0.9);
+.el-table thead tr{
+  background:#8a8787;
+  opacity: 0.9;
   color: #333333;
 }
 .el-table__row{
@@ -202,6 +200,18 @@ span.sub-title{
   width:278px;
   border: solid 1px lightgray;
   margin-top: 5px;
+}
+.departmentTree{
+  overflow:auto;
+  height:300px;
+  width:545px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+}
+.el-department-tree{
+  height:290px;
+  width: 100%;
+  overflow-x: scroll;
 }
 .el-org-tree{
   width: 100%;

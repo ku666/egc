@@ -5,10 +5,10 @@
         <el-form-item label="用户姓名">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
         </el-form-item>
-        <el-form-item label="登录ID" :label-width="formLabelWidth">
+        <el-form-item label="　　登录ID">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
         </el-form-item>
-        <el-form-item label="手机号" :label-width="formLabelWidth">
+        <el-form-item label="　　手机号">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
         </el-form-item>
         <div class="btn-container">
@@ -24,20 +24,22 @@
     </el-form>
 
     <div class="border-divide"></div>
-
     <div class="table-container">
       <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
-                 @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
+        @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
       </user-list>
-
     </div>
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-edit ref="userEditVue" :tableData="userList" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
+    <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+      <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
       :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions"
-      @gridSaveEvent="userSaveEvent" @gridCreateEvent="userCreateEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
+      @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
     </el-dialog>
-
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+      <user-edit ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
+      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions"
+      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
+    </el-dialog>
     <div>
       <el-pagination
           @size-change="handleSizeChange"
@@ -55,6 +57,7 @@
 <script>
 import userList from './component/userList.vue'
 import userEdit from './component/userEdit.vue'
+import userCreate from './component/userCreate.vue'
 import {
   getUserListByPage,
   getUserDetail,
@@ -73,6 +76,7 @@ export default {
       userListParam: undefined,
       total: 0,
       dialogFormVisible: false,
+      dialogCreateFormVisible: false,
       dialogStatus: undefined,
       curUserUuid: undefined,
       addFlag: false,
@@ -111,7 +115,8 @@ export default {
   },
   components: {
     userList,
-    userEdit
+    userEdit,
+    userCreate
   },
   mounted () {
     this.loadData()
@@ -121,9 +126,6 @@ export default {
     }, {
       title: '登录 ID',
       prop: 'userName'
-    }, {
-      title: '用户类型',
-      prop: 'userTypeName'
     }, {
       title: '职务',
       prop: 'position'
@@ -241,16 +243,18 @@ export default {
     // 新增用户
     handleCreate () {
       this.initUserInfo()  // 调用初始信息
-      this.userForm.userAccStatus = this.userAccStatusOptions[1].itemCode
       this.dialogStatus = '添加用户'
-      this.dialogFormVisible = true
+      this.dialogFormVisible = false
+      this.dialogCreateFormVisible = true
+      this.$refs.userCreateVue.reset()
       this.addFlag = false
     },
     userDeleteEvent (row) {
       var data = this.userList[row]
       this.$confirm('确定删除此项？', '删除', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           console.log('删除操作')
@@ -290,6 +294,7 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
+            this.dialogCreateFormVisible = false
             this.loadData()
             this.$message({
               message: '保存成功！',
@@ -308,6 +313,7 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
+            this.dialogCreateFormVisible = false
             this.loadData()
             this.$message({
               message: '保存成功！',
@@ -328,9 +334,14 @@ export default {
         .then(
           function (result) {
             this.userForm = result.baseUser  // 用户基本信息
-            console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
+            console.log('用户基本信息:' + JSON.stringify(result.baseUser))
+            console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
+            console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
+            // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
             this.dialogStatus = '编辑用户'
             this.dialogFormVisible = true
+            this.dialogCreateFormVisible = false
+            this.$refs.userEditVue.reset()
             this.addFlag = true
           }.bind(this)
         )
@@ -342,9 +353,12 @@ export default {
         )
     },
     handleClose () {
-      this.$refs.userEditVue.changeContanctFlag()
+      if (this.addFlag) {
+        this.$refs.userEditVue.changeContanctFlag()
+      }
       this.initUserInfo()
       this.dialogFormVisible = false
+      this.dialogCreateFormVisible = false
     }
   }
 }

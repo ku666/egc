@@ -6,9 +6,16 @@ let contextPath = '/egc-usermgmtcomponent'
 // const BASE_PATH = '/scp-devicemgmtcomponent/register/'
 
 // ----------------- 云端专用接口 ----------------
+
 // 获取下属用户组数据
 export const listUserType = () => {
   return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  ).then(res => res.data)
+}
+
+// 获取小区列表
+export const listCommunity = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/getCourts'
   ).then(res => res.data)
 }
 
@@ -112,30 +119,93 @@ export const getDepartmentList = (listQuery) => {
   console.log('<<<<<q_departName:' + listQuery.q_departName)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departName=' + listQuery.q_departName
+  return Axios.get(contextPath + '/usermgmt/department/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
+  '&departName=' + encodeURI(listQuery.q_departName)
   ).then(res => res.data)
 }
 // 删除部门信息
 export const deleteDepartment = (uuid) => {
+  console.log('deleteDepartment:>>>>>>>>>>>>>' + uuid)
   return Axios.post(contextPath + '/usermgmt/department/delete?departmentUuid=' + uuid
   ).then(res => res.data)
 }
 // 修改部门信息
 export const updateDepartment = (data) => {
-  return Axios.post(contextPath + '/usermgmt/department/update', data
+  console.log('updateDepartment:>>>>>>>>' + JSON.stringify(data))
+  return Axios.post(contextPath + '/usermgmt/department/updateSuperiorDepartment', data
   ).then(res => res.data)
 }
 // 根据部门唯一标识UUID查询部门情报
 export const getDepartmentDetail = (uuid) => {
-  console.log('<<<<<uuid:' + uuid)
+  console.log('getDepartmentDetail<<<<<uuid:' + uuid)
   return Axios.get(contextPath + '/usermgmt/department/get?departmentUuid=' + uuid + '&currentPage=1' + '&pageSize=10'
   ).then(res => res.data)
 }
-// 根据部门唯一标识UUID查询部门情报
+// 当前部门上级及本体以外的部门节点(追加直属部门下拉框)
 export const getDirectDepartmentSelect = (uuid) => {
-  console.log('<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listChildrenAndOtherDepartment?departmentUuid=' + uuid
+  console.log('getDirectDepartmentSelect<<<<<uuid:' + uuid)
+  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid
+  ).then(res => res.data)
+}
+// 当前部门上级及本体以外的部门节点(追加上级部门下拉框)
+export const getParenetDepartmentSelect = (uuid) => {
+  console.log('getParenetDepartmentSelect<<<<<uuid:' + uuid)
+  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid
+  ).then(res => res.data)
+}
+// 查询当前部门下的直属部门列表
+export const getChildrenDepartmentVoList = (listQuery) => {
+  console.log('<<<<<q_userName:' + listQuery.departmentUuid)
+  console.log('<<<<<listQuery.page:' + listQuery.page)
+  console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  return Axios.get(contextPath + '/usermgmt/department/listChildrenDepartment?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
+  '&departmentUuid=' + listQuery.departmentUuid
+  ).then(res => res.data)
+}
+// 删除下属部门
+export const deleteDirDepartGroup = (childrenUuid) => {
+  return Axios.post(contextPath + '/usermgmt/department/deleteChildren?childrenDepartmentUuid=' + childrenUuid
+  ).then(res => res.data)
+}
+// 添加直属部门
+export const createDirectDepartment = (data) => {
+  console.log('createDirectDepartment<<<<<<<<<<<<<<:' + JSON.stringify(data))
+  return Axios.post(contextPath + '/usermgmt/department/createDirDepartment', data
+  ).then(res => res.data)
+}
+// 获取部门树
+export const getDepartmentTreeData = () => {
+  console.log('getDepartmentTreeData<<<<<<<<<<<<<<')
+  return Axios.get(contextPath + '/usermgmt/department/getDepartmentTree'
+  ).then(res => res.data)
+}
+// -----部门直属用户相关接口
+// 删除部门直属用户
+export const deleteDirDepartmentUser = (uuid) => {
+  return Axios.post(contextPath + '/usermgmt/department/deleteDepartmentUser?userUuid=' + uuid
+  ).then(res => res.data)
+}
+// 查询当前部门下的直属用户列表（分页）
+export const getDepartmentUserVoList = (listQuery) => {
+  console.log('<<<<<q_userName:' + listQuery.departmentUuid)
+  console.log('<<<<<listQuery.page:' + listQuery.page)
+  console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
+  '&departmentUuid=' + listQuery.departmentUuid
+  ).then(res => res.data)
+}
+// 查询当前部门下的直属用户列表(不分页)
+export const getListUserAll = (listQuery) => {
+  console.log('<<nopage<<<q_userName:' + listQuery.departmentUuid)
+  console.log('<<nopage<<<listQuery.page:' + listQuery.page)
+  console.log('<<nopage<<<listQuery.limit:' + listQuery.limit)
+  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' + '&departmentUuid=' + listQuery.departmentUuid
+  ).then(res => res.data)
+}
+// 添加直属用户
+export const createDirectUser = (data) => {
+  console.log('createDirectUser<<<<<<<<<<<<<<:' + JSON.stringify(data))
+  return Axios.post(contextPath + '/usermgmt/department/createDirUser', data
   ).then(res => res.data)
 }
 // -----------------  角色接口 ----------------
