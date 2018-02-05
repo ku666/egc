@@ -6,9 +6,16 @@ let contextPath = '/egc-usermgmtcomponent'
 // const BASE_PATH = '/scp-devicemgmtcomponent/register/'
 
 // ----------------- 云端专用接口 ----------------
+
 // 获取下属用户组数据
 export const listUserType = () => {
   return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  ).then(res => res.data)
+}
+
+// 获取小区列表
+export const listCommunity = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/getCourts'
   ).then(res => res.data)
 }
 

@@ -1,16 +1,27 @@
 <template>
   <div class='ui-common'>
     <div class="app-container" calendar-list-container>
-      <!-- <el-tabs v-model="activeName" @tab-click="handleTabClick">
-        <el-tab-pane label="用户组列表" name="0"></el-tab-pane>
-        <el-tab-pane label="用户组树形结构" name="1"></el-tab-pane>
-      </el-tabs> -->
       <div v-show="showGrid == true" class="flex-1 flex-c">
-        <div style="display:block">
+        <div >
           <span>
-            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
+            <el-select filterable
+            v-model='selectedCommunity' 
+            placeholder='请选择小区' 
+            style="width:360px;" 
+            @visible-change='getCommunityList'
+            @change='communitySelected'
+            >
+              <el-option
+                v-for='(item, index) in communityList'
+                :key='index'
+                :label='item.name'
+                :value='item.uuid'>
+              </el-option>
+            </el-select>
+            <span style="float:right">
+            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block;" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
             <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button></span>
           </span>
         </div>
 
@@ -66,7 +77,8 @@
     getUserGroupList,
     // getFilteredUserGroupList,
     getUserGroupData,
-    deleteUserGroup
+    deleteUserGroup,
+    listCommunity
     // createUserGroup,
     // getTreeData,
     // getUserGroupDetail
@@ -75,6 +87,8 @@
     name: 'CommunityUserGroup',
     data () {
       return {
+        selectedCommunity: undefined,
+        communityList: undefined,
         searchText: undefined,
         showCreate: false,
         showEdit: false,
@@ -108,7 +122,8 @@
           currentPage: 1,
           pageSize: 10,
           usergroupUuid: undefined,
-          userGroupName: undefined
+          userGroupName: undefined,
+          cloudFlag: 1
         }
       }
     },
@@ -125,28 +140,18 @@
           title: '用户组说明',
           prop: 'remark'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '用户类别',
-        //   prop: 'type'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirUsersName'
         }]
-        getUserGroupList(this.query)
+      },
+      getCommunityList () {
+        listCommunity()
           .then(
             function (result) {
-              this.userGroupList = result.usergroupBaseVoList
+              this.communityList = result
               this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
+              console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -154,11 +159,15 @@
               console.log(error)
             }
           )
-        // getTreeData()
+      },
+      communitySelected (data) {
+        this.query.communityUuid = data.uuid
+        // getUserGroupList(this.query)
         //   .then(
         //     function (result) {
-        //       this.treeData = result.treeData
-        //       console.log('用户组树形数据：' + JSON.stringify(result))
+        //       this.userGroupList = result.usergroupBaseVoList
+        //       this.total = result.pageCount
+        //       console.log('用户组：' + JSON.stringify(result))
         //     }.bind(this)
         //   )
         //   .catch(
@@ -227,43 +236,10 @@
             }
           )
       },
-      handleCreate () {
-        this.dialogAddStatus = '添加用户组'
-        this.showCreate = true
-        this.showEdit = false
-        this.dialogFormAddVisible = true
-      },
       handleTabClick (tab, event) {
         this.showGrid = (tab.name === '0')
         // this.showSubGrid = (tab.name === '0')
         console.log('*******************************************' + tab, event)
-      },
-      handleNodeClick (data) {
-        console.log('node data : *******************************************' + data.label)
-        this.showSubGrid = true
-        // getUserGroupDetail()
-        //   .then(
-        //     function (result) {
-        //       this.subUserGroupData = result.userDetailList
-        //       this.userGroupForm.code = result.code
-        //       this.userGroupForm.type = result.type
-        //       this.userGroupForm.description = result.desc
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
-      },
-      handleTreeCreate () {
-        this.handleCreate()
-      },
-      handleTreeSave () {
-      },
-      handleTreeDelete () {
-        this.showSubGrid = false
-        this.treeHighlight = false
       },
       handleSizeChange (val) {
         this.query.pageSize = val
