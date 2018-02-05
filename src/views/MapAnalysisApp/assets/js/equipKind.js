@@ -38,6 +38,7 @@ var option = {
       type: 'pie',
       radius: '55%',
       center: ['50%', '50%'],
+      // color: ['#f2c955', '#00a69d', '#46d185', '#ec5845'], // 区域的颜色
       // selectedMode: 'single',
       data: data,
       roseType: 'radius',
@@ -60,7 +61,7 @@ var option = {
       },
       itemStyle: {
         normal: {
-          color: '#c23531',
+          // color: '#c23531', // 区域的颜色
           shadowBlur: 200,
           shadowColor: 'rgba(0, 0, 0, 0.5)'
         }
