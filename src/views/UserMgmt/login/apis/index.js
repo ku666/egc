@@ -5,7 +5,7 @@ import Axios from '@/assets/js/AxiosPlugin'
 const BASE_PATH = process.env.API_URL
 // scp-XXXX 定义为模块的上下文
 // let contextPath = '/demo'
-let contextPath = '/scp-usermgmtcomponent'
+let contextPath = '/egc-usermgmtcomponent'
 
 // 用户登录
 export const login = params => { return Axios.post(`${BASE_PATH}/user/login`, params).then(res => res.data) }

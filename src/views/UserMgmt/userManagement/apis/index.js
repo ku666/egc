@@ -1,6 +1,7 @@
 import Axios from '@/assets/js/AxiosPlugin'
 
-let contextPath = '/scp-usermgmtcomponent'
+let contextPath = '/egc-usermgmtcomponent'
+
 // 接口地址
 // const BASE_PATH = '/scp-devicemgmtcomponent/register/'
 
@@ -16,10 +17,10 @@ export const listUserType = () => {
 // 获取所有用户组清单
 export const getUserGroupList = (query) => {
   if (query.userGroupName) {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + query.userGroupName + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize
+    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + query.userGroupName + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
     ).then(res => res.data)
   } else {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize
+    return Axios.get(contextPath + '/usermgmt/usergroup/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
     ).then(res => res.data)
   }
 }
@@ -141,14 +142,14 @@ export const getDirectDepartmentSelect = (uuid) => {
 
 // 查询角色清单
 export const getRoleList = (query) => {
-  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize
+  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
   ).then(res => res.data)
 }
-// 查询角色完整清单
-export const getRoleListAll = () => {
-  return Axios.get(contextPath + '/usermgmt/role/listAll'
-  ).then(res => res.data)
-}
+// // 查询角色完整清单
+// export const getRoleListAll = () => {
+//   return Axios.get(contextPath + '/usermgmt/role/listAll'
+//   ).then(res => res.data)
+// }
 // 从Maindata查询角色完整清单
 export const getRoleListAllMaindata = () => {
   return Axios.get(contextPath + '/usermgmt/maindata/listRole'
@@ -337,7 +338,7 @@ export const getContactTypeOptions = (dictData) => {
 // --------------用户组--------------
 // 获取用户组下拉框列表信息
 export const getUserGroupListSelect = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
+  return Axios.get('/usermgmt/maindata/listUsergroup'
   ).then(res => res.data)
 }
 // 将当前用户添加到某用户组中
