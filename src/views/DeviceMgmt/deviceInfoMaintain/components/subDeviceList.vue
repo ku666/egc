@@ -2,6 +2,7 @@
 <template>
   <div>
     <el-table
+      class="deviceMgmTable"
       ref="multipleTable"
       :data="childDeviceTableData"
       style="width: 100%"

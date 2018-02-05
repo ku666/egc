@@ -2,6 +2,7 @@
 <template>
   <div>
     <el-table
+      class="deviceMgmTable"
       :data="slaveDeviceTableData"
       style="width: 100%"
       highlight-current-row

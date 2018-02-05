@@ -2,6 +2,7 @@
   <div>
     <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
+      class="deviceMgmTable"
       :data="mainDeviceTableData"
       :default-sort = "{prop: 'order', order: 'ascending'}"
       highlight-current-row

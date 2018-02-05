@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="importFile-container">
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="固件名称"
@@ -27,14 +27,14 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <select-box title="设备类型"
-                        code="deviceTypeDesc"
+                        code="deviceType"
                         :options="deviceType"
                         @listenToInput="_saveDeviceData"
-                        ref="deviceTypeDesc">
+                        ref="deviceType">
             </select-box>
           </div>
         </el-col>
@@ -115,7 +115,7 @@
               this.deviceTypeList = result.deviceCategoryList
               for (let i = 0; i < this.deviceTypeList.length; i++) {
                 this.deviceType.push({
-                  value: this.deviceTypeList[i].typeDesc,
+                  value: this.deviceTypeList[i].typeCode,
                   label: this.deviceTypeList[i].typeDesc
                 })
               }
@@ -144,8 +144,6 @@
           .catch()
       },
       _importFile () {
-        this.importData['deviceType'] = '2002'
-        this.importData['provideCode'] = '1003'
         importDmFotaFile(this.importData)
           .then(result => {
 
@@ -165,14 +163,6 @@
       _saveDeviceData (data) {
         for (var key in data) {
           this.importData[key] = data[key]
-          if (key === 'deviceTypeDesc') {
-            this.importData['deviceType'] = ''
-            for (let i = 0; i < this.deviceTypeList.length; i++) {
-              if (data[key] === this.deviceTypeList[i].typeDesc) {
-                this.importData['deviceType'] = this.deviceTypeList[i].type
-              }
-            }
-          }
         }
       }
     },

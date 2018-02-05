@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row-container">
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <select-box title="设备类型"
@@ -49,7 +49,7 @@
       </el-row>
     </div>
     <div class="row-container">
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="设备IP"
@@ -96,7 +96,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="设备掩码"
@@ -142,7 +142,7 @@
           </div>
         </el-col>
       </el-row>
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="设备名称"
@@ -189,7 +189,7 @@
       </el-row>
     </div>
     <div class="row-container">
-      <el-row :gutter="60">
+      <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <inputBox title="组织ID"
