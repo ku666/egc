@@ -357,14 +357,14 @@ export default {
                 'submenus': null,
                 'items': null
               },
-              // {
-              //   'id': null,
-              //   'title': '部门管理',
-              //   'url': '/userMgmt/userManagement/department',
-              //   'icon': null,
-              //   'submenus': null,
-              //   'items': null
-              // },
+              {
+                'id': null,
+                'title': '部门管理',
+                'url': '/userMgmt/userManagement/department',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '用户组管理',
@@ -429,14 +429,14 @@ export default {
                   //   'submenus': null,
                   //   'items': null
                   // },
-                  // {
-                  //   'id': null,
-                  //   'title': '部门管理',
-                  //   'url': '/userMgmt/userManagement/department',
-                  //   'icon': null,
-                  //   'submenus': null,
-                  //   'items': null
-                  // },
+              {
+                'id': null,
+                'title': '查看部门',
+                'url': '/userMgmt/userManagement/department',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '查看用户组',
