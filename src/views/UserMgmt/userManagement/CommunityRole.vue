@@ -3,7 +3,7 @@
   <div class='ui-common'>
      <div>
       <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
+        <el-col :span="8"  style='height: 100%;' class="flex-c">
           <div class="table-container" style="margin-top:20px">
           <grid-list id="usergroupTable"
             :viewable="true" 
@@ -26,7 +26,7 @@
           </el-pagination>
         </el-col>
         <el-col :span="16" style='margin-top:15px;' v-show="showGrid">
-          <el-card class="box-card" style='margin-left:10px; margin-top:35px'>
+          <el-card class="box-card" style='margin-left:10px; margin-top:20px'>
             <role-view 
               :roleUserData = 'subUserData'
               :roleUsergroupData="subUsergroupData"

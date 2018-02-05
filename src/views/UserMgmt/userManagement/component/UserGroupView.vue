@@ -56,7 +56,7 @@ import {
   updateUserGroup,
   getRoleUserGroup,
   getRoleUser,
-  getRoleListAll,
+  getRoleListAllMaindata,
   getDirUserGroupList,
   getDirUserGroupFilterList,
   createUserUsergroup,
@@ -201,7 +201,7 @@ export default {
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleListAll()
+      getRoleListAllMaindata()
         .then(
           function (result) {
             this.tmpRoleList = result.roleBaseVoList

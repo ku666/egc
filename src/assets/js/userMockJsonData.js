@@ -373,14 +373,14 @@ export default {
                 'submenus': null,
                 'items': null
               },
-              {
-                'id': null,
-                'title': '查看小区用户组',
-                'url': '/userMgmt/userManagement/CommunityUserGroup',
-                'icon': null,
-                'submenus': null,
-                'items': null
-              },
+              // {
+              //   'id': null,
+              //   'title': '查看小区用户组',
+              //   'url': '/userMgmt/userManagement/CommunityUserGroup',
+              //   'icon': null,
+              //   'submenus': null,
+              //   'items': null
+              // },
               {
                 'id': null,
                 'title': '角色管理',
@@ -389,14 +389,14 @@ export default {
                 'submenus': null,
                 'items': null
               },
-              {
-                'id': null,
-                'title': '查看小区角色',
-                'url': '/userMgmt/userManagement/CommunityRole',
-                'icon': null,
-                'submenus': null,
-                'items': null
-              },
+              // {
+              //   'id': null,
+              //   'title': '查看小区角色',
+              //   'url': '/userMgmt/userManagement/CommunityRole',
+              //   'icon': null,
+              //   'submenus': null,
+              //   'items': null
+              // },
               {
                 'id': null,
                 'title': '资源管理',
@@ -413,6 +413,54 @@ export default {
                 'submenus': null,
                 'items': null
               }
+            ]
+          },
+          {
+            'id': null,
+            'title': '查看小区用户',
+            'icon': 'el-icon-menu',
+            'url': '/usermgmt/communityuserauthmgmt',
+            'submenus': [
+                  // {
+                  //   'id': null,
+                  //   'title': '用户管理',
+                  //   'url': '/userMgmt/userManagement/communityuser',
+                  //   'icon': null,
+                  //   'submenus': null,
+                  //   'items': null
+                  // },
+                  // {
+                  //   'id': null,
+                  //   'title': '部门管理',
+                  //   'url': '/userMgmt/userManagement/department',
+                  //   'icon': null,
+                  //   'submenus': null,
+                  //   'items': null
+                  // },
+              {
+                'id': null,
+                'title': '查看用户组',
+                'url': '/userMgmt/userManagement/CommunityUserGroup',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '查看角色',
+                'url': '/userMgmt/userManagement/CommunityRole',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              }
+                  // {
+                  //   'id': null,
+                  //   'title': '资源管理',
+                  //   'url': '/userMgmt/userManagement/communityresource',
+                  //   'icon': null,
+                  //   'submenus': null,
+                  //   'items': null
+                  // }
             ]
           },
           {
@@ -460,7 +508,7 @@ export default {
         url: '/devicemgmt/devicemgmtindex',
         menus: [
           {
-            title: '设备基本维护',
+            title: '信息维护',
             url: '/devicemgmt/deviceInfoMaintain',
             icon: null,
             subs: null

@@ -18,8 +18,8 @@
           <el-option
             v-for='item in editForm.userTypeList'
             :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -149,7 +149,7 @@ export default {
       listUserType()
         .then(
           function (result) {
-            this.createForm.userTypeList = result
+            this.editForm.userTypeList = result
           }.bind(this)
         )
         .catch(

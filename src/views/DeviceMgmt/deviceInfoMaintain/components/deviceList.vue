@@ -109,7 +109,7 @@
     </div>
     <child-device v-show="isChildShow" ref="childDevice" style="margin-top: 100px"></child-device>
     <slave-device v-show="isSlaveShow" ref="slaveDevice" style="margin-top: 100px"></slave-device>
-    <el-dialog :title="currentRow.deviceTypeDesc" :visible.sync="isDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
+    <el-dialog :title="(isDetailDialogShow)?currentRow.deviceTypeDesc:''" :visible.sync="isDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
       <main-device-dialog :uuid="uuid"
                           ref="mainDeviceDialog">
       </main-device-dialog>

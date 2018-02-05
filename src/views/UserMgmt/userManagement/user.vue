@@ -122,6 +122,9 @@ export default {
       title: '登录 ID',
       prop: 'userName'
     }, {
+      title: '用户类型',
+      prop: 'userTypeName'
+    }, {
       title: '职务',
       prop: 'position'
     }, {

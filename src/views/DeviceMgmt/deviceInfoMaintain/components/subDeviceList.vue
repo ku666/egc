@@ -74,7 +74,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog :title="currentRow.deviceTypeDesc" :visible.sync="isSubDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
+    <el-dialog :title="(isSubDetailDialogShow)?currentRow.deviceTypeDesc:''" :visible.sync="isSubDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
       <sub-device-dialog ref="subDeviceDialogEdit"
                          :childUuid="childUuid">
       </sub-device-dialog>

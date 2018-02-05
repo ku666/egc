@@ -13,8 +13,8 @@
           <el-option
             v-for='item in createForm.userTypeList'
             :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -81,10 +81,13 @@ export default {
       this.$emit('listenToAddEvent', this.createForm)
     },
     getUserTypeList () {
+      console.log('start')
       listUserType()
         .then(
           function (result) {
             this.createForm.userTypeList = result
+            console.log(this.createForm.userTypeList[0].itemName)
+            console.log(this.createForm.userTypeList)
           }.bind(this)
         )
         .catch(
