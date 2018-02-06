@@ -39,7 +39,7 @@
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     props: {
-      userTypeOptions: undefined
+      userTypeList: undefined
     },
     data () {
       // 角色名的唯一性
