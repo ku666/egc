@@ -440,7 +440,7 @@ export default {
               {
                 'id': null,
                 'title': '查看部门',
-                'url': '/userMgmt/userManagement/department',
+                'url': '/userMgmt/userManagement/CommunityDepartment',
                 'icon': null,
                 'submenus': null,
                 'items': null

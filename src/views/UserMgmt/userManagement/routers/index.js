@@ -6,6 +6,7 @@ import CommunityRole from '@/views/UserMgmt/userManagement/CommunityRole.vue'
 import CommunityUser from '@/views/UserMgmt/userManagement/CommunityUser.vue'
 import resource from '@/views/UserMgmt/userManagement/resource.vue'
 import department from '@/views/UserMgmt/userManagement/department.vue'
+import CommunityDepartment from '@/views/UserMgmt/userManagement/CommunityDepartment.vue'
 
 // 定义路由路径数组列表
 export default[
@@ -23,6 +24,11 @@ export default[
     path: '/usermgmt/usermanagement/department',
     name: 'department',
     component: department
+  },
+  {
+    path: '/usermgmt/usermanagement/CommunityDepartment',
+    name: 'CommunityDepartment',
+    component: CommunityDepartment
   },
   {
     path: '/usermgmt/usermanagement/resource',
