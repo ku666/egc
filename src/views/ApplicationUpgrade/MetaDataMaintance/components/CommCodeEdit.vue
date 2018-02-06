@@ -1,20 +1,20 @@
 <template>
   <div>
-    <el-form :inline="true" :model="codeInstDetails">
-        <el-form-item label="代码实例值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+    <el-form :inline="true" :model="commCodeDetails">
+        <el-form-item label="代码中文名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
         </el-form-item>
-        <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
-        </el-form-item>
-        <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+        <el-form-item label="代码英文名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
         </el-form-item>
         <el-form-item label="代码值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
+        </el-form-item>
+        <el-form-item label="代码大类名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="commCodeDetails.name"></el-input>
         </el-form-item>
        <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+        <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
       </el-form-item>
 
       <div style="text-align: center">
@@ -27,7 +27,7 @@
 <script>
 export default {
   props: {
-    codeInstDetails: {
+    commCodeDetails: {
       type: Object
     }
   },
@@ -41,20 +41,13 @@ export default {
   },
   methods: {
     updateCodeInst () {
-      if (this.codeInstDetails.remark !== this.tempRemark) {
-        this.$emit('saveCodeInstEvent', this.codeInstDetails)
-      } else {
-        this.$message.error('请修改数据后再提交')
-      }
+      this.$emit('saveCommCodeEvent', this.commCodeDetails)
     }
   },
   watch: {
-    codeInstDetails (val, oldValue) {
-      this.codeInstDetails = val
+    commCodeDetails (val, oldValue) {
+      this.commCodeDetails = val
     }
-  },
-  mounted () {
-    this.tempRemark = this.codeInstDetails.remark
   }
 }
 </script>

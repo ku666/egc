@@ -6,24 +6,20 @@
     <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <el-col :span="24" class="flex-1 flex-c">
         <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="databaseListData" stripe border>
-            <el-table-column  type="index" label="序号" width="50" v-loading="loading">
+          <el-table :data="middlewareListData" stripe border v-loading="loading">
+            <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="details" /> -->
                 </el-button>
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                  <!-- <img :src="edit" /> -->
                 </el-button>
                 <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                  <!-- <img :src="refresh"/> -->
                 </el-button>
                 <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                  <!-- <img :src="history"/> -->
                 </el-button>
               </template>
             </el-table-column>
@@ -46,17 +42,17 @@
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <database-details :databaseDetails="databaseDetails"></database-details >
+        <middleware-details :middlewareDetails="middlewareDetails"></middleware-details >
       </el-dialog>
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
-        <database-edit :databaseEditDetails="databaseEditDetails" @saveDatabaseInfoEvent="_updateDatabaseInfo"></database-edit>
+        <middleware-edit :middlewareDetails="middlewareDetails" @saveMiddlewareInfoEvent="_updateMiddlewareInfo"></middleware-edit>
       </el-dialog>
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <database-history :databaseHistoryData="databaseHistoryData"></database-history>
+        <middleware-history :middlewareHistoryData="middlewareHistoryData"></middleware-history>
       </el-dialog>
     </div>
   </div>
@@ -64,17 +60,17 @@
 
 <script>
 import searchCondition from './components/SearchCondition'
-import databaseDetails from './components/DatabaseDetails'
-import databaseEdit from './components/DatabaseEdit'
-import databaseHistory from './components/DatabaseHistory'
+import middlewareDetails from './components/MiddlewareDetails'
+import middlewareEdit from './components/MiddlewareEdit'
+import middlewareHistory from './components/MiddlewareHistory'
 
-import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData } from './apis/index'
+import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo } from './apis/index'
 export default {
   components: {
     searchCondition,
-    databaseDetails,
-    databaseEdit,
-    databaseHistory
+    middlewareDetails,
+    middlewareEdit,
+    middlewareHistory
   },
   data () {
     return {
@@ -88,10 +84,9 @@ export default {
       dialogSynDataVisible: false,
       dialogHistoryVisible: false,
       addressData: [],
-      databaseListData: undefined,
-      databaseDetails: undefined,
-      databaseEditDetails: undefined,
-      databaseHistoryData: undefined,
+      middlewareListData: undefined,
+      middlewareDetails: undefined,
+      middlewareHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
       loading: true,
@@ -108,6 +103,14 @@ export default {
         children: 'children',
         value: 'name'
       },
+      detailsTitle: '查看详情',
+      editTitle: '编辑',
+      refreshTitle: '比对更新',
+      historyTitle: '历史信息',
+      details: require('./assets/images/details.png'),
+      edit: require('./assets/images/edit.png'),
+      refresh: require('./assets/images/refresh.png'),
+      history: require('./assets/images/history.png'),
       tableTitleList: [
         {
           colName: '省（直辖市）',
@@ -123,89 +126,78 @@ export default {
           width: 100
         }, {
           colName: '小区名称',
-          prop: 'courtDto.name',
+          prop: 'courtDto.memo',
           width: 120
         }, {
-          colName: '数据库名称',
+          colName: '软件名称',
           prop: 'name',
           width: 120
         }, {
-          colName: '数据库版本',
+          colName: '软件版本',
           prop: 'version',
           width: 120
         }, {
-          colName: '数据库安装路径',
+          colName: '软件安装路径',
           prop: 'path',
-          width: 120
+          width: 200
         }, {
           colName: '服务器主机名称',
-          prop: 'server.name',
-          width: 150
+          prop: 'server.hostname',
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'
         }
-      ],
-      detailsTitle: '查看详情',
-      editTitle: '编辑',
-      refreshTitle: '比对更新',
-      historyTitle: '历史信息',
-      details: require('./assets/images/details.png'),
-      edit: require('./assets/images/edit.png'),
-      refresh: require('./assets/images/refresh.png'),
-      history: require('./assets/images/history.png')
+      ]
     }
   },
   methods: {
     // 查询
     _handleFilter () {
       this.loading = true
-      getDatabaseInfoByPage(this.searchConditionList)
+      getMiddlewareInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('database by page --- > ' + JSON.stringify(result))
-            this.databaseListData = result.dbmsList
+            this.middlewareListData = result.middlewareList
             this.total = result.pageCount
-            this.loading = false
+            this.loading = true
           }.bind(this)
         )
         .catch(
           function (error) {
             console.log(error)
             this.loading = false
-          }.bind(this)
+          }
         )
     },
 
-    // 查看数据库每条详细信息
+    // 查看中间件每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '数据库信息详情'
-      var rowData = this.databaseListData[rowIdx]
+      this.dialogStatus = '中间件信息详情'
+      var rowData = this.middlewareListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
-      getDatabaseDetails(eachRowUUID)
+      getMiddlewareDetails(eachRowUUID)
           .then(
             function (result) {
               console.log(result)
-              this.databaseDetails = result.auDbms
+              this.middlewareDetails = result.auMiddleware
               this.dialogDetailsVisible = true
             }.bind(this)
           )
           .catch()
     },
 
-    // 编辑每条数据库信息
+    // 编辑每条中间件信息
     _handleEdit (rowIdx) {
-      // console.log('this.$refs.editDB:' + this.$refs.editDB)
-      this.dialogStatus = '数据库修改'
-      var rowData = this.databaseListData[rowIdx]
+      this.dialogStatus = '中间件修改'
+      var rowData = this.middlewareListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
-      getDatabaseDetails(eachRowUUID)
+      getMiddlewareDetails(eachRowUUID)
           .then(
             function (result) {
-              this.databaseEditDetails = result.auDbms
-              console.log('edit each database details --- >  ' + JSON.stringify(this.databaseEditDetails))
+              this.middlewareDetails = result.auMiddleware
               this.dialogEditVisible = true
             }.bind(this)
           )
@@ -216,23 +208,20 @@ export default {
           )
     },
 
-    // 更新数据库的信息
-    _updateDatabaseInfo (params) {
-      updateDatabaseInfo(params)
+    // 更新中间件的信息
+    _updateMiddlewareInfo (params) {
+      updateMiddlewareInfo(params)
         .then(
           function (result) {
-            console.log('update response --- >' + result)
-            if (result === 'Success!') {
-              this.dialogEditVisible = false
-              this.$message({
-                title: '成功',
-                message: '保存成功',
-                type: 'success',
-                duration: 2000
-              })
+            this.dialogEditVisible = false
+            this.$message({
+              title: '成功',
+              message: '保存成功',
+              type: 'success',
+              duration: 2000
+            })
             // 再次加载列表的数据
-              this.loadData()
-            }
+            this.loadData()
           }.bind(this)
         )
         .catch(
@@ -242,13 +231,13 @@ export default {
         )
     },
 
-    // 更新数据库信息
+    // 更新中间件信息
     _handleSynData (rowIdx) {
       this.synDataLoading = true
-      var rowData = this.databaseListData[rowIdx]
+      var rowData = this.middlewareListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件数据库
-      syncDatabaseData(eachRowUUID)
+      // 刷新硬件中间件
+      syncMiddlewareInfo(eachRowUUID)
         .then(
           function (result) {
             console.log(this.syncDataStatus = result.syncMessage.msg)
@@ -257,17 +246,18 @@ export default {
               this.synDataLoading = false
               // setTimeout(() => {
               // }, 12000)
+            // 再次加载列表的数据
+              this.loadServerList()
+            // this.loadData()
               this.$message({
                 title: '数据更新成功',
                 message: '数据更新成功',
                 type: 'success',
                 duration: 2000
               })
-            // 再次加载列表的数据
-              this.loadData()
             } else {
               this.$message({
-                title: '数据更新',
+                title: '数据更新失败',
                 message: '数据更新失败',
                 type: 'error',
                 duration: 2000
@@ -280,8 +270,8 @@ export default {
             this.synDataLoading = false
             console.log(error)
             this.$message({
-              title: '数据更新',
-              message: '数据更新失败',
+              title: '数据更新成功',
+              message: '数据更新成功',
               type: 'error',
               duration: 2000
             })
@@ -289,16 +279,16 @@ export default {
         )
     },
 
-    // 查看数据库信息的历史记录
+    // 查看中间件信息的历史记录
     _handleCheckHistory (rowIdx) {
-      this.dialogStatus = '数据库历史信息详情'
-      var rowData = this.databaseListData[rowIdx]
+      this.dialogStatus = '中间件历史信息详情'
+      var rowData = this.middlewareListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
-      getDatabaseHistoryList(eachRowUUID)
+      getMiddlewareHistoryList(eachRowUUID)
           .then(
             function (result) {
-              this.databaseHistoryData = result.auServersHisList
+              this.middlewareHistoryData = result.auServersHisList
               this.dialogHistoryVisible = true
             }.bind(this)
           )
@@ -309,34 +299,34 @@ export default {
           )
     },
 
-    // 初始加载数据库的信息
+    // 初始加载中间件的信息
     loadData () {
-      getDatabaseInfoByPage(this.searchConditionList)
+      getMiddlewareInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('database by page --- > ' + JSON.stringify(result))
-            this.databaseListData = result.dbmsList
+            console.log('middleware result -- >' + JSON.stringify(result))
+            this.middlewareListData = result.middlewareList
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
-            console.log(error)
             this.loading = false
-          }.bind(this)
+            console.log(error)
+          }
         )
     },
 
     // 改变分页大小
     handleSizeChange (val) {
-      this.searchConditionList.currentPage = val
+      this.searchConditionList.pageSize = val
       this.loadData()
     },
 
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.pageSize = val
+      this.searchConditionList.currentPage = val
       this.loadData()
     }
   },
@@ -346,6 +336,6 @@ export default {
 }
 </script>
 
-<style scoped>
-@import "assets/css/upgrademgmt.less"
+<style>
+@import "assets/css/upgrademgmt.less";
 </style>

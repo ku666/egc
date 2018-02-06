@@ -1,7 +1,6 @@
 import Axios from '@/assets/js/AxiosPlugin'
 
 let contextPath = '/egc-usermgmtcomponent'
-
 // 接口地址
 // const BASE_PATH = '/scp-devicemgmtcomponent/register/'
 
@@ -18,13 +17,12 @@ export const listCommunity = () => {
   return Axios.get(contextPath + '/usermgmt/maindata/getCourts'
   ).then(res => res.data)
 }
-
 // -----------------  用户组接口 ----------------
 
 // 获取所有用户组清单
 export const getUserGroupList = (query) => {
   if (query.userGroupName) {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + query.userGroupName + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
+    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + encodeURI(query.userGroupName) + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
     ).then(res => res.data)
   } else {
     return Axios.get(contextPath + '/usermgmt/usergroup/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
@@ -102,8 +100,8 @@ export const deleteAssRole = (usergroupRoleUuid) => {
   ).then(res => res.data)
 }
 // 校验用户组名称唯一
-export const checkUserGroupName = (usergroupUuid, usergroupName) => {
-  return Axios.post(contextPath + '/usermgmt/usergroup/checkUsergroupName?usergroupName=' + usergroupName + '&usergroupUuid=' + usergroupUuid
+export const checkUserGroupName = (usergroupUuid, usergroupName, userType) => {
+  return Axios.post(contextPath + '/usermgmt/usergroup/checkUsergroupName?usergroupName=' + encodeURI(usergroupName) + '&usergroupUuid=' + usergroupUuid + '&userType=' + userType
   ).then(res => res.data)
 }
 
@@ -321,8 +319,8 @@ export const deleteRoleResource = (authorityUuid) => {
   ).then(res => res.data)
 }
 // 校验角色名称唯一
-export const checkRoleName = (roleUuid, roleName) => {
-  return Axios.post(contextPath + '/usermgmt/role/checkRoleName?roleName=' + roleName + '&roleUuid=' + roleUuid
+export const checkRoleName = (roleUuid, roleName, userType) => {
+  return Axios.post(contextPath + '/usermgmt/role/checkRoleName?roleName=' + encodeURI(roleName) + '&roleUuid=' + roleUuid + '&userType=' + userType
   ).then(res => res.data)
 }
 
@@ -362,12 +360,12 @@ export const getUserListByPage = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&userName=' + listQuery.q_userName + '&fullName=' + listQuery.q_fullName + '&primaryPhone=' + listQuery.q_primaryPhone
+  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 校验用户名是否唯一
 export const checkUserName = (userUuid, userName) => {
-  return Axios.post(contextPath + '/usermgmt/user/checkUserName?userName=' + userName + '&userUuid=' + userUuid
+  return Axios.post(contextPath + '/usermgmt/user/checkUserName?userName=' + encodeURI(userName) + '&userUuid=' + userUuid
   ).then(res => res.data)
 }
 // 获取部门下拉框
@@ -408,7 +406,7 @@ export const getContactTypeOptions = (dictData) => {
 // --------------用户组--------------
 // 获取用户组下拉框列表信息
 export const getUserGroupListSelect = () => {
-  return Axios.get('/usermgmt/maindata/listUsergroup'
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
   ).then(res => res.data)
 }
 // 将当前用户添加到某用户组中
@@ -482,7 +480,7 @@ export const getResourceListByPage = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + listQuery.q_resourceName + '&appCode=' + listQuery.q_appCode
+  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode
   ).then(res => res.data)
 }
 // 查询应用程序下拉框
@@ -529,7 +527,7 @@ export const checkResourceName = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&resourceName=' + listParm.resourceName + '&uuid=' + listParm.uuid
+  '&resourceName=' + encodeURI(listParm.resourceName) + '&uuid=' + listParm.uuid
   ).then(res => res.data)
 }
 // 校验资源名称是否唯一
@@ -628,13 +626,13 @@ export const createService = (data) => {
 // 获取应用服务页面数据
 export const getServiceListPage = (data) => {
   console.log('Axios getServiceListPage' + JSON.stringify(data))
-  return Axios.get(contextPath + '/usermgmt/resource/listPage?resourceType=' + data.resourceType + '&appCode=' + data.appCode + '&resourceName=' + data.resourceName + '&delAuthority=' + data.delAuthority + '&roleUuid=' + data.roleUuid + '&currentPage=' + data.currentPage + '&pageSize=' + data.pageSize
+  return Axios.get(contextPath + '/usermgmt/resource/listPage?resourceType=' + data.resourceType + '&appCode=' + data.appCode + '&resourceName=' + encodeURI(data.resourceName) + '&delAuthority=' + data.delAuthority + '&roleUuid=' + data.roleUuid + '&currentPage=' + data.currentPage + '&pageSize=' + data.pageSize
   ).then(res => res.data)
 }
 // 获取已有的权限数据
 export const getSelectedListResource = (data) => {
   console.log('Axios getSelectedListResourcee')
-  return Axios.get(contextPath + '/usermgmt/authority/listResource?roleUuid=' + data.uudi + '&resourceType=' + data.type
+  return Axios.get(contextPath + '/usermgmt/authority/listResource?roleUuid=' + data.uuid + '&resourceType=' + data.type
   ).then(res => res.data)
 }
 // 获取供应商下拉框

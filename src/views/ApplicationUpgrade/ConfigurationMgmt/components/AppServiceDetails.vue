@@ -21,6 +21,9 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
+      <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.startUser"></el-input>
+      </el-form-item>
        <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.name"></el-input>
       </el-form-item>

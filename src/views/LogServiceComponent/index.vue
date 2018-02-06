@@ -23,12 +23,12 @@
       </el-form-item>
 
       <el-form-item label="开始时间">
-        <el-date-picker v-model="formInline.beginDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="开始时间" :picker-options="pickerOptions0">
+        <el-date-picker v-model="formInline.beginDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="开始时间" :picker-options="pickerOptionsStart">
         </el-date-picker>
       </el-form-item>
 
       <el-form-item label="结束时间">
-        <el-date-picker v-model="formInline.endDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="结束时间" :picker-options="pickerOptions0">
+        <el-date-picker v-model="formInline.endDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="结束时间" :picker-options="pickerOptionsEnd">
         </el-date-picker>
       </el-form-item>
 
@@ -129,6 +129,7 @@ import { getLogservicelogListByPage, getLogserviceListSysCode } from '@/views/Lo
 
 export default {
   data () {
+    let that = this
     return {
       value: '',
       tableData: [],
@@ -170,7 +171,19 @@ export default {
       loading2: false,
       systemCodeOptions: [],
       selectedSystemCodeOptions: [],
-      multipleSelection: []
+      multipleSelection: [],
+      // begin时间选择
+      pickerOptionsStart: {
+        disabledDate (time) {
+          return time.getTime() > new Date()
+        }
+      },
+      // end时间选择
+      pickerOptionsEnd: {
+        disabledDate (time) {
+          return time.getTime() <= new Date(that.formInline.beginDate).getTime()
+        }
+      }
     }
   },
   mounted () {

@@ -106,7 +106,8 @@
           usergroupName: undefined,
           parentUsergroupName: undefined,
           remark: undefined,
-          uuid: undefined
+          uuid: undefined,
+          userType: undefined
         },
         usergroupUuid: undefined,
         treeData: undefined,
@@ -333,10 +334,10 @@
         console.log('userGroup：编辑了第' + data.uuid + '行')
         this.usergroupUuid = data.uuid
         this.query.usergroupUuid = this.usergroupUuid
-        console.log(this.query.usergroupUuid)
         getUserGroupData(this.query)
             .then(
               function (result) {
+                console.log(result)
                 this.subUserGroupData = result
                 this.dirChildrenUserGroupData = this.subUserGroupData.dirChildrenUsergroupPageVo || []
                 this.userData = this.subUserGroupData.usergroupUserPageVo || []
@@ -345,10 +346,11 @@
                 this.userGroupForm.uuid = result.usergroupBaseVo.uuid
                 // this.userGroupForm.parentUsergroupName = result.usergroupBaseVo.parentUsergroupName
                 this.userGroupForm.remark = result.usergroupBaseVo.remark
+                // this.userGroupForm.userType = result.usergroupBaseVo.userType
                 this.usergroupUuid = result.usergroupBaseVo.uuid
                 // this.dialogStatus = '编辑用户组'
-                console.log('角色组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
-                console.log('角色信息：' + JSON.stringify(this.userData))
+                console.log('用户组子组件信息：' + JSON.stringify(this.dirChildrenUserGroupData))
+                console.log('用户组表单信息：' + JSON.stringify(this.userGroupForm))
               }.bind(this)
             )
             .catch(
@@ -379,10 +381,12 @@
                 this.userGroupForm.uuid = result.usergroupBaseVo.uuid
                 // this.userGroupForm.parentUsergroupName = result.usergroupBaseVo.parentUsergroupName
                 this.userGroupForm.remark = result.usergroupBaseVo.remark
+                this.userGroupForm.userType = result.usergroupBaseVo.userType
                 this.usergroupUuid = result.usergroupBaseVo.uuid
                 // this.dialogStatus = '编辑用户组'
                 console.log('用户组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
                 console.log('用户信息：' + JSON.stringify(this.userData))
+                console.log('用户组表单信息：' + JSON.stringify(this.userGroupForm))
               }.bind(this)
             )
             .catch(
