@@ -36,12 +36,15 @@ var option = {
     {
       name: '小区设备',
       type: 'pie',
-      radius: '55%',
-      center: ['50%', '50%'],
+      // radius: '55%',
+      // center: ['50%', '50%'],
+      // roseType: 'radius',
+      radius: [20, 120],
+      center: ['50%', '55%'],
+      roseType: 'area',
       // color: ['#f2c955', '#00a69d', '#46d185', '#ec5845'], // 区域的颜色
       // selectedMode: 'single',
       data: data,
-      roseType: 'radius',
       label: {
         normal: {
           textStyle: {
