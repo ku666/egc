@@ -18,9 +18,6 @@
           </el-form-item>
         </div>
       </div>
-      <div>
-         <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleCreate" plain type="primary">添加</el-button>
-      </div>
     </el-form>
 
     <div class="border-divide"></div>
@@ -30,15 +27,10 @@
       </user-list>
     </div>
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
-      @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
-    </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-edit ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
+      <user-view ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
       :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
-      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
+      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-view>
     </el-dialog>
     <div>
       <el-pagination
@@ -56,8 +48,7 @@
 
 <script>
 import userList from './component/userList.vue'
-import userEdit from './component/userEdit.vue'
-import userCreate from './component/userCreate.vue'
+import userView from './component/userView.vue'
 import {
   getUserListByPage,
   getUserDetail,
@@ -118,8 +109,7 @@ export default {
   },
   components: {
     userList,
-    userEdit,
-    userCreate
+    userView
   },
   mounted () {
     this.loadData()

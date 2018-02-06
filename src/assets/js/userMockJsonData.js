@@ -429,14 +429,14 @@ export default {
             'icon': 'el-icon-menu',
             'url': '/usermgmt/communityuserauthmgmt',
             'submenus': [
-                  // {
-                  //   'id': null,
-                  //   'title': '用户管理',
-                  //   'url': '/userMgmt/userManagement/communityuser',
-                  //   'icon': null,
-                  //   'submenus': null,
-                  //   'items': null
-                  // },
+              {
+                'id': null,
+                'title': '查看用户',
+                'url': '/userMgmt/userManagement/CommunityUser',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '查看部门',
