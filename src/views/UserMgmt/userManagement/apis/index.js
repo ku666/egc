@@ -102,8 +102,8 @@ export const deleteAssRole = (usergroupRoleUuid) => {
   ).then(res => res.data)
 }
 // 校验用户组名称唯一
-export const checkUserGroupName = (usergroupUuid, usergroupName) => {
-  return Axios.post(contextPath + '/usermgmt/usergroup/checkUsergroupName?usergroupName=' + usergroupName + '&usergroupUuid=' + usergroupUuid
+export const checkUserGroupName = (usergroupUuid, usergroupName, userType) => {
+  return Axios.post(contextPath + '/usermgmt/usergroup/checkUsergroupName?usergroupName=' + usergroupName + '&usergroupUuid=' + usergroupUuid + '&userType=' + userType
   ).then(res => res.data)
 }
 
@@ -258,8 +258,8 @@ export const deleteRoleResource = (authorityUuid) => {
   ).then(res => res.data)
 }
 // 校验角色名称唯一
-export const checkRoleName = (roleUuid, roleName) => {
-  return Axios.post(contextPath + '/usermgmt/role/checkRoleName?roleName=' + roleName + '&roleUuid=' + roleUuid
+export const checkRoleName = (roleUuid, roleName, userType) => {
+  return Axios.post(contextPath + '/usermgmt/role/checkRoleName?roleName=' + roleName + '&roleUuid=' + roleUuid + '&userType=' + userType
   ).then(res => res.data)
 }
 

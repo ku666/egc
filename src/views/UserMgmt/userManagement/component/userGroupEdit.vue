@@ -16,8 +16,8 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='(item, index) in userTypeList'
-            :key='index'
+            v-for='item in userTypeList'
+            :key='item'
             :label='item.itemName'
             :value='item.itemCode'>
           </el-option>
@@ -52,6 +52,7 @@
         <grid-list id='userTable'
           :editable='false'
           :deletable='true'
+          :showOperation='true'
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
@@ -84,6 +85,7 @@
         <grid-list id='roleTable'
           :editable='false'
           :deletable='true'
+          :showOperation='true'
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
@@ -564,8 +566,8 @@ export default {
         )
     },
     // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName) {
-      checkUserGroupName(usergroupUuid, usergroupName)
+    validateName (usergroupUuid, usergroupName, userType) {
+      checkUserGroupName(usergroupUuid, usergroupName, userType)
         .then(
           function (result) {
             console.log('<<<<<userGroupNameFlag:' + result)
@@ -591,8 +593,9 @@ export default {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
       let usergroupUuid = this.editForm.uuid
+      let userType = this.editForm.userType
       console.log('校验：' + usergroupUuid + value)
-      this.validateName(usergroupUuid, value)
+      this.validateName(usergroupUuid, value, userType)
       if (!this.userGroupNameFlag) {
         callback(new Error('用户组名称已存在!'))
         this.userGroupNameFlag = true   // 校验用户组名称存在之后,再将 userGroupNameFlag 值还原初始值 true
