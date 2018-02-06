@@ -157,7 +157,7 @@ export const getChildrenDepartmentVoList = (listQuery) => {
   console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
   // console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/listChildrenDepartment?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 删除下属部门
@@ -199,7 +199,7 @@ export const getListUserAll = (listQuery) => {
   console.log('<<nopage<<<listQuery.page:' + listQuery.page)
   console.log('<<nopage<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' +
-  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 添加直属用户
