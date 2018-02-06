@@ -118,7 +118,7 @@ export const getDepartmentList = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/department/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departName=' + encodeURI(listQuery.q_departName)
+  '&departName=' + encodeURI(listQuery.q_departName) + '&cloudFlag=1' + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 删除部门信息
