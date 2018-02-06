@@ -160,8 +160,7 @@ import {
   createService,
   createDevice,
   checkRoleName,
-  getRoleAssResource,
-  listUserType
+  getRoleAssResource
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -183,7 +182,8 @@ export default {
       remark: undefined,
       uuid: undefined,
       userType: undefined
-    }
+    },
+    userTypeList: undefined
   },
   components: {
     gridList,
@@ -192,19 +192,6 @@ export default {
     addDevice
   },
   methods: {
-    getUserTypeList () {
-      listUserType()
-        .then(
-          function (result) {
-            this.userTypeList = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
     getRoleUserGroupList () {
       getRoleUserGroup()
         .then(

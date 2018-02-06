@@ -141,7 +141,13 @@ export default {
       userType: undefined,
       uuid: undefined
     },
-    userTypeList: undefined
+    userTypeList: undefined,
+    listUserQuery: {
+      cloudFlag: 1
+    },
+    listRoleQuery: {
+      cloudFlag: 1
+    }
   },
   components: {
     gridList
@@ -233,7 +239,7 @@ export default {
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUser()
+      getRoleUser(this.listUserQuery)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -273,7 +279,7 @@ export default {
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleListAllMaindata()
+      getRoleListAllMaindata(this.listRoleQuery)
         .then(
           function (result) {
             this.tmpRoleList = result

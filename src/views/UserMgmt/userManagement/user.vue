@@ -108,7 +108,8 @@ export default {
       formLabelWidth: '120px',
       dictData: {
         userStatusDict: 'USER_ACC_STATUS',
-        contactTypeDict: 'CONTACT_TYPE'
+        contactTypeDict: 'CONTACT_TYPE',
+        cloudFlag: 1
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,

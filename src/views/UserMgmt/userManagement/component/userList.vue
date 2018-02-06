@@ -16,11 +16,14 @@
       width="80">
       <template slot-scope="scope">
         <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
-          <span @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
+          <span v-if="editable" @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="top-start">
-          <span @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+          <span v-if="deletable" @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
         </span>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="查看" placement="top-start">
+          <span v-if="viewable" @click="handleClickView(scope.$index)" style="cursor:pointer" class="el-icon-view"></span>
         </el-tooltip>
       </template>
     </el-table-column>
@@ -36,7 +39,10 @@
     data () {
       return {
         deleteImg: require('../assets/images/delete.png'),
-        editImg: require('../assets/images/edit.png')
+        editImg: require('../assets/images/edit.png'),
+        editable: true,
+        deletable: true,
+        viewable: false
       }
     },
     methods: {
