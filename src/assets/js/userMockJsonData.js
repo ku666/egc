@@ -460,6 +460,14 @@ export default {
                 'icon': null,
                 'submenus': null,
                 'items': null
+              },
+              {
+                'id': null,
+                'title': '查看资源',
+                'url': '/userMgmt/userManagement/CommunityResource',
+                'icon': null,
+                'submenus': null,
+                'items': null
               }
                   // {
                   //   'id': null,
