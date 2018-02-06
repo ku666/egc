@@ -101,7 +101,8 @@ export default {
         limit: 10,
         q_userName: '',
         q_fullName: '',
-        q_primaryPhone: ''
+        q_primaryPhone: '',
+        cloudFlag: 1
       },
       formLabelWidth: '120px',
       dictData: {
@@ -222,7 +223,8 @@ export default {
         'limit': 10,
         'q_userName': '',
         'q_fullName': '',
-        'q_primaryPhone': ''
+        'q_primaryPhone': '',
+        'cloudFlag': 1
       }
       this.loadData()
     },
