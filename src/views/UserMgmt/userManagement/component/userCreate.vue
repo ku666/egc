@@ -1,6 +1,11 @@
 <template>
   <div>
     <el-form ref='user' :inline="true" :rules="rules" :model="user">
+      <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType" style="display:block" class="is-required">
+        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select">
+          <el-option v-for="userType in userTypeSelect" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode"> </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="登录 ID" :label-width="formLabelWidth" prop="userName">
         <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input"></el-input>
       </el-form-item>
@@ -74,7 +79,8 @@ import {
 export default {
   props: {
     userAccStatusSelect: undefined,
-    departmentSelect: undefined
+    departmentSelect: undefined,
+    userTypeSelect: undefined
   },
   mounted () {
     console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + JSON.stringify(this.departmentSelect))
@@ -116,7 +122,8 @@ export default {
       if (value === '' || value === undefined) {
         callback(new Error('登录 ID不能为空'))
       } else {
-        checkUserName('', value)
+        let userType = this.user.userType
+        checkUserName('', value, userType)
         .then(
           function (result) {
             console.log('<<<<<userNameFlag:' + result)

@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import gridList from './gridList.vue'
+import gridList from '../gridList.vue'
 import {
   updateUserGroup,
   getRoleUserGroup,

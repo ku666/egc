@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import gridList from './gridList'
+import gridList from '../gridList'
 import {
   getRoleUserGroup,
   getRoleUser,

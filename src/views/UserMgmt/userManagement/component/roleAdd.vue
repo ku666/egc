@@ -35,10 +35,12 @@
 <script>
   import {
     createRole,
-    checkRoleName,
-    listUserType
+    checkRoleName
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
+    props: {
+      userTypeList: undefined
+    },
     data () {
       // 角色名的唯一性
       var validateRoleName = (rule, value, callback) => {
@@ -76,19 +78,6 @@
       }
     },
     methods: {
-      getUserTypeList () {
-        listUserType()
-          .then(
-            function (result) {
-              this.userTypeList = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log('错误：' + error)
-            }
-          )
-      },
       // 校验角色名的唯一性
       validateName (roleUuid, roleName) {
         console.log('start validating...' + roleUuid + roleName)
@@ -119,6 +108,7 @@
                   })
                   this.form.roleName = null
                   this.form.remark = null
+                  this.form.userType = null
                   this.$emit('listenToAddEvent', this.formData)
                 }.bind(this)
               )
