@@ -31,7 +31,6 @@
     <!-- <hr/> -->
 
       <el-table
-        highlight-current-row
         ref = 'providerTable'
         :data='providerList'
         tooltip-effect='dark'

@@ -4,18 +4,19 @@
     <el-form>
         <el-form-item label="添加用户组">
             <el-select v-model="selectedName" placeholder="请选择需要添加的用户组" class="user_el-select" @change='boxSelected'>
-              <el-option v-for="item in userGroupListSelect" :key="item.uuid" :label="item.usergroupName" :value="item.uuid" :disabled="item.isDisabled"> </el-option>
+              <el-option v-for="item in userGroupListSelect" :key="item.uuid" :label="item.usergroupName" :value="item.uuid" :disabled="item.isDisabled" filterable> </el-option>
             </el-select>
         </el-form-item>
     </el-form>
-    <el-table :data="associtedUserGroupData" style="width: 100%" max-height="580" element-loading-text="拼命加载中" border>
+    <el-table :data="associtedUserGroupData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
-        <el-table-column prop="usergroupName" label="用户组名称" width="260"></el-table-column>
+        <el-table-column prop="usergroupName" label="用户组名称" width="160"></el-table-column>
         <!-- <el-table-column prop="parentUsergroupName" label="上级用户组" width="234"></el-table-column> -->
-        <el-table-column prop="usergroupUsers" label="组成员" width="559"></el-table-column>
+        <el-table-column prop="usergroupRemark" label="用户组说明" width="200"></el-table-column>
+        <el-table-column prop="usergroupUsers" label="组成员" width="459"></el-table-column>
         <el-table-column label="操作" width="100" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+              <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>

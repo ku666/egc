@@ -39,7 +39,7 @@
       <!-- <el-collapse-item :title="dispatchDataList[0].batchName" v-for="(item , index) in dispatchDataList" :key="index" :name="item.batchName"> -->
       <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
         <el-table
-          :ref="'test' + index"
+          ref="test0"
           :data="item.packageDataList"
           tooltip-effect="dark"
           style="width: 100%"
@@ -52,7 +52,7 @@
       </el-collapse-item>
     </el-collapse>
   </div>
-  <!-- <test-colle></test-colle> -->
+  
   <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
     <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
   </el-dialog>
@@ -68,8 +68,7 @@
 <script>
 import orgTree from './components/OrgTree'
 import DispatchedSoftwareResults from './components/DispatchedSoftwareResults'
-// import { getAllRegisterPackages, dispatchSoftwarePackage } from './apis/index'
-import { getAllRegisterPackages, downloadDispatchResult } from './apis/index'
+import { getAllRegisterPackages, downloadDispatchResult, dispatchSoftwarePackage } from './apis/index'
 export default {
   components: {
     orgTree,
@@ -145,9 +144,20 @@ export default {
       console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
     },
     handleChange (val) {
-      console.log(this.$refs.test0)
-      // console.log(this.$refs.text1)
-      // this.$refs.text0.clearSelection()
+      this.loadDataAgain(val)
+    },
+    loadDataAgain (val) {
+      getAllRegisterPackages()
+        .then(
+          function (result) {
+            console.log('dispatch software packages result === > ' + JSON.stringify(result, null, ' '))
+            this.dispatchDataList = result.testData
+          }.bind(this)
+        ).catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     },
     loadData () {
       getAllRegisterPackages()
@@ -182,19 +192,19 @@ export default {
       // 需要获取当前登录人的信息
       this.operator = 'SystemAdmin'
       this.downloadResultVisible = true
-      // dispatchSoftwarePackage(this.multipleSelection, houseData, this.operator)
-      //   .then(
-      //     function (result) {
-      //       this.dispatchResult = result
-      //       console.log('_dispatchSoftwareToCourt data === > ' + JSON.stringify(this.dispatchResult, null, ' '))
-      //       this.activeNames = this.dispatchDataList[0].batchName
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
+      dispatchSoftwarePackage(this.multipleSelection, houseData, this.operator)
+        .then(
+          function (result) {
+            this.dispatchResult = result
+            console.log('_dispatchSoftwareToCourt data === > ' + JSON.stringify(this.dispatchResult, null, ' '))
+            this.activeNames = this.dispatchDataList[0].batchName
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     },
     _downloadDispatchResult () {
       this.downloadResultVisible = false

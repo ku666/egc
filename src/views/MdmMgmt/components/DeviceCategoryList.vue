@@ -46,7 +46,6 @@
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
 
     <el-table
-      highlight-current-row
       ref='deviceTable'
       :data='tableData'
       v-loading='loading'
@@ -57,7 +56,7 @@
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table empty-text='无子设备' highlight-current-row :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
+          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备编码'>

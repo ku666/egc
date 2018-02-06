@@ -7,28 +7,17 @@
       <el-tab-pane label="关联角色" name="3" v-if="isAddFlag"></el-tab-pane>
     </el-tabs>
     <el-form ref='user' v-show='gridUser' :inline="true" :rules="rules" :model="user">
-      <el-form-item label="登录 ID" :label-width="formLabelWidth" prop="userName" v-if="isAddFlag">
+      <el-form-item label="登录 ID" :label-width="formLabelWidth">
         <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input" :disabled="true"></el-input>
-      </el-form-item>
-      <el-form-item label="登录 ID" :label-width="formLabelWidth" prop="userName" v-else>
-        <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input"></el-input>
       </el-form-item>
       <el-form-item label="姓名" :label-width="formLabelWidth" prop="fullName">
         <el-input v-model="user.fullName" auto-complete="off" placeholder="请输入姓名" class="user_el-input"></el-input>
       </el-form-item>
-      <div v-if="isAddFlag">
+      <div>
         <el-form-item label="密码" :label-width="formLabelWidth">
           <el-input type="password" v-model="user.password" auto-complete="off" :disabled="true" class="user_el-input"></el-input>
         </el-form-item>
         <el-button @click="resetPass">重置密码</el-button>
-      </div>
-      <div v-else>
-        <el-form-item label="密码" :label-width="formLabelWidth" prop="password">
-          <el-input type="password" v-model="user.password" auto-complete="off" placeholder="请输入密码" class="user_el-input"></el-input>
-        </el-form-item>
-        <el-form-item label="确认密码" :label-width="formLabelWidth" prop="checkPass">
-          <el-input type="password" v-model="user.checkPass" auto-complete="off" placeholder="再次输入密码" class="user_el-input"></el-input>
-        </el-form-item>
       </div>
       <el-form-item label="手机号" :label-width="formLabelWidth" prop="primaryPhone">
         <el-input v-model="user.primaryPhone" auto-complete="off" placeholder="请输入手机号" class="user_el-input"></el-input>
@@ -47,25 +36,27 @@
       <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
         <el-input v-model="user.position" auto-complete="off" placeholder="请输入职务名称" class="user_el-select"></el-input>
       </el-form-item>
-      <el-form-item label="状态" :label-width="formLabelWidth" prop="userAccStatus">
+      <el-form-item label="状态" :label-width="formLabelWidth">
         <el-select v-model="user.userAccStatus" placeholder="请选择" class="user_el-select" disabled>
           <el-option v-for="userStatus in userAccStatusSelect" :key="userStatus.itemCode" :label="userStatus.itemName" :value="userStatus.itemCode"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="生效日期" :label-width="formLabelWidth" prop="effectiveDate">
-        <el-date-picker
+        <el-date-picker ref = "effectiveDate"
           v-model="user.effectiveDate"
-          type="date"
           placeholder="选择日期"
+          type="date"
           @change="changeDate"
+          :editable="false"
           :picker-options="pickerOptionsStart" style="width: 280px">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="失效日期" label-width="120px">
-        <el-date-picker
+      <el-form-item label="失效日期" label-width="120px" prop="expiryDate">
+        <el-date-picker ref = "expiryDate"
           v-model="user.expiryDate"
-          type="date"
           placeholder="选择日期"
+          type="date"
+          :editable="false"
           :picker-options="pickerOptionsEnd" style="width: 280px;">
         </el-date-picker>
       </el-form-item>
@@ -74,8 +65,7 @@
           <el-col>
             <span class="dialog-footer">
               <el-button class='cancel-btn' @click="cancelEvent('user')" type='primary'>取消</el-button>
-              <el-button v-if="isAddFlag" type="primary" @click="update('user')" class='action-btn'>保 存</el-button>
-              <el-button v-else type="primary" @click="create('user')" class='action-btn'>保 存</el-button>
+              <el-button type="primary" @click="update('user')" class='action-btn'>保 存</el-button>
             </span>
           </el-col>
         </el-row>
@@ -96,12 +86,9 @@
 </template>
 <script>
 import contactList from './contact.vue'
-import gridList from './gridList.vue'
 import assUserGroup from './associatedUserGroup.vue'
 import assUserRole from './associatedUserRole.vue'
 import {
-  // createUser,
-  // updateUser,
   checkUserName,
   resetPassword
 } from '@/views/UserMgmt/userManagement/apis'
@@ -115,30 +102,29 @@ export default {
     tableDataUserUserGroup: undefined,
     curUserUuidParm: undefined,
     user: {
-      fullName: undefined,
-      userName: undefined,
-      position: undefined,
-      departmentUuid: undefined,
-      primaryPhone: undefined,
-      idenNum: undefined,
-      password: undefined,
-      checkPass: undefined,
-      primaryEmail: undefined,
-      effectiveDate: undefined,
-      expiryDate: undefined,
-      userAccStatus: undefined,
-      uuid: undefined,
-      userType: undefined
+      fullName: '',
+      userName: '',
+      position: '',
+      departmentUuid: '',
+      primaryPhone: '',
+      idenNum: '',
+      password: '',
+      checkPass: '',
+      primaryEmail: '',
+      effectiveDate: '',
+      expiryDate: '',
+      userAccStatus: '',
+      uuid: '',
+      userType: ''
     }
   },
   components: {
     contactList,
-    gridList,
     assUserGroup,
     assUserRole
   },
   watch: {
-    user (val) {
+    user: function (newValue, oldValue) {
       console.log('watch: userDetailData!!!!!!!!!!!!!!!!')
       console.log('userUuid<<<<<<<:' + this.user.uuid)
       this.subActiveName = '0'
@@ -146,31 +132,16 @@ export default {
       this.gridContact = false
       this.gridUserGroup = false
       this.gridUserRole = false
+
+      // console.log('生效日期old>>>>>>>>>>>>>>：' + newValue.effectiveDate)
+      // console.log('失效日期>>>>>>>>：' + newValue.expiryDate)
+      // this.user = newValue
+      // this.user.effectiveDate = '2000-11-10'
+      // this.user.expiryDate = '2000-11-10'
     }
   },
   data () {
     let that = this
-    // 密码校验是否一致
-    var validatePass = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'))
-      } else if (value !== this.user.password) {
-        callback(new Error('两次输入密码不一致!'))
-      } else {
-        callback()
-      }
-    }
-    // 用户名的唯一性
-    var validateUserName = (rule, value, callback) => {
-      let userUuid = this.user.uuid
-      this.validateName(userUuid, value)
-      if (!this.userNameFlag) {
-        this.userNameFlag = true   // 校验用户名存在之后,再将userNameFlag值还原初始值 true
-        callback(new Error('用户名已存在!'))
-      } else {
-        callback()
-      }
-    }
     // 身份证有效验证
     var validateIdenNum = (rule, value, callback) => {
       // 15位
@@ -180,13 +151,13 @@ export default {
       if (value !== '' && value !== null && value !== undefined) {
         if (value.length === 15) {
           if (!isIDCard1.test(value)) {
-            callback(new Error('15位身份证号码无效!'))
+            callback(new Error('15位身份证号码无效'))
           } else {
             callback()
           }
         } else {
           if (!isIDCard2.test(value)) {
-            callback(new Error('18位身份证号码无效!'))
+            callback(new Error('18位身份证号码无效'))
           } else {
             callback()
           }
@@ -219,7 +190,7 @@ export default {
       },
       rules: {
         departmentUuid: [
-          { required: true, message: '请选择部门', trigger: 'blur,change' }
+          { required: true, message: '请选择部门', trigger: 'change' }
         ],
         // userAccStatus: [
         //   { required: true, message: '请选择账户状态', trigger: 'blur,change' }
@@ -227,21 +198,6 @@ export default {
         fullName: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
-        ],
-        userName: [
-          { required: true, message: '请输入登录名', trigger: 'blur' },
-          { min: 3, max: 20, message: '长度在 3 到 20 个字符' },
-          { pattern: /^[A-Za-z0-9]+$/, message: '登录只能为字母和数字' },
-          { validator: validateUserName }
-        ],
-        password: [
-          { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 8, max: 20, message: '长度在 8 到 20 个字符' },
-          { pattern: /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/, message: '必须包括数字、字母以及 <! # & $ %> 等特殊符号' }
-        ],
-        checkPass: [
-          { required: true, message: '请再次输入密码', trigger: 'blur' },
-          { validator: validatePass }
         ],
         idenNum: [
           { validator: validateIdenNum, trigger: 'blur,change' }
@@ -256,10 +212,10 @@ export default {
           { pattern: /^1[34578]\d{9}$/, message: '请输入有效的手机号' }
         ],
         effectiveDate: [
-          { required: true, message: '请选择生效日期', trigger: 'blur,change' }
+          { required: true, message: '请选择生效日期', trigger: 'change' }
         ],
         position: [
-          { min: 0, max: 16, message: '长度在 0 到 16 个字符', trigger: 'blur' }
+          { max: 16, message: '长度不能超过16个字符', trigger: 'blur' }
         ]
       },
       listQueryUserEditVue: {
@@ -375,13 +331,18 @@ export default {
     },
     changeDate () {
       this.user.expiryDate = ''
+      console.log('生效日期：' + this.user.effectiveDate)
+      console.log('失效日期：' + this.user.expiryDate)
     },
     cancelEvent (user) {
       console.log('cancelEvent')
-      // this.user = undefined
-      this.$refs[user].clearValidate()
-      this.$refs[user].resetFields()
       this.$emit('canelDialogEvent')
+    },
+    reset (user) {
+      console.log('userEdit-reset start')
+      this.$refs.effectiveDate.focus()
+      this.$refs.expiryDate.focus()
+      console.log('userEdit-reset end')
     }
   }
 }

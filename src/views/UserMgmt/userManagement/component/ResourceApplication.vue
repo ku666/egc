@@ -1,18 +1,18 @@
 <template>
   <div>
     <el-form ref='resourceAppVue' :inline="true" :model="resourceAppVue" :rules="rules">
-      <el-form-item label="应用程序名称" :label-width="formLabelWidth" prop="resourceName">  
-        <el-input v-model="resourceAppVue.resourceName" auto-complete="off" placeholder="请输入应用程序名称" class="user_el-input"></el-input>
+      <el-form-item label="应用名称" :label-width="formLabelWidth" prop="resourceName">  
+        <el-input v-model="resourceAppVue.resourceName" auto-complete="off" placeholder="请输入应用名称" class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label="应用程序代码" :label-width="formLabelWidth" prop="appCode">
-        <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用程序代码" class="user_el-input" disabled v-if="isAddFlagParm"></el-input>
-        <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用程序代码" class="user_el-input" v-else></el-input>
+      <el-form-item label="应用代码" :label-width="formLabelWidth" prop="appCode">
+        <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用代码" class="user_el-input" disabled v-if="isAddFlagParm"></el-input>
+        <el-input v-model="resourceAppVue.appCode" auto-complete="off" placeholder="请输入应用代码" class="user_el-input" v-else></el-input>
       </el-form-item>
       <!-- <el-form-item label="应用程序URL" :label-width="formLabelWidth">
         <el-input v-model="resourceAppVue.resourceUrl" auto-complete="off" placeholder="请输入应用程序URL" class="user_el-input"></el-input>
       </el-form-item> -->
       <el-form-item label="排序" :label-width="formLabelWidth" prop="sort">
-        <el-input v-model.number="resourceAppVue.sort" type="number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
+        <el-input v-model="resourceAppVue.sort" type="Number" auto-complete="off" class="user_el-input" placeholder="请输入排序序号"></el-input>
       </el-form-item>
       <div class="user-button" align="center">
           <el-row align="center">
@@ -67,14 +67,14 @@ export default {
     // 检查资源名称唯一性
     var validateResourceName = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入应用程序名称'))
+        callback(new Error('请输入应用名称'))
       } else {
         this.listParm.resourceType = '1'
         this.listParm.uuid = this.resourceAppVue.uuid
         this.listParm.resourceName = value
         this.validateName(this.listParm)
         if (this.meunCodeFlag) {
-          callback(new Error('应用程序名称已存在，请修改!'))
+          callback(new Error('应用名称已存在，请修改!'))
         } else {
           callback()
         }
@@ -83,14 +83,14 @@ export default {
     // 检查应用程序代码唯一性
     var validateAppCode = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入应用程序代码'))
+        callback(new Error('请输入应用代码'))
       } else {
         this.listParm.resourceType = '1'
         this.listParm.uuid = this.resourceAppVue.uuid
         this.listParm.appCode = value
         this.validateCode(this.listParm)
         if (this.appCodeFlag) {
-          callback(new Error('应用程序代码已存在，请修改!'))
+          callback(new Error('应用代码已存在，请修改!'))
         } else {
           this.isShow = false
           callback()
@@ -99,15 +99,20 @@ export default {
     }
     // 检查排序
     var validateSort = (rule, value, callback) => {
+      // this.currentValue = ''
       if (value === '' || value === undefined) {
         callback(new Error('请输入数字型排序值'))
       } else {
-        let numberPatten = /^[0-9]*$/
         console.log(value)
-        if (!new RegExp(numberPatten).test(value)) {
-          callback(new Error('请输入数字型排序值'))
+        if (!this.isValueNumber(value)) {
+          this.resourceAppVue.sort = this.currentValue
         } else {
-          callback()
+          if (value > 999) {
+            callback(new Error('不能超过3位有效数字'))
+          } else {
+            this.currentValue = value
+            callback()
+          }
         }
       }
     }
@@ -115,6 +120,7 @@ export default {
       formLabelWidth: '120px',
       meunCodeFlag: false,
       appCodeFlag: false,
+      currentValue: '',
       listParm: {
         resourceType: '',
         resourceName: '',
@@ -123,10 +129,12 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName },
+          { max: 20, message: '长度不能超过20个字符' }
         ],
         appCode: [
-          { required: true, validator: validateAppCode, trigger: 'blur' }
+          { required: true, validator: validateAppCode, trigger: 'blur' },
+          { max: 32, message: '长度不能超过32个字符' }
         ],
         sort: [
           { required: true, validator: validateSort, trigger: 'blur' }
@@ -194,6 +202,9 @@ export default {
       this.$refs[resourceAppVue].clearValidate()
       this.$refs[resourceAppVue].resetFields()
       this.$emit('cancelDialogEvent')
+    },
+    isValueNumber (value) {
+      return (/^[0-9]*$/).test(value)
     }
   }
 }

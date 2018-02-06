@@ -227,8 +227,16 @@ export default {
               },
               {
                 'id': null,
-                'title': '中间件&运维管理',
+                'title': '中间件',
                 'url': '/applicationupgrade/middlewaresysinfo',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '运维管理',
+                'url': '/applicationupgrade/operationmaintance',
                 'icon': null,
                 'submenus': null,
                 'items': null
@@ -357,14 +365,14 @@ export default {
                 'submenus': null,
                 'items': null
               },
-              // {
-              //   'id': null,
-              //   'title': '部门管理',
-              //   'url': '/userMgmt/userManagement/department',
-              //   'icon': null,
-              //   'submenus': null,
-              //   'items': null
-              // },
+              {
+                'id': null,
+                'title': '部门管理',
+                'url': '/userMgmt/userManagement/department',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '用户组管理',
@@ -429,14 +437,14 @@ export default {
                   //   'submenus': null,
                   //   'items': null
                   // },
-                  // {
-                  //   'id': null,
-                  //   'title': '部门管理',
-                  //   'url': '/userMgmt/userManagement/department',
-                  //   'icon': null,
-                  //   'submenus': null,
-                  //   'items': null
-                  // },
+              {
+                'id': null,
+                'title': '查看部门',
+                'url': '/userMgmt/userManagement/department',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '查看用户组',

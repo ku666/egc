@@ -91,10 +91,13 @@ export default {
     },
     loadProvinceData () {
       var that = this
-      getProvinceDataList(that.provParams)
+      that.cities = []
+      that.districts = []
+      getProvinceDataList()
           .then(
             function (result) {
-              let provinceArr = result.data
+              console.log('province --- > ' + JSON.stringify(result))
+              let provinceArr = result
               for (let i = 0; i < provinceArr.length; i++) {
                 that.provinces.push(
                   {
@@ -121,10 +124,12 @@ export default {
       that.cities = []
       that.districts = []
       that.provParams.province = that.searchConDetails.province
+      console.log('province -- > ' + JSON.stringify(that.provParams.province))
       getCityDataList(that.provParams)
           .then(
             function (result) {
-              let cityArr = result.data
+              console.log('city -- > ' + JSON.stringify(result))
+              let cityArr = result
               for (let i = 0; i < cityArr.length; i++) {
                 that.cities.push(
                   {
@@ -143,6 +148,7 @@ export default {
     },
     loadDistrictData () {
       var that = this
+      that.districts = []
       that.provParams.province = that.searchConDetails.province
       that.provParams.city = that.searchConDetails.city
       if (that.searchConDetails.city !== '') {
@@ -151,7 +157,8 @@ export default {
         getDisctrictDataList(that.provParams)
           .then(
             function (result) {
-              let districtsArr = result.data
+              console.log('district -- > ' + JSON.stringify(result))
+              let districtsArr = result
               for (let i = 0; i < districtsArr.length; i++) {
                 that.districts.push(
                   {

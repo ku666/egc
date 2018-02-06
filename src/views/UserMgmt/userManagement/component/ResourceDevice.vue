@@ -62,14 +62,14 @@ export default {
     // 检查资源名称唯一性
     var validateResourceName = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入服务名称'))
+        callback(new Error('请输入设备名称'))
       } else {
         this.listParm.resourceType = '99'
         this.listParm.uuid = this.resourceDeviceVue.uuid
         this.listParm.resourceName = value
         this.validateName(this.listParm)
         if (this.meunCodeFlag) {
-          callback(new Error('服务名称已存在，请修改!'))
+          callback(new Error('设备名称已存在，请修改!'))
         } else {
           callback()
         }
@@ -85,13 +85,16 @@ export default {
       },
       rules: {
         resourceName: [
-          { required: true, trigger: 'blur,change', validator: validateResourceName }
+          { required: true, trigger: 'blur', validator: validateResourceName },
+          { max: 20, message: '长度不能超过20个字符' }
         ],
         deviceCode: [
-          { required: true, message: '请输入服务代码', trigger: 'blur' }
+          { required: true, message: '请输入设备代码', trigger: 'blur' },
+          { max: 32, message: '长度不能超过32个字符' }
         ],
         logicalAddress: [
-          { required: true, message: '请输入逻辑(IP)地址', trigger: 'blur' }
+          { required: true, message: '请输入逻辑(IP)地址', trigger: 'blur' },
+          { max: 128, message: '长度不能超过128个字符' }
         ]
       }
     }
