@@ -157,6 +157,7 @@
           .then(
             function (result) {
               this.userTypeOptions = result
+              console.log(this.userTypeOptions)
             }.bind(this)
           )
           .catch(

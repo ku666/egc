@@ -141,31 +141,12 @@ export default {
       userType: undefined,
       uuid: undefined
     },
-    userTypeList: undefined,
-    listUserQuery: {
-      cloudFlag: 1
-    },
-    listRoleQuery: {
-      cloudFlag: 1
-    }
+    userTypeList: undefined
   },
   components: {
     gridList
   },
   methods: {
-    // getUserTypeList () {
-    //   listUserType()
-    //     .then(
-    //       function (result) {
-    //         this.userTypeList = result
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log('错误：' + error)
-    //       }
-    //     )
-    // },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
@@ -278,11 +259,12 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
+      console.log(this.listRoleQuery)
       getRoleListAllMaindata(this.listRoleQuery)
         .then(
           function (result) {
             this.tmpRoleList = result
+            console.log(this.tmpRoleList)
             getUsergroupRoleFilterList(this.usergroupUuid)
             .then(
               function (result) {
@@ -668,6 +650,16 @@ export default {
       queryRole: {
         roleUuid: undefined,
         usergroupUuid: undefined
+      },
+      listUserQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
+      },
+      listRoleQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
       },
       userGroupList: undefined,
       userList: undefined,
