@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <el-form>
+    <el-form v-if="showSelect">
         <el-form-item label="添加关联角色">
             <el-select v-model="selectedName" placeholder="请选择需要添加的角色" class="user_el-select" @change='boxSelected'>
               <el-option v-for="item in userRoleListSelect" :key="item.uuid" :label="item.roleName" :value="item.uuid" :disabled="item.isDisabled" filterable> </el-option>
@@ -49,7 +49,9 @@
 
   export default {
     props: {
-      userUuidValue: undefined
+      userUuidValue: undefined,
+      showSelect: undefined,
+      cloudFlag: ''
     },
     watch: {
       associtedUserRoleData (val) {
@@ -95,7 +97,7 @@
             function (result) {
               this.associtedUserRoleData = result.userRoleVoList  // 获取当前用户下所关联的角色列表(含分页)
               this.total = result.pageCount
-              getUserRoleListSelect()
+              getUserRoleListSelect(this.cloudFlag)
                 .then(
                   function (result) {
                     this.userRoleListSelect = result       // 获取关联角色下拉框值

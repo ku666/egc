@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import gridList from './gridList.vue'
+import gridList from '../gridList.vue'
 import {
   updateUserGroup,
   getRoleUserGroup,
@@ -91,7 +91,7 @@ export default {
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -122,7 +122,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -601,6 +601,11 @@ export default {
       queryRole: {
         roleUuid: undefined,
         usergroupUuid: undefined
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 0
       },
       userGroupList: undefined,
       userList: undefined,

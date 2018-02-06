@@ -1,7 +1,22 @@
 <template>
   <div class='ui-common'>
     <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
-      <div class="search-container">
+      <el-select filterable
+      v-model='selectedCommunity' 
+      placeholder='请选择小区' 
+      style="width:360px; display: block; margin-bottom:20px" 
+      @visible-change='getCommunityList'
+      @change='communitySelected'
+      >
+        <el-option
+          v-for='(item, index) in communityList'
+          :key='index'
+          :label='item.name'
+          :value='item.uuid'>
+        </el-option>
+      </el-select>
+      <div class="border-divide"></div>
+      <div class="search-container" style="margin-top:20px">
         <el-form-item label="资源类别">
           <el-select v-model="listQuery.q_resourceType" placeholder="请选择" @change="changeResourceType" class="user_el-select">
             <el-option v-for="resourceType in resourceTypeOptions" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
@@ -23,9 +38,6 @@
             <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
           </el-form-item>
         </div>
-      </div>
-      <div>
-        <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px"  @click="handleCreate" plain type="primary">添加</el-button>
       </div>
     </el-form>
 
@@ -77,12 +89,14 @@ import {
   getActionTypeOptions,
   updateResource,
   getDeviceTypeOptions,
-  getProviderCodeTypeOptions
+  getProviderCodeTypeOptions,
+  listCommunity
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
   data () {
     return {
+      communityList: undefined,
       resourceList: [],
       resourceListParam: undefined,
       total: 0,
@@ -125,8 +139,7 @@ export default {
         q_resourceType: '2',
         q_resourceName: '',
         q_logicalAddress: '',
-        q_appCode: '',
-        cloudFlag: 1
+        q_appCode: ''
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
@@ -278,7 +291,7 @@ export default {
           }
         )
       // 获取应用程序下拉框信息
-      getAppCodeOptions(1)
+      getAppCodeOptions()
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
@@ -343,6 +356,37 @@ export default {
           }
         )
     },
+    getCommunityList () {
+      listCommunity()
+        .then(
+          function (result) {
+            this.communityList = result
+            this.total = result.pageCount
+            console.log('小区列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    communitySelected (data) {
+      this.query.communityUuid = data.uuid
+      // getUserGroupList(this.query)
+      //   .then(
+      //     function (result) {
+      //       this.userGroupList = result.usergroupBaseVoList
+      //       this.total = result.pageCount
+      //       console.log('用户组：' + JSON.stringify(result))
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
+    },
     // 初始新增资源信息
     initResourceInfo () {
       this.resourceForm = {
@@ -368,8 +412,7 @@ export default {
         'q_resourceType': '2',
         'q_resourceName': '',
         'q_logicalAddress': '',
-        'q_appCode': '',
-        'cloudFlag': 1
+        'q_appCode': ''
       }
       this.handleFilter()
     },

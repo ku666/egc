@@ -1,6 +1,23 @@
 <template>
   <div class='ui-common'>
-    <el-form :inline="true" :model="listQuery" ref="listQuery">
+    <el-select filterable
+    v-model='selectedCommunity' 
+    placeholder='请选择小区' 
+    style="width:360px; margin-bottom:20px" 
+    @visible-change='getCommunityList'
+    @change='communitySelected'
+    >
+      <el-option
+        v-for='(item, index) in communityList'
+        :key='index'
+        :label='item.name'
+        :value='item.uuid'>
+      </el-option>
+    </el-select>
+
+    <div class="border-divide"></div>
+
+    <el-form :inline="true" :model="listQuery" ref="listQuery" style="margin-top:15px">
       <div class="search-container">
         <el-form-item label="用户姓名">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
@@ -18,27 +35,19 @@
           </el-form-item>
         </div>
       </div>
-      <div>
-         <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleCreate" plain type="primary">添加</el-button>
-      </div>
     </el-form>
 
-    <div class="border-divide"></div>
+
     <div class="table-container">
-      <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
-        @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
+      <user-list :tableData="userList" :params="userListParam" style="margin-top: 10px" :viewable="true" :editable="false" :deletable="false"
+        @listenViewEvent="userViewEvent">
       </user-list>
     </div>
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
-      @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
-    </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-edit ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
-      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
+      <user-view ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
+      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions" :userTypeList="userTypeOptions"
+      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-view>
     </el-dialog>
     <div>
       <el-pagination
@@ -56,18 +65,19 @@
 
 <script>
 import userList from './component/userList.vue'
-import userEdit from './component/userEdit.vue'
-import userCreate from './component/userCreate.vue'
+import userView from './component/communityView/userView.vue'
 import {
   getUserListByPage,
   getUserDetail,
-  deleteUser,
-  updateUser,
-  createUser,
+  // deleteUser,
+  // updateUser,
+  // createUser,
   getUserStatusOptions,
   getDepartmentOptions,
   getContactTypeOptions,
-  listUserType
+  listUserType,
+  listCommunity,
+  getRoleUser
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -103,24 +113,28 @@ export default {
         q_userName: '',
         q_fullName: '',
         q_primaryPhone: '',
-        cloudFlag: 1
+        cloudFlag: 0
       },
       formLabelWidth: '120px',
       dictData: {
         userStatusDict: 'USER_ACC_STATUS',
         contactTypeDict: 'CONTACT_TYPE',
-        cloudFlag: 1
+        cloudFlag: 0
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
       departmentOptions: undefined,
-      userTypeOptions: undefined
+      userTypeOptions: undefined,
+      communityList: undefined,
+      userListQuery: {
+        cloudFlag: 0,
+        courtUuid: undefined
+      }
     }
   },
   components: {
     userList,
-    userEdit,
-    userCreate
+    userView
   },
   mounted () {
     this.loadData()
@@ -161,6 +175,18 @@ export default {
         .catch(
           function (error) {
             console.log(error)
+          }
+        )
+      listUserType()
+        .then(
+          function (result) {
+            this.userTypeOptions = result
+            console.log('user types: ' + result)
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
           }
         )
       // 获取部门信息
@@ -235,6 +261,39 @@ export default {
         uuid: ''
       }
     },
+    // 获取小区列表
+    getCommunityList () {
+      listCommunity()
+        .then(
+          function (result) {
+            this.communityList = result
+            this.total = result.pageCount
+            console.log('小区列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    // 选择小区
+    communitySelected (data) {
+      this.userListQuery.communityUuid = data.uuid
+      getRoleUser(this.userListQuery)
+        .then(
+          function (result) {
+            this.userGroupList = result
+            // this.total = result.pageCount
+            console.log('小区用户列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
@@ -261,95 +320,120 @@ export default {
       this.listQuery.page = 1
       this.loadData()
     },
-    // 新增用户
-    handleCreate () {
-      this.initUserInfo()  // 调用初始信息
-      this.dialogStatus = '添加用户'
-      this.dialogFormVisible = false
-      this.dialogCreateFormVisible = true
-      this.$refs.userCreateVue.reset()
-      this.addFlag = false
-    },
-    userDeleteEvent (row) {
-      var data = this.userList[row]
-      this.$confirm('确定删除此项？', '删除', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          console.log('删除操作')
-          this.delete(data.uuid, row)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    // 删除用户实体
-    delete (uuid, row) {
-      console.log('删除操作:' + uuid)
-      deleteUser(uuid)
-        .then(
-          function (result) {
-            console.log('删除成功:' + uuid)
-            this.loadData()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
-    userCreateEvent (data) {
-      console.log('新增用户')
-      data.userType = 1
-      createUser(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            this.loadData()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log('.....新增失败')
-          console.log(error)
-        })
-    },
-    userSaveEvent (data) {
-      console.log('user：保存了第' + data.userName + '行')
-      updateUser(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            this.loadData()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
-    userEditEvent (data) {
-      console.log('user：编辑了第' + data.userName + '行')
+    // // 新增用户
+    // handleCreate () {
+    //   this.initUserInfo()  // 调用初始信息
+    //   this.dialogStatus = '添加用户'
+    //   this.dialogFormVisible = false
+    //   this.dialogCreateFormVisible = true
+    //   this.$refs.userCreateVue.reset()
+    //   this.addFlag = false
+    // },
+    // userDeleteEvent (row) {
+    //   var data = this.userList[row]
+    //   this.$confirm('确定删除此项？', '删除', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   })
+    //     .then(() => {
+    //       console.log('删除操作')
+    //       this.delete(data.uuid, row)
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: 'info',
+    //         message: '已取消删除'
+    //       })
+    //     })
+    // },
+    // // 删除用户实体
+    // delete (uuid, row) {
+    //   console.log('删除操作:' + uuid)
+    //   deleteUser(uuid)
+    //     .then(
+    //       function (result) {
+    //         console.log('删除成功:' + uuid)
+    //         this.loadData()
+    //         this.$message({
+    //           type: 'success',
+    //           message: '删除成功!'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    // userCreateEvent (data) {
+    //   console.log('新增用户')
+    //   data.userType = 1
+    //   createUser(data)
+    //     .then(
+    //       function (result) {
+    //         this.dialogFormVisible = false
+    //         this.dialogCreateFormVisible = false
+    //         this.loadData()
+    //         this.$message({
+    //           message: '保存成功！',
+    //           type: 'success'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(function (error) {
+    //       console.log('.....新增失败')
+    //       console.log(error)
+    //     })
+    // },
+    // userSaveEvent (data) {
+    //   console.log('user：保存了第' + data.userName + '行')
+    //   updateUser(data)
+    //     .then(
+    //       function (result) {
+    //         this.dialogFormVisible = false
+    //         this.dialogCreateFormVisible = false
+    //         this.loadData()
+    //         this.$message({
+    //           message: '保存成功！',
+    //           type: 'success'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    // userEditEvent (data) {
+    //   console.log('user：编辑了第' + data.userName + '行')
+    //   this.curUserUuid = data.uuid
+    //   getUserDetail(data.uuid)
+    //     .then(
+    //       function (result) {
+    //         this.userForm = result.baseUser  // 用户基本信息
+    //         console.log('用户基本信息:' + JSON.stringify(result.baseUser))
+    //         console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
+    //         console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
+    //         // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
+    //         this.dialogStatus = '查看用户'
+    //         this.dialogFormVisible = true
+    //         this.dialogCreateFormVisible = false
+    //         this.$refs.userEditVue.reset()
+    //         this.addFlag = true
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log('.....失败')
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    userViewEvent (data) {
+      console.log('user：查看了第' + data.userName + '行')
       this.curUserUuid = data.uuid
       getUserDetail(data.uuid)
         .then(
@@ -359,10 +443,12 @@ export default {
             console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
             console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
             // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
-            this.dialogStatus = '编辑用户'
+            this.dialogStatus = '查看用户'
             this.dialogFormVisible = true
             this.dialogCreateFormVisible = false
-            this.$refs.userEditVue.reset()
+            if (this.$refs.userEditVue) {
+              this.$refs.userEditVue.reset()
+            }
             this.addFlag = true
           }.bind(this)
         )
@@ -386,5 +472,7 @@ export default {
 </script>
 
 <style scoped>
-  @import "assets/css/usermanagement.less"
+  .el-input {
+    border: none
+  }
 </style>

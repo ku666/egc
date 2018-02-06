@@ -57,7 +57,7 @@
 
 <script>
   import gridList from './component/gridList.vue'
-  import RoleView from './component/RoleView.vue'
+  import RoleView from './component/communityView/RoleView.vue'
   import {
     getRoleList,
     getRoleData,
