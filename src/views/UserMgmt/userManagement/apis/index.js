@@ -113,8 +113,10 @@ export const getDepartmentList = (listQuery) => {
   console.log('<<<<<q_departName:' + listQuery.q_departName)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
+  console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departName=' + encodeURI(listQuery.q_departName) + '&cloudFlag=1' + '&courtUuid=' + listQuery.courtUuid
+  '&departmentName=' + encodeURI(listQuery.q_departName) + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.q_courtUuid
   ).then(res => res.data)
 }
 // 删除部门信息
@@ -152,8 +154,10 @@ export const getChildrenDepartmentVoList = (listQuery) => {
   console.log('<<<<<q_userName:' + listQuery.departmentUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
+  // console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/listChildrenDepartment?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 删除下属部门
@@ -168,9 +172,9 @@ export const createDirectDepartment = (data) => {
   ).then(res => res.data)
 }
 // 获取部门树
-export const getDepartmentTreeData = () => {
-  console.log('getDepartmentTreeData<<<<<<<<<<<<<<')
-  return Axios.get(contextPath + '/usermgmt/department/getDepartmentTree'
+export const getDepartmentTreeData = (listQuery) => {
+  console.log('小区uuid<<<<<<<<<<<<<<:' + listQuery.q_courtUuid)
+  return Axios.get(contextPath + '/usermgmt/department/getDepartmentTree?courtUuid=' + listQuery.q_courtUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // -----部门直属用户相关接口
@@ -181,11 +185,12 @@ export const deleteDirDepartmentUser = (uuid) => {
 }
 // 查询当前部门下的直属用户列表（分页）
 export const getDepartmentUserVoList = (listQuery) => {
-  console.log('<<<<<q_userName:' + listQuery.departmentUuid)
+  console.log('<<<<<departmentUuid:' + listQuery.departmentUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
   return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 查询当前部门下的直属用户列表(不分页)
@@ -193,7 +198,8 @@ export const getListUserAll = (listQuery) => {
   console.log('<<nopage<<<q_userName:' + listQuery.departmentUuid)
   console.log('<<nopage<<<listQuery.page:' + listQuery.page)
   console.log('<<nopage<<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' + '&departmentUuid=' + listQuery.departmentUuid
+  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' +
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 添加直属用户
