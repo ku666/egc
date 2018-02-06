@@ -67,7 +67,7 @@
 import userList from './component/userList.vue'
 import userView from './component/communityView/userView.vue'
 import {
-  getUserListByPage,
+  // getUserListByPage,
   getUserDetail,
   // deleteUser,
   // updateUser,
