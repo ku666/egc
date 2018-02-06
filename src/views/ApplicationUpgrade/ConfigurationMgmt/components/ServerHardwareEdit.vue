@@ -19,11 +19,6 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-      <template v-if="auServerDetails.oss !== null">
-        <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.oss.hostname"></el-input>
-        </el-form-item>
-      </template>
       <el-form-item label="CPU型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.cpuModel"></el-input>
       </el-form-item>
