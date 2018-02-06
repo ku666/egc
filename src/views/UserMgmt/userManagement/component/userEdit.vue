@@ -94,7 +94,7 @@ import contactList from './contact.vue'
 import assUserGroup from './associatedUserGroup.vue'
 import assUserRole from './associatedUserRole.vue'
 import {
-  checkUserName,
+  // checkUserName,
   resetPassword
 } from '@/views/UserMgmt/userManagement/apis'
 export default {
@@ -279,21 +279,21 @@ export default {
         }
       })
     },
-    // 校验登陆名的唯一性
-    validateName (userUuid, userName) {
-      checkUserName(userUuid, userName)
-        .then(
-          function (result) {
-            console.log('<<<<<userNameFlag:' + result)
-            this.userNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
+    // // 校验登陆名的唯一性
+    // validateName (userUuid, userName, userType) {
+    //   checkUserName(userUuid, userName, userType)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<userNameFlag:' + result)
+    //         this.userNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
     // 重置密码
     resetPass () {
       this.$prompt('请输入密码', {

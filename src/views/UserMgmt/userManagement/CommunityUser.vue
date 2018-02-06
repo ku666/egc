@@ -1,6 +1,23 @@
 <template>
   <div class='ui-common'>
-    <el-form :inline="true" :model="listQuery" ref="listQuery">
+    <el-select filterable
+    v-model='selectedCommunity' 
+    placeholder='请选择小区' 
+    style="width:360px; margin-bottom:20px" 
+    @visible-change='getCommunityList'
+    @change='communitySelected'
+    >
+      <el-option
+        v-for='(item, index) in communityList'
+        :key='index'
+        :label='item.name'
+        :value='item.uuid'>
+      </el-option>
+    </el-select>
+
+    <div class="border-divide"></div>
+
+    <el-form :inline="true" :model="listQuery" ref="listQuery" style="margin-top:15px">
       <div class="search-container">
         <el-form-item label="用户姓名">
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
@@ -20,9 +37,9 @@
       </div>
     </el-form>
 
-    <div class="border-divide"></div>
+
     <div class="table-container">
-      <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
+      <user-list :tableData="userList" :params="userListParam" style="margin-top: 10px" :viewable="true" :editable="false" :deletable="false"
         @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
       </user-list>
     </div>
@@ -58,7 +75,8 @@ import {
   getUserStatusOptions,
   getDepartmentOptions,
   getContactTypeOptions,
-  listUserType
+  listUserType,
+  listCommunity
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -223,6 +241,39 @@ export default {
         userAccStatus: '',
         uuid: ''
       }
+    },
+    // 获取小区列表
+    getCommunityList () {
+      listCommunity()
+        .then(
+          function (result) {
+            this.communityList = result
+            this.total = result.pageCount
+            console.log('小区列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    // 选择小区
+    communitySelected (data) {
+      this.query.communityUuid = data.uuid
+      // getUserGroupList(this.query)
+      //   .then(
+      //     function (result) {
+      //       this.userGroupList = result.usergroupBaseVoList
+      //       this.total = result.pageCount
+      //       console.log('用户组：' + JSON.stringify(result))
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
     },
     // 重置搜选宽内容
     resetForm: function () {

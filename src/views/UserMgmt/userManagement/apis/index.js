@@ -219,8 +219,8 @@ export const getRoleList = (query) => {
 //   ).then(res => res.data)
 // }
 // 从Maindata查询角色完整清单
-export const getRoleListAllMaindata = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole'
+export const getRoleListAllMaindata = (data) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
   ).then(res => res.data)
 }
 // 新建角色
@@ -279,8 +279,8 @@ export const updateRoleResourceList = (query) => {
 ).then(res => res.data)
 }
 // 获取用户清单
-export const getRoleUser = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUser'
+export const getRoleUser = (data) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUser?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
   ).then(res => res.data)
 }
 // 获取资源清单
@@ -370,7 +370,7 @@ export const checkUserName = (userUuid, userName, userType) => {
 }
 // 获取部门下拉框
 export const getDepartmentOptions = (dictData) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listDepartment'
+  return Axios.get(contextPath + '/usermgmt/maindata/listDepartment?cloudFlag=' + dictData.cloudFlag
   ).then(res => res.data)
 }
 // 获取用户状态下拉框
