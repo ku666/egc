@@ -7,6 +7,11 @@
       <el-tab-pane label="关联角色" name="3" v-if="isAddFlag"></el-tab-pane>
     </el-tabs>
     <el-form ref='user' v-show='gridUser' :inline="true" :rules="rules" :model="user">
+      <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType">
+        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select">
+          <el-option v-for="userType in userTypeSelect" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode"> </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="登录 ID" :label-width="formLabelWidth">
         <el-input v-model="user.userName" auto-complete="off" placeholder="请输入登录 ID" class="user_el-input" :disabled="true"></el-input>
       </el-form-item>
@@ -98,6 +103,7 @@ export default {
     userAccStatusSelect: undefined,
     contactTypeSelect: undefined,
     departmentSelect: undefined,
+    userTypeSelect: undefined,
     tableData: undefined,
     tableDataUserUserGroup: undefined,
     curUserUuidParm: undefined,

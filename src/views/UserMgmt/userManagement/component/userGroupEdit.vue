@@ -125,8 +125,7 @@ import {
   // deleteDirUserGroup,
   deleteDirUser,
   deleteAssRole,
-  checkUserGroupName,
-  listUserType
+  checkUserGroupName
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -141,25 +140,26 @@ export default {
       remark: undefined,
       userType: undefined,
       uuid: undefined
-    }
+    },
+    userTypeList: undefined
   },
   components: {
     gridList
   },
   methods: {
-    getUserTypeList () {
-      listUserType()
-        .then(
-          function (result) {
-            this.userTypeList = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
+    // getUserTypeList () {
+    //   listUserType()
+    //     .then(
+    //       function (result) {
+    //         this.userTypeList = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log('错误：' + error)
+    //       }
+    //     )
+    // },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)

@@ -32,12 +32,12 @@
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions"
+      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
       @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <user-edit ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions"
+      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
       @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
     </el-dialog>
     <div>
@@ -66,7 +66,8 @@ import {
   createUser,
   getUserStatusOptions,
   getDepartmentOptions,
-  getContactTypeOptions
+  getContactTypeOptions,
+  listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -111,7 +112,8 @@ export default {
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
-      departmentOptions: undefined
+      departmentOptions: undefined,
+      userTypeOptions: undefined
     }
   },
   components: {
@@ -127,6 +129,9 @@ export default {
     }, {
       title: '登录 ID',
       prop: 'userName'
+    }, {
+      title: '用户类型',
+      prop: 'userType'
     }, {
       title: '职务',
       prop: 'position'
@@ -163,6 +168,19 @@ export default {
             function (result) {
               console.log('<<<<<departmentOptions:' + JSON.stringify(result))
               this.departmentOptions = result
+            }.bind(this)
+          )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+      // 获取用户类型信息
+      listUserType()
+        .then(
+            function (result) {
+              console.log('<<<<<userTypeOptions:' + JSON.stringify(result))
+              this.userTypeOptions = result
             }.bind(this)
           )
         .catch(

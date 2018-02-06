@@ -364,8 +364,8 @@ export const getUserListByPage = (listQuery) => {
   ).then(res => res.data)
 }
 // 校验用户名是否唯一
-export const checkUserName = (userUuid, userName) => {
-  return Axios.post(contextPath + '/usermgmt/user/checkUserName?userName=' + encodeURI(userName) + '&userUuid=' + userUuid
+export const checkUserName = (userUuid, userName, userType) => {
+  return Axios.post(contextPath + '/usermgmt/user/checkUserName?userName=' + encodeURI(userName) + '&userUuid=' + userUuid + '&userType=' + userType
   ).then(res => res.data)
 }
 // 获取部门下拉框
