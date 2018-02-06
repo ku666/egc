@@ -2,7 +2,7 @@
   <el-container>
     <div class="mapCon">
       <div class="infoCon">
-        <h3 class="infoTitle">{{courtInfo.courtName}}</h3>
+        <h2 class="infoTitle">{{courtInfo.courtName}}</h2>
         <div class="itemCl">
           <span class="itemlabel">小区地址：</span>
           <span class="itemvalue">{{courtInfo.regionName}}</span>
@@ -41,16 +41,6 @@
         <div id="mapECarts1" class="smallBox" style="width:570px; height:330px"></div>
         <div v-show="isOwnerErrInfo" class="errInfo"><img :src="perErrImg"></div>
       </el-card>
-      <!-- <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
-        <div id="mapECarts2" style="width:480px; height:300px"></div>
-        <div v-show="isPerErrInfo" class="errInfo">数据加载不成功</div>
-      </el-card>
-      <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
-        <div id="mapECarts3" style="width:480px; height:300px"></div>
-        <div v-show="isCarErrInfo" class="errInfo">数据加载不成功</div>
-      </el-card> -->
       <el-card class="echartsBox">
         <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
         <div id="mapECarts4" style="width:480px; height:330px"></div>
@@ -289,14 +279,23 @@ export default {
           let ageData = []
           let ageLevelData = []
           let list = res.data.data
+          let lastAge = 80
+          let lastAgeNum = 0
           if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
           if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
           let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
           list = list.ageGroupInfo
           list.map(function (item, index) {
-            ageLevelData.push(item.group)
-            ageData.push(item.countNum)
+            let aa = item.group.split('-')
+            if (parseInt(aa[0]) >= lastAge) {
+              lastAgeNum += item.countNum
+            } else {
+              ageLevelData.push(item.group)
+              ageData.push(item.countNum)
+            }
           })
+          ageLevelData.push(lastAge + '以上')
+          ageData.push(lastAgeNum)
           ownerOption.updateSexData(sexData)
           ownerOption.updateAgeLevelData(ageLevelData)
           ownerOption.updateAgeData(ageData)
@@ -366,6 +365,9 @@ export default {
   width: 520px;
   text-align: center;
   vertical-align: middle;
+}
+.infoTitle{
+  margin-top: 23px;
 }
 .itemCl {
   margin: 35px 0px;
