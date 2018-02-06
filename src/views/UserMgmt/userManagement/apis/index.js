@@ -249,8 +249,8 @@ export const updateRole = (data) => {
   ).then(res => res.data)
 }
 // 获取用户组清单
-export const getRoleUserGroup = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
+export const getRoleUserGroup = (data) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
   ).then(res => res.data)
 }
 // 获取用户组筛选清单
@@ -405,8 +405,8 @@ export const getContactTypeOptions = (dictData) => {
 }
 // --------------用户组--------------
 // 获取用户组下拉框列表信息
-export const getUserGroupListSelect = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
+export const getUserGroupListSelect = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 将当前用户添加到某用户组中
@@ -439,8 +439,8 @@ export const deleteUsergroup = (userUsergroupUuid) => {
 }
 // --------------关联角色--------------
 // 获取当前用户关联角色下拉框列表信息
-export const getUserRoleListSelect = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole'
+export const getUserRoleListSelect = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 将当前用户添加到某角色中
@@ -480,12 +480,12 @@ export const getResourceListByPage = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode
+  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 查询应用程序下拉框
-export const getAppCodeOptions = () => {
-  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1'
+export const getAppCodeOptions = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 新增资源

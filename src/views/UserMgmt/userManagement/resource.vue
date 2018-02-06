@@ -125,7 +125,8 @@ export default {
         q_resourceType: '2',
         q_resourceName: '',
         q_logicalAddress: '',
-        q_appCode: ''
+        q_appCode: '',
+        cloudFlag: 1
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
@@ -277,7 +278,7 @@ export default {
           }
         )
       // 获取应用程序下拉框信息
-      getAppCodeOptions()
+      getAppCodeOptions(1)
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
@@ -367,7 +368,8 @@ export default {
         'q_resourceType': '2',
         'q_resourceName': '',
         'q_logicalAddress': '',
-        'q_appCode': ''
+        'q_appCode': '',
+        'cloudFlag': 1
       }
       this.handleFilter()
     },

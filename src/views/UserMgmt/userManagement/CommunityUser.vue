@@ -40,13 +40,13 @@
 
     <div class="table-container">
       <user-list :tableData="userList" :params="userListParam" style="margin-top: 10px" :viewable="true" :editable="false" :deletable="false"
-        @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
+        @listenViewEvent="userViewEvent">
       </user-list>
     </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <user-view ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
+      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions" :userTypeList="userTypeOptions"
       @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-view>
     </el-dialog>
     <div>
@@ -69,14 +69,15 @@ import userView from './component/communityView/userView.vue'
 import {
   getUserListByPage,
   getUserDetail,
-  deleteUser,
-  updateUser,
-  createUser,
+  // deleteUser,
+  // updateUser,
+  // createUser,
   getUserStatusOptions,
   getDepartmentOptions,
   getContactTypeOptions,
   listUserType,
-  listCommunity
+  listCommunity,
+  getRoleUser
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -112,17 +113,23 @@ export default {
         q_userName: '',
         q_fullName: '',
         q_primaryPhone: '',
-        cloudFlag: 1
+        cloudFlag: 0
       },
       formLabelWidth: '120px',
       dictData: {
         userStatusDict: 'USER_ACC_STATUS',
-        contactTypeDict: 'CONTACT_TYPE'
+        contactTypeDict: 'CONTACT_TYPE',
+        cloudFlag: 0
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
       departmentOptions: undefined,
-      userTypeOptions: undefined
+      userTypeOptions: undefined,
+      communityList: undefined,
+      userListQuery: {
+        cloudFlag: 0,
+        courtUuid: undefined
+      }
     }
   },
   components: {
@@ -168,6 +175,18 @@ export default {
         .catch(
           function (error) {
             console.log(error)
+          }
+        )
+      listUserType()
+        .then(
+          function (result) {
+            this.userTypeOptions = result
+            console.log('user types: ' + result)
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('错误：' + error)
           }
         )
       // 获取部门信息
@@ -260,20 +279,20 @@ export default {
     },
     // 选择小区
     communitySelected (data) {
-      this.query.communityUuid = data.uuid
-      // getUserGroupList(this.query)
-      //   .then(
-      //     function (result) {
-      //       this.userGroupList = result.usergroupBaseVoList
-      //       this.total = result.pageCount
-      //       console.log('用户组：' + JSON.stringify(result))
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
+      this.userListQuery.communityUuid = data.uuid
+      getRoleUser(this.userListQuery)
+        .then(
+          function (result) {
+            this.userGroupList = result
+            // this.total = result.pageCount
+            console.log('小区用户列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     },
     // 重置搜选宽内容
     resetForm: function () {
@@ -301,95 +320,120 @@ export default {
       this.listQuery.page = 1
       this.loadData()
     },
-    // 新增用户
-    handleCreate () {
-      this.initUserInfo()  // 调用初始信息
-      this.dialogStatus = '添加用户'
-      this.dialogFormVisible = false
-      this.dialogCreateFormVisible = true
-      this.$refs.userCreateVue.reset()
-      this.addFlag = false
-    },
-    userDeleteEvent (row) {
-      var data = this.userList[row]
-      this.$confirm('确定删除此项？', '删除', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          console.log('删除操作')
-          this.delete(data.uuid, row)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    // 删除用户实体
-    delete (uuid, row) {
-      console.log('删除操作:' + uuid)
-      deleteUser(uuid)
-        .then(
-          function (result) {
-            console.log('删除成功:' + uuid)
-            this.loadData()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
-    userCreateEvent (data) {
-      console.log('新增用户')
-      data.userType = 1
-      createUser(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            this.loadData()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log('.....新增失败')
-          console.log(error)
-        })
-    },
-    userSaveEvent (data) {
-      console.log('user：保存了第' + data.userName + '行')
-      updateUser(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            this.loadData()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
-    userEditEvent (data) {
-      console.log('user：编辑了第' + data.userName + '行')
+    // // 新增用户
+    // handleCreate () {
+    //   this.initUserInfo()  // 调用初始信息
+    //   this.dialogStatus = '添加用户'
+    //   this.dialogFormVisible = false
+    //   this.dialogCreateFormVisible = true
+    //   this.$refs.userCreateVue.reset()
+    //   this.addFlag = false
+    // },
+    // userDeleteEvent (row) {
+    //   var data = this.userList[row]
+    //   this.$confirm('确定删除此项？', '删除', {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   })
+    //     .then(() => {
+    //       console.log('删除操作')
+    //       this.delete(data.uuid, row)
+    //     })
+    //     .catch(() => {
+    //       this.$message({
+    //         type: 'info',
+    //         message: '已取消删除'
+    //       })
+    //     })
+    // },
+    // // 删除用户实体
+    // delete (uuid, row) {
+    //   console.log('删除操作:' + uuid)
+    //   deleteUser(uuid)
+    //     .then(
+    //       function (result) {
+    //         console.log('删除成功:' + uuid)
+    //         this.loadData()
+    //         this.$message({
+    //           type: 'success',
+    //           message: '删除成功!'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    // userCreateEvent (data) {
+    //   console.log('新增用户')
+    //   data.userType = 1
+    //   createUser(data)
+    //     .then(
+    //       function (result) {
+    //         this.dialogFormVisible = false
+    //         this.dialogCreateFormVisible = false
+    //         this.loadData()
+    //         this.$message({
+    //           message: '保存成功！',
+    //           type: 'success'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(function (error) {
+    //       console.log('.....新增失败')
+    //       console.log(error)
+    //     })
+    // },
+    // userSaveEvent (data) {
+    //   console.log('user：保存了第' + data.userName + '行')
+    //   updateUser(data)
+    //     .then(
+    //       function (result) {
+    //         this.dialogFormVisible = false
+    //         this.dialogCreateFormVisible = false
+    //         this.loadData()
+    //         this.$message({
+    //           message: '保存成功！',
+    //           type: 'success'
+    //         })
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    // userEditEvent (data) {
+    //   console.log('user：编辑了第' + data.userName + '行')
+    //   this.curUserUuid = data.uuid
+    //   getUserDetail(data.uuid)
+    //     .then(
+    //       function (result) {
+    //         this.userForm = result.baseUser  // 用户基本信息
+    //         console.log('用户基本信息:' + JSON.stringify(result.baseUser))
+    //         console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
+    //         console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
+    //         // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
+    //         this.dialogStatus = '查看用户'
+    //         this.dialogFormVisible = true
+    //         this.dialogCreateFormVisible = false
+    //         this.$refs.userEditVue.reset()
+    //         this.addFlag = true
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log('.....失败')
+    //         console.log(error)
+    //       }
+    //     )
+    // },
+    userViewEvent (data) {
+      console.log('user：查看了第' + data.userName + '行')
       this.curUserUuid = data.uuid
       getUserDetail(data.uuid)
         .then(
@@ -399,10 +443,12 @@ export default {
             console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
             console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
             // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
-            this.dialogStatus = '编辑用户'
+            this.dialogStatus = '查看用户'
             this.dialogFormVisible = true
             this.dialogCreateFormVisible = false
-            this.$refs.userEditVue.reset()
+            if (this.$refs.userEditVue) {
+              this.$refs.userEditVue.reset()
+            }
             this.addFlag = true
           }.bind(this)
         )
@@ -426,5 +472,7 @@ export default {
 </script>
 
 <style scoped>
-  @import "assets/css/usermanagement.less"
+  .el-input {
+    border: none
+  }
 </style>

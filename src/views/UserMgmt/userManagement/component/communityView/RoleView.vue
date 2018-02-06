@@ -114,7 +114,7 @@ export default {
   },
   methods: {
     getRoleUserGroupList () {
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -293,6 +293,11 @@ export default {
       postRoleUser: {
         roleUuid: undefined,
         userUuid: undefined
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 0
       },
       selectedName: null,
       roleUserGroupList: undefined,
