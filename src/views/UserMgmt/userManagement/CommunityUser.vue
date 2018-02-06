@@ -128,7 +128,8 @@ export default {
       communityList: undefined,
       userListQuery: {
         cloudFlag: 0,
-        courtUuid: undefined
+        courtUuid: '',
+        userType: ''
       }
     }
   },
@@ -136,7 +137,7 @@ export default {
     userList,
     userView
   },
-  mounted () {
+  created () {
     this.loadData()
     this.userListParam = [{
       title: '用户姓名',
@@ -164,19 +165,19 @@ export default {
   methods: {
     // 加载数据
     loadData () {
-      getUserListByPage(this.listQuery)
-        .then(
-          function (result) {
-            console.log('get data by page:' + JSON.stringify(result))
-            this.userList = result.baseUserVoList
-            this.total = result.pageCount
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+      // getUserListByPage(this.listQuery)
+      //   .then(
+      //     function (result) {
+      //       // console.log('get data by page:' + JSON.stringify(result))
+      //       this.userList = result.baseUserVoList
+      //       this.total = result.pageCount
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
       listUserType()
         .then(
           function (result) {
@@ -193,7 +194,7 @@ export default {
       getDepartmentOptions(this.dictData)
         .then(
             function (result) {
-              console.log('<<<<<departmentOptions:' + JSON.stringify(result))
+              // console.log('<<<<<departmentOptions:' + JSON.stringify(result))
               this.departmentOptions = result
             }.bind(this)
           )
@@ -206,7 +207,7 @@ export default {
       listUserType()
         .then(
             function (result) {
-              console.log('<<<<<userTypeOptions:' + JSON.stringify(result))
+              // console.log('<<<<<userTypeOptions:' + JSON.stringify(result))
               this.userTypeOptions = result
             }.bind(this)
           )
@@ -219,7 +220,7 @@ export default {
       getUserStatusOptions(this.dictData)
         .then(
             function (result) {
-              console.log('<<<<<userStatusOptions:' + JSON.stringify(result))
+              // console.log('<<<<<userStatusOptions:' + JSON.stringify(result))
               this.userAccStatusOptions = result
             }.bind(this)
           )
@@ -232,7 +233,7 @@ export default {
       getContactTypeOptions(this.dictData)
         .then(
             function (result) {
-              console.log('<<<<<getContactTypeOptions:' + JSON.stringify(result))
+              // console.log('<<<<<getContactTypeOptions:' + JSON.stringify(result))
               this.contactTypeOptions = result
             }.bind(this)
           )
@@ -267,8 +268,8 @@ export default {
         .then(
           function (result) {
             this.communityList = result
-            this.total = result.pageCount
-            console.log('小区列表：' + JSON.stringify(result))
+            // this.total = result.pageCount
+            // console.log('小区列表：' + JSON.stringify(result))
           }.bind(this)
         )
         .catch(
@@ -279,12 +280,13 @@ export default {
     },
     // 选择小区
     communitySelected (data) {
-      this.userListQuery.communityUuid = data.uuid
+      this.userListQuery.courtUuid = data
+      console.log(this.userListQuery)
       getRoleUser(this.userListQuery)
         .then(
           function (result) {
-            this.userGroupList = result
-            // this.total = result.pageCount
+            this.userList = result
+            this.total = result.pageCount
             console.log('小区用户列表：' + JSON.stringify(result))
           }.bind(this)
         )
@@ -472,7 +474,4 @@ export default {
 </script>
 
 <style scoped>
-  .el-input {
-    border: none
-  }
 </style>

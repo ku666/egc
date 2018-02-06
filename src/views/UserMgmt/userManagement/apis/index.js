@@ -350,11 +350,11 @@ export const getUserDetail = (uuid) => {
 }
 // 查询用户列表信息
 export const getUserListByPage = (listQuery) => {
-  console.log('<<<<<q_userName:' + listQuery.q_userName)
-  console.log('<<<<<q_fullName:' + listQuery.q_fullName)
-  console.log('<<<<<q_primaryPhone:' + listQuery.q_primaryPhone)
-  console.log('<<<<<listQuery.page:' + listQuery.page)
-  console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  // console.log('<<<<<q_userName:' + listQuery.q_userName)
+  // console.log('<<<<<q_fullName:' + listQuery.q_fullName)
+  // console.log('<<<<<q_primaryPhone:' + listQuery.q_primaryPhone)
+  // console.log('<<<<<listQuery.page:' + listQuery.page)
+  // console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
   '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
