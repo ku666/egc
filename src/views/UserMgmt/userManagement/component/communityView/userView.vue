@@ -90,9 +90,9 @@
   </div>
 </template>
 <script>
-import contactList from './contact.vue'
-import assUserGroup from './associatedUserGroup.vue'
-import assUserRole from './associatedUserRole.vue'
+import contactList from '../contact.vue'
+import assUserGroup from '../associatedUserGroup.vue'
+import assUserRole from '../associatedUserRole.vue'
 import {
   checkUserName,
   resetPassword

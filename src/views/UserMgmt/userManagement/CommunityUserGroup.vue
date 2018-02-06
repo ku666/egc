@@ -71,7 +71,7 @@
 
 <script>
   import gridList from './component/gridList.vue'
-  import UserGroupView from './component/UserGroupView.vue'
+  import UserGroupView from './component/communityView/UserGroupView.vue'
   // import userGroupCreate from './component/userGroupCreate'
   import {
     getUserGroupList,

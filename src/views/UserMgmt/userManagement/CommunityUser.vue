@@ -65,7 +65,7 @@
 
 <script>
 import userList from './component/userList.vue'
-import userView from './component/userView.vue'
+import userView from './component/communityView/userView.vue'
 import {
   getUserListByPage,
   getUserDetail,
