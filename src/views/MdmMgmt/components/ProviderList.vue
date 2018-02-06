@@ -100,7 +100,7 @@
             </el-col>
             <el-col :span='12'>
               <el-form-item label='供应商类别' prop='category'>
-                <el-select v-model = 'providerForm.category' :disabled = 'disabledflag'>
+                <el-select v-model = 'providerForm.category'>
                   <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
                 </el-select>
               </el-form-item>
@@ -109,25 +109,25 @@
           <el-row>
             <el-col :span='12'>
               <el-form-item label='供应商名称' prop='providerName'>
-                <el-input v-model='providerForm.providerName' :disabled = 'disabledflag'></el-input>
+                <el-input v-model='providerForm.providerName'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
               <el-form-item label='联系方式' prop='contact'>
-                <el-input v-model='providerForm.contact' :disabled = 'disabledflag'></el-input>
+                <el-input v-model='providerForm.contact'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span='24'>
               <el-form-item label='供应商描述' prop='providerDesc'>
-                <el-input v-model='providerForm.providerDesc' :disabled = 'disabledflag'></el-input>
+                <el-input v-model='providerForm.providerDesc'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <div style='text-align: center'>
             <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
-            <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
+            <el-button type='primary' @click='save' class="action-btn">保存</el-button>
           </div>
         </el-form>
       </div>
@@ -337,7 +337,7 @@ export default {
         providerDesc: attr.providerDesc
       }
       this.providerDialogVisible = true
-      this.disabledflag = false
+      this.disabledflag = true
     },
     // 删除设备分类
     deleteProviderBatch: function () {
