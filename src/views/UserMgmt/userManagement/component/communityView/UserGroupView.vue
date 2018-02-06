@@ -7,8 +7,12 @@
     </el-tabs>
     <el-container style="margin-top:20px">
     <el-form ref='editForm' v-show='showSummary' label-width='100px' :model='editForm'>
-      <el-form-item label='用户组名称' class="read-only" type="text" > {{ editForm.usergroupName }} </el-form-item>
-      <el-form-item label='用户组说明' class="read-only" type="text" > {{ editForm.remark }} </el-form-item>
+      <el-form-item label='用户组名称' prop='usergroupName'>
+        <el-input v-model='editForm.usergroupName' placeholder='无数据' readonly></el-input>
+      </el-form-item>
+      <el-form-item label='用户组说明' prop='remark'>
+        <el-input type='textarea' rows="3" v-model='editForm.remark' style="width:650px" placeholder='无数据' readonly></el-input>
+      </el-form-item>
     </el-form>
     </el-container>
       <div v-show="showUser" style="margin-top:-5px">

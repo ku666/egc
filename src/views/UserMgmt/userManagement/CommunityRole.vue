@@ -1,8 +1,8 @@
 
 <template>
   <div class='ui-common'>
-     <div>
-      <el-row>
+     <div class="flex-c flex-1">
+      <el-row style="height: 100%;">
         <el-col :span="8"  style='height: 100%;' class="flex-c">
           <el-select filterable
             v-model='selectedCommunity' 
@@ -46,6 +46,7 @@
               :roleUsergroupData="subUsergroupData"
               :roleResourceData="subResourceData"
               :form="roleForm"
+              :userTypeList="userTypeOptions"
               style='margin-top: 20px'
             ></role-view>
           </el-card>

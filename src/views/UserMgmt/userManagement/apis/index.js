@@ -21,14 +21,10 @@ export const listCommunity = () => {
 
 // 获取所有用户组清单
 export const getUserGroupList = (query) => {
-  if (query.userGroupName) {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + encodeURI(query.userGroupName) + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
-    ).then(res => res.data)
-  } else {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
-    ).then(res => res.data)
-  }
+  return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + encodeURI(query.userGroupName) + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid + '&userType=' + query.userType
+  ).then(res => res.data)
 }
+
 // 创建用户组
 export const createUserGroup = (data) => {
   return Axios.post(contextPath + '/usermgmt/usergroup/create', data
