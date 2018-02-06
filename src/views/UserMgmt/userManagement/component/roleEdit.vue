@@ -18,7 +18,7 @@
         >
           <el-option
             v-for='item in userTypeList'
-            :key='item'
+            :key='item.itemCode'
             :label='item.itemName'
             :value='item.itemCode'>
           </el-option>
