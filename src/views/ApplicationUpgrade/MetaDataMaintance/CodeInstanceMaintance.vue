@@ -110,7 +110,7 @@ export default {
       loading: false,
       codeInstDetails: undefined,
       dialogTittle: '',
-      formLabelWidth: '120px',
+      formLabelWidth: '140px',
       tableTitleList: [
         {
           colName: '代码实例值',

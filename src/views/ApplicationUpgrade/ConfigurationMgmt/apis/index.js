@@ -36,17 +36,29 @@ export const downSearchResult = (params) => {
   ).then(res => res.data)
 }
 
+// export const downloadExcelFile = (params) => {
+//   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+//   return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
+//   ).then(res => {
+//     let blob = new Blob([res.data], { type: 'application/x-xls' })
+//     let link = document.createElement('a')
+//     link.href = window.URL.createObjectURL(blob)
+//     link.download = params
+//     link.click()
+//     return res.data
+//   })
 export const downloadExcelFile = (params) => {
   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
-  ).then(res => {
-    let blob = new Blob([res.data], { type: 'application/x-xls' })
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.download = params
-    link.click()
-    return res.data
-  })
+    ).then(res => {
+      let blob = new Blob([res.data], { type: 'application/x-xls' })
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = params
+      console.log('link.down -- > ' + params)
+      link.click()
+      return res.data
+    })
 }
 
 /** =================硬件服务器信息================================ */
@@ -270,6 +282,36 @@ export const getMiddlewareHistoryList = (id) => {
     ).then(res => res.data)
 
   // return Axios.get(contextPath + '/osServices/queryHistoryById/{id}').then(res => res.data)
+}
+
+/** =================运维管理================================ */
+
+// 运维管理列表数据
+export const getOperMgmtInfoByPage = (params) => {
+  // console.log('<<<<<middleware params data :' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData', params
+  ).then(res => res.data)
+}
+
+// 运维管理单条信息的详细信息
+export const getOperMgmtDetails = (id) => {
+  return Axios.get(BASE_PATH + '/auMiddleware/get?id=' + id).then(res => res.data)
+}
+
+// 更新运维管理
+export const updateOperMgmtInfo = (params) => {
+  return Axios.post(BASE_PATH + '/auMiddleware/update', params).then(res => res.data)
+}
+
+// 刷新运维管理
+export const syncOperMgmtInfo = (params) => {
+  return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
+  ).then(res => res.data)
+}
+
+// 运维管理历史记录信息
+export const getOperMgmtHistoryList = (id) => {
+  return Axios.get(BASE_PATH + '/auMiddleware/queryHistoryById?id=' + id).then(res => res.data)
 }
 
 /** =================网络设备信息================================ */

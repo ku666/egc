@@ -107,7 +107,7 @@ export default {
       loading: false,
       commCodeDetails: undefined,
       dialogTittle: '',
-      formLabelWidth: '120px',
+      formLabelWidth: '140px',
       tableTitleList: [
         {
           colName: '代码中文名称',

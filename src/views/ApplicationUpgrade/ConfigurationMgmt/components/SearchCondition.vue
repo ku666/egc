@@ -38,8 +38,8 @@
           <div class="btn-container">
             <el-form-item>
               <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-              <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 15px">搜索</el-button>
-              <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 30px">导出</el-button>
+              <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
+              <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn">导出</el-button>
             </el-form-item>
           </div>
         </div>
@@ -185,12 +185,13 @@ export default {
 </script>
 
 <style scoped>
-.download-template {
+/* .download-template {
   cursor: pointer;
 }
 .icon-download {
   color: #fff;
   background-color: #409EFF;
   border-color: #409EFF;
-}
+} */
+
 </style>
