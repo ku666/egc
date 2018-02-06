@@ -111,6 +111,16 @@
           </inputBox>
         </div>
       </el-col>
+      <el-col :span="7">
+        <div class="grid-content bg-purple">
+          <inputBox title="设备编码"
+                    code="deviceCode"
+                    ref="deviceCode"
+                    @listenToInput="_saveDeviceData"
+                    :maxlength=128>
+          </inputBox>
+        </div>
+      </el-col>
     </el-row>
     <div class="action-container">
       <el-button @click="_seekDevice" type="primary" icon="el-icon-search">查找</el-button>

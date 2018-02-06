@@ -114,7 +114,8 @@
         roleForm: {
           roleName: undefined,
           remark: undefined,
-          uuid: undefined
+          uuid: undefined,
+          userType: undefined
         }
       }
     },
@@ -196,6 +197,7 @@
               this.roleForm.roleName = result.roleBaseVo.roleName
               this.roleForm.remark = result.roleBaseVo.remark
               this.roleForm.uuid = result.roleBaseVo.uuid
+              this.roleForm.userType = result.roleBaseVo.userType
               this.roleName = result.roleBaseVo.roleName
             }.bind(this)
           )
@@ -275,6 +277,7 @@
         this.roleForm.roleName = undefined
         this.roleForm.remark = undefined
         this.roleForm.uuid = undefined
+        this.roleForm.userType = undefined
         this.dialogFormVisible = true
       }
     },
