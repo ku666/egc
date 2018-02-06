@@ -20,7 +20,7 @@
         <div class="btn-container">
           <el-form-item>
             <el-button @click="resetForm('listQuery')" type="primary" class="cancel-btn">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
           </el-form-item>
         </div>
       </div>

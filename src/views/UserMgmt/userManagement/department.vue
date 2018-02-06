@@ -10,9 +10,9 @@
           <el-form :model="listQuery" ref="listQuery">
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
             <span style="float:right">
-              <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称搜索" v-model="listQuery.q_departName"></el-input>
+              <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称查询" v-model="listQuery.q_departName"></el-input>
               <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
-              <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
+              <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
             </span>
           </el-form>
         </div>

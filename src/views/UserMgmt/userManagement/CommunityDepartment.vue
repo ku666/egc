@@ -15,12 +15,12 @@
                 </el-select>
               </el-form-item>
               <el-form-item label="　　部门名称">
-                <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入部门名称搜索" v-model="listQuery.q_departName"></el-input>
+                <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入部门名称查询" v-model="listQuery.q_departName"></el-input>
               </el-form-item>
               <div class="btn-container">
                 <el-form-item>
                   <el-button @click="handleFilterReset" type="primary" class="cancel-btn">清空</el-button>
-                  <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+                  <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
                 </el-form-item>
               </div>
             </div>

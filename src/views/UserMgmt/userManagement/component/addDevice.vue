@@ -17,7 +17,7 @@
               <el-select v-model="provider" @visible-change='getProviders' placeholder="请选择">
                   <el-option v-for="providerOpt in providerList" :key="providerOpt.itemCode" :label="providerOpt.itemName" :value="providerOpt.itemCode"> </el-option>
               </el-select>
-              <el-button class="search-btn" type="primary" @click="handleSearch" style="margin-left:10px">搜索</el-button>
+              <el-button class="search-btn" type="primary" @click="handleSearch" style="margin-left:10px">查询</el-button>
           </el-form-item>
        </el-form>
     </div>
