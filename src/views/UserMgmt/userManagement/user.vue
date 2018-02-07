@@ -32,7 +32,7 @@
       <div class="border-divide"></div>
 
       <div class="table-container">
-        <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
+        <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px" :deletable="true" :editable="true"
           @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
         </user-list>
       </div>
@@ -76,7 +76,8 @@
         </el-tooltip>
         <el-button icon="el-icon-upload" style="margin-center: 10px" @click="submitUpload" plain type="primary">上传到服务器</el-button>
       </el-upload> -->
-    <div id="fileUpload">
+    <div id="fileUpload" style="text-align:center; margin-top:40px">
+      <div style="width: 500px; margin: 0 auto">
       <el-upload
           ref="upload"
           class="avatar-uploader"
@@ -90,11 +91,22 @@
           :file-list="fileList">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传 excel 文件，且不超过 10M</div>
+          <div class="el-upload__tip" slot="tip">只能上传 excel 文件，且不超过 1M</div>
       </el-upload>
-      <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+      <el-button type="primary" @click="submitUpload" class="action-btn" style="margin: 0 auto; margin-top: 20px; display: block" icon="el-icon-upload2">上传服务器</el-button>
+      <el-dropdown @command="handleCommand">
+        <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" type="primary" class="action-btn">
+          下载模板<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="1">.xls</el-dropdown-item>
+        <el-dropdown-item command="2">.xlsm</el-dropdown-item>
+      </el-dropdown-menu>
+      </el-dropdown>
+      <!-- <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" @click="downloadTemplate" class="search-btn" type="primary">下载模板</el-button> -->
+      </div>
     </div>
-      <el-button icon="el-icon-download" style="margin-center: 10px; margin-left: 10px" @click="downloadTemplate" plain type="primary">下载模板</el-button>
+
     </div>
   </div>
 </template>
@@ -114,6 +126,7 @@ import {
   getContactTypeOptions,
   listUserType,
   uploadUserExcel
+  // downloadExcelTemplate
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -150,7 +163,8 @@ export default {
         q_userName: '',
         q_fullName: '',
         q_primaryPhone: '',
-        cloudFlag: 1
+        cloudFlag: 1,
+        courtUuid: ''
       },
       formLabelWidth: '120px',
       dictData: {
@@ -204,7 +218,7 @@ export default {
       getUserListByPage(this.listQuery)
         .then(
           function (result) {
-            console.log('get data by page:' + JSON.stringify(result))
+            // console.log('get data by page:' + JSON.stringify(result))
             this.userList = result.baseUserVoList
             this.total = result.pageCount
           }.bind(this)
@@ -436,45 +450,47 @@ export default {
       this.dialogFormVisible = false
       this.dialogCreateFormVisible = false
     },
-    handleRemove (file, fileList) {
-      console.log(file, fileList)
-    },
-    handlePreview (file) {
-      console.log(file)
-    },
+    // handleRemove (file, fileList) {
+    //   console.log(file, fileList)
+    // },
+    // handlePreview (file) {
+    //   console.log(file)
+    // },
     handleExceed (files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
-    beforeRemove (file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
-    },
+    // beforeRemove (file, fileList) {
+    //   return this.$confirm(`确定移除 ${file.name}？`)
+    // },
     submitUpload () {
       var fileLength = this.$refs.upload._data.uploadFiles.length
       console.log(fileLength)
       if (fileLength > 0) {
         uploadUserExcel(this.uploadFiles)
-        .then((res) => {
-          this.$message({
-            message: '上传成功!',
-            type: 'success'
-          }).bind(this)
-        }
-        ).catch(
-          function (error) {
+        .then(
+          function (result) {
             this.$message({
-              message: error.message,
-              center: true,
-              showClose: true,
-              type: 'error',
-              duration: 2000
-            }).bind(this)
-            console.log(error)
-          }
-        )
+              message: '上传成功！',
+              type: 'success'
+            })
+            this.fileList = []
+          }.bind(this)
+          ).catch(
+            function (error) {
+              this.$message({
+                message: error.message,
+                center: true,
+                showClose: true,
+                type: 'error',
+                duration: 2000
+              }).bind(this)
+              console.log(error)
+            }
+          )
       } else {
         this.$message({
           message: '请先选择需要上传的文件',
-          type: 'warning',
+          type: 'error',
           duration: 20000,
           center: true,
           showClose: true
@@ -488,6 +504,27 @@ export default {
         this.uploadFiles.append('file', fileList[0].raw)
       }
       // this.uploadFiles.files = fileList[0]
+    },
+    beforeUpload (file) {
+      var Xls = file.name.split('.')
+      console.log('Xls[1] --- > ' + Xls)
+      const isExcel = (Xls[Xls.length - 1] === 'xls' || Xls[Xls.length - 1] === 'xlsx' || Xls[Xls.length - 1] === 'xlsm')
+      console.log('Xls[Xls.length - 1] --- > ' + Xls[1])
+      const isLt10M = file.size / 1024 / 1024 < 1000
+      if (!isExcel) {
+        this.$message.error('上传文件只能是 xls/xlsx/xlsm 格式！')
+        this.fileList = []
+        return false
+      } else if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过 1MB!')
+        this.fileList = []
+        return false
+      } else {
+        return file
+      }
+    },
+    handleCommand (type) {
+      window.open('/egc-usermgmtcomponent/usermgmt/user/download/template?type=' + type)
     }
   }
 }

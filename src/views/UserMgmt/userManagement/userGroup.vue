@@ -10,7 +10,7 @@
       <div>
         <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
         <span style="float:right">
-          <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入用户组名称查询" v-model="searchText"></el-input>
+          <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入用户组名称" v-model="searchText"></el-input>
           <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
           <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
         </span>
@@ -92,7 +92,7 @@
     data () {
       return {
         userTypeOptions: undefined,
-        searchText: undefined,
+        searchText: '',
         showCreate: false,
         showEdit: false,
         dirChildrenUserGroupData: undefined,
@@ -125,14 +125,16 @@
         query: {
           currentPage: 1,
           pageSize: 10,
-          usergroupUuid: undefined,
-          userGroupName: undefined,
-          cloudFlag: 1
+          usergroupUuid: '',
+          userGroupName: '',
+          cloudFlag: 1,
+          courtUuid: '',
+          userType: ''
         },
         queryEdit: {
           currentPage: 1,
           pageSize: 5,
-          usergroupUuid: undefined
+          usergroupUuid: ''
         }
       }
     },
@@ -203,44 +205,26 @@
         return data.label.indexOf(value) !== -1
       },
       handleFilter () {
-        if (this.searchText) {
-          this.query.userGroupName = this.searchText
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-                // this.query.userGroupName = undefined
-                // this.searchText = undefined
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        } else {
-          this.searchText = undefined
-          this.query.userGroupName = undefined
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        }
+        this.query.userGroupName = this.searchText
+        getUserGroupList(this.query)
+          .then(
+            function (result) {
+              this.userGroupList = result.usergroupBaseVoList
+              this.total = result.pageCount
+              console.log('用户组：' + JSON.stringify(result))
+              // this.query.userGroupName = undefined
+              // this.searchText = undefined
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       },
       handleFilterReset () {
-        this.searchText = undefined
-        this.query.userGroupName = undefined
+        this.searchText = ''
+        this.query.userGroupName = ''
         getUserGroupList(this.query)
           .then(
             function (result) {
@@ -473,22 +457,18 @@
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    /* width: 20% */
-    width: 200px;
+    width: 15%
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    /* width: 25% */
-    width: 200px;
+    width: 15%
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    /* width: 35% */
-    width: 300px;
+    width: 30%
   }
   #usergroupTable >>> colgroup col:nth-child(4) {
-    /* width: 35% */
-    width: 450px;
+    width: 30%
   }
-  /* #usergroupTable >>> colgroup col:nth-child(4) {
-    width: 8%
-  } */
+  #usergroupTable >>> colgroup col:nth-child(5) {
+    width: 10%
+  }
 </style>

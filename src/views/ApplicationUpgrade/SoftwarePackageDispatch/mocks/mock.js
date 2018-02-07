@@ -3,7 +3,6 @@ import Mock from 'mockjs'
 let contextPath = '/scp-upgradecomponent'
 
 Mock.mock(contextPath + '/aupackagedispatches/listCourts', function () {
-  console.log('软件下发mock数据 -->   ')
   return {
     testData: [{
       'pageNo': 1,

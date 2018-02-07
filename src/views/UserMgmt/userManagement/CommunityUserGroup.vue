@@ -4,30 +4,37 @@
       <div v-show="showGrid == true" class="flex-1 flex-c">
         <div >
           <span>
-            <el-select filterable
-            v-model='selectedCommunity' 
-            placeholder='请选择小区' 
-            style="width:360px;" 
-            @visible-change='getCommunityList'
-            @change='communitySelected'
-            >
-              <el-option
-                v-for='(item, index) in communityList'
-                :key='index'
-                :label='item.name'
-                :value='item.uuid'>
-              </el-option>
-            </el-select>
-            <span style="float:right">
-            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block;" class="filter-item" placeholder="输入用户组名称查询" v-model="searchText"></el-input>
-            <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button></span>
+            <el-form :inline="true">
+              <el-form-item>
+                <el-select filterable
+                v-model='query.courtUuid'
+                placeholder='请选择小区' 
+                style="width:360px;" 
+                @visible-change='getCommunityList'
+                @change='communitySelected'
+                >
+                  <el-option
+                    v-for='(item, index) in communityList'
+                    :key='index'
+                    :label='item.name'
+                    :value='item.uuid'>
+                  </el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block;" class="filter-item" placeholder="请输入用户组名称" v-model="searchText"></el-input>
+              </el-form-item>
+              <span style="float:right">
+                <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
+                <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
+              </span>
+            </el-form>
           </span>
         </div>
 
         <!-- <div class="border-divide"></div> -->
 
-        <div class="table-container" style="margin-top:20px">
+        <div class="table-container" >
         <grid-list id="usergroupTable"
           :viewable="true" 
           :deletable="false" 
@@ -89,7 +96,7 @@
       return {
         selectedCommunity: undefined,
         communityList: undefined,
-        searchText: undefined,
+        searchText: '',
         showCreate: false,
         showEdit: false,
         dirChildrenUserGroupData: undefined,
@@ -146,6 +153,8 @@
           title: '直属用户',
           prop: 'dirUsersName'
         }]
+      },
+      getUserGroupListFunction () {
         getUserGroupList(this.query)
           .then(
             function (result) {
@@ -165,7 +174,7 @@
           .then(
             function (result) {
               this.communityList = result
-              this.total = result.pageCount
+              // this.total = result.pageCount
               // console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
@@ -177,77 +186,22 @@
       },
       communitySelected (data) {
         this.query.courtUuid = data
-        console.log(this.query)
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListFunction()
       },
       filterNode (value, data) {
         if (!value) return true
         return data.label.indexOf(value) !== -1
       },
       handleFilter () {
-        if (this.searchText) {
-          this.query.userGroupName = this.searchText
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-                // this.query.userGroupName = undefined
-                // this.searchText = undefined
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        } else {
-          this.searchText = undefined
-          this.query.userGroupName = undefined
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        }
+        // if (this.searchText) {
+        this.query.userGroupName = this.searchText
+        this.getUserGroupListFunction()
       },
       handleFilterReset () {
-        this.searchText = undefined
-        this.query.userGroupName = undefined
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.searchText = ''
+        this.query.userGroupName = ''
+        this.query.courtUuid = ''
+        this.getUserGroupListFunction()
       },
       handleTabClick (tab, event) {
         this.showGrid = (tab.name === '0')
@@ -257,34 +211,12 @@
       handleSizeChange (val) {
         this.query.pageSize = val
         this.query.usergroupName = this.searchText
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListFunction()
       },
       handleCurrentChange (val) {
         this.query.currentPage = val
         this.query.usergroupName = this.searchText
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListFunction()
       },
       userGroupDeleteEvent (data) {
         console.log('userGroup：删除了第' + data.uuid + '行')
@@ -293,18 +225,7 @@
         deleteUserGroup(this.usergroupUuid)
           .then(
             function (result) {
-              getUserGroupList(this.query)
-                .then(
-                  function (result) {
-                    this.userGroupList = result.usergroupBaseVoList
-                    this.total = result.pageCount
-                  }.bind(this)
-                )
-                .catch(
-                  function (error) {
-                    console.log(error)
-                  }
-                )
+              this.getUserGroupListFunction()
             }.bind(this)
           )
           .catch(
@@ -377,50 +298,14 @@
             )
       },
       childEditEvent (data) {
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组child编辑：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListFunction()
       },
       childDeleteEvent (data) {
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组child删除：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListFunction()
       },
       userGroupAddEvent (data) {
-        console.log('角色组：添加了 ' + data)
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        console.log('用户组：添加了 ' + data)
+        this.getUserGroupListFunction()
         this.dialogFormAddVisible = false
         this.showCreate = false
       }
@@ -437,4 +322,16 @@
 </script>
 
 <style scoped>
+  #usergroupTable >>> colgroup col:nth-child(1) {
+    width: 20%
+  }
+  #usergroupTable >>> colgroup col:nth-child(2) {
+    width: 35%
+  }
+  #usergroupTable >>> colgroup col:nth-child(3) {
+    width: 35%
+  }
+  #usergroupTable >>> colgroup col:nth-child(4) {
+    width: 10%
+  }
 </style>

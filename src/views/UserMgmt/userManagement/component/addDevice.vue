@@ -4,20 +4,22 @@
       <!-- 资源类别 -->
       <el-form align="left" :inline="true">
           <el-form-item label="资源类别">
-              <el-select v-model="appResource" @visible-change='getResourceTypeList' placeholder="请选择">
+              <el-select v-model="appResource" @visible-change='getResourceTypeList' placeholder="请选择资源类别">
                   <el-option v-for="appResourceOpt in resourceList" :key="appResourceOpt.itemCode" :label="appResourceOpt.itemName" :value="appResourceOpt.itemCode"></el-option>
               </el-select>
           </el-form-item>
-          <el-form-item label="设备类型">
-              <el-select v-model="device" @visible-change='getDeviceList' placeholder="请选择">
+          <el-form-item label="　　设备类型">
+              <el-select v-model="device" @visible-change='getDeviceList' placeholder="请选择设备类型">
                   <el-option v-for="deviceOpt in deviceList" :key="deviceOpt.itemCode" :label="deviceOpt.itemName" :value="deviceOpt.itemCode"> </el-option>
               </el-select>
           </el-form-item>
-          <el-form-item label="供应商">
-              <el-select v-model="provider" @visible-change='getProviders' placeholder="请选择">
+          <el-form-item label="　　供应商">
+              <el-select v-model="provider" @visible-change='getProviders' placeholder="请选择供应商">
                   <el-option v-for="providerOpt in providerList" :key="providerOpt.itemCode" :label="providerOpt.itemName" :value="providerOpt.itemCode"> </el-option>
               </el-select>
-              <el-button class="search-btn" type="primary" @click="handleSearch" style="margin-left:10px">查询</el-button>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="action-btn" type="primary" @click="handleSearch" style="margin-left:20px;">搜索</el-button>
           </el-form-item>
        </el-form>
     </div>
@@ -45,7 +47,6 @@
         <el-table
           ref="multipleTable"
           :data="tableData"
-          border
           @selection-change="handleSelectionChange">
           <el-table-column
             label="选择"
@@ -291,9 +292,15 @@ export default {
         }
       } else {
         if (this.appResource === '4') {
-          this.$msgbox('请选择至少一个设备组')
+          this.$msgbox({
+            title: '消息',
+            message: '请选择至少一个设备组'}
+          )
         } else {
-          this.$msgbox('请选择至少一个指定设备')
+          this.$msgbox({
+            title: '消息',
+            message: '请选择至少一个指定设备'}
+          )
         }
         return
       }
@@ -385,6 +392,8 @@ export default {
       this.appResource = '4'
       this.device = ''
       this.provider = ''
+      this.total = 0
+      this.pageSize = 5
       if (this.tableData.length > 0) {
         this.tableData = []
       }
