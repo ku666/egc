@@ -32,14 +32,11 @@ import resourceDevice from './ResourceDevice.vue'
 import resourceService from './ResourceService.vue'
 import resourceApp from './ResourceApplication.vue'
 import resourceMenu from './ResourceMenu.vue'
-// import {
-
-// } from '@/views/UserMgmt/userManagement/apis'
 export default {
   props: {
     isAddFlag: false,
     tableData: undefined,
-
+    defaultResourceTypeParm: undefined,
     deviceTypeSelect: undefined,
     providerCodeTypeSelect: undefined,
     resourceTypeSelect: undefined,
@@ -54,9 +51,7 @@ export default {
     resourceDeviceGroup
   },
   mounted () {
-    this.handleChange(this.resource.resourceType)
-    // this.initCreateResource()
-    this.appCodeValue = this.resource.appCode
+    this.handleChange(this.defaultResourceTypeParm)
   },
   data () {
     return {
@@ -68,7 +63,7 @@ export default {
       showDialog: false,
       curResourceType: undefined,
       resource: {
-        resourceType: '1',       // 资源类别
+        resourceType: undefined,       // 资源类别
         resourceName: undefined,       // 资源名称
         resourceUrl: undefined,        // 资源URL
         appCode: undefined,            // 程序代码
@@ -182,7 +177,7 @@ export default {
       this.showDeviceGroup = false
       this.showDevice = false
       this.resource = {
-        resourceType: '1',       // 资源类别
+        resourceType: undefined,       // 资源类别
         resourceName: undefined,       // 资源名称
         resourceUrl: undefined,        // 资源URL
         appCode: undefined,            // 程序代码

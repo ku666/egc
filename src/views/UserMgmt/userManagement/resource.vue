@@ -46,7 +46,8 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
       :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-create>
+      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
+      :defaultResourceTypeParm="defaultResourceType"> </resource-create>
     </el-dialog>
 
     <div>
@@ -84,6 +85,7 @@ export default {
   data () {
     return {
       resourceList: [],
+      defaultResourceType: undefined,
       resourceListParam: undefined,
       total: 0,
       dialogFormVisible: false,
@@ -278,7 +280,7 @@ export default {
           }
         )
       // 获取应用程序下拉框信息
-      getAppCodeOptions(1)
+      getAppCodeOptions()
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
@@ -363,13 +365,13 @@ export default {
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
-        'page': 1,
-        'limit': 10,
-        'q_resourceType': '2',
-        'q_resourceName': '',
-        'q_logicalAddress': '',
-        'q_appCode': '',
-        'cloudFlag': 1
+        page: 1,
+        limit: 10,
+        q_resourceType: '2',
+        q_resourceName: '',
+        q_logicalAddress: '',
+        q_appCode: '',
+        cloudFlag: 1
       }
       this.handleFilter()
     },
@@ -421,10 +423,10 @@ export default {
     // 新增资源
     handleCreate () {
       this.initResourceInfo()  // 调用初始信息
-      this.resourceForm.resourceType = '1'
+      this.defaultResourceType = this.listQuery.q_resourceType
       if (this.$refs.resourCreateVue) {
         this.$refs.resourCreateVue.initCreateResource()
-        this.$refs.resourCreateVue.handleChange(this.resourceForm.resourceType)
+        this.$refs.resourCreateVue.handleChange(this.defaultResourceType)
       }
       this.dialogStatus = '添加资源'
       this.dialogFormVisible = false
@@ -562,6 +564,7 @@ export default {
       this.handleFilter()
     },
     changeResourceType () {
+      this.defaultResourceType = this.listQuery.q_resourceType
       if (this.listQuery.q_resourceType === '1') {
         this.showQueryParm = false
         this.showQueryApp = true
