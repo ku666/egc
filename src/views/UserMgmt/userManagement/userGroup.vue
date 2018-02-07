@@ -92,7 +92,7 @@
     data () {
       return {
         userTypeOptions: undefined,
-        searchText: undefined,
+        searchText: '',
         showCreate: false,
         showEdit: false,
         dirChildrenUserGroupData: undefined,
@@ -205,44 +205,26 @@
         return data.label.indexOf(value) !== -1
       },
       handleFilter () {
-        if (this.searchText) {
-          this.query.userGroupName = this.searchText
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-                // this.query.userGroupName = undefined
-                // this.searchText = undefined
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        } else {
-          this.searchText = undefined
-          this.query.userGroupName = undefined
-          getUserGroupList(this.query)
-            .then(
-              function (result) {
-                this.userGroupList = result.usergroupBaseVoList
-                this.total = result.pageCount
-                console.log('用户组：' + JSON.stringify(result))
-              }.bind(this)
-            )
-            .catch(
-              function (error) {
-                console.log(error)
-              }
-            )
-        }
+        this.query.userGroupName = this.searchText
+        getUserGroupList(this.query)
+          .then(
+            function (result) {
+              this.userGroupList = result.usergroupBaseVoList
+              this.total = result.pageCount
+              console.log('用户组：' + JSON.stringify(result))
+              // this.query.userGroupName = undefined
+              // this.searchText = undefined
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       },
       handleFilterReset () {
-        this.searchText = undefined
-        this.query.userGroupName = undefined
+        this.searchText = ''
+        this.query.userGroupName = ''
         getUserGroupList(this.query)
           .then(
             function (result) {
