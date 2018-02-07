@@ -4,9 +4,7 @@
       class="deviceMgmTable"
       :data="sendStatusData"
       style="width:100%"
-      highlight-current-row
-      @select="_getCurRow"
-      @select-all="_getCurRow">
+      highlight-current-row>
       <el-table-column label="下发状态信息：">
         <el-table-column
           :resizable="false"
