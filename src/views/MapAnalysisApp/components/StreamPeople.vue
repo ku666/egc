@@ -110,7 +110,7 @@ export default {
         currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '0', // 报表类型（日、月、年）
-        starTime: null, // 开始时间
+        startTime: null, // 开始时间
         endTime: null // 结束时间
       },
       cellDetailsList: {}, // 小区详细信息
@@ -430,7 +430,7 @@ export default {
     },
     // 获取人流信息(图表)
     getData: function () {
-      this.parameter.starTime = this.processingDate(this.startDate)
+      this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)
       getCourtPerAccessInfo(this.parameter).then(res => {
         if (res.data.code === '00000') {
@@ -477,7 +477,7 @@ export default {
     },
     // 获取人流分页信息（表格）
     getPgingData: function () {
-      this.parameter.starTime = this.processingDate(this.startDate)
+      this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)
       getPerAccessPageList(this.parameter).then(res => {
         if (res.data.code === '00000') {
