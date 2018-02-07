@@ -125,14 +125,16 @@
         query: {
           currentPage: 1,
           pageSize: 10,
-          usergroupUuid: undefined,
-          userGroupName: undefined,
-          cloudFlag: 1
+          usergroupUuid: '',
+          userGroupName: '',
+          cloudFlag: 1,
+          courtUuid: '',
+          userType: ''
         },
         queryEdit: {
           currentPage: 1,
           pageSize: 5,
-          usergroupUuid: undefined
+          usergroupUuid: ''
         }
       }
     },
@@ -473,22 +475,18 @@
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    /* width: 20% */
-    width: 200px;
+    width: 15%
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    /* width: 25% */
-    width: 200px;
+    width: 15%
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    /* width: 35% */
-    width: 300px;
+    width: 30%
   }
   #usergroupTable >>> colgroup col:nth-child(4) {
-    /* width: 35% */
-    width: 450px;
+    width: 30%
   }
-  /* #usergroupTable >>> colgroup col:nth-child(4) {
-    width: 8%
-  } */
+  #usergroupTable >>> colgroup col:nth-child(5) {
+    width: 10%
+  }
 </style>

@@ -21,7 +21,10 @@ export const listCommunity = () => {
 // 导入用户 Excel
 export const uploadUserExcel = (params) => {
   let config = {
-    headers: {'Content-Type': 'multipart/form-data'}
+    headers: {
+      'enctype': 'multipart/form-data',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
   return Axios.post(contextPath + '/usermgmt/user/upload/excel', params, config
   ).then(res => {
@@ -225,7 +228,7 @@ export const createDirectUser = (data) => {
 
 // 查询角色清单
 export const getRoleList = (query) => {
-  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
+  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid
   ).then(res => res.data)
 }
 // // 查询角色完整清单
@@ -375,7 +378,7 @@ export const getUserListByPage = (listQuery) => {
   // console.log('<<<<<listQuery.page:' + listQuery.page)
   // console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag
+  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 校验用户名是否唯一

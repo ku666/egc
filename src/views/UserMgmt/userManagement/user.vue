@@ -76,7 +76,8 @@
         </el-tooltip>
         <el-button icon="el-icon-upload" style="margin-center: 10px" @click="submitUpload" plain type="primary">上传到服务器</el-button>
       </el-upload> -->
-    <div id="fileUpload">
+    <div id="fileUpload" style="text-align:center">
+      <div style="width: 360px; margin: 0 auto">
       <el-upload
           ref="upload"
           class="avatar-uploader"
@@ -90,11 +91,22 @@
           :file-list="fileList">
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传 excel 文件，且不超过 10M</div>
+          <div class="el-upload__tip" slot="tip">只能上传 excel 文件，且不超过 1M</div>
       </el-upload>
-      <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+      <el-button type="primary" @click="submitUpload" class="action-btn" style="margin: 0 auto; margin-top: 20px; display: block" icon="el-icon-upload2">上传服务器</el-button>
+      <el-dropdown>
+        <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" type="primary" class="action-btn">
+          下载模板<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item>.xls</el-dropdown-item>
+        <el-dropdown-item>.xlsx /.xlsm</el-dropdown-item>
+      </el-dropdown-menu>
+      </el-dropdown>
+      <!-- <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" @click="downloadTemplate" class="search-btn" type="primary">下载模板</el-button> -->
+      </div>
     </div>
-      <el-button icon="el-icon-download" style="margin-center: 10px; margin-left: 10px" @click="downloadTemplate" plain type="primary">下载模板</el-button>
+
     </div>
   </div>
 </template>
@@ -150,7 +162,8 @@ export default {
         q_userName: '',
         q_fullName: '',
         q_primaryPhone: '',
-        cloudFlag: 1
+        cloudFlag: 1,
+        courtUuid: ''
       },
       formLabelWidth: '120px',
       dictData: {
@@ -204,7 +217,7 @@ export default {
       getUserListByPage(this.listQuery)
         .then(
           function (result) {
-            console.log('get data by page:' + JSON.stringify(result))
+            // console.log('get data by page:' + JSON.stringify(result))
             this.userList = result.baseUserVoList
             this.total = result.pageCount
           }.bind(this)
