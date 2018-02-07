@@ -125,8 +125,7 @@ import {
   // deleteDirUserGroup,
   deleteDirUser,
   deleteAssRole,
-  checkUserGroupName,
-  listUserType
+  checkUserGroupName
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -141,29 +140,17 @@ export default {
       remark: undefined,
       userType: undefined,
       uuid: undefined
-    }
+    },
+    userTypeList: undefined
   },
   components: {
     gridList
   },
   methods: {
-    getUserTypeList () {
-      listUserType()
-        .then(
-          function (result) {
-            this.userTypeList = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -194,7 +181,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -233,7 +220,7 @@ export default {
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUser()
+      getRoleUser(this.listUserQuery)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -272,11 +259,12 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
-      getRoleListAllMaindata()
+      console.log(this.listRoleQuery)
+      getRoleListAllMaindata(this.listRoleQuery)
         .then(
           function (result) {
             this.tmpRoleList = result
+            console.log(this.tmpRoleList)
             getUsergroupRoleFilterList(this.usergroupUuid)
             .then(
               function (result) {
@@ -662,6 +650,21 @@ export default {
       queryRole: {
         roleUuid: undefined,
         usergroupUuid: undefined
+      },
+      listUserQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
+      },
+      listRoleQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 1
       },
       userGroupList: undefined,
       userList: undefined,

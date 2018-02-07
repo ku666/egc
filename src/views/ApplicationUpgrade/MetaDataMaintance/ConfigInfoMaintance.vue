@@ -101,7 +101,7 @@ export default {
       loading: false,
       codeInstDetails: undefined,
       dialogTittle: '',
-      formLabelWidth: '120px',
+      formLabelWidth: '140px',
       tableTitleList: [
         {
           colName: '配置项名称',

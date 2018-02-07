@@ -1,7 +1,22 @@
 <template>
   <div class='ui-common'>
     <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
-      <div class="search-container">
+      <el-select filterable
+      v-model='selectedCommunity' 
+      placeholder='请选择小区' 
+      style="width:360px; display: block; margin-bottom:20px" 
+      @visible-change='getCommunityList'
+      @change='communitySelected'
+      >
+        <el-option
+          v-for='(item, index) in communityList'
+          :key='index'
+          :label='item.name'
+          :value='item.uuid'>
+        </el-option>
+      </el-select>
+      <div class="border-divide"></div>
+      <div class="search-container" style="margin-top:20px">
         <el-form-item label="资源类别">
           <el-select v-model="listQuery.q_resourceType" placeholder="请选择" @change="changeResourceType" class="user_el-select">
             <el-option v-for="resourceType in resourceTypeOptions" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
@@ -24,9 +39,6 @@
           </el-form-item>
         </div>
       </div>
-      <div>
-        <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px"  @click="handleCreate" plain type="primary">添加</el-button>
-      </div>
     </el-form>
 
     <div class="border-divide"></div>
@@ -46,8 +58,7 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
       :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
-      :defaultResourceTypeParm="defaultResourceType"> </resource-create>
+      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-create>
     </el-dialog>
 
     <div>
@@ -78,14 +89,15 @@ import {
   getActionTypeOptions,
   updateResource,
   getDeviceTypeOptions,
-  getProviderCodeTypeOptions
+  getProviderCodeTypeOptions,
+  listCommunity
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
   data () {
     return {
+      communityList: undefined,
       resourceList: [],
-      defaultResourceType: undefined,
       resourceListParam: undefined,
       total: 0,
       dialogFormVisible: false,
@@ -127,8 +139,7 @@ export default {
         q_resourceType: '2',
         q_resourceName: '',
         q_logicalAddress: '',
-        q_appCode: '',
-        cloudFlag: 1
+        q_appCode: ''
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
@@ -345,6 +356,37 @@ export default {
           }
         )
     },
+    getCommunityList () {
+      listCommunity()
+        .then(
+          function (result) {
+            this.communityList = result
+            this.total = result.pageCount
+            console.log('小区列表：' + JSON.stringify(result))
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    communitySelected (data) {
+      this.query.communityUuid = data.uuid
+      // getUserGroupList(this.query)
+      //   .then(
+      //     function (result) {
+      //       this.userGroupList = result.usergroupBaseVoList
+      //       this.total = result.pageCount
+      //       console.log('用户组：' + JSON.stringify(result))
+      //     }.bind(this)
+      //   )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
+    },
     // 初始新增资源信息
     initResourceInfo () {
       this.resourceForm = {
@@ -365,13 +407,12 @@ export default {
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
-        page: 1,
-        limit: 10,
-        q_resourceType: '2',
-        q_resourceName: '',
-        q_logicalAddress: '',
-        q_appCode: '',
-        cloudFlag: 1
+        'page': 1,
+        'limit': 10,
+        'q_resourceType': '2',
+        'q_resourceName': '',
+        'q_logicalAddress': '',
+        'q_appCode': ''
       }
       this.handleFilter()
     },
@@ -423,10 +464,10 @@ export default {
     // 新增资源
     handleCreate () {
       this.initResourceInfo()  // 调用初始信息
-      this.defaultResourceType = this.listQuery.q_resourceType
+      this.resourceForm.resourceType = '1'
       if (this.$refs.resourCreateVue) {
         this.$refs.resourCreateVue.initCreateResource()
-        this.$refs.resourCreateVue.handleChange(this.defaultResourceType)
+        this.$refs.resourCreateVue.handleChange(this.resourceForm.resourceType)
       }
       this.dialogStatus = '添加资源'
       this.dialogFormVisible = false
@@ -564,7 +605,6 @@ export default {
       this.handleFilter()
     },
     changeResourceType () {
-      this.defaultResourceType = this.listQuery.q_resourceType
       if (this.listQuery.q_resourceType === '1') {
         this.showQueryParm = false
         this.showQueryApp = true

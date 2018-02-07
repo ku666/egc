@@ -37,11 +37,14 @@
 <script>
 import {
   createUserGroup,
-  checkUserGroupName,
-  listUserType
+  checkUserGroupName
+  // listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
+  props: {
+    userTypeList: undefined
+  },
   methods: {
     // loadData () {
     //   listUserType()
@@ -72,7 +75,7 @@ export default {
                   type: 'success'
                 })
                 this.$emit('listenToAddEvent', this.formData)
-                this.createForm.usergroupName = ''
+                this.createForm.usergroupName = undefined
                 this.createForm.remark = ''
                 this.createForm.userType = ''
               }.bind(this)
@@ -96,23 +99,23 @@ export default {
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
     },
-    getUserTypeList () {
-      console.log('start')
-      listUserType()
-        .then(
-          function (result) {
-            this.userTypeList = result
-            // this.userTypeList = result
-            console.log(this.userTypeList[0].itemName)
-            console.log(this.userTypeList)
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
+    // getUserTypeList () {
+    //   console.log('start')
+    //   listUserType()
+    //     .then(
+    //       function (result) {
+    //         this.userTypeList = result
+    //         // this.userTypeList = result
+    //         console.log(this.userTypeList[0].itemName)
+    //         console.log(this.userTypeList)
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log('错误：' + error)
+    //       }
+    //     )
+    // },
 
     // 校验用户组名的唯一性
     validateName (usergroupUuid, usergroupName) {

@@ -36,6 +36,7 @@
         :visible.sync="dialogFormVisible">
             <role-add
               :form="roleForm"
+              :userTypeList="userTypeOptions"
               @listenToAddEvent="roleAddEvent"
               v-show="showCreate"
             ></role-add>
@@ -49,6 +50,7 @@
               :roleUsergroupData="subUsergroupData"
               :roleResourceData="subResourceData"
               :form="roleForm"
+              :userTypeList="userTypeOptions"
               style='margin-top: 20px'
             ></role-edit>
           </el-card>
@@ -65,7 +67,8 @@
   import {
     getRoleList,
     getRoleData,
-    deleteRole
+    deleteRole,
+    listUserType
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     name: 'role',
@@ -116,7 +119,8 @@
           remark: undefined,
           uuid: undefined,
           userType: undefined
-        }
+        },
+        userTypeOptions: undefined
       }
     },
     components: {
@@ -147,6 +151,18 @@
           .catch(
             function (error) {
               console.log(error)
+            }
+          )
+        listUserType()
+          .then(
+            function (result) {
+              this.userTypeOptions = result
+              console.log(this.userTypeOptions)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log('错误：' + error)
             }
           )
       },

@@ -85,7 +85,7 @@ export default {
       loading: false,
       softwareBatchDetails: undefined,
       dialogTittle: '',
-      formLabelWidth: '120px',
+      formLabelWidth: '140px',
       tableTitleList: [
         {
           colName: '软件包批次名称',

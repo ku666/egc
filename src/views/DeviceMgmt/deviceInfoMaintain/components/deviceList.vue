@@ -1,6 +1,5 @@
 <template>
   <div>
-    <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
       class="deviceMgmTable"
       :data="mainDeviceTableData"
@@ -212,10 +211,6 @@
       handleCurrentChange (row) {
         this.currentRow = row
       },
-      _refresh () {
-        this.currentPage = 1
-        this.loadMainDeviceTableData(1, this.pageSize, this.selectData)
-      },
       _showChildDevice (index, row) {
         this.isSlaveShow = false
         this.isChildShow = true
@@ -247,6 +242,8 @@
           this.$refs.mainDeviceDialog.passToDialogUuid(this.uuid)
         }
         this.isDetailDialogShow = true
+        this.isSlaveShow = false
+        this.isChildShow = false
       }
     },
     mounted () {

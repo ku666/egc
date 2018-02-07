@@ -1,7 +1,7 @@
 
 <template>
   <div>
-    <el-form>
+    <el-form v-if="showSelect">
         <el-form-item label="添加用户组">
             <el-select v-model="selectedName" placeholder="请选择需要添加的用户组" class="user_el-select" @change='boxSelected'>
               <el-option v-for="item in userGroupListSelect" :key="item.uuid" :label="item.usergroupName" :value="item.uuid" :disabled="item.isDisabled" filterable> </el-option>
@@ -50,7 +50,9 @@
 
   export default {
     props: {
-      userUuidValue: undefined
+      userUuidValue: undefined,
+      showSelect: undefined,
+      cloudFlag: ''
     },
     watch: {
       associtedUserGroupData (val) {
@@ -96,7 +98,7 @@
             function (result) {
               this.associtedUserGroupData = result.userUsergroupVoList
               this.total = result.pageCount
-              getUserGroupListSelect()
+              getUserGroupListSelect(this.cloudFlag)
                 .then(
                   function (result) {
                     this.userGroupListSelect = result

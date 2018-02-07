@@ -82,13 +82,14 @@
             <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
             <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-            <el-table-column label='供应商' show-overflow-tooltip>
+            <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
+            <!-- <el-table-column label='供应商' show-overflow-tooltip>
               <template slot-scope="scope">
                 <div v-for='provider in providers' v-bind:key='provider.providerCode'>
                   {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
                 </div>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
             <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
             <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
@@ -119,13 +120,14 @@
       <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-      <el-table-column label='供应商' show-overflow-tooltip>
+      <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
+      <!-- <el-table-column label='供应商' show-overflow-tooltip>
         <template slot-scope="scope">
           <div v-for='provider in providers' v-bind:key='provider.providerCode'>
             {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
       <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>

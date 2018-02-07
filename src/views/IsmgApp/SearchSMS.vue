@@ -1,7 +1,7 @@
 <template>
   <div class='ui-common'>
-    <div class="app-container" calendar-list-container>
-      <div>
+    <!-- <div class="app-container" calendar-list-container> -->
+      <!-- <div> -->
         <el-form :inline="true">
           <el-form-item><el-checkbox v-model="searchInSendChk" label="即时发送短信"></el-checkbox></el-form-item>
           <el-form-item><el-checkbox v-model="searchFixSendChk" label="定时发送时间"></el-checkbox></el-form-item>
@@ -46,40 +46,42 @@
         </el-form>
         <div style="clear:both"></div>
         <div style="margin-top:20px;"></div>
-        <div class="table-container">
-          <el-table :data="smsList" highlight-current-row :default-sort = "{prop: 'sendTimeStr', order: 'ascending'}" style="width: 100%">
-            <el-table-column width="170" align="center" label="定时时间"> <template slot-scope="scope">
-              <span v-if="scope.row.sendTimeStr != '' && !(scope.row.sendTimeStr === null)">{{scope.row.sendTimeStr}}</span>
-              <span v-else>即时发送</span>
-            </template> </el-table-column>
-            <el-table-column width="200" align="center" label="手机号码"> <template slot-scope="scope">
-              <span>{{scope.row.mobiles}}</span>
-            </template> </el-table-column>
-            <el-table-column width="650" align="center" label="短信内容"> <template slot-scope="scope">
-              <span>{{scope.row.smsContent}}</span>
-            </template> </el-table-column>
-            <el-table-column width="80" align="center" label="扩展号码"> <template slot-scope="scope">
-              <span>{{scope.row.addSerial}} </span>
-            </template> </el-table-column>
-            <el-table-column width="80" align="center" label="字符编码"> <template slot-scope="scope">
-              <span>{{scope.row.srcCharset}}</span>
-            </template> </el-table-column>
-            <el-table-column width="80" align="center" label="短信等级"> <template slot-scope="scope">
-              <span>{{scope.row.smsPriority}}</span>
-            </template> </el-table-column>
-            <el-table-column width="100" align="center" label="短信ID"> <template slot-scope="scope">
-              <span>{{scope.row.smsId}}</span>
-            </template> </el-table-column>
-            <el-table-column align="center" label="发送状态"> <template slot-scope="scope">
-              <span>{{scope.row.sendStatus}}</span>
-            </template> </el-table-column>
-            <el-table-column label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button type="text" size="small"  @click="showDetailDialog(scope.row)">查看</el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+        <el-table
+          :data="smsList"
+          :default-sort = "{prop: 'sendTimeStr', order: 'ascending'}"
+          height="100%"
+          style="width: 100%">
+          <el-table-column width="170" label="定时时间"> <template slot-scope="scope">
+            <span v-if="scope.row.sendTimeStr != '' && !(scope.row.sendTimeStr === null)">{{scope.row.sendTimeStr}}</span>
+            <span v-else>即时发送</span>
+          </template> </el-table-column>
+          <el-table-column width="400" label="手机号码"> <template slot-scope="scope">
+            <span>{{scope.row.mobiles}}</span>
+          </template> </el-table-column>
+          <el-table-column width="400" label="短信内容"> <template slot-scope="scope">
+            <span>{{scope.row.smsContent}}</span>
+          </template> </el-table-column>
+          <el-table-column width="100" label="扩展号码"> <template slot-scope="scope">
+            <span>{{scope.row.addSerial}} </span>
+          </template> </el-table-column>
+          <el-table-column width="100" label="字符编码"> <template slot-scope="scope">
+            <span>{{scope.row.srcCharset}}</span>
+          </template> </el-table-column>
+          <el-table-column width="90" label="短信等级"> <template slot-scope="scope">
+            <span>{{scope.row.smsPriority}}</span>
+          </template> </el-table-column>
+          <el-table-column width="100" label="短信ID"> <template slot-scope="scope">
+            <span>{{scope.row.smsId}}</span>
+          </template> </el-table-column>
+          <el-table-column label="发送状态"> <template slot-scope="scope">
+            <span>{{scope.row.sendStatus}}</span>
+          </template> </el-table-column>
+          <el-table-column label="操作" width="100">
+            <template slot-scope="scope">
+              <el-button type="text" size="small"  @click="showDetailDialog(scope.row)">查看</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
         <div class="pagination-container">
           <el-pagination :page-sizes="[10, 20, 30, 50]" layout="total, sizes, prev, pager, next, jumper"
           @size-change="handleSizeChange"
@@ -87,7 +89,7 @@
           :current-page="currentPage"
           :total="total"> </el-pagination>
         </div>
-        <el-dialog title="短信细节" :visible.sync="dialogFormVisible" center>
+        <el-dialog title="短信细节" :visible.sync="dialogFormVisible">
           <el-row>
             <el-col :span="11" >
               <span>短信ID：{{detailRow.smsId}}</span>
@@ -135,8 +137,8 @@
              </el-col>
          </el-row>
         </el-dialog>
-      </div>
-    </div>
+      <!-- </div> -->
+    <!-- </div> -->
   </div>
 </template>
 
@@ -204,6 +206,7 @@ export default {
   },
   mounted () {
     this.initScrean()
+    this.handleFilter()
   },
   methods: {
     initScrean () {

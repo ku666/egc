@@ -10,9 +10,9 @@
           <el-form :model="listQuery" ref="listQuery">
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
             <span style="float:right">
-              <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称搜索" v-model="listQuery.q_departName"></el-input>
+              <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称查询" v-model="listQuery.q_departName"></el-input>
               <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
-              <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button>
+              <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
             </span>
           </el-form>
         </div>
@@ -21,7 +21,8 @@
       <div class="flex-1">
           <grid-list
             :editable="true" 
-            :deletable="true" 
+            :deletable="true"
+            :showOperation="true"
             :tableData="departmentList" 
             :params="departmentListParam" 
             style="margin-top: 15px" 
@@ -43,11 +44,11 @@
       </div>
       </div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible">
-        <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
+        <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" :departmentTypeSelect="departmentTypeOptions"  @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
       </el-dialog>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <department-edit ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
-        @gridSaveEvent="deptUpdateEvent"
+        @gridSaveEvent="deptUpdateEvent" :departmentTypeSelect="departmentTypeOptions"
         :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
       </el-dialog>
     </div>
@@ -80,11 +81,11 @@
           <el-card class="box-card" style='margin-left:10px;' v-show="showEditTree">
             <department-edit ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
             :departmentSelect="departmentOptions" @gridSaveEvent="deptUpdateEvent" @gridRefreshDir="loadDepartmentTree"
-            :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
+            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-edit>
           </el-card>
           <el-card class="box-card" style='margin-left:10px;' v-show="showCreateTree">
             <department-create  ref="departmentCreateTreeVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent"
-            @canelDialogEvent="handleClose"></department-create>
+            @canelDialogEvent="handleClose" :departmentTypeSelect="departmentTypeOptions"></department-create>
           </el-card>
         </el-col>
       </el-row>
@@ -103,7 +104,8 @@
     getDepartmentDetail,
     createDepartment,
     updateDepartment,
-    deleteDepartment
+    deleteDepartment,
+    getUserStatusOptions
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     data () {
@@ -126,7 +128,9 @@
         listQuery: {
           page: 1,
           limit: 10,
-          q_departName: ''
+          cloudFlag: 1,
+          q_departName: '',
+          q_courtUuid: ''
         },
         defaultProps: {
           children: 'children',
@@ -156,7 +160,11 @@
         dialogStatus: undefined,
         addFlag: false,
         departmentOptions: [],
-        curDepartmentUuid: ''
+        curDepartmentUuid: '',
+        dictData: {
+          userStatusDict: 'CLOUD_USER_TYPE'
+        },
+        departmentTypeOptions: undefined
       }
     },
     components: {
@@ -166,6 +174,7 @@
     },
     mounted () {
       this.loadData()
+      this.getDepartmentType()  // 加载部门类别下拉框
     },
     methods: {
       loadData () {
@@ -184,7 +193,7 @@
           )
       },
       loadDepartmentTree () {
-        getDepartmentTreeData()
+        getDepartmentTreeData(this.listQuery)
           .then(
             function (result) {
               this.treeData = []
@@ -295,7 +304,9 @@
         this.listQuery = {
           page: 1,
           limit: 10,
-          q_departName: ''
+          cloudFlag: 1,
+          q_departName: '',
+          q_courtUuid: ''
         }
         this.loadData()
       },
@@ -421,7 +432,7 @@
       },
       deptAddEvent (data) {
         console.log('部门：添加了 ' + JSON.stringify(data))
-        data.userType = 1
+        // data.userType = 1
         if (data.parentDepartmentUuid === 'CREATION_VIRTUAL_UUID') {
           data.parentDepartmentUuid = null
         }
@@ -452,6 +463,21 @@
         this.filterText = ''
         this.loadData()
         this.loadDepartmentTree()
+      },
+      // 获取用户状态信息
+      getDepartmentType () {
+        getUserStatusOptions(this.dictData)
+          .then(
+              function (result) {
+                console.log('<<<<<departmentTypeOptions:' + JSON.stringify(result))
+                this.departmentTypeOptions = result
+              }.bind(this)
+            )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       }
     },
     watch: {

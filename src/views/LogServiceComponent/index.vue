@@ -22,7 +22,7 @@
         <el-input v-model="formInline.url" placeholder="URL地址"></el-input>
       </el-form-item>
 
-      <el-form-item label="开始时间">
+      <!-- <el-form-item label="开始时间">
         <el-date-picker v-model="formInline.beginDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="开始时间" :picker-options="pickerOptionsStart">
         </el-date-picker>
       </el-form-item>
@@ -30,6 +30,10 @@
       <el-form-item label="结束时间">
         <el-date-picker v-model="formInline.endDate" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetime" placeholder="结束时间" :picker-options="pickerOptionsEnd">
         </el-date-picker>
+      </el-form-item> -->
+
+     <el-form-item label="时间范围">
+        <el-date-picker v-model="datevalue3" value-format='yyyy-MM-dd HH:mm:ss' format='yyyy-MM-dd HH:mm:ss' type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
 
       <el-form-item>
@@ -129,10 +133,10 @@ import { getLogservicelogListByPage, getLogserviceListSysCode } from '@/views/Lo
 
 export default {
   data () {
-    let that = this
     return {
       value: '',
       tableData: [],
+      datevalue3: [],
       formInline: {
         ip: '',
         beginDate: '',
@@ -171,19 +175,7 @@ export default {
       loading2: false,
       systemCodeOptions: [],
       selectedSystemCodeOptions: [],
-      multipleSelection: [],
-      // begin时间选择
-      pickerOptionsStart: {
-        disabledDate (time) {
-          return time.getTime() > new Date()
-        }
-      },
-      // end时间选择
-      pickerOptionsEnd: {
-        disabledDate (time) {
-          return time.getTime() <= new Date(that.formInline.beginDate).getTime()
-        }
-      }
+      multipleSelection: []
     }
   },
   mounted () {
@@ -218,6 +210,8 @@ export default {
     // 查询
     onSubmit () {
       // console.log('selectedSystemCodeOptions: ' + this.selectedSystemCodeOptions[0])
+      this.formInline.beginDate = this.datevalue3[0]
+      this.formInline.endDate = this.datevalue3[1]
       this.loadData()
     },
     resetForm (formName) {
@@ -228,6 +222,7 @@ export default {
       this.formInline.ip = ''
       this.formInline.url = ''
       this.value = ''
+      this.formInline.datevalue3 = []
     },
     // 改变分页大小
     handleSizeChange (val) {

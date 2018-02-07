@@ -429,18 +429,18 @@ export default {
             'icon': 'el-icon-menu',
             'url': '/usermgmt/communityuserauthmgmt',
             'submenus': [
-                  // {
-                  //   'id': null,
-                  //   'title': '用户管理',
-                  //   'url': '/userMgmt/userManagement/communityuser',
-                  //   'icon': null,
-                  //   'submenus': null,
-                  //   'items': null
-                  // },
+              {
+                'id': null,
+                'title': '查看用户',
+                'url': '/userMgmt/userManagement/CommunityUser',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
               {
                 'id': null,
                 'title': '查看部门',
-                'url': '/userMgmt/userManagement/department',
+                'url': '/userMgmt/userManagement/CommunityDepartment',
                 'icon': null,
                 'submenus': null,
                 'items': null
@@ -457,6 +457,14 @@ export default {
                 'id': null,
                 'title': '查看角色',
                 'url': '/userMgmt/userManagement/CommunityRole',
+                'icon': null,
+                'submenus': null,
+                'items': null
+              },
+              {
+                'id': null,
+                'title': '查看资源',
+                'url': '/userMgmt/userManagement/CommunityResource',
                 'icon': null,
                 'submenus': null,
                 'items': null
