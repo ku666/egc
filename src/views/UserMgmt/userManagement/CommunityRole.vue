@@ -4,12 +4,14 @@
      <div class="flex-c flex-1">
       <el-row style="height: 100%;">
         <el-col :span="8"  style='height: 100%;' class="flex-c">
+          <el-form :inline='true'>
+            <el-form-item>
           <el-select filterable
-            v-model='selectedCommunity' 
+            v-model='query.courtUuid' 
             placeholder='请选择小区' 
-            style="width:360px; display: block" 
             @visible-change='getCommunityList'
             @change='communitySelected'
+            style="width:260px"
             >
               <el-option
                 v-for='(item, index) in communityList'
@@ -17,7 +19,9 @@
                 :label='item.name'
                 :value='item.uuid'>
               </el-option>
-            </el-select>
+            </el-select></el-form-item>
+            <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px; float:right">清空</el-button>
+          </el-form>
           <div class="table-container" style="margin-top:20px">
           <grid-list id="usergroupTable"
             :viewable="true" 
@@ -71,7 +75,6 @@
     },
     data () {
       return {
-        selectedCommunity: undefined,
         communityList: undefined,
         showCreate: false,
         showGrid: false,
@@ -100,10 +103,11 @@
         dialogStatus: undefined,
         userGroupData: undefined,
         query: {
-          roleId: undefined,
+          roleId: '',
           currentPage: 1,
           pageSize: 10,
-          cloudFlag: 1
+          cloudFlag: 0,
+          courtUuid: ''
         },
         editQuery: {
           roleId: undefined,
@@ -130,17 +134,6 @@
           title: '角色说明',
           prop: 'remark'
         }]
-        // getRoleList(this.query)
-        //   .then(
-        //     function (result) {
-        //       this.roleData = result
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
       },
       getCommunityList () {
         listCommunity()
@@ -158,20 +151,21 @@
           )
       },
       communitySelected (data) {
-        this.query.communityUuid = data.uuid
-        // getUserGroupList(this.query)
-        //   .then(
-        //     function (result) {
-        //       this.userGroupList = result.usergroupBaseVoList
-        //       this.total = result.pageCount
-        //       console.log('用户组：' + JSON.stringify(result))
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
+        this.query.courtUuid = data
+        this.getRoleListFunction()
+      },
+      getRoleListFunction () {
+        getRoleList(this.query)
+          .then(
+            function (result) {
+              this.roleData = result
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       },
       roleViewEvent (data) {
         console.log(data)
@@ -202,56 +196,23 @@
       },
       roleAddEvent (data) {
         console.log('role：添加了 ' + data)
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleListParam = [{
-                title: '角色名称',
-                prop: 'roleName'
-              }, {
-                title: '角色说明',
-                prop: 'remark'
-              }]
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListFunction()
         this.dialogFormVisible = false
         this.showCreate = false
       },
       handleRoleCurrentChange (val) {
         this.query.currentPage = val
         // this.query.roleId = this.form.uuid
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListFunction()
       },
       handleRoleSizeChange (val) {
         this.query.pageSize = val
         // this.query.roleId = this.form.uuid
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListFunction()
+      },
+      handleFilterReset () {
+        this.query.courtUuid = ''
+        this.getRoleListFunction()
       }
     },
     created: function () {
@@ -263,12 +224,12 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 170px
+    width: 30%
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 250px
+    width: 50%
   }
   #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 100px
+    width: 20%
   }
 </style>

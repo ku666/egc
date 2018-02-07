@@ -9,7 +9,7 @@
           <el-table :data="operMainListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width"  show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
@@ -148,7 +148,7 @@ export default {
     }
   },
   methods: {
-    // 查询
+    // 条件查询
     _handleFilter () {
       this.loading = true
       getOperMgmtInfoByPage(this.searchConditionList)
@@ -156,18 +156,18 @@ export default {
           function (result) {
             this.operMainListData = result.middlewareList
             this.total = result.pageCount
-            this.loading = true
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
-            console.log(error)
             this.loading = false
+            console.log(error)
           }
         )
     },
 
-    // 查看运维管理每条详细信息
+    // 详情
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '运维管理信息详情'
       var rowData = this.operMainListData[rowIdx]
@@ -184,7 +184,7 @@ export default {
           .catch()
     },
 
-    // 编辑每条运维管理信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '运维管理修改'
       var rowData = this.operMainListData[rowIdx]
@@ -204,7 +204,7 @@ export default {
           )
     },
 
-    // 更新运维管理的信息
+    // 更新
     _updateMiddlewareInfo (params) {
       updateOperMgmtInfo(params)
         .then(
@@ -227,12 +227,12 @@ export default {
         )
     },
 
-    // 刷新运维管理信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.operMainListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件运维管理
+      // 刷新
       syncOperMgmtInfo(eachRowUUID)
         .then(
           function (result) {
@@ -240,10 +240,10 @@ export default {
             this.syncDataStatus = result.syncMessage.msg
             this.synDataLoading = false
             this.$message({
-              message: '数据更新成功',
+              message: '刷新成功',
               type: 'success'
             })
-            // this.loadData()
+            this.loadData()
           }.bind(this)
         ).catch(
           function (error) {
@@ -253,7 +253,7 @@ export default {
         )
     },
 
-    // 查看运维管理信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '运维管理历史信息详情'
       var rowData = this.operMainListData[rowIdx]
@@ -273,7 +273,7 @@ export default {
           )
     },
 
-    // 初始加载运维管理的信息
+    // 初始加载
     loadData () {
       getOperMgmtInfoByPage(this.searchConditionList)
         .then(
