@@ -494,9 +494,10 @@ export const deleteUserRole = (userRoleUuid) => {
 export const getResourceListByPage = (listQuery) => {
   console.log('<<<<<q_resourceType:' + listQuery.q_resourceType)
   console.log('<<<<<q_resourceName:' + listQuery.q_resourceName)
-  console.log('<<<<<q_logicalAddress:' + listQuery.q_logicalAddress)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
+  console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
   '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) +
   '&appCode=' + listQuery.q_appCode + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.q_courtUuid
@@ -537,6 +538,7 @@ export const getActionTypeOptions = (dictData) => {
 }
 // 获取资源类型下拉框信息
 export const getResourceTypeOptions = (dictData) => {
+  console.log('dictData.resourceTypeDict:' + dictData.resourceTypeDict)
   return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=' + dictData.resourceTypeDict
   ).then(res => res.data)
 }
