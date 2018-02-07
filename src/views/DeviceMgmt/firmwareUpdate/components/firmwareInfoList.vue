@@ -35,7 +35,7 @@
         <el-table-column
           :resizable="false"
           property="fileSize"
-          label="文件大小"
+          label="文件大小(MB)"
           width="200">
         </el-table-column>
         <el-table-column
@@ -48,7 +48,13 @@
         <el-table-column
           :resizable="false"
           property="providerCode"
-          label="厂商编码">
+          label="厂商编码"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
+          property="isSend"
+          label="是否已下发">
         </el-table-column>
         <el-table-column fixed="right" label="操作" width="110">
           <template slot-scope="scope">

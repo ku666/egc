@@ -6,10 +6,11 @@
           <div class="grid-content bg-purple">
             <input-box title="固件名称"
                        class="uploadInput"
+                       :required="true"
                        code="fileName"
                        :disabled="true"
                        @listenToInput="_saveDeviceData"
-                       :value="importData.fileName"
+                       :value="fileInfo.name"
                        ref="fileName">
             </input-box>
             <el-upload
@@ -31,6 +32,7 @@
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <select-box title="设备类型"
+                        :required="true"
                         code="deviceType"
                         :options="deviceType"
                         @listenToInput="_saveDeviceData"
@@ -41,6 +43,7 @@
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <select-box title="厂商编码"
+                        :required="true"
                         code="providerCode"
                         ref="providerCode"
                         :options="providerType"
@@ -51,6 +54,7 @@
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="固件版本"
+                       :required="true"
                        code="firmwareVersion"
                        @listenToInput="_saveDeviceData"
                        ref="firmwareVersion">
@@ -60,8 +64,10 @@
         <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box title="固件大小"
+                       :required="true"
                        code="fileSize"
                        ref="fileSize"
+                       :value="(fileInfo.size)?(parseInt(fileInfo.size)/1000000).toString():''"
                        append="MB"
                        @listenToInput="_saveDeviceData">
             </input-box>
@@ -78,6 +84,9 @@
                          :providerType="providerType">
       </firmware-maintain>
     </div>
+    <div class="maintain-container">
+      <send-status-list></send-status-list>
+    </div>
   </div>
 </template>
 
@@ -86,9 +95,10 @@
   import selectBox from '../../deviceInfoMaintain/components/selectBox'
   import inputBox from '../../deviceInfoMaintain/components/inputBox'
   import ElButton from 'element-ui/packages/button/src/button.vue'
-  import {readBlobAsDataURL} from '../../deviceInfoMaintain/assets/js/tool.js'
+  import {readBlobAsDataURL, getCurentTime} from '../../deviceInfoMaintain/assets/js/tool.js'
   import {getDeviceTypeList, getProviderList} from '../../deviceInfoMaintain/apis/index.js'
   import {importDmFotaFile} from '../apis/index'
+  import sendStatusList from './sendStatusList'
   import firmwareMaintain from './firmwareMaintain'
 
   export default {
@@ -97,14 +107,16 @@
       ElRow,
       selectBox,
       inputBox,
-      firmwareMaintain
+      firmwareMaintain,
+      sendStatusList
     },
     data () {
       return {
         deviceType: [{value: '', label: ''}],
         deviceTypeList: [],
         providerType: [],
-        importData: {}
+        importData: {},
+        fileInfo: {}
       }
     },
     methods: {
@@ -144,18 +156,26 @@
           .catch()
       },
       _importFile () {
-        importDmFotaFile(this.importData)
-          .then(result => {
+        if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['providerCode'] && this.importData['providerCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
+          this.importData['fileName'] = this.importData['deviceType'] + this.importData['providerCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
+          importDmFotaFile(this.importData)
+            .then(result => {
 
+            })
+            .catch()
+        } else {
+          this.$message({
+            message: '请将页面中带*号的必填项目补充完整',
+            type: 'warning'
           })
+        }
       },
       _handleUploadFile (file, fileList) {
-        // this.importData['fileData'] = file
-        // this.importData['fileName'] = file.name
         if (fileList.length === 2) {
           fileList.shift()
         }
-        this.importData['fileName'] = file.name
+        this.fileInfo = file
+        this.importData['fileSize'] = file.size
         readBlobAsDataURL(file.raw, (result) => {
           this.importData['fileData'] = result
         })
