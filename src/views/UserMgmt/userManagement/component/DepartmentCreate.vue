@@ -69,11 +69,15 @@ export default {
       department: {
         departmentName: undefined,
         parentDepartmentUuid: undefined,
+        departmentType: undefined,
         remark: undefined
       },
       rules: {
         departmentName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' }
+        ],
+        departmentType: [
+          { required: true, message: '请选择部门类别', trigger: 'change' }
         ]
       }
     }

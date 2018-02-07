@@ -6,6 +6,11 @@
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
     </el-tabs>
     <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment">
+      <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别">
+          <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
+       </el-select>
+      </el-form-item>
       <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
         <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
       </el-form-item>
@@ -52,7 +57,8 @@ export default {
       uuid: ''
     },
     curDepartmentUuidParm: undefined,
-    departmentSelect: undefined
+    departmentSelect: undefined,
+    departmentTypeSelect: undefined
   },
   components: {
     gridList,

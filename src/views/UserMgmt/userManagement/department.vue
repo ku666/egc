@@ -128,8 +128,9 @@
         listQuery: {
           page: 1,
           limit: 10,
+          cloudFlag: 1,
           q_departName: '',
-          courtUuid: ''
+          q_courtUuid: ''
         },
         defaultProps: {
           children: 'children',
@@ -192,7 +193,7 @@
           )
       },
       loadDepartmentTree () {
-        getDepartmentTreeData()
+        getDepartmentTreeData(this.listQuery)
           .then(
             function (result) {
               this.treeData = []
@@ -303,7 +304,9 @@
         this.listQuery = {
           page: 1,
           limit: 10,
-          q_departName: ''
+          cloudFlag: 1,
+          q_departName: '',
+          q_courtUuid: ''
         }
         this.loadData()
       },
@@ -429,7 +432,7 @@
       },
       deptAddEvent (data) {
         console.log('部门：添加了 ' + JSON.stringify(data))
-        data.userType = 1
+        // data.userType = 1
         if (data.parentDepartmentUuid === 'CREATION_VIRTUAL_UUID') {
           data.parentDepartmentUuid = null
         }
