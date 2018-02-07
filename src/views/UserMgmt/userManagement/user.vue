@@ -179,7 +179,8 @@ export default {
       uploadFiles: new FormData(),
       showFirstTab: true,
       showSecondTab: false,
-      activeName: 0
+      activeName: 0,
+      errorMsg: ''
     }
   },
   components: {
@@ -464,21 +465,44 @@ export default {
     // },
     submitUpload () {
       var fileLength = this.$refs.upload._data.uploadFiles.length
-      console.log(fileLength)
       if (fileLength > 0) {
         uploadUserExcel(this.uploadFiles)
         .then(
           function (result) {
-            this.$message({
-              message: '上传成功！',
-              type: 'success'
-            })
+            if (result.code === '0') {
+              this.errorMsg = result.msg
+              if (result.errorList != null) {
+                this.errorMsg += '：'
+                for (var i = 0; i < result.errorList.length; i++) {
+                  this.errorMsg += result.errorList[i].errorMsg + '、'
+                }
+                var length = this.errorMsg.length
+                this.errorMsg = this.errorMsg.substr(0, length - 1)
+              }
+              this.$message({
+                message: this.errorMsg,
+                // showClose: true,
+                type: 'error',
+                duration: 5000
+              })
+            } else if (result.code === '1') {
+              this.$message({
+                message: '用户导入成功！',
+                type: 'success'
+              })
+            } else {
+              this.$message({
+                message: '用户导入失败！',
+                type: 'error'
+              })
+            }
             this.fileList = []
           }.bind(this)
           ).catch(
             function (error) {
+              this.fileList = []
               this.$message({
-                message: error.message,
+                message: '用户导入失败！',
                 center: true,
                 showClose: true,
                 type: 'error',
