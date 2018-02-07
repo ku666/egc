@@ -233,7 +233,8 @@ export default {
       }
     },
     getRoleUserList () {
-      getRoleUser()
+      let cloudFlag = 1
+      getRoleUser(cloudFlag)
         .then(
           function (result) {
             this.tmpRoleUserList = result

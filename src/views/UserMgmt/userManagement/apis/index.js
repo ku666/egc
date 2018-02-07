@@ -21,10 +21,7 @@ export const listCommunity = () => {
 // 导入用户 Excel
 export const uploadUserExcel = (params) => {
   let config = {
-    headers: {
-      'enctype': 'multipart/form-data',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
+    headers: {'Content-Type': 'multipart/form-data'}
   }
   return Axios.post(contextPath + '/usermgmt/user/upload/excel', params, config
   ).then(res => {
@@ -33,6 +30,13 @@ export const uploadUserExcel = (params) => {
     return res.data
   })
 }
+
+// 下载 excel 模板
+export const downloadExcelTemplate = (type) => {
+  return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type
+  ).then(res => res.data)
+}
+
 // -----------------  用户组接口 ----------------
 
 // 获取所有用户组清单
@@ -297,8 +301,8 @@ export const updateRoleResourceList = (query) => {
 ).then(res => res.data)
 }
 // 获取用户清单
-export const getRoleUser = (data) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUser?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
+export const getRoleUser = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUser?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 获取资源清单

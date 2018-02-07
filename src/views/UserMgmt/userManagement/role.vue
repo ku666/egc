@@ -107,7 +107,8 @@
           roleId: '',
           currentPage: 1,
           pageSize: 10,
-          cloudFlag: 1
+          cloudFlag: 1,
+          courtUuid: ''
         },
         editQuery: {
           roleId: '',

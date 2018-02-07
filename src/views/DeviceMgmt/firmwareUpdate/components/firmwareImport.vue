@@ -78,15 +78,6 @@
         <el-button @click="_importFile" type="primary" icon="el-icon-upload">导入</el-button>
       </div>
     </div>
-    <div class="maintain-container">
-      <firmware-maintain :deviceTypeList="deviceTypeList"
-                         :deviceType="deviceType"
-                         :providerType="providerType">
-      </firmware-maintain>
-    </div>
-    <div class="maintain-container">
-      <send-status-list></send-status-list>
-    </div>
   </div>
 </template>
 
@@ -96,65 +87,33 @@
   import inputBox from '../../deviceInfoMaintain/components/inputBox'
   import ElButton from 'element-ui/packages/button/src/button.vue'
   import {readBlobAsDataURL, getCurentTime} from '../../deviceInfoMaintain/assets/js/tool.js'
-  import {getDeviceTypeList, getProviderList} from '../../deviceInfoMaintain/apis/index.js'
   import {importDmFotaFile} from '../apis/index'
-  import sendStatusList from './sendStatusList'
-  import firmwareMaintain from './firmwareMaintain'
 
   export default {
+    props: {
+      deviceTypeList: {
+        type: Array
+      },
+      deviceType: {
+        type: Array
+      },
+      providerType: {
+        type: Array
+      }
+    },
     components: {
       ElButton,
       ElRow,
       selectBox,
-      inputBox,
-      firmwareMaintain,
-      sendStatusList
+      inputBox
     },
     data () {
       return {
-        deviceType: [{value: '', label: ''}],
-        deviceTypeList: [],
-        providerType: [],
         importData: {},
         fileInfo: {}
       }
     },
     methods: {
-      _loadDeviceTypeList () {
-        getDeviceTypeList()
-          .then(
-            function (result) {
-              this.deviceTypeList = result.deviceCategoryList
-              for (let i = 0; i < this.deviceTypeList.length; i++) {
-                this.deviceType.push({
-                  value: this.deviceTypeList[i].typeCode,
-                  label: this.deviceTypeList[i].typeDesc
-                })
-              }
-            }.bind(this)
-          )
-          .catch()
-      },
-      _loadProviderCode () {
-        getProviderList()
-          .then(
-            function (result) {
-              this.providerList = result.providerList
-              var list = [{
-                value: '',
-                label: ''
-              }]
-              for (let i = 0; i < this.providerList.length; i++) {
-                list.push({
-                  value: this.providerList[i].providerCode,
-                  label: this.providerList[i].providerCode
-                })
-              }
-              this.providerType = list
-            }.bind(this)
-          )
-          .catch()
-      },
       _importFile () {
         if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['providerCode'] && this.importData['providerCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
           this.importData['fileName'] = this.importData['deviceType'] + this.importData['providerCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
@@ -185,10 +144,6 @@
           this.importData[key] = data[key]
         }
       }
-    },
-    mounted () {
-      this._loadDeviceTypeList()
-      this._loadProviderCode()
     }
   }
 </script>
