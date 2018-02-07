@@ -11,13 +11,13 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="80">
+            <!-- <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="detailsImg"/> -->
+                  <img :src="detailsImg"/>
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
         </div>
         <div>
@@ -70,40 +70,57 @@ export default {
       },
       tableTitleList: [
         {
+          colName: '批次',
+          prop: 'batchName',
+          width: 200
+        }, {
           colName: '软件包名称',
-          prop: 'uuid',
+          prop: 'packageName',
           width: 200
         }, {
           colName: '软件包版本',
-          prop: 'uuid',
-          width: 100
+          prop: 'packageVersion',
+          width: 150
         }, {
-          colName: '开发者',
-          prop: 'uuid',
-          width: 100
+          colName: '应用&组件英语名称',
+          prop: 'softwareType',
+          width: 150
         }, {
           colName: '应用&组件名称',
-          prop: 'uuid',
-          width: 300
+          prop: 'name',
+          width: 150
         }, {
-          colName: '前续软件包版本',
-          prop: 'uuid',
+          colName: '最低版本',
+          prop: 'earliestVer',
           width: 120
         }, {
-          colName: 'CPU要求（核数）',
-          prop: 'uuid',
-          width: 140
-        }, {
-          colName: '内存要求（G）',
-          prop: 'uuid',
-          width: 160
-        }, {
-          colName: '硬盘要求',
-          prop: 'uuid',
+          colName: '最高版本(可不限)',
+          prop: 'latestVer',
           width: 120
         }, {
-          colName: '备注',
-          prop: 'remark'
+          colName: '配置项1',
+          prop: 'extData',
+          width: 80
+        }, {
+          colName: '配置项2',
+          prop: 'extData',
+          width: 80
+        }, {
+          colName: '配置项3',
+          prop: 'extData',
+          width: 80
+        }, {
+          colName: '配置项4',
+          prop: 'extData',
+          width: 80
+        }, {
+          colName: '配置项5',
+          prop: 'extData',
+          width: 80
+        }, {
+          colName: '配置项6',
+          prop: 'extData',
+          width: 80
         }
       ],
       detailsTitle: '查看详情',
@@ -181,7 +198,7 @@ export default {
   },
 
   mounted () {
-    this.loadData()
+    // this.loadData()
   }
 }
 </script>

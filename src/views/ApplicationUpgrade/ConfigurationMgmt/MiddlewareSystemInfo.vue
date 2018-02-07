@@ -9,21 +9,17 @@
           <el-table :data="middlewareListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="details"/> -->
                 </el-button>
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                  <!-- <img :src="edit" /> -->
                 </el-button>
                 <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                  <!-- <img :src="refresh"/> -->
                 </el-button>
                 <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                  <!-- <img :src="history"/> -->
                 </el-button>
               </template>
             </el-table-column>
@@ -111,10 +107,6 @@ export default {
       editTitle: '编辑',
       refreshTitle: '比对更新',
       historyTitle: '历史信息',
-      details: require('./assets/images/details.png'),
-      edit: require('./assets/images/edit.png'),
-      refresh: require('./assets/images/refresh.png'),
-      history: require('./assets/images/history.png'),
       tableTitleList: [
         {
           colName: '省（直辖市）',
@@ -164,13 +156,13 @@ export default {
           function (result) {
             this.middlewareListData = result.middlewareList
             this.total = result.pageCount
-            this.loading = true
+            this.loading = false
           }.bind(this)
         )
         .catch(
           function (error) {
-            console.log(error)
             this.loading = false
+            console.log(error)
           }
         )
     },
@@ -192,7 +184,7 @@ export default {
           .catch()
     },
 
-    // 编辑每条中间件信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '中间件修改'
       var rowData = this.middlewareListData[rowIdx]
@@ -212,7 +204,7 @@ export default {
           )
     },
 
-    // 更新中间件的信息
+    // 更新
     _updateMiddlewareInfo (params) {
       updateMiddlewareInfo(params)
         .then(
@@ -235,7 +227,7 @@ export default {
         )
     },
 
-    // 更新中间件信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.middlewareListData[rowIdx]
@@ -248,23 +240,17 @@ export default {
             this.syncDataStatus = result.syncMessage.msg
             if (this.syncDataStatus) {
               this.synDataLoading = false
-              // setTimeout(() => {
-              // }, 12000)
             // 再次加载列表的数据
               this.loadServerList()
             // this.loadData()
               this.$message({
-                title: '数据更新成功',
-                message: '数据更新成功',
-                type: 'success',
-                duration: 2000
+                message: '刷新成功',
+                type: 'success'
               })
             } else {
               this.$message({
-                title: '数据更新失败',
-                message: '数据更新失败',
-                type: 'error',
-                duration: 2000
+                message: '刷新失败',
+                type: 'error'
               })
             }
           }.bind(this)
@@ -273,17 +259,11 @@ export default {
           function (error) {
             this.synDataLoading = false
             console.log(error)
-            this.$message({
-              title: '数据更新成功',
-              message: '数据更新成功',
-              type: 'error',
-              duration: 2000
-            })
           }
         )
     },
 
-    // 查看中间件信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '中间件历史信息详情'
       var rowData = this.middlewareListData[rowIdx]
@@ -303,7 +283,7 @@ export default {
           )
     },
 
-    // 初始加载中间件的信息
+    // 初始加载
     loadData () {
       getMiddlewareInfoByPage(this.searchConditionList)
         .then(

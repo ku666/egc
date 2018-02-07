@@ -14,7 +14,7 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="选择省" :label-width="formLabelWidth">
-          <el-select v-model="searchConditionList.province" placeholder="请选择省" clearable  @change="loadCityData">
+          <el-select v-model="searchConditionList.province" placeholder="请选择省" clearable>
             <el-option
               v-for="item in provinces"
               :key="item.label"
@@ -24,7 +24,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="选择市" :label-width="formLabelWidth">
-          <el-select v-model="searchConditionList.city" placeholder="请选择市" clearable  @change="loadDistrictData">
+          <el-select v-model="searchConditionList.city" placeholder="请选择市" clearable>
             <el-option
               v-for="item in cities"
               :key="item.label"
@@ -69,7 +69,7 @@
 
 <script>
 import { getProvinceDataList, getCityDataList, getDisctrictDataList } from '../../ConfigurationMgmt/apis/index'
-import { getLocalTime } from '../assets/js/tool'
+import { getLocalTime } from '../assets/js/index'
 export default {
   props: {
     searchConditionList: {
@@ -109,7 +109,6 @@ export default {
           }
         }]
       },
-      // value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       dateValue: '',
       maxlength: 30,
       formLabelWidth: '140px'
@@ -122,6 +121,7 @@ export default {
       this.searchConditionList.district = ''
       this.searchConditionList.condition = ''
       this.dateValue = ''
+      this.$emit('handleFilterEvent', this.searchConditionList, 'search')
     },
     _callHandleFilter () {
       if (this.dateValue) {
@@ -129,9 +129,9 @@ export default {
         this.searchConditionList.startDate = getLocalTime(dateArr[0])
         this.searchConditionList.endDate = getLocalTime(dateArr[1])
       }
-      if (this.validateInput()) {
-        this.$emit('handleFilterEvent', this.searchConditionList, 'search')
-      }
+      // if (this.validateInput()) {
+      this.$emit('handleFilterEvent', this.searchConditionList, 'search')
+      // }
     },
     _callHanderDownLoadResult () {
       this.$emit('handleFilterEvent', this.searchConditionList, 'download')
@@ -147,6 +147,7 @@ export default {
       }
       return true
     },
+    // 省
     loadProvinceData () {
       var that = this
       that.cities = []
@@ -170,6 +171,7 @@ export default {
             }
           )
     },
+    // 市
     loadCityData () {
       var that = this
       if (that.searchConditionList.city !== '') {
@@ -201,6 +203,7 @@ export default {
             }
           )
     },
+    // 区
     loadDistrictData () {
       var that = this
       that.provParams.province = that.searchConditionList.province
@@ -229,6 +232,14 @@ export default {
       } else {
         that.searchConditionList.district = ''
       }
+    }
+  },
+  watch: {
+    'searchConditionList.province': function (newValue, oldValue) {
+      this.loadCityData()
+    },
+    'searchConditionList.city' (newValue, oldValue) {
+      this.loadDistrictData()
     }
   },
   mounted () {

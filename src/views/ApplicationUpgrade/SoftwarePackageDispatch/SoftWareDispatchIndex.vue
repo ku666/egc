@@ -50,7 +50,11 @@
 <script>
 import orgTree from './components/OrgTree'
 import DispatchedSoftwareResults from './components/DispatchedSoftwareResults'
-import { getAllRegisterPackages, downloadDispatchResult, dispatchSoftwarePackage } from './apis/index'
+import {
+  getAllRegisterPackages,
+  downloadDispatchResult,
+  dispatchSoftwarePackage
+} from './apis/index'
 export default {
   components: {
     orgTree,
@@ -66,6 +70,7 @@ export default {
       multipleSelection: [],
       disabled: true,
       formLabelWidth: '160px',
+      maxlength: 30,
       searchCondition: {
         name: '',
         version: '',
@@ -76,39 +81,48 @@ export default {
           colName: '软件包名称',
           prop: 'name',
           width: 120
-        }, {
+        },
+        {
           colName: '软件包版本',
           prop: 'version',
           width: 100
-        }, {
+        },
+        {
           colName: '开发者',
           prop: 'provider',
           width: 100
-        }, {
+        },
+        {
           colName: '软件包源服务器名称',
           prop: 'hostname',
           width: 150
-        }, {
+        },
+        {
           colName: '软件包源路径名称',
           prop: 'path',
           width: 140
-        }, {
+        },
+        {
           colName: '软件包登记日期/时间',
           prop: 'registerTime',
           width: 180
-        }, {
+        },
+        {
           colName: '软件包登记操作者',
           prop: 'register',
           width: 140
-        }, {
+        },
+        {
           colName: '前续软件包名称',
           prop: 'preName',
           width: 150
-        }, {
+        },
+        {
           colName: '前续软件包版本',
           prop: 'latestPreVer',
           width: 120
-        }, {
+        },
+        {
           colName: '备注',
           prop: 'remark'
         }
@@ -117,45 +131,51 @@ export default {
       operator: ''
     }
   },
-
+  watch: {
+    activeNames (newVal, oldValue) {
+      console.log('activeNames newVal --> ' + newVal)
+      console.log('activeNames oldValue --> ' + oldValue)
+      if (newVal === '') {
+        this.loadDataAgain()
+      } else if (newVal !== '' && oldValue !== '') {
+        this.loadDataAgain()
+      }
+    }
+  },
   methods: {
     _handleClearQuery () {
-      this.searchCondition = {name: '', version: '', developer: ''}
+      this.searchCondition = { name: '', version: '', developer: '' }
     },
     _callHandleFilter () {
       console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
     },
     handleChange (val) {
-      this.loadDataAgain(val)
+      // console.log('active name -- > ' + val)
+      // this.loadDataAgain()
     },
-    loadDataAgain (val) {
+    loadDataAgain () {
       getAllRegisterPackages()
         .then(
           function (result) {
-            console.log('dispatch software packages result === > ' + JSON.stringify(result, null, ' '))
+            // console.log('dispatch software packages result === > ' + JSON.stringify(result))
             this.dispatchDataList = result.testData
           }.bind(this)
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
         )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     loadData () {
       getAllRegisterPackages()
         .then(
           function (result) {
-            console.log('dispatch software packages result === > ' + JSON.stringify(result, null, ' '))
             this.dispatchDataList = result.testData
-            console.log('dispatch software packages dispatchDataList === > ' + JSON.stringify(this.dispatchDataList, null, ' '))
             this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
@@ -178,30 +198,27 @@ export default {
         .then(
           function (result) {
             this.dispatchResult = result
-            console.log('_dispatchSoftwareToCourt data === > ' + JSON.stringify(this.dispatchResult, null, ' '))
+            console.log(
+              '_dispatchSoftwareToCourt data === > ' +
+                JSON.stringify(this.dispatchResult, null, ' ')
+            )
             this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     _downloadDispatchResult () {
       this.downloadResultVisible = false
       console.log('download dispath results')
       downloadDispatchResult()
-        .then(
-          function (result) {
-            this.$message.success('下载成功')
-          }
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .then(function (result) {
+          this.$message.success('下载成功')
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     }
   },
   mounted () {
@@ -223,5 +240,4 @@ export default {
   font-size: var(--font-size-el-table);
   padding-top: 13px;
 } */
-
 </style>
