@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
-            <el-input class="upgrade_el-input" v-model="softwareDetails.batchesName"></el-input>
+            <el-input class="upgrade_el-input" v-model="softwareDetails.batchesId"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -40,7 +40,7 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="新增修改功能点" :label-width="formLabelWidth">
-            <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.newFunction"></el-input>
+            <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.remark"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -54,7 +54,7 @@
               action=""
               drag
               multiple
-              :limit=1
+              :limit=10
               :show-file-list="true"
               :on-exceed="handleExceed"
               :on-change="handleOnchange"
@@ -102,7 +102,7 @@ export default {
         latestPreVer: [
           { required: true, message: '请输入前续版本', trigger: 'blur,change' }
         ],
-        newFunction: [
+        remark: [
           { required: true, message: '请输入新增修改功能点', trigger: 'blur,change' }
         ]
       }

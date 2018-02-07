@@ -47,6 +47,8 @@
 
     <el-table
       ref='deviceTable'
+      :expand-row-keys='expandRows'
+      :row-key="getRowKeys"
       :data='tableData'
       v-loading='loading'
       @row-dblclick='editDevicedbl'
@@ -56,7 +58,11 @@
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
+          <el-table empty-text='无子设备'
+            :data='props.row.slave'
+            :show-header='false'
+            :row-class-name='tableRowClassName'
+            @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备编码'>
@@ -172,6 +178,7 @@ export default {
     return {
       loading: false,
       showflag: false,
+      expandRows: [],
       // 检索用表单
       searchForm: {
         uuid: null,
@@ -324,8 +331,17 @@ export default {
       getDeviceCategoryList(this.searchForm)
         .then(
           function (result) {
+            let haveChilds = []
             this.tableData = result.data.result
             this.searchForm.totalCount = result.data.totalCount
+            if (Array.isArray(this.tableData) && this.tableData.length > 0) {
+              this.tableData.forEach(element => {
+                if (Array.isArray(element.slave) && element.slave.length > 0) {
+                  haveChilds.push(element.uuid)
+                }
+              })
+            }
+            this.expandRows = haveChilds
             this.loading = false
           }.bind(this)
         )
@@ -434,6 +450,9 @@ export default {
       // }
       // return ''
       return 'child-row'
+    },
+    getRowKeys: function (row) {
+      return row.uuid
     }
   }
 }

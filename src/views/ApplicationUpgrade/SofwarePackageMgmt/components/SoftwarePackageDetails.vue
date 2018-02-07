@@ -65,7 +65,6 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
       </el-form-item>
     </el-form>
-
   </div>
 </template>
 

@@ -96,7 +96,8 @@ export default {
         appCode: '',
         hasButton: true,
         hasAuthority: true,
-        uuid: ''
+        uuid: '',
+        cloudFlag: 1
       },
       isShowTree: true,
       isShowAppType: true,
@@ -113,7 +114,8 @@ export default {
     loadData () {
       console.log('<<<<<loadData app start:')
       // 获取应用程序名称下拉框信息
-      getResourceList(this.val)
+      var resourceQuery = {cloudFlag: 1, type: this.val}
+      getResourceList(resourceQuery)
         .then(
             function (result) {
               console.log('<<<<<getAppResourceList:' + result)
