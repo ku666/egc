@@ -1,7 +1,7 @@
 <template>
   <div class="item-container">
     <span class="sub-title">{{title}}<span v-show="required" style="color:red">*</span>：</span>
-    <el-input v-model="input"
+    <el-input v-model.trim="input"
               class="devicemgmInput"
               :placeholder="(disabled)? '':'请输入内容'"
               :disabled=disabled
