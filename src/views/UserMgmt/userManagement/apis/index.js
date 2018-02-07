@@ -498,7 +498,8 @@ export const getResourceListByPage = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode + '&cloudFlag=' + listQuery.cloudFlag
+  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) +
+  '&appCode=' + listQuery.q_appCode + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.q_courtUuid
   ).then(res => res.data)
 }
 // 查询应用程序下拉框
