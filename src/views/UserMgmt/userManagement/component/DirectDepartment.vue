@@ -11,6 +11,7 @@
     <el-table :data="directDepartmentData" max-height="580" element-loading-text="拼命加载中" style="width:100%" id="directTable">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="departmentName" label="部门名称" ></el-table-column>
+        <el-table-column prop="departmentType" label="部门类别" ></el-table-column>
         <el-table-column prop="parentDepartmentName" label="上级部门"></el-table-column>
         <el-table-column prop="childrenDepartments" label="下级部门" ></el-table-column>
         <el-table-column prop="directUsers" label="直属员工" ></el-table-column>
@@ -191,15 +192,18 @@ export default {
   width: 20%;
 }
 #directTable >>> colgroup :nth-child(2) {
-  width: 15%;
+  width: 10%;
 }
 #directTable >>> colgroup :nth-child(3) {
-  width: 25%;
+  width: 10%;
 }
 #directTable >>> colgroup :nth-child(4) {
   width: 25%;
 }
 #directTable >>> colgroup :nth-child(5) {
-  width: 15%;
+  width: 25%;
+}
+#directTable >>> colgroup :nth-child(6) {
+  width: 10%;
 }
 </style>

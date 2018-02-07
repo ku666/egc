@@ -1,6 +1,11 @@
 <template>
   <div>
     <el-form :model='department' :rules="rules" ref="department">
+      <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别">
+          <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
+       </el-select>
+      </el-form-item>
       <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
         <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
       </el-form-item>
@@ -29,7 +34,8 @@
 <script>
 export default {
   props: {
-    departmentSelect: undefined
+    departmentSelect: undefined,
+    departmentTypeSelect: undefined
   },
   methods: {
     create (formName) {
@@ -63,11 +69,15 @@ export default {
       department: {
         departmentName: undefined,
         parentDepartmentUuid: undefined,
+        departmentType: undefined,
         remark: undefined
       },
       rules: {
         departmentName: [
           { required: true, message: '请输入部门名称', trigger: 'blur' }
+        ],
+        departmentType: [
+          { required: true, message: '请选择部门类别', trigger: 'change' }
         ]
       }
     }

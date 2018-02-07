@@ -65,10 +65,8 @@ var option = {
         'LightSkyBlue',
         'lightgreen',
         'DeepSkyBlue',
-        // 'yellow',
         'LimeGreen'
-        // 'yellow'
-      ] // lightgrey
+      ]
     },
     calculable: true
   },
