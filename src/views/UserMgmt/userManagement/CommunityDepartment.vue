@@ -99,7 +99,7 @@
 
 <script>
   import gridList from './component/gridList.vue'
-  import departmentView from './component/communityView/DepartmentView.vue'
+  import departmentView from './component/communityView/departmentView.vue'
   import {
     getDepartmentList,
     getParenetDepartmentSelect,
