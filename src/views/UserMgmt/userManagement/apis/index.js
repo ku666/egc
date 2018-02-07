@@ -17,6 +17,19 @@ export const listCommunity = () => {
   return Axios.get(contextPath + '/usermgmt/maindata/getCourts'
   ).then(res => res.data)
 }
+
+// 导入用户 Excel
+export const uploadUserExcel = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(contextPath + '/usermgmt/user/upload/excel', params, config
+  ).then(res => {
+    console.log('---------------upload excel files result ---------- ')
+    console.info(res)
+    return res.data
+  })
+}
 // -----------------  用户组接口 ----------------
 
 // 获取所有用户组清单
