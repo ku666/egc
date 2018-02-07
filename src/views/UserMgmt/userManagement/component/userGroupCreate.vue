@@ -75,7 +75,7 @@ export default {
                   type: 'success'
                 })
                 this.$emit('listenToAddEvent', this.formData)
-                this.createForm.usergroupName = ''
+                this.createForm.usergroupName = undefined
                 this.createForm.remark = ''
                 this.createForm.userType = ''
               }.bind(this)
