@@ -51,7 +51,7 @@
               :show-footer="false"
               @select="_getCurRow"
               @select-all="_getCurRow"
-              @current-change="_getCurRow">
+              @cell-dblclick="_getCurRow">
       <el-table-column
         v-if="dialogType"
         :resizable="false"
