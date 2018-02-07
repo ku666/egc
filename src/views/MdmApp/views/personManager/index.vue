@@ -90,7 +90,7 @@
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 750px">
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 920px">
       <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
       <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
@@ -141,8 +141,8 @@
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
           <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
-            <el-table-column label="小区" prop="courtName" min-width="420px"></el-table-column>
-            <el-table-column label="房屋" prop="houseAddress" min-width="420px"></el-table-column>
+            <el-table-column label="小区" prop="courtName" min-width="460px"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress" min-width="460px"></el-table-column>
             <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
@@ -405,7 +405,7 @@ div:hover {
 .header_style {
   padding: 13px 3%;
   border-radius: 4px;
-  background: #f5f7fa;
+  /* background: #f5f7fa; */
   width: 92%;
   color: #0078F4;
   font-size: 18px;
