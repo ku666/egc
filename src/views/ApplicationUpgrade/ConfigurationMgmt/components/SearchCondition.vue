@@ -37,9 +37,11 @@
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
-              <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-              <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
-              <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn">导出</el-button>
+              <el-button @click="_handleClearQuery" :class="cancelBtnClsName">清空</el-button>
+              <el-button type="primary" @click="_callHandleFilter" :class="actionBtnClsName">搜索</el-button>
+              <el-button type="primary" @click="_callHanderDownLoadResult" :class="actionBtnClsName">导出</el-button>
+              <el-button type="primary" @click="_callUploadFile" :class="actionBtnClsName" v-show="isShowBtn">导入</el-button>
+              <el-button type="primary" @click="_callDownTemplate" :class="actionBtnClsName" v-show="isShowBtn">模板下载</el-button>
             </el-form-item>
           </div>
         </div>
@@ -62,7 +64,10 @@ export default {
       districts: [],
       provParams: {},
       maxlength: 30,
-      formLabelWidth: '80px'
+      formLabelWidth: '80px',
+      isShowBtn: false,
+      actionBtnClsName: 'action-btn',
+      cancelBtnClsName: 'cancel-btn'
     }
   },
   methods: {
@@ -80,6 +85,19 @@ export default {
     },
     _callHanderDownLoadResult () {
       this.$emit('handleFilterEvent', this.searchConDetails, 'download')
+    },
+    _callUploadFile () {
+      this.$emit('handleFilterEvent', this.searchConDetails, 'upload')
+    },
+    _callDownTemplate () {
+      this.$emit('handleFilterEvent', this.searchConDetails, 'downtemplate')
+    },
+    setBtnVisible () {
+      if (this.searchConDetails.pageFlag === 'hw' || this.searchConDetails.pageFlag === 'ne' || this.searchConDetails.pageFlag === 'as') {
+        this.isShowBtn = true
+        this.actionBtnClsName = 'small-action-btn'
+        this.cancelBtnClsName = 'small-cancel-btn'
+      }
     },
     // 验证输入内容是否为空
     validateInput () {
@@ -179,19 +197,29 @@ export default {
     }
   },
   mounted () {
+    console.log('searchConDetails -- > ' + JSON.stringify(this.searchConDetails))
+    this.setBtnVisible()
     this.loadProvinceData()
   }
 }
 </script>
 
 <style scoped>
-/* .download-template {
-  cursor: pointer;
+/* 用于取消，重置等撤销类动作类按钮 */
+.small-cancel-btn{
+  width: 66px;
+  height: 40px;
+  background: #fffcfc;
+  color: #0078f4;
+  border-radius: 4px;
+  border-color: #0078f4;
 }
-.icon-download {
-  color: #fff;
-  background-color: #409EFF;
-  border-color: #409EFF;
-} */
+/* 用于搜索等按钮 */
+.small-action-btn{
+  width: 88px;
+  height: 40px;
+  background: #0078f4;
+  border-radius: 4px;
+}
 
 </style>

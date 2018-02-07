@@ -29,25 +29,64 @@ export const getDisctrictDataList = (params) => {
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 
-// 下载查询结果
-export const downSearchResult = (params) => {
+// 导入
+export const uploadHardWareConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  ).then(res => {
+    console.log('---------------upload excel files  result ---------- ')
+    console.info(res)
+    return res.data
+  })
+}
+
+export const uploadNetEquipConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  ).then(res => {
+    console.log('---------------upload excel files  result ---------- ')
+    console.info(res)
+    return res.data
+  })
+}
+
+export const uploadAppServiceConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  ).then(res => {
+    console.log('---------------upload excel files  result ---------- ')
+    console.info(res)
+    return res.data
+  })
+}
+
+// 导出模板
+export const downHardwareTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/common/generateExcel', params
   ).then(res => res.data)
 }
 
-// export const downloadExcelFile = (params) => {
-//   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-//   return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
-//   ).then(res => {
-//     let blob = new Blob([res.data], { type: 'application/x-xls' })
-//     let link = document.createElement('a')
-//     link.href = window.URL.createObjectURL(blob)
-//     link.download = params
-//     link.click()
-//     return res.data
-//   })
-export const downloadExcelFile = (params) => {
+export const downloadEquipTemplate = (params) => {
+  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  ).then(res => res.data)
+}
+
+export const downloadAppServiceTemplate = (params) => {
+  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  ).then(res => res.data)
+}
+
+// 导出结果
+export const downloadResultFile = (params) => {
   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
     ).then(res => {

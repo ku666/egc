@@ -67,7 +67,7 @@ import searchCondition from './components/SearchCondition'
 import osDetails from './components/OsDetails'
 import osEdit from './components/OsEdit'
 import osHistory from './components/OsHistory'
-import { getOSInfoByPage, getOSDetails, updateOSInfo, getOSHistoryList, syncOSData, downSearchResult, downloadExcelFile } from './apis/index'
+import { getOSInfoByPage, getOSDetails, updateOSInfo, getOSHistoryList, syncOSData, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -184,123 +184,123 @@ export default {
           }
         )
       } else if (type === 'download') {
+        this.loading = false
         // 获取满足搜索条件的所有数据
         this.searchConditionList.pageSize = this.total
-        // this.searchConditionList.total = this.total
-        // this.searchConditionList.flag = 1
-        // downloadExcelFile(this.searchConditionList)
-        // .then(
-        //   function (result) {
-        //     this.excelPath = result.data
-        //     console.log(' excel path -- > ' + this.excelPath)
-        //   }.bind(this)
-        // ).catch(
-        //   function (error) {
-        //     console.log(error)
-        //   }
-        // )
-        this.loading = false
-        getOSInfoByPage(params)
+        this.searchConditionList.total = this.total
+        this.searchConditionList.flag = 1
+        downloadResultFile(this.searchConditionList)
         .then(
           function (result) {
-            this.downloadData = result.ossList
-            if (this.downloadData !== undefined && this.downloadData.length > 0) {
-              for (let i = 0; i < this.downloadData.length; i++) {
-                let element = this.downloadData[i]
-                if (element.hasOwnProperty('courtDto')) {
-                  if (element.courtDto !== null) {
-                    this.lineData.push(element.courtDto.province)
-                    this.lineData.push(element.courtDto.city)
-                    this.lineData.push(element.courtDto.name)
-                  } else {
-                    this.lineData.push('')
-                    this.lineData.push('')
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('name')) {
-                  if (element.name !== null) {
-                    this.lineData.push(element.name)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('version')) {
-                  if (element.version !== null) {
-                    this.lineData.push(element.version)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('dataLength')) {
-                  if (element.dataLength !== null) {
-                    this.lineData.push(element.dataLength)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('hostname')) {
-                  if (element.hostname !== null) {
-                    this.lineData.push(element.hostname)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('remark')) {
-                  if (element.remark !== null) {
-                    this.lineData.push(element.remark)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('uuid')) {
-                  if (element.uuid !== null) {
-                    this.lineData.push(element.uuid)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                if (element.hasOwnProperty('updateUser')) {
-                  if (element.updateUser !== null) {
-                    this.lineData.push(element.updateUser)
-                  } else {
-                    this.lineData.push('')
-                  }
-                }
-                this.excelData.result.push(this.lineData)
-                this.lineData = []
-              }
-              this.excelData.thead = ['省（直辖市）', '市', '区', '小区名称', '操作系统版本（服务包）', '操作系统位数', '服务器主机名称', '描述', '所在服务器UUID', '操作系统提供者']
-              downSearchResult(this.excelData)
-              .then(
-                function (result) {
-                  this.excelPath = result.data
-                  console.log(' excel path -- > ' + this.excelPath)
-                  // 下载
-                  downloadExcelFile(this.excelPath)
-                  .then(
-                    function (result) {
-                      this.$message.success('导出成功')
-                    }.bind(this)
-                  ).catch({
-                    function (error) {
-                      console.log(error)
-                    }
-                  }.bind(this)
-                  )
-                }.bind(this)
-              ).catch(
-                function (error) {
-                  console.log(error)
-                }
-              )
-            }
+            this.excelPath = result.data
+            console.log(' excel path -- > ' + this.excelPath)
           }.bind(this)
-          ).catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        ).catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+        // getOSInfoByPage(params)
+        // .then(
+        //   function (result) {
+        //     this.downloadData = result.ossList
+        //     if (this.downloadData !== undefined && this.downloadData.length > 0) {
+        //       for (let i = 0; i < this.downloadData.length; i++) {
+        //         let element = this.downloadData[i]
+        //         if (element.hasOwnProperty('courtDto')) {
+        //           if (element.courtDto !== null) {
+        //             this.lineData.push(element.courtDto.province)
+        //             this.lineData.push(element.courtDto.city)
+        //             this.lineData.push(element.courtDto.name)
+        //           } else {
+        //             this.lineData.push('')
+        //             this.lineData.push('')
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('name')) {
+        //           if (element.name !== null) {
+        //             this.lineData.push(element.name)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('version')) {
+        //           if (element.version !== null) {
+        //             this.lineData.push(element.version)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('dataLength')) {
+        //           if (element.dataLength !== null) {
+        //             this.lineData.push(element.dataLength)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('hostname')) {
+        //           if (element.hostname !== null) {
+        //             this.lineData.push(element.hostname)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('remark')) {
+        //           if (element.remark !== null) {
+        //             this.lineData.push(element.remark)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('uuid')) {
+        //           if (element.uuid !== null) {
+        //             this.lineData.push(element.uuid)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         if (element.hasOwnProperty('updateUser')) {
+        //           if (element.updateUser !== null) {
+        //             this.lineData.push(element.updateUser)
+        //           } else {
+        //             this.lineData.push('')
+        //           }
+        //         }
+        //         this.excelData.result.push(this.lineData)
+        //         this.lineData = []
+        //       }
+        //       this.excelData.thead = ['省（直辖市）', '市', '区', '小区名称', '操作系统版本（服务包）', '操作系统位数', '服务器主机名称', '描述', '所在服务器UUID', '操作系统提供者']
+        //       downSearchResult(this.excelData)
+        //       .then(
+        //         function (result) {
+        //           this.excelPath = result.data
+        //           console.log(' excel path -- > ' + this.excelPath)
+        //           // 下载
+        //           downloadResultFile(this.excelPath)
+        //           .then(
+        //             function (result) {
+        //               this.$message.success('导出成功')
+        //             }.bind(this)
+        //           ).catch({
+        //             function (error) {
+        //               console.log(error)
+        //             }
+        //           }.bind(this)
+        //           )
+        //         }.bind(this)
+        //       ).catch(
+        //         function (error) {
+        //           console.log(error)
+        //         }
+        //       )
+        //     }
+        //   }.bind(this)
+        //   ).catch(
+        //     function (error) {
+        //       console.log(error)
+        //     }
+        //   )
       }
     },
 
