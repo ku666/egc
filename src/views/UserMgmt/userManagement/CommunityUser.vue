@@ -1,31 +1,31 @@
 <template>
   <div class='ui-common'>
-    <el-select filterable
-    v-model='selectedCommunity' 
-    placeholder='请选择小区' 
-    style="width:360px; margin-bottom:20px" 
-    @visible-change='getCommunityList'
-    @change='communitySelected'
-    >
-      <el-option
-        v-for='(item, index) in communityList'
-        :key='index'
-        :label='item.name'
-        :value='item.uuid'>
-      </el-option>
-    </el-select>
-
-    <div class="border-divide"></div>
 
     <el-form :inline="true" :model="listQuery" ref="listQuery" style="margin-top:15px">
       <div class="search-container">
-        <el-form-item label="用户姓名">
+        <el-form-item>
+          <el-select filterable
+          v-model='listQuery.courtUuid' 
+          placeholder='请选择小区' 
+          class="user_el-select"
+          @visible-change='getCommunityList'
+          @change='communitySelected'
+          >
+            <el-option
+              v-for='(item, index) in communityList'
+              :key='index'
+              :label='item.name'
+              :value='item.uuid'>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item >
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
         </el-form-item>
-        <el-form-item label="　　登录ID">
+        <el-form-item >
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
         </el-form-item>
-        <el-form-item label="　　手机号">
+        <el-form-item >
           <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
         </el-form-item>
         <div class="btn-container">
@@ -37,7 +37,7 @@
       </div>
     </el-form>
 
-
+    <!-- <div class="border-divide"></div> -->
     <div class="table-container">
       <user-list :tableData="userList" :params="userListParam" style="margin-top: 10px" :viewable="true" :editable="false" :deletable="false"
         @listenViewEvent="userViewEvent">
@@ -67,7 +67,7 @@
 import userList from './component/userList.vue'
 import userView from './component/communityView/userView.vue'
 import {
-  // getUserListByPage,
+  getUserListByPage,
   getUserDetail,
   // deleteUser,
   // updateUser,
@@ -76,8 +76,8 @@ import {
   getDepartmentOptions,
   getContactTypeOptions,
   listUserType,
-  listCommunity,
-  getRoleUser
+  listCommunity
+  // getRoleUser
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -113,7 +113,8 @@ export default {
         q_userName: '',
         q_fullName: '',
         q_primaryPhone: '',
-        cloudFlag: 0
+        cloudFlag: 0,
+        courtUuid: ''
       },
       formLabelWidth: '120px',
       dictData: {
@@ -244,6 +245,22 @@ export default {
           }.bind(this)
         )
     },
+    getUserList () {
+      getUserListByPage(this.listQuery)
+        .then(
+          function (result) {
+            // console.log('get data by page:' + JSON.stringify(result))
+            console.log('success getting user list')
+            this.userList = result.baseUserVoList
+            this.total = result.pageCount
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
     // 初始新增用户信息
     initUserInfo () {
       this.userForm = {
@@ -278,49 +295,41 @@ export default {
           }
         )
     },
-    // 选择小区
     communitySelected (data) {
-      this.userListQuery.courtUuid = data
-      console.log(this.userListQuery)
-      getRoleUser(this.userListQuery)
-        .then(
-          function (result) {
-            this.userList = result
-            this.total = result.pageCount
-            console.log('小区用户列表：' + JSON.stringify(result))
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+      this.listQuery.courtUuid = data
+      this.getUserList()
     },
     // 重置搜选宽内容
     resetForm: function () {
-      this.listQuery = {
-        'page': 1,
-        'limit': 10,
-        'q_userName': '',
-        'q_fullName': '',
-        'q_primaryPhone': '',
-        'cloudFlag': 1
-      }
-      this.loadData()
+      this.listQuery.page = 1
+      this.listQuery.cloudFlag = 0
+      this.listQuery.q_userName = ''
+      this.listQuery.q_fullName = ''
+      this.listQuery.q_primaryPhone = ''
+      this.listQuery.courtUuid = ''
+      // this.listQuery = {
+      //   'page': 1,
+      //   'limit': 10,
+      //   'q_userName': '',
+      //   'q_fullName': '',
+      //   'q_primaryPhone': '',
+      //   'cloudFlag': 0
+      // }
+      this.getUserList()
     },
     // 改变分页大小
     handleSizeChange (val) {
       this.listQuery.limit = val
-      this.loadData()
+      this.getUserList()
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.listQuery.page = val
-      this.loadData()
+      this.getUserList()
     },
     handleFilter () {
       this.listQuery.page = 1
-      this.loadData()
+      this.getUserList()
     },
     // // 新增用户
     // handleCreate () {

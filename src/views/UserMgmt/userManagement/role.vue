@@ -8,7 +8,7 @@
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary">添加</el-button>
           </div>
           <div class="flex-1 flex-c">
-          <grid-list id="usergroupTable"
+          <grid-list id="roleTable"
             :editable="true"
             :deletable="true"
             :showOperation="true"
@@ -104,13 +104,14 @@
         dialogStatus: undefined,
         userGroupData: undefined,
         query: {
-          roleId: undefined,
+          roleId: '',
           currentPage: 1,
           pageSize: 10,
-          cloudFlag: 1
+          cloudFlag: 1,
+          courtUuid: ''
         },
         editQuery: {
-          roleId: undefined,
+          roleId: '',
           currentPage: 1,
           pageSize: 5
         },
@@ -305,19 +306,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #usergroupTable >>> colgroup col:nth-child(1) {
-    /* width: 30% */
-    width: 100px;
+  #roleTable >>> colgroup col:nth-child(1) {
+    width: 25%;
   }
-  #usergroupTable >>> colgroup col:nth-child(2) {
-    /* width: 50% */
-    width: 100px;
+  #roleTable >>> colgroup col:nth-child(2) {
+    width: 25%;
   }
-  #usergroupTable >>> colgroup col:nth-child(3) {
-    /* width: 50% */
-    width: 150px;
+  #roleTable >>> colgroup col:nth-child(3) {
+    width: 30%
   }
-  /* #usergroupTable >>> colgroup col:nth-child(3) {
+  #roleTable >>> colgroup col:nth-child(4) {
     width: 20%
-  } */
+  }
 </style>

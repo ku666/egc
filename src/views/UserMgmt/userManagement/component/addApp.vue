@@ -4,8 +4,8 @@
         <el-row>
            <el-col v-if="isShowAppType">
               <div>
-                <el-form-item label="应用程序">
-                  <el-select class="filter-item" v-model="appResource" placeholder="请选择" @change='handleChange'>
+                <el-form-item label="所属应用">
+                  <el-select class="filter-item" v-model="appResource" placeholder="请选择所属应用" @change='handleChange'>
                     <el-option v-for="appResourceOpt in appResourceList" :key="appResourceOpt.appCode" :label="appResourceOpt.resourceName" :value="appResourceOpt.appCode"> </el-option>
                   </el-select>
                 </el-form-item>
@@ -125,20 +125,6 @@ export default {
             console.log(error)
           }
         )
-      getTreeResourceData(this.appResource)
-          .then(
-            function (result) {
-              this.treeData = result
-              this.checkedKeys = []
-              this.deepJsonData(result)
-              console.log('树形数据****：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
     },
     created: function () {
       this.loadData()
@@ -202,6 +188,37 @@ export default {
         console.log('other')
       }
     },
+    deepParentJsonData: function (json, parenetUuid) {
+      console.log('deepParentJsonData start: ')
+      if (json instanceof Array) {
+        for (var i = 0; i < json.length; i++) {
+          var jsonObj = json[i]
+          console.log('deepParentJsonData start: Array ')
+          this.deepParentJsonData(jsonObj, parenetUuid)
+        }
+      } else if (json instanceof Object) {
+        console.log('deepParentJsonData start: Object')
+        for (var key in json) {
+          if (key === 'uuid') {
+            if (parenetUuid === json['uuid'].toString()) {
+              console.log('deepParentJsonData...push: ' + json['uuid'].toString())
+              if (!this.isContainsData(this.parentItem, json['uuid'].toString())) {
+                if (json['parentResourceUuid'] !== null) {
+                  this.parentItem.push(json['uuid'].toString())
+                  this.deepParentJsonData(this.treeData, json['parentResourceUuid'].toString())
+                } else {
+                  return
+                }
+              }
+            } else {
+              this.deepParentJsonData(json['children'], parenetUuid)
+            }
+          }
+        }
+      } else {
+        console.log('other')
+      }
+    },
     deepJsonData: function (json) {
       if (json instanceof Array) {
         console.log('deepJsonData...Array...')
@@ -228,7 +245,7 @@ export default {
     },
     refresh () {
       console.log('refresh uuid:' + this.form.uuid)
-      this.handleChange()
+      this.reset()
     },
     reset () {
       console.log('addApp reset')
@@ -237,7 +254,10 @@ export default {
     },
     saveData () {
       if (this.appResource == null || this.appResource === '' || this.appResource === 'false') {
-        this.$msgbox('请选择至少一个应用程序')
+        this.$msgbox({
+          title: '消息',
+          message: '请选择至少一个所属应用'}
+          )
         return
       }
       console.log('getCheckedNodes:')
@@ -246,8 +266,17 @@ export default {
       console.log(this.$refs.tree.getCheckedKeys())
       console.log(this.appResource)
       this.items = []
+      this.parentItem = []
+      if (this.$refs.tree.getCheckedNodes().length > 0) {
+        console.log('Top uuid : ' + this.treeData[0].uuid)
+        if (!this.isContainsData(this.parentItem, this.treeData[0].uuid)) {
+          this.parentItem.push(this.treeData[0].uuid)
+        }
+      }
       for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
         const node = this.$refs.tree.getCheckedNodes()[index]
+        this.deepParentJsonData(this.treeData, node.parentResourceUuid)
+        console.log('parentResourceUuid : ' + node.parentResourceUuid)
         console.log('node:')
         console.log(node)
         console.log('appResource:appResource')
@@ -267,6 +296,29 @@ export default {
           uuid: ''
         })
       }
+      console.log('parentItem........')
+      console.log(JSON.stringify(this.parentItem))
+      for (let index = 0; index < this.parentItem.length; index++) {
+        var uuid = this.parentItem[index]
+        console.log('appResource:appResource')
+        console.log(this.appResource)
+        this.items.push({
+          actionType: '1',
+          actionTypeName: '',
+          appCode: this.appResource,
+          authority: true,
+          resourceName: '',
+          resourceType: '2',
+          resourceTypeName: '',
+          resourceUrl: '',
+          resourceUuid: uuid,
+          roleName: '',
+          roleUuid: this.form.uuid,
+          uuid: ''
+        })
+      }
+      console.log('this.items........')
+      console.log(JSON.stringify(this.items))
       this.saveItem.authorityExtList = this.items
       this.saveItem.appCode = this.appResource
       this.saveItem.resourceType = '2'

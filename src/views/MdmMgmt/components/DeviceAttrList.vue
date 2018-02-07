@@ -336,6 +336,7 @@ export default {
       this.disabledflag = false
       this.mode = 2
       this.clear()
+      this.attrForm.uuid = ''
       this.attrDialogVisible = true
       this.attrSaved = false
     },
