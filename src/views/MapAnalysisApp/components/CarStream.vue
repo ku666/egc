@@ -39,12 +39,12 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开始时间">
-                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.startDate" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align:left">
                 <el-form-item label="结束时间">
-                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.endDate" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -104,16 +104,17 @@ export default {
       isShowTable: true, // 是否显示表格
       isShowChart: false, // 是否显示echarts图表
       isReponseData: false,
+      canLeaveChart: true,
       clickCount: 0,
       preTableShowStatus: '', // 判断是否第一次进入echarts图表页面
       formDatePickType: 'date', // 报表类型
       clearableDatepick: false,
       editableDatepick: false,
       form: {
-        courtUuid: '', // 小区ID
+        courtUuid: '222b79f4a7b44d03b6f55f028992851f', // 小区ID
         reportType: '0', // 报表类型
-        startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
-        endDate: new Date() // 结束时间
+        startTime: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
+        endTime: new Date() // 结束时间
       },
       courtInfo: {},
       carStreamData: [], // 后端请求回的车流信息
@@ -131,12 +132,12 @@ export default {
       loading: false,
       forbiddenStartDatetime: { // 限制开始时间选择器
         disabledDate: (time) => {
-          return time.getTime() > this.form.endDate
+          return time.getTime() > this.form.endTime
         }
       },
       forbiddenEndDatetime: { // 限制结束时间选择器
         disabledDate: (time) => {
-          return time.getTime() < this.form.startDate || time.getTime() > Date.now()
+          return time.getTime() < this.form.startTime || time.getTime() > Date.now()
         }
       }
     }
@@ -162,6 +163,7 @@ export default {
     },
     // 切换到表格
     goToTable: function () {
+      if (!this.canLeaveChart) return
       this.isShowTable = true
       this.isShowChart = false
     },
@@ -321,13 +323,13 @@ export default {
       // 切换报表类型，年报表或月报表等
       if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
-        this.form.startDate = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
+        this.form.startTime = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
       } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
-        this.form.startDate = new Date(new Date() - 86400000 * 30)
+        this.form.startTime = new Date(new Date() - 86400000 * 30)
       } else {
         this.formDatePickType = 'month'
-        this.form.startDate = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
+        this.form.startTime = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
       }
     },
     handleSizeChange: function (val) {
@@ -358,6 +360,7 @@ export default {
     getCourtCarAccessInfo: function () {
       // 请求echarts表格数据
       if (this.datePickRangeConfrim()) return
+      this.canLeaveChart = false
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
         if (res.data.code === '00000') {
@@ -373,8 +376,10 @@ export default {
           this.isReponseData = true
           this.errMessage(res.data.message)
         }
+        this.canLeaveChart = true
       }).catch(() => {
         this.isReponseData = true
+        this.canLeaveChart = true
       })
     },
     getCarAccessPageList: function () {
@@ -404,8 +409,8 @@ export default {
     queryParam: function () {
       // 获取查询参数
       return Object.assign({}, this.form, {
-        startDate: this.timeFomate(this.form.startDate),
-        endDate: this.timeFomate(this.form.endDate)
+        startTime: this.timeFomate(this.form.startTime),
+        endTime: this.timeFomate(this.form.endTime)
       })
     },
     timeFomate: function (date) {
@@ -426,7 +431,7 @@ export default {
       switch (this.form.reportType) {
         case '0':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000) + '天')
-          if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000) > 31) {
+          if (Math.ceil((this.form.endTime - this.form.startTime) / 86400000) > 31) {
             this.$message.error({
               message: '只能查一个月之内的日报表',
               duration: 1500
@@ -436,7 +441,7 @@ export default {
           break
         case '1':
           // console.log(Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) + '月')
-          if (Math.ceil((this.form.endDate - this.form.startDate) / 86400000 / 30) > 12) {
+          if (Math.ceil((this.form.endTime - this.form.startTime) / 86400000 / 30) > 12) {
             this.$message.error({
               message: '只能查一年之内的月报表',
               duration: 1500

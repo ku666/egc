@@ -198,6 +198,7 @@ export default {
     },
     equipmentReport (courtId) {
       this.dialogReportVisible = true
+      if (!courtId) { courtId = '222b79f4a7b44d03b6f55f028992851f' }
       this.$nextTick(() => {
         // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {
