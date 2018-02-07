@@ -9,7 +9,7 @@
           <el-table :data="appServiceListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
@@ -105,7 +105,7 @@ export default {
         district: '',
         pageSize: 10,
         province: '',
-        pageFlag: 'hw'
+        pageFlag: 'as'
       },
       tableTitleList: [
         {
@@ -160,7 +160,7 @@ export default {
     }
   },
   methods: {
-    // 查询
+    // 条件查询
     _handleFilter (params, type) {
       delete params.pageFlag
       if (type === 'search') {
@@ -214,7 +214,7 @@ export default {
       }
     },
 
-    // 查看应用&服务每条详细信息
+    // 详情
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '管理应用&服务信息详情'
       var rowData = this.appServiceListData[rowIdx]
@@ -230,8 +230,7 @@ export default {
         )
         .catch()
     },
-
-    // 编辑每条应用&服务信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '管理应用&服务修改'
       var rowData = this.appServiceListData[rowIdx]
@@ -252,8 +251,7 @@ export default {
           console.log(error)
         })
     },
-
-    // 更新应用&服务的信息
+    // 更新
     _updateAppServiceInfo (params) {
       updateAppServiceInfo(params)
         .then(
@@ -276,12 +274,12 @@ export default {
         })
     },
 
-    // 更新应用&服务信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.appServiceListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件应用&服务
+      // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
@@ -301,17 +299,10 @@ export default {
         .catch(function (error) {
           this.synDataLoading = false
           console.log(error)
-          this.$message({
-            title: '数据更新成功',
-            message: '数据更新成功',
-            type: 'success',
-            duration: 2000
-          })
         })
       console.log('dispatch rowData -- >' + eachRowUUID)
     },
-
-    // 查看应用&服务信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '管理应用&服务历史信息详情'
       var rowData = this.appServiceListData[rowIdx]
@@ -329,10 +320,10 @@ export default {
           console.log(error)
         })
     },
-
-    // 初始加载应用&服务的信息
+    // 初始加载
     loadData () {
       delete this.searchConditionList.pageFlag
+      this.loading = true
       getAppServiceByPage(this.searchConditionList)
         .then(
           function (result) {
@@ -363,6 +354,7 @@ export default {
     },
     _handleCloseUploadDialog () {
       this.dialogUploadVisible = false
+      this.loadData()
     },
     _handleBeforClose () {
       this.dialogUploadVisible = false

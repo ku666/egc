@@ -23,7 +23,7 @@
           <el-table :data="commCodeDataList" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">

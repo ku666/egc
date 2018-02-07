@@ -9,7 +9,7 @@
           <el-table :data="auServerListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
@@ -96,7 +96,6 @@ export default {
       auServerHistory: undefined,
       synDataLoading: false,
       syncDataStatus: '',
-      maxlength: 30,
       loading: true,
       uploadFlag: 'hw',
       searchConditionList: {
@@ -161,7 +160,7 @@ export default {
     }
   },
   methods: {
-    // 查询
+    // 条件查询
     _handleFilter (params, type) {
       delete params.pageFlag
       if (type === 'search') {
@@ -181,7 +180,6 @@ export default {
             }.bind(this)
           )
       } else if (type === 'download') {
-        // this.loading = false
         downloadResultFile(params)
           .then(
             function (result) {
@@ -217,7 +215,7 @@ export default {
       }
     },
 
-    // 查看服务器每条详细信息
+    // 详情
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '服务器硬件信息详情'
       var rowData = this.auServerListData[rowIdx]
@@ -233,7 +231,7 @@ export default {
         .catch()
     },
 
-    // 编辑每条服务器信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '服务器硬件信息修改'
       var rowData = this.auServerListData[rowIdx]
@@ -253,7 +251,7 @@ export default {
           console.log(error)
         })
     },
-    // 更新server的信息
+    // 更新
     _updateServerInfo (params) {
       updateAuServerInfor(params)
         .then(
@@ -274,12 +272,12 @@ export default {
           console.log(error)
         })
     },
-    // 刷新服务器信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.auServerListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件服务器
+      // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
@@ -302,7 +300,7 @@ export default {
           console.log(error)
         })
     },
-    // 服务器信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '服务器硬件历史信息详情'
       var rowData = this.auServerListData[rowIdx]
@@ -322,7 +320,7 @@ export default {
           }.bind(this)
         )
     },
-    // 初始加载服务器的信息
+    // 初始加载
     loadData () {
       delete this.searchConditionList.pageFlag
       getauServersByPage(this.searchConditionList)

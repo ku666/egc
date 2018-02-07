@@ -15,16 +15,17 @@ export const getProvinceDataList = () => {
 
 // 市
 export const getCityDataList = (params) => {
-  console.log(' cities api  param province ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getCity?province=' + params.province
+  console.log('get city list, param is  -->   ' + JSON.stringify(params))
+  console.log('get city list param: province is  -->   ' + JSON.stringify(params.province))
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getCity?province=' + encodeURI(params.province)
     ).then(res => res.data)
   // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
-  console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + params.province + '---- >' + params.city)
-  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getDistrict?province=' + params.province + '&city=' + params.city
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getDistrict?province=' + encodeURI(params.province) + '&city=' + encodeURI(params.city)
   ).then(res => res.data)
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
@@ -34,10 +35,8 @@ export const uploadHardWareConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  return Axios.post(BASE_PATH + '/auServers/importExcel', params, config
   ).then(res => {
-    console.log('---------------upload excel files  result ---------- ')
-    console.info(res)
     return res.data
   })
 }
@@ -46,10 +45,8 @@ export const uploadNetEquipConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  return Axios.post(BASE_PATH + '/auNetequip/importExcel', params, config
   ).then(res => {
-    console.log('---------------upload excel files  result ---------- ')
-    console.info(res)
     return res.data
   })
 }
@@ -58,10 +55,8 @@ export const uploadAppServiceConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  return Axios.post(BASE_PATH + '/package/dependence/importExcel', params, config
+  return Axios.post(BASE_PATH + '/auServices/importExcel', params, config
   ).then(res => {
-    console.log('---------------upload excel files  result ---------- ')
-    console.info(res)
     return res.data
   })
 }

@@ -9,7 +9,7 @@
           <el-table :data="netDeviceListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width"  show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
@@ -96,7 +96,6 @@ export default {
       netDeviceHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
-      maxlength: 30,
       loading: true,
       uploadFlag: 'ne',
       searchConditionList: {
@@ -161,7 +160,7 @@ export default {
     }
   },
   methods: {
-    // 查询
+    // 条件查询
     _handleFilter (params, type) {
       delete params.pageFlag
       console.log('_handleFilter --- > ' + JSON.stringify(params))
@@ -176,6 +175,7 @@ export default {
             }.bind(this)
           )
           .catch(function (error) {
+            this.loading = false
             console.log(error)
           })
       } else if (type === 'download') {
@@ -214,7 +214,7 @@ export default {
       }
     },
 
-    // 查看网络设备每条详细信息
+    // 详情
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '网络设备信息详情'
       var rowData = this.netDeviceListData[rowIdx]
@@ -231,7 +231,7 @@ export default {
         .catch()
     },
 
-    // 编辑每条网络设备信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '网络设备修改'
       var rowData = this.netDeviceListData[rowIdx]
@@ -252,7 +252,7 @@ export default {
         })
     },
 
-    // 更新网络设备的信息
+    // 更新
     _updateOsInfo (params) {
       updateNetDeviceInfo(params)
         .then(
@@ -260,10 +260,8 @@ export default {
             this.dialogEditVisible = false
             if (result === 'Success!') {
               this.$message({
-                title: '更新成功',
                 message: '保存成功',
-                type: 'success',
-                duration: 2000
+                type: 'success'
               })
               // 加载数据
               this.loadData()
@@ -280,12 +278,12 @@ export default {
         })
     },
 
-    // 刷新网络设备信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.netDeviceListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件网络设备
+      // 刷新
       syncNetDeviceData(eachRowUUID)
         .then(
           function (result) {
@@ -294,7 +292,7 @@ export default {
             if (this.syncDataStatus) {
               this.synDataLoading = false
               this.$message({
-                message: '保存成功',
+                message: '刷新成功',
                 type: 'success'
               })
               // 加载数据
@@ -308,7 +306,7 @@ export default {
         })
     },
 
-    // 查看网络设备信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '网络设备历史信息详情'
       var rowData = this.netDeviceListData[rowIdx]
@@ -325,7 +323,7 @@ export default {
           console.log(error)
         })
     },
-    // 初始加载网络设备的信息
+    // 初始加载
     loadData () {
       delete this.searchConditionList.pageFlag
       getNetDeviceInfoByPage(this.searchConditionList)

@@ -40,10 +40,10 @@ export default {
   },
   methods: {
     handleOnchange (file, fileList) {
-      console.info(fileList)
-      // this.uploadFiles.append('file', fileList[0].raw)
+      console.info(fileList[0])
+      // this.uploadFiles.append('uploadFile', fileList[0].raw)
       if (this.beforeUpload(file)) {
-        this.uploadFiles.append('file', fileList[0].raw)
+        this.uploadFiles.append('uploadFile', fileList[0].raw)
       }
       // this.uploadFiles.files = fileList[0]
     },
@@ -56,12 +56,12 @@ export default {
           uploadHardWareConfigFile(this.uploadFiles)
             .then(
               function (res) {
+                this.$emit('handleUploadSuccessEvent')
                 this.$message({
                   message: '上传成功!',
                   type: 'success'
                 })
                 this.fileList = []
-                this.$emit('@handleUploadSuccessEvent')
               }.bind(this)
             )
             .catch(function (error) {
@@ -71,12 +71,12 @@ export default {
           uploadNetEquipConfigFile(this.uploadFiles)
             .then(
               function (res) {
+                this.$emit('handleUploadSuccessEvent')
                 this.$message({
                   message: '上传成功!',
                   type: 'success'
                 })
                 this.fileList = []
-                this.$emit('@handleUploadSuccessEvent')
               }.bind(this)
             )
             .catch(function (error) {
@@ -86,12 +86,12 @@ export default {
           uploadAppServiceConfigFile(this.uploadFiles)
             .then(
               function (res) {
+                this.$emit('handleUploadSuccessEvent')
                 this.$message({
                   message: '上传成功!',
                   type: 'success'
                 })
                 this.fileList = []
-                this.$emit('@handleUploadSuccessEvent')
               }.bind(this)
             )
             .catch(function (error) {
