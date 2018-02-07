@@ -37,13 +37,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="starTime" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%" @blur="timeJudgment">
+                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%" @blur="timeJudgment">
+                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" style="width:95%" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -110,8 +110,8 @@ export default {
         currentPage: 1, // 多少页
         pageSize: 10, // 多少条数据
         reportType: '0', // 报表类型（日、月、年）
-        startDate: null, // 开始时间
-        endDate: null // 结束时间
+        startTime: null, // 开始时间
+        endTime: null // 结束时间
       },
       cellDetailsList: {}, // 小区详细信息
       timeType: 'date', // 日期type属性
@@ -122,8 +122,8 @@ export default {
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
       perErrImg: errImg, // 图表错误提示
-      starTime: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
-      endTime: new Date(), // 结束时间
+      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
+      endDate: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
@@ -134,12 +134,12 @@ export default {
       // 限制开始时间与结束时间
       starForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > this.endTime
+          return time.getTime() > this.endDate
         }
       },
       endForbiddenDatetime: {
         disabledDate: (time) => {
-          return time.getTime() > new Date() || time.getTime() < this.starTime
+          return time.getTime() > new Date() || time.getTime() < this.startDate
         }
       }
     }
@@ -149,10 +149,10 @@ export default {
     reportTypeEvent: function (val) {
       if (val === '0' || val === '1') { // 1年31622400000  7天604800000
         this.timeType = 'date'
-        this.starTime = new Date(this.endTime.getTime() - 604800000)
+        this.startDate = new Date(this.endDate.getTime() - 604800000)
       } else {
         this.timeType = 'month'
-        this.starTime = new Date(this.endTime.getTime() - 31622400000)
+        this.startDate = new Date(this.endDate.getTime() - 31622400000)
       }
     },
     // 点击切换图表展示
@@ -402,7 +402,7 @@ export default {
     timeJudgment: function () {
       switch (this.parameter.reportType) {
         case '0':
-          if (this.endTime.getTime() - this.starTime.getTime() > 31 * 24 * 60 * 60 * 1000) {
+          if (this.endDate.getTime() - this.startDate.getTime() > 31 * 24 * 60 * 60 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -413,7 +413,7 @@ export default {
           }
           break
         case '1':
-          if (this.endTime.getTime() - this.starTime.getTime() > 366 * 24 * 60 * 60 * 1000) {
+          if (this.endDate.getTime() - this.startDate.getTime() > 366 * 24 * 60 * 60 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -430,8 +430,8 @@ export default {
     },
     // 获取人流信息(图表)
     getData: function () {
-      this.parameter.startDate = this.processingDate(this.starTime)
-      this.parameter.endDate = this.processingDate(this.endTime)
+      this.parameter.startTime = this.processingDate(this.startDate)
+      this.parameter.endTime = this.processingDate(this.endDate)
       getCourtPerAccessInfo(this.parameter).then(res => {
         if (res.data.code === '00000') {
           let perData = res.data.data
@@ -477,8 +477,8 @@ export default {
     },
     // 获取人流分页信息（表格）
     getPgingData: function () {
-      this.parameter.startDate = this.processingDate(this.starTime)
-      this.parameter.endDate = this.processingDate(this.endTime)
+      this.parameter.startTime = this.processingDate(this.startDate)
+      this.parameter.endTime = this.processingDate(this.endDate)
       getPerAccessPageList(this.parameter).then(res => {
         if (res.data.code === '00000') {
           this.tableData = res.data.data.result
