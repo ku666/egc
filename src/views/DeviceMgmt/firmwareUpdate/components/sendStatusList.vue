@@ -1,5 +1,5 @@
 <template>
-  <div style="margin-top: 50px">
+  <div style="margin-top: 10px">
     <el-table
       class="deviceMgmTable"
       :data="sendStatusData"
