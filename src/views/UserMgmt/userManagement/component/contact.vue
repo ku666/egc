@@ -3,7 +3,7 @@
   <div>
 
     <template v-if="!contactFlag">
-      <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createContact" type="primary">添加</el-button>
+      <el-button v-if="showButton" icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createContact" type="primary">添加</el-button>
     </template>
     <template v-else>
       <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelContact" type="primary">取消添加</el-button>
@@ -62,7 +62,8 @@
   export default {
     props: {
       contactTypeOptionsProp: undefined,
-      userUuidValue: undefined
+      userUuidValue: undefined,
+      showButton: undefined
     },
     watch: {
       contactDetailData (val) {

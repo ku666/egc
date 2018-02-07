@@ -9,7 +9,7 @@
          </el-form-item>
           <el-form-item label="服务名称">
             <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="选择服务名称"></el-input>
-            <el-button class="search-btn" type="primary" @click="handleFilter">搜索</el-button>
+            <el-button class="search-btn" type="primary" @click="handleFilter">查询</el-button>
           </el-form-item>
         </el-form>
     </el-row>

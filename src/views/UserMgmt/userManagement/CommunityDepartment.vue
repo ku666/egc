@@ -10,17 +10,17 @@
           <el-form :model="listQuery" ref="listQuery" :inline="true">
             <div class="search-container">
               <el-form-item label="小区列表">
-                <el-select v-model="listQuery.q_courtUuid" placeholder="请选择需要查询的小区" class="user_el-select">
+                <el-select v-model="listQuery.q_courtUuid" placeholder="请选择需要查询的小区" class="user_el-select" @change="communitySelected">
                   <el-option v-for="community in communityList" :key="community.uuid" :label="community.name" :value="community.uuid"> </el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label="　　部门名称">
-                <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入部门名称搜索" v-model="listQuery.q_departName"></el-input>
+                <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入部门名称查询" v-model="listQuery.q_departName"></el-input>
               </el-form-item>
               <div class="btn-container">
                 <el-form-item>
                   <el-button @click="handleFilterReset" type="primary" class="cancel-btn">清空</el-button>
-                  <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+                  <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
                 </el-form-item>
               </div>
             </div>
@@ -33,6 +33,7 @@
             :editable="false" 
             :deletable="false"
             :viewable="true"
+            :showOperation="true"
             :tableData="departmentList" 
             :params="departmentListParam" 
             style="margin-top: 15px" 
@@ -53,18 +54,23 @@
       </div>
       </div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-        <department-edit ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
-        @gridSaveEvent="deptUpdateEvent" :departmentTypeSelect="departmentTypeOptions"
-        :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
+        <department-view ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
+        :departmentTypeSelect="departmentTypeOptions"
+        :curDepartmentUuidParm="curDepartmentUuid" :curCourtUuidParm="curCourtUuid"></department-view>
       </el-dialog>
     </div>
     <div v-show="showGrid == false">
       <el-row>
         <el-col :span="8" style='margin-top:15px;'>
-          <el-input
-            placeholder="输入关键字进行过滤"
-            v-model="filterText">
-          </el-input>
+          <div>
+            <el-select v-model="communityName" placeholder="请选择需要查询的小区" class="user_el-select" @change='communityTreeSelected' style="width:48%">
+              <el-option v-for="community in communityList" :key="community.uuid" :label="community.name" :value="community.uuid"> </el-option>
+            </el-select>
+            <el-input style="width:51%"
+              placeholder="输入关键字进行过滤"
+              v-model="filterText">
+            </el-input>
+          </div>
           <div class="departmentTree">
             <el-tree style='margin-top:10px;'
               class="el-department-tree"
@@ -81,9 +87,9 @@
         </el-col>
         <el-col :span="16" style='margin-top:15px;' v-show="showSubGrid">
           <el-card class="box-card" style='margin-left:10px;' v-show="showEditTree">
-            <department-edit ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
-            :departmentSelect="departmentOptions" @gridSaveEvent="deptUpdateEvent" @gridRefreshDir="loadDepartmentTree"
-            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-edit>
+            <department-view ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
+            :departmentSelect="departmentOptions" :curCourtUuidParm="curCourtUuid"
+            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-view>
           </el-card>
         </el-col>
       </el-row>
@@ -93,15 +99,12 @@
 
 <script>
   import gridList from './component/gridList.vue'
-  import departmentCreate from './component/DepartmentCreate.vue'
-  import departmentEdit from './component/departmentEdit.vue'
+  import departmentView from './component/communityView/DepartmentView.vue'
   import {
     getDepartmentList,
     getParenetDepartmentSelect,
     getDepartmentTreeData,
     getDepartmentDetail,
-    updateDepartment,
-    deleteDepartment,
     getUserStatusOptions,
     listCommunity
   } from '@/views/UserMgmt/userManagement/apis'
@@ -109,6 +112,7 @@
     data () {
       return {
         showCreate: false,
+        communityName: undefined,
         departmentList: undefined,
         communityList: undefined,
         departmentListParam: [{
@@ -127,7 +131,12 @@
         listQuery: {
           page: 1,
           limit: 10,
+          cloudFlag: 0,
           q_departName: '',
+          q_courtUuid: ''
+        },
+        listTreeQuery: {
+          cloudFlag: 0,
           q_courtUuid: ''
         },
         defaultProps: {
@@ -136,10 +145,8 @@
         },
         total: 0,
         showEditTree: false,
-        showCreateTree: false,
         selectDepartmentData: undefined,
         dialogFormVisible: false,
-        dialogCreateFormVisible: false,
         showGrid: true,
         showSubGrid: false,
         activeName: '0',
@@ -159,6 +166,7 @@
         addFlag: false,
         departmentOptions: [],
         curDepartmentUuid: '',
+        curCourtUuid: '',
         dictData: {
           userStatusDict: 'CLOUD_USER_TYPE'
         },
@@ -167,11 +175,10 @@
     },
     components: {
       gridList,
-      departmentEdit,
-      departmentCreate
+      departmentView
     },
     mounted () {
-      this.loadData()
+      // this.loadData()
       this.getDepartmentType()  // 加载部门类别下拉框
       this.getCommunityList() // 加载小区端查询下拉框
     },
@@ -191,8 +198,8 @@
             }
           )
       },
-      loadDepartmentTree () {
-        getDepartmentTreeData()
+      loadDepartmentTree (listQuery) {
+        getDepartmentTreeData(listQuery)
           .then(
             function (result) {
               this.treeData = []
@@ -222,7 +229,11 @@
       },
       handleFilter () {
         this.listQuery.page = 1
-        this.loadData()
+        if (this.listQuery.q_courtUuid) {
+          this.loadData()
+        } else {
+          this.$message.error('请先选择需要查询的小区!')
+        }
       },
       getDepartmentSelect (uuid) {
         // 获取部门信息
@@ -230,8 +241,6 @@
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
-                let unChoose = {departmentName: '', disabled: false}
-                result.unshift(unChoose)
                 this.departmentOptions = result
               }.bind(this)
             )
@@ -243,9 +252,16 @@
         if (tab.name === '0') {
           this.showGrid = true
           this.showSubGrid = false
+          this.departmentList = []
+          this.listQuery.q_courtUuid = ''
+          this.listQuery.q_departName = ''
         } else if (tab.name === '1') {
           this.showGrid = false
-          this.loadDepartmentTree()
+          // this.loadDepartmentTree()
+          this.listTreeQuery.q_courtUuid = ''
+          this.communityName = ''
+          this.filterText = ''
+          this.treeData = []
         }
       },
       handleNodeClick (data) {
@@ -255,22 +271,16 @@
         this.showSubGrid = true
         if (!data.pid) {
           this.showEditTree = false
-          this.showCreateTree = false
           return
         }
         this.showEditTree = true
-        this.showCreateTree = false
         this.curDepartmentUuid = data.id
         this.getDepartmentSelect(data.id)
         getDepartmentDetail(data.id)
           .then(
             function (result) {
               this.departmentForm = result.departmentBaseVo
-              if (result.departmentBaseVo.parentDepartmentUuid) {
-                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
-                this.departmentOptions.push(chooseParentName)
-              }
-              this.dialogStatus = '编辑部门'
+              this.dialogStatus = '查看部门'
               this.addFlag = true
             }.bind(this)
           )
@@ -282,23 +292,11 @@
         this.listQuery = {
           page: 1,
           limit: 10,
+          cloudFlag: 0,
           q_departName: '',
           q_courtUuid: ''
         }
         this.loadData()
-      },
-      initDepartmentForm () {
-        this.departmentForm = {
-          departmentName: undefined,
-          parentDepartmentUuid: undefined,
-          remark: undefined,
-          departmentType: undefined,
-          userType: undefined,
-          uuid: ''
-        }
-      },
-      departmentDeleteEvent (data) {
-        this.deptDeleteEvent(data.uuid)
       },
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
@@ -309,14 +307,9 @@
             function (result) {
               console.log('<<<<<departmentOptions:' + JSON.stringify(this.departmentOptions))
               this.departmentForm = result.departmentBaseVo
-              if (result.departmentBaseVo.parentDepartmentUuid) {
-                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
-                this.departmentOptions.push(chooseParentName)
-              }
-              this.dialogStatus = '编辑部门'
+              this.dialogStatus = '查看部门'
               this.addFlag = true
               this.dialogFormVisible = true
-              this.dialogCreateFormVisible = false
             }.bind(this)
           )
           .catch(
@@ -325,53 +318,10 @@
             }
           )
       },
-      deptDeleteEvent (data) {
-        console.log('部门：删除了 ' + data)
-        deleteDepartment(data)
-          .then(
-            function (result) {
-              this.dialogFormVisible = false
-              this.dialogCreateFormVisible = false
-              this.loadData()
-              this.loadDepartmentTree()
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-            }.bind(this)
-          )
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
-      deptUpdateEvent (data) {
-        console.log('部门：修改了 ' + JSON.stringify(data))
-        // data.userType = 1
-        updateDepartment(data)
-          .then(
-            function (result) {
-              this.dialogFormVisible = false
-              this.dialogCreateFormVisible = false
-              this.loadData()
-              this.loadDepartmentTree()
-              this.$message({
-                message: '保存成功！',
-                type: 'success'
-              })
-            }.bind(this)
-          )
-          .catch(function (error) {
-            console.log(error)
-          })
-      },
       handleClose () {
         this.dialogFormVisible = false
-        this.dialogCreateFormVisible = false
         this.showEditTree = false
-        this.showCreateTree = false
         this.filterText = ''
-        this.loadData()
-        this.loadDepartmentTree()
       },
       // 获取用户状态信息
       getDepartmentType () {
@@ -393,7 +343,6 @@
           .then(
             function (result) {
               this.communityList = result
-              // this.total = result.pageCount
               console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
@@ -404,11 +353,23 @@
           )
       },
       communitySelected (data) {
-        this.listQuery.q_courtUuid = data.uuid
+        console.log('communitySelected-----' + JSON.stringify(data))
+        this.listQuery.q_courtUuid = data
+        this.curCourtUuid = data
+        this.loadData(this.listQuery)
+      },
+      communityTreeSelected (data) {
+        console.log('communityTreeSelected-----' + JSON.stringify(data))
+        this.listTreeQuery.q_courtUuid = data
+        this.curCourtUuid = data
+        this.showEditTree = false
+        this.filterText = ''
+        this.loadDepartmentTree(this.listTreeQuery)
       }
     },
     watch: {
       filterText (val) {
+        this.showEditTree = false
         this.$refs.departmentTree.filter(val)
       }
     }

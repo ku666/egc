@@ -1,6 +1,6 @@
 <template>
   <div class='ui-common'>
-    <div class="app-container" calendar-list-container>
+    <div class="flex-c flex-1">
       <div v-show="showGrid == true" class="flex-1 flex-c">
         <div >
           <span>
@@ -19,9 +19,9 @@
               </el-option>
             </el-select>
             <span style="float:right">
-            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block;" class="filter-item" placeholder="输入用户组名称搜索" v-model="searchText"></el-input>
+            <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block;" class="filter-item" placeholder="输入用户组名称查询" v-model="searchText"></el-input>
             <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">搜索</el-button></span>
+            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button></span>
           </span>
         </div>
 
@@ -121,9 +121,11 @@
         query: {
           currentPage: 1,
           pageSize: 10,
-          usergroupUuid: undefined,
-          userGroupName: undefined,
-          cloudFlag: 1
+          usergroupUuid: '',
+          userGroupName: '',
+          cloudFlag: 0,
+          courtUuid: '',
+          userType: ''
         }
       }
     },
@@ -144,6 +146,19 @@
           title: '直属用户',
           prop: 'dirUsersName'
         }]
+        getUserGroupList(this.query)
+          .then(
+            function (result) {
+              this.userGroupList = result.usergroupBaseVoList
+              this.total = result.pageCount
+              console.log('用户组：' + JSON.stringify(result))
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       },
       getCommunityList () {
         listCommunity()
@@ -151,7 +166,7 @@
             function (result) {
               this.communityList = result
               this.total = result.pageCount
-              console.log('小区列表：' + JSON.stringify(result))
+              // console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -161,20 +176,21 @@
           )
       },
       communitySelected (data) {
-        this.query.communityUuid = data.uuid
-        // getUserGroupList(this.query)
-        //   .then(
-        //     function (result) {
-        //       this.userGroupList = result.usergroupBaseVoList
-        //       this.total = result.pageCount
-        //       console.log('用户组：' + JSON.stringify(result))
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
+        this.query.courtUuid = data
+        console.log(this.query)
+        getUserGroupList(this.query)
+          .then(
+            function (result) {
+              this.userGroupList = result.usergroupBaseVoList
+              this.total = result.pageCount
+              console.log('用户组：' + JSON.stringify(result))
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       },
       filterNode (value, data) {
         if (!value) return true
@@ -215,9 +231,6 @@
               }
             )
         }
-        // else {
-        //   alert('请输入搜索条件')
-        // }
       },
       handleFilterReset () {
         this.searchText = undefined

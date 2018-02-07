@@ -1,66 +1,48 @@
 <template>
-<div class="ui-common">
-
-  <div class="item-container">
-    <el-row :gutter="50">
-      <el-col :span="6">
-        <div class="item-container">
-          <span class="sub-title">软件包名称</span>
-          <el-input v-model="searchCondition.name" placeholder="请输入软件包名称" clearable></el-input>
+  <div class="ui-common">
+    <el-form :inline="true" :model="searchCondition">
+      <div class="search-container">
+        <el-form-item label="软件包名称">
+          <el-input v-model="searchCondition.name" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+        </el-form-item>
+        <el-form-item label="软件包版本">
+          <el-input v-model="searchCondition.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+        </el-form-item>
+        <el-form-item label="开发者">
+          <el-input v-model="searchCondition.developer" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+        </el-form-item>
+        <div class="btn-container">
+          <el-form-item>
+            <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+            <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
+          </el-form-item>
         </div>
-      </el-col>
-      <el-col :span="4">
-        <div class="item-container">
-          <span class="sub-title">软件包版本</span>
-          <el-input v-model="searchCondition.version" placeholder="请输入软件包版本" clearable></el-input>
-        </div>
-      </el-col>
-      <el-col :span="6">
-        <div class="item-container">
-          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
-          <el-input v-model="searchCondition.developer" placeholder="请输入开发者" clearable></el-input>
-        </div>
-      </el-col>
-      <el-col :span="3">
-        <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-      </el-col>
-      <el-col :span="2">
-        <el-button @click="_callHandleFilter" class="search-btn" type="primary">搜索</el-button>
-      </el-col>
-      <el-col :span="2">
-        <el-button @click="_selectOrg" class="action-btn" type="primary" style="margin-left:60px;" :disabled="disabled">选择组织</el-button>
-      </el-col>
-    </el-row>
+      </div>
+    </el-form>
+    <div style="margin-top: 20px">
+      <el-collapse v-model="activeNames" accordion  @change="handleChange" >
+        <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
+          <el-table
+            ref="test0"
+            :data="item.packageDataList"
+            tooltip-effect="dark"
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+            stripe border>
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column  type="index" label="编号" width="50"></el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
+          </el-table>
+        </el-collapse-item>
+      </el-collapse>
+    </div>
+    <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
+      <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
+    </el-dialog>
+    <el-dialog :title="dispatchTittle" :visible.sync="downloadResultVisible">
+      <dispatched-software-results @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
+    </el-dialog>
   </div>
-
-
-  <div style="margin-top: 20px">
-    <el-collapse v-model="activeNames" accordion  @change="handleChange" >
-      <!-- <el-collapse-item :title="dispatchDataList[0].batchName" v-for="(item , index) in dispatchDataList" :key="index" :name="item.batchName"> -->
-      <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-        <el-table
-          ref="test0"
-          :data="item.packageDataList"
-          tooltip-effect="dark"
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-          stripe border>
-          <el-table-column type="selection" width="55"></el-table-column>
-          <el-table-column  type="index" label="编号" width="50"></el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
-        </el-table>
-      </el-collapse-item>
-    </el-collapse>
-  </div>
-  
-  <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
-    <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
-  </el-dialog>
-
-  <el-dialog :title="dispatchTittle" :visible.sync="downloadResultVisible">
-    <dispatched-software-results @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
-  </el-dialog>
-</div>
 
 
 </template>
@@ -229,7 +211,7 @@ export default {
 </script>
 
 <style scoped>
-div.item-container{
+/* div.item-container{
   display: flex;
 }
 .detail-span {
@@ -240,6 +222,6 @@ div.item-container{
   color: #7b6f6f;
   font-size: var(--font-size-el-table);
   padding-top: 13px;
-}
+} */
 
 </style>

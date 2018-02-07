@@ -150,7 +150,7 @@ export default {
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -181,7 +181,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -660,6 +660,11 @@ export default {
         cloudFlag: 1,
         courtUuid: '',
         userType: ''
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 1
       },
       userGroupList: undefined,
       userList: undefined,

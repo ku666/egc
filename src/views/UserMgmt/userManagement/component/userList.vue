@@ -34,15 +34,15 @@
   export default {
     props: {
       params: undefined,
-      tableData: undefined
+      tableData: undefined,
+      editable: true,
+      deletable: true,
+      viewable: false
     },
     data () {
       return {
         deleteImg: require('../assets/images/delete.png'),
-        editImg: require('../assets/images/edit.png'),
-        editable: true,
-        deletable: true,
-        viewable: false
+        editImg: require('../assets/images/edit.png')
       }
     },
     methods: {
@@ -53,6 +53,10 @@
       handleClickEdit (row) {
         this.$emit('listenEditEvent', this.tableData[row])
         console.log('userlist 编辑' + row + '行')
+      },
+      handleClickView (row) {
+        this.$emit('listenViewEvent', this.tableData[row])
+        console.log('userlist 查看' + row + '行')
       }
     },
     created () {

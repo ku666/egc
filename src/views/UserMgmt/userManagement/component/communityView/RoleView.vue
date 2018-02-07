@@ -9,8 +9,12 @@
     <el-container style="margin-top:20px">
     <!-- Tab 角色概要 -->
     <el-form  ref='form' v-show="showSummary" label-width='70px' :model='form' >
-      <el-form-item label='角色名称' class="read-only" type="text" > {{ form.roleName }} </el-form-item>
-      <el-form-item label='角色说明' class="read-only" type="text" > {{ form.remark }} </el-form-item>
+      <el-form-item label='角色名称' prop='roleName'>
+        <el-input type="text" v-model='form.roleName' placeholder='无数据' readonly></el-input>
+      </el-form-item>
+      <el-form-item label='角色说明' prop='remark' style=" display: block">
+        <el-input type="textarea" v-model='form.remark' placeholder='无数据' rows="3" style="width:650px" readonly></el-input>
+      </el-form-item>
     </el-form>
     </el-container>
 
@@ -114,7 +118,7 @@ export default {
   },
   methods: {
     getRoleUserGroupList () {
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -293,6 +297,11 @@ export default {
       postRoleUser: {
         roleUuid: undefined,
         userUuid: undefined
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 0
       },
       selectedName: null,
       roleUserGroupList: undefined,

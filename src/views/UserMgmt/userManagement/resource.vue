@@ -20,7 +20,7 @@
         <div class="btn-container">
           <el-form-item>
             <el-button @click="resetForm('listQuery')" type="primary" class="cancel-btn">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
           </el-form-item>
         </div>
       </div>
@@ -125,7 +125,8 @@ export default {
         q_resourceType: '2',
         q_resourceName: '',
         q_logicalAddress: '',
-        q_appCode: ''
+        q_appCode: '',
+        cloudFlag: 1
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
@@ -277,7 +278,7 @@ export default {
           }
         )
       // 获取应用程序下拉框信息
-      getAppCodeOptions()
+      getAppCodeOptions(1)
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
@@ -367,7 +368,8 @@ export default {
         'q_resourceType': '2',
         'q_resourceName': '',
         'q_logicalAddress': '',
-        'q_appCode': ''
+        'q_appCode': '',
+        'cloudFlag': 1
       }
       this.handleFilter()
     },

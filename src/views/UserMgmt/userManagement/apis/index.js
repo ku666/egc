@@ -21,14 +21,10 @@ export const listCommunity = () => {
 
 // 获取所有用户组清单
 export const getUserGroupList = (query) => {
-  if (query.userGroupName) {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + encodeURI(query.userGroupName) + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
-    ).then(res => res.data)
-  } else {
-    return Axios.get(contextPath + '/usermgmt/usergroup/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag
-    ).then(res => res.data)
-  }
+  return Axios.get(contextPath + '/usermgmt/usergroup/list?userGroupName=' + encodeURI(query.userGroupName) + '&currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid + '&userType=' + query.userType
+  ).then(res => res.data)
 }
+
 // 创建用户组
 export const createUserGroup = (data) => {
   return Axios.post(contextPath + '/usermgmt/usergroup/create', data
@@ -117,8 +113,10 @@ export const getDepartmentList = (listQuery) => {
   console.log('<<<<<q_departName:' + listQuery.q_departName)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
+  console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departName=' + encodeURI(listQuery.q_departName) + '&cloudFlag=1' + '&courtUuid=' + listQuery.courtUuid
+  '&departmentName=' + encodeURI(listQuery.q_departName) + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.q_courtUuid
   ).then(res => res.data)
 }
 // 删除部门信息
@@ -156,8 +154,10 @@ export const getChildrenDepartmentVoList = (listQuery) => {
   console.log('<<<<<q_userName:' + listQuery.departmentUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
+  // console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/listChildrenDepartment?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 删除下属部门
@@ -172,9 +172,9 @@ export const createDirectDepartment = (data) => {
   ).then(res => res.data)
 }
 // 获取部门树
-export const getDepartmentTreeData = () => {
-  console.log('getDepartmentTreeData<<<<<<<<<<<<<<')
-  return Axios.get(contextPath + '/usermgmt/department/getDepartmentTree'
+export const getDepartmentTreeData = (listQuery) => {
+  console.log('小区uuid<<<<<<<<<<<<<<:' + listQuery.q_courtUuid)
+  return Axios.get(contextPath + '/usermgmt/department/getDepartmentTree?courtUuid=' + listQuery.q_courtUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // -----部门直属用户相关接口
@@ -185,11 +185,12 @@ export const deleteDirDepartmentUser = (uuid) => {
 }
 // 查询当前部门下的直属用户列表（分页）
 export const getDepartmentUserVoList = (listQuery) => {
-  console.log('<<<<<q_userName:' + listQuery.departmentUuid)
+  console.log('<<<<<departmentUuid:' + listQuery.departmentUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
   return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 查询当前部门下的直属用户列表(不分页)
@@ -197,7 +198,8 @@ export const getListUserAll = (listQuery) => {
   console.log('<<nopage<<<q_userName:' + listQuery.departmentUuid)
   console.log('<<nopage<<<listQuery.page:' + listQuery.page)
   console.log('<<nopage<<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' + '&departmentUuid=' + listQuery.departmentUuid
+  return Axios.get(contextPath + '/usermgmt/department/listDepartmentUser?currentPage=1&pageSize=1000000' +
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
   ).then(res => res.data)
 }
 // 添加直属用户
@@ -249,8 +251,8 @@ export const updateRole = (data) => {
   ).then(res => res.data)
 }
 // 获取用户组清单
-export const getRoleUserGroup = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
+export const getRoleUserGroup = (data) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
   ).then(res => res.data)
 }
 // 获取用户组筛选清单
@@ -354,11 +356,11 @@ export const getUserDetail = (uuid) => {
 }
 // 查询用户列表信息
 export const getUserListByPage = (listQuery) => {
-  console.log('<<<<<q_userName:' + listQuery.q_userName)
-  console.log('<<<<<q_fullName:' + listQuery.q_fullName)
-  console.log('<<<<<q_primaryPhone:' + listQuery.q_primaryPhone)
-  console.log('<<<<<listQuery.page:' + listQuery.page)
-  console.log('<<<<<listQuery.limit:' + listQuery.limit)
+  // console.log('<<<<<q_userName:' + listQuery.q_userName)
+  // console.log('<<<<<q_fullName:' + listQuery.q_fullName)
+  // console.log('<<<<<q_primaryPhone:' + listQuery.q_primaryPhone)
+  // console.log('<<<<<listQuery.page:' + listQuery.page)
+  // console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
   '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
@@ -405,8 +407,8 @@ export const getContactTypeOptions = (dictData) => {
 }
 // --------------用户组--------------
 // 获取用户组下拉框列表信息
-export const getUserGroupListSelect = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup'
+export const getUserGroupListSelect = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 将当前用户添加到某用户组中
@@ -439,8 +441,8 @@ export const deleteUsergroup = (userUsergroupUuid) => {
 }
 // --------------关联角色--------------
 // 获取当前用户关联角色下拉框列表信息
-export const getUserRoleListSelect = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole'
+export const getUserRoleListSelect = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 将当前用户添加到某角色中
@@ -480,12 +482,12 @@ export const getResourceListByPage = (listQuery) => {
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/resource/listPage?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode
+  '&resourceType=' + listQuery.q_resourceType + '&resourceName=' + encodeURI(listQuery.q_resourceName) + '&appCode=' + listQuery.q_appCode + '&cloudFlag=' + listQuery.cloudFlag
   ).then(res => res.data)
 }
 // 查询应用程序下拉框
-export const getAppCodeOptions = () => {
-  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1'
+export const getAppCodeOptions = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 新增资源

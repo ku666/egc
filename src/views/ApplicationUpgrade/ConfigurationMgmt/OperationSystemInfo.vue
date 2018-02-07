@@ -186,6 +186,20 @@ export default {
       } else if (type === 'download') {
         // 获取满足搜索条件的所有数据
         this.searchConditionList.pageSize = this.total
+        // this.searchConditionList.total = this.total
+        // this.searchConditionList.flag = 1
+        // downloadExcelFile(this.searchConditionList)
+        // .then(
+        //   function (result) {
+        //     this.excelPath = result.data
+        //     console.log(' excel path -- > ' + this.excelPath)
+        //   }.bind(this)
+        // ).catch(
+        //   function (error) {
+        //     console.log(error)
+        //   }
+        // )
+        this.loading = false
         getOSInfoByPage(params)
         .then(
           function (result) {
@@ -277,8 +291,8 @@ export default {
                 }.bind(this)
               ).catch(
                 function (error) {
-                  this.$message.error(error.message)
-                }.bind(this)
+                  console.log(error)
+                }
               )
             }
           }.bind(this)
