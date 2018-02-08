@@ -19,7 +19,7 @@
           </el-form-item>
           <el-form-item label='父设备' prop='parentUuid'>
             <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
-              <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeName' :value='parent.uuid'>
+              <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeCode + ":" + parent.typeName' :value='parent.uuid'>
               </el-option>
             </el-select>
           </el-form-item>
@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item label='供应商' prop='providerCode'>
             <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
-              <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+              <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
               </el-option>
             </el-select>
           </el-form-item>
