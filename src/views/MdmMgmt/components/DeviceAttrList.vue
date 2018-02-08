@@ -272,13 +272,13 @@ export default {
     },
     // 改变分页大小
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      this.searchAttrForm.pageSize = val
+      this.searchAttrForm.currentPage = 1
       this.search()
     },
     // 跳转页面
     currentChange: function (val) {
-      this.currentPage = val
+      this.searchAttrForm.currentPage = val
       this.search()
     },
     // 打开新增/修改设备域弹框页面
