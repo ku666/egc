@@ -65,12 +65,21 @@ export default {
     getSummaries (param) {
       const { columns, data } = param
       const sums = []
+      console.log('lulud')
+      console.log(columns)
+      console.log(data)
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = '总数量'
           return
         }
+        if (index === 1) {
+          sums[index] = ''
+          return
+        }
         const values = data.map(item => Number(item[column.property]))
+        console.log('values')
+        console.log(values)
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
