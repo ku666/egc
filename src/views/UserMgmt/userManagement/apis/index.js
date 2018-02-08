@@ -31,10 +31,22 @@ export const uploadUserExcel = (params) => {
   })
 }
 
-// 下载 excel 模板
+// 下载用户导入 excel 模板
 export const downloadExcelTemplate = (type) => {
-  return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type
-  ).then(res => res.data)
+  return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type, {responseType: 'arraybuffer'}
+  ).then(res => {
+    console.log('download success')
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    let link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    if (type === '1') {
+      link.download = '用户信息.xls'
+    } else if (type === '2') {
+      link.download = '用户信息.xlsm'
+    }
+    link.click()
+    return res.data
+  })
 }
 
 // -----------------  用户组接口 ----------------
@@ -627,13 +639,13 @@ export const deleteResourceRole = (uuid) => {
 // 获取资源应用程序树形情报
 export const getTreeResourceData = (data) => {
   console.log('Axios getTreeResourceData tree:')
-  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data.appCode + '&hasAuthority=' + data.hasAuthority + '&hasButton=' + data.hasButton + '&roleUuid=' + data.uuid
+  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data.appCode + '&hasAuthority=' + data.hasAuthority + '&hasButton=' + data.hasButton + '&roleUuid=' + data.uuid + '&cloudFlag=' + data.cloudFlag
   ).then(res => res.data)
 }
 // 获取应用程序名称下拉框信息
-export const getResourceList = (type) => {
+export const getResourceList = (data) => {
   console.log('Axios getResourceList:')
-  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=' + type
+  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=' + data.type + '&cloudFlag=' + data.cloudFlag
   ).then(res => res.data)
 }
 // 保存应用程序Menu资源
@@ -651,7 +663,7 @@ export const createService = (data) => {
 // 获取应用服务页面数据
 export const getServiceListPage = (data) => {
   console.log('Axios getServiceListPage' + JSON.stringify(data))
-  return Axios.get(contextPath + '/usermgmt/resource/listPage?resourceType=' + data.resourceType + '&appCode=' + data.appCode + '&resourceName=' + encodeURI(data.resourceName) + '&delAuthority=' + data.delAuthority + '&roleUuid=' + data.roleUuid + '&currentPage=' + data.currentPage + '&pageSize=' + data.pageSize
+  return Axios.get(contextPath + '/usermgmt/resource/listPage?resourceType=' + data.resourceType + '&appCode=' + data.appCode + '&resourceName=' + encodeURI(data.resourceName) + '&delAuthority=' + data.delAuthority + '&roleUuid=' + data.roleUuid + '&currentPage=' + data.currentPage + '&pageSize=' + data.pageSize + '&cloudFlag=' + data.cloudFlag
   ).then(res => res.data)
 }
 // 获取已有的权限数据

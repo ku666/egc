@@ -1,51 +1,74 @@
 <template>
-  <div class="ui-common">
-    <el-row :gutter="40">
-      <el-col :span="6">
-        <div class="item-container">
-          <span class="sub-title">软件名称</span>
-          <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
+  <div class="ui-common"> 
+
+      <el-form align="left" :inline="true">
+        <div class="search-container">
+          <el-form-item label="软件名称">
+            <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="版本号">
+            <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="开发者">
+            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="搜索条件">
+            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
+              <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
+            </el-form-item>
+          </div>
         </div>
-      </el-col>
+       </el-form>
 
-      <el-col :span="4">
-        <div class="item-container">
-          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;版本号</span>
-          <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
+    <!-- <el-row>
+      <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
+        <div class="search-container">
+          <div class="item-container">
+            <span class="sub-title">软件名称</span>
+            <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
+          </div>
+          <div class="item-container">
+            <span class="sub-title">版本号</span>
+            <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
+          </div>
+          <div class="item-container">
+            <span class="sub-title">开发者</span>
+            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
+          </div>
+          <div class="item-container">
+            <span class="sub-title">搜索条件</span>
+            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
+          </div>
+          <div class="btn-container">
+            <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+            <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
+            <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
+          </div>
         </div>
+      </el-form>
+    </el-row> -->
+    <el-row style="margin-top: 15px;">
+      <el-col>
+        <el-button icon="el-icon-circle-plus-outline" @click="_handleRegister" plain type="primary">注册</el-button>
       </el-col>
-
-      <el-col :span="4">
-        <div class="item-container">
-          <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
-          <el-input v-model="searchConditionList.updateUser" placeholder="请输入开发者姓名" clearable></el-input>
-        </div>
-      </el-col>
-
-      <el-col :span="3">
-        <div>
-          <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-        </div>
-      </el-col>
-
-      <el-col :span="3">
-        <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
-      </el-col>
-
-      <el-col :span="2">
-        <el-button type="info" @click="_handleRegister" class="action-btn">注册</el-button>
-      </el-col>
-
     </el-row>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24"  class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softwarePackListData" stripe border v-loading="loading">
+    <el-row>
+      <div class="border-divide"></div>
+    </el-row>
+    <el-row style='height: 100%;'>
+      <el-col style='height: 100%;'>
+        <div style="margin-top: 15px; max-height: 100%;"> 
+          <el-table :data="softwarePackListData" v-loading="loading" style="margin-top: 15px; height: 700px;" >
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                   <!-- <img :src="details"/> -->
@@ -62,19 +85,18 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+                @size-change="handleSizeChange"
+                @current-change="handleCurrentChange"
+                :current-page.sync="searchConditionList.pageNo"
+                :page-sizes="[5, 10, 20]"
+                :page-size="searchConditionList.pageSize"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="total"
+                style="margin-top:15px; margin-bottom:20px">
+            </el-pagination>
         </div>
         <div>
-          <div class="table-pages">
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.pageNo"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-          </el-pagination>
-          </div>
         </div>
       </el-col>
     </el-row>
@@ -84,8 +106,8 @@
           <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
             <el-row>
               <el-col :span="12">
-                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesName" :autofocus="true">
-                  <el-select v-model="softwareDetails.batchesName" placeholder="请选择">
+                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesId" :autofocus="true">
+                  <el-select v-model="softwareDetails.batchesId" placeholder="请选择">
                     <el-option
                       v-for="item in batchs"
                       :key="item.value"
@@ -129,8 +151,8 @@
 
             <el-row>
               <el-col :span="24">
-                <el-form-item label="新增修改功能点" :label-width="formLabelWidth" prop="newFunction">
-                  <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.newFunction"></el-input>
+                <el-form-item label="新增修改功能点" :label-width="formLabelWidth" prop="remark">
+                  <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -144,7 +166,7 @@
                     action=""
                     drag
                     multiple
-                    :limit=1
+                    :limit=10
                     :show-file-list="true"
                     :on-exceed="handleExceed"
                     :on-change="handleOnchange"
@@ -164,7 +186,6 @@
         </div>
       </el-dialog>
     </div>
-
     <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogDetailsVisible" top="8vh">
         <software-package-details :softwarePckDetails="softwarePckDetails"></software-package-details>
@@ -180,6 +201,39 @@
         <software-package-history :softwarePckHistory="softwarePckHistory"></software-package-history>
       </el-dialog>
     </div>
+    <div>
+      <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" top="8vh" :before-close="closeImportDialog">
+        <div>
+          <el-form>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
+                  <el-upload
+                    ref="uploadPackageJarFiles"
+                    class="avatar-uploader"
+                    action=""
+                    drag
+                    multiple
+                    :limit=10
+                    :show-file-list="true"
+                    :on-exceed="handleExceed"
+                    :on-change="handleOnchange"
+                    :auto-upload="false"
+                    :file-list="fileList">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div style="text-align:center;">
+              <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
+            </div>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -188,7 +242,7 @@ import softwarePackageDetails from './components/SoftwarePackageDetails'
 import softwarePackageEdit from './components/SoftwarePackageEdit'
 import softwarePackageHistory from './components/SoftwarePackageHistory'
 
-import { getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, getSoftwarePackageHistoryList, registerSoftwarePackage } from './apis/index'
+import { getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, getSoftwarePackageHistoryList, registerSoftwarePackage, uploadExcelFiles } from './apis/index'
 export default {
   components: {
     softwarePackageDetails,
@@ -200,13 +254,21 @@ export default {
       searchConditionList: {
         name: '',
         version: '',
-        updateUser: '',
+        provider: '',
+        key: '',
+        pageNo: 1,
+        pageSize: 10
+      },
+      searchConditionHistroyList: {
+        packageUuid: '',
         pageNo: 1,
         pageSize: 10
       },
       selectOpts: [],
       total: 0,
       dialogTitle: '',
+      dialogImportTitle: '',
+      dialogImportVisible: false,
       addr: '',
       dialogRegisterVisible: false,
       dialogDetailsVisible: false,
@@ -222,8 +284,8 @@ export default {
         version: '',
         developer: '',
         latestPreVer: '',
-        newFunction: '',
-        batchesName: '',
+        remark: '',
+        batchesId: '',
         latestPreName: ''
       },
       uploadFiles: new FormData(),
@@ -231,11 +293,11 @@ export default {
         {
           colName: '软件包名称',
           prop: 'name',
-          width: 120
+          width: 200
         }, {
           colName: '软件包版本',
           prop: 'version',
-          width: 120
+          width: 150
         }, {
           colName: '开发者',
           prop: 'developer',
@@ -243,7 +305,7 @@ export default {
         }, {
           colName: '软件包功能说明',
           prop: 'functionDesc',
-          width: 120
+          width: 200
         }, {
           colName: '前续软件包名称',
           prop: 'lastestPreName',
@@ -253,15 +315,12 @@ export default {
           prop: 'latestPreVer'
         }, {
           colName: '软件包登记日期/时间',
-          prop: 'registerTime',
+          prop: 'createTime',
           width: 160
         }, {
           colName: '软件包登记者',
-          prop: 'register',
+          prop: 'createUser',
           width: 120
-        }, {
-          colName: '备注',
-          prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
@@ -272,10 +331,10 @@ export default {
       fileList: [],
       maxlength: 30,
       batchs: [{
-        value: '恒大智慧小区平台1.0',
+        value: '1',
         label: '恒大智慧小区平台1.0'
       }, {
-        value: '恒大智慧小区平台1.1',
+        value: '2',
         label: '恒大智慧小区平台1.1'
       }],
       rules: {
@@ -291,13 +350,13 @@ export default {
         latestPreVer: [
           { required: true, message: '请输入前续版本', trigger: 'blur,change' }
         ],
-        newFunction: [
+        functionDesc: [
           { required: true, message: '请输入新增修改功能点', trigger: 'blur,change' }
         ],
         uploadFiles: [
           {}
         ],
-        batchesName: [
+        batchesId: [
           { required: true, message: '请选择注册软件包批次', trigger: 'blur,change' }
         ]
       }
@@ -314,7 +373,7 @@ export default {
 
     // 验证查询输入内容是否为空
     validateInput () {
-      if (this.searchConditionList.name.trim() === '' && this.searchConditionList.version.trim() === '' && this.searchConditionList.updateUser.trim() === '') {
+      if (this.searchConditionList.name.trim() === '' && this.searchConditionList.version.trim() === '' && this.searchConditionList.provider.trim() === '') {
         this.$message({
           message: '请输入查询条件',
           center: true,
@@ -331,12 +390,13 @@ export default {
     _handleClearQuery () {
       this.searchConditionList.name = ''
       this.searchConditionList.version = ''
-      this.searchConditionList.updateUser = ''
+      this.searchConditionList.provider = ''
+      this.searchConditionList.key = ''
     },
 
     // 软件包注册
     _handleRegister () {
-      this.dialogTitle = '软件服务包注册'
+      this.dialogTitle = '软件包注册'
       this.dialogRegisterVisible = true
     },
     _registerSoftware (formName) {
@@ -379,12 +439,56 @@ export default {
         }
       })
     },
-    handleOnchange (file, fileList) {
-      console.info(fileList[0])
-      // 验证上传文件的格式
-      if (this.beforeUpload(file)) {
-        this.uploadFiles.append('file', fileList[0].raw)
+    // 文件导入
+    _importFile () {
+      this.dialogImportTitle = '软件包注册'
+      this.dialogImportVisible = true
+    },
+    _importRegisterSoftware () {
+      console.info('_importRegisterSoftware')
+      console.info(JSON.stringify(this.uploadFiles))
+      var fileLength = this.$refs.uploadPackageJarFiles._data.uploadFiles.length
+      if (fileLength > 0) {
+        uploadExcelFiles(this.uploadFiles)
+        .then((res) => {
+          console.log('===>' + res)
+          this.$message.success('上传成功', 2000)
+          this.dialogImportVisible = false
+          this.fileList = []
+          this.loadData()
+        }).catch(
+          function (error) {
+            this.$message({
+              message: error.message,
+              center: true,
+              showClose: true,
+              type: 'error',
+              duration: 2000
+            }).bind(this)
+            console.log(error)
+          })
+      } else {
+        this.$message({
+          message: '请先选择需要上传的文件',
+          type: 'warning',
+          duration: 20000,
+          center: true,
+          showClose: true
+        })
       }
+    },
+    handleOnchange (file, fileList) {
+      console.info('handleOnchange')
+      // var fileArray = []
+      for (let i = 0; i < fileList.length; i++) {
+        // console.info(fileList[i].raw)
+        // fileArray.push(fileList[i].raw)
+        this.uploadFiles.append('file', fileList[i].raw)
+      }
+      // 验证上传文件的格式
+      // if (this.beforeUpload(file)) {
+      //   this.uploadFiles.append('file', fileArray)
+      // }
     },
     beforeUpload (file) {
       var jarFileName = file.name.split('.')
@@ -405,7 +509,7 @@ export default {
       }
     },
     handleExceed (files, fileList) {
-      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      // this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
 
     // 清空软件包注册页面之前输入的值
@@ -414,7 +518,10 @@ export default {
       this.$refs.softwareDetails.resetFields()
       this.fileList = []
     },
-
+    // 清空软件包注册页面之前输入的值
+    closeImportDialog () {
+      this.dialogImportVisible = false
+    },
     // 查看软件包每条详细信息
     _handleCheckDetails (rowIdx) {
       this.dialogTitle = '软件服务包详情'
@@ -426,7 +533,7 @@ export default {
           .then(
             function (result) {
               console.log(JSON.stringify(result))
-              this.softwarePckDetails = result
+              this.softwarePckDetails = result.data
               this.dialogDetailsVisible = true
               console.log(' check software details -----------> ' + JSON.stringify(this.softwarePckDetails, null, ' '))
             }.bind(this)
@@ -442,7 +549,7 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              this.softwarePckDetails = result
+              this.softwarePckDetails = result.data
               this.dialogEditVisible = true
               console.log('edit software details ----------->   ' + JSON.stringify(this.softwarePckDetails))
             }.bind(this)
@@ -509,9 +616,9 @@ export default {
     _handleCheckHistory (rowIdx) {
       this.dialogTitle = '软件包历史信息详情'
       var rowData = this.softwarePackListData[rowIdx]
-      var eachRowUUID = rowData.uuid
-      console.log('history rowData -- >' + eachRowUUID)
-      getSoftwarePackageHistoryList(eachRowUUID)
+      this.searchConditionHistroyList.packageUuid = rowData.uuid
+      console.log('history rowData -- >' + rowData.uuid)
+      getSoftwarePackageHistoryList(this.searchConditionHistroyList)
           .then(
             function (result) {
               console.log('get history result -- >' + result)

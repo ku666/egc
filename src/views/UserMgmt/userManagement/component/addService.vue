@@ -83,6 +83,7 @@ export default {
       total: 0,
       pageSize: 10,
       listPageParm: {
+        cloudFlag: '1',
         resourceType: '3',
         appCode: '',
         delAuthority: true,
@@ -122,7 +123,8 @@ export default {
   },
   methods: {
     getAppList () {
-      getResourceList(this.appVal)
+      var resourceQuery = {type: this.appVal, cloudFlag: 1}
+      getResourceList(resourceQuery)
         .then(
             function (result) {
               console.log('<<<<<getAppList:' + result)

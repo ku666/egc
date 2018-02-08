@@ -3,21 +3,53 @@
     <div>
       <search-dep-condition  @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-dep-condition>
     </div>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
+    <el-row style="height: 100%">
+      <el-col :span="24" >
+        <div style="margin-top: 20px">
           <el-table :data="hardwareDepListData" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="80">
+            <!-- <el-table-column
+              prop="batchName"
+              label="批次"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="packageName"
+              label="软件包名称"
+              width="200">
+            </el-table-column>
+            <el-table-column
+              prop="packageVersion"
+              label="软件包版本"
+              width="200">
+            </el-table-column>            
+            <el-table-column
+              prop="index"
+              label="应用&组件名称"
+              width="200">
+            </el-table-column> 
+            <el-table-column
+              prop="index"
+              label="前续软件包版本"
+              width="200">
+            </el-table-column> 
+            <el-table-column label="二级菜单">
+              <el-table-column
+                prop="index"
+                label="CPU要求（核数）"
+                width="200">
+              </el-table-column>
+            </el-table-column> -->
+            <!-- <el-table-column label="操作" width="80">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="detailsImg"/> -->
+                  <img :src="detailsImg"/> 
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
         </div>
         <div>
@@ -70,40 +102,42 @@ export default {
       },
       tableTitleList: [
         {
+          colName: '批次',
+          prop: 'batchName',
+          width: 200
+        },
+        {
           colName: '软件包名称',
-          prop: 'package_name',
+          prop: 'packageName',
           width: 200
         }, {
           colName: '软件包版本',
-          prop: 'package_version',
+          prop: 'packageVersion',
+          width: 150
+        }, {
+          colName: 'CPU（核数）',
+          prop: 'numberOfCore',
           width: 100
         }, {
-          colName: '开发者',
-          prop: 'package_provider',
-          width: 100
-        }, {
-          colName: '应用&组件名称',
-          prop: 'uuid',
-          width: 300
-        }, {
-          colName: '前续软件包版本',
-          prop: 'uuid',
-          width: 120
-        }, {
-          colName: 'CPU要求（核数）',
-          prop: 'cpuFrequency',
-          width: 140
-        }, {
-          colName: '内存要求（G）',
+          colName: '内存（G）',
           prop: 'ram',
-          width: 160
+          width: 100
         }, {
-          colName: '硬盘要求',
+          colName: '硬盘总可用容量要求(M)',
           prop: 'storage',
-          width: 120
+          width: 150
         }, {
-          colName: '备注',
-          prop: 'remark'
+          colName: '硬盘1',
+          prop: 'hd1',
+          width: 80
+        }, {
+          colName: '硬盘2',
+          prop: 'hd2',
+          width: 80
+        }, {
+          colName: '硬盘3',
+          prop: 'hd3',
+          width: 80
         }
       ],
       detailsTitle: '查看详情',
@@ -182,7 +216,7 @@ export default {
   },
 
   mounted () {
-    this.loadData()
+    // this.loadData()
   }
 }
 </script>
