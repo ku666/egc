@@ -455,26 +455,19 @@ export default {
       this.dialogFormVisible = false
       this.dialogCreateFormVisible = false
     },
-    // handleRemove (file, fileList) {
-    //   console.log(file, fileList)
-    // },
-    // handlePreview (file) {
-    //   console.log(file)
-    // },
     handleExceed (files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
-    // beforeRemove (file, fileList) {
-    //   return this.$confirm(`确定移除 ${file.name}？`)
-    // },
     submitUpload () {
+      this.errorList = ''
+      this.errorMsg = ''
       var fileLength = this.$refs.upload._data.uploadFiles.length
       if (fileLength > 0) {
+        console.log(this.uploadFiles.get('file'))
         uploadUserExcel(this.uploadFiles)
         .then(
           function (result) {
             if (result.code === '0') {
-              // this.errorList = '<p><p id="errorTitle">导入用户失败！</p><br>'
               this.errorMsg = result.msg
               this.errorList = '<p><strong>' + result.msg + '</strong>'
               if (result.errorList != null) {
@@ -490,9 +483,9 @@ export default {
               }
               this.$message({
                 message: this.errorMsg,
-                // showClose: true,
+                showClose: true,
                 type: 'error',
-                duration: 5000
+                duration: 4000
               })
             } else if (result.code === '1') {
               this.$message({
@@ -531,24 +524,21 @@ export default {
       }
     },
     handleOnchange (file, fileList) {
-      console.info(fileList)
-      // this.uploadFiles.append('file', fileList[0].raw)
       if (this.beforeUpload(file)) {
-        this.uploadFiles.append('file', fileList[0].raw)
+        this.uploadFiles.set('file', fileList[0].raw)
       }
-      // this.uploadFiles.files = fileList[0]
     },
     beforeUpload (file) {
       var Xls = file.name.split('.')
       console.log('Xls[1] --- > ' + Xls)
       const isExcel = (Xls[Xls.length - 1] === 'xls' || Xls[Xls.length - 1] === 'xlsx' || Xls[Xls.length - 1] === 'xlsm')
       console.log('Xls[Xls.length - 1] --- > ' + Xls[1])
-      const isLt10M = file.size / 1024 / 1024 < 1000
+      const isLt1M = file.size / 1024 / 1024 < 100
       if (!isExcel) {
         this.$message.error('上传文件只能是 xls/xlsx/xlsm 格式！')
         this.fileList = []
         return false
-      } else if (!isLt10M) {
+      } else if (!isLt1M) {
         this.$message.error('上传文件大小不能超过 1MB!')
         this.fileList = []
         return false
@@ -557,7 +547,6 @@ export default {
       }
     },
     handleCommand (type) {
-      // window.open('/egc-usermgmtcomponent/usermgmt/user/download/template?type=' + type)
       downloadExcelTemplate(type)
         .then(
           function (result) {
@@ -576,7 +565,7 @@ export default {
 
 <style scoped>
   #errorList {
-    margin: 20px 0 100px 100px;
+    margin: 20px 0 50px 50px;
     text-align: left;
     color: red;
     font-size: 0.9em;
