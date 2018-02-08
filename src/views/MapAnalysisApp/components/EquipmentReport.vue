@@ -65,9 +65,6 @@ export default {
     getSummaries (param) {
       const { columns, data } = param
       const sums = []
-      console.log('lulud')
-      console.log(columns)
-      console.log(data)
       columns.forEach((column, index) => {
         if (index === 0) {
           sums[index] = '总数量'

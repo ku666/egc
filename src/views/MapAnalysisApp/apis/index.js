@@ -1,25 +1,14 @@
 import Axios from '@/assets/js/AxiosPlugin'
 // 以下地址是本地调试时使用
-<<<<<<< HEAD
-// let contextPath = '/egcmapanalysis'
+let contextPath = '/courtorg'
 let personPath = '/mapAnalysis'
 let devicePath = '/device'
-// let ownertPath = '/profile'
+let ownertPath = '/profile'
 // 以下地址是发布到服务器上时用
-let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
+// let contextPath = '/egc-smartcommunitymgmtapp/courtorg'
 // let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
 // let devicePath = '/egc-smartcommunitymgmtapp/device'
-=======
-// let contextPath = '/courtorg'
-// let personPath = '/mapAnalysis'
-// let devicePath = '/device'
-// let ownertPath = '/profile'
-// 以下地址是发布到服务器上时用
-let contextPath = '/egc-smartcommunitymgmtapp/courtorg'
-let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
-let devicePath = '/egc-smartcommunitymgmtapp/device'
->>>>>>> 083c110dacd96856de511d9bb7173df287c66812
-let ownertPath = '/egc-smartcommunitymgmtapp/profile'
+// let ownertPath = '/egc-smartcommunitymgmtapp/profile'
 
 /**
  * 条件查询小区列表
