@@ -118,8 +118,8 @@ export default {
       },
       formLabelWidth: '120px',
       dictData: {
-        userStatusDict: 'USER_ACC_STATUS',
-        contactTypeDict: 'CONTACT_TYPE',
+        userStatusDict: 'COURT_USER_ACC_STATUS',
+        contactTypeDict: 'COURT_CONTACT_TYPE',
         cloudFlag: 0
       },
       userAccStatusOptions: undefined,
