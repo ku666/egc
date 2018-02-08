@@ -107,11 +107,11 @@
         <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button>
       </el-button-group>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-        <add-app ref="addapp" v-show="showApp" :form="form" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
+        <add-app ref="addapp" v-show="showApp" :form="form" :cloudFlag="1" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
         ></add-app>
-        <add-service ref="addservice" v-show="showService" :form="form"  @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
+        <add-service ref="addservice" v-show="showService" :form="form" :cloudFlag="1" @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
         ></add-service>
-        <add-device ref="adddevice" v-show="showDevice" :form="form"  @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
+        <add-device ref="adddevice" v-show="showDevice" :form="form" :cloudFlag="1" @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
         ></add-device>
       </el-dialog>
       <grid-list id="resourceTable"

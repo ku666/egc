@@ -109,7 +109,8 @@ export default {
       roleName: undefined,
       remark: undefined,
       uuid: undefined
-    }
+    },
+    cloudFlag: undefined
   },
   data () {
     return {
@@ -144,8 +145,8 @@ export default {
         children: 'children'
       },
       dictData: {
-        resourceTypeDict: 'RESC_TYPE',
-        actionType: 'ACT_TYPE'
+        resourceTypeDict: 'CLOUD_RESC_TYPE',
+        actionType: 'CLOUD_ACT_TYPE'
       },
       listParam: {
         currentPage: '1',
