@@ -76,44 +76,44 @@
                 <!-- </div> -->
               </template>
             </el-table-column>
-            <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip>
+            <el-table-column prop='typeModel' label='设备型号' >
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeModel, searchForm.typeModel)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip>
+            <el-table-column prop='typeName' label='设备名称' >
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeName, searchForm.typeName)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip>
+            <el-table-column prop='typeDesc' label='设备描述' >
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeDesc, searchForm.typeDesc)"></p>
               </template>
             </el-table-column>
             <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-            <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
+            <!-- <el-table-column label='父设备' width="120" >
               <template slot-scope="scope">
                 <div v-for='device in parents' v-bind:key='device.uuid'>
                   {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
                 </div>
               </template>
             </el-table-column> -->
-            <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
+            <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-            <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
-            <!-- <el-table-column label='供应商' show-overflow-tooltip>
+            <el-table-column prop='providerName' label='供应商' ></el-table-column>
+            <!-- <el-table-column label='供应商' >
               <template slot-scope="scope">
                 <div v-for='provider in providers' v-bind:key='provider.providerCode'>
                   {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
                 </div>
               </template>
             </el-table-column> -->
-            <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
+            <el-table-column prop='createUser' label='创建人' ></el-table-column>
+            <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
+            <el-table-column prop='updateUser' label='修改人' ></el-table-column>
             <el-table-column label='操作'>
               <template slot-scope='scope'>
                 <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -130,44 +130,44 @@
           <p v-html="highlightKeys(scopeParent.row.typeCode, searchForm.typeCode)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip>
+      <el-table-column prop='typeModel' label='设备型号' >
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeModel, searchForm.typeModel)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip>
+      <el-table-column prop='typeName' label='设备名称' >
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeName, searchForm.typeName)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip>
+      <el-table-column prop='typeDesc' label='设备描述' >
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeDesc, searchForm.typeDesc)"></p>
         </template>
       </el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-      <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
+      <!-- <el-table-column label='父设备' width="120" >
         <template slot-scope="scope">
           <div v-for='device in parents' v-bind:key='device.uuid'>
             {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
+      <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-      <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
-      <!-- <el-table-column label='供应商' show-overflow-tooltip>
+      <el-table-column prop='providerName' label='供应商' ></el-table-column>
+      <!-- <el-table-column label='供应商' >
         <template slot-scope="scope">
           <div v-for='provider in providers' v-bind:key='provider.providerCode'>
             {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
+      <el-table-column prop='createUser' label='创建人' ></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' ></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
