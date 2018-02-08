@@ -47,13 +47,13 @@
             </el-col>
             <el-col :span="6" class="stime">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' @blur="timeJudgment">
+                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' @blur="timeJudgment">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -171,6 +171,8 @@ export default {
         perInCountList: [], // 入园人数集合
         perOutCountList: [] // 出园人数集合
       },
+      clearableDatepick: false,
+      editableDatepick: false,
       isOwner: true, // 默认显示业主人数
       isRate: false, // 显示出入频率
       isOwenrTable: true, // 默认显示业主表格
