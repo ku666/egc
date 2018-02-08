@@ -31,10 +31,17 @@ export const uploadUserExcel = (params) => {
   })
 }
 
-// 下载 excel 模板
+// 下载用户导入 excel 模板
 export const downloadExcelTemplate = (type) => {
   return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type
-  ).then(res => res.data)
+  ).then(res => {
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    let link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = type
+    link.click()
+    return res.data
+  })
 }
 
 // -----------------  用户组接口 ----------------

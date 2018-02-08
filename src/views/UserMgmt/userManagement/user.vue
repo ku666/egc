@@ -77,7 +77,7 @@
         <el-button icon="el-icon-upload" style="margin-center: 10px" @click="submitUpload" plain type="primary">上传到服务器</el-button>
       </el-upload> -->
     <div id="fileUpload" style="text-align:center; margin-top:40px">
-      <div style="width: 500px; margin: 0 auto">
+      <div style="width: 360px; margin: 0 auto">
       <el-upload
           ref="upload"
           class="avatar-uploader"
@@ -103,6 +103,8 @@
         <el-dropdown-item command="2">.xlsm</el-dropdown-item>
       </el-dropdown-menu>
       </el-dropdown>
+      <div id="errorList" v-html="errorList">
+      </div>
       <!-- <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" @click="downloadTemplate" class="search-btn" type="primary">下载模板</el-button> -->
       </div>
     </div>
@@ -180,7 +182,8 @@ export default {
       showFirstTab: true,
       showSecondTab: false,
       activeName: 0,
-      errorMsg: ''
+      errorMsg: '',
+      errorList: ''
     }
   },
   components: {
@@ -470,14 +473,19 @@ export default {
         .then(
           function (result) {
             if (result.code === '0') {
+              // this.errorList = '<p><p id="errorTitle">导入用户失败！</p><br>'
               this.errorMsg = result.msg
+              this.errorList = '<p><strong>' + result.msg + '</strong>'
               if (result.errorList != null) {
                 this.errorMsg += '：'
+                this.errorList += '：<br>'
                 for (var i = 0; i < result.errorList.length; i++) {
                   this.errorMsg += result.errorList[i].errorMsg + '、'
+                  this.errorList += result.errorList[i].errorMsg + '<br>'
                 }
                 var length = this.errorMsg.length
                 this.errorMsg = this.errorMsg.substr(0, length - 1)
+                this.errorList += '</p>'
               }
               this.$message({
                 message: this.errorMsg,
@@ -555,5 +563,10 @@ export default {
 </script>
 
 <style scoped>
-
+  #errorList {
+    margin: 20px 0 100px 100px;
+    text-align: left;
+    color: red;
+    font-size: 0.9em;
+  }
 </style>
