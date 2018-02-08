@@ -224,11 +224,13 @@ export default {
       getDeviceAttributeList({'typeCode': this.deviceCategoryDetail.typeCode})
       .then(res => {
         let temp = []
-        res.data.forEach(element => {
-          temp.push(element.uuid)
-        })
-        this.selectAttr = []
-        this.selectAttr = temp
+        if (res.data !== null) {
+          res.data.forEach(element => {
+            temp.push(element.uuid)
+          })
+          this.selectAttr = []
+          this.selectAttr = temp
+        }
       })
     },
     // 保存设备基本信息
