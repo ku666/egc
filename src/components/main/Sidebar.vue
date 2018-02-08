@@ -22,7 +22,6 @@
                   </el-menu-item>
                 </template>
               </template>
-              </el-menu-item>
             </el-submenu>
           </template>
         </template>
@@ -40,7 +39,8 @@
 export default {
   data () {
     return {
-      items: []
+      items: [],
+      openeds: []
     }
   },
   props: {
@@ -57,7 +57,17 @@ export default {
     var qs = require('qs')
     this.items = qs.parse(meuns)
     */
+    if (sessionStorage.getItem('CurrentlyUrl') !== undefined) {
+      console.log('sidebar.vue_beforeMount_  CurrentlyUrl :' + sessionStorage.getItem('CurrentlyUrl'))
+      this.openeds.push(sessionStorage.getItem('CurrentlyUrl'))
+    } else {
+      console.log('sidebar.vue_beforeMount_  CurrentlyUrl is undefined')
+    }
     this.loadData()
+  },
+  mounted () {
+    console.log('sidebar.vue_mounted  is active')
+    this.checkedTitle = sessionStorage.getItem('CurrentlyCheckedTitle')
   },
   methods: {
     showSelectedTitle () {
@@ -73,6 +83,7 @@ export default {
     onRoutes () {
       console.log('sidebar.vue_computed_onRoutes  is active')
       console.log(this.$route.path)
+      sessionStorage.setItem('CurrentlyUrl', this.$route.path)
       return this.$route.path
     }
   },
@@ -80,6 +91,7 @@ export default {
     checkedTitle (curVal, oldVal) {
       console.log('sidebar.vue_watch_checkedTitle  is active')
       if (curVal) {
+        sessionStorage.setItem('CurrentlyCheckedTitle', curVal)
         this.checkedTitle = curVal
       }
     }
@@ -112,5 +124,11 @@ export default {
 .egsc-admin-sidebar .el-submenu__title {
   min-width: 180px;
   font-size: 12px;
+}
+.egsc-admin-sidebar .el-menu-item:focus {
+  background-color: #fff;
+}
+.egsc-admin-sidebar .el-menu-item.is-active {
+  background-color: #ecf5ff;
 }
 </style>
