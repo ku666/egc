@@ -8,7 +8,7 @@
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary">添加</el-button>
           </div>
           <div class="flex-1 flex-c">
-          <grid-list id="usergroupTable"
+          <grid-list id="roleTable"
             :editable="true"
             :deletable="true"
             :showOperation="true"
@@ -36,6 +36,7 @@
         :visible.sync="dialogFormVisible">
             <role-add
               :form="roleForm"
+              :userTypeList="userTypeOptions"
               @listenToAddEvent="roleAddEvent"
               v-show="showCreate"
             ></role-add>
@@ -49,6 +50,7 @@
               :roleUsergroupData="subUsergroupData"
               :roleResourceData="subResourceData"
               :form="roleForm"
+              :userTypeList="userTypeOptions"
               style='margin-top: 20px'
             ></role-edit>
           </el-card>
@@ -65,7 +67,8 @@
   import {
     getRoleList,
     getRoleData,
-    deleteRole
+    deleteRole,
+    listUserType
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     name: 'role',
@@ -101,20 +104,24 @@
         dialogStatus: undefined,
         userGroupData: undefined,
         query: {
-          roleId: undefined,
+          roleId: '',
           currentPage: 1,
-          pageSize: 10
+          pageSize: 10,
+          cloudFlag: 1,
+          courtUuid: ''
         },
         editQuery: {
-          roleId: undefined,
+          roleId: '',
           currentPage: 1,
           pageSize: 5
         },
         roleForm: {
           roleName: undefined,
           remark: undefined,
-          uuid: undefined
-        }
+          uuid: undefined,
+          userType: undefined
+        },
+        userTypeOptions: undefined
       }
     },
     components: {
@@ -145,6 +152,18 @@
           .catch(
             function (error) {
               console.log(error)
+            }
+          )
+        listUserType()
+          .then(
+            function (result) {
+              this.userTypeOptions = result
+              console.log(this.userTypeOptions)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log('错误：' + error)
             }
           )
       },
@@ -195,6 +214,7 @@
               this.roleForm.roleName = result.roleBaseVo.roleName
               this.roleForm.remark = result.roleBaseVo.remark
               this.roleForm.uuid = result.roleBaseVo.uuid
+              this.roleForm.userType = result.roleBaseVo.userType
               this.roleName = result.roleBaseVo.roleName
             }.bind(this)
           )
@@ -274,6 +294,7 @@
         this.roleForm.roleName = undefined
         this.roleForm.remark = undefined
         this.roleForm.uuid = undefined
+        this.roleForm.userType = undefined
         this.dialogFormVisible = true
       }
     },
@@ -285,19 +306,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #usergroupTable >>> colgroup col:nth-child(1) {
-    /* width: 30% */
-    width: 100px;
+  #roleTable >>> colgroup col:nth-child(1) {
+    width: 25%;
   }
-  #usergroupTable >>> colgroup col:nth-child(2) {
-    /* width: 50% */
-    width: 100px;
+  #roleTable >>> colgroup col:nth-child(2) {
+    width: 25%;
   }
-  #usergroupTable >>> colgroup col:nth-child(3) {
-    /* width: 50% */
-    width: 150px;
+  #roleTable >>> colgroup col:nth-child(3) {
+    width: 30%
   }
-  /* #usergroupTable >>> colgroup col:nth-child(3) {
+  #roleTable >>> colgroup col:nth-child(4) {
     width: 20%
-  } */
+  }
 </style>

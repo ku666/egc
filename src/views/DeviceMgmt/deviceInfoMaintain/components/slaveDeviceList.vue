@@ -2,6 +2,7 @@
 <template>
   <div>
     <el-table
+      class="deviceMgmTable"
       :data="slaveDeviceTableData"
       style="width: 100%"
       highlight-current-row
@@ -73,7 +74,7 @@
         :total="total">
       </el-pagination>
     </div>
-    <el-dialog :title="currentRow.deviceTypeDesc" :visible.sync="isSalveDetailShow" @close="_closeDialog" width="75%" top="8vh">
+    <el-dialog :title="(isSalveDetailShow)?currentRow.deviceTypeDesc:''" :visible.sync="isSalveDetailShow" @close="_closeDialog" width="75%" top="8vh">
       <main-device-dialog ref="salveDeviceDialog"
                          :uuid="slaveUuid">
       </main-device-dialog>

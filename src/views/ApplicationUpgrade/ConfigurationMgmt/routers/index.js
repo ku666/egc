@@ -3,6 +3,7 @@ import serverHardwareCfgInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/
 import applicationServiceInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/ApplicationServiceInfo'
 import operationSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/OperationSystemInfo'
 import middlewareSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/MiddlewareSystemInfo'
+import operationMaintance from '@/views/ApplicationUpgrade/ConfigurationMgmt/OperationMaintance'
 import databaseSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/DatabaseSystemInfo'
 import netDeviceSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/NetDeviceSystemInfo'
 
@@ -37,5 +38,10 @@ export default[
     path: '/applicationupgrade/netdevice',
     name: 'netDeviceSystemInfo',
     component: netDeviceSystemInfo
+  },
+  {
+    path: '/applicationupgrade/operationmaintance',
+    name: 'operationMaintance',
+    component: operationMaintance
   }
 ]

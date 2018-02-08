@@ -2,14 +2,16 @@
   <div class = "ui-common">
     <el-row align="left">
         <el-form align="left" :inline="true">
-          <el-form-item label="应用程序 ">
-            <el-select v-model='appResource' @visible-change='getAppList' placeholder='选择应用程序' >
+          <el-form-item label="所属应用 ">
+            <el-select v-model='appResource' @visible-change='getAppList' placeholder='请选择所属应用' >
               <el-option v-for="appResourceOpt in appResourceList" :key="appResourceOpt.appCode" :label="appResourceOpt.resourceName" :value="appResourceOpt.appCode"> </el-option>
             </el-select>
          </el-form-item>
-          <el-form-item label="服务名称">
-            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="选择服务名称"></el-input>
-            <el-button class="search-btn" type="primary" @click="handleFilter">搜索</el-button>
+          <el-form-item label="　　服务名称">
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="请输入服务名称"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:20px;">搜索</el-button>
           </el-form-item>
         </el-form>
     </el-row>
@@ -17,7 +19,6 @@
     <el-table
       ref="multipleTable"
       :data="tableData" 
-      border
       style="margin-top: 10px"
       @selection-change="handleSelectionChange">
       <el-table-column
@@ -105,7 +106,7 @@ export default {
       multipleSelection: undefined,
       params: [
         {
-          title: '应用程序',
+          title: '应用名称',
           prop: 'appName'
         },
         {
@@ -113,7 +114,7 @@ export default {
           prop: 'resourceName'
         },
         {
-          title: '服务URL',
+          title: '服务URI',
           prop: 'resourceUrl'
         }
       ]
@@ -191,7 +192,10 @@ export default {
         }
         this.$emit('createServiceAuthorityEvent', this.items)
       } else {
-        this.$msgbox('请选择至少一个服务')
+        this.$msgbox({
+          title: '消息',
+          message: '请选择至少一个服务'}
+          )
       }
     },
     handleSelectionChange (val) {
@@ -226,6 +230,8 @@ export default {
       console.log('addSevice reset')
       this.appResource = ''
       this.searchServiceTxt = ''
+      this.total = 0
+      this.pageSize = 5
       if (this.tableData.length > 0) {
         this.tableData = []
       }

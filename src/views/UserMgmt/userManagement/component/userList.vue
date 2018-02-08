@@ -1,7 +1,7 @@
 <template>
   <el-table
     :data="tableData"
-    height="100%"
+    height="680"
     >
     <!-- <el-table-column label="序号" type="index" width="50"></el-table-column> -->
     <el-table-column
@@ -16,11 +16,14 @@
       width="80">
       <template slot-scope="scope">
         <el-tooltip class="item" effect="light" content="编辑" placement="top-start">
-          <span @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
+          <span v-if="editable" @click="handleClickEdit(scope.$index)" style="cursor:pointer; margin-right:10px" class="el-icon-edit"></span>
         </el-tooltip>
         <el-tooltip class="item" effect="light" content="删除" placement="top-start">
-          <span @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+          <span v-if="deletable" @click="handleClickDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
         </span>
+        </el-tooltip>
+        <el-tooltip class="item" effect="light" content="查看" placement="top-start">
+          <span v-if="viewable" @click="handleClickView(scope.$index)" style="cursor:pointer" class="el-icon-view"></span>
         </el-tooltip>
       </template>
     </el-table-column>
@@ -31,7 +34,10 @@
   export default {
     props: {
       params: undefined,
-      tableData: undefined
+      tableData: undefined,
+      editable: true,
+      deletable: true,
+      viewable: false
     },
     data () {
       return {
@@ -47,6 +53,10 @@
       handleClickEdit (row) {
         this.$emit('listenEditEvent', this.tableData[row])
         console.log('userlist 编辑' + row + '行')
+      },
+      handleClickView (row) {
+        this.$emit('listenViewEvent', this.tableData[row])
+        console.log('userlist 查看' + row + '行')
       }
     },
     created () {

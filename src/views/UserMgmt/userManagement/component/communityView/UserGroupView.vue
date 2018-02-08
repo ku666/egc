@@ -7,8 +7,12 @@
     </el-tabs>
     <el-container style="margin-top:20px">
     <el-form ref='editForm' v-show='showSummary' label-width='100px' :model='editForm'>
-      <el-form-item label='用户组名称' class="read-only" type="text" > {{ editForm.usergroupName }} </el-form-item>
-      <el-form-item label='用户组说明' class="read-only" type="text" > {{ editForm.remark }} </el-form-item>
+      <el-form-item label='用户组名称' prop='usergroupName'>
+        <el-input v-model='editForm.usergroupName' placeholder='无数据' readonly></el-input>
+      </el-form-item>
+      <el-form-item label='用户组说明' prop='remark'>
+        <el-input type='textarea' rows="3" v-model='editForm.remark' style="width:650px" placeholder='无数据' readonly></el-input>
+      </el-form-item>
     </el-form>
     </el-container>
       <div v-show="showUser" style="margin-top:-5px">
@@ -51,12 +55,12 @@
 </template>
 
 <script>
-import gridList from './gridList.vue'
+import gridList from '../gridList.vue'
 import {
   updateUserGroup,
   getRoleUserGroup,
   getRoleUser,
-  getRoleListAll,
+  getRoleListAllMaindata,
   getDirUserGroupList,
   getDirUserGroupFilterList,
   createUserUsergroup,
@@ -91,7 +95,7 @@ export default {
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -122,7 +126,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -201,7 +205,7 @@ export default {
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleListAll()
+      getRoleListAllMaindata()
         .then(
           function (result) {
             this.tmpRoleList = result.roleBaseVoList
@@ -601,6 +605,11 @@ export default {
       queryRole: {
         roleUuid: undefined,
         usergroupUuid: undefined
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 0
       },
       userGroupList: undefined,
       userList: undefined,

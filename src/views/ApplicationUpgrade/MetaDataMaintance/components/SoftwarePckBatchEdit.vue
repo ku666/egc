@@ -1,20 +1,20 @@
 <template>
   <div>
-    <el-form :inline="true" :model="codeInstDetails">
+    <el-form :inline="true" :model="softwareBatchDetails">
         <el-form-item label="代码实例值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
         </el-form-item>
         <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
         </el-form-item>
         <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
         </el-form-item>
         <el-form-item label="代码值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.name"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwareBatchDetails.name"></el-input>
         </el-form-item>
        <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
+        <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
       </el-form-item>
 
       <div style="text-align: center">
@@ -27,7 +27,7 @@
 <script>
 export default {
   props: {
-    codeInstDetails: {
+    softwareBatchDetails: {
       type: Object
     }
   },
@@ -41,20 +41,16 @@ export default {
   },
   methods: {
     updateCodeInst () {
-      if (this.codeInstDetails.remark !== this.tempRemark) {
-        this.$emit('saveCodeInstEvent', this.codeInstDetails)
-      } else {
-        this.$message.error('请修改数据后再提交')
-      }
+      this.$emit('saveSoftwareBatchEvent', this.softwareBatchDetails)
     }
   },
   watch: {
-    codeInstDetails (val, oldValue) {
-      this.codeInstDetails = val
+    softwareBatchDetails (val, oldValue) {
+      this.softwareBatchDetails = val
     }
   },
   mounted () {
-    this.tempRemark = this.codeInstDetails.remark
+    this.tempRemark = this.softwareBatchDetails.remark
   }
 }
 </script>

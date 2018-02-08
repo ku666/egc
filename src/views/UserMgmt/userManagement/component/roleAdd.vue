@@ -10,10 +10,10 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='item in form.userTypeList'
-            :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            v-for='(item, index) in userTypeList'
+            :key='index'
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -35,10 +35,12 @@
 <script>
   import {
     createRole,
-    checkRoleName,
-    listUserType
+    checkRoleName
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
+    props: {
+      userTypeList: undefined
+    },
     data () {
       // 角色名的唯一性
       var validateRoleName = (rule, value, callback) => {
@@ -64,6 +66,7 @@
             { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
           ]
         },
+        userTypeList: undefined,
         roleNameFlag: true,
         formData: undefined,
         form: {
@@ -75,19 +78,6 @@
       }
     },
     methods: {
-      getUserTypeList () {
-        listUserType()
-          .then(
-            function (result) {
-              this.form.userTypeList = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log('错误：' + error)
-            }
-          )
-      },
       // 校验角色名的唯一性
       validateName (roleUuid, roleName) {
         console.log('start validating...' + roleUuid + roleName)
@@ -118,6 +108,7 @@
                   })
                   this.form.roleName = null
                   this.form.remark = null
+                  this.form.userType = null
                   this.$emit('listenToAddEvent', this.formData)
                 }.bind(this)
               )

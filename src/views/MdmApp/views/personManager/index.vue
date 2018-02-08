@@ -7,7 +7,7 @@
 
     <div class="person-list">
       <div>
-        <el-form :inline='true' :model='searchCondition' ref='searchConditionForm' label-width="70px" style='margin-top: 20px;'>
+        <el-form :inline='true' :model='searchCondition' ref='searchCondition' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='小区名称'>
             <!-- <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input> -->
             <el-select
@@ -26,16 +26,16 @@
             </el-select>
           </el-form-item>
           <el-form-item label='姓名'>
-            <el-input placeholder='请输入姓名' v-model='searchCondition.name' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入姓名' v-model.trim='searchCondition.name' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='证件号码'>
-            <el-input placeholder='请输入证件号码' v-model='searchCondition.idenNum' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入证件号码' v-model.trim='searchCondition.idenNum' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电话'>
-            <el-input placeholder='请输入电话' v-model='searchCondition.phone' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入电话' v-model.trim='searchCondition.phone' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电子邮箱'>
-            <el-input placeholder='请输入电子邮箱' v-model='searchCondition.mail' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入电子邮箱' v-model.trim='searchCondition.mail' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <div align="right">
             <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
@@ -46,7 +46,7 @@
 
       <!-- 带分页表格 -->
       <!-- <hr/> -->
-      <el-table :data="tableData" @row-dblclick='showPersonDetail' stripe height="100%" v-loading="loading" style="margin-top: 15px">
+      <el-table :data="tableData" @row-dblclick='showPersonDetail' height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name">
@@ -77,12 +77,20 @@
         <el-table-column label="电子邮箱" prop="email">
         </el-table-column>
       </el-table>
-      <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+      <el-pagination
+        background
+        :current-page='searchCondition.currentPage'
+        :page-sizes='[10, 20, 50, 100]'
+        :page-size='searchCondition.pageSize'
+        layout='total, sizes, prev, pager, next, jumper'
+        :total='searchCondition.total'
+        @size-change='sizeChange'
+        @current-change='currentChange'>
       </el-pagination>
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 750px">
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 920px">
       <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
       <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
@@ -133,8 +141,8 @@
         </el-tab-pane>
         <el-tab-pane label="房产信息" name='detail'>
           <el-table :data="this.modelDetailForm.detail" stripe width="99%" height="190">
-            <el-table-column label="小区" prop="courtName" min-width="420px"></el-table-column>
-            <el-table-column label="房屋" prop="houseAddress" min-width="420px"></el-table-column>
+            <el-table-column label="小区" prop="courtName" min-width="460px"></el-table-column>
+            <el-table-column label="房屋" prop="houseAddress" min-width="460px"></el-table-column>
             <!-- <el-table-column label="备注" prop="description"></el-table-column> -->
           </el-table>
         </el-tab-pane>
@@ -155,9 +163,6 @@ export default {
       uuid: null,
       uuidshow: false,
       selections: [],
-      total: 0,
-      currentPage: 1,
-      pageSize: 10,
       tableData: [],
       loading: false,
       getCourtsLoading: false,
@@ -177,6 +182,9 @@ export default {
         detail: []
       },
       searchCondition: {
+        total: 0,
+        currentPage: 1,
+        pageSize: 10,
         courtUuid: '',
         name: '',
         idenNum: '',
@@ -237,7 +245,6 @@ export default {
       this.modelDetailForm.idenNum = rowData.idenNum
       this.modelDetailForm.phone = rowData.phone
       this.modelDetailForm.email = rowData.email
-
       // 根据人员的uuid获取该人员的房产信息
       getHousesByUserUuid({'userUuid': rowData.uuid})
       .then(res => {
@@ -246,7 +253,6 @@ export default {
       .catch(err => {
         console.log(err)
       })
-      // console.log(JSON.stringify(rowData))
     },
     getCourts: function (query) {
       this.getCourtsLoading = true
@@ -270,65 +276,38 @@ export default {
     },
     reset: function () {
       this.searchCondition = {
+        currentPage: 1,
+        pageSize: 10,
         courtName: '',
         name: '',
-        // pageSize: 10,
-        // currentPage: 1,
         idenNum: '',
         phone: '',
         mail: ''
       }
     },
-    /**
-     * @description 点击table组件复选框触发
-     * @param Array val 所有选中行数据
-     */
     handleSelectionChange: function (val) {
       this.selections = val
     },
-    /**
-     * @description 分页组件单页总数变化
-     * @param Number val 选择的单页总数得值
-     */
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      console.log('sizeChange')
+      this.searchCondition.pageSize = val
+      this.searchCondition.currentPage = 1
       this.search()
     },
-    /**
-     * @description 分页组件当前页变化
-     * @param Number val 选择当前页的值
-     */
     currentChange: function (val) {
-      this.currentPage = val
+      console.log('currentChange')
+      this.searchCondition.currentPage = val
       this.search()
     },
-    search: function (options) {
-      let condition = {}
+    search: function () {
+      console.log('search method')
       this.loading = true
-      // 查询条件
-      condition.courtUuid = this.searchCondition.courtUuid
-      condition.name = this.searchCondition.name
-      condition.idenNum = this.searchCondition.idenNum
-      condition.phone = this.searchCondition.phone
-      condition.mail = this.searchCondition.mail
-      // 分页
-      condition.pageSize = this.pageSize
-      condition.currentPage = this.currentPage
-      if (options) {
-        condition.currentPage = this.currentPage = 1
-        condition.uuid = options.uuid || this.uuid
-      }
-      getPersonList(condition)
-        .then(res => {
-          var self = this
-          this.total = res.data.totalCount
-          const timeOut = setTimeout(function () {
-            self.tableData = res.data.result
-            self.loading = false
-            clearTimeout(timeOut)
-          }, 1000)
-        })
+      getPersonList(this.searchCondition)
+        .then(function (result) {
+          this.searchCondition.total = result.data.totalCount
+          this.tableData = result.data.result
+          this.loading = false
+        }.bind(this))
         .catch(err => {
           console.log(err)
           this.loading = false
@@ -426,8 +405,8 @@ div:hover {
 .header_style {
   padding: 13px 3%;
   border-radius: 4px;
-  background: #f5f7fa;
-  width: 90%;
+  /* background: #f5f7fa; */
+  width: 92%;
   color: #0078F4;
   font-size: 18px;
 }

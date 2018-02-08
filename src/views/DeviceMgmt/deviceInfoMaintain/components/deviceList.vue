@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
+      class="deviceMgmTable"
       :data="mainDeviceTableData"
       :default-sort = "{prop: 'order', order: 'ascending'}"
       highlight-current-row
@@ -109,7 +109,7 @@
     </div>
     <child-device v-show="isChildShow" ref="childDevice" style="margin-top: 100px"></child-device>
     <slave-device v-show="isSlaveShow" ref="slaveDevice" style="margin-top: 100px"></slave-device>
-    <el-dialog :title="currentRow.deviceTypeDesc" :visible.sync="isDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
+    <el-dialog :title="(isDetailDialogShow)?currentRow.deviceTypeDesc:''" :visible.sync="isDetailDialogShow" @close="_closeDialog" width="75%" top="8vh">
       <main-device-dialog :uuid="uuid"
                           ref="mainDeviceDialog">
       </main-device-dialog>
@@ -211,10 +211,6 @@
       handleCurrentChange (row) {
         this.currentRow = row
       },
-      _refresh () {
-        this.currentPage = 1
-        this.loadMainDeviceTableData(1, this.pageSize, this.selectData)
-      },
       _showChildDevice (index, row) {
         this.isSlaveShow = false
         this.isChildShow = true
@@ -246,6 +242,8 @@
           this.$refs.mainDeviceDialog.passToDialogUuid(this.uuid)
         }
         this.isDetailDialogShow = true
+        this.isSlaveShow = false
+        this.isChildShow = false
       }
     },
     mounted () {

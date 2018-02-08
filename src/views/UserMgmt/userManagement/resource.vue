@@ -7,23 +7,21 @@
             <el-option v-for="resourceType in resourceTypeOptions" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="应用程序">
-          <el-select v-model="listQuery.q_appCode" placeholder="请选择" class="user_el-select">
+        <el-form-item v-if="showQueryApp">
+          <span class="sub-title" style="margin-left:24px">{{appLabelTitle}}&nbsp;&nbsp;</span>
+          <el-select v-model="listQuery.q_appCode" placeholder="请选择应用" class="user_el-select">
             <el-option v-for="appCodeType in appCodeOptions" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="showQueryParm">
-          <span class="sub-title">{{labelTitle}}&nbsp;&nbsp;</span>
+          <span class="sub-title" style="margin-left:24px">{{labelTitle}}&nbsp;&nbsp;</span>
           <el-input @keyup.enter.native="handleFilter" class="user_el-input" placeholder="请输入内容" v-model="listQuery.q_resourceName"> </el-input>
         </el-form-item>
-        <!-- <el-form-item label="逻辑地址" :label-width="formLabelWidth">
-          <el-input @keyup.enter.native="handleFilter" class="user_el-input" placeholder="逻辑地址" v-model="listQuery.q_logicalAddress"> </el-input>
-        </el-form-item> -->
         <div class="btn-container">
-        <el-form-item>
-          <el-button class="action-btn" @click="handleFilter" type="primary">搜索</el-button>
-          <el-button @click="resetForm('listQuery')" class="cancel-btn" type="primary" >重置</el-button>
-        </el-form-item>
+          <el-form-item>
+            <el-button @click="resetForm('listQuery')" type="primary" class="cancel-btn">清空</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
+          </el-form-item>
         </div>
       </div>
       <div>
@@ -32,11 +30,12 @@
     </el-form>
 
     <div class="border-divide"></div>
-
     <div class="table-container">
-    <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
-      @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
-    </resource-list>
+      <div class="flex-1">
+        <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
+          @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
+        </resource-list>
+      </div>
     </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
@@ -47,7 +46,8 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
       :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-create>
+      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
+      :defaultResourceTypeParm="defaultResourceType"> </resource-create>
     </el-dialog>
 
     <div>
@@ -85,6 +85,7 @@ export default {
   data () {
     return {
       resourceList: [],
+      defaultResourceType: undefined,
       resourceListParam: undefined,
       total: 0,
       dialogFormVisible: false,
@@ -126,7 +127,8 @@ export default {
         q_resourceType: '2',
         q_resourceName: '',
         q_logicalAddress: '',
-        q_appCode: ''
+        q_appCode: '',
+        cloudFlag: 1
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
@@ -141,7 +143,9 @@ export default {
       deviceGroupListParm: undefined,
       deviceListParm: undefined,
       labelTitle: undefined,
-      showQueryParm: true
+      appLabelTitle: undefined,
+      showQueryParm: true,
+      showQueryApp: true
     }
   },
   components: {
@@ -153,11 +157,12 @@ export default {
     this.loadData()
     this.initListParm()
     this.labelTitle = '菜单名称'
+    this.appLabelTitle = '所属应用'
   },
   methods: {
     initListParm () {
       this.menuListParm = [{
-        title: '应用程序',
+        title: '所属应用',
         prop: 'appName',
         width: 180
       }, {
@@ -169,7 +174,7 @@ export default {
         prop: 'menuCode',
         width: 270
       }, {
-        title: 'URL',
+        title: 'URI',
         prop: 'resourceUrl',
         width: 250
       }, {
@@ -177,7 +182,7 @@ export default {
         prop: 'icon',
         width: 110
       }, {
-        title: '是否按钮',
+        title: '类型',
         prop: 'button',
         width: 77
       }, {
@@ -187,11 +192,11 @@ export default {
       }, {
         title: '已授权角色',
         prop: 'roleNames',
-        width: 400
+        width: 380
       }]
 
       this.appCodeListParm = [{
-        title: '应用程序',
+        title: '应用名称',
         prop: 'appName'
       }, {
         title: '应用代码',
@@ -204,19 +209,20 @@ export default {
         prop: 'roleNames'
       }]
 
-      this.serviceListParm = [{
-        title: '服务名称',
-        prop: 'resourceName'
-      }, {
-        title: '服务URL',
-        prop: 'resourceUrl'
-      }, {
-        title: '应用程序',
-        prop: 'appName'
-      }, {
-        title: '已授权角色',
-        prop: 'roleNames'
-      }]
+      this.serviceListParm = [
+        {
+          title: '所属应用',
+          prop: 'appName'
+        }, {
+          title: '服务名称',
+          prop: 'resourceName'
+        }, {
+          title: '服务URI',
+          prop: 'resourceUrl'
+        }, {
+          title: '已授权角色',
+          prop: 'roleNames'
+        }]
 
       this.deviceGroupListParm = [{
         title: '设备组名称',
@@ -259,9 +265,9 @@ export default {
               buttonName = result.resource[i].button
               // console.log(i + '---buttonName>>>>>>>>>>>>>>>>>:' + buttonName)
               if (buttonName === false) {
-                result.resource[i].button = '否'
+                result.resource[i].button = '菜单'
               } else {
-                result.resource[i].button = '是'
+                result.resource[i].button = '按钮'
               }
             }
             this.resourceList = result.resource
@@ -359,12 +365,13 @@ export default {
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
-        'page': 1,
-        'limit': 10,
-        'q_resourceType': '2',
-        'q_resourceName': '',
-        'q_logicalAddress': '',
-        'q_appCode': ''
+        page: 1,
+        limit: 10,
+        q_resourceType: '2',
+        q_resourceName: '',
+        q_logicalAddress: '',
+        q_appCode: '',
+        cloudFlag: 1
       }
       this.handleFilter()
     },
@@ -381,23 +388,33 @@ export default {
     handleFilter () {
       if (this.listQuery.q_resourceType === '1') {
         this.showQueryParm = false
+        this.showQueryApp = true
         this.resourceListParam = this.appCodeListParm
         this.listQuery.q_resourceName = ''
+        this.appLabelTitle = '应用名称'
       } else if (this.listQuery.q_resourceType === '2') {
         this.labelTitle = '菜单名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = true
         this.resourceListParam = this.menuListParm
       } else if (this.listQuery.q_resourceType === '3') {
         this.labelTitle = '服务名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = true
         this.resourceListParam = this.serviceListParm
       } else if (this.listQuery.q_resourceType === '4') {
         this.labelTitle = '设备组名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = false
         this.resourceListParam = this.deviceGroupListParm
       } else if (this.listQuery.q_resourceType === '99') {
         this.labelTitle = '设备名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = false
         this.resourceListParam = this.deviceListParm
       }
       this.listQuery.page = 1
@@ -406,10 +423,10 @@ export default {
     // 新增资源
     handleCreate () {
       this.initResourceInfo()  // 调用初始信息
-      this.resourceForm.resourceType = '1'
+      this.defaultResourceType = this.listQuery.q_resourceType
       if (this.$refs.resourCreateVue) {
         this.$refs.resourCreateVue.initCreateResource()
-        this.$refs.resourCreateVue.handleChange(this.resourceForm.resourceType)
+        this.$refs.resourCreateVue.handleChange(this.defaultResourceType)
       }
       this.dialogStatus = '添加资源'
       this.dialogFormVisible = false
@@ -547,24 +564,40 @@ export default {
       this.handleFilter()
     },
     changeResourceType () {
+      this.defaultResourceType = this.listQuery.q_resourceType
       if (this.listQuery.q_resourceType === '1') {
         this.showQueryParm = false
+        this.showQueryApp = true
         this.listQuery.q_resourceName = ''
+        this.listQuery.q_appCode = ''
+        this.appLabelTitle = '应用名称'
       } else if (this.listQuery.q_resourceType === '2') {
         this.labelTitle = '菜单名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = true
+        this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '3') {
         this.labelTitle = '服务名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = true
+        this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '4') {
         this.labelTitle = '设备组名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = false
+        this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '99') {
         this.labelTitle = '设备名称'
+        this.appLabelTitle = '所属应用'
         this.showQueryParm = true
+        this.showQueryApp = false
+        this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       }
     }

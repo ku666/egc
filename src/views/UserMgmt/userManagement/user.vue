@@ -1,53 +1,112 @@
 <template>
   <div class='ui-common'>
-    <el-form :inline="true" :model="listQuery" ref="listQuery">
-      <div class="search-container">
-        <el-form-item label="用户姓名">
-          <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
-        </el-form-item>
-        <el-form-item label="登录ID" :label-width="formLabelWidth">
-          <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
-        </el-form-item>
-        <el-form-item label="手机号" :label-width="formLabelWidth">
-          <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
-        </el-form-item>
-        <div class="btn-container">
-          <el-form-item>
-            <el-button @click="resetForm" type="primary" class="cancel-btn">清空</el-button>
-            <el-button class="action-btn" type="primary" @click="handleFilter">搜索</el-button>
+    <el-tabs v-model="activeName" @tab-click="handleTabClick" prop='…'>
+      <el-tab-pane label="用户管理" name="0"></el-tab-pane>
+      <el-tab-pane label="导入用户" name="1"></el-tab-pane>
+    </el-tabs>
+    
+     <div v-show="showFirstTab">
+      <el-form :inline="true" :model="listQuery" ref="listQuery">
+        <div class="search-container">
+          <el-form-item label="用户姓名">
+            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
           </el-form-item>
+          <el-form-item label="　　登录ID">
+            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
+          </el-form-item>
+          <el-form-item label="　　手机号">
+            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="resetForm" type="primary" class="cancel-btn">清空</el-button>
+              <el-button class="action-btn" type="primary" @click="handleFilter">查询</el-button>
+            </el-form-item>
+          </div>
         </div>
+        <div>
+          <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleCreate" plain type="primary">添加</el-button>
+        </div>
+      </el-form>
+
+      <div class="border-divide"></div>
+
+      <div class="table-container">
+        <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px" :deletable="true" :editable="true"
+          @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
+        </user-list>
       </div>
+
+      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+        <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
+        :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
+        @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
+      </el-dialog>
+      <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
+        <user-edit ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
+        :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
+        @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
+      </el-dialog>
       <div>
-         <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" @click="handleCreate" plain type="primary">添加</el-button>
+        <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="listQuery.page"
+            :page-sizes="[10, 20, 50]"
+            :page-size="listQuery.limit"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+        </el-pagination>
       </div>
-    </el-form>
-
-    <div class="border-divide"></div>
-
-    <div class="table-container">
-      <user-list :tableData="userList" :params="userListParam" style="margin-top: 15px"
-                 @listenDeleteEvent="userDeleteEvent" @listenEditEvent="userEditEvent">
-      </user-list>
-
     </div>
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <user-edit ref="userEditVue" :tableData="userList" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
-      :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions"
-      @gridSaveEvent="userSaveEvent" @gridCreateEvent="userCreateEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-edit>
-    </el-dialog>
+    <div v-show="showSecondTab">
+      <!-- <el-upload
+        ref="upload"
+        action=""
+        :limit=1
+        :show-file-list="true"
+        :on-change="handleOnchange"
+        :on-exceed="handleExceed"
+        :file-list="fileList"
+        :auto-upload="false"
+        style="display:inline-block">
+        <el-tooltip class="item" effect="light" content="只能上传 xls、xlsm 格式的文件，且不超过 10M" placement="top-start">
+          <el-button icon="el-icon-upload2" style="margin-center: 10px; margin-left: 10px" plain type="primary">导入用户</el-button>
+        </el-tooltip>
+        <el-button icon="el-icon-upload" style="margin-center: 10px" @click="submitUpload" plain type="primary">上传到服务器</el-button>
+      </el-upload> -->
+    <div id="fileUpload" style="text-align:center; margin-top:40px">
+      <div style="width: 500px; margin: 0 auto">
+      <el-upload
+          ref="upload"
+          class="avatar-uploader"
+          action=""
+          drag
+          :limit=1
+          :show-file-list="true"
+          :on-exceed="handleExceed"
+          :on-change="handleOnchange"
+          :auto-upload="false"
+          :file-list="fileList">
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+          <div class="el-upload__tip" slot="tip">只能上传 excel 文件，且不超过 1M</div>
+      </el-upload>
+      <el-button type="primary" @click="submitUpload" class="action-btn" style="margin: 0 auto; margin-top: 20px; display: block" icon="el-icon-upload2">上传服务器</el-button>
+      <el-dropdown @command="handleCommand">
+        <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" type="primary" class="action-btn">
+          下载模板<i class="el-icon-arrow-down el-icon--right"></i>
+        </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item command="1">.xls</el-dropdown-item>
+        <el-dropdown-item command="2">.xlsm</el-dropdown-item>
+      </el-dropdown-menu>
+      </el-dropdown>
+      <!-- <el-button icon="el-icon-download" style="margin:0 auto; margin-top:10px" @click="downloadTemplate" class="search-btn" type="primary">下载模板</el-button> -->
+      </div>
+    </div>
 
-    <div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="listQuery.page"
-          :page-sizes="[10, 20, 50]"
-          :page-size="listQuery.limit"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
     </div>
   </div>
 </template>
@@ -55,6 +114,7 @@
 <script>
 import userList from './component/userList.vue'
 import userEdit from './component/userEdit.vue'
+import userCreate from './component/userCreate.vue'
 import {
   getUserListByPage,
   getUserDetail,
@@ -63,16 +123,21 @@ import {
   createUser,
   getUserStatusOptions,
   getDepartmentOptions,
-  getContactTypeOptions
+  getContactTypeOptions,
+  listUserType,
+  uploadUserExcel
+  // downloadExcelTemplate
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
   data () {
     return {
+      fileList: [],
       userList: undefined,
       userListParam: undefined,
       total: 0,
       dialogFormVisible: false,
+      dialogCreateFormVisible: false,
       dialogStatus: undefined,
       curUserUuid: undefined,
       addFlag: false,
@@ -97,21 +162,30 @@ export default {
         limit: 10,
         q_userName: '',
         q_fullName: '',
-        q_primaryPhone: ''
+        q_primaryPhone: '',
+        cloudFlag: 1,
+        courtUuid: ''
       },
       formLabelWidth: '120px',
       dictData: {
         userStatusDict: 'USER_ACC_STATUS',
-        contactTypeDict: 'CONTACT_TYPE'
+        contactTypeDict: 'CONTACT_TYPE',
+        cloudFlag: 1
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
-      departmentOptions: undefined
+      departmentOptions: undefined,
+      userTypeOptions: undefined,
+      uploadFiles: new FormData(),
+      showFirstTab: true,
+      showSecondTab: false,
+      activeName: 0
     }
   },
   components: {
     userList,
-    userEdit
+    userEdit,
+    userCreate
   },
   mounted () {
     this.loadData()
@@ -121,6 +195,9 @@ export default {
     }, {
       title: '登录 ID',
       prop: 'userName'
+    }, {
+      title: '用户类型',
+      prop: 'userTypeName'
     }, {
       title: '职务',
       prop: 'position'
@@ -141,7 +218,7 @@ export default {
       getUserListByPage(this.listQuery)
         .then(
           function (result) {
-            console.log('get data by page:' + JSON.stringify(result))
+            // console.log('get data by page:' + JSON.stringify(result))
             this.userList = result.baseUserVoList
             this.total = result.pageCount
           }.bind(this)
@@ -157,6 +234,19 @@ export default {
             function (result) {
               console.log('<<<<<departmentOptions:' + JSON.stringify(result))
               this.departmentOptions = result
+            }.bind(this)
+          )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+      // 获取用户类型信息
+      listUserType()
+        .then(
+            function (result) {
+              console.log('<<<<<userTypeOptions:' + JSON.stringify(result))
+              this.userTypeOptions = result
             }.bind(this)
           )
         .catch(
@@ -210,6 +300,10 @@ export default {
         uuid: ''
       }
     },
+    handleTabClick (tab, event) {
+      this.showFirstTab = tab.name === '0'
+      this.showSecondTab = tab.name === '1'
+    },
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
@@ -217,7 +311,8 @@ export default {
         'limit': 10,
         'q_userName': '',
         'q_fullName': '',
-        'q_primaryPhone': ''
+        'q_primaryPhone': '',
+        'cloudFlag': 1
       }
       this.loadData()
     },
@@ -238,16 +333,18 @@ export default {
     // 新增用户
     handleCreate () {
       this.initUserInfo()  // 调用初始信息
-      this.userForm.userAccStatus = this.userAccStatusOptions[1].itemCode
       this.dialogStatus = '添加用户'
-      this.dialogFormVisible = true
+      this.dialogFormVisible = false
+      this.dialogCreateFormVisible = true
+      this.$refs.userCreateVue.reset()
       this.addFlag = false
     },
     userDeleteEvent (row) {
       var data = this.userList[row]
       this.$confirm('确定删除此项？', '删除', {
         confirmButtonText: '确定',
-        cancelButtonText: '取消'
+        cancelButtonText: '取消',
+        type: 'warning'
       })
         .then(() => {
           console.log('删除操作')
@@ -287,6 +384,7 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
+            this.dialogCreateFormVisible = false
             this.loadData()
             this.$message({
               message: '保存成功！',
@@ -305,6 +403,7 @@ export default {
         .then(
           function (result) {
             this.dialogFormVisible = false
+            this.dialogCreateFormVisible = false
             this.loadData()
             this.$message({
               message: '保存成功！',
@@ -325,9 +424,14 @@ export default {
         .then(
           function (result) {
             this.userForm = result.baseUser  // 用户基本信息
-            console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
+            console.log('用户基本信息:' + JSON.stringify(result.baseUser))
+            console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
+            console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
+            // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
             this.dialogStatus = '编辑用户'
             this.dialogFormVisible = true
+            this.dialogCreateFormVisible = false
+            this.$refs.userEditVue.reset()
             this.addFlag = true
           }.bind(this)
         )
@@ -339,14 +443,93 @@ export default {
         )
     },
     handleClose () {
-      this.$refs.userEditVue.changeContanctFlag()
+      if (this.addFlag) {
+        this.$refs.userEditVue.changeContanctFlag()
+      }
       this.initUserInfo()
       this.dialogFormVisible = false
+      this.dialogCreateFormVisible = false
+    },
+    // handleRemove (file, fileList) {
+    //   console.log(file, fileList)
+    // },
+    // handlePreview (file) {
+    //   console.log(file)
+    // },
+    handleExceed (files, fileList) {
+      this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    // beforeRemove (file, fileList) {
+    //   return this.$confirm(`确定移除 ${file.name}？`)
+    // },
+    submitUpload () {
+      var fileLength = this.$refs.upload._data.uploadFiles.length
+      console.log(fileLength)
+      if (fileLength > 0) {
+        uploadUserExcel(this.uploadFiles)
+        .then(
+          function (result) {
+            this.$message({
+              message: '上传成功！',
+              type: 'success'
+            })
+            this.fileList = []
+          }.bind(this)
+          ).catch(
+            function (error) {
+              this.$message({
+                message: error.message,
+                center: true,
+                showClose: true,
+                type: 'error',
+                duration: 2000
+              }).bind(this)
+              console.log(error)
+            }
+          )
+      } else {
+        this.$message({
+          message: '请先选择需要上传的文件',
+          type: 'error',
+          duration: 20000,
+          center: true,
+          showClose: true
+        })
+      }
+    },
+    handleOnchange (file, fileList) {
+      console.info(fileList)
+      // this.uploadFiles.append('file', fileList[0].raw)
+      if (this.beforeUpload(file)) {
+        this.uploadFiles.append('file', fileList[0].raw)
+      }
+      // this.uploadFiles.files = fileList[0]
+    },
+    beforeUpload (file) {
+      var Xls = file.name.split('.')
+      console.log('Xls[1] --- > ' + Xls)
+      const isExcel = (Xls[Xls.length - 1] === 'xls' || Xls[Xls.length - 1] === 'xlsx' || Xls[Xls.length - 1] === 'xlsm')
+      console.log('Xls[Xls.length - 1] --- > ' + Xls[1])
+      const isLt10M = file.size / 1024 / 1024 < 1000
+      if (!isExcel) {
+        this.$message.error('上传文件只能是 xls/xlsx/xlsm 格式！')
+        this.fileList = []
+        return false
+      } else if (!isLt10M) {
+        this.$message.error('上传文件大小不能超过 1MB!')
+        this.fileList = []
+        return false
+      } else {
+        return file
+      }
+    },
+    handleCommand (type) {
+      window.open('/egc-usermgmtcomponent/usermgmt/user/download/template?type=' + type)
     }
   }
 }
 </script>
 
 <style scoped>
-  @import "assets/css/usermanagement.less"
+
 </style>

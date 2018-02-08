@@ -3,10 +3,10 @@
     <el-form :inline="true" :model="searchConditionList">
       <div class="search-container">
           <el-form-item label="代码中文名称">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.condition"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.codeName"> </el-input>
           </el-form-item>
           <el-form-item label="代码值" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.condition"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.codeValue"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -16,11 +16,14 @@
           </div>
         </div>
     </el-form>
+    <div>
+      <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
+    </div>
     <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="middlewareListData" stripe border v-loading="loading">
+          <el-table :data="commCodeDataList" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
@@ -41,16 +44,70 @@
           :total="total">
       </el-pagination>
     </div>
+    <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
+      <comm-code-edit :commCodeDetails="commCodeDetails" @saveCommCodeEvent="_updateCommCode"></comm-code-edit>
+    </el-dialog>
+    <el-dialog :title="dialogTittle" :visible.sync="dialogRegisterVisible" :before-close="beforeCloseDialog">
+      <div>
+        <el-form :model="registerParaList" :rules="rules" ref='registerParaList'>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="代码中文名称" :label-width="formLabelWidth" prop="instanceValue">
+                <el-input v-model="registerParaList.instanceValue"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="代码英文名称" :label-width="formLabelWidth" prop="instanceName">
+                <el-input v-model="registerParaList.instanceName"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="代码值" :label-width="formLabelWidth" prop="codeValue">
+                <el-input v-model="registerParaList.codeValue"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="12">
+              <el-form-item label="代码大类名称" :label-width="formLabelWidth" prop="codeProvider">
+                <el-input v-model="registerParaList.codeProvider"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="12">
+              <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+                <el-input v-model="registerParaList.remark"></el-input>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <div style="text-align:center;">
+            <el-button type="primary" @click="_registerCommCode('registerParaList')" class="search-btn">注 册</el-button>
+          </div>
+        </el-form>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { getCommCodeByPage, getCommCodeDetails } from './apis/index'
+import CommCodeEdit from './components/CommCodeEdit'
+import { getCommCodeByPage, getCommCodeDetails, registerCommCode, updateCommCode } from './apis/index'
 export default {
   components: {
+    CommCodeEdit
   },
   data () {
     return {
+      dialogEditVisible: false,
+      dialogRegisterVisible: false,
+      commCodeDataList: undefined,
+      total: 0,
+      loading: false,
+      commCodeDetails: undefined,
+      dialogTittle: '',
+      formLabelWidth: '140px',
       tableTitleList: [
         {
           colName: '代码中文名称',
@@ -76,9 +133,28 @@ export default {
       searchConditionList: {
         'currentPage': 1,
         'pageSize': 10,
-        'condition': ''
+        'codeName': '',
+        'codeValue': '',
+        'vendor': ''
       },
-      formLabelWidth: '120px'
+      registerParaList: {
+        instanceValue: '',
+        instanceName: '',
+        codeValue: '',
+        codeProvider: '',
+        ramark: ''
+      },
+      rules: {
+        instanceValue: [
+          { required: true, message: '请输入软件名称', trigger: 'blur,change' }
+        ],
+        codeValue: [
+          { required: true, message: '请输入软件版本', trigger: 'blur,change' }
+        ],
+        instanceName: [
+          { required: true, message: '请输入开发者姓名', trigger: 'blur,change' }
+        ]
+      }
     }
   },
   methods: {
@@ -86,8 +162,8 @@ export default {
       getCommCodeByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('middleware result -- >' + JSON.stringify(result))
-            this.middlewareListData = result.middlewareList
+            console.log('comm code result -- >' + JSON.stringify(result))
+            this.commCodeDataList = result
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
@@ -102,27 +178,63 @@ export default {
     _handleFilter () {
       console.log('search common code')
     },
-
+    handleRegister () {
+      this.dialogTittle = '代码实例注册'
+      this.dialogRegisterVisible = true
+    },
+    _registerCommCode (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          registerCommCode().then((result) => {
+            console.log('===>' + result)
+            this.$message.success('注册成功')
+            this.loadData()
+          }).catch(
+            function (error) {
+              console.log(error)
+            })
+        }
+      })
+    },
     _handleClearQuery () {
-      this.searchConDetails.condition = ''
+      this.searchConditionList = { 'currentPage': 1, 'pageSize': 10, 'codeName': '', 'code': '', 'vendor': '' }
+    },
+    beforeCloseDialog () {
+      this.dialogRegisterVisible = false
+      this.$refs.registerParaList.resetFields()
     },
     _handleEdit (rowIdx) {
-      this.dialogStatus = '中间件修改'
-      var rowData = this.middlewareListData[rowIdx]
+      this.dialogTittle = '公共代码修改'
+      var rowData = this.codeInstList[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getCommCodeDetails(eachRowUUID)
           .then(
             function (result) {
-              this.middlewareDetails = result.auMiddleware
+              console.log('comm code  details -- >' + JSON.stringify(result, null, ' '))
+              this.commCodeDetails = result
               this.dialogEditVisible = true
             }.bind(this)
-          )
-          .catch(
+          ).catch(
             function (error) {
               console.log(error)
             }
           )
+    },
+    _updateCommCode (params) {
+      updateCommCode(params)
+        .then(
+          function (result) {
+            this.dialogEditVisible = false
+            this.$message.success('保存成功')
+            // 再次加载列表的数据
+            this.loadData()
+          }.bind(this)
+        ).catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     },
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val

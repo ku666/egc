@@ -4,13 +4,14 @@
     :highlight-current-row="true"
     :data="tableData"
     stripe
-    height="100%"
+    max-height="680"
     >
     <el-table-column
       v-for="(item, index) in params"
       :prop="item.prop"
       :label="item.title"
       :key="index"
+      show-overflow-tooltip
     >
     </el-table-column>
     <el-table-column

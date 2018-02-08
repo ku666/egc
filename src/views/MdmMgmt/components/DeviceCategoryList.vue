@@ -9,17 +9,17 @@
     </el-breadcrumb> -->
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
-        <el-form-item label='设备型号'>
-          <el-input placeholder='请输入设备型号' v-model='searchForm.typeModel' @keyup.enter.native='search'></el-input>
-        </el-form-item>
         <el-form-item label='设备编码'>
-          <el-input placeholder='请输入设备编码' v-model='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search'></el-input>
+        </el-form-item>
+        <el-form-item label='设备型号'>
+          <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备名称'>
-          <el-input placeholder='请输入设备名称' v-model='searchForm.typeName' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备名称' v-model.trim='searchForm.typeName' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='设备描述'>
-          <el-input placeholder='请输入设备描述' v-model='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
+          <el-input placeholder='请输入设备描述' v-model.trim='searchForm.typeDesc' @keyup.enter.native='search'></el-input>
         </el-form-item>
         <el-form-item label='供应商'>
           <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
@@ -45,8 +45,10 @@
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
 
-    <el-table stripe
+    <el-table
       ref='deviceTable'
+      :expand-row-keys='expandRows'
+      :row-key="getRowKeys"
       :data='tableData'
       v-loading='loading'
       @row-dblclick='editDevicedbl'
@@ -56,7 +58,11 @@
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' :row-class-name='tableRowClassName' @row-dblclick='editDevicedbl'>
+          <el-table empty-text='无子设备'
+            :data='props.row.slave'
+            :show-header='false'
+            :row-class-name='tableRowClassName'
+            @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备编码'>
@@ -82,13 +88,14 @@
             <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
             <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-            <el-table-column label='供应商' show-overflow-tooltip>
+            <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
+            <!-- <el-table-column label='供应商' show-overflow-tooltip>
               <template slot-scope="scope">
                 <div v-for='provider in providers' v-bind:key='provider.providerCode'>
                   {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
                 </div>
               </template>
-            </el-table-column>
+            </el-table-column> -->
             <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
             <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
             <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
@@ -119,13 +126,14 @@
       <el-table-column prop='hardwareVersion' label='硬件版本' show-overflow-tooltip></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' show-overflow-tooltip></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-      <el-table-column label='供应商' show-overflow-tooltip>
+      <el-table-column prop='providerName' label='供应商' show-overflow-tooltip></el-table-column>
+      <!-- <el-table-column label='供应商' show-overflow-tooltip>
         <template slot-scope="scope">
           <div v-for='provider in providers' v-bind:key='provider.providerCode'>
             {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
           </div>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
       <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
@@ -139,7 +147,15 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
+    <el-pagination
+      background
+      :current-page='searchForm.currentPage'
+      :page-sizes='[10, 20, 50, 100]'
+      :page-size='searchForm.pageSize'
+      layout='total, sizes, prev, pager, next, jumper'
+      :total='searchForm.totalCount'
+      @size-change='sizeChange'
+      @current-change='currentChange'>
     </el-pagination>
   </div>
 </template>
@@ -162,6 +178,7 @@ export default {
     return {
       loading: false,
       showflag: false,
+      expandRows: [],
       // 检索用表单
       searchForm: {
         uuid: null,
@@ -309,31 +326,42 @@ export default {
     // },
     // ********************查询设备********************
     search () {
+      console.log('search method')
       this.loading = true
       getDeviceCategoryList(this.searchForm)
         .then(
-        function (result) {
-          console.log(result)
-          this.tableData = result.data.result
-          this.searchForm.totalCount = result.data.totalCount
-          this.loading = false
-        }.bind(this)
+          function (result) {
+            let haveChilds = []
+            this.tableData = result.data.result
+            this.searchForm.totalCount = result.data.totalCount
+            if (Array.isArray(this.tableData) && this.tableData.length > 0) {
+              this.tableData.forEach(element => {
+                if (Array.isArray(element.slave) && element.slave.length > 0) {
+                  haveChilds.push(element.uuid)
+                }
+              })
+            }
+            this.expandRows = haveChilds
+            this.loading = false
+          }.bind(this)
         )
         .catch(
-        function (error) {
-          this.loading = false
-          console.log(error)
-        }.bind(this)
+          function (error) {
+            this.loading = false
+            console.log(error)
+          }.bind(this)
         )
     },
     // 改变分页大小
     sizeChange: function (val) {
+      console.log('sizeChange')
       this.searchForm.pageSize = val
       this.searchForm.currentPage = 1
       this.search()
     },
     // 改变当前显示页面
     currentChange: function (val) {
+      console.log('currentChange')
       this.searchForm.currentPage = val
       this.search()
     },
@@ -422,6 +450,9 @@ export default {
       // }
       // return ''
       return 'child-row'
+    },
+    getRowKeys: function (row) {
+      return row.uuid
     }
   }
 }

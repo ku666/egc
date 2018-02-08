@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="ui-common">
     <device-base-info></device-base-info>
   </div>
 </template>
@@ -13,6 +13,6 @@
   }
 </script>
 
-<style>
+<style scoped>
   @import "./assets/css/devicemgmt.less";
 </style>

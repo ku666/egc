@@ -17,12 +17,12 @@ module.exports = {
         target: 'http://172.16.30.106:8082/',  // 王珂(设备管理)
         changeOrigin: true
       },
-      '/egc-mapanalysiscomponent/egcmapanalysis': {
+      '/egc-mapanalysiscomponent/courtorg': {
         // target: 'http://172.16.30.74:8082/' // 小区列表
-        target: 'http://192.168.0.186:9033/' //
+        target: 'http://192.168.0.186:9030/' //
       },
-      '/egcmapanalysis': {
-          target: 'http://192.168.0.186:9033/' // 小区列表
+      '/courtorg': {
+          target: 'http://192.168.0.186:9030/' // 小区列表
       },
       '/egc-smartcommunitymgmtapp/profile': {
         target: 'http://192.168.0.186:9030', // 业主画像
@@ -56,7 +56,7 @@ module.exports = {
       //更新升级模块接口
        "/egc-applicationupgradecomponent": {
         //  target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
-         target: 'http://192.168.0.186:9039/',  
+         target: 'http://192.168.0.186:9039/',
          changeOrigin: true
        },
       //  "/egc-applicationupgradecomponent": {
@@ -67,8 +67,9 @@ module.exports = {
         target: 'http://172.16.30.67:8083/',  // 朱秀红(省市区数据)
         changeOrigin: true
       },
-      '/scp-usermgmtcomponent': {
-        target: 'http://192.168.0.242:30940',  // 242线上用户管理
+      '/egc-usermgmtcomponent': {
+        target: 'http://192.168.0.186:30940',  // 242线上用户管理
+        // target: 'http://192.168.0.186:9011',  // 云端用户管理
         changeOrigin: true
       },
       // '/egc-applicationupgradecomponent': {
@@ -78,6 +79,12 @@ module.exports = {
       '/egc-logservicecomponent': {
         target: 'http://172.16.30.9:8082/',  // 日志组件管理
         changeOrigin: true
+      },
+      '/egc-ismgcomponent': {
+        target: 'http://192.168.0.186:9013/',  // 短信网关
+        changeOrigin: true,
+        pathRewrite: {
+          '/egc-ismgcomponent':'/'}
       }
       },
     // Various Dev Server settings

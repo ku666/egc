@@ -1,72 +1,75 @@
 <template>
-<div class="ui-common">
+  <div class="ui-common">
     <el-form :inline="true" :model="searchConditionList">
       <div class="search-container">
-          <el-form-item label="选择日期">
-            <el-date-picker
-              v-model="dateValue"
-              type="datetimerange"
-              :picker-options="pickerOptions"
-              range-separator="至"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              align="right">
-            </el-date-picker>
-          </el-form-item>
-          <el-form-item label="选择省" :label-width="formLabelWidth">
-            <el-select v-model="searchConditionList.province" placeholder="请选择省" clearable  @change="loadCityData">
-              <el-option
-                v-for="item in provinces"
-                :key="item.label"
-                :label="item.label"
-                :value="item.label">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择市" :label-width="formLabelWidth">
-            <el-select v-model="searchConditionList.city" placeholder="请选择市" clearable  @change="loadDistrictData">
-              <el-option
-                v-for="item in cities"
-                :key="item.label"
-                :label="item.label"
-                :value="item.label">
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label="选择区" :label-width="formLabelWidth">
-            <el-select v-model="searchConditionList.district" placeholder="请选择区" clearable>
-              <el-option
-                v-for="item in districts"
-                :key="item.label"
-                :label="item.label"
-                :value="item.label">
-              </el-option>
-            </el-select>
-          </el-form-item>
+        <el-form-item label="选择日期">
+          <el-date-picker
+            v-model="dateValue"
+            type="datetimerange"
+            :picker-options="pickerOptions"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            align="right">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="选择省" :label-width="formLabelWidth">
+          <el-select v-model="searchConditionList.province" placeholder="请选择省" clearable>
+            <el-option
+              v-for="item in provinces"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择市" :label-width="formLabelWidth">
+          <el-select v-model="searchConditionList.city" placeholder="请选择市" clearable>
+            <el-option
+              v-for="item in cities"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="选择区" :label-width="formLabelWidth">
+          <el-select v-model="searchConditionList.district" placeholder="请选择区" clearable>
+            <el-option
+              v-for="item in districts"
+              :key="item.label"
+              :label="item.label"
+              :value="item.label">
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </div>
+        
+      <div class="search-container">
+        <el-form-item label="软件包名称">
+          <el-input v-model="searchConditionList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="dispthpckg_el-input"></el-input>
+        </el-form-item>
+        <el-form-item label="软件包版本" :label-width="formLabelWidth">
+          <el-input v-model="searchConditionList.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="dispthsearch_el-input"></el-input>
+        </el-form-item>
+        <el-form-item label="搜索关键字" :label-width="formLabelWidth">
+          <el-input v-model="searchConditionList.keyWord" placeholder="请输入搜索关键字" clearable :maxlength="maxlength" class="dispthsearch_el-input"></el-input>
+        </el-form-item>
+          <div class="btn-container">
+        <el-form-item>
+          <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+          <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
+          <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn">导出</el-button>
+        </el-form-item>
           </div>
-          <div>
-          <el-form-item label="软件包名称">
-            <el-input v-model="searchConditionList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength"></el-input>
-          </el-form-item>
-          <el-form-item label="软件包版本" :label-width="formLabelWidth">
-            <el-input v-model="searchConditionList.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength"></el-input>
-          </el-form-item>
-          <el-form-item label="搜索关键字" :label-width="formLabelWidth">
-            <el-input v-model="searchConditionList.keyWord" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
-          </el-form-item>
-            <el-form-item>
-              <el-button @click="_handleClearQuery" class="cancel-btn" style="margin-left: 40px">清空</el-button>
-              <el-button type="primary" @click="_callHandleFilter" class="search-btn" style="margin-left: 80px">搜索</el-button>
-              <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn" style="margin-left: 120px">导出</el-button>
-            </el-form-item>
-        </div>
+      </div>
     </el-form>
   </div>
 </template>
 
 <script>
 import { getProvinceDataList, getCityDataList, getDisctrictDataList } from '../../ConfigurationMgmt/apis/index'
-import { getLocalTime } from '../assets/js/tool'
+import { getLocalTime } from '../assets/js/index'
 export default {
   props: {
     searchConditionList: {
@@ -106,10 +109,9 @@ export default {
           }
         }]
       },
-      // value3: [new Date(2000, 10, 10, 10, 10), new Date(2000, 10, 11, 10, 10)],
       dateValue: '',
       maxlength: 30,
-      formLabelWidth: '120px'
+      formLabelWidth: '140px'
     }
   },
   methods: {
@@ -119,6 +121,7 @@ export default {
       this.searchConditionList.district = ''
       this.searchConditionList.condition = ''
       this.dateValue = ''
+      this.$emit('handleFilterEvent', this.searchConditionList, 'search')
     },
     _callHandleFilter () {
       if (this.dateValue) {
@@ -126,9 +129,9 @@ export default {
         this.searchConditionList.startDate = getLocalTime(dateArr[0])
         this.searchConditionList.endDate = getLocalTime(dateArr[1])
       }
-      if (this.validateInput()) {
-        this.$emit('handleFilterEvent', this.searchConditionList, 'search')
-      }
+      // if (this.validateInput()) {
+      this.$emit('handleFilterEvent', this.searchConditionList, 'search')
+      // }
     },
     _callHanderDownLoadResult () {
       this.$emit('handleFilterEvent', this.searchConditionList, 'download')
@@ -144,12 +147,15 @@ export default {
       }
       return true
     },
+    // 省
     loadProvinceData () {
       var that = this
+      that.cities = []
+      that.districts = []
       getProvinceDataList(that.provParams)
           .then(
             function (result) {
-              let provinceArr = result.data
+              let provinceArr = result
               for (let i = 0; i < provinceArr.length; i++) {
                 that.provinces.push(
                   {
@@ -165,6 +171,7 @@ export default {
             }
           )
     },
+    // 市
     loadCityData () {
       var that = this
       if (that.searchConditionList.city !== '') {
@@ -179,7 +186,7 @@ export default {
       getCityDataList(that.provParams)
           .then(
             function (result) {
-              let cityArr = result.data
+              let cityArr = result
               for (let i = 0; i < cityArr.length; i++) {
                 that.cities.push(
                   {
@@ -196,6 +203,7 @@ export default {
             }
           )
     },
+    // 区
     loadDistrictData () {
       var that = this
       that.provParams.province = that.searchConditionList.province
@@ -206,7 +214,7 @@ export default {
         getDisctrictDataList(that.provParams)
           .then(
             function (result) {
-              let districtsArr = result.data
+              let districtsArr = result
               for (let i = 0; i < districtsArr.length; i++) {
                 that.districts.push(
                   {
@@ -226,8 +234,26 @@ export default {
       }
     }
   },
+  watch: {
+    'searchConditionList.province': function (newValue, oldValue) {
+      this.loadCityData()
+    },
+    'searchConditionList.city' (newValue, oldValue) {
+      this.loadDistrictData()
+    }
+  },
   mounted () {
     this.loadProvinceData()
   }
 }
 </script>
+
+<style scoped>
+.dispthpckg_el-input {
+  width: 388px
+}
+
+.dispthsearch_el-input {
+  width: 200px
+}
+</style>

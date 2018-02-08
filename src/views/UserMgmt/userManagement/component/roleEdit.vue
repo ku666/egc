@@ -17,10 +17,10 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='item in form.userTypeList'
-            :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            v-for='item in userTypeList'
+            :key='item.itemCode'
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -54,7 +54,8 @@
         :tableData='roleUsergroupData.roleUsergroupVoList' 
         :params='userGroupParams' 
         :editable='false' 
-        :deletable='true' 
+        :deletable='true'
+        :showOperation='true'
         style='margin-top: 20px; height: 100%'
       ></grid-list>
       <el-pagination
@@ -84,7 +85,8 @@
         :tableData='roleUserData.roleUserVoList' 
         :params='userParams' 
         :editable='false' 
-        :deletable='true' 
+        :deletable='true'
+        :showOperation='true'
         style='margin-top: 20px'
       ></grid-list>
       <el-pagination
@@ -119,6 +121,7 @@
         :params='resourceParams' 
         :editable='false' 
         :deletable='true'
+        :showOperation='true'
         style='margin-top: 20px'
       ></grid-list>
       <el-pagination
@@ -157,8 +160,7 @@ import {
   createService,
   createDevice,
   checkRoleName,
-  getRoleAssResource,
-  listUserType
+  getRoleAssResource
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -180,7 +182,8 @@ export default {
       remark: undefined,
       uuid: undefined,
       userType: undefined
-    }
+    },
+    userTypeList: undefined
   },
   components: {
     gridList,
@@ -189,21 +192,8 @@ export default {
     addDevice
   },
   methods: {
-    getUserTypeList () {
-      listUserType()
-        .then(
-          function (result) {
-            this.form.userTypeList = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
     getRoleUserGroupList () {
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -243,7 +233,8 @@ export default {
       }
     },
     getRoleUserList () {
-      getRoleUser()
+      let cloudFlag = 1
+      getRoleUser(cloudFlag)
         .then(
           function (result) {
             this.tmpRoleUserList = result
@@ -688,8 +679,8 @@ export default {
       console.log('dialog changeRoleEditDiaLogEvent End')
     },
     // 校验角色名的唯一性
-    validateName (roleUuid, roleName) {
-      checkRoleName(roleUuid, roleName)
+    validateName (roleUuid, roleName, userType) {
+      checkRoleName(roleUuid, roleName, userType)
         .then(
           function (result) {
             console.log('<<<<<roleNameFlag:' + result)
@@ -707,8 +698,9 @@ export default {
     // 角色名的唯一性
     var validateRoleName = (rule, value, callback) => {
       let roleUuid = this.form.uuid
+      let userType = this.form.userType
       console.log('校验：' + roleUuid + value)
-      this.validateName(roleUuid, value)
+      this.validateName(roleUuid, value, userType)
       if (!this.roleNameFlag) {
         callback(new Error('角色名称已存在!'))
         this.roleNameFlag = true   // 校验角色名称存在之后,再将roleNameFlag值还原初始值 true
@@ -728,6 +720,7 @@ export default {
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
         ]
       },
+      userTypeList: undefined,
       roleNameFlag: true,
       showSummary: true,
       showUserGroup: false,
@@ -754,6 +747,11 @@ export default {
       postRoleUser: {
         roleUuid: undefined,
         userUuid: undefined
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 1
       },
       selectedName: null,
       roleUserGroupList: undefined,

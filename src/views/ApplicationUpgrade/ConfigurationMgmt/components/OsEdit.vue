@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-form :inline="true" :model="osDetails">
-      <!-- <template v-if=" osDetails.courtDto !== null">
+      <template v-if=" osDetails.courtDto !== null">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.province"></el-input>
         </el-form-item>
@@ -14,7 +14,7 @@
         <el-form-item label="小区名称" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
         </el-form-item>
-      </template> -->
+      </template>
        <el-form-item label="操作系统名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.name"></el-input>
       </el-form-item>
@@ -36,19 +36,14 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input"  v-model="osDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
-
-
-      <!-- <div> -->
-        <!-- <template v-if="osDetails.extDataList">
-        <el-form-item :label="item.fieldName" v-for="(item) in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
-      </el-form-item>
-      </template> -->
-      <!-- </div> -->
-
+      <template v-if="osDetails.extDataList !== null">
+        <el-form-item :label="item.fieldName" v-for="item in osDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
 
       <div style="text-align: center">
-        <el-button class="action-btn" @click="updateAppServiceInfo" type="primary">保 存</el-button>
+        <el-button class="action-btn" @click="updateOsInfo" type="primary">保 存</el-button>
 
         <el-popover
             ref="newCIEventPop"
@@ -58,8 +53,8 @@
             :hide="clearData"
             v-model="showAddNewEvent">
             <div>
-              <div><el-input :autofocus="true" placeholder="请输入新CI名称" size="small" v-model="fieldName"></el-input></div>
-              <div class="margin-top-5"><el-input placeholder="请输入新CI值" size="small" v-model="fieldValue"></el-input></div>
+              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
+              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
             </div>
             <div class="text-right margin-top-5">
               <el-button size="mini" type="text" @click="clearData">取消</el-button>
@@ -90,26 +85,30 @@ export default {
       fieldName: '',
       fieldValue: '',
       showAddNewEvent: false,
-      osDetailsTemp: []
+      tempExtDataList: undefined
     }
   },
   methods: {
-    updateAppServiceInfo () {
+    updateOsInfo () {
       console.log(JSON.stringify(this.osDetails))
-      if (this.tempRemark !== this.osDetails.remark) {
-        this.$emit('saveOsInfoEvent', this.osDetails)
-      } else {
-        this.$message({
-          message: '请修改数据后再提交',
-          type: 'error'
-        })
-      }
+      this.$emit('saveOsInfoEvent', this.osDetails)
+      // if (this.tempRemark !== this.osDetails.remark || this.tempExtDataList !== this.osDetails.extDataList) {
+      //   this.$emit('saveOsInfoEvent', this.osDetails)
+      // } else {
+      //   this.$message({
+      //     message: '请修改数据后再提交',
+      //     type: 'error'
+      //   })
+      // }
     },
     addNewEvent () {
       console.info('add new item')
       if (this.fieldName.trim() === '') {
         this.$message.error('请输入新增项名称')
       } else {
+        if (this.osDetails.extDataList === null) {
+          this.osDetails.extDataList = []
+        }
         this.osDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
         console.info(JSON.stringify(this.osDetails))
       }
@@ -128,7 +127,7 @@ export default {
   },
   mounted () {
     this.tempRemark = this.osDetails.remark
-    this.osDetailsTemp = this.osDetails
+    this.tempExtDataList = this.osDetails.extDataList
   }
 }
 </script>

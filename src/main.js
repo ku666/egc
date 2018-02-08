@@ -18,9 +18,9 @@ Vue.prototype.$http = axios
 
 // mock 启动
 
-if (/localhost/.test(location.href) || location.search === '?mock') {
-  require('@/mocks/mock')
-}
+// if (/localhost/.test(location.href) || location.search === '?mock') {
+//   require('@/mocks/mock')
+// }
 Vue.use(ElementUI)
 // Vue.use(ajax)
 Vue.prototype.$echarts = echarts

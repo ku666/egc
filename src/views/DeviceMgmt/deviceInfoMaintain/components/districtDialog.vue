@@ -51,7 +51,7 @@
               :show-footer="false"
               @select="_getCurRow"
               @select-all="_getCurRow"
-              @current-change="_getCurRow">
+              @cell-dblclick="_getCurRow">
       <el-table-column
         v-if="dialogType"
         :resizable="false"
@@ -168,6 +168,7 @@
         getCourtList(this.screeningData)
           .then(result => {
             this.tableList = result.listCourtVo
+            this.total = result.countTotal
           })
           .catch()
       },
@@ -199,7 +200,13 @@
       },
       _confirm () {
         if (this.listRows.length > 0) {
-          this.$emit('listenToRowSelected', this.listRows)
+          this.$confirm('是否确定将所选固件下发至所选小区?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.$emit('listenToRowSelected', this.listRows)
+          }).catch()
         }
       }
     },

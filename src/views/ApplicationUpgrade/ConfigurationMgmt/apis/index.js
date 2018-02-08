@@ -3,65 +3,96 @@ import Axios from '@/assets/js/AxiosPlugin'
 // 接口地址
 let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-const MDM_BASE_PATH = '/egc-mdmcomponent/api'
 
 /** 主数据 */
 
 // 省
-export const getProvinceDataList = (params) => {
-  // console.log(' provinces data ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getProvinceList', params
+export const getProvinceDataList = () => {
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getProvince'
   ).then(res => res.data)
-
-  // return Axios.post('/court/getProvinceList', params
-  // ).then(res => res.data)
-
   // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
 }
 
 // 市
 export const getCityDataList = (params) => {
-  // console.log(' cities ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-
-  return Axios.post(MDM_BASE_PATH + '/court/getCityList', params
-  ).then(res => res.data)
-
-  // return Axios.post('/court/getCityList', params
-  // ).then(res => res.data)
-
+  console.log('get city list, param is  -->   ' + JSON.stringify(params))
+  console.log('get city list param: province is  -->   ' + JSON.stringify(params.province))
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getCity?province=' + encodeURI(params.province)
+    ).then(res => res.data)
   // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
 }
 
 // 区
 export const getDisctrictDataList = (params) => {
-  // console.log(' >>>>>>>>>>>>>> districts ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(MDM_BASE_PATH + '/court/getDistrictList', params
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getDistrict?province=' + encodeURI(params.province) + '&city=' + encodeURI(params.city)
   ).then(res => res.data)
-
-  // return Axios.post('/court/getDistrictList', params
-  // ).then(res => res.data)
-
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
 
-// 下载查询结果
-export const downSearchResult = (params) => {
+// 导入
+export const uploadHardWareConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/auServers/importExcel', params, config
+  ).then(res => {
+    return res.data
+  })
+}
+
+export const uploadNetEquipConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/auNetequip/importExcel', params, config
+  ).then(res => {
+    return res.data
+  })
+}
+
+export const uploadAppServiceConfigFile = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/auServices/importExcel', params, config
+  ).then(res => {
+    return res.data
+  })
+}
+
+// 导出模板
+export const downHardwareTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/common/generateExcel', params
   ).then(res => res.data)
 }
 
-export const downloadExcelFile = (params) => {
+export const downloadEquipTemplate = (params) => {
+  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  ).then(res => res.data)
+}
+
+export const downloadAppServiceTemplate = (params) => {
+  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  ).then(res => res.data)
+}
+
+// 导出结果
+export const downloadResultFile = (params) => {
   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.get(BASE_PATH + '/common/downloadExcel?file=' + params
-  ).then(res => {
-    let blob = new Blob([res.data], { type: 'application/x-xls' })
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
-    link.download = params
-    link.click()
-    return res.data
-  })
+    ).then(res => {
+      let blob = new Blob([res.data], { type: 'application/x-xls' })
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = params
+      console.log('link.down -- > ' + params)
+      link.click()
+      return res.data
+    })
 }
 
 /** =================硬件服务器信息================================ */
@@ -285,6 +316,36 @@ export const getMiddlewareHistoryList = (id) => {
     ).then(res => res.data)
 
   // return Axios.get(contextPath + '/osServices/queryHistoryById/{id}').then(res => res.data)
+}
+
+/** =================运维管理================================ */
+
+// 运维管理列表数据
+export const getOperMgmtInfoByPage = (params) => {
+  // console.log('<<<<<middleware params data :' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData', params
+  ).then(res => res.data)
+}
+
+// 运维管理单条信息的详细信息
+export const getOperMgmtDetails = (id) => {
+  return Axios.get(BASE_PATH + '/auMiddleware/get?id=' + id).then(res => res.data)
+}
+
+// 更新运维管理
+export const updateOperMgmtInfo = (params) => {
+  return Axios.post(BASE_PATH + '/auMiddleware/update', params).then(res => res.data)
+}
+
+// 刷新运维管理
+export const syncOperMgmtInfo = (params) => {
+  return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
+  ).then(res => res.data)
+}
+
+// 运维管理历史记录信息
+export const getOperMgmtHistoryList = (id) => {
+  return Axios.get(BASE_PATH + '/auMiddleware/queryHistoryById?id=' + id).then(res => res.data)
 }
 
 /** =================网络设备信息================================ */

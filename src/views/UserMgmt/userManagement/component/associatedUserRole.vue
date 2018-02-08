@@ -1,21 +1,21 @@
 
 <template>
   <div>
-    <el-form>
+    <el-form v-if="showSelect">
         <el-form-item label="添加关联角色">
             <el-select v-model="selectedName" placeholder="请选择需要添加的角色" class="user_el-select" @change='boxSelected'>
-              <el-option v-for="item in userRoleListSelect" :key="item.uuid" :label="item.roleName" :value="item.uuid" :disabled="item.isDisabled"> </el-option>
+              <el-option v-for="item in userRoleListSelect" :key="item.uuid" :label="item.roleName" :value="item.uuid" :disabled="item.isDisabled" filterable> </el-option>
             </el-select>
         </el-form-item>
     </el-form>
-    <el-table :data="associtedUserRoleData" style="width: 100%" max-height="580" element-loading-text="拼命加载中" border>
+    <el-table :data="associtedUserRoleData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="roleName" label="角色名称" width="160"></el-table-column>
         <el-table-column prop="roleRemark" label="角色说明" width="289"></el-table-column>
         <el-table-column prop="roleUsers" label="角色已有成员" width="370"></el-table-column>
         <el-table-column label="操作" width="100" align="center">
             <template slot-scope="scope">
-              <span @click="handleDelete(scope.$index)" style="cursor:pointer" class="el-icon-delete">
+              <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
               </span>
             </template>
@@ -49,7 +49,9 @@
 
   export default {
     props: {
-      userUuidValue: undefined
+      userUuidValue: undefined,
+      showSelect: undefined,
+      cloudFlag: ''
     },
     watch: {
       associtedUserRoleData (val) {
@@ -95,7 +97,7 @@
             function (result) {
               this.associtedUserRoleData = result.userRoleVoList  // 获取当前用户下所关联的角色列表(含分页)
               this.total = result.pageCount
-              getUserRoleListSelect()
+              getUserRoleListSelect(this.cloudFlag)
                 .then(
                   function (result) {
                     this.userRoleListSelect = result       // 获取关联角色下拉框值

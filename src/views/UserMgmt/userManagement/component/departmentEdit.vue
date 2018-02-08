@@ -1,187 +1,154 @@
 <template>
-  <div>
+  <div class='usermgn'>
     <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick'>
       <el-tab-pane label='部门概要' name='0'></el-tab-pane>
       <el-tab-pane label='直属部门' name='1'></el-tab-pane>
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
     </el-tabs>
-    <el-form  ref='form' v-show='showSummary' label-width='100px' :inline='true' :model='form'>
-      <el-form-item label='部门名称' prop='name'>
-        <el-input type="text" placeholder='请输入部门名称'></el-input>
+    <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment">
+      <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别">
+          <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
+       </el-select>
       </el-form-item>
-      <el-form-item label='上级部门' prop='superior'>
-        <el-select class='filter-item' v-model='form.type' placeholder='请选择上级部门'>
-          <el-option v-for='item in  typeOptions' :key='item' :label='item' :value='item'></el-option>
-        </el-select>
+      <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
+        <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
       </el-form-item>
-      <el-form-item label='部门说明' prop='desc'>
-        <el-input type="textarea" v-model='form.code' style="width:202px"></el-input>
+      <el-form-item label='上级部门' :label-width="formLabelWidth">
+        <el-select v-model='department.parentDepartmentUuid' class="user_el-select">
+          <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid'></el-option>
+       </el-select>
       </el-form-item>
-      <el-button class='filter-item' style='margin-left: 30px; display: block' @click='handleSave' type='primary'>
-              保存
-      </el-button>
+      <el-form-item label='部门说明' :label-width="formLabelWidth">
+        <el-input type='textarea' v-model='department.remark' placeholder='请输入部门说明' class="el-textarea"></el-input>
+      </el-form-item>
+      <div class="user-button" align="center">
+        <el-row>
+          <el-col>
+            <span class="dialog-footer">
+              <el-button class='cancel-btn' @click="cancelEvent('department')" type='primary'>取消</el-button>
+              <el-button type="primary" @click="update('department')" class='action-btn'>保 存</el-button>
+            </span>
+          </el-col>
+        </el-row>
+      </div>
     </el-form>
-    <div v-show='!showSummary'>
-      <el-select v-model='selectedName' @visible-change='getDepartmentList' @change='boxSelected' :placeholder='tabPlaceholder' style='margin-left: 30px'>
-        <el-option
-          v-for='(item, index) in addDepartmentList'
-          :key='index'
-          :label='item.name'
-          :value='item.name'>
-        </el-option>
-      </el-select>
-      <grid-list @listenToDeleteEvent='gridDeleteEvent' @listenToEditEvent='gridEditEvent' :tableData='gridTableData' :params='gridParams' :editable='false' :deletable='true' style='margin-top: 20px'></grid-list>
+    <div v-show="showDirectDepartment">
+      <direct-department ref="directDepartmentVue" :departmentUuidValue="curDepartmentUuidParm" @gridDirecDepCreateEvent="refreshDir"></direct-department>
+    </div>
+    <div v-show="showUserDepartment">
+      <direct-user ref="directUserVue" :departmentUuidValue="curDepartmentUuidParm"></direct-user>
     </div>
   </div>
 </template>
 
 <script>
 import gridList from './gridList.vue'
-import {
-} from '@/views/UserMgmt/userManagement/apis'
-
+import directDepartment from './DirectDepartment.vue'
+import directUser from './DirectUser.vue'
 export default {
   props: {
-    departmentDetailData: undefined
+    department: {
+      departmentName: undefined,
+      parentDepartmentUuid: undefined,
+      remark: undefined,
+      departmentType: undefined,
+      userType: undefined,
+      uuid: ''
+    },
+    curDepartmentUuidParm: undefined,
+    departmentSelect: undefined,
+    departmentTypeSelect: undefined
   },
   components: {
-    gridList
+    gridList,
+    directDepartment,
+    directUser
   },
   methods: {
-    // getDepartmentList () {
-    //   addDepartmentList()
-    //     .then(
-    //       function (result) {
-    //         this.addDepartmentList = result.departmentList
-    //       }.bind(this)
-    //     )
-    //     .catch(function (error) {
-    //       console.log(error)
-    //     })
-    // },
-    // boxSelected () {
-    //   saveDepartmentList()
-    //     .then(
-    //       function (result) {
-    //         this.gridTableData = result.departmentList
-    //         //              this.gridTableData.push(result.userGroupList)
-    //         this.selectedName = ''
-    //         this.tabPlaceholder = '添加' + this.tabTitle
-    //       }.bind(this)
-    //     )
-    //     .catch(function (error) {
-    //       console.log(error)
-    //     })
-    // },
     handleSubTabClick (tab, event) {
-      this.gridParams = this.gridListParams[tab.name - 1]
-      this.gridTableData = this.departmentDetailData[tab.name - 1]
-      this.tabTitle = this.textMap[tab.name]
-      this.showSummary = tab.name === '0'
-      this.tabPlaceholder = '添加' + this.tabTitle
-      console.log('用户组详细信息 参数：' + JSON.stringify(this.gridListParam))
-      console.log('用户组详细信息 数据：' + JSON.stringify(this.gridListTableData))
+      if (tab.name === '0') {
+        this.showMainDepartment = true
+        this.showDirectDepartment = false
+        this.showUserDepartment = false
+      } else if (tab.name === '1') {
+        this.showDirectDepartment = true
+        this.showMainDepartment = false
+        this.showUserDepartment = false
+        this.listQuery.departmentUuid = this.curDepartmentUuidParm
+        this.$refs.directDepartmentVue.findDirectDepartmentList(this.listQuery)
+      } else if (tab.name === '2') {
+        this.showDirectDepartment = false
+        this.showMainDepartment = false
+        this.showUserDepartment = true
+        this.listQuery.departmentUuid = this.curDepartmentUuidParm
+        this.$refs.directUserVue.findDirectUserList(this.listQuery)
+      }
     },
-    gridDeleteEvent (data) {
-      console.log('departmentGroupEdit：删除了第' + data + '行')
-      this.$emit('gridDeleteEvent', data)
+    // changeSelectValue () {
+    //   this.$refs.directDepartmentVue.handleChangeSelectedName()
+    //   // this.$refs.associtedUserRoleVue.handleChangeSelectedName()
+    // },
+    cancelEvent (department) {
+      console.log('cancelEvent')
+      this.$refs[department].clearValidate()
+      this.$refs[department].resetFields()
+      this.$emit('canelDialogEvent')
     },
-    gridEditEvent (data) {
-      console.log('departmentGroupEdit：编辑了第' + data + '行')
-      this.$emit('gridEditEvent', data)
+    create (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit('gridCreateEvent', this.department)
+        } else {
+          return false
+        }
+      })
+    },
+    update (formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          this.$emit('gridSaveEvent', this.department)
+        } else {
+          return false
+        }
+      })
+    },
+    refreshDir () {
+      this.$emit('gridRefreshDir')
     }
   },
   watch: {
-    departmentDetailData (val) {
-      console.log('watch: departmentDetailData!!!!!!!!!!!!!!!!')
-      console.log(val)
-      this.gridTableData = val[0]
-      this.gridParams = this.gridListParams[0]
+    department (val) {
+      console.log('watch: department!!!!!!!!!!!!!!!!')
       this.subActiveName = '0'
-      this.showSummary = true
+      this.showMainDepartment = true
+      this.showDirectDepartment = false
+      this.showUserDepartment = false
     }
   },
   data () {
     return {
-      showSummary: true,
-      tabTitle: '部门概要',
-      textMap: {
-        '0': '部门概要',
-        '1': '直属部门',
-        '2': '直属用户'
-      },
-      tabPlaceholder: '添加直属部门',
+      formLabelWidth: '120px',
       selectedName: null,
       adddepartmentList: undefined,
       subActiveName: '0',
       gridParams: undefined,
       gridTableData: undefined,
-      gridListParams: [
-        [
-          {
-            title: '部门名称',
-            prop: 'name'
-          },
-          {
-            title: '部门类别',
-            prop: 'type'
-          },
-          {
-            title: '上级部门',
-            prop: 'superior'
-          },
-          {
-            title: '用户类型',
-            prop: 'userType'
-          },
-          {
-            title: '下级部门',
-            prop: 'subordinate'
-          },
-          {
-            title: '直属员工',
-            prop: 'member'
-          }
-        ],
-        [
-          {
-            title: '姓名',
-            prop: 'name'
-          },
-          {
-            title: '用户名',
-            prop: 'username'
-          },
-          {
-            title: '职务',
-            prop: 'job'
-          },
-          {
-            title: '部门',
-            prop: 'department'
-          },
-          {
-            title: '手机号',
-            prop: 'phoneNumber'
-          },
-          {
-            title: '身份证号码',
-            prop: 'id'
-          }
+      showDirectDepartment: false,
+      showMainDepartment: true,
+      showUserDepartment: false,
+      departNameFlag: true,
+      rules: {
+        departmentName: [
+          { required: true, message: '请输入部门名称', trigger: 'blur' }
         ]
-      ],
-      form: {
-        departmentname: undefined,
-        name: undefined,
-        sex: undefined,
-        password: undefined,
-        description: undefined
+      },
+      listQuery: {
+        page: 1,
+        limit: 5,
+        departmentUuid: ''
       }
     }
   }
 }
 </script>
-
-<style scoped>
-
-</style>

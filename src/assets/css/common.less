@@ -32,7 +32,7 @@ flex: 1;
 .table-container {
   .flex-1;
   .flex-c;
-  min-height: 700px;
+  //min-height: 700px;
 }
 .el-main {
 padding: 20px 40px !important;
@@ -42,11 +42,12 @@ padding: 20px 40px !important;
 .flex-1;
 
 .el-dialog {
-  min-width: 900px;
+  min-width: 400px;
 }
 
 .search-container {
   display: flex;
+  height: auto;
   flex-wrap: wrap;
   justify-content: flex-start;
   align-content: flex-start;
@@ -54,20 +55,20 @@ padding: 20px 40px !important;
   .btn-container {
     flex: 1;
     text-align: right;
-    min-width: 20px;
+    min-width: 300px;
   }
 }
 
 .border-divide {
-  height: 1px;
+  height: 2px;
   background-color: #F1F0F0;
-  margin: 20px 0;
+  margin: 15px 0 10px 0;
 }
 // 用于保存等动作类按钮
 .action-btn{
   width: 138px;
   height: 40px;
-  background: #0078f4;
+  // background: #0078f4;
   border-radius: 4px;
 }
 // 用于个别小按钮（比如 一览页上面的 +添加之类）
@@ -139,13 +140,15 @@ p,span{
 }
 .el-table__header{
   height: 40px;
-  // background:#8a8787;
-  // opacity: 0.9;
+  background:#8a8787;
+  opacity: 0.9;
   font-size: var(--font-size-el-table);
   color: #333333;
 }
-.el-table thead tr{
-  background-color:rgba(243, 243, 243, 0.9);
+.el-table th{
+  // background:linear-gradient(#f5f7fa,#b3d8ff);
+  background:#ecf5ff;
+  opacity: 0.9;
   color: #333333;
 }
 .el-table__row{
@@ -202,6 +205,18 @@ span.sub-title{
   width:278px;
   border: solid 1px lightgray;
   margin-top: 5px;
+}
+.departmentTree{
+  overflow:auto;
+  height:300px;
+  width:545px;
+  border: solid 1px lightgray;
+  margin-top: 5px;
+}
+.el-department-tree{
+  height:290px;
+  width: 100%;
+  overflow-x: scroll;
 }
 .el-org-tree{
   width: 100%;

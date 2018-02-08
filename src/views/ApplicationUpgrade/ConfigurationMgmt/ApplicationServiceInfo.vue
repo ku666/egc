@@ -9,21 +9,17 @@
           <el-table :data="appServiceListData" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
             <el-table-column fixed="right" label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <!-- <img :src="details"/> -->
                 </el-button>
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                  <!-- <img :src="edit" /> -->
                 </el-button>
                 <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                  <!-- <img :src="refresh"/> -->
                 </el-button>
                 <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                  <!-- <img :src="history"/> -->
                 </el-button>
               </template>
             </el-table-column>
@@ -44,21 +40,18 @@
         </div>
       </el-col>
     </el-row>
-    <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <app-service-details :auappServiceDetails="auappServiceData"></app-service-details>
-      </el-dialog>
-    </div>
-    <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
-        <app-service-edit :auappServiceDetails="auappServiceData" @saveAppServiceInfoEvent="_updateAppServiceInfo"></app-service-edit>
-      </el-dialog>
-    </div>
-    <div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <app-service-history :auappServiceHistory="auappServiceHistory"></app-service-history>
-      </el-dialog>
-    </div>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
+      <app-service-details :auappServiceDetails="auappServiceData"></app-service-details>
+    </el-dialog>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
+      <app-service-edit :auappServiceDetails="auappServiceData" @saveAppServiceInfoEvent="_updateAppServiceInfo"></app-service-edit>
+    </el-dialog>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
+      <app-service-history :auappServiceHistory="auappServiceHistory"></app-service-history>
+    </el-dialog>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogUploadVisible" width="40%" :before-close="_handleBeforClose">
+      <config-file-upload ref="uploadCmpt" :uploadFlag="uploadFlag" @handleUploadSuccessEvent="_handleCloseUploadDialog"></config-file-upload>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,14 +60,24 @@ import searchCondition from './components/SearchCondition'
 import appServiceDetails from './components/AppServiceDetails'
 import appServiceEdit from './components/AppServiceEdit'
 import appServiceHistory from './components/AppServiceHistory'
+import ConfigFileUpload from './components/ConfigFileUpload'
 
-import { getAppServiceDetails, getAppServiceByPage, updateAppServiceInfo, getAppServiceHistoryList, syncauServersData } from './apis/index'
+import {
+  getAppServiceDetails,
+  getAppServiceByPage,
+  updateAppServiceInfo,
+  getAppServiceHistoryList,
+  syncauServersData,
+  downloadResultFile,
+  downloadAppServiceTemplate
+} from './apis/index'
 export default {
   components: {
     searchCondition,
     appServiceDetails,
     appServiceEdit,
-    appServiceHistory
+    appServiceHistory,
+    ConfigFileUpload
   },
   data () {
     return {
@@ -90,56 +93,62 @@ export default {
       dialogHistoryVisible: false,
       appServiceListData: undefined,
       auappServiceHistory: undefined,
+      dialogUploadVisible: false,
       synDataLoading: false,
       syncDataStatus: '',
       loading: true,
+      uploadFlag: 'as',
       searchConditionList: {
-        'city': '',
-        'condition': '',
-        'currentPage': 1,
-        'district': '',
-        'pageSize': 10,
-        'province': ''
-      },
-      defaultProps: {
-        label: 'name',
-        children: 'children',
-        value: 'name'
+        city: '',
+        condition: '',
+        currentPage: 1,
+        district: '',
+        pageSize: 10,
+        province: '',
+        pageFlag: 'as'
       },
       tableTitleList: [
         {
           colName: '省（直辖市）',
           prop: 'courtDto.province',
           width: 120
-        }, {
+        },
+        {
           colName: '市',
           prop: 'courtDto.city',
           width: 100
-        }, {
+        },
+        {
           colName: '区',
           prop: 'courtDto.district',
           width: 100
-        }, {
+        },
+        {
           colName: '小区名称',
           prop: 'courtDto.name',
           width: 120
-        }, {
+        },
+        {
           colName: '应用&服务名称',
           prop: 'name',
           width: 120
-        }, {
+        },
+        {
           colName: '应用&服务版本',
           prop: 'version',
           width: 120
-        }, {
+        },
+        {
           colName: '应用&服务端口',
           prop: 'port',
           width: 120
-        }, {
-          colName: '应用&服务启动用户',
-          prop: 'startUser',
-          width: 150
-        }, {
+        },
+        {
+          colName: '服务器主机名称',
+          prop: 'oss.hostname',
+          width: 220
+        },
+        {
           colName: '描述',
           prop: 'remark'
         }
@@ -147,72 +156,102 @@ export default {
       detailsTitle: '查看详情',
       editTitle: '编辑',
       refreshTitle: '比对更新',
-      historyTitle: '历史信息',
-      details: require('./assets/images/details.png'),
-      edit: require('./assets/images/edit.png'),
-      refresh: require('./assets/images/refresh.png'),
-      history: require('./assets/images/history.png')
+      historyTitle: '历史信息'
     }
   },
   methods: {
-    // 查询
-    _handleFilter () {
-      this.loading = true
-      getAppServiceByPage(this.searchConditionList)
-        .then(
-          function (result) {
-            this.appServiceListData = result.auServicesList
-            console.log('get data by page -- >' + JSON.stringify(result))
-            this.total = result.pageCount
-            this.loading = false
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
+    // 条件查询
+    _handleFilter (params, type) {
+      delete params.pageFlag
+      if (type === 'search') {
+        this.loading = true
+        getAppServiceByPage(params)
+          .then(
+            function (result) {
+              this.appServiceListData = result.auServicesList
+              console.log('get data by page -- >' + JSON.stringify(result))
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(function (error) {
             this.loading = false
             console.log(error)
-          }
-        )
+          })
+      } else if (type === 'download') {
+        downloadResultFile(params)
+          .then(
+            function (result) {
+              this.auServerListData = result.auServersList
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      } else if (type === 'upload') {
+        this.dialogStatus = '上传应用服务配置信息'
+        this.dialogUploadVisible = true
+      } else if (type === 'downtemplate') {
+        downloadAppServiceTemplate(params)
+          .then(
+            function (result) {
+              this.auServerListData = result.auServersList
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
-    // 查看应用&服务每条详细信息
+    // 详情
     _handleCheckDetails (rowIdx) {
       this.dialogStatus = '管理应用&服务信息详情'
       var rowData = this.appServiceListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
       getAppServiceDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log('app service details --- >  ' + JSON.stringify(result))
-              this.auappServiceData = result.auServices
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
+        .then(
+          function (result) {
+            console.log('app service details --- >  ' + JSON.stringify(result))
+            this.auappServiceData = result.auServices
+            this.dialogDetailsVisible = true
+          }.bind(this)
+        )
+        .catch()
     },
-
-    // 编辑每条应用&服务信息
+    // 编辑
     _handleEdit (rowIdx) {
       this.dialogStatus = '管理应用&服务修改'
       var rowData = this.appServiceListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getAppServiceDetails(eachRowUUID)
-          .then(
-            function (result) {
-              this.auappServiceData = result.auServices
-              this.dialogEditVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.auappServiceData = result.auServices
+            console.log(
+              'app service edit details --- > ' +
+                JSON.stringify(this.auappServiceData)
+            )
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
-
-    // 更新应用&服务的信息
+    // 更新
     _updateAppServiceInfo (params) {
       updateAppServiceInfo(params)
         .then(
@@ -230,30 +269,26 @@ export default {
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
-    // 更新应用&服务信息
+    // 比对刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.appServiceListData[rowIdx]
       var eachRowUUID = rowData.uuid
-      // 刷新硬件应用&服务
+      // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
-            console.log(this.syncDataStatus = result.syncMessage.msg)
+            console.log((this.syncDataStatus = result.syncMessage.msg))
             this.syncDataStatus = result.syncMessage.msg
             if (this.syncDataStatus) {
               this.synDataLoading = false
-              // setTimeout(() => {
-              // }, 12000)
-            // 再次加载列表的数据
-            // this.loadData()
+              // 再次加载列表的数据
+              // this.loadData()
               this.$message({
                 message: '数据更新成功',
                 type: 'success'
@@ -261,59 +296,49 @@ export default {
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            this.synDataLoading = false
-            console.log(error)
-            this.$message({
-              title: '数据更新成功',
-              message: '数据更新成功',
-              type: 'success',
-              duration: 2000
-            })
-          }
-        )
+        .catch(function (error) {
+          this.synDataLoading = false
+          console.log(error)
+        })
       console.log('dispatch rowData -- >' + eachRowUUID)
     },
-
-    // 查看应用&服务信息的历史记录
+    // 历史记录
     _handleCheckHistory (rowIdx) {
       this.dialogStatus = '管理应用&服务历史信息详情'
       var rowData = this.appServiceListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
       getAppServiceHistoryList(eachRowUUID)
-          .then(
-            function (result) {
-              this.auappServiceHistory = result.auServicesHisList
-              console.log('searvices history  -- >' + JSON.stringify(result))
-              this.dialogHistoryVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.auappServiceHistory = result.auServicesHisList
+            console.log('searvices history  -- >' + JSON.stringify(result))
+            this.dialogHistoryVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
-
-    // 初始加载应用&服务的信息
+    // 初始加载
     loadData () {
+      delete this.searchConditionList.pageFlag
+      this.loading = true
       getAppServiceByPage(this.searchConditionList)
         .then(
           function (result) {
             this.appServiceListData = result.auServicesList
-            console.log('application service result -- >' + JSON.stringify(result))
+            console.log(
+              'application service result -- >' + JSON.stringify(result)
+            )
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            this.loading = false
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          this.loading = false
+          console.log(error)
+        })
     },
 
     // 改变分页大小
@@ -326,6 +351,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
+    },
+    _handleCloseUploadDialog () {
+      this.dialogUploadVisible = false
+      this.loadData()
+    },
+    _handleBeforClose () {
+      this.dialogUploadVisible = false
+      this.$refs.uploadCmpt.clearFileList()
     }
   },
   mounted () {
@@ -335,5 +368,5 @@ export default {
 </script>
 
 <style scoped>
- @import "assets/css/upgrademgmt.less"
+@import 'assets/css/upgrademgmt.less';
 </style>

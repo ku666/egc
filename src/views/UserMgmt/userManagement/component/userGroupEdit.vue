@@ -16,10 +16,10 @@
         @visible-change='getUserTypeList'
         >
           <el-option
-            v-for='item in editForm.userTypeList'
-            :key='item'
-            :label='item.userTypeName'
-            :value='item.userType'>
+            v-for='item in userTypeList'
+            :key='item.itemCode'
+            :label='item.itemName'
+            :value='item.itemCode'>
           </el-option>
         </el-select>
       </el-form-item>
@@ -52,6 +52,7 @@
         <grid-list id='userTable'
           :editable='false'
           :deletable='true'
+          :showOperation='true'
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
@@ -84,6 +85,7 @@
         <grid-list id='roleTable'
           :editable='false'
           :deletable='true'
+          :showOperation='true'
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
@@ -123,8 +125,7 @@ import {
   // deleteDirUserGroup,
   deleteDirUser,
   deleteAssRole,
-  checkUserGroupName,
-  listUserType
+  checkUserGroupName
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -139,29 +140,17 @@ export default {
       remark: undefined,
       userType: undefined,
       uuid: undefined
-    }
+    },
+    userTypeList: undefined
   },
   components: {
     gridList
   },
   methods: {
-    getUserTypeList () {
-      listUserType()
-        .then(
-          function (result) {
-            this.createForm.userTypeList = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
-    },
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -192,7 +181,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup()
+      getRoleUserGroup(this.listUsergroupQuery)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -231,7 +220,7 @@ export default {
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUser()
+      getRoleUser(this.listUserQuery)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -270,11 +259,12 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
-      getRoleListAllMaindata()
+      console.log(this.listRoleQuery)
+      getRoleListAllMaindata(this.listRoleQuery)
         .then(
           function (result) {
             this.tmpRoleList = result
+            console.log(this.tmpRoleList)
             getUsergroupRoleFilterList(this.usergroupUuid)
             .then(
               function (result) {
@@ -564,8 +554,8 @@ export default {
         )
     },
     // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName) {
-      checkUserGroupName(usergroupUuid, usergroupName)
+    validateName (usergroupUuid, usergroupName, userType) {
+      checkUserGroupName(usergroupUuid, usergroupName, userType)
         .then(
           function (result) {
             console.log('<<<<<userGroupNameFlag:' + result)
@@ -591,8 +581,9 @@ export default {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
       let usergroupUuid = this.editForm.uuid
+      let userType = this.editForm.userType
       console.log('校验：' + usergroupUuid + value)
-      this.validateName(usergroupUuid, value)
+      this.validateName(usergroupUuid, value, userType)
       if (!this.userGroupNameFlag) {
         callback(new Error('用户组名称已存在!'))
         this.userGroupNameFlag = true   // 校验用户组名称存在之后,再将 userGroupNameFlag 值还原初始值 true
@@ -612,6 +603,7 @@ export default {
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
         ]
       },
+      userTypeList: undefined,
       formData: undefined,
       userGroupNameFlag: true,
       userGroupFilterList: undefined,
@@ -658,6 +650,21 @@ export default {
       queryRole: {
         roleUuid: undefined,
         usergroupUuid: undefined
+      },
+      listUserQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
+      },
+      listRoleQuery: {
+        cloudFlag: 1,
+        courtUuid: '',
+        userType: ''
+      },
+      listUsergroupQuery: {
+        courtUuid: '',
+        userType: '',
+        cloudFlag: 1
       },
       userGroupList: undefined,
       userList: undefined,
