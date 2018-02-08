@@ -127,8 +127,8 @@ import {
   getDepartmentOptions,
   getContactTypeOptions,
   listUserType,
-  uploadUserExcel
-  // downloadExcelTemplate
+  uploadUserExcel,
+  downloadExcelTemplate
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -341,6 +341,7 @@ export default {
       this.dialogFormVisible = false
       this.dialogCreateFormVisible = true
       this.$refs.userCreateVue.reset()
+      this.$refs.userCreateVue.initUserInfo()
       this.addFlag = false
     },
     userDeleteEvent (row) {
@@ -556,7 +557,29 @@ export default {
       }
     },
     handleCommand (type) {
-      window.open('/egc-usermgmtcomponent/usermgmt/user/download/template?type=' + type)
+      // window.open('/egc-usermgmtcomponent/usermgmt/user/download/template?type=' + type)
+      downloadExcelTemplate(type)
+        .then(
+          function (result) {
+            console.log(result)
+            // this.userForm = result.baseUser  // 用户基本信息
+            // console.log('用户基本信息:' + JSON.stringify(result.baseUser))
+            // console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
+            // console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
+            // // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
+            // this.dialogStatus = '编辑用户'
+            // this.dialogFormVisible = true
+            // this.dialogCreateFormVisible = false
+            // this.$refs.userEditVue.reset()
+            // this.addFlag = true
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log('.....失败')
+            console.log(error)
+          }
+        )
     }
   }
 }

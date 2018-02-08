@@ -33,12 +33,17 @@ export const uploadUserExcel = (params) => {
 
 // 下载用户导入 excel 模板
 export const downloadExcelTemplate = (type) => {
-  return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type
+  return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type, {responseType: 'arraybuffer'}
   ).then(res => {
+    console.log('download success')
     let blob = new Blob([res.data], { type: 'application/x-xls' })
     let link = document.createElement('a')
     link.href = window.URL.createObjectURL(blob)
-    link.download = type
+    if (type === '1') {
+      link.download = '用户信息.xls'
+    } else if (type === '2') {
+      link.download = '用户信息.xlsm'
+    }
     link.click()
     return res.data
   })
