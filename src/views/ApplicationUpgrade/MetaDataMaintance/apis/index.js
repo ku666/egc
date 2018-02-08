@@ -7,7 +7,7 @@ const BASE_PATH = '/egc-applicationupgradecomponent'
 // 代码实例
 export const getCodeInstanceByPage = (params) => {
   console.log('get code instance maintance by page params ---> ' + JSON.stringify(params, null, ' '))
-  return Axios.post(BASE_PATH + '/commCode/', params
+  return Axios.post(BASE_PATH + '/codeInstances/queryPageData', params
   ).then(res => res.data)
   // return Axios.post(contextPath + '/osServices/update', params).then(res => res.data)
 }
@@ -30,7 +30,6 @@ export const updateCodeInstance = (params) => {
 
 export const registerCodeInstance = (params) => {
   console.log('register code instance maintance params ---> ' + JSON.stringify(params))
-  console.log(JSON.stringify(params, null, ' '))
   return Axios.post(BASE_PATH + '/commCode/', params
   ).then(res => res.data)
   // return Axios.post(contextPath + '/osServices/update', params).then(res => res.data)

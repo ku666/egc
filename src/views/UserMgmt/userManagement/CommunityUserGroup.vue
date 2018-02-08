@@ -201,7 +201,8 @@
         this.searchText = ''
         this.query.userGroupName = ''
         this.query.courtUuid = ''
-        this.getUserGroupListFunction()
+        this.userGroupList = ''
+        // this.getUserGroupListFunction()
       },
       handleTabClick (tab, event) {
         this.showGrid = (tab.name === '0')
