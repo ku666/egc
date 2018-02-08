@@ -69,7 +69,7 @@
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
           <div v-if="isOwenrTable" style="width:100%">
-            <el-table :data="ownerTableData" width="100%" max-height="420" class="tableWidth" stripe>
+            <el-table :data="ownerTableData" width="100%" height="420" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
               <el-table-column style="width:100%" prop="countNum" label="人数">
@@ -85,7 +85,7 @@
         <div class="show" v-show='isRate'>
           <!-- 表格展示 -->
           <div v-show='isRateTable' width="100%">
-            <el-table :data='rateTableData' width="100%" max-height="380" class="tableWidth" stripe>
+            <el-table :data='rateTableData' width="100%" height="380" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
               <el-table-column style="width:100%" prop="inCount" label="进入次数">
@@ -219,7 +219,7 @@ export default {
             res.data.data.buildInfo.map(item => {
               this.form.buildList.push({
                 value: item.uuid,
-                label: item.name
+                label: item.memo.slice(item.memo.indexOf(' ') + 1)
               })
             })
           }
@@ -250,7 +250,7 @@ export default {
           break
         case '2':
           this.timeType = 'month'
-          this.startTime = new Date(this.endTime.getTime() - 31622400000)// 默认开始时间
+          this.startTime = new Date(this.endTime.getTime() - 86400000 * 366)// 默认开始时间
           break
         default:
           break
@@ -258,14 +258,12 @@ export default {
     },
     goToTable () { // 切换到表格显示
       this.tableOrMap = '0'
-      // this.$nextTick(() => {
-      // })
       switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwenrTable = true
           this.isOwenrMap = false
-          let tableHeader = document.querySelector('.el-table__header-wrapper .el-table__header')
-          let tableBody = document.querySelector('.el-table__body-wrapper .el-table__body')
+          let tableHeader = document.querySelector('.el-table__header')
+          let tableBody = document.querySelector('.el-table__body')
           tableHeader.style.width = '100%'
           tableBody.style.width = '100%'
           if (!this.clickTable) { // 控制多次点击
