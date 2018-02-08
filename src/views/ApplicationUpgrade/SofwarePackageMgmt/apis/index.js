@@ -4,10 +4,8 @@ let contextPath = '/scp-upgradecomponent'
 // 接口地址
 const BASE_PATH = '/egc-applicationupgradecomponent'
 
-/** ***************************以下定义的方法是用于调用真实环境的数据********************************* */
-
-// 上传Excel
-
+/** ***************************数据导入******************************** */
+// 软件包上传Excel
 export const uploadExcelFiles = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
@@ -19,7 +17,18 @@ export const uploadExcelFiles = (params) => {
     return res.data
   })
 }
-
+// 依赖关系上传xls
+export const uploadDependencyExcelFiles = (params) => {
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  return Axios.post(BASE_PATH + '/package/importPackageDependenciesExcel', params, config
+  ).then(res => {
+    console.log('---------------upload excel files  result ---------- ')
+    console.info(res)
+    return res.data
+  })
+}
 /** =================软件包信息================================ */
 
 // 注册软件包
@@ -30,7 +39,7 @@ export const registerSoftwarePackage = (params1, params2) => {
   console.log('<<<<< software register  params:' + JSON.stringify(JSON.stringify(params1) + ' =============== > ' + JSON.stringify(params2)))
 
   return Axios.post(BASE_PATH + '/package/create?' + 'batchesId=' + params1.batchesId + '&name=' + params1.name + '&version=' + params1.version + '&developer=' + params1.developer +
-  '&latestPreVer=' + params1.latestPreVer + '&latestPreName=' + params1.latestPreName + '&remark=' + params1.remark, params2, contentType).then(res => res.data)
+  '&latestPreVer=' + params1.latestPreVer + '&latestPreName=' + params1.latestPreName + '&functionDesc=' + params1.functionDesc, params2, contentType).then(res => res.data)
 }
 
 // 分页查询软件包信息
