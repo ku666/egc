@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { uploadExcelFiles } from '../apis/index'
+import { uploadDependencyExcelFiles } from '../apis/index'
 export default {
   data () {
     return {
@@ -42,7 +42,7 @@ export default {
       var fileLength = this.$refs.upload._data.uploadFiles.length
       console.log(fileLength)
       if (fileLength > 0) {
-        uploadExcelFiles(this.uploadFiles)
+        uploadDependencyExcelFiles(this.uploadFiles)
         .then((res) => {
           this.$message({
             message: '上传成功!',

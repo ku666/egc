@@ -116,7 +116,7 @@ export default {
           width: 150
         }, {
           colName: 'CPU（核数）',
-          prop: 'cpuFrequency',
+          prop: 'numberOfCore',
           width: 100
         }, {
           colName: '内存（G）',

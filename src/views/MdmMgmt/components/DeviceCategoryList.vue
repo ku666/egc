@@ -48,6 +48,7 @@
     <el-table
       ref='deviceTable'
       :expand-row-keys='expandRows'
+      :row-class-name='parentRowClassName'
       :row-key="getRowKeys"
       :data='tableData'
       v-loading='loading'
@@ -61,7 +62,7 @@
           <el-table empty-text='无子设备'
             :data='props.row.slave'
             :show-header='false'
-            :row-class-name='tableRowClassName'
+            :row-class-name='childRowClassName'
             @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
@@ -70,13 +71,26 @@
                 <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
                 <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
                 <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
-                <div style='padding-left: 20px; float: left'>{{scope.row.typeCode}}</div>
+                <!-- <div style='padding-left: 20px; float: left'>{{highlightKeys(scope.row.typeCode, searchForm.typeCode)}}</div> -->
+                <p style='padding-left: 20px; float: left' v-html="highlightKeys(scope.row.typeCode, searchForm.typeCode)"></p>
                 <!-- </div> -->
               </template>
             </el-table-column>
-            <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
+            <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip>
+              <template slot-scope="scope">
+                <p v-html="highlightKeys(scope.row.typeModel, searchForm.typeModel)"></p>
+              </template>
+            </el-table-column>
+            <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip>
+              <template slot-scope="scope">
+                <p v-html="highlightKeys(scope.row.typeName, searchForm.typeName)"></p>
+              </template>
+            </el-table-column>
+            <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip>
+              <template slot-scope="scope">
+                <p v-html="highlightKeys(scope.row.typeDesc, searchForm.typeDesc)"></p>
+              </template>
+            </el-table-column>
             <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
             <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
               <template slot-scope="scope">
@@ -111,10 +125,26 @@
         </template>
       </el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备编码'></el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='typeCode' label='设备编码'>
+        <template slot-scope="scopeParent">
+          <p v-html="highlightKeys(scopeParent.row.typeCode, searchForm.typeCode)"></p>
+        </template>
+      </el-table-column>
+      <el-table-column prop='typeModel' label='设备型号' show-overflow-tooltip>
+        <template slot-scope="scopeParent">
+          <p v-html="highlightKeys(scopeParent.row.typeModel, searchForm.typeModel)"></p>
+        </template>
+      </el-table-column>
+      <el-table-column prop='typeName' label='设备名称' show-overflow-tooltip>
+        <template slot-scope="scopeParent">
+          <p v-html="highlightKeys(scopeParent.row.typeName, searchForm.typeName)"></p>
+        </template>
+      </el-table-column>
+      <el-table-column prop='typeDesc' label='设备描述' show-overflow-tooltip>
+        <template slot-scope="scopeParent">
+          <p v-html="highlightKeys(scopeParent.row.typeDesc, searchForm.typeDesc)"></p>
+        </template>
+      </el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
       <!-- <el-table-column label='父设备' width="120" show-overflow-tooltip>
         <template slot-scope="scope">
@@ -442,7 +472,7 @@ export default {
         providerCode: ''
       }
     },
-    tableRowClassName ({ row, rowIndex }) {
+    childRowClassName ({ row, rowIndex }) {
       // if (rowIndex === 1) {
       //   return 'warning-row'
       // } else if (rowIndex === 3) {
@@ -451,8 +481,22 @@ export default {
       // return ''
       return 'child-row'
     },
+    parentRowClassName ({ row, rowIndex }) {
+      return 'parent-row'
+    },
     getRowKeys: function (row) {
       return row.uuid
+    },
+    highlightKeys: function (txt, key) {
+      let t = txt
+      let k = key
+      if (t !== null && t.length > 0 && k !== null && k.length > 0) {
+        // txt.replace(key, '<span style = "color: red">' + key + '</span>')
+        let temp = t.replace(k, '<span style = "color: red; font-weight: bold">' + k + '</span>')
+        return temp
+      } else {
+        return t
+      }
     }
   }
 }
@@ -470,10 +514,22 @@ export default {
   font-weight: normal;
   font-style: normal;
 }
+.el-table {
+  border: none;
+}
 .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
+  /* border-bottom: none; */
 }
 .el-table .child-row td {
   padding: 0px;
+  /* background-color:blanchedalmond; */
+  /* font-size: 10px; */
+  /* background-color:#f5f7fa; */
+}
+.el-table .parent-row {
+  /* background-color:#AAA */
+  /* border-top: 1px solid #ebeef5; */
+  /* border-bottom: 1px solid #ebeef5; */
 }
 </style>

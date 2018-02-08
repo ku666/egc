@@ -40,7 +40,7 @@
       <el-row>
         <el-col :span="24">
           <el-form-item label="新增修改功能点" :label-width="formLabelWidth">
-            <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.remark"></el-input>
+            <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc"></el-input>
           </el-form-item>
         </el-col>
       </el-row>
@@ -87,7 +87,6 @@ export default {
   data () {
     return {
       formLabelWidth: '160px',
-      baseURL: 'http://localhost:8081/egc-applicationupgradecomponent/package/create',
       fileList: [],
       rules: {
         name: [
@@ -102,7 +101,7 @@ export default {
         latestPreVer: [
           { required: true, message: '请输入前续版本', trigger: 'blur,change' }
         ],
-        remark: [
+        functionDesc: [
           { required: true, message: '请输入新增修改功能点', trigger: 'blur,change' }
         ]
       }

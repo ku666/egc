@@ -1,6 +1,31 @@
 <template>
   <div class="ui-common"> 
-    <el-row>
+
+      <el-form align="left" :inline="true">
+        <div class="search-container">
+          <el-form-item label="软件名称">
+            <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="版本号">
+            <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="开发者">
+            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
+          </el-form-item>
+          <el-form-item label="搜索条件">
+            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
+              <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
+            </el-form-item>
+          </div>
+        </div>
+       </el-form>
+
+    <!-- <el-row>
       <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
         <div class="search-container">
           <div class="item-container">
@@ -8,25 +33,26 @@
             <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
           </div>
           <div class="item-container">
-            <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;版本号</span>
+            <span class="sub-title">版本号</span>
             <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
           </div>
           <div class="item-container">
-            <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;开发者</span>
+            <span class="sub-title">开发者</span>
             <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
           </div>
           <div class="item-container">
-            <span class="sub-title">&nbsp;&nbsp;&nbsp;&nbsp;搜索条件</span>
+            <span class="sub-title">搜索条件</span>
             <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
           </div>
           <div class="btn-container">
             <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
             <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
+            <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
           </div>
         </div>
       </el-form>
-    </el-row>
-    <el-row>
+    </el-row> -->
+    <el-row style="margin-top: 15px;">
       <el-col>
         <el-button icon="el-icon-circle-plus-outline" @click="_handleRegister" plain type="primary">注册</el-button>
       </el-col>
@@ -126,7 +152,7 @@
             <el-row>
               <el-col :span="24">
                 <el-form-item label="新增修改功能点" :label-width="formLabelWidth" prop="remark">
-                  <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.remark"></el-input>
+                  <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -175,6 +201,39 @@
         <software-package-history :softwarePckHistory="softwarePckHistory"></software-package-history>
       </el-dialog>
     </div>
+    <div>
+      <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" top="8vh" :before-close="closeImportDialog">
+        <div>
+          <el-form>
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
+                  <el-upload
+                    ref="uploadPackageJarFiles"
+                    class="avatar-uploader"
+                    action=""
+                    drag
+                    multiple
+                    :limit=10
+                    :show-file-list="true"
+                    :on-exceed="handleExceed"
+                    :on-change="handleOnchange"
+                    :auto-upload="false"
+                    :file-list="fileList">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                  </el-upload>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <div style="text-align:center;">
+              <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
+            </div>
+          </el-form>
+        </div>
+      </el-dialog>
+    </div>
   </div>
 </template>
 
@@ -183,7 +242,7 @@ import softwarePackageDetails from './components/SoftwarePackageDetails'
 import softwarePackageEdit from './components/SoftwarePackageEdit'
 import softwarePackageHistory from './components/SoftwarePackageHistory'
 
-import { getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, getSoftwarePackageHistoryList, registerSoftwarePackage } from './apis/index'
+import { getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, getSoftwarePackageHistoryList, registerSoftwarePackage, uploadExcelFiles } from './apis/index'
 export default {
   components: {
     softwarePackageDetails,
@@ -208,6 +267,8 @@ export default {
       selectOpts: [],
       total: 0,
       dialogTitle: '',
+      dialogImportTitle: '',
+      dialogImportVisible: false,
       addr: '',
       dialogRegisterVisible: false,
       dialogDetailsVisible: false,
@@ -289,7 +350,7 @@ export default {
         latestPreVer: [
           { required: true, message: '请输入前续版本', trigger: 'blur,change' }
         ],
-        remark: [
+        functionDesc: [
           { required: true, message: '请输入新增修改功能点', trigger: 'blur,change' }
         ],
         uploadFiles: [
@@ -378,6 +439,44 @@ export default {
         }
       })
     },
+    // 文件导入
+    _importFile () {
+      this.dialogImportTitle = '软件包注册'
+      this.dialogImportVisible = true
+    },
+    _importRegisterSoftware () {
+      console.info('_importRegisterSoftware')
+      console.info(JSON.stringify(this.uploadFiles))
+      var fileLength = this.$refs.uploadPackageJarFiles._data.uploadFiles.length
+      if (fileLength > 0) {
+        uploadExcelFiles(this.uploadFiles)
+        .then((res) => {
+          console.log('===>' + res)
+          this.$message.success('上传成功', 2000)
+          this.dialogImportVisible = false
+          this.fileList = []
+          this.loadData()
+        }).catch(
+          function (error) {
+            this.$message({
+              message: error.message,
+              center: true,
+              showClose: true,
+              type: 'error',
+              duration: 2000
+            }).bind(this)
+            console.log(error)
+          })
+      } else {
+        this.$message({
+          message: '请先选择需要上传的文件',
+          type: 'warning',
+          duration: 20000,
+          center: true,
+          showClose: true
+        })
+      }
+    },
     handleOnchange (file, fileList) {
       console.info('handleOnchange')
       // var fileArray = []
@@ -419,7 +518,10 @@ export default {
       this.$refs.softwareDetails.resetFields()
       this.fileList = []
     },
-
+    // 清空软件包注册页面之前输入的值
+    closeImportDialog () {
+      this.dialogImportVisible = false
+    },
     // 查看软件包每条详细信息
     _handleCheckDetails (rowIdx) {
       this.dialogTitle = '软件服务包详情'

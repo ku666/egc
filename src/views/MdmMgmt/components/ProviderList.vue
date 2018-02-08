@@ -95,7 +95,7 @@
           <el-row>
             <el-col :span='12'>
               <el-form-item label='供应商编码' prop='providerCode'>
-                <el-input v-model='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
+                <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
@@ -109,19 +109,19 @@
           <el-row>
             <el-col :span='12'>
               <el-form-item label='供应商名称' prop='providerName'>
-                <el-input v-model='providerForm.providerName'></el-input>
+                <el-input v-model.trim='providerForm.providerName'></el-input>
               </el-form-item>
             </el-col>
             <el-col :span='12'>
               <el-form-item label='联系方式' prop='contact'>
-                <el-input v-model='providerForm.contact'></el-input>
+                <el-input v-model.trim='providerForm.contact'></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
             <el-col :span='24'>
               <el-form-item label='供应商描述' prop='providerDesc'>
-                <el-input v-model='providerForm.providerDesc'></el-input>
+                <el-input v-model.trim='providerForm.providerDesc'></el-input>
               </el-form-item>
             </el-col>
           </el-row>

@@ -94,12 +94,12 @@
               <el-row>
                 <el-col :span = '12'>
                   <el-form-item label='属性编码' prop='attrCode' >
-                    <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+                    <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span = '12'>
                   <el-form-item label='属性描述' prop='attrDesc'>
-                    <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+                    <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
@@ -122,12 +122,12 @@
               <el-row>
                 <el-col :span = '12'>
                     <el-form-item label='单位描述' prop='unitDesc'>
-                    <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+                    <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
                   </el-form-item>
                 </el-col>
                 <el-col :span = '12'>
                   <el-form-item label='单位编码' prop='unitCode'>
-                      <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+                      <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
                   </el-form-item>
                 </el-col>
               </el-row>
