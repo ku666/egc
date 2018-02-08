@@ -564,7 +564,7 @@ export const checkResourceName = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&resourceName=' + encodeURI(listParm.resourceName) + '&uuid=' + listParm.uuid
+  '&resourceName=' + encodeURI(listParm.resourceName) + '&uuid=' + listParm.uuid + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 校验资源名称是否唯一
@@ -573,7 +573,7 @@ export const checkResourceCode = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&uuid=' + listParm.uuid + '&appCode=' + listParm.appCode
+  '&uuid=' + listParm.uuid + '&appCode=' + listParm.appCode + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 获取主设备类型
@@ -588,7 +588,7 @@ export const getProviderCodeTypeOptions = () => {
 }
 // 获取菜单树
 export const getMenuTreeDetail = (data) => {
-  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data
+  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data + '&cloudFlag=1'
   ).then(res => res.data)
 }
 // 获取组织树
@@ -699,4 +699,37 @@ export const getHandelTypeOptions = (dictData) => {
   console.log('Axios getHandelTypeOptions <<<<<uuid:' + dictData.actTypeDict)
   return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=' + dictData.actTypeDict
   ).then(res => res.data)
+}
+
+// 省
+export const getProvinceDataList = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/getProvince'
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+}
+
+// 市
+export const getCityDataList = (params) => {
+  console.log('get city list, param is  -->   ' + JSON.stringify(params))
+  console.log('get city list param: province is  -->   ' + JSON.stringify(params.province))
+  return Axios.get(contextPath + '/usermgmt/maindata/getCity?province=' + encodeURI(params.province)
+    ).then(res => res.data)
+  // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
+}
+
+// 区
+export const getDisctrictDataList = (params) => {
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(contextPath + '/usermgmt/maindata/getDistrict?province=' + encodeURI(params.province) + '&city=' + encodeURI(params.city)
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+}
+
+// 区
+export const getCourtsDataList = (params) => {
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(contextPath + '/usermgmt/maindata/getCourts?province=' + encodeURI(params.province) +
+  '&city=' + encodeURI(params.city) + '&district=' + encodeURI(params.district)
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }

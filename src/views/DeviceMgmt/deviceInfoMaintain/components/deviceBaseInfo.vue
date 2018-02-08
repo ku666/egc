@@ -5,10 +5,10 @@
       <el-col :span="8">
         <div class="grid-content bg-purple">
           <select-box title="设备类型"
-                      code="deviceTypeDesc"
+                      code="deviceType"
                       :options="deviceType"
                       @listenToInput="_saveDeviceData"
-                      ref="deviceTypeDesc">
+                      ref="deviceType">
           </select-box>
         </div>
       </el-col>
@@ -173,7 +173,7 @@
               this.deviceTypeList = result.deviceCategoryList
               for (let i = 0; i < this.deviceTypeList.length; i++) {
                 this.deviceType.push({
-                  value: this.deviceTypeList[i].typeDesc,
+                  value: this.deviceTypeList[i].typeCode,
                   label: this.deviceTypeList[i].typeDesc
                 })
               }
@@ -240,15 +240,6 @@
       _saveDeviceData (data) {
         for (var key in data) {
           this.screeningData[key] = data[key]
-          if (key === 'deviceTypeDesc') {
-            this.screeningData['deviceType'] = ''
-            for (let i = 0; i < this.deviceTypeList.length; i++) {
-              if (data[key] === this.deviceTypeList[i].typeDesc) {
-                this.currentDevice = this.deviceTypeList[i]
-                this.screeningData['deviceType'] = this.currentDevice.type
-              }
-            }
-          }
           if (key === 'deviceIp' && data[key] !== undefined && data[key] !== '') {
             if (!isValidIP(data[key])) {
               this.$message.error('请输入合法IP')
