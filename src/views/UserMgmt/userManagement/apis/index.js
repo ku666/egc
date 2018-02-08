@@ -253,8 +253,8 @@ export const getRoleList = (query) => {
 //   ).then(res => res.data)
 // }
 // 从Maindata查询角色完整清单
-export const getRoleListAllMaindata = (data) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
+export const getRoleListAllMaindata = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 新建角色
@@ -283,8 +283,8 @@ export const updateRole = (data) => {
   ).then(res => res.data)
 }
 // 获取用户组清单
-export const getRoleUserGroup = (data) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
+export const getRoleUserGroup = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 获取用户组筛选清单

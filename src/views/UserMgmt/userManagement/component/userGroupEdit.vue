@@ -150,7 +150,7 @@ export default {
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup(this.listUsergroupQuery)
+      getRoleUserGroup(1)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -181,7 +181,7 @@ export default {
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUserGroup(this.listUsergroupQuery)
+      getRoleUserGroup(1)
         .then(
           function (result) {
             this.tmpUserGroupList = result
@@ -220,7 +220,7 @@ export default {
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
       console.log(this.query.usergroupUuid)
-      getRoleUser(this.listUserQuery)
+      getRoleUser(1)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -259,8 +259,7 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.listRoleQuery)
-      getRoleListAllMaindata(this.listRoleQuery)
+      getRoleListAllMaindata(1)
         .then(
           function (result) {
             this.tmpRoleList = result
