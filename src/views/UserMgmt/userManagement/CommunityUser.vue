@@ -147,9 +147,6 @@ export default {
       title: '登录 ID',
       prop: 'userName'
     }, {
-      title: '用户类型',
-      prop: 'userTypeName'
-    }, {
       title: '职务',
       prop: 'position'
     }, {
@@ -315,7 +312,8 @@ export default {
       //   'q_primaryPhone': '',
       //   'cloudFlag': 0
       // }
-      this.getUserList()
+      this.userList = ''
+      // this.getUserList()
     },
     // 改变分页大小
     handleSizeChange (val) {
@@ -329,7 +327,14 @@ export default {
     },
     handleFilter () {
       this.listQuery.page = 1
-      this.getUserList()
+      if (this.listQuery.courtUuid) {
+        this.getUserList()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请先选择需要查询的小区！'
+        })
+      }
     },
     // // 新增用户
     // handleCreate () {
