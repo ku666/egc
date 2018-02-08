@@ -238,6 +238,7 @@ export default {
       if (id !== this.courtId) { // 选中的是楼栋
         this.buildId = id
       }
+      console.log(this.tempId, this.buildId, this.courtId)
     },
     reportTypeEvent (val) { // 报表选择
       switch (val) {
@@ -288,7 +289,7 @@ export default {
           if (this.tempId !== this.courtId && this.tempId !== '') {
             this.getBuildRateTableData() // 获取楼栋表格
           } else {
-            this.getRateTableData(this.courtId) // 获取小区表格
+            this.getRateTableData() // 获取小区表格
           }
           break
         default:
@@ -298,11 +299,19 @@ export default {
     sizeChange (pageSize) { // 切换每页条数
       this.parameter.pageSize = pageSize
       this.parameter.currentPage = 1
-      this.getRateTableData()
+      if (this.tempId !== this.courtId && this.tempId !== '') {
+        this.getBuildRateTableData() // 获取楼栋表格
+      } else {
+        this.getRateTableData() // 获取小区表格
+      }
     },
     currentChange (currentPage) { // 切换当前页
       this.parameter.currentPage = currentPage
-      this.getRateTableData()
+      if (this.tempId !== this.courtId && this.tempId !== '') {
+        this.getBuildRateTableData() // 获取楼栋表格
+      } else {
+        this.getRateTableData() // 获取小区表格
+      }
     },
     goToMap () { // 切换到图表显示
       this.tableOrMap = '1'
@@ -393,7 +402,7 @@ export default {
           break
       }
     },
-    timeJudgment (val) { // 判断选择的时间是否符合要求
+    timeJudgment () { // 判断选择的时间是否符合要求
       switch (this.parameter.reportType) {
         case '0':
           if (this.endTime.getTime() - this.startTime.getTime() > 2851200000) { // 一个月2851200000
@@ -465,11 +474,8 @@ export default {
           }
           break
         case '2': // 选择出入频率
+          this.timeJudgment()
           if (!this.isRequest) {
-            this.$message({
-              type: 'error',
-              message: '请选择正确的时间'
-            })
             return
           }
           this.isRate = true
@@ -500,11 +506,11 @@ export default {
       this.flagVal = '1'
       this.flag = false
       this.parameter = {
-        courtUuid: '', // 小区ID
-        classValue: '1', // 默认业主
-        reportType: '0', // 默认日报
-        currentPage: 1, // 默认第一页
-        pageSize: 10, // 默认每页条数
+        courtUuid: '',
+        classValue: '1',
+        reportType: '0',
+        currentPage: 1,
+        pageSize: 10,
         startDate: null,
         endDate: null
       }
