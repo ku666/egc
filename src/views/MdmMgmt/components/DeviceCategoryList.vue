@@ -492,7 +492,8 @@ export default {
       let k = key
       if (t !== null && t.length > 0 && k !== null && k.length > 0) {
         // txt.replace(key, '<span style = "color: red">' + key + '</span>')
-        let temp = t.replace(k, '<span style = "color: red; font-weight: bold">' + k + '</span>')
+        // let temp = t.replace(k, '<span style = "color: red; font-weight: bold">' + k + '</span>')
+        let temp = t.replace(k, '<span style = "background-color: antiquewhite;">' + k + '</span>')
         return temp
       } else {
         return t
