@@ -15,6 +15,7 @@
           <el-form-item>
             <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
             <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
+            <el-button @click="_selectOrg" class="action-btn" type="primary" :disabled="disabled">选择组织</el-button>
           </el-form-item>
         </div>
       </div>
@@ -166,10 +167,15 @@ export default {
         })
     },
     loadData () {
-      getAllRegisterPackages()
+      let queryList = {
+        'packageName': '',
+        'packageProvider': '',
+        'packageVersion': ''
+      }
+      getAllRegisterPackages(queryList)
         .then(
           function (result) {
-            this.dispatchDataList = result.testData
+            this.dispatchDataList = result
             this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
         )
@@ -183,18 +189,23 @@ export default {
       console.log(JSON.stringify(this.multipleSelection))
     },
     _selectOrg () {
-      if (this.multipleSelection.length > 0) {
-        this.selectOrgVisible = true
-      } else {
-        this.$message.error('请选择软件包!')
-      }
+      // if (this.multipleSelection.length > 0) {
+      this.selectOrgVisible = true
+      // } else {
+      //   this.$message.error('请选择软件包!')
+      // }
     },
-    _dispatchSoftwareToCourt (houseData) {
+    _dispatchSoftwareToCourt (courtList) {
       this.selectOrgVisible = false
       // 需要获取当前登录人的信息
       this.operator = 'SystemAdmin'
       this.downloadResultVisible = true
-      dispatchSoftwarePackage(this.multipleSelection, houseData, this.operator)
+      var appList = []
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        let element = this.multipleSelection[i]
+        appList.push(element.packageId)
+      }
+      dispatchSoftwarePackage(appList, courtList, this.operator)
         .then(
           function (result) {
             this.dispatchResult = result

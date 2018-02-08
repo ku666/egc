@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="searchConditionList">
       <div class="search-container">
         <el-form-item label="代码实例值">
-          <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.codeValue"> </el-input>
+          <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
         </el-form-item>
         <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
           <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
@@ -68,8 +68,8 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码值" :label-width="formLabelWidth" prop="codeValue">
-                <el-input v-model="registerParaList.codeValue"></el-input>
+              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
+                <el-input v-model="registerParaList.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -111,26 +111,27 @@ export default {
       codeInstDetails: undefined,
       dialogTittle: '',
       formLabelWidth: '140px',
+      editTitle: '编辑',
       tableTitleList: [
         {
           colName: '代码实例值',
-          prop: 'name',
+          prop: 'code',
           width: 220
         }, {
           colName: '代码实例对应名称',
-          prop: 'name',
+          prop: 'instanceName',
           width: 220
         }, {
           colName: '提供商',
-          prop: 'name',
+          prop: 'sourceVendor',
           width: 220
         }, {
           colName: '代码值',
-          prop: 'name',
+          prop: 'code',
           width: 220
         }, {
           colName: '备注',
-          prop: 'name'
+          prop: 'remark'
         }
       ],
       searchConditionList: {
@@ -139,14 +140,14 @@ export default {
         // 名称
         'codeName': '',
         // 值
-        'codeValue': '',
+        'code': '',
         // 提供商
         'vendor': ''
       },
       registerParaList: {
         instanceValue: '',
         instanceName: '',
-        codeValue: '',
+        code: '',
         codeProvider: '',
         ramark: ''
       },
@@ -154,7 +155,7 @@ export default {
         instanceValue: [
           { required: true, message: '请输入软件名称', trigger: 'blur,change' }
         ],
-        codeValue: [
+        code: [
           { required: true, message: '请输入软件版本', trigger: 'blur,change' }
         ],
         instanceName: [
@@ -169,7 +170,7 @@ export default {
         .then(
           function (result) {
             console.log('code instance -- >' + JSON.stringify(result))
-            this.codeInstList = result
+            this.codeInstList = result.codesInstanceList
             this.total = result.pageCount
             this.loading = false
           }.bind(this)

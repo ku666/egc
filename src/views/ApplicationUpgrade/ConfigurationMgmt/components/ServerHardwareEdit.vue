@@ -139,6 +139,7 @@ export default {
     return {
       formLabelWidth: '150px',
       isInptDisabled: true,
+      showAddNewEvent: false,
       maxlength: 30,
       tempAeestNo: undefined,
       tempMgmtIp: undefined,

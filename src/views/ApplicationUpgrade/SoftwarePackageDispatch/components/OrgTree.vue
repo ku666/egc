@@ -8,7 +8,7 @@
       <div class="tree">
         <el-tree
           class="filter-tree"
-          node-key="uuid"
+          node-key=""
           :data="orgsData"
           :props="defaultProps"
           ref="tree"
@@ -50,8 +50,8 @@ export default {
       getAllOrgs()
         .then(
           function (result) {
-            console.log('org tree data--- >   ' + JSON.stringify(result.testData))
-            this.orgsData = result.testData
+            console.log('org tree data--- >   ' + JSON.stringify(result))
+            this.orgsData = result
           }.bind(this)
         )
         .catch(
@@ -83,7 +83,7 @@ export default {
       return data.labelAbbr.indexOf(value) !== -1
     },
     handleCheckChange: function (data, checked, indeterminate) {
-      console.log(JSON.stringify(data, null, '  '))
+      console.log(JSON.stringify(data))
     }
   },
   mounted () {

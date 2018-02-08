@@ -181,10 +181,9 @@ export default {
           )
       } else if (type === 'download') {
         let downloadCls = 1
-        downloadResultFile(params, downloadCls, this.total)
+        downloadResultFile(params, downloadCls)
           .then(
             function (result) {
-              console.log('download server hardware result -- >' + JSON.stringify(result))
               this.loading = false
             }.bind(this)
           )
@@ -274,18 +273,17 @@ export default {
     },
     // 比对刷新
     _handleSynData (rowIdx) {
-      this.synDataLoading = true
+      // this.synDataLoading = true
       var rowData = this.auServerListData[rowIdx]
       var eachRowUUID = rowData.uuid
       // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
+            console.log(' sync result --- > ' + JSON.strngify(result))
             this.syncDataStatus = result.syncMessage.msg
             if (this.syncDataStatus) {
               this.synDataLoading = false
-              // setTimeout(() => {
-              // }, 12000)
               this.$message({
                 message: '数据更新成功',
                 type: 'success'

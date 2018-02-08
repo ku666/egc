@@ -182,8 +182,6 @@ export default {
         downloadResultFile(params)
           .then(
             function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
               this.loading = false
             }.bind(this)
           )
@@ -200,8 +198,6 @@ export default {
         downloadEquipTemplate(params)
           .then(
             function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
               this.loading = false
             }.bind(this)
           )
