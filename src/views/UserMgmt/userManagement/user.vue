@@ -340,8 +340,10 @@ export default {
       this.dialogStatus = '添加用户'
       this.dialogFormVisible = false
       this.dialogCreateFormVisible = true
-      this.$refs.userCreateVue.reset()
-      this.$refs.userCreateVue.initUserInfo()
+      if (this.$refs.userCreateVue) {
+        this.$refs.userCreateVue.reset()
+        this.$refs.userCreateVue.initUserInfo()
+      }
       this.addFlag = false
     },
     userDeleteEvent (row) {
@@ -436,7 +438,9 @@ export default {
             this.dialogStatus = '编辑用户'
             this.dialogFormVisible = true
             this.dialogCreateFormVisible = false
-            this.$refs.userEditVue.reset()
+            if (this.$refs.userEditVue) {
+              this.$refs.userEditVue.reset()
+            }
             this.addFlag = true
           }.bind(this)
         )
