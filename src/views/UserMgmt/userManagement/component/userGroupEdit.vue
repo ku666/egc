@@ -731,50 +731,41 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    /* width: 16% */
-    width: 120px;
+    width: 16%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    /* width: 14% */
-    width: 120px;
+    width: 14%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    /* width: 15% */
-    width: 140px;
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    /* width: 15% */
-    width: 140px;
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    /* width: 12% */
-    width: 100px;
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    /* width: 18% */
-    width: 150px;
+    width: 18%
   }
-  /* #userTable >>> colgroup col:nth-child(7) {
+  #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  } */
+  }
   #userTable {
     margin-top: 15px
   }
   #roleTable >>> colgroup col:nth-child(1) {
-    /* width: 20% */
-    width: 200px;
+    width: 20%
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    /* width: 30% */
-    width: 220px;
+    width: 30%
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    /* width: 40% */
-    width: 250px;
+    width: 40%
   }
-  /* #roleTable >>> colgroup col:nth-child(4) {
+  #roleTable >>> colgroup col:nth-child(4) {
     width: 10%
-  } */
+  }
   #roleTable {
     margin-top: 15px
   }

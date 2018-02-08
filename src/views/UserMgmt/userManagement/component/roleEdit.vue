@@ -850,26 +850,26 @@ export default {
   }
 
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 130px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 130px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 150px
+    width: 16%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 200px
+    width: 20%
   }
-  /* #userTable >>> colgroup col:nth-child(7) {
+  #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  } */
+  }
 
   #resourceTable >>> colgroup col:nth-child(1) {
     width: 15%
