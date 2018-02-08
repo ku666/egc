@@ -129,6 +129,7 @@ export default {
       canvasNode: null,
       chartClickNum: 0, // 图表点击
       tableClickNum: 0, // 表格点击
+      isRequest: true, // 时间判断
       myChartContainer: null,
       // 限制开始时间与结束时间
       starForbiddenDatetime: {
@@ -371,6 +372,24 @@ export default {
     timeQuery: function () {
       // 查询时页面初始化到第一页
       this.parameter.currentPage = 1
+      this.timeJudgment()
+      if (this.isRequest) {
+        if (this.isTableShow) this.getPgingData()
+        else this.getData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
+      // 重置点击次数
+      if (this.isTableShow) {
+        this.chartClickNum = 0
+      } else {
+        this.tableClickNum = 0
+      }
+    },
+    timeJudgment () {
       switch (this.parameter.reportType) {
         case '0':
           if (this.endDate.getTime() - this.startDate.getTime() > 30 * 24 * 60 * 60 * 1000) {
@@ -378,10 +397,9 @@ export default {
               type: 'error',
               message: '日报查询范围为1个月'
             })
-            return
+            this.isRequest = false
           } else {
-            if (this.isTableShow) this.getPgingData()
-            else this.getData()
+            this.isRequest = true
           }
           break
         case '1':
@@ -390,22 +408,14 @@ export default {
               type: 'error',
               message: '月报查询范围为1年'
             })
-            return
+            this.isRequest = false
           } else {
-            if (this.isTableShow) this.getPgingData()
-            else this.getData()
+            this.isRequest = true
           }
           break
         case '2':
-          if (this.isTableShow) this.getPgingData()
-          else this.getData()
+          this.isRequest = true
           break
-      }
-      // 重置点击次数
-      if (this.isTableShow) {
-        this.chartClickNum = 0
-      } else {
-        this.tableClickNum = 0
       }
     },
     // 分页组件单页总数变化
