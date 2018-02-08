@@ -212,7 +212,8 @@
       },
       handleFilterReset () {
         this.query.courtUuid = ''
-        this.getRoleListFunction()
+        this.roleData.roleBaseVoList = ''
+        // this.getRoleListFunction()
       }
     },
     created: function () {
