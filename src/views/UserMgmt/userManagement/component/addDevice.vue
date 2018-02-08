@@ -155,7 +155,8 @@ export default {
           resourceType: '',
           deviceType: '',
           providerCode: '',
-          roleUuid: this.form.uuid
+          roleUuid: this.form.uuid,
+          cloudFlag: 1
         }
       },
       emptyProviderData: {
@@ -330,6 +331,7 @@ export default {
       this.listParam.roleDeviceQueryRequestVo.providerCode = this.provider
       this.listParam.pageSize = this.pageSize
       this.listParam.currentPage = this.currentPage
+      console.log(JSON.stringify(this.listParam))
       getDeviceListPage(this.listParam)
         .then(
           function (result) {
