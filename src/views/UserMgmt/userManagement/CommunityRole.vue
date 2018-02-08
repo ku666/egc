@@ -141,7 +141,7 @@
             function (result) {
               this.communityList = result
               this.total = result.pageCount
-              console.log('小区列表：' + JSON.stringify(result))
+              // console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -212,7 +212,8 @@
       },
       handleFilterReset () {
         this.query.courtUuid = ''
-        this.getRoleListFunction()
+        this.roleData.roleBaseVoList = ''
+        // this.getRoleListFunction()
       }
     },
     created: function () {
