@@ -38,7 +38,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="职务" :label-width="formLabelWidth" prop="position">
-        <el-input v-model="user.position" auto-complete="off" placeholder="无数据" class="user_el-select"></el-input>
+        <el-input v-model="user.position" auto-complete="off" placeholder="无数据" class="user_el-select" readonly></el-input>
       </el-form-item>
       <el-form-item label="状态" :label-width="formLabelWidth">
         <el-select v-model="user.userAccStatus" placeholder="无数据" class="user_el-select" disabled>
@@ -48,7 +48,7 @@
       <el-form-item label="生效日期" :label-width="formLabelWidth" prop="effectiveDate">
         <el-date-picker ref = "effectiveDate"
           v-model="user.effectiveDate"
-          placeholder="选择日期"
+          placeholder="无数据"
           type="date"
           @change="changeDate"
           :editable="false"
