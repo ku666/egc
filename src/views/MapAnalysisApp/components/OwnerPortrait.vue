@@ -68,8 +68,8 @@
         <!-- 业主人数显示 -->
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
-          <div v-show="isOwenrTable" style="width:100%">
-            <el-table :data="ownerTableData" width="100%" max-height="470" class="tableWidth" stripe fit>
+          <div v-if="isOwenrTable" style="width:100%">
+            <el-table :data="ownerTableData" width="100%" max-height="420" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
               <el-table-column style="width:100%" prop="countNum" label="人数">
@@ -181,7 +181,7 @@ export default {
       clickTap: false, // 控制数据未变重复点击(图表)
       clickTable: false, // 控制数据未变重复点击(表格)
       myChartContainer: null,
-      tableOrMap: 0, // 控制当前是表格还是图表
+      tableOrMap: '0', // 控制当前是表格还是图表
       flagVal: '1', // 业主或出入频率条件
       flag: false // 开关
     }
@@ -258,14 +258,16 @@ export default {
     },
     goToTable () { // 切换到表格显示
       this.tableOrMap = '0'
-      let tableHeader = document.querySelector('.el-table__header')
-      let tableBody = document.querySelector('.el-table__body')
-      tableHeader.style.width = '100%'
-      tableBody.style.width = '100%'
+      // this.$nextTick(() => {
+      // })
       switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwenrTable = true
           this.isOwenrMap = false
+          let tableHeader = document.querySelector('.el-table__header-wrapper .el-table__header')
+          let tableBody = document.querySelector('.el-table__body-wrapper .el-table__body')
+          tableHeader.style.width = '100%'
+          tableBody.style.width = '100%'
           if (!this.clickTable) { // 控制多次点击
             return
           }
@@ -494,16 +496,46 @@ export default {
       this.isRequest = true
       this.clickTap = false
       this.clickTable = false
-      this.tableOrMap = 0
+      this.tableOrMap = '0'
       this.flagVal = '1'
       this.flag = false
+      this.parameter = {
+        courtUuid: '', // 小区ID
+        classValue: '1', // 默认业主
+        reportType: '0', // 默认日报
+        currentPage: 1, // 默认第一页
+        pageSize: 10, // 默认每页条数
+        startDate: null,
+        endDate: null
+      }
+      this.disabled = true
+      this.ownerTableData = []
     },
     getCourtTableData (courtId) { // 获取小区表格（业主人数）
       getCourtProfile({ courtUuid: courtId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
-            this.ownerTableData = res.data.data.ageGroupInfo
-            this.owerMapData = res.data.data
+            let ageGroupInfo = res.data.data.ageGroupInfo
+            let num = 0
+            let ageGroup = []
+            for (let i = 0; i < ageGroupInfo.length; i++) {
+              if (Number(ageGroupInfo[i].group.slice(0, ageGroupInfo[i].group.indexOf('-'))) >= 80) {
+                num += ageGroupInfo[i].countNum
+                if (i === ageGroupInfo.length - 1) {
+                  ageGroup.push({
+                    countNum: num,
+                    group: '80以上'
+                  })
+                }
+              } else {
+                ageGroup.push(ageGroupInfo[i])
+              }
+            }
+            this.ownerTableData = ageGroup
+            this.owerMapData = {
+              ageGroupInfo: ageGroup,
+              sexInfo: res.data.data.sexInfo
+            }
           }
         }).catch(err => {
           this.$message({
@@ -563,8 +595,27 @@ export default {
       getBuildProfile({ courtUuid: this.courtId, buildId: this.buildId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
-            this.ownerTableData = res.data.data.ageGroupInfo
-            this.owerMapData = res.data.data
+            let ageGroupInfo = res.data.data.ageGroupInfo
+            let num = 0
+            let ageGroup = []
+            for (let i = 0; i < ageGroupInfo.length; i++) {
+              if (Number(ageGroupInfo[i].group.slice(0, ageGroupInfo[i].group.indexOf('-'))) >= 80) {
+                num += ageGroupInfo[i].countNum
+                if (i === ageGroupInfo.length - 1) {
+                  ageGroup.push({
+                    countNum: num,
+                    group: '80以上'
+                  })
+                }
+              } else {
+                ageGroup.push(ageGroupInfo[i])
+              }
+            }
+            this.ownerTableData = ageGroup
+            this.owerMapData = {
+              ageGroupInfo: ageGroup,
+              sexInfo: res.data.data.sexInfo
+            }
           }
         }).catch(err => {
           this.$message({
