@@ -150,6 +150,7 @@ export default {
       listParam: {
         currentPage: '1',
         pageSize: '5',
+        cloudFlag: '1',
         roleDeviceQueryRequestVo: {
           resourceType: '',
           deviceType: '',

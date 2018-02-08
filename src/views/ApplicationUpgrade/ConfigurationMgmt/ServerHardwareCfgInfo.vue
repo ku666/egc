@@ -180,11 +180,11 @@ export default {
             }.bind(this)
           )
       } else if (type === 'download') {
-        downloadResultFile(params)
+        let downloadCls = 1
+        downloadResultFile(params, downloadCls, this.total)
           .then(
             function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
+              console.log('download server hardware result -- >' + JSON.stringify(result))
               this.loading = false
             }.bind(this)
           )

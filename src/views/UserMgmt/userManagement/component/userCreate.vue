@@ -86,23 +86,7 @@ export default {
     console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + JSON.stringify(this.departmentSelect))
     console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + this.departmentSelect[0].uuid)
     // this.user.departmentUuid = this.departmentSelect[0].uuid
-    this.user = {
-      fullName: '',
-      userName: '',
-      position: '',
-        // departmentUuid: this.departmentSelect[0].uuid,
-      departmentUuid: '',
-      primaryPhone: '',
-      idenNum: '',
-      password: '',
-      checkPass: '',
-      primaryEmail: '',
-      effectiveDate: '',
-      expiryDate: '',
-      userAccStatus: '1',
-      uuid: '',
-      userType: ''
-    }
+    this.initUserInfo()
   },
   data () {
     let that = this
@@ -189,7 +173,7 @@ export default {
       // 失效日期选择
       pickerOptionsEnd: {
         disabledDate (time) {
-          return time.getTime() < new Date(that.user.effectiveDate).getTime() + 3600 * 1000 * 24
+          return time.getTime() < new Date(that.user.effectiveDate).getTime()
         }
       },
       rules: {
@@ -257,6 +241,24 @@ export default {
       this.$refs[user].clearValidate()
       this.$refs[user].resetFields()
       this.$emit('canelDialogEvent')
+    },
+    // 初始新增用户信息
+    initUserInfo () {
+      this.user = {
+        fullName: '',
+        userName: '',
+        position: '',
+        departmentUuid: '',
+        primaryPhone: '',
+        idenNum: '',
+        password: '',
+        checkPass: '',
+        primaryEmail: '',
+        effectiveDate: '',
+        expiryDate: '',
+        userAccStatus: '1',
+        uuid: ''
+      }
     },
     reset () {
       console.log('reset')

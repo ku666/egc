@@ -47,27 +47,27 @@
       <el-form-item label="开发者" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.developer"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="软件包功能说明" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
+      <el-form-item label="软件包功能说明" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.functionDesc"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item> -->
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.latestPreName"></el-input>
+      </el-form-item>
       <el-form-item label="前续软件包版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwarePckDetails.latestPreVer"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="端口" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
+      <el-form-item label="端口" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.port"></el-input>
       </el-form-item>
       <el-form-item label="软件包源服务器名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.svrPkgName"></el-input>
       </el-form-item>
       <el-form-item label="软件包源路径名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.cltPkgName"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwarePckDetails.uuid"></el-input>
-      </el-form-item> -->
+        <el-input class="upgrade_el-input" v-model="softwarePckDetails.remark"></el-input>
+      </el-form-item>
 
       <div style="text-align:center;">
         <el-button @click="saveSoftwareInfoEvent" class="action-btn" type="primary">保 存</el-button>
@@ -89,6 +89,10 @@ export default {
       formLabelWidth: '150px',
       isInptDisabled: true
     }
+  },
+  mounted () {
+    console.log('SoftwarePackageEdit.vue mounted active')
+    console.log(this.softwarePckDetails)
   },
   methods: {
     saveSoftwareInfoEvent () {

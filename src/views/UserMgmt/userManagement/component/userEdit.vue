@@ -191,7 +191,7 @@ export default {
       // 失效日期选择
       pickerOptionsEnd: {
         disabledDate (time) {
-          return time.getTime() < new Date(that.user.effectiveDate).getTime() + 3600 * 1000 * 24
+          return time.getTime() < new Date(that.user.effectiveDate).getTime()
         }
       },
       rules: {
@@ -342,6 +342,8 @@ export default {
     },
     cancelEvent (user) {
       console.log('cancelEvent')
+      this.$refs[user].clearValidate()
+      this.$refs[user].resetFields()
       this.$emit('canelDialogEvent')
     },
     reset (user) {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="margin-top: 50px">
     <el-table
       class="deviceMgmTable"
       :data="mainDeviceTableData"
@@ -202,6 +202,8 @@
       },
       _handlePageChange (val) {
         this.currentPage = val
+        this.isSlaveShow = false
+        this.isChildShow = false
         if (!this.selectData.pageSize) {
           this.loadMainDeviceTableData(val, this.pageSize)
         } else {
@@ -224,6 +226,8 @@
       _handleSizeChange (val) {
         this.pageSize = val
         this.currentPage = 1
+        this.isSlaveShow = false
+        this.isChildShow = false
         if (!this.selectData) {
           this.loadMainDeviceTableData(1, val)
         } else {
