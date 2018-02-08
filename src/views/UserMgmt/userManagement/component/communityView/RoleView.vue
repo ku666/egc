@@ -391,58 +391,49 @@ export default {
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    width: 300px
+    width: 35%
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    width: 600px
+    width: 65%
   }
-  /* #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 200px
-  } */
 
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 190px
+    width: 20%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 190px
+    width: 20%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 250px
+    width: 24%
   }
-  /* #userTable >>> colgroup col:nth-child(7) {
-    width: 100px
-  } */
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 150px
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 200px
+    width: 20%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 250px
+    width: 25%
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    width: 130px
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 130px
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(6) {
-    width: 130px
+    width: 10%
   }
-  /* #resourceTable >>> colgroup col:nth-child(7) {
-    width: 85px
-  } */
 
   .read-only .el-form-item__content {
     font-size: 12px

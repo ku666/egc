@@ -5,7 +5,7 @@
       <el-tab-pane label="导入用户" name="1"></el-tab-pane>
     </el-tabs>
     
-     <div v-show="showFirstTab">
+     <div v-show="showFirstTab" class="flex-1 flex-c">
       <el-form :inline="true" :model="listQuery" ref="listQuery">
         <div class="search-container">
           <el-form-item label="用户姓名">
@@ -467,7 +467,7 @@ export default {
       this.errorMsg = ''
       var fileLength = this.$refs.upload._data.uploadFiles.length
       if (fileLength > 0) {
-        console.log(this.uploadFiles.get('file'))
+        // console.log(this.uploadFiles.get('file'))
         uploadUserExcel(this.uploadFiles)
         .then(
           function (result) {
