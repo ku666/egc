@@ -82,6 +82,7 @@ export default {
       formLabelWidth: '120px',
       meunCodeFlag: false,
       listParm: {
+        cloudFlag: '1',
         resourceType: undefined,
         resourceName: undefined,
         uuid: ''

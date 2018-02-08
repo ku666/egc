@@ -1,29 +1,32 @@
 <template>
   <div id="resourcesEdit">
     <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick' >
-      <el-tab-pane label="资源概要" name="0" v-if="isAddFlag"></el-tab-pane>
-      <el-tab-pane label="拥有该资源权限的角色" name="1" v-if="isAddFlag"></el-tab-pane>
+      <el-tab-pane label="资源概要" name="0"></el-tab-pane>
+      <el-tab-pane label="拥有该资源权限的角色" name="1"></el-tab-pane>
     </el-tabs>
     <el-form ref='resource' v-show='gridResource' :inline="true" :model="resource">
-      <el-form-item label="资源类别" :label-width="formLabelWidth" prop="resourceType">
-        <el-select v-model="resource.resourceType" placeholder="请选择" class="user_el-select" disabled v-if="isAddFlag">
+      <el-form-item label="资源类别" :label-width="formLabelWidth">
+        <el-select v-model="resource.resourceType" placeholder="请选择" class="user_el-select" disabled>
           <el-option v-for="resourceType in resourceTypeSelect" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
         </el-select>
       </el-form-item>
     </el-form>
 
     <resource-menu v-if="showMenu" ref="resourceMenuVue" :appCodeSelectOption="appCodeSelect" :isAddFlagParm="isAddFlag" :appCodeParm="appCodeValue"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceMenuVue="resource"></resource-menu>
+     :resourceMenuVue="resource"></resource-menu>
 
     <resource-app v-if="showApplication" ref="resourceAppVue" :isAddFlagParm="isAddFlag"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceAppVue="resource"></resource-app>
+     :resourceAppVue="resource"></resource-app>
     
     <resource-service v-if="showService" ref="resourceServiceVue" :isAddFlagParm="isAddFlag" :appCodeSelectOption="appCodeSelect"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceServiceVue="resource"></resource-service>
+     :resourceServiceVue="resource"></resource-service>
     
+    <resource-device v-if="showDevice" ref="resourceDeviceVue" :isAddFlagParm="isAddFlag"
+     :resourceDeviceVue="resource"></resource-device>
+
     <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :deviceOptions="deviceTypeSelect"
-    :providerOptions="providerCodeTypeSelect" :provincesSelect="provincesOptions"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource"></resource-device-group>
+    :providerOptions="providerCodeTypeSelect"
+     :resourceDeviceGroupVue="resource"></resource-device-group>
 
     <div v-show="gridResourceRole">
       <div class="flex-1">
@@ -34,11 +37,12 @@
   </div>
 </template>
 <script>
-import resourceDeviceGroup from './AreaData.vue'
-import resourceService from './ResourceService.vue'
-import resourceApp from './ResourceApplication.vue'
-import resourceMenu from './ResourceMenu.vue'
-import resourceRoleList from './resourceRoleList.vue'
+import resourceDeviceGroup from './ResourceDeviceGroupView.vue'
+import resourceDevice from './ResourceDeviceView.vue'
+import resourceService from './ResourceServiceView.vue'
+import resourceApp from './ResourceApplicationView.vue'
+import resourceMenu from './ResourceMenuView.vue'
+import resourceRoleList from './ResourceRoleListView.vue'
 // import {
 
 // } from '@/views/UserMgmt/userManagement/apis'
@@ -46,7 +50,6 @@ export default {
   props: {
     isAddFlag: false,
     tableData: undefined,
-    provincesOptions: undefined,
     resource: {
       resourceType: undefined,       // 资源类别
       resourceName: undefined,       // 资源名称
@@ -71,15 +74,7 @@ export default {
         resourceName: '',
         menuCode: ''
       },
-      houseOrgCodeList: [],
-      province: undefined,
-      provinceAbbr: undefined,
-      city: undefined,
-      cityAbbr: undefined,
-      district: undefined,
-      districtAbbr: undefined,
-      courtAbbr: undefined,
-      courtName: undefined
+      houseOrgCodeList: []
     },
     deviceTypeSelect: undefined,
     providerCodeTypeSelect: undefined,
@@ -92,11 +87,11 @@ export default {
     resourceMenu,
     resourceApp,
     resourceService,
+    resourceDevice,
     resourceDeviceGroup
   },
   mounted () {
     this.handleChange(this.resource.resourceType)
-    // this.initCreateResource()
     this.appCodeValue = this.resource.appCode
   },
   watch: {
@@ -117,11 +112,9 @@ export default {
       selectedVaue: {},
       showDialog: false,
       curResourceType: undefined,
-
       expandedKeys: undefined,
       menuTreeData: undefined,
       curResourceUuid: undefined,
-
       treeId: undefined,
       treeName: undefined,
       treeUuid: undefined,
@@ -182,6 +175,12 @@ export default {
         this.showMenu = false
         this.showApplication = false
         this.showDevice = false
+      } else if (resourceType === '99') {
+        this.showDevice = true
+        this.showService = false
+        this.showMenu = false
+        this.showApplication = false
+        this.showDeviceGroup = false
       }
     },
     initCreateResource () {
@@ -191,18 +190,9 @@ export default {
       this.showDeviceGroup = false
       this.showDevice = false
     },
-    create (data) {
-      this.$emit('gridCreateEvent', data)
-    },
-    update (data) {
-      this.$emit('gridEditEvent', data)
-    },
-    cancelEvent () {
-      this.$emit('canelDialogEvent')
-    },
-    initMenuTree (appCode) {
-      if (this.$refs.resourceMenuVue) {
-        this.$refs.resourceMenuVue.initMenuTree(appCode)
+    setCheckNodes (houseOrgCodeList) {
+      if (this.$refs.resourceDeviceGroupVue) {
+        this.$refs.resourceDeviceGroupVue.setCheckNodes(houseOrgCodeList)
       }
     }
   }
