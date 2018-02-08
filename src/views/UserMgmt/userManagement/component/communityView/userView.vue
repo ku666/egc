@@ -41,7 +41,7 @@
         <el-input v-model="user.position" auto-complete="off" placeholder="无数据" class="user_el-select" readonly></el-input>
       </el-form-item>
       <el-form-item label="状态" :label-width="formLabelWidth">
-        <el-select v-model="user.userAccStatus" placeholder="无数据" class="user_el-select" disabled>
+        <el-select v-model="user.userAccStatus" placeholder="无数据" class="user_el-select">
           <el-option v-for="userStatus in userAccStatusSelect" :key="userStatus.itemCode" :label="userStatus.itemName" :value="userStatus.itemCode"> </el-option>
         </el-select>
       </el-form-item>
@@ -51,7 +51,7 @@
           placeholder="无数据"
           type="date"
           @change="changeDate"
-          :editable="false"
+          readonly
           :picker-options="pickerOptionsStart" style="width: 280px">
         </el-date-picker>
       </el-form-item>
@@ -60,7 +60,7 @@
           v-model="user.expiryDate"
           placeholder="无数据"
           type="date"
-          :editable="false"
+          readonly
           :picker-options="pickerOptionsEnd" style="width: 280px;">
         </el-date-picker>
       </el-form-item>
