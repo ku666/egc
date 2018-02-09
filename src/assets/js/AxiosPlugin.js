@@ -5,7 +5,7 @@ import axios from 'axios'
 import { catchError } from '@/assets/js/util.js'
 
 const Axios = axios.create({
-  timeout: 30000
+  timeout: 60000
 })
 
 // 暂时不启用过滤
