@@ -35,16 +35,22 @@ export const uploadUserExcel = (params) => {
 export const downloadExcelTemplate = (type) => {
   return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type, {responseType: 'arraybuffer'}
   ).then(res => {
-    console.log('download success')
-    let blob = new Blob([res.data], { type: 'application/x-xls' })
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
     if (type === '1') {
-      link.download = '用户信息.xls'
+      var fileName = '用户信息.xls'
     } else if (type === '2') {
-      link.download = '用户信息.xlsm'
+      fileName = '用户信息.xlsm'
     }
-    link.click()
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, fileName)
+    } else {
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
     return res.data
   })
 }
