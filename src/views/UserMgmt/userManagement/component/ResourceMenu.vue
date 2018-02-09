@@ -198,9 +198,7 @@ export default {
       }
     },
     initMenuTree (data) {
-      console.log('..appCodeParm>>>>>:..' + JSON.stringify(data))
       if (data) {
-        console.log('菜单树正在查询中...appCodeParm..')
         this.getMenuTree(JSON.parse(JSON.stringify(data)))
       }
     },
@@ -212,6 +210,7 @@ export default {
       console.log('this.treeName:' + this.treeName)
     },
     getMenuTree (data) {
+      console.log('菜单树正在查询中...appCodeParm..' + JSON.parse(JSON.stringify(data)))
       getMenuTreeDetail(data)
         .then(
           function (result) {
