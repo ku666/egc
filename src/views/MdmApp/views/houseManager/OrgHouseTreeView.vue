@@ -6,6 +6,7 @@
       <!-- <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button> -->
     </div>
     <el-tree ref="tree"
+      highlight-current=true
       :data="treeData"
       node-key="uuid"
       :props="defaultProps"
