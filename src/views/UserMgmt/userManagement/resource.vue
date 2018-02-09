@@ -40,13 +40,13 @@
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-edit ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag"
       @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
       :provincesOptions="provinces"> </resource-edit>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag"
       @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
       :defaultResourceTypeParm="defaultResourceType" :provincesOptions="provinces"> </resource-create>
     </el-dialog>
@@ -76,10 +76,7 @@ import {
   deleteResource,
   getResourceTypeOptions,
   getAppCodeOptions,
-  getActionTypeOptions,
   updateResource,
-  getDeviceTypeOptions,
-  getProviderCodeTypeOptions,
   getProvinceDataList
 } from '@/views/UserMgmt/userManagement/apis'
 
@@ -144,9 +141,6 @@ export default {
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
       appCodeOptions: undefined,
-      deviceTypeOptions: undefined,
-      providerCodeTypeOptions: undefined,
-      actionTypeOptions: undefined,
       addFlag: false,
       menuListParm: undefined,
       appCodeListParm: undefined,
@@ -300,51 +294,12 @@ export default {
             console.log(error)
           }
         )
-        // 获取操作类型字典项
-      getActionTypeOptions(this.dictData)
-        .then(
-            function (result) {
-              console.log('<<<<<getActionTypeOptions:' + JSON.stringify(result))
-              this.actionTypeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
       // 获取资源类型下拉框信息
       getResourceTypeOptions(this.dictData)
         .then(
             function (result) {
               console.log('<<<<<resourceTypeOptions:' + JSON.stringify(result))
               this.resourceTypeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      // 获取设备类型下拉框信息
-      getDeviceTypeOptions(this.dictData)
-        .then(
-            function (result) {
-              console.log('<<<<<deviceCategoryList:' + JSON.stringify(result))
-              this.deviceTypeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      // 获取设备供应商下拉框信息
-      getProviderCodeTypeOptions()
-        .then(
-            function (result) {
-              console.log('厂商编码：' + JSON.stringify(result))
-              this.providerCodeTypeOptions = result
             }.bind(this)
           )
         .catch(

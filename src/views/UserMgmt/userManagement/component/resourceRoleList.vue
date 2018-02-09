@@ -47,7 +47,6 @@
 
   export default {
     props: {
-      actionTypeOptionsProp: undefined,
       resourceUuidValue: undefined,
       resourceType: undefined
     },
