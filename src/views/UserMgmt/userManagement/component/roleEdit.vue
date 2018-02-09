@@ -676,22 +676,22 @@ export default {
         this.$refs.addservice.reset()
       }
       console.log('dialog changeRoleEditDiaLogEvent End')
-    },
-    // 校验角色名的唯一性
-    validateName (roleUuid, roleName, userType) {
-      checkRoleName(roleUuid, roleName, userType)
-        .then(
-          function (result) {
-            console.log('<<<<<roleNameFlag:' + result)
-            this.roleNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
     }
+    // // 校验角色名的唯一性
+    // validateName (roleUuid, roleName, userType) {
+    //   checkRoleName(roleUuid, roleName, userType)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<roleNameFlag:' + result)
+    //         this.roleNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // }
   },
   data () {
     // 角色名的唯一性
@@ -776,14 +776,6 @@ export default {
           title: '用户组名称',
           prop: 'usergroupName'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirctUsers'
