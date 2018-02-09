@@ -35,6 +35,10 @@ export const registerCodeInstance = (params) => {
   // return Axios.post(contextPath + '/osServices/update', params).then(res => res.data)
 }
 
+export const getCodeInstances = () => {
+  return Axios.get(BASE_PATH + '/codeTypes/queryAll').then(res => res.data)
+}
+
 // 公共代码维护
 export const getCommCodeByPage = (params) => {
   console.log('get code instance maintance by page params ---> ' + JSON.stringify(params, null, ' '))

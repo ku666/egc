@@ -122,6 +122,7 @@ export default {
       appCodeFlag: false,
       currentValue: '',
       listParm: {
+        cloudFlag: '1',
         resourceType: '',
         resourceName: '',
         appCode: '',

@@ -35,17 +35,16 @@ export default {
     return {
       fileList: [],
       actUrl: '',
-      uploadFiles: new FormData()
+      uploadFiles: undefined
     }
   },
   methods: {
     handleOnchange (file, fileList) {
+      this.uploadFiles = new FormData()
       console.info(fileList[0])
-      // this.uploadFiles.append('uploadFile', fileList[0].raw)
       if (this.beforeUpload(file)) {
-        this.uploadFiles.set('uploadFile', fileList[0].raw)
+        this.uploadFiles.append('uploadFile', fileList[0].raw)
       }
-      // this.uploadFiles.files = fileList[0]
     },
     _submitUpload () {
       var fileLength = this.$refs.upload._data.uploadFiles.length
@@ -56,11 +55,19 @@ export default {
           uploadHardWareConfigFile(this.uploadFiles)
             .then(
               function (res) {
+                console.log('upload response -- > ' + JSON.stringify(res))
                 this.$emit('handleUploadSuccessEvent')
-                this.$message({
-                  message: '上传成功!',
-                  type: 'success'
-                })
+                if (res.code === '200') {
+                  this.$message({
+                    message: '上传成功!',
+                    type: 'error'
+                  })
+                } else {
+                  this.$message({
+                    message: '上传失败!',
+                    type: 'success'
+                  })
+                }
                 this.fileList = []
               }.bind(this)
             )
@@ -72,14 +79,14 @@ export default {
             .then(
               function (res) {
                 this.$emit('handleUploadSuccessEvent')
-                if (res.code !== '200') {
+                if (res.code === '200') {
                   this.$message({
-                    message: '上传失败!',
+                    message: '上传成功!',
                     type: 'error'
                   })
                 } else {
                   this.$message({
-                    message: '上传成功!',
+                    message: '上传失败!',
                     type: 'success'
                   })
                 }
@@ -94,10 +101,17 @@ export default {
             .then(
               function (res) {
                 this.$emit('handleUploadSuccessEvent')
-                this.$message({
-                  message: '上传成功!',
-                  type: 'success'
-                })
+                if (res.code === '200') {
+                  this.$message({
+                    message: '上传成功!',
+                    type: 'error'
+                  })
+                } else {
+                  this.$message({
+                    message: '上传失败!',
+                    type: 'success'
+                  })
+                }
                 this.fileList = []
               }.bind(this)
             )

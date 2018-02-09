@@ -1,36 +1,26 @@
 <template>
   <div class='ui-common'>
     <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
-      <el-select filterable
-      v-model='selectedCommunity' 
-      placeholder='请选择小区' 
-      style="width:360px; display: block; margin-bottom:20px" 
-      @visible-change='getCommunityList'
-      @change='communitySelected'
-      >
-        <el-option
-          v-for='(item, index) in communityList'
-          :key='index'
-          :label='item.name'
-          :value='item.uuid'>
-        </el-option>
-      </el-select>
-      <div class="border-divide"></div>
-      <div class="search-container" style="margin-top:20px">
-        <el-form-item label="资源类别">
-          <el-select v-model="listQuery.q_resourceType" placeholder="请选择" @change="changeResourceType" class="user_el-select">
+      <div class="search-container">
+        <el-form-item label="小区列表">
+          <el-select v-model="listQuery.q_courtUuid" placeholder="请选择需要查询的小区" @change="communitySelected">
+            <el-option v-for="community in communityList" :key="community.uuid" :label="community.name" :value="community.uuid"> </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="　　资源类别">
+          <el-select v-model="listQuery.q_resourceType" placeholder="请选择" @change="changeResourceType">
             <el-option v-for="resourceType in resourceTypeOptions" :key="resourceType.itemCode" :label="resourceType.itemName" :value="resourceType.itemCode"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="showQueryApp">
           <span class="sub-title" style="margin-left:24px">{{appLabelTitle}}&nbsp;&nbsp;</span>
-          <el-select v-model="listQuery.q_appCode" placeholder="请选择应用" class="user_el-select">
+          <el-select v-model="listQuery.q_appCode" placeholder="请选择所属应用">
             <el-option v-for="appCodeType in appCodeOptions" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
           </el-select>
         </el-form-item>
         <el-form-item v-if="showQueryParm">
           <span class="sub-title" style="margin-left:24px">{{labelTitle}}&nbsp;&nbsp;</span>
-          <el-input @keyup.enter.native="handleFilter" class="user_el-input" placeholder="请输入内容" v-model="listQuery.q_resourceName"> </el-input>
+          <el-input @keyup.enter.native="handleFilter" style="width:180px" placeholder="请输入查询内容" v-model="listQuery.q_resourceName"> </el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
@@ -45,20 +35,16 @@
     <div class="table-container">
       <div class="flex-1">
         <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
-          @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
+          @listenEditEvent="resourceEditEvent" :editable="false" :deletable="false" :viewable="true">
         </resource-list>
       </div>
     </div>
 
-    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <resource-edit ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-edit>
-    </el-dialog>
-    <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
-      <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-create>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose">
+      <resource-view ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm"
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" 
+      :providerCodeTypeSelect="providerCodeTypeOptions" :appCodeSelect="appCodeOptions"
+      > </resource-view>
     </el-dialog>
 
     <div>
@@ -77,17 +63,13 @@
 
 <script>
 import resourceList from './component/resourceList.vue'
-import resourceEdit from './component/resourceEdit.vue'
-import resourceCreate from './component/resourceCreate.vue'
+import resourceView from './component/communityView/resourceView.vue'
 import {
   getResourceListByPage,
-  createResource,
   getResourceDetail,
-  deleteResource,
   getResourceTypeOptions,
   getAppCodeOptions,
   getActionTypeOptions,
-  updateResource,
   getDeviceTypeOptions,
   getProviderCodeTypeOptions,
   listCommunity
@@ -101,7 +83,6 @@ export default {
       resourceListParam: undefined,
       total: 0,
       dialogFormVisible: false,
-      dialogCreateFormVisible: false,
       dialogStatus: undefined,
       resourceForm: {
         resourceType: '',       // 资源类别
@@ -130,18 +111,18 @@ export default {
         houseOrgCodeList: []
       },
       dictData: {
-        resourceTypeDict: 'RESC_TYPE',
-        actionType: 'ACT_TYPE'
+        resourceTypeDict: 'COURT_RESC_TYPE',
+        actionType: 'COURT_ACT_TYPE'
       },
       listQuery: {
         page: 1,
         limit: 10,
+        cloudFlag: 0,
         q_resourceType: '2',
         q_resourceName: '',
-        q_logicalAddress: '',
-        q_appCode: ''
+        q_appCode: '',
+        q_courtUuid: ''
       },
-      formLabelWidth: '120px',
       resourceTypeOptions: undefined,
       appCodeOptions: undefined,
       deviceTypeOptions: undefined,
@@ -161,12 +142,12 @@ export default {
   },
   components: {
     resourceList,
-    resourceEdit,
-    resourceCreate
+    resourceView
   },
   mounted () {
-    this.loadData()
+    this.loadSelectData()    // 加载下拉框值
     this.initListParm()
+    this.getCommunityList() // 加载小区端查询下拉框
     this.labelTitle = '菜单名称'
     this.appLabelTitle = '所属应用'
   },
@@ -270,15 +251,15 @@ export default {
         .then(
           function (result) {
             console.log('get data by page:' + JSON.stringify(result.resource))
-            let buttonName = ''
-            console.log('result.resource.length>>>>>>>>>>>>>>>>>:' + result.resource.length)
-            for (let i = 0; i < result.resource.length; i++) {
-              buttonName = result.resource[i].button
-              // console.log(i + '---buttonName>>>>>>>>>>>>>>>>>:' + buttonName)
-              if (buttonName === false) {
-                result.resource[i].button = '菜单'
-              } else {
-                result.resource[i].button = '按钮'
+            if (result.resource !== null && result.resource.resourceType === '2') {
+              let buttonName = ''
+              for (let i = 0; i < result.pageCount; i++) {
+                buttonName = result.resource[i].button
+                if (buttonName === false) {
+                  result.resource[i].button = '菜单'
+                } else {
+                  result.resource[i].button = '按钮'
+                }
               }
             }
             this.resourceList = result.resource
@@ -290,8 +271,10 @@ export default {
             console.log(error)
           }
         )
-      // 获取应用程序下拉框信息
-      getAppCodeOptions()
+    },
+    loadSelectData () {
+    // 获取应用程序下拉框信息
+      getAppCodeOptions(0)// ‘0’ 是默认查小区端
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
@@ -361,7 +344,6 @@ export default {
         .then(
           function (result) {
             this.communityList = result
-            this.total = result.pageCount
             console.log('小区列表：' + JSON.stringify(result))
           }.bind(this)
         )
@@ -372,47 +354,21 @@ export default {
         )
     },
     communitySelected (data) {
-      this.query.communityUuid = data.uuid
-      // getUserGroupList(this.query)
-      //   .then(
-      //     function (result) {
-      //       this.userGroupList = result.usergroupBaseVoList
-      //       this.total = result.pageCount
-      //       console.log('用户组：' + JSON.stringify(result))
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
-    },
-    // 初始新增资源信息
-    initResourceInfo () {
-      this.resourceForm = {
-        resourceType: undefined,       // 资源类别
-        resourceName: undefined,       // 资源名称
-        resourceUrl: undefined,        // 资源URL
-        appCode: undefined,            // 程序代码
-        serviceId: undefined,          // 服务代码
-        menuCode: undefined,           // 菜单
-        deviceCode: undefined,         // 设备代码
-        deviceType: undefined,         // 设备类型
-        providerCode: undefined,       // 供应商
-        houseOrgCode: undefined,      // 设备组织(位置)
-        logicalAddress: undefined,     // 逻辑地址(IP地址)
-        uuid: undefined                 // 表主键
-      }
+      console.log('communitySelected-----' + JSON.stringify(data))
+      this.listQuery.q_courtUuid = data
+      this.curCourtUuid = data
+      this.loadData()
     },
     // 重置搜选宽内容
     resetForm: function () {
       this.listQuery = {
-        'page': 1,
-        'limit': 10,
-        'q_resourceType': '2',
-        'q_resourceName': '',
-        'q_logicalAddress': '',
-        'q_appCode': ''
+        page: 1,
+        limit: 10,
+        cloudFlag: 0,
+        q_resourceType: '2',
+        q_resourceName: '',
+        q_appCode: '',
+        q_courtUuid: this.listQuery.q_courtUuid
       }
       this.handleFilter()
     },
@@ -427,89 +383,43 @@ export default {
       this.loadData()
     },
     handleFilter () {
-      if (this.listQuery.q_resourceType === '1') {
-        this.showQueryParm = false
-        this.showQueryApp = true
-        this.resourceListParam = this.appCodeListParm
-        this.listQuery.q_resourceName = ''
-        this.appLabelTitle = '应用名称'
-      } else if (this.listQuery.q_resourceType === '2') {
-        this.labelTitle = '菜单名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = true
-        this.resourceListParam = this.menuListParm
-      } else if (this.listQuery.q_resourceType === '3') {
-        this.labelTitle = '服务名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = true
-        this.resourceListParam = this.serviceListParm
-      } else if (this.listQuery.q_resourceType === '4') {
-        this.labelTitle = '设备组名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = false
-        this.resourceListParam = this.deviceGroupListParm
-      } else if (this.listQuery.q_resourceType === '99') {
-        this.labelTitle = '设备名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = false
-        this.resourceListParam = this.deviceListParm
+      if (this.listQuery.q_courtUuid) {
+        if (this.listQuery.q_resourceType === '1') {
+          this.showQueryParm = false
+          this.showQueryApp = true
+          this.resourceListParam = this.appCodeListParm
+          this.listQuery.q_resourceName = ''
+          this.appLabelTitle = '应用名称'
+        } else if (this.listQuery.q_resourceType === '2') {
+          this.labelTitle = '菜单名称'
+          this.appLabelTitle = '所属应用'
+          this.showQueryParm = true
+          this.showQueryApp = true
+          this.resourceListParam = this.menuListParm
+        } else if (this.listQuery.q_resourceType === '3') {
+          this.labelTitle = '服务名称'
+          this.appLabelTitle = '所属应用'
+          this.showQueryParm = true
+          this.showQueryApp = true
+          this.resourceListParam = this.serviceListParm
+        } else if (this.listQuery.q_resourceType === '4') {
+          this.labelTitle = '设备组名称'
+          this.appLabelTitle = '所属应用'
+          this.showQueryParm = true
+          this.showQueryApp = false
+          this.resourceListParam = this.deviceGroupListParm
+        } else if (this.listQuery.q_resourceType === '99') {
+          this.labelTitle = '设备名称'
+          this.appLabelTitle = '所属应用'
+          this.showQueryParm = true
+          this.showQueryApp = false
+          this.resourceListParam = this.deviceListParm
+        }
+        this.listQuery.page = 1
+        this.loadData()
+      } else {
+        this.$message.error('请先选择需要查询的小区!')
       }
-      this.listQuery.page = 1
-      this.loadData()
-    },
-    // 新增资源
-    handleCreate () {
-      this.initResourceInfo()  // 调用初始信息
-      this.resourceForm.resourceType = '1'
-      if (this.$refs.resourCreateVue) {
-        this.$refs.resourCreateVue.initCreateResource()
-        this.$refs.resourCreateVue.handleChange(this.resourceForm.resourceType)
-      }
-      this.dialogStatus = '添加资源'
-      this.dialogFormVisible = false
-      this.dialogCreateFormVisible = true
-      this.addFlag = false
-    },
-    resourceDeleteEvent (row) {
-      var dataResourse = this.resourceList[row]
-      this.$confirm('确定删除此项？', '删除', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      })
-        .then(() => {
-          this.delete(dataResourse.uuid, row)
-        })
-        .catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-    },
-    // 删除资源实体
-    delete (uuid, row) {
-      deleteResource(uuid)
-        .then(
-          function (result) {
-            console.log(uuid)
-            this.handleFilter()
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            this.$message.error(error.response.data.message)
-            console.log('error:' + JSON.stringify(error.response.data.message))
-          }
-        )
     },
     resourceEditEvent (data) {
       console.log('resource：编辑了第' + data.resourceName + '行')
@@ -520,24 +430,17 @@ export default {
             // 返回的接口信息
             console.log('resourceForm:' + JSON.stringify(result))
             this.resourceForm = result
-            // if (result.resourceType === '2') {
-            //   this.resourceForm.menuCode = result.menuCode.substring(result.menuCode.lastIndexOf('-') + 1, result.menuCode.length)
-            // }
             if (result.parentResource) {
               this.resourceForm.parentResourceUuid = result.parentResource.uuid
               this.resourceForm.parentResourceName = result.parentResource.resourceName
               this.resourceForm.parentResourceCode = result.parentResource.menuCode
             }
             if (this.$refs.resourceEditVue) {
-              // console.log('this.resourceForm.resourceType:' + this.resourceForm.resourceType)
-              // console.log('this.resourceForm.parentResource:' + this.resourceForm.parentResource)
               this.$refs.resourceEditVue.handleChange(this.resourceForm.resourceType)
               this.$refs.resourceEditVue.setCheckNodes(result.houseOrgCodeList)
-              this.$refs.resourceEditVue.initMenuTree(result.appCode)
             }
-            this.dialogStatus = '编辑资源'
+            this.dialogStatus = '查看资源'
             this.dialogFormVisible = true
-            this.dialogCreateFormVisible = false
             this.addFlag = true
           }.bind(this)
         )
@@ -547,62 +450,9 @@ export default {
           }
         )
     },
-    resourceSaveEvent (data) {
-      console.log('resource' + data.resourceName + '行')
-      updateResource(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            this.handleFilter()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
-    // 新增资源实体
-    resourceCreateEvent (data) {
-      createResource(data)
-        .then(
-          function (result) {
-            this.dialogFormVisible = false
-            this.dialogCreateFormVisible = false
-            // var item = {}
-            // for (var key in data) {
-            //   item[key] = data[key]
-            // }
-            // this.$set(this.resourceList, 0, item)
-            console.log('createResource:' + JSON.stringify(result))
-            this.handleFilter()
-            this.$message({
-              message: '保存成功！',
-              type: 'success'
-            })
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
     handleClose () {
-      if (this.addFlag) {
-        this.$refs.resourceEditVue.changeResourceRoleVueFlag()
-      }
-      console.log('关闭窗口。。。。')
-      // this.resourceForm = undefined
-      this.initResourceInfo()
       this.dialogFormVisible = false
-      this.dialogCreateFormVisible = false
-      this.handleFilter()
+      // this.handleFilter()
     },
     changeResourceType () {
       if (this.listQuery.q_resourceType === '1') {
