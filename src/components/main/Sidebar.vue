@@ -1,6 +1,6 @@
 <template>
   <div class="egsc-admin-sidebar">
-    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="light" unique-opened router>
+    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="light" :default-openeds="openeds" unique-opened router>
       <template v-for="(item,i) in items">
         <template v-if="item.menus">
           <template v-if="item.title === checkedTitle">
