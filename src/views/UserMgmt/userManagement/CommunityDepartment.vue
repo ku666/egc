@@ -1,11 +1,11 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container>
+    <div calendar-list-container class="flex-1 flex-c">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
-      <div v-show="showGrid == true">
+      <div v-show="showGrid == true" class="flex-c flex-1">
         <div>
           <el-form :model="listQuery" ref="listQuery" :inline="true">
             <div class="search-container">
@@ -28,7 +28,7 @@
         </div>
 
       <div class="border-divide"></div>
-      <div class="flex-1">
+      <div class="table-container">
           <grid-list
             :editable="false" 
             :deletable="false"
