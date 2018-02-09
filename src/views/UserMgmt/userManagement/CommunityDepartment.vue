@@ -1,6 +1,6 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container class="flex-1 flex-c">
+    <div class="flex-1 flex-c">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
@@ -52,7 +52,7 @@
             :total="total">
         </el-pagination>
       </div>
-      </div>
+
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <department-view ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
         :departmentTypeSelect="departmentTypeOptions"
@@ -93,6 +93,7 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
     </div>
   </div>
 </template>
