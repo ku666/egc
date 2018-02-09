@@ -64,7 +64,7 @@ import OperationMaintanceDetails from './components/OperationMaintanceDetails'
 import OperationMaintanceEdit from './components/OperationMaintanceEdit'
 import OperationMaintanceHistory from './components/OperationMaintanceHistory'
 
-import { getOperMgmtInfoByPage, getOperMgmtDetails, updateOperMgmtInfo, getOperMgmtHistoryList, syncOperMgmtInfo } from './apis/index'
+import { getOperMgmtInfoByPage, getOperMgmtDetails, updateOperMgmtInfo, getOperMgmtHistoryList, syncOperMgmtInfo, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -149,9 +149,10 @@ export default {
   },
   methods: {
     // 条件查询
-    _handleFilter () {
-      this.loading = true
-      getOperMgmtInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getOperMgmtInfoByPage(params)
         .then(
           function (result) {
             this.operMainListData = result.middlewareList
@@ -165,6 +166,21 @@ export default {
             console.log(error)
           }
         )
+      } else if (type === 'download') {
+        let downloadCls = 6
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 详情

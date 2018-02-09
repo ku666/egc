@@ -179,11 +179,10 @@ export default {
             console.log(error)
           })
       } else if (type === 'download') {
-        downloadResultFile(params)
+        let downloadCls = 7
+        downloadResultFile(params, downloadCls)
           .then(
             function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
               this.loading = false
             }.bind(this)
           )

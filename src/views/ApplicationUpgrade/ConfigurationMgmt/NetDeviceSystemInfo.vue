@@ -166,7 +166,7 @@ export default {
       console.log('_handleFilter --- > ' + JSON.stringify(params))
       if (type === 'search') {
         this.loading = true
-        getNetDeviceInfoByPage(this.params)
+        getNetDeviceInfoByPage(params)
           .then(
             function (result) {
               this.netDeviceListData = result.netequipList
@@ -179,7 +179,8 @@ export default {
             console.log(error)
           })
       } else if (type === 'download') {
-        downloadResultFile(params)
+        let downloadCls = 2
+        downloadResultFile(params, downloadCls)
           .then(
             function (result) {
               this.loading = false
