@@ -243,6 +243,8 @@ export default {
             // this.deviceCategoryDetailVisible = false
             this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
+            this.$parent.getParents()
+            this.viewFlagParent = true
             this.deviceSaved = true
             this.$message({
               message: '设备类别保存成功!',

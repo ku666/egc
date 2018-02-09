@@ -280,6 +280,7 @@ export default {
             type: 'success'
           })
           this.search()
+          this.getParents()
         })
       }).catch(() => {
         // this.$message({
@@ -301,6 +302,7 @@ export default {
             type: 'success'
           })
           this.search()
+          this.getParents()
         })
       }).catch(() => {
         // this.$message({
