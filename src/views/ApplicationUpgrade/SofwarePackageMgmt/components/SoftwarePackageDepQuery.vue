@@ -3,10 +3,10 @@
     <div>
       <search-dep-condition  @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-dep-condition>
     </div>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softpackDepListData" stripe border>
+    <el-row style="height: 100%">
+      <el-col :span="24">
+        <div style="margin-top: 20px">
+          <el-table :data="softpackDepListData" style="height: 750px;overflow-y: scroll;" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -96,31 +96,7 @@ export default {
         }, {
           colName: '最高版本(可不限)',
           prop: 'latestVer',
-          width: 120
-        }, {
-          colName: '配置项1',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项2',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项3',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项4',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项5',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项6',
-          prop: 'extData',
-          width: 80
+          width: 150
         }
       ],
       detailsTitle: '查看详情',

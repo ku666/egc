@@ -39,7 +39,11 @@ export const registerSoftwarePackage = (params1, params2) => {
   console.log('<<<<< software register  params:' + JSON.stringify(JSON.stringify(params1) + ' =============== > ' + JSON.stringify(params2)))
 
   return Axios.post(BASE_PATH + '/package/create?' + 'batchesId=' + params1.batchesId + '&name=' + params1.name + '&version=' + params1.version + '&developer=' + params1.developer +
-  '&latestPreVer=' + params1.latestPreVer + '&latestPreName=' + params1.latestPreName + '&functionDesc=' + params1.functionDesc, params2, contentType).then(res => res.data)
+  '&latestPreVer=' + params1.latestPreVer + '&latestPreName=' + params1.latestPreName + '&functionDesc=' + params1.functionDesc +
+  '&remark=' + params1.remark + '&nameEn=' + params1.nameEn + '&gitRepository=' + params1.gitRepository + '&mavenName=' + params1.mavenName +
+  '&svrPkgName=' + params1.svrPkgName + '&cltPkgName=' + params1.cltPkgName + '&cltPkgName=' + params1.cltPkgName + '&port=' + params1.port +
+  '&functionType=' + params1.functionType + '&appType=' + params1.appType,
+  params2, contentType).then(res => res.data)
 }
 
 // 分页查询软件包信息
