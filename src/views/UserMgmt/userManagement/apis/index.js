@@ -35,16 +35,22 @@ export const uploadUserExcel = (params) => {
 export const downloadExcelTemplate = (type) => {
   return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type, {responseType: 'arraybuffer'}
   ).then(res => {
-    console.log('download success')
-    let blob = new Blob([res.data], { type: 'application/x-xls' })
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
     if (type === '1') {
-      link.download = '用户信息.xls'
+      var fileName = '用户信息.xls'
     } else if (type === '2') {
-      link.download = '用户信息.xlsm'
+      fileName = '用户信息.xlsm'
     }
-    link.click()
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, fileName)
+    } else {
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
     return res.data
   })
 }
@@ -170,15 +176,15 @@ export const getDepartmentDetail = (uuid) => {
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加直属部门下拉框)
-export const getDirectDepartmentSelect = (uuid) => {
+export const getDirectDepartmentSelect = (uuid, cloudFlag) => {
   console.log('getDirectDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid
+  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加上级部门下拉框)
-export const getParenetDepartmentSelect = (uuid) => {
+export const getParenetDepartmentSelect = (uuid, cloudFlag) => {
   console.log('getParenetDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid
+  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 查询当前部门下的直属部门列表
@@ -573,7 +579,7 @@ export const checkResourceCode = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&uuid=' + listParm.uuid + '&appCode=' + listParm.appCode + '&cloudFlag=' + listParm.cloudFlag
+  '&uuid=' + listParm.uuid + '&appCode=' + encodeURI(listParm.appCode) + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 获取主设备类型
@@ -609,7 +615,7 @@ export const getOrgNextLevel = (param) => {
 // -----------------资源角色关联接口信息----------------
 // 获取资源角色列表信息
 export const getResourceRoleList = (listQuery) => {
-  console.log('<<<<<userUuid:' + listQuery.resourceUuid)
+  console.log('<<<<<resourceUuid:' + listQuery.resourceUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=' +
@@ -617,11 +623,9 @@ export const getResourceRoleList = (listQuery) => {
   ).then(res => res.data)
 }
 // 获取资源角色列表信息
-export const getResourceRoleNoPageList = (listQuery) => {
-  console.log('<<<noPage<<userUuid:' + listQuery.resourceUuid)
-  console.log('<<<noPage<<listQuery.page:' + listQuery.page)
-  console.log('<<<noPage<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=1&pageSize=100000'
+export const getResourceRoleNoPageList = (resourceUuid) => {
+  console.log('<<<noPage<<resourceUuid:' + resourceUuid)
+  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + resourceUuid + '&currentPage=1&pageSize=100000'
   ).then(res => res.data)
 }
 // 新增资源角色

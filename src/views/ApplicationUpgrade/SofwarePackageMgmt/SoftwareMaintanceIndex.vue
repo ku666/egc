@@ -151,7 +151,7 @@
 
             <el-row>
               <el-col :span="24">
-                <el-form-item label="新增修改功能点" :label-width="formLabelWidth" prop="remark">
+                <el-form-item label="软件包功能说明" :label-width="formLabelWidth" prop="functionDesc">
                   <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc"></el-input>
                 </el-form-item>
               </el-col>
@@ -217,7 +217,7 @@
                     :limit=10
                     :show-file-list="true"
                     :on-exceed="handleExceed"
-                    :on-change="handleOnchange"
+                    :on-change="handleImportOnchange"
                     :auto-upload="false"
                     :file-list="fileList">
                     <i class="el-icon-upload"></i>
@@ -478,6 +478,19 @@ export default {
       }
     },
     handleOnchange (file, fileList) {
+      console.info('handleOnchange')
+      // var fileArray = []
+      for (let i = 0; i < fileList.length; i++) {
+        // console.info(fileList[i].raw)
+        // fileArray.push(fileList[i].raw)
+        this.uploadFiles.append('files', fileList[i].raw)
+      }
+      // 验证上传文件的格式
+      // if (this.beforeUpload(file)) {
+      //   this.uploadFiles.append('file', fileArray)
+      // }
+    },
+    handleImportOnchange (file, fileList) {
       console.info('handleOnchange')
       // var fileArray = []
       for (let i = 0; i < fileList.length; i++) {

@@ -78,14 +78,14 @@
     </el-form>
     <div v-show="gridContact">
       <div class="flex-1">
-        <contact-list ref="userContactVue" :contactTypeOptionsProp="contactTypeSelect" :userUuidValue="curUserUuidParm" :showButton="true"></contact-list>
+        <contact-list ref="userContactVue" :contactTypeOptionsProp="contactTypeSelect" :userUuidValue="curUserUuidParm" :showButton="true" :showOperation="true"></contact-list>
       </div>
     </div>
     <div v-show="gridUserGroup">
-      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1'></ass-user-group>
+      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-group>
     </div>
     <div v-show="gridUserRole">
-      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1'></ass-user-role>
+      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-role>
     </div>
   </div>
 </template>

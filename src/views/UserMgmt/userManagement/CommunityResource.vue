@@ -63,7 +63,7 @@
 
 <script>
 import resourceList from './component/resourceList.vue'
-import resourceView from './component/communityView/resourceView.vue'
+import resourceView from './component/communityView/ResourceView.vue'
 import {
   getResourceListByPage,
   getResourceDetail,

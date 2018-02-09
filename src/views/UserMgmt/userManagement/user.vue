@@ -178,7 +178,7 @@ export default {
       contactTypeOptions: undefined,
       departmentOptions: undefined,
       userTypeOptions: undefined,
-      uploadFiles: new FormData(),
+      uploadFiles: undefined,
       showFirstTab: true,
       showSecondTab: false,
       activeName: 0,
@@ -529,7 +529,8 @@ export default {
     },
     handleOnchange (file, fileList) {
       if (this.beforeUpload(file)) {
-        this.uploadFiles.set('file', fileList[0].raw)
+        this.uploadFiles = new FormData()
+        this.uploadFiles.append('file', fileList[0].raw)
       }
     },
     beforeUpload (file) {

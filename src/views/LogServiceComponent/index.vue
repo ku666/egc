@@ -210,8 +210,10 @@ export default {
     // 查询
     onSubmit () {
       // console.log('selectedSystemCodeOptions: ' + this.selectedSystemCodeOptions[0])
-      this.formInline.beginDate = this.datevalue3[0]
-      this.formInline.endDate = this.datevalue3[1]
+      if (this.datevalue3 !== undefined && this.datevalue3 !== null && this.datevalue3.length > 1) {
+        this.formInline.beginDate = this.datevalue3[0]
+        this.formInline.endDate = this.datevalue3[1]
+      }
       this.loadData()
     },
     resetForm (formName) {

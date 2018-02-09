@@ -71,8 +71,8 @@ import {
   getUsergroupRoleList,
   getUsergroupRoleFilterList,
   deleteDirUser,
-  deleteAssRole,
-  checkUserGroupName
+  deleteAssRole
+  // checkUserGroupName
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -517,22 +517,22 @@ export default {
             console.log(error)
           }
         )
-    },
-    // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName) {
-      checkUserGroupName(usergroupUuid, usergroupName)
-        .then(
-          function (result) {
-            console.log('<<<<<userGroupNameFlag:' + result)
-            this.userGroupNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
     }
+    // // 校验用户组名的唯一性
+    // validateName (usergroupUuid, usergroupName) {
+    //   checkUserGroupName(usergroupUuid, usergroupName)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<userGroupNameFlag:' + result)
+    //         this.userGroupNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // }
   },
     // watch: {
     //   dirUsergroupDetailData (val) {
@@ -689,22 +689,22 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
     width: 20%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 22%
+    width: 20%
   }
   #userTable {
     margin-top: 15px

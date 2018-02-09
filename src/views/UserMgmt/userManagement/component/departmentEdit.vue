@@ -146,6 +146,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 5,
+        cloudFlag: 1,
         departmentUuid: ''
       }
     }

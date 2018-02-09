@@ -67,6 +67,7 @@ export default {
         listQuery: {
           page: 1,
           limit: 5,
+          cloudFlag: 1,
           departmentUuid: ''
         },
         directUserInVo: {
@@ -95,7 +96,7 @@ export default {
             function (result) {
               this.directUserData = result.departmentUserVoList  // 获取当前部门下的直属用户列表信息(带分页)
               this.total = result.pageCount
-              getRoleUser()
+              getRoleUser(1)
                 .then(
                   function (result) {
                     this.directUserListSelect = result       // 获取用户下拉框值
@@ -150,7 +151,7 @@ export default {
         })
           .then(() => {
             console.log('移除操作')
-            this.delete(data.uuid, row)
+            this.delete(data.userUuid)
           })
           .catch(() => {
             this.$message({
@@ -160,7 +161,7 @@ export default {
           })
       },
       // 将当前用户移除该用户组
-      delete (uuid, row) {
+      delete (uuid) {
         console.log('移除操作:' + uuid)
         deleteDirDepartmentUser(uuid)
           .then(
