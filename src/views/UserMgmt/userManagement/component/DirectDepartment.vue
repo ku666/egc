@@ -11,7 +11,7 @@
     <el-table :data="directDepartmentData" max-height="580" element-loading-text="拼命加载中" style="width:100%" id="directTable">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="departmentName" label="部门名称" ></el-table-column>
-        <el-table-column prop="departmentType" label="部门类别" ></el-table-column>
+        <el-table-column prop="departmentTypeName" label="部门类别" ></el-table-column>
         <el-table-column prop="parentDepartmentName" label="上级部门"></el-table-column>
         <el-table-column prop="childrenDepartments" label="下级部门" ></el-table-column>
         <el-table-column prop="directUsers" label="直属员工" ></el-table-column>
@@ -64,6 +64,7 @@ export default {
         listQuery: {
           page: 1,
           limit: 5,
+          cloudFlag: 1,
           departmentUuid: ''
         },
         directDepartmentInVo: {
@@ -92,7 +93,7 @@ export default {
             function (result) {
               this.directDepartmentData = result.childrenDepartmentVoList  // 获取当前部门下的直属部门列表信息
               this.total = result.pageCount
-              getDirectDepartmentSelect(this.departmentUuidValue)
+              getDirectDepartmentSelect(this.departmentUuidValue, 1)
                 .then(
                   function (result) {
                     this.directDepartmentListSelect = result       // 获取下属部门下拉框值

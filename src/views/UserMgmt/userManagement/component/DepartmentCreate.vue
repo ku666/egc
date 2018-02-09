@@ -61,6 +61,14 @@ export default {
         remark: undefined
       }
       // this.department.parentDepartmentUuid = val
+    },
+    initDepartmentInfo () {
+      this.department = {
+        departmentName: undefined,
+        parentDepartmentUuid: undefined,
+        departmentType: undefined,
+        remark: undefined
+      }
     }
   },
   data () {

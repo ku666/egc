@@ -235,9 +235,9 @@
           this.$message.error('请先选择需要查询的小区!')
         }
       },
-      getDepartmentSelect (uuid) {
+      getDepartmentSelect (uuid, cloudFlag) {
         // 获取部门信息
-        getParenetDepartmentSelect(uuid)
+        getParenetDepartmentSelect(uuid, cloudFlag)
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
@@ -275,7 +275,7 @@
         }
         this.showEditTree = true
         this.curDepartmentUuid = data.id
-        this.getDepartmentSelect(data.id)
+        this.getDepartmentSelect(data.id, 0)
         getDepartmentDetail(data.id)
           .then(
             function (result) {
@@ -301,7 +301,7 @@
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
         this.curDepartmentUuid = data.uuid
-        this.getDepartmentSelect(data.uuid)
+        this.getDepartmentSelect(data.uuid, 0)
         getDepartmentDetail(data.uuid)
           .then(
             function (result) {
