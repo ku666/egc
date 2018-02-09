@@ -54,7 +54,7 @@
               action=""
               drag
               multiple
-              :limit=10
+              :limit=100
               :show-file-list="true"
               :on-exceed="handleExceed"
               :on-change="handleOnchange"
@@ -62,7 +62,7 @@
               :file-list="fileList">
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-              <div class="el-upload__tip" slot="tip">上传文件，且不超过10M</div>
+              <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
             </el-upload>
           </el-form-item>
         </el-col>
