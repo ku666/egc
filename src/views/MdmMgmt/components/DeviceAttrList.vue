@@ -89,10 +89,10 @@
           <div style="padding-left: 30px">
             <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules' :inline='true'>
               <el-form-item label='属性编码' prop='attrCode' >
-                <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+                <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag' :maxlength="64"></el-input>
               </el-form-item>
               <el-form-item label='属性描述' prop='attrDesc'>
-                <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+                <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag' :maxlength="128"></el-input>
               </el-form-item>
               <el-form-item label='属性类型' prop='attrType'>
                 <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
@@ -105,10 +105,10 @@
                 </el-select>
               </el-form-item>
                 <el-form-item label='单位描述' prop='unitDesc'>
-                <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+                <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag' :maxlength="32"></el-input>
               </el-form-item>
               <el-form-item label='单位编码' prop='unitCode'>
-                <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+                <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag' :maxlength="32"></el-input>
               </el-form-item>
             </el-form>
             <div style='text-align: center; '>
