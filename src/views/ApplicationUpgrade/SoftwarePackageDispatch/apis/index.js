@@ -24,8 +24,7 @@ export const getAllRegisterPackages = (params) => {
 
 export const dispatchSoftwarePackage = (params1, params2, params3) => {
   console.log(' dispatch software packages params1  --->   ' + JSON.stringify(params1) + ' --->  ' + JSON.stringify(params2) + ' --->  ' + params3)
-  return Axios.post(BASE_PATH + '/aupackagedispatches/appDispatch?appList=' + params1 + '&courtList=' + params2 + '&dispatcher=' + params3
-  ).then(res => res.data)
+  return Axios.post(BASE_PATH + '/aupackagedispatches/appDispatch?appList=' + params1 + '&courtList=' + params2 + '&dispatcher=' + params3).then(res => res.data)
 
   // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }
