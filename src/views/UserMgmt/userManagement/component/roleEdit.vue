@@ -520,10 +520,11 @@ export default {
       this.showService = false
     },
     handleSave (form) {
+      this.formData = JSON.stringify(this.form)
+      console.log(this.formData)
+      this.formData = JSON.parse(this.formData)
       this.$refs[form].validate((valid) => {
         if (valid) {
-          this.formData = JSON.stringify(this.form)
-          this.formData = JSON.parse(this.formData)
           updateRole(this.formData)
             .then(
               function (result) {
@@ -676,35 +677,41 @@ export default {
         this.$refs.addservice.reset()
       }
       console.log('dialog changeRoleEditDiaLogEvent End')
-    },
-    // 校验角色名的唯一性
-    validateName (roleUuid, roleName, userType) {
-      checkRoleName(roleUuid, roleName, userType)
-        .then(
-          function (result) {
-            console.log('<<<<<roleNameFlag:' + result)
-            this.roleNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
     }
+    // // 校验角色名的唯一性
+    // validateName (roleUuid, roleName, userType) {
+    //   checkRoleName(roleUuid, roleName, userType)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<roleNameFlag:' + result)
+    //         this.roleNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // }
   },
   data () {
     // 角色名的唯一性
     var validateRoleName = (rule, value, callback) => {
-      let roleUuid = this.form.uuid
-      let userType = this.form.userType
-      console.log('校验：' + roleUuid + value)
-      this.validateName(roleUuid, value, userType)
-      if (!this.roleNameFlag) {
-        callback(new Error('角色名称已存在!'))
-        this.roleNameFlag = true   // 校验角色名称存在之后,再将roleNameFlag值还原初始值 true
+      if (value === '' || value === undefined) {
+        callback(new Error('角色名称不能为空'))
       } else {
-        callback()
+        let userType = this.form.userType
+        let roleUuid = this.form.uuid
+        checkRoleName(roleUuid, value, userType)
+        .then(
+          function (result) {
+            if (!result) {
+              callback(new Error('角色名称已存在'))
+            } else {
+              callback()
+            }
+          }
+        )
       }
     }
     return {
@@ -717,6 +724,9 @@ export default {
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
+        ],
+        userType: [
+          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       userTypeList: undefined,
@@ -768,14 +778,6 @@ export default {
           title: '用户组名称',
           prop: 'usergroupName'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirctUsers'

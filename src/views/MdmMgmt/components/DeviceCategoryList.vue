@@ -23,7 +23,7 @@
         </el-form-item>
         <el-form-item label='供应商'>
           <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
-            <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerName' :value='provider.providerCode'>
+            <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
             </el-option>
           </el-select>
         </el-form-item>
@@ -280,6 +280,7 @@ export default {
             type: 'success'
           })
           this.search()
+          this.getParents()
         })
       }).catch(() => {
         // this.$message({
@@ -301,6 +302,7 @@ export default {
             type: 'success'
           })
           this.search()
+          this.getParents()
         })
       }).catch(() => {
         // this.$message({

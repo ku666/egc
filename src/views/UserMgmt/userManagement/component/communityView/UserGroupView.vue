@@ -689,22 +689,22 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 12%
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
     width: 20%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 22%
+    width: 20%
   }
   #userTable {
     margin-top: 15px

@@ -5,20 +5,20 @@
           <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
         </el-form-item>
         <el-form-item label="代码英文名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.nameEn"></el-input>
         </el-form-item>
         <el-form-item label="代码值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.code"></el-input>
         </el-form-item>
         <el-form-item label="代码大类名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="commCodeDetails.name"></el-input>
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.typeCode"></el-input>
         </el-form-item>
        <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
+        <el-input class="upgrade_el-input" v-model="commCodeDetails.remark"></el-input>
       </el-form-item>
 
       <div style="text-align: center">
-        <el-button class="action-btn" @click="updateCodeInst" type="primary">保 存</el-button>
+        <el-button class="action-btn" @click="updateCommCodeEvent" type="primary">保 存</el-button>
       </div>
     </el-form>
   </div>
@@ -40,7 +40,7 @@ export default {
     }
   },
   methods: {
-    updateCodeInst () {
+    updateCommCodeEvent () {
       this.$emit('saveCommCodeEvent', this.commCodeDetails)
     }
   },

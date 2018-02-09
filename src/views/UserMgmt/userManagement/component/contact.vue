@@ -25,9 +25,9 @@
     </el-form>
     <el-table :data="contactDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="75" type="index" label="序号" align="center"></el-table-column> -->
-        <el-table-column prop="contactType" label="类别" width="350" :formatter="contactTypeFormat"></el-table-column>
-        <el-table-column prop="userContact" label="联系方式" width="498"></el-table-column>
-        <el-table-column label="操作" width="70" align="center">
+        <el-table-column prop="contactType" label="类别" :formatter="contactTypeFormat"></el-table-column>
+        <el-table-column prop="userContact" label="联系方式"></el-table-column>
+        <el-table-column label="操作" align="center" v-if="showOperation">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
@@ -63,7 +63,8 @@
     props: {
       contactTypeOptionsProp: undefined,
       userUuidValue: undefined,
-      showButton: undefined
+      showButton: undefined,
+      showOperation: undefined
     },
     watch: {
       contactDetailData (val) {

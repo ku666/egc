@@ -176,15 +176,15 @@ export const getDepartmentDetail = (uuid) => {
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加直属部门下拉框)
-export const getDirectDepartmentSelect = (uuid) => {
+export const getDirectDepartmentSelect = (uuid, cloudFlag) => {
   console.log('getDirectDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid
+  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加上级部门下拉框)
-export const getParenetDepartmentSelect = (uuid) => {
+export const getParenetDepartmentSelect = (uuid, cloudFlag) => {
   console.log('getParenetDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid
+  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 查询当前部门下的直属部门列表

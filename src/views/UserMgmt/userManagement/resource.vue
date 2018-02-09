@@ -158,6 +158,7 @@ export default {
     resourceCreate
   },
   mounted () {
+    this.loadSelectData()
     this.loadData()
     this.initListParm()
     this.loadProvinceData()
@@ -294,6 +295,8 @@ export default {
             console.log(error)
           }
         )
+    },
+    loadSelectData () {
       // 获取资源类型下拉框信息
       getResourceTypeOptions(this.dictData)
         .then(

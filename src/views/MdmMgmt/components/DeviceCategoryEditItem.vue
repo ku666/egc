@@ -9,13 +9,13 @@
         <div style="padding-left: 30px">
         <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
           <el-form-item label='设备编码' prop='typeCode'>
-            <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='设备名称' prop='typeName'>
-            <el-input v-model.trim='deviceCategoryDetail.typeName' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.typeName' :disabled='viewFlag' :maxlength="64"></el-input>
           </el-form-item>
           <el-form-item label='设备描述' prop='typeDesc'>
-            <el-input v-model.trim='deviceCategoryDetail.typeDesc' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.typeDesc' :disabled='viewFlag' :maxlength="64"></el-input>
           </el-form-item>
           <el-form-item label='父设备' prop='parentUuid'>
             <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
@@ -24,7 +24,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label='设备型号' prop='typeModel'>
-            <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag' :maxlength="64"></el-input>
           </el-form-item>
           <el-form-item label='供应商' prop='providerCode'>
             <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
@@ -33,10 +33,10 @@
             </el-select>
           </el-form-item>
           <el-form-item label='硬件版本' prop='hardwareVersion'>
-            <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
           </el-form-item>
           <el-form-item label='软件版本' prop='softwareVersion'>
-            <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag'></el-input>
+            <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
           </el-form-item>
         </el-form>
         </div>
@@ -243,6 +243,8 @@ export default {
             // this.deviceCategoryDetailVisible = false
             this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
+            this.$parent.getParents()
+            this.viewFlagParent = true
             this.deviceSaved = true
             this.$message({
               message: '设备类别保存成功!',

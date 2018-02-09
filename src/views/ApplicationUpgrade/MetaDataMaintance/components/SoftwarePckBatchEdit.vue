@@ -1,24 +1,15 @@
 <template>
   <div>
     <el-form :inline="true" :model="softwareBatchDetails">
-        <el-form-item label="代码实例值" :label-width="formLabelWidth">
+        <el-form-item label="软件包批次名称" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
-        </el-form-item>
-        <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
-        </el-form-item>
-        <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
-        </el-form-item>
-        <el-form-item label="代码值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwareBatchDetails.name"></el-input>
         </el-form-item>
        <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
+        <el-input class="upgrade_el-input" v-model="softwareBatchDetails.remark"></el-input>
       </el-form-item>
 
       <div style="text-align: center">
-        <el-button class="action-btn" @click="updateCodeInst" type="primary">保 存</el-button>
+        <el-button class="action-btn" @click="updateSoftwareBatchEvent" type="primary">保 存</el-button>
       </div>
     </el-form>
   </div>
@@ -40,7 +31,7 @@ export default {
     }
   },
   methods: {
-    updateCodeInst () {
+    updateSoftwareBatchEvent () {
       this.$emit('saveSoftwareBatchEvent', this.softwareBatchDetails)
     }
   },

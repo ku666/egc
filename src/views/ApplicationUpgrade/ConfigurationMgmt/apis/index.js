@@ -35,6 +35,7 @@ export const getDisctrictDataList = (params) => {
 export const uploadHardWareConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
+    // headers: {'Content-Type': 'application/x-www-form-urlencoded'}
   }
   return Axios.post(BASE_PATH + '/auServers/importExcel', params, config
   ).then(res => {
@@ -44,8 +45,7 @@ export const uploadHardWareConfigFile = (params) => {
 
 export const uploadNetEquipConfigFile = (params) => {
   let config = {
-    // headers: {'Content-Type': 'multipart/form-data'}
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    headers: {'Content-Type': 'multipart/form-data'}
   }
   return Axios.post(BASE_PATH + '/auNetequip/importExcel', params, config
   ).then(res => {
