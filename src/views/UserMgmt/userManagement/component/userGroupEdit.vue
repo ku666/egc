@@ -600,6 +600,9 @@ export default {
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
+        ],
+        userType: [
+          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       userTypeList: undefined,

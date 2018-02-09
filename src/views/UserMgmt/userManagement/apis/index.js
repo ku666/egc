@@ -579,7 +579,7 @@ export const checkResourceCode = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&uuid=' + listParm.uuid + '&appCode=' + listParm.appCode + '&cloudFlag=' + listParm.cloudFlag
+  '&uuid=' + listParm.uuid + '&appCode=' + encodeURI(listParm.appCode) + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 获取主设备类型
@@ -615,7 +615,7 @@ export const getOrgNextLevel = (param) => {
 // -----------------资源角色关联接口信息----------------
 // 获取资源角色列表信息
 export const getResourceRoleList = (listQuery) => {
-  console.log('<<<<<userUuid:' + listQuery.resourceUuid)
+  console.log('<<<<<resourceUuid:' + listQuery.resourceUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=' +
@@ -623,11 +623,9 @@ export const getResourceRoleList = (listQuery) => {
   ).then(res => res.data)
 }
 // 获取资源角色列表信息
-export const getResourceRoleNoPageList = (listQuery) => {
-  console.log('<<<noPage<<userUuid:' + listQuery.resourceUuid)
-  console.log('<<<noPage<<listQuery.page:' + listQuery.page)
-  console.log('<<<noPage<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=1&pageSize=100000'
+export const getResourceRoleNoPageList = (resourceUuid) => {
+  console.log('<<<noPage<<resourceUuid:' + resourceUuid)
+  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + resourceUuid + '&currentPage=1&pageSize=100000'
   ).then(res => res.data)
 }
 // 新增资源角色

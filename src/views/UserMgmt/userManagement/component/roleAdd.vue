@@ -6,8 +6,7 @@
         <el-select 
         v-model='form.userType' 
         placeholder='请选择用户类型' 
-        style="width:650px" 
-        @visible-change='getUserTypeList'
+        style="width:650px"
         >
           <el-option
             v-for='(item, index) in userTypeList'
@@ -41,19 +40,35 @@
     props: {
       userTypeList: undefined
     },
+
     data () {
       // 角色名的唯一性
       var validateRoleName = (rule, value, callback) => {
-        let roleUuid = this.form.uuid
-        console.log('校验：' + roleUuid + value)
-        this.validateName(roleUuid, value)
-        if (!this.roleNameFlag) {
-          callback(new Error('角色名称已存在!'))
-          this.roleNameFlag = true   // 校验角色名称存在之后,再将roleNameFlag值还原初始值 true
+        if (value === '' || value === undefined) {
+          callback(new Error('角色名称不能为空'))
         } else {
-          callback()
+          let userType = this.form.userType
+          checkRoleName('', value, userType)
+          .then(
+            function (result) {
+              if (!result) {
+                callback(new Error('角色名称已存在'))
+              } else {
+                callback()
+              }
+            }
+          )
         }
       }
+        // let roleUuid = this.form.uuid
+        // console.log('校验：' + roleUuid + value)
+        // this.validateName(roleUuid, value)
+        // if (!this.roleNameFlag) {
+        //   callback(new Error('角色名称已存在!'))
+        //   this.roleNameFlag = true   // 校验角色名称存在之后,再将roleNameFlag值还原初始值 true
+        // } else {
+        //   callback()
+        // }
       return {
         rules: {
           roleName: [
@@ -64,52 +79,64 @@
           ],
           remark: [
             { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
+          ],
+          userType: [
+            { required: true, message: '请选择用户类型', trigger: 'blur' }
           ]
         },
-        userTypeList: undefined,
+        // userTypeList: undefined,
         roleNameFlag: true,
         formData: undefined,
         form: {
-          roleName: undefined,
-          remark: undefined,
-          uuid: undefined,
-          userType: undefined
+          roleName: '',
+          remark: '',
+          uuid: '',
+          userType: ''
         }
       }
     },
     methods: {
-      // 校验角色名的唯一性
-      validateName (roleUuid, roleName) {
-        console.log('start validating...' + roleUuid + roleName)
-        checkRoleName(roleUuid, roleName)
-          .then(
-            function (result) {
-              console.log('<<<<<roleNameFlag:' + result)
-              this.roleNameFlag = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+      initData () {
+        this.form = {
+          userType: '',
+          roleName: '',
+          remark: ''
+        }
+        this.$refs.form.resetFields()
       },
+      // // 校验角色名的唯一性
+      // validateName (roleUuid, roleName) {
+      //   console.log('start validating...' + roleUuid + roleName)
+      //   checkRoleName(roleUuid, roleName)
+      //     .then(
+      //       function (result) {
+      //         console.log('<<<<<roleNameFlag:' + result)
+      //         this.roleNameFlag = result
+      //       }.bind(this)
+      //     )
+      //     .catch(
+      //       function (error) {
+      //         console.log(error)
+      //       }
+      //     )
+      // },
       handleSave (form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
-            this.formData = JSON.stringify(this.form)
-            this.formData = JSON.parse(this.formData)
-            createRole(this.formData)
+            // this.formData = JSON.stringify(this.form)
+            // this.formData = JSON.parse(this.formData)
+            createRole(this.form)
               .then(
                 function (result) {
                   this.$message({
                     message: '保存成功！',
                     type: 'success'
                   })
-                  this.form.roleName = null
-                  this.form.remark = null
-                  this.form.userType = null
-                  this.$emit('listenToAddEvent', this.formData)
+                  this.$emit('listenToAddEvent', this.form)
+                  this.form.roleName = ''
+                  this.form.remark = ''
+                  this.form.userType = ''
+                  this.$refs[form].resetFields()
                 }.bind(this)
               )
               .catch(
@@ -122,14 +149,17 @@
       },
       handleCancel (form) {
         this.form = {
-          roleName: undefined,
-          remark: undefined,
-          uuid: undefined,
-          userType: undefined
+          roleName: '',
+          remark: '',
+          uuid: '',
+          userType: ''
         }
         this.$refs[form].resetFields()
         this.$emit('listenToAddEvent', this.form)
       }
+    },
+    created: function () {
+      this.initData()
     }
   }
 </script>

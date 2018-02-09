@@ -32,11 +32,8 @@ export default {
     isAddFlag: false,
     tableData: undefined,
     defaultResourceTypeParm: undefined,
-    deviceTypeSelect: undefined,
-    providerCodeTypeSelect: undefined,
     resourceTypeSelect: undefined,
     appCodeSelect: undefined,
-    actionTypeSelect: undefined,
     provincesOptions: undefined
   },
   components: {
