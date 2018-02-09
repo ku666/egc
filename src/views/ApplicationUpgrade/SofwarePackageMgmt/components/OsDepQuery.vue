@@ -11,6 +11,8 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            </el-table-column>
             <!-- <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
@@ -68,6 +70,11 @@ export default {
         'currentPage': 1,
         'pageSize': 10
       },
+      searchItemList: {
+        'item1': '11',
+        'item2': '22',
+        'item3': '33'
+      },
       tableTitleList: [
         {
           colName: '批次',
@@ -93,32 +100,11 @@ export default {
           colName: 'ServicePack',
           prop: 'servicePack',
           width: 120
-        }, {
-          colName: '配置项1',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项2',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项3',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项4',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项5',
-          prop: 'extData',
-          width: 80
-        }, {
-          colName: '配置项6',
-          prop: 'extData',
-          width: 80
         }
       ],
+      tableTitleExtData: [
+      ],
+      extMaxLenth: 6,
       detailsTitle: '查看详情',
       detailsImg: require('../assets/images/details.png')
     }
@@ -164,13 +150,37 @@ export default {
 
     // 初始加载硬件依赖的信息
     loadData () {
+      console.log('loadData.....mounted')
+      this.tableTitleExtData = []
+      for (let i = 1; i < this.extMaxLenth + 1; i++) {
+        var colName = '配置项' + i
+        var extData = 'extData' + i
+        var keyArr = ['colName', 'prop', 'width']
+        var valArr = [colName, extData, '80']
+        this.tableTitleExtData.push(this.getExtData(keyArr, valArr))
+      }
+      console.log('loadData.....mounted tableTitleExtData over')
+      console.log(JSON.stringify(this.tableTitleExtData))
       getOsDepByPage(this.searchConditionList)
         .then(
           function (result) {
             this.osDepListData = result.data.data
+            console.log('Data get .....' + result.data.data.length)
+            for (let i = 1; result.data.data !== null && i < result.data.data.length + 1; i++) {
+              for (let k = 1; result.data.data[i - 1].extData !== null && k < this.extMaxLenth + 1; k++) {
+                console.log('Data get2222 .....')
+                var key = '配置项' + k
+                var key2 = 'extData' + k
+                result.data.data[i - 1][key2] = result.data.data[i - 1].extData[key]
+              }
+            }
             this.total = result.data.totalCount
+            console.log(JSON.stringify(this.osDepListData))
           }.bind(this)
         )
+        // var obj = Object.assign(this.searchConditionList, this.searchItemList)
+        // console.log('loadData....object loaddata:.....')
+        // console.log(obj)
         .catch(
           function (error) {
             console.log(error)
@@ -183,14 +193,22 @@ export default {
       this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    },
+    // data
+    getExtData (keyArr, valArr) {
+      var data = {}
+      for (let i = 0; i < keyArr.length; i++) {
+        var key = keyArr[i]
+        var val = valArr[i]
+        data[key] = val
+      }
+      return data
     }
   },
-
   mounted () {
     // this.loadData()
   }

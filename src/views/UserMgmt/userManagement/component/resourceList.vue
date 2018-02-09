@@ -46,7 +46,7 @@
     },
     methods: {
       handleClickDelete (row) {
-        this.$emit('listenDeleteEvent', row)
+        this.$emit('listenDeleteEvent', this.tableData[row])
         console.log('resourcelist 删除' + row + '行')
       },
       handleClickEdit (row) {

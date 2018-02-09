@@ -21,13 +21,12 @@
     <resource-service v-if="showService" ref="resourceServiceVue" :isAddFlagParm="isAddFlag" :appCodeSelectOption="appCodeSelect"
     @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceServiceVue="resource"></resource-service>
     
-    <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :deviceOptions="deviceTypeSelect"
-    :providerOptions="providerCodeTypeSelect" :provincesSelect="provincesOptions"
+    <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :provincesSelect="provincesOptions"
     @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource"></resource-device-group>
 
     <div v-show="gridResourceRole">
       <div class="flex-1">
-        <resource-role-list ref="resourceRoleVue" :actionTypeOptionsProp="actionTypeSelect"
+        <resource-role-list ref="resourceRoleVue"
         :resourceUuidValue="curResourceUuid" :resourceType="curResourceType"></resource-role-list>
       </div>
     </div>
@@ -81,11 +80,8 @@ export default {
       courtAbbr: undefined,
       courtName: undefined
     },
-    deviceTypeSelect: undefined,
-    providerCodeTypeSelect: undefined,
     resourceTypeSelect: undefined,
-    appCodeSelect: undefined,
-    actionTypeSelect: undefined
+    appCodeSelect: undefined
   },
   components: {
     resourceRoleList,
@@ -155,6 +151,7 @@ export default {
         this.curResourceType = this.resource.resourceType
         console.log('this.listQuery:' + JSON.stringify(this.listQuery))
         this.$refs.resourceRoleVue.handResourceRoleList(this.listQuery)
+        this.$refs.resourceRoleVue.handResourceRoleSelect(this.listQuery)
       }
     },
     handleChange (resourceType) {
