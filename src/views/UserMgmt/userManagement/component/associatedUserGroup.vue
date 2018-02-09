@@ -14,7 +14,7 @@
         <!-- <el-table-column prop="parentUsergroupName" label="上级用户组" width="234"></el-table-column> -->
         <el-table-column prop="usergroupRemark" label="用户组说明" width="200"></el-table-column>
         <el-table-column prop="usergroupUsers" label="组成员" width="459"></el-table-column>
-        <el-table-column label="操作" width="100" align="center">
+        <el-table-column label="操作" width="100" align="center" v-if="showOperation">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
@@ -52,7 +52,8 @@
     props: {
       userUuidValue: undefined,
       showSelect: undefined,
-      cloudFlag: ''
+      cloudFlag: '',
+      showOperation: undefined
     },
     watch: {
       associtedUserGroupData (val) {
