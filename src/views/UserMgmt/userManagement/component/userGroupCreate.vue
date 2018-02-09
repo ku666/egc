@@ -7,8 +7,7 @@
         <el-select 
         v-model='createForm.userType' 
         placeholder='请选择用户类型' 
-        style="width:650px" 
-        @visible-change='getUserTypeList'
+        style="width:650px"
         >
           <el-option
             v-for='(item, index) in userTypeList'
@@ -46,38 +45,29 @@ export default {
     userTypeList: undefined
   },
   methods: {
-    // loadData () {
-    //   listUserType()
-    //     .then(
-    //       function (result) {
-    //         this.createForm.userTypeList = result
-    //         console.log(this.createForm.userTypeList[0].itemName)
-    //         console.log(this.createForm.userTypeList)
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log('错误：' + error)
-    //       }
-    //     )
-    // },
+    initData () {
+      this.createForm = {
+        userType: '',
+        usergroupName: '',
+        remark: ''
+      }
+      this.$refs.createForm.resetFields()
+    },
     handleSave (createForm) {
       this.$refs[createForm].validate((valid) => {
         if (valid) {
-          this.formData = JSON.stringify(this.createForm)
-          console.log(this.formData)
-          this.formData = JSON.parse(this.formData)
-          createUserGroup(this.formData)
+          createUserGroup(this.createForm)
             .then(
               function (result) {
                 this.$message({
                   message: '保存成功！',
                   type: 'success'
                 })
-                this.$emit('listenToAddEvent', this.formData)
-                this.createForm.usergroupName = undefined
+                this.$emit('listenToAddEvent', this.createForm)
+                this.createForm.usergroupName = ''
                 this.createForm.remark = ''
                 this.createForm.userType = ''
+                this.$refs[createForm].resetFields()
               }.bind(this)
             )
             .catch(
@@ -91,64 +81,51 @@ export default {
     handleCancel (createForm) {
       this.createForm = {
         usergroupName: undefined,
-        parentUsergroupName: undefined,
+        // parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
         userType: undefined
       }
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
-    },
-    // getUserTypeList () {
-    //   console.log('start')
-    //   listUserType()
+    }
+    // // 校验用户组名的唯一性
+    // validateName (usergroupUuid, usergroupName, userType) {
+    //   console.log('start validating...' + usergroupUuid + usergroupName)
+    //   checkUserGroupName(usergroupUuid, usergroupName, userType)
     //     .then(
     //       function (result) {
-    //         this.userTypeList = result
-    //         // this.userTypeList = result
-    //         console.log(this.userTypeList[0].itemName)
-    //         console.log(this.userTypeList)
+    //         console.log('<<<<<userGroupNameFlag:' + result)
+    //         this.userGroupNameFlag = result
     //       }.bind(this)
     //     )
     //     .catch(
     //       function (error) {
-    //         console.log('错误：' + error)
+    //         console.log(error)
     //       }
     //     )
-    // },
-
-    // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName) {
-      console.log('start validating...' + usergroupUuid + usergroupName)
-      checkUserGroupName(usergroupUuid, usergroupName)
-        .then(
-          function (result) {
-            console.log('<<<<<userGroupNameFlag:' + result)
-            this.userGroupNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    }
+    // }
   },
-  // mounted: function () {
-  //   this.loadData()
-  // },
+  mounted: function () {
+    this.initData()
+  },
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
-      console.log('value: ' + value)
-      let usergroupUuid = this.createForm.uuid
-      console.log('校验：' + usergroupUuid + value)
-      this.validateName(usergroupUuid, value)
-      if (!this.userGroupNameFlag) {
-        callback(new Error('用户组名称已存在!'))
-        this.userGroupNameFlag = true   // 校验用户组名称存在之后,再将 userGroupNameFlag 值还原初始值 true
+      if (value === '' || value === undefined) {
+        callback(new Error('用户组名称不能为空'))
       } else {
-        callback()
+        let userType = this.createForm.userType
+        checkUserGroupName('', value, userType)
+        .then(
+          function (result) {
+            if (!result) {
+              callback(new Error('用户组名称已存在'))
+            } else {
+              callback()
+            }
+          }
+        )
       }
     }
     return {
@@ -171,13 +148,11 @@ export default {
       selectedValue: undefined,
       createForm: {
         usergroupName: undefined,
-        parentUsergroupName: undefined,
+        // parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
         userType: undefined
-      },
-      userTypeList: undefined,
-      formData: undefined
+      }
     }
   }
 }
