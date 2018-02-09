@@ -1,11 +1,11 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container>
+    <div calendar-list-container class="flex-1 flex-c">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
-      <div v-show="showGrid == true">
+      <div v-show="showGrid == true" class="flex-c flex-1">
         <div>
           <el-form :model="listQuery" ref="listQuery">
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
@@ -18,7 +18,7 @@
         </div>
 
       <div class="border-divide"></div>
-      <div class="flex-1">
+      <div class="table-container">
           <grid-list
             :editable="true" 
             :deletable="true"
@@ -115,6 +115,9 @@
         departmentListParam: [{
           title: '部门名称',
           prop: 'departmentName'
+        }, {
+          title: '部门类别',
+          prop: 'departmentTypeName'
         }, {
           title: '上级部门',
           prop: 'parentDepartmentName'
@@ -232,12 +235,13 @@
         this.dialogFormVisible = false
         this.dialogCreateFormVisible = true
         this.addFlag = false
-        this.initDepartmentForm()
-        this.getDepartmentSelect(this.curDepartmentUuid)
+        // this.initDepartmentForm()
+        this.$refs.departmentCreateVue.initDepartmentInfo()
+        this.getDepartmentSelect(this.curDepartmentUuid, 1)
       },
-      getDepartmentSelect (uuid) {
+      getDepartmentSelect (uuid, cloudFlag) {
         // 获取部门信息
-        getParenetDepartmentSelect(uuid)
+        getParenetDepartmentSelect(uuid, cloudFlag)
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
@@ -254,6 +258,7 @@
         if (tab.name === '0') {
           this.showGrid = true
           this.showSubGrid = false
+          // this.loadData()
         } else if (tab.name === '1') {
           this.showGrid = false
           this.loadDepartmentTree()
@@ -272,7 +277,7 @@
         this.showEditTree = true
         this.showCreateTree = false
         this.curDepartmentUuid = data.id
-        this.getDepartmentSelect(data.id)
+        this.getDepartmentSelect(data.id, 1)
         getDepartmentDetail(data.id)
           .then(
             function (result) {
@@ -369,7 +374,7 @@
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
         this.curDepartmentUuid = data.uuid
-        this.getDepartmentSelect(data.uuid)
+        this.getDepartmentSelect(data.uuid, 1)
         getDepartmentDetail(data.uuid)
           .then(
             function (result) {
