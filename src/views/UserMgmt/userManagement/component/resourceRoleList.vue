@@ -3,7 +3,7 @@
   <div>
     <el-form :model="authority" :inline="true" ref="authority">
       <el-form-item label="添加角色">
-        <el-select v-model="authority.roleUuid" placeholder="请选择需要添加的角色" class="user_el-select" filterable @change='saveResourceRole'>
+        <el-select v-model="selectRole" placeholder="请选择需要添加的角色" class="user_el-select" filterable @change='saveResourceRole'>
           <el-option v-for="roleType in roleSelectOptions" :key="roleType.uuid" :label="roleType.roleName" :value="roleType.uuid"> </el-option>
         </el-select>
       </el-form-item>
@@ -58,13 +58,14 @@
       }
     },
     mounted () {
-      // this.listQuery.resourceUuid = this.resourceUuidValue
+      this.listQuery.resourceUuid = this.resourceUuidValue
       // this.handResourceRoleList(this.listQuery)
     },
     data () {
       return {
         resourceRoleDetailData: undefined,
         formLabelWidth: '120px',
+        selectRole: '',
         authority: {
                 // -----权限表-----
           resourceUuid: '',   // 资源代码
@@ -76,6 +77,7 @@
           roleUuid: undefined
         },
         roleSelectOptions: undefined,
+        tmpRoleList: undefined,
         total: 0,
         listQuery: {
           page: 1,
@@ -97,11 +99,6 @@
         this.listQuery.resourceUuid = this.resourceUuidValue
         this.handResourceRoleList(this.listQuery)
       },
-      createResourceRole () {
-        console.log('this.curResourceUuid:' + this.resourceUuidValue)
-        this.authority.resourceUuid = this.resourceUuidValue
-        this.handResourceRoleSelect()
-      },
       // 获取角色权限列表信息（分页）
       handResourceRoleList (listQuery) {
       // 权限角色列表信息
@@ -120,14 +117,16 @@
       // 获取角色下拉框信息（不分页）
       handResourceRoleSelect () {
       // 角色下拉框信息
-        getRoleListAllMaindata()
+        getRoleListAllMaindata(1)// 1：为云端查询参数
         .then(
           function (result) {
             this.tmpRoleList = result
-            getResourceRoleNoPageList(this.authority)
+            console.log('this.tmpRoleList' + JSON.stringify(result))
+            getResourceRoleNoPageList(this.resourceUuidValue)
               .then(
                 function (result) {
                   let roleFilterList = result.authorityExt
+                  console.log('roleFilterList:' + JSON.stringify(result.authorityExt))
                   if (result.pageCount > 0) {
                     for (var i = 0; i < roleFilterList.length; i++) {
                       this.disableRole(roleFilterList[i].roleUuid)
@@ -148,6 +147,7 @@
         )
       },
       disableRole (roleUuid) {
+        console.log('roleUuid:' + roleUuid)
         for (var i = 0; i < this.tmpRoleList.length; i++) {
           if (roleUuid === this.tmpRoleList[i].uuid) {
             this.tmpRoleList[i].isDisabled = true
@@ -155,12 +155,16 @@
           }
         }
       },
-      saveResourceRole () {
+      saveResourceRole (ele) {
+        this.authority.resourceUuid = this.resourceUuidValue
+        this.authority.roleUuid = ele
         console.log('this.authority.resourceUuid:' + this.authority.resourceUuid)
+        this.selectRole = ''
         createResourceRole(this.authority)
           .then(() => {
             this.listQuery.resourceUuid = this.resourceUuidValue
             this.handResourceRoleList(this.listQuery)
+            this.handResourceRoleSelect()
             this.$message({
               message: '保存成功',
               type: 'success'
@@ -196,6 +200,7 @@
               // this.resourceRoleDetailData.splice(row, 1)
               this.listQuery.resourceUuid = this.resourceUuidValue
               this.handResourceRoleList(this.listQuery)
+              this.handResourceRoleSelect()
               this.$message({
                 type: 'success',
                 message: '删除成功!'

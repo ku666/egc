@@ -435,15 +435,15 @@ export default {
       this.dialogCreateFormVisible = true
       this.addFlag = false
     },
-    resourceDeleteEvent (row) {
-      var dataResourse = this.resourceList[row]
+    resourceDeleteEvent (dataResourse) {
+      // var dataResourse = this.resourceList[row]
       this.$confirm('确定删除此项？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.delete(dataResourse.uuid, row)
+          this.delete(dataResourse.uuid)
         })
         .catch(() => {
           this.$message({
@@ -453,7 +453,7 @@ export default {
         })
     },
     // 删除资源实体
-    delete (uuid, row) {
+    delete (uuid) {
       deleteResource(uuid)
         .then(
           function (result) {
@@ -579,14 +579,7 @@ export default {
         this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '4') {
-        this.labelTitle = '设备组名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = false
-        this.listQuery.q_appCode = ''
-        this.listQuery.q_resourceName = ''
-      } else if (this.listQuery.q_resourceType === '99') {
-        this.labelTitle = '设备名称'
+        this.labelTitle = '区域名称'
         this.appLabelTitle = '所属应用'
         this.showQueryParm = true
         this.showQueryApp = false

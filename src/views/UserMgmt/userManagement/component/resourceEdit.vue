@@ -155,6 +155,7 @@ export default {
         this.curResourceType = this.resource.resourceType
         console.log('this.listQuery:' + JSON.stringify(this.listQuery))
         this.$refs.resourceRoleVue.handResourceRoleList(this.listQuery)
+        this.$refs.resourceRoleVue.handResourceRoleSelect(this.listQuery)
       }
     },
     handleChange (resourceType) {
