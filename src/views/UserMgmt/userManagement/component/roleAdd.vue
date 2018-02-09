@@ -51,7 +51,6 @@
           checkRoleName('', value, userType)
           .then(
             function (result) {
-              console.log('value: ' + value)
               if (!result) {
                 callback(new Error('角色名称已存在'))
               } else {
@@ -60,6 +59,7 @@
             }
           )
         }
+      }
         // let roleUuid = this.form.uuid
         // console.log('校验：' + roleUuid + value)
         // this.validateName(roleUuid, value)
@@ -69,7 +69,6 @@
         // } else {
         //   callback()
         // }
-      }
       return {
         rules: {
           roleName: [
@@ -89,10 +88,10 @@
         roleNameFlag: true,
         formData: undefined,
         form: {
-          roleName: undefined,
-          remark: undefined,
-          uuid: undefined,
-          userType: undefined
+          roleName: '',
+          remark: '',
+          uuid: '',
+          userType: ''
         }
       }
     },
@@ -150,16 +149,16 @@
       },
       handleCancel (form) {
         this.form = {
-          roleName: undefined,
-          remark: undefined,
-          uuid: undefined,
-          userType: undefined
+          roleName: '',
+          remark: '',
+          uuid: '',
+          userType: ''
         }
         this.$refs[form].resetFields()
         this.$emit('listenToAddEvent', this.form)
       }
     },
-    mounted: function () {
+    created: function () {
       this.initData()
     }
   }
