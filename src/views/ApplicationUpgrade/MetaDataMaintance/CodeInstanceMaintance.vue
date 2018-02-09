@@ -3,7 +3,7 @@
     <el-form :inline="true" :model="searchConditionList">
       <div class="search-container">
         <el-form-item label="代码实例值">
-          <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.codeValue"> </el-input>
+          <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
         </el-form-item>
         <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
           <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
@@ -56,7 +56,15 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="代码实例值" :label-width="formLabelWidth" prop="instanceValue">
-                <el-input v-model="registerParaList.instanceValue"></el-input>
+                <!-- <el-input v-model="registerParaList.instanceValue"></el-input> -->
+                <el-select v-model="registerParaList.instanceValue" placeholder="请选择代码实例值" clearable>
+                  <el-option
+                    v-for="item in instanceValues"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -68,8 +76,8 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码值" :label-width="formLabelWidth" prop="codeValue">
-                <el-input v-model="registerParaList.codeValue"></el-input>
+              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
+                <el-input v-model="registerParaList.code"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -96,7 +104,7 @@
 
 <script>
 import CodeInstanceEdit from './components/CodeInstanceEdit'
-import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance } from './apis/index'
+import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance, getCodeInstances } from './apis/index'
 export default {
   components: {
     CodeInstanceEdit
@@ -111,26 +119,28 @@ export default {
       codeInstDetails: undefined,
       dialogTittle: '',
       formLabelWidth: '140px',
+      instanceValues: [],
+      editTitle: '编辑',
       tableTitleList: [
         {
           colName: '代码实例值',
-          prop: 'name',
+          prop: 'code',
           width: 220
         }, {
           colName: '代码实例对应名称',
-          prop: 'name',
+          prop: 'instanceName',
           width: 220
         }, {
           colName: '提供商',
-          prop: 'name',
+          prop: 'sourceVendor',
           width: 220
         }, {
           colName: '代码值',
-          prop: 'name',
+          prop: 'code',
           width: 220
         }, {
           colName: '备注',
-          prop: 'name'
+          prop: 'remark'
         }
       ],
       searchConditionList: {
@@ -139,14 +149,14 @@ export default {
         // 名称
         'codeName': '',
         // 值
-        'codeValue': '',
+        'code': '',
         // 提供商
         'vendor': ''
       },
       registerParaList: {
         instanceValue: '',
         instanceName: '',
-        codeValue: '',
+        code: '',
         codeProvider: '',
         ramark: ''
       },
@@ -154,7 +164,7 @@ export default {
         instanceValue: [
           { required: true, message: '请输入软件名称', trigger: 'blur,change' }
         ],
-        codeValue: [
+        code: [
           { required: true, message: '请输入软件版本', trigger: 'blur,change' }
         ],
         instanceName: [
@@ -169,7 +179,7 @@ export default {
         .then(
           function (result) {
             console.log('code instance -- >' + JSON.stringify(result))
-            this.codeInstList = result
+            this.codeInstList = result.codesInstanceList
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
@@ -184,8 +194,29 @@ export default {
       this.loadData()
     },
     handleRegister () {
-      this.dialogTittle = '代码实例注册'
-      this.dialogRegisterVisible = true
+      var that = this
+      that.dialogTittle = '代码实例注册'
+      that.dialogRegisterVisible = true
+      // 实例代码值
+      getCodeInstances()
+          .then(
+            function (result) {
+              console.log(JSON.stringify(result))
+              let instanceValueRes = result
+              for (let i = 0; i < instanceValueRes.length; i++) {
+                that.instanceValues.push(
+                  {
+                    label: instanceValueRes[i].typeName,
+                    value: instanceValueRes[i].typeCode
+                  }
+                )
+              }
+            }
+          ).catch(
+            function (error) {
+              console.log(error)
+            }
+          )
     },
     _registerCodeInstance (formName) {
       this.$refs[formName].validate(valid => {
@@ -216,7 +247,7 @@ export default {
       getCodeInstanceDetails(eachRowUUID)
           .then(
             function (result) {
-              console.log('code instance  details -- >' + JSON.stringify(result, null, ' '))
+              console.log('code instance  details -- >' + JSON.stringify(result))
               this.codeInstDetails = result
               this.dialogEditVisible = true
             }.bind(this)
@@ -233,7 +264,7 @@ export default {
           function (result) {
             this.dialogEditVisible = false
             this.$message.success('保存成功')
-            // 再次加载列表的数据
+            // 加载数据
             this.loadData()
           }.bind(this)
         ).catch(
@@ -249,6 +280,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    }
+  },
+  watch: {
+    'registerParaList.instanceValue': function (newValue, oldValue) {
+      this.load()
+    },
+    'searchConDetails.city' (newValue, oldValue) {
+      this.loadDistrictData()
     }
   },
   mounted () {

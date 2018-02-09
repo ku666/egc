@@ -26,14 +26,7 @@ export default {
   data () {
     return {
       name: '',
-      titleList: [
-        {title: '主数据管理'},
-        {title: '地图分析'},
-        {title: '小区信息'},
-        {title: '设备管理'},
-        {title: '智慧社区'}
-      ]
-
+      titleList: []
     }
   },
   mounted () {
@@ -42,7 +35,7 @@ export default {
   },
   computed: {
     username () {
-      let username = sessionStorage.getItem('login_username')
+      let username = localStorage.getItem('login_username')
       return username || this.name || 'admin'
     },
     headerStataus () {
@@ -52,10 +45,8 @@ export default {
   methods: {
     handleCommand (command) {
       if (command === 'loginout') {
-        sessionStorage.removeItem('login_username')
-        sessionStorage.removeItem('token')
-        sessionStorage.removeItem('userRouters')
-        sessionStorage.removeItem('userResourcePermission')
+        localStorage.removeItem('login_username')
+        localStorage.removeItem('token')
         this.$router.push('/login')
       }
     },
@@ -83,6 +74,19 @@ export default {
           let temp = { 'id': uiResTemp.id, 'title': uiResTemp.title, 'icon': '', 'url': uiResTemp.url }
           this.titleList.push(temp)
         }
+      }
+      if (sessionStorage.getItem('CurrentlyCheckedTitle') !== undefined) {
+        var currentMeunName = sessionStorage.getItem('CurrentlyCheckedTitle')
+        if (this.titleList !== undefined && this.titleList.length > 0) {
+          for (let i = 0; i < this.titleList.length; i++) {
+            if (this.titleList[i].title === currentMeunName) {
+              this.titleList[i].icon = 'header_navbar_active'
+            } else {
+              this.titleList[i].icon = ''
+            }
+          }
+        }
+        this.$emit('getSelectedTitle', currentMeunName)
       }
     }
   }

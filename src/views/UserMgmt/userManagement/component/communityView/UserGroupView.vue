@@ -71,8 +71,8 @@ import {
   getUsergroupRoleList,
   getUsergroupRoleFilterList,
   deleteDirUser,
-  deleteAssRole,
-  checkUserGroupName
+  deleteAssRole
+  // checkUserGroupName
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -517,22 +517,22 @@ export default {
             console.log(error)
           }
         )
-    },
-    // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName) {
-      checkUserGroupName(usergroupUuid, usergroupName)
-        .then(
-          function (result) {
-            console.log('<<<<<userGroupNameFlag:' + result)
-            this.userGroupNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
     }
+    // // 校验用户组名的唯一性
+    // validateName (usergroupUuid, usergroupName) {
+    //   checkUserGroupName(usergroupUuid, usergroupName)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<userGroupNameFlag:' + result)
+    //         this.userGroupNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // }
   },
     // watch: {
     //   dirUsergroupDetailData (val) {
@@ -689,41 +689,35 @@ export default {
 
 <style scoped>
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 170px
+    width: 20%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 200px
+    width: 22%
   }
-  /* #userTable >>> colgroup col:nth-child(7) {
-    width: 60px
-  } */
   #userTable {
     margin-top: 15px
   }
   #roleTable >>> colgroup col:nth-child(1) {
-    width: 160px
+    width: 20%
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    width: 200px
+    width: 30%
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    width: 430px
+    width: 50%
   }
-  /* #roleTable >>> colgroup col:nth-child(4) {
-    width: 120px
-  } */
 
   #roleTable {
     margin-top: 15px

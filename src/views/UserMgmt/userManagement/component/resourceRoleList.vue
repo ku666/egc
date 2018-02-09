@@ -1,30 +1,17 @@
 
 <template>
   <div>
-    <template v-if="!authorityFlag">
-      <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px; margin-bottom: 10px" plain @click="createResourceRole" type="primary">添加</el-button>
-    </template>
-    <template v-else>
-      <el-button class="cancel-btn" style="margin-bottom: 10px" @click="cancelResourceRole" type="primary">取消添加</el-button>
-      <el-button class="action-btn" style="margin-bottom: 10px" @click="saveResourceRole('authority')" type="primary">保存</el-button>
-    </template>
-    <el-form :model="authority" :inline="true" v-if="authorityFlag" ref="authority" :rules="rules">
-      <el-form-item label="选择角色" prop="roleUuid">
-        <el-select v-model="authority.roleUuid" placeholder="请选择" class="user_el-select" filterable>
+    <el-form :model="authority" :inline="true" ref="authority">
+      <el-form-item label="添加角色">
+        <el-select v-model="selectRole" placeholder="请选择需要添加的角色" class="user_el-select" filterable @change='saveResourceRole'>
           <el-option v-for="roleType in roleSelectOptions" :key="roleType.uuid" :label="roleType.roleName" :value="roleType.uuid"> </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="操作类型" :label-width="formLabelWidth" v-if="showActionType">
-        <el-select v-model="authority.actionType" placeholder="请选择" multiple class="user_el-select">
-          <el-option v-for="action in actionTypeOptionsProp" :key="action.itemCode" :label="action.itemName" :value="action.itemCode"> </el-option>
         </el-select>
       </el-form-item>
     </el-form>
     <el-table :data="resourceRoleDetailData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="75" type="index" align="center" label="序号"></el-table-column> -->
-        <el-table-column prop="roleName" label="角色名称" width="120"></el-table-column>
-        <el-table-column prop="remark" label="角色说明" width="323"></el-table-column>
-        <el-table-column prop="actionTypeName" label="操作类型" width="355"></el-table-column>
+        <el-table-column prop="roleName" label="角色名称" width="320"></el-table-column>
+        <el-table-column prop="remark" label="角色说明" width="478"></el-table-column>
         <el-table-column label="操作" width="120" align="center">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
@@ -55,13 +42,11 @@
     createResourceRole,
     getResourceRoleList,
     getRoleListAllMaindata,
-    createDevice,
     getResourceRoleNoPageList
   } from '@/views/UserMgmt/userManagement/apis'
 
   export default {
     props: {
-      actionTypeOptionsProp: undefined,
       resourceUuidValue: undefined,
       resourceType: undefined
     },
@@ -69,44 +54,34 @@
       resourceRoleDetailData (val) {
         console.log('watch: resourceRoleDetailData!!!!!!!!!!!!!!!!')
         console.log(val)
-        // alert('-------------')
-        this.authorityFlag = false
-        this.showActionType = false
       }
     },
     mounted () {
       this.listQuery.resourceUuid = this.resourceUuidValue
-      this.handResourceRoleList(this.listQuery)
+      // this.handResourceRoleList(this.listQuery)
     },
     data () {
       return {
-        deleteImg: require('../assets/images/delete.png'),
         resourceRoleDetailData: undefined,
         formLabelWidth: '120px',
+        selectRole: '',
         authority: {
                 // -----权限表-----
           resourceUuid: '',   // 资源代码
-          roleUuid: '',       // 角色ID
-          actionType: ''      // 操作类型
+          roleUuid: ''       // 角色ID
         },
         roleDeviceAuthorityRequestVo: {
           resourceUuidList: undefined,
           actionTypeList: undefined,
           roleUuid: undefined
         },
-        authorityFlag: false,
-        showActionType: false,
         roleSelectOptions: undefined,
+        tmpRoleList: undefined,
         total: 0,
         listQuery: {
           page: 1,
           limit: 5,
           resourceUuid: ''
-        },
-        rules: {
-          roleUuid: [
-            { required: true, message: '请选择角色名称', trigger: 'blur, change' }
-          ]
         }
       }
     },
@@ -123,29 +98,7 @@
         this.listQuery.resourceUuid = this.resourceUuidValue
         this.handResourceRoleList(this.listQuery)
       },
-      // 初始联系方式信息
-      initResourceRole () {
-        this.authority = {
-          resourceUuid: '',
-          roleUuid: '',
-          actionType: ''
-        }
-      },
-      createResourceRole: function () {
-        this.authorityFlag = true
-        if (this.resourceType === '4' || this.resourceType === '99') {
-          this.showActionType = true
-        }
-        console.log('this.curResourceUuid:' + this.resourceUuidValue)
-        this.authority.resourceUuid = this.resourceUuidValue
-        this.handResourceRoleSelect()
-      },
-      cancelResourceRole: function () {
-        this.authorityFlag = false
-        // 添加完contact对象后，重置contact对象
-        this.initResourceRole()
-      },
-      // 获取角色权限列表信息
+      // 获取角色权限列表信息（分页）
       handResourceRoleList (listQuery) {
       // 权限角色列表信息
         getResourceRoleList(listQuery)
@@ -160,17 +113,19 @@
           console.log(error)
         })
       },
-      // 获取角色下拉框信息
+      // 获取角色下拉框信息（不分页）
       handResourceRoleSelect () {
       // 角色下拉框信息
-        getRoleListAllMaindata()
+        getRoleListAllMaindata(1)// 1：为云端查询参数
         .then(
           function (result) {
             this.tmpRoleList = result
-            getResourceRoleNoPageList(this.authority)
+            console.log('this.tmpRoleList' + JSON.stringify(result))
+            getResourceRoleNoPageList(this.resourceUuidValue)
               .then(
                 function (result) {
                   let roleFilterList = result.authorityExt
+                  console.log('roleFilterList:' + JSON.stringify(result.authorityExt))
                   if (result.pageCount > 0) {
                     for (var i = 0; i < roleFilterList.length; i++) {
                       this.disableRole(roleFilterList[i].roleUuid)
@@ -191,6 +146,7 @@
         )
       },
       disableRole (roleUuid) {
+        console.log('roleUuid:' + roleUuid)
         for (var i = 0; i < this.tmpRoleList.length; i++) {
           if (roleUuid === this.tmpRoleList[i].uuid) {
             this.tmpRoleList[i].isDisabled = true
@@ -198,49 +154,21 @@
           }
         }
       },
-      saveResourceRole (formName) {
+      saveResourceRole (ele) {
+        this.authority.resourceUuid = this.resourceUuidValue
+        this.authority.roleUuid = ele
         console.log('this.authority.resourceUuid:' + this.authority.resourceUuid)
-        this.$refs[formName].validate(valid => {
-          if (valid) {
-            if (this.resourceType === '4' || this.resourceType === '99') {
-              this.roleDeviceAuthorityRequestVo.resourceUuidList = [this.authority.resourceUuid]
-              this.roleDeviceAuthorityRequestVo.actionTypeList = this.authority.actionType
-              this.roleDeviceAuthorityRequestVo.roleUuid = this.authority.roleUuid
-              createDevice(this.roleDeviceAuthorityRequestVo)
-                .then(() => {
-                  this.listQuery.resourceUuid = this.resourceUuidValue
-                  this.handResourceRoleList(this.listQuery)
-                  this.authorityFlag = false
-                    // 添加完authority对象后，重置authority对象
-                  this.initResourceRole()
-                  this.$message({
-                    title: '成功',
-                    message: '保存成功',
-                    type: 'success',
-                    duration: 2000
-                  })
-                })
-            } else {
-              this.authority.actionType = ''
-              createResourceRole(this.authority)
-                .then(() => {
-                  this.listQuery.resourceUuid = this.resourceUuidValue
-                  this.handResourceRoleList(this.listQuery)
-                  this.authorityFlag = false
-                  // 添加完authority对象后，重置authority对象
-                  this.initResourceRole()
-                  this.$message({
-                    title: '成功',
-                    message: '保存成功',
-                    type: 'success',
-                    duration: 2000
-                  })
-                })
-            }
-          } else {
-            return false
-          }
-        })
+        this.selectRole = ''
+        createResourceRole(this.authority)
+          .then(() => {
+            this.listQuery.resourceUuid = this.resourceUuidValue
+            this.handResourceRoleList(this.listQuery)
+            this.handResourceRoleSelect()
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+          })
       },
       // 确认是否删除联系方式
       handleDelete (row) {
@@ -271,6 +199,7 @@
               // this.resourceRoleDetailData.splice(row, 1)
               this.listQuery.resourceUuid = this.resourceUuidValue
               this.handResourceRoleList(this.listQuery)
+              this.handResourceRoleSelect()
               this.$message({
                 type: 'success',
                 message: '删除成功!'
@@ -282,10 +211,6 @@
               console.log(error)
             }
           )
-      },
-      handleChangeActionTypeFlag () {
-        this.authorityFlag = false
-        this.showActionType = false
       }
     }
   }

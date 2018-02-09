@@ -33,21 +33,22 @@
     <div class="table-container">
       <div class="flex-1">
         <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
-          @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent">
+          @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent" :editable="true" :deletable="true" :viewable="false">
         </resource-list>
       </div>
     </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-edit ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
-      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"> </resource-edit>
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag"
+      @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
+      :provincesOptions="provinces"> </resource-edit>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <resource-create ref="resourCreateVue" @gridDeleteEvent="resourceDeleteEvent" @gridEditEvent="resourceSaveEvent"
-      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" :providerCodeTypeSelect="providerCodeTypeOptions"
+      :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag"
       @gridCreateEvent="resourceCreateEvent" @canelDialogEvent="handleClose" :appCodeSelect="appCodeOptions"
-      :defaultResourceTypeParm="defaultResourceType"> </resource-create>
+      :defaultResourceTypeParm="defaultResourceType" :provincesOptions="provinces"> </resource-create>
     </el-dialog>
 
     <div>
@@ -75,15 +76,14 @@ import {
   deleteResource,
   getResourceTypeOptions,
   getAppCodeOptions,
-  getActionTypeOptions,
   updateResource,
-  getDeviceTypeOptions,
-  getProviderCodeTypeOptions
+  getProvinceDataList
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
   data () {
     return {
+      provinces: [],
       resourceList: [],
       defaultResourceType: undefined,
       resourceListParam: undefined,
@@ -115,33 +115,37 @@ export default {
           resourceName: '',
           menuCode: ''
         },
-        houseOrgCodeList: []
+        houseOrgCodeList: [],
+        province: undefined,
+        provinceAbbr: undefined,
+        city: undefined,
+        cityAbbr: undefined,
+        district: undefined,
+        districtAbbr: undefined,
+        courtAbbr: undefined,
+        courtName: undefined
       },
       dictData: {
-        resourceTypeDict: 'RESC_TYPE',
-        actionType: 'ACT_TYPE'
+        resourceTypeDict: 'CLOUD_RESC_TYPE',
+        actionType: 'CLOUD_ACT_TYPE'
       },
       listQuery: {
         page: 1,
         limit: 10,
+        cloudFlag: 1,
         q_resourceType: '2',
         q_resourceName: '',
-        q_logicalAddress: '',
-        q_appCode: '',
-        cloudFlag: 1
+        q_courtUuid: '',
+        q_appCode: ''
       },
       formLabelWidth: '120px',
       resourceTypeOptions: undefined,
       appCodeOptions: undefined,
-      deviceTypeOptions: undefined,
-      providerCodeTypeOptions: undefined,
-      actionTypeOptions: undefined,
       addFlag: false,
       menuListParm: undefined,
       appCodeListParm: undefined,
       serviceListParm: undefined,
       deviceGroupListParm: undefined,
-      deviceListParm: undefined,
       labelTitle: undefined,
       appLabelTitle: undefined,
       showQueryParm: true,
@@ -156,6 +160,7 @@ export default {
   mounted () {
     this.loadData()
     this.initListParm()
+    this.loadProvinceData()
     this.labelTitle = '菜单名称'
     this.appLabelTitle = '所属应用'
   },
@@ -225,32 +230,29 @@ export default {
         }]
 
       this.deviceGroupListParm = [{
-        title: '设备组名称',
+        title: '所属应用',
+        prop: 'appName'
+      }, {
+        title: '区域名称',
         prop: 'resourceName'
       }, {
-        title: '设备类型',
-        prop: 'deviceTypeName'
+        title: '省份',
+        prop: 'province'
       }, {
-        title: '供应商',
-        prop: 'providerCodeName'
+        title: '市',
+        prop: 'city'
+      }, {
+        title: '区县',
+        prop: 'district'
+      },
+      {
+        title: '小区',
+        prop: 'courtName'
       }, {
         title: '已授权角色',
         prop: 'roleNames'
       }]
 
-      this.deviceListParm = [{
-        title: '设备名称',
-        prop: 'resourceName'
-      }, {
-        title: '设备代码',
-        prop: 'deviceCode'
-      }, {
-        title: '逻辑地址',
-        prop: 'logicalAddress'
-      }, {
-        title: '已授权角色',
-        prop: 'roleNames'
-      }]
       this.resourceListParam = this.menuListParm
     },
     // 加载数据
@@ -280,24 +282,11 @@ export default {
           }
         )
       // 获取应用程序下拉框信息
-      getAppCodeOptions()
+      getAppCodeOptions(1)    // 1：为云端查询标识
         .then(
             function (result) {
               console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
               this.appCodeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-        // 获取操作类型字典项
-      getActionTypeOptions(this.dictData)
-        .then(
-            function (result) {
-              console.log('<<<<<getActionTypeOptions:' + JSON.stringify(result))
-              this.actionTypeOptions = result
             }.bind(this)
           )
         .catch(
@@ -311,32 +300,6 @@ export default {
             function (result) {
               console.log('<<<<<resourceTypeOptions:' + JSON.stringify(result))
               this.resourceTypeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      // 获取设备类型下拉框信息
-      getDeviceTypeOptions(this.dictData)
-        .then(
-            function (result) {
-              console.log('<<<<<deviceCategoryList:' + JSON.stringify(result))
-              this.deviceTypeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      // 获取设备供应商下拉框信息
-      getProviderCodeTypeOptions()
-        .then(
-            function (result) {
-              console.log('厂商编码：' + JSON.stringify(result))
-              this.providerCodeTypeOptions = result
             }.bind(this)
           )
         .catch(
@@ -367,11 +330,11 @@ export default {
       this.listQuery = {
         page: 1,
         limit: 10,
+        cloudFlag: 1,
         q_resourceType: '2',
         q_resourceName: '',
-        q_logicalAddress: '',
-        q_appCode: '',
-        cloudFlag: 1
+        q_courtUuid: '',
+        q_appCode: ''
       }
       this.handleFilter()
     },
@@ -405,17 +368,11 @@ export default {
         this.showQueryApp = true
         this.resourceListParam = this.serviceListParm
       } else if (this.listQuery.q_resourceType === '4') {
-        this.labelTitle = '设备组名称'
+        this.labelTitle = '区域数据名称'
         this.appLabelTitle = '所属应用'
         this.showQueryParm = true
         this.showQueryApp = false
         this.resourceListParam = this.deviceGroupListParm
-      } else if (this.listQuery.q_resourceType === '99') {
-        this.labelTitle = '设备名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = false
-        this.resourceListParam = this.deviceListParm
       }
       this.listQuery.page = 1
       this.loadData()
@@ -433,15 +390,15 @@ export default {
       this.dialogCreateFormVisible = true
       this.addFlag = false
     },
-    resourceDeleteEvent (row) {
-      var dataResourse = this.resourceList[row]
+    resourceDeleteEvent (dataResourse) {
+      // var dataResourse = this.resourceList[row]
       this.$confirm('确定删除此项？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       })
         .then(() => {
-          this.delete(dataResourse.uuid, row)
+          this.delete(dataResourse.uuid)
         })
         .catch(() => {
           this.$message({
@@ -451,7 +408,7 @@ export default {
         })
     },
     // 删除资源实体
-    delete (uuid, row) {
+    delete (uuid) {
       deleteResource(uuid)
         .then(
           function (result) {
@@ -479,19 +436,13 @@ export default {
             // 返回的接口信息
             console.log('resourceForm:' + JSON.stringify(result))
             this.resourceForm = result
-            // if (result.resourceType === '2') {
-            //   this.resourceForm.menuCode = result.menuCode.substring(result.menuCode.lastIndexOf('-') + 1, result.menuCode.length)
-            // }
             if (result.parentResource) {
               this.resourceForm.parentResourceUuid = result.parentResource.uuid
               this.resourceForm.parentResourceName = result.parentResource.resourceName
               this.resourceForm.parentResourceCode = result.parentResource.menuCode
             }
             if (this.$refs.resourceEditVue) {
-              // console.log('this.resourceForm.resourceType:' + this.resourceForm.resourceType)
-              // console.log('this.resourceForm.parentResource:' + this.resourceForm.parentResource)
               this.$refs.resourceEditVue.handleChange(this.resourceForm.resourceType)
-              this.$refs.resourceEditVue.setCheckNodes(result.houseOrgCodeList)
               this.$refs.resourceEditVue.initMenuTree(result.appCode)
             }
             this.dialogStatus = '编辑资源'
@@ -553,9 +504,6 @@ export default {
         )
     },
     handleClose () {
-      if (this.addFlag) {
-        this.$refs.resourceEditVue.changeResourceRoleVueFlag()
-      }
       console.log('关闭窗口。。。。')
       // this.resourceForm = undefined
       this.initResourceInfo()
@@ -586,20 +534,35 @@ export default {
         this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '4') {
-        this.labelTitle = '设备组名称'
-        this.appLabelTitle = '所属应用'
-        this.showQueryParm = true
-        this.showQueryApp = false
-        this.listQuery.q_appCode = ''
-        this.listQuery.q_resourceName = ''
-      } else if (this.listQuery.q_resourceType === '99') {
-        this.labelTitle = '设备名称'
+        this.labelTitle = '区域名称'
         this.appLabelTitle = '所属应用'
         this.showQueryParm = true
         this.showQueryApp = false
         this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       }
+    },
+    loadProvinceData () {
+      getProvinceDataList()
+          .then(
+            function (result) {
+              this.provinces = []
+              console.log('province --- > ' + JSON.stringify(result))
+              let provinceArr = result
+              for (let i = 0; i < provinceArr.length; i++) {
+                this.provinces.push(
+                  {
+                    label: provinceArr[i].province,
+                    value: provinceArr[i].provinceAbbr
+                  }
+                )
+              }
+            }.bind(this)
+          ).catch(
+            function (error) {
+              console.log(error)
+            }
+          )
     }
   }
 }

@@ -35,16 +35,22 @@ export const uploadUserExcel = (params) => {
 export const downloadExcelTemplate = (type) => {
   return Axios.get(contextPath + '/usermgmt/user/download/template?type=' + type, {responseType: 'arraybuffer'}
   ).then(res => {
-    console.log('download success')
-    let blob = new Blob([res.data], { type: 'application/x-xls' })
-    let link = document.createElement('a')
-    link.href = window.URL.createObjectURL(blob)
     if (type === '1') {
-      link.download = '用户信息.xls'
+      var fileName = '用户信息.xls'
     } else if (type === '2') {
-      link.download = '用户信息.xlsm'
+      fileName = '用户信息.xlsm'
     }
-    link.click()
+    let blob = new Blob([res.data], { type: 'application/x-xls' })
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, fileName)
+    } else {
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = fileName
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
     return res.data
   })
 }
@@ -253,8 +259,8 @@ export const getRoleList = (query) => {
 //   ).then(res => res.data)
 // }
 // 从Maindata查询角色完整清单
-export const getRoleListAllMaindata = (data) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
+export const getRoleListAllMaindata = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 新建角色
@@ -283,8 +289,8 @@ export const updateRole = (data) => {
   ).then(res => res.data)
 }
 // 获取用户组清单
-export const getRoleUserGroup = (data) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + data.cloudFlag + '&courtUuid=' + data.courtUuid + '&userType=' + data.userType
+export const getRoleUserGroup = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
   ).then(res => res.data)
 }
 // 获取用户组筛选清单
@@ -564,7 +570,7 @@ export const checkResourceName = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&resourceName=' + encodeURI(listParm.resourceName) + '&uuid=' + listParm.uuid
+  '&resourceName=' + encodeURI(listParm.resourceName) + '&uuid=' + listParm.uuid + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 校验资源名称是否唯一
@@ -573,7 +579,7 @@ export const checkResourceCode = (listParm) => {
   console.log('<<<<<resourceName:' + listParm.resourceName)
   console.log('<<<<<uuid:' + listParm.uuid)
   return Axios.get(contextPath + '/usermgmt/resource/isExist?resourceType=' + listParm.resourceType +
-  '&uuid=' + listParm.uuid + '&appCode=' + listParm.appCode
+  '&uuid=' + listParm.uuid + '&appCode=' + encodeURI(listParm.appCode) + '&cloudFlag=' + listParm.cloudFlag
   ).then(res => res.data)
 }
 // 获取主设备类型
@@ -588,7 +594,7 @@ export const getProviderCodeTypeOptions = () => {
 }
 // 获取菜单树
 export const getMenuTreeDetail = (data) => {
-  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data
+  return Axios.get(contextPath + '/usermgmt/resource/getMenuTree?appCode=' + data + '&cloudFlag=1'
   ).then(res => res.data)
 }
 // 获取组织树
@@ -609,7 +615,7 @@ export const getOrgNextLevel = (param) => {
 // -----------------资源角色关联接口信息----------------
 // 获取资源角色列表信息
 export const getResourceRoleList = (listQuery) => {
-  console.log('<<<<<userUuid:' + listQuery.resourceUuid)
+  console.log('<<<<<resourceUuid:' + listQuery.resourceUuid)
   console.log('<<<<<listQuery.page:' + listQuery.page)
   console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=' +
@@ -617,11 +623,9 @@ export const getResourceRoleList = (listQuery) => {
   ).then(res => res.data)
 }
 // 获取资源角色列表信息
-export const getResourceRoleNoPageList = (listQuery) => {
-  console.log('<<<noPage<<userUuid:' + listQuery.resourceUuid)
-  console.log('<<<noPage<<listQuery.page:' + listQuery.page)
-  console.log('<<<noPage<<listQuery.limit:' + listQuery.limit)
-  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + listQuery.resourceUuid + '&currentPage=1&pageSize=100000'
+export const getResourceRoleNoPageList = (resourceUuid) => {
+  console.log('<<<noPage<<resourceUuid:' + resourceUuid)
+  return Axios.get(contextPath + '/usermgmt/authority/listRolePage?resourceUuid=' + resourceUuid + '&currentPage=1&pageSize=100000'
   ).then(res => res.data)
 }
 // 新增资源角色
@@ -699,4 +703,37 @@ export const getHandelTypeOptions = (dictData) => {
   console.log('Axios getHandelTypeOptions <<<<<uuid:' + dictData.actTypeDict)
   return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=' + dictData.actTypeDict
   ).then(res => res.data)
+}
+
+// 省
+export const getProvinceDataList = () => {
+  return Axios.get(contextPath + '/usermgmt/maindata/getProvince'
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/provinceData/queryProvinceData', params).then(res => res.data)
+}
+
+// 市
+export const getCityDataList = (params) => {
+  console.log('get city list, param is  -->   ' + JSON.stringify(params))
+  console.log('get city list param: province is  -->   ' + JSON.stringify(params.province))
+  return Axios.get(contextPath + '/usermgmt/maindata/getCity?province=' + encodeURI(params.province)
+    ).then(res => res.data)
+  // return Axios.post(contextPath + '/cityData/queryProvinceData', params).then(res => res.data)
+}
+
+// 区
+export const getDisctrictDataList = (params) => {
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(contextPath + '/usermgmt/maindata/getDistrict?province=' + encodeURI(params.province) + '&city=' + encodeURI(params.city)
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
+}
+
+// 区
+export const getCourtsDataList = (params) => {
+  console.log('get district, the param  province is -->   ' + params.province + ' the param  city is ---- >' + params.city)
+  return Axios.get(contextPath + '/usermgmt/maindata/getCourts?province=' + encodeURI(params.province) +
+  '&city=' + encodeURI(params.city) + '&district=' + encodeURI(params.district)
+  ).then(res => res.data)
+  // return Axios.post(contextPath + '/districtData/queryProvinceData', params).then(res => res.data)
 }

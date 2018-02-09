@@ -14,7 +14,6 @@
         v-model='form.userType' 
         placeholder='请选择用户类型' 
         style="width:650px" 
-        @visible-change='getUserTypeList'
         >
           <el-option
             v-for='item in userTypeList'
@@ -108,11 +107,11 @@
         <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button>
       </el-button-group>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
-        <add-app ref="addapp" v-show="showApp" :form="form" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
+        <add-app ref="addapp" v-show="showApp" :form="form" :cloudFlag="1" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
         ></add-app>
-        <add-service ref="addservice" v-show="showService" :form="form"  @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
+        <add-service ref="addservice" v-show="showService" :form="form" :cloudFlag="1" @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
         ></add-service>
-        <add-device ref="adddevice" v-show="showDevice" :form="form"  @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
+        <add-device ref="adddevice" v-show="showDevice" :form="form" :cloudFlag="1" @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
         ></add-device>
       </el-dialog>
       <grid-list id="resourceTable"
@@ -193,7 +192,7 @@ export default {
   },
   methods: {
     getRoleUserGroupList () {
-      getRoleUserGroup(this.listUsergroupQuery)
+      getRoleUserGroup(1)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -233,8 +232,7 @@ export default {
       }
     },
     getRoleUserList () {
-      let cloudFlag = 1
-      getRoleUser(cloudFlag)
+      getRoleUser(1)
         .then(
           function (result) {
             this.tmpRoleUserList = result
@@ -585,6 +583,7 @@ export default {
     },
     createServiceEvent (data) {
       console.log('createServiceEvent Start')
+      console.log(JSON.stringify(data))
       createService(data)
           .then(
             function (result) {
@@ -841,64 +840,56 @@ export default {
 
 <style scoped>
   #usergroupTable >>> colgroup col:nth-child(1) {
-    /* width: 30% */
-    width: 250px;
+    width: 30%;
   }
   #usergroupTable >>> colgroup col:nth-child(2) {
-    /* width: 60% */
-    width: 550px;
+    width: 60%;
   }
-  /* #usergroupTable >>> colgroup col:nth-child(3) {
-    width: 10%
-  } */
+  #usergroupTable >>> colgroup col:nth-child(3) {
+    width: 10%;
+  }
 
   #userTable >>> colgroup col:nth-child(1) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(2) {
-    width: 120px
+    width: 12%
   }
   #userTable >>> colgroup col:nth-child(3) {
-    width: 130px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(4) {
-    width: 130px
+    width: 15%
   }
   #userTable >>> colgroup col:nth-child(5) {
-    width: 150px
+    width: 16%
   }
   #userTable >>> colgroup col:nth-child(6) {
-    width: 200px
+    width: 20%
   }
-  /* #userTable >>> colgroup col:nth-child(7) {
+  #userTable >>> colgroup col:nth-child(7) {
     width: 10%
-  } */
+  }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    /* width: 15% */
-    width: 120px;
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    /* width: 18% */
-    width: 180px;
+    width: 18%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    /* width: 28% */
-    width: 200px;
+    width: 28%
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    /* width: 11% */
-    width: 100px;
+    width: 11%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
-    /* width: 9% */
-    width: 100px;
+    width: 9%
   }
   #resourceTable >>> colgroup col:nth-child(6) {
-    /* width: 9% */
-    width: 100px;
+    width: 9%
   }
-  /* #resourceTable >>> colgroup col:nth-child(7) {
+  #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
-  } */
+  }
 </style>

@@ -5,7 +5,7 @@
       <el-tab-pane label="导入用户" name="1"></el-tab-pane>
     </el-tabs>
     
-     <div v-show="showFirstTab">
+     <div v-show="showFirstTab" class="flex-1 flex-c">
       <el-form :inline="true" :model="listQuery" ref="listQuery">
         <div class="search-container">
           <el-form-item label="用户姓名">
@@ -170,15 +170,15 @@ export default {
       },
       formLabelWidth: '120px',
       dictData: {
-        userStatusDict: 'USER_ACC_STATUS',
-        contactTypeDict: 'CONTACT_TYPE',
+        userStatusDict: 'CLOUD_USER_ACC_STATUS',
+        contactTypeDict: 'CLOUD_CONTACT_TYPE',
         cloudFlag: 1
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
       departmentOptions: undefined,
       userTypeOptions: undefined,
-      uploadFiles: new FormData(),
+      uploadFiles: undefined,
       showFirstTab: true,
       showSecondTab: false,
       activeName: 0,
@@ -467,7 +467,7 @@ export default {
       this.errorMsg = ''
       var fileLength = this.$refs.upload._data.uploadFiles.length
       if (fileLength > 0) {
-        console.log(this.uploadFiles.get('file'))
+        // console.log(this.uploadFiles.get('file'))
         uploadUserExcel(this.uploadFiles)
         .then(
           function (result) {
@@ -529,7 +529,8 @@ export default {
     },
     handleOnchange (file, fileList) {
       if (this.beforeUpload(file)) {
-        this.uploadFiles.set('file', fileList[0].raw)
+        this.uploadFiles = new FormData()
+        this.uploadFiles.append('file', fileList[0].raw)
       }
     },
     beforeUpload (file) {

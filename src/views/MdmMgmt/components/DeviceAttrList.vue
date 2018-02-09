@@ -33,28 +33,25 @@
 
     <!-- <hr/> -->
     <el-table
-      ref = 'attrTable'
+      ref='attrTable'
       :data='attrList'
-      tooltip-effect='dark'
       v-loading='attrListLoading'
-      @selection-change = 'getSelections'
       @row-dblclick = 'editAttrdbl'
-      @row-click = 'checkrow'
       height="100%"
       element-loading-text='拼命加载中'
       style='margin-top: 15px'>
       <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码'></el-table-column>
-      <el-table-column prop='attrDesc' label='属性描述' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='attrType' label='属性类型' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='attrDataType' label='数据类型' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='unitDesc' label='单位描述' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='unitCode' label='单位编码' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='createTime' label='创建时间' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='createUser' label='创建人' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' show-overflow-tooltip></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' show-overflow-tooltip></el-table-column>
+      <el-table-column prop='attrDesc' label='属性描述'></el-table-column>
+      <el-table-column prop='attrType' label='属性类型'></el-table-column>
+      <el-table-column prop='attrDataType' label='数据类型'></el-table-column>
+      <el-table-column prop='unitDesc' label='单位描述'></el-table-column>
+      <el-table-column prop='unitCode' label='单位编码'></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
+      <el-table-column prop='createUser' label='创建人'></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
+      <el-table-column prop='updateUser' label='修改人'></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
@@ -87,51 +84,32 @@
         <el-step :title="title" icon="el-icon-edit"></el-step>
       </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-      <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
+      <el-tabs style="margin-top:-20px" v-model='activeTab'>
         <el-tab-pane label="属性基本信息" name = 'basic'>
           <div style="padding-left: 30px">
-            <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules'>
-              <el-row>
-                <el-col :span = '12'>
-                  <el-form-item label='属性编码' prop='attrCode' >
-                    <el-input v-model='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='属性描述' prop='attrDesc'>
-                    <el-input v-model='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span = '12'>
-                  <el-form-item label='属性类型' prop='attrType'>
-                    <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
-                      <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='数据类型' prop='attrDataType'>
-                    <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
-                      <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span = '12'>
-                    <el-form-item label='单位描述' prop='unitDesc'>
-                    <el-input v-model='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='单位编码' prop='unitCode'>
-                      <el-input v-model='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
+            <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules' :inline='true'>
+              <el-form-item label='属性编码' prop='attrCode' >
+                <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='属性描述' prop='attrDesc'>
+                <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='属性类型' prop='attrType'>
+                <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
+                  <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label='数据类型' prop='attrDataType'>
+                <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
+                  <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
+                </el-select>
+              </el-form-item>
+                <el-form-item label='单位描述' prop='unitDesc'>
+                <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='单位编码' prop='unitCode'>
+                <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
             </el-form>
             <div style='text-align: center; '>
               <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
@@ -267,18 +245,18 @@ export default {
       })
     },
     // 单击行时，勾选或者去掉勾选checkbox
-    checkrow: function (row) {
-      this.$refs['attrTable'].toggleRowSelection(row)
-    },
+    // checkrow: function (row) {
+    //   this.$refs['attrTable'].toggleRowSelection(row)
+    // },
     // 改变分页大小
     sizeChange: function (val) {
-      this.pageSize = val
-      this.currentPage = 1
+      this.searchAttrForm.pageSize = val
+      this.searchAttrForm.currentPage = 1
       this.search()
     },
     // 跳转页面
     currentChange: function (val) {
-      this.currentPage = val
+      this.searchAttrForm.currentPage = val
       this.search()
     },
     // 打开新增/修改设备域弹框页面
@@ -287,9 +265,9 @@ export default {
     //   this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
     // },
     // checkbox勾选事件
-    getSelections: function (sel) {
-      this.selections = sel
-    },
+    // getSelections: function (sel) {
+    //   this.selections = sel
+    // },
     // ************************查看属性*****************
     /* viewAttr: function () {
       if (this.selections.length === 0) {
