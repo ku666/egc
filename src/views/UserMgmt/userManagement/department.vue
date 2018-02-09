@@ -1,10 +1,10 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container class="flex-1 flex-c">
-      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
+    <div class="flex-1 flex-c">
       <div v-show="showGrid == true" class="flex-c flex-1">
         <div>
           <el-form :model="listQuery" ref="listQuery">
@@ -42,7 +42,7 @@
             :total="total">
         </el-pagination>
       </div>
-      </div>
+
       <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible">
         <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" :departmentTypeSelect="departmentTypeOptions"  @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
       </el-dialog>
@@ -52,9 +52,9 @@
         :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
       </el-dialog>
     </div>
-    <div v-show="showGrid == false">
+    <div v-show="showGrid == false" >
       <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
+        <el-col :span="8" style='margin-top:15px;' >
           <el-input
             placeholder="输入关键字进行过滤"
             v-model="filterText">
@@ -89,6 +89,7 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
     </div>
   </div>
 </template>
