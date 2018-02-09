@@ -17,18 +17,13 @@
     <resource-service v-if="showService" ref="resourceServiceVue" :isAddFlagParm="isAddFlag" :appCodeSelectOption="appCodeSelect"
     @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceServiceVue="resource"></resource-service>
     
-    <resource-device v-if="showDevice" ref="resourceDeviceVue" :isAddFlagParm="isAddFlag"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceVue="resource"></resource-device>
-
-    <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :deviceOptions="deviceTypeSelect"
-    :providerOptions="providerCodeTypeSelect"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource"></resource-device-group>
+    <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :appCodeSelectOption="appCodeSelect"
+    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource" :provincesSelect="provincesOptions"></resource-device-group>
 
   </div>
 </template>
 <script>
-import resourceDeviceGroup from './ResourceDeviceGroup.vue'
-import resourceDevice from './ResourceDevice.vue'
+import resourceDeviceGroup from './AreaData.vue'
 import resourceService from './ResourceService.vue'
 import resourceApp from './ResourceApplication.vue'
 import resourceMenu from './ResourceMenu.vue'
@@ -41,13 +36,13 @@ export default {
     providerCodeTypeSelect: undefined,
     resourceTypeSelect: undefined,
     appCodeSelect: undefined,
-    actionTypeSelect: undefined
+    actionTypeSelect: undefined,
+    provincesOptions: undefined
   },
   components: {
     resourceMenu,
     resourceApp,
     resourceService,
-    resourceDevice,
     resourceDeviceGroup
   },
   mounted () {
@@ -86,7 +81,15 @@ export default {
           resourceName: '',
           menuCode: ''
         },
-        houseOrgCodeList: []
+        houseOrgCodeList: [],
+        province: undefined,
+        provinceAbbr: undefined,
+        city: undefined,
+        cityAbbr: undefined,
+        district: undefined,
+        districtAbbr: undefined,
+        courtAbbr: undefined,
+        courtName: undefined
       },
       expandedKeys: undefined,
       menuTreeData: undefined,
@@ -136,12 +139,6 @@ export default {
         this.showMenu = false
         this.showApplication = false
         this.showDevice = false
-      } else if (resourceType === '99') {
-        this.showDevice = true
-        this.showService = false
-        this.showMenu = false
-        this.showApplication = false
-        this.showDeviceGroup = false
       }
       this.resource = {
         resourceType: resourceType,       // 资源类别
@@ -167,7 +164,15 @@ export default {
           resourceName: '',
           menuCode: ''
         },
-        houseOrgCodeList: []
+        houseOrgCodeList: [],
+        province: undefined,
+        provinceAbbr: undefined,
+        city: undefined,
+        cityAbbr: undefined,
+        district: undefined,
+        districtAbbr: undefined,
+        courtAbbr: undefined,
+        courtName: undefined
       }
     },
     initCreateResource () {
@@ -200,7 +205,15 @@ export default {
           resourceName: '',
           menuCode: ''
         },
-        houseOrgCodeList: []
+        houseOrgCodeList: [],
+        province: undefined,
+        provinceAbbr: undefined,
+        city: undefined,
+        cityAbbr: undefined,
+        district: undefined,
+        districtAbbr: undefined,
+        courtAbbr: undefined,
+        courtName: undefined
       }
     },
     create (data) {
@@ -212,11 +225,6 @@ export default {
     cancelEvent () {
       this.resource.resourceType = '1'
       this.$emit('canelDialogEvent')
-    },
-    setCheckNodes (houseOrgCodeList) {
-      if (this.$refs.resourceDeviceGroupVue) {
-        this.$refs.resourceDeviceGroupVue.setCheckNodes(houseOrgCodeList)
-      }
     },
     initMenuTree (appCode) {
       if (this.$refs.resourceMenuVue) {

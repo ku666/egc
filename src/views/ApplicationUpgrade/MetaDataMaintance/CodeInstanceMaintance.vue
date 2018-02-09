@@ -56,7 +56,15 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="代码实例值" :label-width="formLabelWidth" prop="instanceValue">
-                <el-input v-model="registerParaList.instanceValue"></el-input>
+                <!-- <el-input v-model="registerParaList.instanceValue"></el-input> -->
+                <el-select v-model="registerParaList.instanceValue" placeholder="请选择代码实例值" clearable>
+                  <el-option
+                    v-for="item in instanceValues"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
@@ -96,7 +104,7 @@
 
 <script>
 import CodeInstanceEdit from './components/CodeInstanceEdit'
-import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance } from './apis/index'
+import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance, getCodeInstances } from './apis/index'
 export default {
   components: {
     CodeInstanceEdit
@@ -111,6 +119,7 @@ export default {
       codeInstDetails: undefined,
       dialogTittle: '',
       formLabelWidth: '140px',
+      instanceValues: [],
       editTitle: '编辑',
       tableTitleList: [
         {
@@ -185,8 +194,29 @@ export default {
       this.loadData()
     },
     handleRegister () {
-      this.dialogTittle = '代码实例注册'
-      this.dialogRegisterVisible = true
+      var that = this
+      that.dialogTittle = '代码实例注册'
+      that.dialogRegisterVisible = true
+      // 实例代码值
+      getCodeInstances()
+          .then(
+            function (result) {
+              console.log(JSON.stringify(result))
+              let instanceValueRes = result
+              for (let i = 0; i < instanceValueRes.length; i++) {
+                that.instanceValues.push(
+                  {
+                    label: instanceValueRes[i].typeName,
+                    value: instanceValueRes[i].typeCode
+                  }
+                )
+              }
+            }
+          ).catch(
+            function (error) {
+              console.log(error)
+            }
+          )
     },
     _registerCodeInstance (formName) {
       this.$refs[formName].validate(valid => {
@@ -217,7 +247,7 @@ export default {
       getCodeInstanceDetails(eachRowUUID)
           .then(
             function (result) {
-              console.log('code instance  details -- >' + JSON.stringify(result, null, ' '))
+              console.log('code instance  details -- >' + JSON.stringify(result))
               this.codeInstDetails = result
               this.dialogEditVisible = true
             }.bind(this)
@@ -234,7 +264,7 @@ export default {
           function (result) {
             this.dialogEditVisible = false
             this.$message.success('保存成功')
-            // 再次加载列表的数据
+            // 加载数据
             this.loadData()
           }.bind(this)
         ).catch(
@@ -250,6 +280,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    }
+  },
+  watch: {
+    'registerParaList.instanceValue': function (newValue, oldValue) {
+      this.load()
+    },
+    'searchConDetails.city' (newValue, oldValue) {
+      this.loadDistrictData()
     }
   },
   mounted () {

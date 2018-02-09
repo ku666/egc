@@ -84,51 +84,32 @@
         <el-step :title="title" icon="el-icon-edit"></el-step>
       </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
-      <el-tabs style="height: 410px; margin-top:-20px" v-model='activeTab'>
+      <el-tabs style="margin-top:-20px" v-model='activeTab'>
         <el-tab-pane label="属性基本信息" name = 'basic'>
           <div style="padding-left: 30px">
-            <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules'>
-              <el-row>
-                <el-col :span = '12'>
-                  <el-form-item label='属性编码' prop='attrCode' >
-                    <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='属性描述' prop='attrDesc'>
-                    <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span = '12'>
-                  <el-form-item label='属性类型' prop='attrType'>
-                    <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
-                      <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='数据类型' prop='attrDataType'>
-                    <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
-                      <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
-                    </el-select>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-              <el-row>
-                <el-col :span = '12'>
-                    <el-form-item label='单位描述' prop='unitDesc'>
-                    <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-                <el-col :span = '12'>
-                  <el-form-item label='单位编码' prop='unitCode'>
-                      <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
-                  </el-form-item>
-                </el-col>
-              </el-row>
-
+            <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules' :inline='true'>
+              <el-form-item label='属性编码' prop='attrCode' >
+                <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='属性描述' prop='attrDesc'>
+                <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='属性类型' prop='attrType'>
+                <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
+                  <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
+                </el-select>
+              </el-form-item>
+              <el-form-item label='数据类型' prop='attrDataType'>
+                <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
+                  <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
+                </el-select>
+              </el-form-item>
+                <el-form-item label='单位描述' prop='unitDesc'>
+                <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
+              <el-form-item label='单位编码' prop='unitCode'>
+                <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag'></el-input>
+              </el-form-item>
             </el-form>
             <div style='text-align: center; '>
               <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
