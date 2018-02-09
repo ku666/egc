@@ -520,10 +520,11 @@ export default {
       this.showService = false
     },
     handleSave (form) {
+      this.formData = JSON.stringify(this.form)
+      console.log(this.formData)
+      this.formData = JSON.parse(this.formData)
       this.$refs[form].validate((valid) => {
         if (valid) {
-          this.formData = JSON.stringify(this.form)
-          this.formData = JSON.parse(this.formData)
           updateRole(this.formData)
             .then(
               function (result) {
@@ -700,7 +701,8 @@ export default {
         callback(new Error('角色名称不能为空'))
       } else {
         let userType = this.form.userType
-        checkRoleName('', value, userType)
+        let roleUuid = this.form.uuid
+        checkRoleName(roleUuid, value, userType)
         .then(
           function (result) {
             if (!result) {

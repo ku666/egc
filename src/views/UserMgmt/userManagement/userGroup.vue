@@ -381,9 +381,9 @@
                 this.userGroupForm.userType = result.usergroupBaseVo.userType
                 this.usergroupUuid = result.usergroupBaseVo.uuid
                 // this.dialogStatus = '编辑用户组'
-                console.log('用户组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
-                console.log('用户信息：' + JSON.stringify(this.userData))
-                console.log('用户组表单信息：' + JSON.stringify(this.userGroupForm))
+                // console.log('用户组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
+                // console.log('用户信息：' + JSON.stringify(this.userData))
+                // console.log('用户组表单信息：' + JSON.stringify(this.userGroupForm))
               }.bind(this)
             )
             .catch(

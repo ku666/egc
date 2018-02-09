@@ -34,10 +34,10 @@
     <div style='margin-top:20px'>
       <el-form :model='domainForm' ref='domainForm' label-width='160px' :rules='rules' :inline='true'>
         <el-form-item label='域取值' prop='domainValue' >
-          <el-input v-model.trim='domainForm.domainValue'></el-input>
+          <el-input v-model.trim='domainForm.domainValue' :maxlength="64"></el-input>
         </el-form-item>
         <el-form-item label='域取值编码' prop='domainValueCode'>
-          <el-input v-model.trim='domainForm.domainValueCode'></el-input>
+          <el-input v-model.trim='domainForm.domainValueCode' :maxlength="64"></el-input>
         </el-form-item>
       </el-form>
       <div style='text-align: center'>
