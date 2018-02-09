@@ -4,7 +4,7 @@
 
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
 
-    <el-tabs style="height: 430px; margin-top:-20px" v-model='activeTab'>
+    <el-tabs style="margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name = 'basic'>
         <div style="padding-left: 30px">
         <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
