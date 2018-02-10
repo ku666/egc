@@ -35,7 +35,7 @@
             <el-input placeholder='请输入电话' v-model.trim='searchCondition.phone' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <el-form-item label='电子邮箱'>
-            <el-input placeholder='请输入电子邮箱' v-model.trim='searchCondition.mail' @keyup.enter.native='search'></el-input>
+            <el-input placeholder='请输入电子邮箱' v-model.trim='searchCondition.email' @keyup.enter.native='search'></el-input>
           </el-form-item>
           <div align="right">
             <el-button @click='reset' type='primary' class="cancel-btn">清空</el-button>
@@ -190,7 +190,7 @@ export default {
         name: '',
         idenNum: '',
         phone: '',
-        mail: ''
+        email: ''
       },
       idTypes: [
         {
@@ -283,7 +283,7 @@ export default {
         name: '',
         idenNum: '',
         phone: '',
-        mail: ''
+        email: ''
       }
     },
     handleSelectionChange: function (val) {
