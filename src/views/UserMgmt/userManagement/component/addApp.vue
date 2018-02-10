@@ -33,7 +33,7 @@
               </el-col>
           </el-row>
         <!-- 按钮区域 -->
-        <el-row align="center">
+        <el-row align="center" style="margin-top:15px">
           <el-col align="center">
             <el-button class="cancel-btn" @click="cancelEvent" type="primary" >
               取消

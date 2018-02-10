@@ -45,12 +45,15 @@ export const registerSoftwarePackage = (params1, params2) => {
   '&functionType=' + params1.functionType + '&appType=' + params1.appType,
   params2, contentType).then(res => res.data)
 }
-
+// 批次
+export const getBatchesList = () => {
+  console.log(' getBatchesList........... ')
+  return Axios.get(BASE_PATH + '/batches/queryBatches').then(res => res.data)
+}
 // 分页查询软件包信息
 export const getSoftwarePackageByPage = (params) => {
   console.log(' query software package by page1 -- > ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/package/likeQuery', params).then(res => res.data)
-  // return Axios.get(contextPath + '/softwaremaintance/queryPageData').then(res => res.data)
 }
 
 // 获取软件包单条信息的详细信息

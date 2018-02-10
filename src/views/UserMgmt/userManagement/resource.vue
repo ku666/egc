@@ -234,7 +234,7 @@ export default {
         title: '所属应用',
         prop: 'appName'
       }, {
-        title: '区域名称',
+        title: '区域数据名称',
         prop: 'resourceName'
       }, {
         title: '省份',
@@ -537,7 +537,7 @@ export default {
         this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
       } else if (this.listQuery.q_resourceType === '4') {
-        this.labelTitle = '区域名称'
+        this.labelTitle = '区域数据名称'
         this.appLabelTitle = '所属应用'
         this.showQueryParm = true
         this.showQueryApp = false

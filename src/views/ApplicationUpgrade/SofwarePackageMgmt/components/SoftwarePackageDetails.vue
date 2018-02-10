@@ -15,10 +15,10 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.developer"></el-input>
       </el-form-item>
       <el-form-item label="软件包功能说明" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.functionDesc"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.latestPreName"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.latestPreVer"></el-input>
@@ -30,30 +30,30 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.createUser"></el-input>
       </el-form-item>
       <el-form-item label="软件包英文名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.nameEn"></el-input>
       </el-form-item>
       <template v-if="softwarePckDetails.extData !== null ">
         <el-form-item label="Git仓库名" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.extData.git"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.gitRepository"></el-input>
         </el-form-item>
         <el-form-item label="Maven工程名" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.extData.maven"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.mavenName"></el-input>
         </el-form-item>
         <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.extData.lable1"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.svrPkgName"></el-input>
         </el-form-item>
       </template>
       <el-form-item label="client包名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.cltPkgName"></el-input>
       </el-form-item>
       <el-form-item label="功能类型" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.functionType"></el-input>
       </el-form-item>
       <el-form-item label="应用类型" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.appType"></el-input>
       </el-form-item>
       <el-form-item label="端口" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.port"></el-input>
       </el-form-item>
       <el-form-item label="软件包源服务器名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
@@ -62,7 +62,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.path"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.uuid"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.remark"></el-input>
       </el-form-item>
     </el-form>
   </div>

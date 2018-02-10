@@ -7,11 +7,11 @@
               <el-option v-for="appResourceOpt in appResourceList" :key="appResourceOpt.appCode" :label="appResourceOpt.resourceName" :value="appResourceOpt.appCode"> </el-option>
             </el-select>
          </el-form-item>
-          <el-form-item label="　　服务名称">
-            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="请输入服务名称"></el-input>
+          <el-form-item label="　　区域数据名称">
+            <el-input @keyup.enter.native="handleFilter" style="width: 200px;" v-model="searchServiceTxt" class="filter-item" placeholder="请输入区域数据名称"></el-input>
           </el-form-item>
           <el-form-item style="float:right">
-            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:20px;">查询</el-button>
+            <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:20px">查询</el-button>
           </el-form-item>
         </el-form>
     </el-row>
@@ -60,7 +60,6 @@ import {
   getResourceList,
   getServiceListPage
 } from '@/views/UserMgmt/userManagement/apis'
-import '../assets/css/usermanagement.less'
 export default {
   props: {
     form: {
@@ -85,7 +84,7 @@ export default {
       pageSize: 10,
       listPageParm: {
         cloudFlag: '1',
-        resourceType: '3',
+        resourceType: '4',
         appCode: '',
         delAuthority: true,
         roleUuid: this.form.uuid,
@@ -108,16 +107,16 @@ export default {
       multipleSelection: undefined,
       params: [
         {
-          title: '应用名称',
-          prop: 'appName'
-        },
-        {
-          title: '服务名称',
+          title: '区域数据名称',
           prop: 'resourceName'
         },
         {
-          title: '服务URI',
-          prop: 'resourceUrl'
+          title: '所属应用',
+          prop: 'appName'
+        },
+        {
+          title: '区域',
+          prop: 'regionName'
         }
       ]
     }
@@ -175,29 +174,18 @@ export default {
           console.log(data.uuid)
           console.log(this.form.uuid)
           this.items.push({
-            actionType: '1',
             authority: true,
             authorityType: '1',
-            courtUuid: '',
-            desc: '',
-            houseOrgCode: '',
-            houseOrgName: '',
-            logicalAddress: '',
-            resourceName: '',
-            resourceType: '3',
-            resourceTypeName: '',
-            resourceUrl: '',
+            resourceType: '4',
             resourceUuid: data.uuid,
-            roleName: '',
-            roleUuid: this.form.uuid,
-            uuid: ''
+            roleUuid: this.form.uuid
           })
         }
-        this.$emit('createServiceAuthorityEvent', this.items)
+        this.$emit('createRegionalDataAuthorityEvent', this.items)
       } else {
         this.$msgbox({
           title: '消息',
-          message: '请选择至少一个服务'}
+          message: '请选择至少一个区域数据'}
           )
       }
     },

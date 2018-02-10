@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form ref='resourceDeviceGroupVue' :inline="true" :model="resourceDeviceGroupVue" :rules="rules">
-      <el-form-item label="区域名称" :label-width="formLabelWidth" prop="resourceName">  
-        <el-input v-model="resourceDeviceGroupVue.resourceName" auto-complete="off" placeholder="请输入区域名称" class="user_el-input"></el-input>
+      <el-form-item label="区域数据名称" :label-width="formLabelWidth" prop="resourceName">  
+        <el-input v-model="resourceDeviceGroupVue.resourceName" auto-complete="off" placeholder="请输入区域数据名称" class="user_el-input"></el-input>
       </el-form-item>
       <el-form-item label="所属应用" :label-width="formLabelWidth" prop="appCode">
         <el-select v-model="resourceDeviceGroupVue.appCode" placeholder="请选择所属应用" class="user_el-select">
@@ -176,14 +176,14 @@ export default {
     // 检查资源名称唯一性
     var validateResourceName = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入区域名称'))
+        callback(new Error('请输入区域数据名称'))
       } else {
         this.listParm.resourceType = '4'
         this.listParm.uuid = this.resourceDeviceGroupVue.uuid
         this.listParm.resourceName = value
         this.validateName(this.listParm)
         if (this.meunCodeFlag) {
-          callback(new Error('区域名称已存在，请修改!'))
+          callback(new Error('区域数据名称已存在，请修改!'))
         } else {
           callback()
         }
