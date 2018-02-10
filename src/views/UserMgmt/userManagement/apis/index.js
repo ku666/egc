@@ -8,7 +8,7 @@ let contextPath = '/egc-usermgmtcomponent'
 
 // 获取下属用户组数据
 export const listUserType = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=CLOUD_USER_TYPE'
   ).then(res => res.data)
 }
 
