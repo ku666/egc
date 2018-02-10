@@ -697,6 +697,20 @@ export default {
     //     )
     // }
   },
+  mounted: function () {
+    this.subActiveName = 0
+  },
+  watch: {
+    'form.uuid': function (newVal, oldVal) {
+      console.log('watch: form!!!!!!!!!!!!!!!!')
+      this.subActiveName = '0'
+      this.showSummary = true
+      this.showUserGroup = false
+      this.showUser = false
+      this.showResource = false
+    },
+    deep: true
+  },
   data () {
     // 角色名的唯一性
     var validateRoleName = (rule, value, callback) => {
