@@ -88,7 +88,7 @@ export default {
           let proObj = {}
           // console.log(list)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
-          list.map(function (item, index) {
+          list.map((item, index) => {
             if ((item.gpsLat && item.gpsLon) || index < test.length) {
               if (!item.gpsLat) {
                 item.gpsLon = test[index][0]
