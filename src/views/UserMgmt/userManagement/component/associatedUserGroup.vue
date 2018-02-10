@@ -53,6 +53,7 @@
       userUuidValue: undefined,
       showSelect: undefined,
       cloudFlag: '',
+      userType: '',
       showOperation: undefined
     },
     watch: {
@@ -99,7 +100,7 @@
             function (result) {
               this.associtedUserGroupData = result.userUsergroupVoList
               this.total = result.pageCount
-              getUserGroupListSelect(this.cloudFlag)
+              getUserGroupListSelect(this.cloudFlag, this.userType)
                 .then(
                   function (result) {
                     this.userGroupListSelect = result
