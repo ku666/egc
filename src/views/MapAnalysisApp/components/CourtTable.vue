@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" height="735" @row-dblclick="handleRowClick" stripe>
+  <el-table :data="tableData" @row-dblclick="handleRowClick" stripe>
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">

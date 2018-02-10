@@ -6,50 +6,11 @@
     <el-row style="height: 100%">
       <el-col :span="24" >
         <div style="margin-top: 20px">
-          <el-table :data="hardwareDepListData" stripe border>
+          <el-table :data="hardwareDepListData" style="height: 750px;overflow-y: scroll;" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <!-- <el-table-column
-              prop="batchName"
-              label="批次"
-              width="200">
-            </el-table-column>
-            <el-table-column
-              prop="packageName"
-              label="软件包名称"
-              width="200">
-            </el-table-column>
-            <el-table-column
-              prop="packageVersion"
-              label="软件包版本"
-              width="200">
-            </el-table-column>            
-            <el-table-column
-              prop="index"
-              label="应用&组件名称"
-              width="200">
-            </el-table-column> 
-            <el-table-column
-              prop="index"
-              label="前续软件包版本"
-              width="200">
-            </el-table-column> 
-            <el-table-column label="二级菜单">
-              <el-table-column
-                prop="index"
-                label="CPU要求（核数）"
-                width="200">
-              </el-table-column>
-            </el-table-column> -->
-            <!-- <el-table-column label="操作" width="80">
-              <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                  <img :src="detailsImg"/> 
-                </el-button>
-              </template>
-            </el-table-column> -->
           </el-table>
         </div>
         <div>
@@ -117,7 +78,7 @@ export default {
         }, {
           colName: 'CPU（核数）',
           prop: 'numberOfCore',
-          width: 100
+          width: 150
         }, {
           colName: '内存（G）',
           prop: 'ram',
@@ -125,7 +86,7 @@ export default {
         }, {
           colName: '硬盘总可用容量要求(M)',
           prop: 'storage',
-          width: 150
+          width: 200
         }, {
           colName: '硬盘1',
           prop: 'hd1',

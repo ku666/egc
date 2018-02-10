@@ -17,12 +17,12 @@ module.exports = {
         target: 'http://172.16.30.106:8082/',  // 王珂(设备管理)
         changeOrigin: true
       },
-      '/egc-mapanalysiscomponent/egcmapanalysis': {
+      '/egc-mapanalysiscomponent/courtorg': {
         // target: 'http://172.16.30.74:8082/' // 小区列表
-        target: 'http://192.168.0.186:9033/' //
+        target: 'http://192.168.0.186:9030/' //
       },
-      '/egcmapanalysis': {
-          target: 'http://192.168.0.186:9033/' // 小区列表
+      '/courtorg': {
+          target: 'http://192.168.0.186:9030/' // 小区列表
       },
       '/egc-smartcommunitymgmtapp/profile': {
         target: 'http://192.168.0.186:9030', // 业主画像

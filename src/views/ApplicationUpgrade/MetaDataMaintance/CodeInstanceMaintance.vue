@@ -1,52 +1,58 @@
 <template>
   <div class='ui-common'>
-    <el-form :inline="true" :model="searchConditionList">
-      <div class="search-container">
-        <el-form-item label="代码实例值">
-          <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
-        </el-form-item>
-        <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-          <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
-        </el-form-item>
-        <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
-        </el-form-item>
-        <div class="btn-container">
-          <el-form-item>
-            <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-            <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-          </el-form-item>
+    <el-row class="flex-c" style="height: 100%">
+      <el-col :span="24" class="flex-1 flex-c">
+        <el-form :inline="true" :model="searchConditionList">
+          <div class="search-container">
+            <el-form-item label="代码实例值">
+              <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
+            </el-form-item>
+            <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
+              <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
+            </el-form-item>
+            <el-form-item label="提供商" :label-width="formLabelWidth">
+              <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
+            </el-form-item>
+            <div class="btn-container">
+              <el-form-item>
+                <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+                <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
+              </el-form-item>
+            </div>
+          </div>
+          <div>
+            <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
+          </div>
+        </el-form>
+        <div style="margin-top: 10px" class="flex-1">
+              <el-table :data="codeInstList" stripe border v-loading="loading">
+                <el-table-column  type="index" label="序号" width="50">
+                </el-table-column>
+                <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label="操作" width="80" align="center">
+                  <template slot-scope="scope">
+                    <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                    </el-button>
+                    <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+        <div>
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="searchConditionList.currentPage"
+              :page-sizes="[10, 20, 50]"
+              :page-size="searchConditionList.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+          </el-pagination>
         </div>
-      </div>
-      <div>
-        <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
-      </div>
-    </el-form>
-    <div style="margin-top: 10px" class="flex-1">
-          <el-table :data="codeInstList" stripe border v-loading="loading">
-            <el-table-column  type="index" label="序号" width="50">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="100">
-              <template slot-scope="scope">
-                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
-    <div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="searchConditionList.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="searchConditionList.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+      </el-col>
+    </el-row>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
       <code-instance-edit :codeInstDetails="codeInstDetails" @saveCodeInstEvent="_updateCodeInstInfo"></code-instance-edit>
     </el-dialog>
@@ -56,7 +62,6 @@
           <el-row>
             <el-col :span="12">
               <el-form-item label="代码实例值" :label-width="formLabelWidth" prop="instanceValue">
-                <!-- <el-input v-model="registerParaList.instanceValue"></el-input> -->
                 <el-select v-model="registerParaList.instanceValue" placeholder="请选择代码实例值" clearable>
                   <el-option
                     v-for="item in instanceValues"
@@ -67,22 +72,30 @@
                 </el-select>
               </el-form-item>
             </el-col>
+            
             <el-col :span="12">
-              <el-form-item label="代码实例对应名称" :label-width="formLabelWidth" prop="instanceName">
-                <el-input v-model="registerParaList.instanceName"></el-input>
+              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
+                <el-select v-model="registerParaList.code" placeholder="请选择代码值" clearable>
+                  <el-option
+                    v-for="item in instanceCodes"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
-                <el-input v-model="registerParaList.code"></el-input>
+              <el-form-item label="代码实例对应名称" :label-width="formLabelWidth" prop="instanceName">
+                <el-input v-model="registerParaList.instanceName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="提供商" :label-width="formLabelWidth" prop="codeProvider">
-                <el-input v-model="registerParaList.codeProvider"></el-input>
+              <el-form-item label="提供商" :label-width="formLabelWidth" prop="sourceVendor">
+                <el-input v-model="registerParaList.sourceVendor"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -104,7 +117,7 @@
 
 <script>
 import CodeInstanceEdit from './components/CodeInstanceEdit'
-import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance, getCodeInstances } from './apis/index'
+import { getCodeInstanceByPage, getCodeInstanceDetails, updateCodeInstance, registerCodeInstance, getCodeInstances, getInstanceCodes, deleteCodeInstance } from './apis/index'
 export default {
   components: {
     CodeInstanceEdit
@@ -115,12 +128,14 @@ export default {
       dialogRegisterVisible: false,
       codeInstList: undefined,
       total: 0,
-      loading: false,
+      loading: true,
       codeInstDetails: undefined,
       dialogTittle: '',
       formLabelWidth: '140px',
       instanceValues: [],
+      instanceCodes: [],
       editTitle: '编辑',
+      deleteTitle: '删除',
       tableTitleList: [
         {
           colName: '代码实例值',
@@ -146,23 +161,20 @@ export default {
       searchConditionList: {
         'currentPage': 1,
         'pageSize': 10,
-        // 名称
         'codeName': '',
-        // 值
         'code': '',
-        // 提供商
         'vendor': ''
       },
       registerParaList: {
         instanceValue: '',
         instanceName: '',
         code: '',
-        codeProvider: '',
+        sourceVendor: '',
         ramark: ''
       },
       rules: {
         instanceValue: [
-          { required: true, message: '请输入软件名称', trigger: 'blur,change' }
+          { required: true, message: '请选择代码实例值', trigger: 'blur,change' }
         ],
         code: [
           { required: true, message: '请输入软件版本', trigger: 'blur,change' }
@@ -175,6 +187,7 @@ export default {
   },
   methods: {
     loadData () {
+      this.loading = true
       getCodeInstanceByPage(this.searchConditionList)
         .then(
           function (result) {
@@ -194,10 +207,15 @@ export default {
       this.loadData()
     },
     handleRegister () {
+      this.dialogTittle = '代码实例注册'
+      this.dialogRegisterVisible = true
+      this.instanceValues = []
+      this._getCodeInstances()
+    },
+    // 实例代码值
+    _getCodeInstances () {
       var that = this
-      that.dialogTittle = '代码实例注册'
-      that.dialogRegisterVisible = true
-      // 实例代码值
+      that.instanceCodes = []
       getCodeInstances()
           .then(
             function (result) {
@@ -218,12 +236,41 @@ export default {
             }
           )
     },
+    _getCodeCategories () {
+      var that = this
+      that.instanceCodes = []
+      console.log('this.registerParaList.instanceValue' + this.registerParaList.instanceValue)
+      getInstanceCodes(this.registerParaList.instanceValue)
+          .then(
+            function (result) {
+              console.log('codes --->>>' + JSON.stringify(result))
+              let instanceCodesRes = result
+              for (let i = 0; i < instanceCodesRes.length; i++) {
+                that.instanceCodes.push(
+                  {
+                    label: instanceCodesRes[i].code,
+                    value: instanceCodesRes[i].code
+                  }
+                )
+              }
+            }
+          ).catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+    },
     _registerCodeInstance (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          registerCodeInstance().then((res) => {
-            console.log('===>' + res)
-            this.$message.success('注册成功')
+          registerCodeInstance(this.registerParaList).then((res) => {
+            this.dialogRegisterVisible = false
+            this.$message({
+              message: '保存成功',
+              type: 'success'
+            })
+            this.beforeCloseDialog()
+            // 加载数据
             this.loadData()
           }).catch(
             function (error) {
@@ -234,6 +281,7 @@ export default {
     },
     _handleClearQuery () {
       this.searchConditionList = { 'currentPage': 1, 'pageSize': 10, 'codeName': '', 'code': '', 'vendor': '' }
+      this.loadData()
     },
     beforeCloseDialog () {
       this.dialogRegisterVisible = false
@@ -273,6 +321,35 @@ export default {
           }
         )
     },
+    // 删除
+    _handleDeleteData (rowIdx) {
+      var rowData = this.codeInstList[rowIdx]
+      var instanceUuid = rowData.uuid
+      console.log(rowData.instanceName)
+      this.$confirm("确定要删除代码实例'" + rowData.instanceName + "'?', '提示'", {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      })
+      .then(() => {
+        deleteCodeInstance(instanceUuid)
+        .then(
+          function (result) {
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            })
+            // 加载数据
+            this.loadData()
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+      })
+    },
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
@@ -284,10 +361,7 @@ export default {
   },
   watch: {
     'registerParaList.instanceValue': function (newValue, oldValue) {
-      this.load()
-    },
-    'searchConDetails.city' (newValue, oldValue) {
-      this.loadDistrictData()
+      this._getCodeCategories()
     }
   },
   mounted () {

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick' prop='…'>
+    <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick'>
       <el-tab-pane label='用户组概要' name='0'></el-tab-pane>
       <!-- <el-tab-pane label='下属用户组' name='1'></el-tab-pane> -->
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
@@ -8,18 +8,20 @@
     </el-tabs>
     <el-container style="margin-top:20px; text-align:center">
     <el-form ref='editForm' v-show='showSummary' label-width='100px' :model='editForm' :rules="rules" style="margin: 0 auto">
-      <el-form-item label='用户类型' prop='userType' class="is-required">
+      <el-form-item label='用户类型' prop='userType'>
         <el-select 
         v-model='editForm.userType' 
         placeholder='请选择用户类型' 
         style="width:650px" 
         @visible-change='getUserTypeList'
+        disabled
         >
           <el-option
             v-for='item in userTypeList'
             :key='item.itemCode'
             :label='item.itemName'
-            :value='item.itemCode'>
+            :value='item.itemCode'
+            :disabled="true">
           </el-option>
         </el-select>
       </el-form-item>
@@ -56,7 +58,7 @@
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
-          style='margin-top: 10px'>
+          style='margin-top: 10px; width:100%'>
         </grid-list>
         <el-pagination 
           :page-sizes="[5,10,20,30]" 
@@ -89,7 +91,7 @@
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
-          style='margin-top: 10px'
+          style='margin-top: 10px; width:100%'
         >
         </grid-list>
         <el-pagination 
@@ -219,8 +221,8 @@ export default {
     },
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
-      getRoleUser(1)
+      console.log('userType: ' + this.editForm.userType)
+      getRoleUser(1, this.editForm.userType)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -259,7 +261,7 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      getRoleListAllMaindata(1)
+      getRoleListAllMaindata(1, this.editForm.userType)
         .then(
           function (result) {
             this.tmpRoleList = result
@@ -461,16 +463,14 @@ export default {
     handleSave (editForm) {
       this.$refs[editForm].validate((valid) => {
         if (valid) {
-          this.formData = JSON.stringify(this.editForm)
-          this.formData = JSON.parse(this.formData)
-          updateUserGroup(this.formData)
+          updateUserGroup(this.editForm)
             .then(
               function (result) {
                 this.$message({
                   message: '保存成功！',
                   type: 'success'
                 })
-                this.$emit('listenToChildEditEvent', this.formData)
+                this.$emit('listenToChildEditEvent', this.editForm)
                 this.$emit('listenToChildCloseEvent')
               }.bind(this)
             )
@@ -479,6 +479,8 @@ export default {
                 console.log('错误：' + error)
               }
             )
+        } else {
+          return false
         }
       })
     },
@@ -552,21 +554,21 @@ export default {
           }
         )
     },
-    // 校验用户组名的唯一性
-    validateName (usergroupUuid, usergroupName, userType) {
-      checkUserGroupName(usergroupUuid, usergroupName, userType)
-        .then(
-          function (result) {
-            console.log('<<<<<userGroupNameFlag:' + result)
-            this.userGroupNameFlag = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
+    // // 校验用户组名的唯一性
+    // validateName (usergroupUuid, usergroupName, userType) {
+    //   checkUserGroupName(usergroupUuid, usergroupName, userType)
+    //     .then(
+    //       function (result) {
+    //         console.log('<<<<<userGroupNameFlag:' + result)
+    //         this.userGroupNameFlag = result
+    //       }.bind(this)
+    //     )
+    //     .catch(
+    //       function (error) {
+    //         console.log(error)
+    //       }
+    //     )
+    // },
     handleCancel (editForm) {
       this.$emit('listenToChildCloseEvent')
     }
@@ -576,33 +578,40 @@ export default {
     //     this.dirUsergroupDetailData = val
     //   }
     // },
+  mounted: function () {
+    this.subActiveName = 0
+  },
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
-      let usergroupUuid = this.editForm.uuid
-      let userType = this.editForm.userType
-      console.log('校验：' + usergroupUuid + value)
-      this.validateName(usergroupUuid, value, userType)
-      if (!this.userGroupNameFlag) {
-        callback(new Error('用户组名称已存在!'))
-        this.userGroupNameFlag = true   // 校验用户组名称存在之后,再将 userGroupNameFlag 值还原初始值 true
+      if (value === '' || value === undefined) {
+        callback(new Error('用户组名称不能为空'))
       } else {
-        callback()
+        let userType = this.editForm.userType
+        let usergroupUuid = this.editForm.uuid
+        checkUserGroupName(usergroupUuid, value, userType)
+        .then(
+          function (result) {
+            if (!result) {
+              callback(new Error('用户组名称已存在'))
+            } else {
+              callback()
+            }
+          }
+        )
       }
     }
     return {
+      subActiveName: 0,
       rules: {
         usergroupName: [
           { required: true, message: '请填写用户组名称', trigger: 'blur' },
           { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '角色名只能为字母、数字和汉字' },
+          { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '用户组名称只能为字母、数字和汉字' },
           { validator: validateUserGroupName }
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
-        ],
-        userType: [
-          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       userTypeList: undefined,
@@ -674,7 +683,6 @@ export default {
       tabPlaceholder: '添加下属用户组',
       selectedName: null,
       addUserList: undefined,
-      subActiveName: '0',
       gridTableData: undefined,
       gridParams: undefined,
       dirUsergroupParam: [

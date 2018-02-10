@@ -7,9 +7,9 @@
       <el-tab-pane label="关联角色" name="3" v-if="isAddFlag"></el-tab-pane>
     </el-tabs>
     <el-form ref='user' v-show='gridUser' :inline="true" :rules="rules" :model="user">
-      <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType">
-        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select">
-          <el-option v-for="userType in userTypeSelect" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode"> </el-option>
+      <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType" style="display:block" >
+        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select" disabled>
+          <el-option v-for="userType in userTypeSelect" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode" :disabled="true"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="登录 ID" :label-width="formLabelWidth">
@@ -82,10 +82,10 @@
       </div>
     </div>
     <div v-show="gridUserGroup">
-      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-group>
+      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true" :userType="this.user.userType"></ass-user-group>
     </div>
     <div v-show="gridUserRole">
-      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-role>
+      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true" :userType="this.user.userType"></ass-user-role>
     </div>
   </div>
 </template>
@@ -195,9 +195,9 @@ export default {
         }
       },
       rules: {
-        departmentUuid: [
-          { required: true, message: '请选择部门', trigger: 'change' }
-        ],
+        // departmentUuid: [
+        //   { required: true, message: '请选择部门', trigger: 'change' }
+        // ],
         // userAccStatus: [
         //   { required: true, message: '请选择账户状态', trigger: 'blur,change' }
         // ],

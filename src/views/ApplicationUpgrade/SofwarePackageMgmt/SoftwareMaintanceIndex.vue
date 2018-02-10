@@ -3,58 +3,31 @@
 
       <el-form align="left" :inline="true">
         <div class="search-container">
-          <el-form-item label="软件名称">
-            <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
+          <el-form-item label="软件包名称">
+            <el-input v-model="searchConditionList.name" placeholder="请输入软件包名称" clearable></el-input>
           </el-form-item>
           <el-form-item label="版本号">
             <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
           </el-form-item>
           <el-form-item label="开发者">
-            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
+            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者信息" clearable></el-input>
           </el-form-item>
           <el-form-item label="搜索条件">
-            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
+            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="请输入搜索关键字" @keyup.enter.native="_handleFilter" clearable></el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
               <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
               <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
-              <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
+              
             </el-form-item>
           </div>
         </div>
        </el-form>
-
-    <!-- <el-row>
-      <el-form :inline="true" :model="listQuery" ref="listQuery" class="demo-form-inline">
-        <div class="search-container">
-          <div class="item-container">
-            <span class="sub-title">软件名称</span>
-            <el-input v-model="searchConditionList.name" placeholder="请输入软件名名称" clearable></el-input>
-          </div>
-          <div class="item-container">
-            <span class="sub-title">版本号</span>
-            <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
-          </div>
-          <div class="item-container">
-            <span class="sub-title">开发者</span>
-            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者姓名" clearable></el-input>
-          </div>
-          <div class="item-container">
-            <span class="sub-title">搜索条件</span>
-            <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="搜索关键字" clearable></el-input>
-          </div>
-          <div class="btn-container">
-            <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-            <el-button type="primary" @click="_handleFilter" class="search-btn">查询</el-button>
-            <el-button type="primary" @click="_importFile" class="action-btn">导入</el-button>
-          </div>
-        </div>
-      </el-form>
-    </el-row> -->
     <el-row style="margin-top: 15px;">
       <el-col>
         <el-button icon="el-icon-circle-plus-outline" @click="_handleRegister" plain type="primary">注册</el-button>
+        <el-button icon="el-icon-circle-plus-outline" @click="_importFile" plain type="primary">导入</el-button>
       </el-col>
     </el-row>
     <el-row>
@@ -63,7 +36,7 @@
     <el-row style='height: 100%;'>
       <el-col style='height: 100%;'>
         <div style="margin-top: 15px; max-height: 100%;"> 
-          <el-table :data="softwarePackListData" v-loading="loading" style="margin-top: 15px; height: 700px;" >
+          <el-table :data="softwarePackListData" v-loading="loading" style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -119,7 +92,7 @@
               </el-col>
               <el-col :span="12">
                 <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.developer" :maxlength="maxlength"></el-input>
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.developer"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -153,6 +126,81 @@
               <el-col :span="24">
                 <el-form-item label="软件包功能说明" :label-width="formLabelWidth" prop="functionDesc">
                   <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            
+            <el-row>
+              <el-col :span="24">
+                <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+                  <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.remark"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="软件包英文名称" :label-width="formLabelWidth" prop="nameEn">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.nameEn" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="Git仓库名" :label-width="formLabelWidth" prop="gitRepository">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.gitRepository" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="Maven工程名" :label-width="formLabelWidth" prop="mavenName">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.mavenName" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth" prop="svrPkgName">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.svrPkgName" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="client包名称" :label-width="formLabelWidth" prop="cltPkgName">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.cltPkgName" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="端口" :label-width="formLabelWidth" prop="port">
+                  <el-input class="upgrade_el-input" v-model="softwareDetails.port" :maxlength="maxlength"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+
+            <el-row>
+              <el-col :span="12">
+                <el-form-item label="功能类型" :label-width="formLabelWidth" prop="functionType" :autofocus="true">
+                  <el-select v-model="softwareDetails.functionType" placeholder="请选择">
+                    <el-option
+                      v-for="item in batchs"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="应用类型" :label-width="formLabelWidth" prop="appType" :autofocus="true">
+                  <el-select v-model="softwareDetails.appType" placeholder="请选择">
+                    <el-option
+                      v-for="item in batchs"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value">
+                    </el-option>
+                  </el-select>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -286,7 +334,13 @@ export default {
         latestPreVer: '',
         remark: '',
         batchesId: '',
-        latestPreName: ''
+        latestPreName: '',
+        functionDesc: '',
+        svrPkgName: '',
+        cltPkgName: '',
+        port: '',
+        functionType: '',
+        appType: ''
       },
       uploadFiles: new FormData(),
       tableTitleList: [
@@ -339,25 +393,44 @@ export default {
       }],
       rules: {
         name: [
-          { required: true, message: '请输入软件名称', trigger: 'blur,change' }
+          { required: true, message: '请输入软件名称', trigger: 'blur,change' },
+          { max: 32, message: '长度不能超过32个字符' }
         ],
         version: [
-          { required: true, message: '请输入软件版本', trigger: 'blur,change' }
+          { required: true, message: '请输入软件版本', trigger: 'blur,change' },
+          { max: 32, message: '长度不能超过32个字符' }
         ],
         developer: [
-          { required: true, message: '请输入开发者姓名', trigger: 'blur,change' }
-        ],
-        latestPreVer: [
-          { required: true, message: '请输入前续版本', trigger: 'blur,change' }
-        ],
-        functionDesc: [
-          { required: true, message: '请输入新增修改功能点', trigger: 'blur,change' }
+          { required: true, message: '请输入开发者姓名', trigger: 'blur,change' },
+          { max: 32, message: '长度不能超过32个字符' }
         ],
         uploadFiles: [
           {}
         ],
         batchesId: [
           { required: true, message: '请选择注册软件包批次', trigger: 'blur,change' }
+        ],
+        latestPreVer: [
+          { max: 32, message: '长度不能超过32个字符' }
+        ],
+        latestPreName: [
+          { max: 32, message: '长度不能超过32个字符' }
+        ],
+        functionDesc: [
+          { max: 256, message: '长度不能超过256个字符' }
+        ],
+        remark: [
+          { max: 256, message: '长度不能超过256个字符' }
+        ],
+        svrPkgName: [
+          { max: 32, message: '长度不能超过32个字符' }
+        ],
+        cltPkgName: [
+          { max: 32, message: '长度不能超过32个字符' }
+        ],
+        port: [
+          { max: 6, message: '长度不能超过6个字符' },
+          { pattern: /^\+?[1-9][0-9]*$/, message: '请输入有效的端口号（数字）' }
         ]
       }
     }
@@ -400,6 +473,11 @@ export default {
       this.dialogRegisterVisible = true
     },
     _registerSoftware (formName) {
+      console.info(JSON.stringify(this.$refs.uploadJarFiles._data.uploadFiles))
+      if (!this.beforeUploadCheckedFiles(this.$refs.uploadJarFiles._data.uploadFiles)) {
+        this.$message.error('上传文件中至少要有1个指定的软件包 jar/war 格式的文件!')
+        return false
+      }
       console.info(JSON.stringify(this.uploadFiles))
       var fileLength = this.$refs.uploadJarFiles._data.uploadFiles.length
       this.$refs[formName].validate(valid => {
@@ -441,7 +519,7 @@ export default {
     },
     // 文件导入
     _importFile () {
-      this.dialogImportTitle = '软件包注册'
+      this.dialogImportTitle = '软件包导入'
       this.dialogImportVisible = true
     },
     _importRegisterSoftware () {
@@ -479,50 +557,59 @@ export default {
     },
     handleOnchange (file, fileList) {
       console.info('handleOnchange')
-      // var fileArray = []
+      console.info(JSON.stringify(fileList))
+      if (!this.beforeUploadCheckedFiles(fileList)) {
+        this.$message.error('上传文件必须要有1个（且只能有1个）指定的软件包 jar/war 格式的文件!')
+        return false
+      }
       for (let i = 0; i < fileList.length; i++) {
-        // console.info(fileList[i].raw)
-        // fileArray.push(fileList[i].raw)
         this.uploadFiles.append('files', fileList[i].raw)
       }
-      // 验证上传文件的格式
-      // if (this.beforeUpload(file)) {
-      //   this.uploadFiles.append('file', fileArray)
-      // }
     },
     handleImportOnchange (file, fileList) {
-      console.info('handleOnchange')
-      // var fileArray = []
+      console.info('handleImportOnchange')
       for (let i = 0; i < fileList.length; i++) {
-        // console.info(fileList[i].raw)
-        // fileArray.push(fileList[i].raw)
         this.uploadFiles.append('file', fileList[i].raw)
       }
-      // 验证上传文件的格式
-      // if (this.beforeUpload(file)) {
-      //   this.uploadFiles.append('file', fileArray)
-      // }
     },
-    beforeUpload (file) {
-      var jarFileName = file.name.split('.')
-      console.log('jarFileName[1] --- > ' + jarFileName)
-      const isExcel = (jarFileName[jarFileName.length - 1] === 'jar' || jarFileName[jarFileName.length - 1] === 'war')
-      console.log('jarFileName[jarFileName.length - 1] --- > ' + jarFileName[1])
-      const isLt10M = file.size / 1024 / 1024 < 200
-      if (!isExcel) {
-        this.$message.error('上传文件只能是 jar/war 格式!')
-        this.fileList = []
+    beforeUploadCheckedFiles (files) {
+      let isHasWarorJar = false
+      if (files == null) {
         return false
-      } else if (!isLt10M) {
-        this.$message.error('上传文件大小不能超过 200MB!')
-        this.fileList = []
-        return false
-      } else {
-        return true
       }
+      console.info('beforeUploadCheckedFiles')
+      console.info(JSON.stringify(files))
+      for (let i = 0; i < files.length; i++) {
+        var jarFileName = files[i].name.split('.')
+        console.info('jarFileName : ' + jarFileName)
+        isHasWarorJar = (jarFileName[jarFileName.length - 1] === 'jar' || jarFileName[jarFileName.length - 1] === 'war')
+        if (isHasWarorJar) {
+          console.info('is has jar or war')
+          return true
+        }
+      }
+      return false
     },
+    // beforeUpload (file) {
+    //   console.info('beforeUpload')
+    //   var jarFileName = file.name.split('.')
+    //   console.log('jarFileName[1] --- > ' + jarFileName)
+    //   const isExcel = (jarFileName[jarFileName.length - 1] === 'jar' || jarFileName[jarFileName.length - 1] === 'war')
+    //   console.log('jarFileName[jarFileName.length - 1] --- > ' + jarFileName[1])
+    //   const isLt10M = file.size / 1024 / 1024 < 200
+    //   if (!isExcel) {
+    //     this.$message.error('上传文件只能是 jar/war 格式!')
+    //     this.fileList = []
+    //     return false
+    //   } else if (!isLt10M) {
+    //     this.$message.error('上传文件大小不能超过 200MB!')
+    //     this.fileList = []
+    //     return false
+    //   } else {
+    //     return true
+    //   }
+    // },
     handleExceed (files, fileList) {
-      // this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
 
     // 清空软件包注册页面之前输入的值

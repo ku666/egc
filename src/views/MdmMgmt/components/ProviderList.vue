@@ -7,10 +7,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
         <el-form-item label='供应商编码'>
-          <el-input placeholder='请输入供应商编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入供应商编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4"></el-input>
         </el-form-item>
         <el-form-item label='供应商名称'>
-          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search' :maxlength="100"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
@@ -92,7 +92,7 @@
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>
           <el-form-item label='供应商编码' prop='providerCode'>
-            <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag'></el-input>
+            <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='供应商类别' prop='category'>
             <el-select v-model = 'providerForm.category'>
@@ -100,13 +100,13 @@
             </el-select>
           </el-form-item>
           <el-form-item label='供应商名称' prop='providerName'>
-            <el-input v-model.trim='providerForm.providerName'></el-input>
+            <el-input v-model.trim='providerForm.providerName' :maxlength="100"></el-input>
           </el-form-item>
           <el-form-item label='联系方式' prop='contact'>
-            <el-input v-model.trim='providerForm.contact'></el-input>
+            <el-input v-model.trim='providerForm.contact' :maxlength="20"></el-input>
           </el-form-item>
           <el-form-item label='供应商描述' prop='providerDesc'>
-            <el-input v-model.trim='providerForm.providerDesc'></el-input>
+            <el-input v-model.trim='providerForm.providerDesc' :maxlength="64"></el-input>
           </el-form-item>
           <div style='text-align: center'>
             <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->

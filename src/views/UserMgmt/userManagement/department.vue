@@ -1,11 +1,11 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container>
-      <el-tabs v-model="activeName" @tab-click="handleTabClick">
+          <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
-      <div v-show="showGrid == true">
+    <div class="flex-1 flex-c">
+      <div v-show="showGrid == true" class="flex-c flex-1">
         <div>
           <el-form :model="listQuery" ref="listQuery">
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
@@ -18,7 +18,7 @@
         </div>
 
       <div class="border-divide"></div>
-      <div class="flex-1">
+      <div class="table-container">
           <grid-list
             :editable="true" 
             :deletable="true"
@@ -42,19 +42,19 @@
             :total="total">
         </el-pagination>
       </div>
-      </div>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible">
+
+      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" :departmentTypeSelect="departmentTypeOptions"  @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
       </el-dialog>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
+      <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <department-edit ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
         @gridSaveEvent="deptUpdateEvent" :departmentTypeSelect="departmentTypeOptions"
-        :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
+        :curDepartmentUuidParm="curDepartmentUuid" :curDepartmentTypeParm="curDepartmentType"></department-edit>
       </el-dialog>
     </div>
-    <div v-show="showGrid == false">
+    <div v-show="showGrid == false" >
       <el-row>
-        <el-col :span="8" style='margin-top:15px;'>
+        <el-col :span="8" style='margin-top:15px;' >
           <el-input
             placeholder="输入关键字进行过滤"
             v-model="filterText">
@@ -81,7 +81,7 @@
           <el-card class="box-card" style='margin-left:10px;' v-show="showEditTree">
             <department-edit ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
             :departmentSelect="departmentOptions" @gridSaveEvent="deptUpdateEvent" @gridRefreshDir="loadDepartmentTree"
-            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-edit>
+            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions" :curDepartmentTypeParm="curDepartmentType"></department-edit>
           </el-card>
           <el-card class="box-card" style='margin-left:10px;' v-show="showCreateTree">
             <department-create  ref="departmentCreateTreeVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent"
@@ -89,6 +89,7 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
     </div>
   </div>
 </template>
@@ -116,13 +117,16 @@
           title: '部门名称',
           prop: 'departmentName'
         }, {
+          title: '用户类型',
+          prop: 'departmentTypeName'
+        }, {
           title: '上级部门',
           prop: 'parentDepartmentName'
         }, {
           title: '下级部门',
           prop: 'childrenDepartments'
         }, {
-          title: '直属员工',
+          title: '直属用户',
           prop: 'directUsers'
         }],
         listQuery: {
@@ -161,6 +165,7 @@
         addFlag: false,
         departmentOptions: [],
         curDepartmentUuid: '',
+        curDepartmentType: '',
         dictData: {
           userStatusDict: 'CLOUD_USER_TYPE'
         },
@@ -232,12 +237,15 @@
         this.dialogFormVisible = false
         this.dialogCreateFormVisible = true
         this.addFlag = false
-        this.initDepartmentForm()
-        this.getDepartmentSelect(this.curDepartmentUuid)
+        // this.initDepartmentForm()
+        if (this.$refs.departmentCreateVue) {
+          this.$refs.departmentCreateVue.initDepartmentInfo()
+        }
+        // this.getDepartmentSelect(this.curDepartmentUuid, 1)
       },
-      getDepartmentSelect (uuid) {
+      getDepartmentSelect (uuid, cloudFlag, departmentType) {
         // 获取部门信息
-        getParenetDepartmentSelect(uuid)
+        getParenetDepartmentSelect(uuid, cloudFlag, departmentType)
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
@@ -254,6 +262,7 @@
         if (tab.name === '0') {
           this.showGrid = true
           this.showSubGrid = false
+          // this.loadData()
         } else if (tab.name === '1') {
           this.showGrid = false
           this.loadDepartmentTree()
@@ -272,7 +281,7 @@
         this.showEditTree = true
         this.showCreateTree = false
         this.curDepartmentUuid = data.id
-        this.getDepartmentSelect(data.id)
+        this.getDepartmentSelect(data.id, 1)
         getDepartmentDetail(data.id)
           .then(
             function (result) {
@@ -316,7 +325,8 @@
         if (this.selectDepartmentData.leaf) {
           this.$confirm('确定删除此项？', '删除', {
             confirmButtonText: '确定',
-            cancelButtonText: '取消'
+            cancelButtonText: '取消',
+            type: 'warning'
           })
           .then(() => {
             console.log('删除操作')
@@ -369,7 +379,8 @@
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
         this.curDepartmentUuid = data.uuid
-        this.getDepartmentSelect(data.uuid)
+        this.curDepartmentType = data.departmentType
+        this.getDepartmentSelect(data.uuid, 1, data.departmentType)
         getDepartmentDetail(data.uuid)
           .then(
             function (result) {

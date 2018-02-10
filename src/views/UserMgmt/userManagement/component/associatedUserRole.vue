@@ -10,10 +10,10 @@
     </el-form>
     <el-table :data="associtedUserRoleData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
-        <el-table-column prop="roleName" label="角色名称" width="160"></el-table-column>
-        <el-table-column prop="roleRemark" label="角色说明" width="289"></el-table-column>
-        <el-table-column prop="roleUsers" label="角色已有成员" width="370"></el-table-column>
-        <el-table-column label="操作" width="100" align="center" v-if="showOperation">
+        <el-table-column prop="roleName" label="角色名称" ></el-table-column>
+        <el-table-column prop="roleRemark" label="角色说明"></el-table-column>
+        <el-table-column prop="roleUsers" label="角色已有成员" ></el-table-column>
+        <el-table-column label="操作" align="center" v-if="showOperation">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
@@ -52,6 +52,7 @@
       userUuidValue: undefined,
       showSelect: undefined,
       cloudFlag: '',
+      userType: '',
       showOperation: undefined
     },
     watch: {
@@ -98,7 +99,7 @@
             function (result) {
               this.associtedUserRoleData = result.userRoleVoList  // 获取当前用户下所关联的角色列表(含分页)
               this.total = result.pageCount
-              getUserRoleListSelect(this.cloudFlag)
+              getUserRoleListSelect(this.cloudFlag, this.userType)
                 .then(
                   function (result) {
                     this.userRoleListSelect = result       // 获取关联角色下拉框值

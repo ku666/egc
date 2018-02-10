@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -64,7 +64,7 @@ import middlewareDetails from './components/MiddlewareDetails'
 import middlewareEdit from './components/MiddlewareEdit'
 import middlewareHistory from './components/MiddlewareHistory'
 
-import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo } from './apis/index'
+import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -149,9 +149,10 @@ export default {
   },
   methods: {
     // 查询
-    _handleFilter () {
-      this.loading = true
-      getMiddlewareInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getMiddlewareInfoByPage(params)
         .then(
           function (result) {
             this.middlewareListData = result.middlewareList
@@ -165,6 +166,21 @@ export default {
             console.log(error)
           }
         )
+      } else if (type === 'download') {
+        let downloadCls = 5
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 查看中间件每条详细信息
@@ -236,13 +252,12 @@ export default {
       syncMiddlewareInfo(eachRowUUID)
         .then(
           function (result) {
-            console.log(this.syncDataStatus = result.syncMessage.msg)
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 再次加载列表的数据
-              this.loadServerList()
-            // this.loadData()
+            // 加载数据
+              this.loadData()
               this.$message({
                 message: '刷新成功',
                 type: 'success'
@@ -257,8 +272,8 @@ export default {
         )
         .catch(
           function (error) {
-            this.synDataLoading = false
             console.log(error)
+            this.synDataLoading = false
           }
         )
     },

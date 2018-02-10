@@ -3,15 +3,15 @@
     <div>
       <search-dep-condition  @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-dep-condition>
     </div>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="osDepListData" stripe border>
+    <el-row style="height: 100%" >
+      <el-col :span="24">
+        <div style="margin-top: 20px">
+          <el-table :data="osDepListData" style="height: 750px;overflow-y: scroll;" stripe border>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableOsTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
             <!-- <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
@@ -102,7 +102,7 @@ export default {
           width: 120
         }
       ],
-      tableTitleExtData: [
+      tableOsTitleExtData: [
       ],
       extMaxLenth: 6,
       detailsTitle: '查看详情',
@@ -150,21 +150,20 @@ export default {
 
     // 初始加载硬件依赖的信息
     loadData () {
-      console.log('loadData.....mounted')
-      this.tableTitleExtData = []
+      console.log('OSDEP loadData.....mounted')
+      this.tableOsTitleExtData = []
       for (let i = 1; i < this.extMaxLenth + 1; i++) {
         var colName = '配置项' + i
         var extData = 'extData' + i
         var keyArr = ['colName', 'prop', 'width']
         var valArr = [colName, extData, '80']
-        this.tableTitleExtData.push(this.getExtData(keyArr, valArr))
+        this.tableOsTitleExtData.push(this.getExtData(keyArr, valArr))
       }
-      console.log('loadData.....mounted tableTitleExtData over')
-      console.log(JSON.stringify(this.tableTitleExtData))
+      console.log('loadData.....mounted tableOsTitleExtData over')
+      console.log(JSON.stringify(this.tableOsTitleExtData))
       getOsDepByPage(this.searchConditionList)
         .then(
           function (result) {
-            this.osDepListData = result.data.data
             console.log('Data get .....' + result.data.data.length)
             for (let i = 1; result.data.data !== null && i < result.data.data.length + 1; i++) {
               for (let k = 1; result.data.data[i - 1].extData !== null && k < this.extMaxLenth + 1; k++) {
@@ -174,13 +173,11 @@ export default {
                 result.data.data[i - 1][key2] = result.data.data[i - 1].extData[key]
               }
             }
+            this.osDepListData = result.data.data
             this.total = result.data.totalCount
             console.log(JSON.stringify(this.osDepListData))
           }.bind(this)
         )
-        // var obj = Object.assign(this.searchConditionList, this.searchItemList)
-        // console.log('loadData....object loaddata:.....')
-        // console.log(obj)
         .catch(
           function (error) {
             console.log(error)

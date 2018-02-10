@@ -1,11 +1,11 @@
 <template>
   <div class='ui-common'>
-    <div calendar-list-container>
+    <div class="flex-1 flex-c">
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="部门列表" name="0"></el-tab-pane>
         <el-tab-pane label="部门树形结构" name="1"></el-tab-pane>
       </el-tabs>
-      <div v-show="showGrid == true">
+      <div v-show="showGrid == true" class="flex-c flex-1">
         <div>
           <el-form :model="listQuery" ref="listQuery" :inline="true">
             <div class="search-container">
@@ -28,7 +28,7 @@
         </div>
 
       <div class="border-divide"></div>
-      <div class="flex-1">
+      <div class="table-container">
           <grid-list
             :editable="false" 
             :deletable="false"
@@ -52,7 +52,7 @@
             :total="total">
         </el-pagination>
       </div>
-      </div>
+
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <department-view ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
         :departmentTypeSelect="departmentTypeOptions"
@@ -93,6 +93,7 @@
           </el-card>
         </el-col>
       </el-row>
+    </div>
     </div>
   </div>
 </template>
@@ -235,9 +236,9 @@
           this.$message.error('请先选择需要查询的小区!')
         }
       },
-      getDepartmentSelect (uuid) {
+      getDepartmentSelect (uuid, cloudFlag) {
         // 获取部门信息
-        getParenetDepartmentSelect(uuid)
+        getParenetDepartmentSelect(uuid, cloudFlag)
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
@@ -275,7 +276,7 @@
         }
         this.showEditTree = true
         this.curDepartmentUuid = data.id
-        this.getDepartmentSelect(data.id)
+        this.getDepartmentSelect(data.id, 0)
         getDepartmentDetail(data.id)
           .then(
             function (result) {
@@ -294,14 +295,16 @@
           limit: 10,
           cloudFlag: 0,
           q_departName: '',
-          q_courtUuid: ''
+          q_courtUuid: this.listQuery.q_courtUuid
         }
-        this.loadData()
+        if (this.listQuery.q_courtUuid) {
+          this.loadData()
+        }
       },
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
         this.curDepartmentUuid = data.uuid
-        this.getDepartmentSelect(data.uuid)
+        this.getDepartmentSelect(data.uuid, 0)
         getDepartmentDetail(data.uuid)
           .then(
             function (result) {

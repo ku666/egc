@@ -10,11 +10,11 @@
     </el-form>
     <el-table :data="associtedUserGroupData" style="width: 100%" max-height="580" element-loading-text="拼命加载中">
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
-        <el-table-column prop="usergroupName" label="用户组名称" width="160"></el-table-column>
+        <el-table-column prop="usergroupName" label="用户组名称"></el-table-column>
         <!-- <el-table-column prop="parentUsergroupName" label="上级用户组" width="234"></el-table-column> -->
-        <el-table-column prop="usergroupRemark" label="用户组说明" width="200"></el-table-column>
-        <el-table-column prop="usergroupUsers" label="组成员" width="459"></el-table-column>
-        <el-table-column label="操作" width="100" align="center" v-if="showOperation">
+        <el-table-column prop="usergroupRemark" label="用户组说明" ></el-table-column>
+        <el-table-column prop="usergroupUsers" label="组成员"></el-table-column>
+        <el-table-column label="操作" align="center" v-if="showOperation">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">
                 <!-- <img :src="deleteImg" style="width:20px"> -->
@@ -53,6 +53,7 @@
       userUuidValue: undefined,
       showSelect: undefined,
       cloudFlag: '',
+      userType: '',
       showOperation: undefined
     },
     watch: {
@@ -99,7 +100,7 @@
             function (result) {
               this.associtedUserGroupData = result.userUsergroupVoList
               this.total = result.pageCount
-              getUserGroupListSelect(this.cloudFlag)
+              getUserGroupListSelect(this.cloudFlag, this.userType)
                 .then(
                   function (result) {
                     this.userGroupListSelect = result
