@@ -581,6 +581,17 @@ export default {
   mounted: function () {
     this.subActiveName = 0
   },
+  watch: {
+    'editForm.uuid': function (newVal, oldVal) {
+      console.log('watch: editForm!!!!!!!!!!!!!!!!')
+      this.subActiveName = '0'
+      this.showSummary = true
+      this.showDirUserGroup = false
+      this.showUser = false
+      this.showRole = false
+    },
+    deep: true
+  },
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
