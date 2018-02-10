@@ -25,10 +25,10 @@
           </div>
         </el-form>
         <div style="margin-top: 10px" class="flex-1">
-              <el-table :data="codeInstList" stripe border v-loading="loading">
+              <el-table :data="codeInstList" stripe border v-loading="loading" id="codeInstanceTable">
                 <el-table-column  type="index" label="序号" width="50">
                 </el-table-column>
-                <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+                <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip>
                 </el-table-column>
                 <el-table-column label="操作" width="80" align="center">
                   <template slot-scope="scope">
@@ -372,4 +372,21 @@ export default {
 
 <style scoped>
   @import "../ConfigurationMgmt/assets/css/upgrademgmt.less";
+
+    #codeInstanceTable >>> colgroup col:nth-child(1) {
+    width: 4%
+  }
+  #codeInstanceTable >>> colgroup col:nth-child(2) {
+    width: 20%
+  }
+  #codeInstanceTable >>> colgroup col:nth-child(3) {
+    width: 20%
+  }
+  #codeInstanceTable >>> colgroup col:nth-child(4) {
+    width: 15%
+  }
+  #codeInstanceTable >>> colgroup col:nth-child(5) {
+    width: 30%
+  }
+  
 </style>

@@ -122,15 +122,15 @@ export default {
         {
           colName: '配置项名称',
           prop: 'configItem',
-          width: 220
+          width: 360
         }, {
           colName: '配置项的值',
           prop: 'value',
-          width: 220
+          width: 360
         }, {
           colName: '配置项类别代码',
           prop: 'configTypeCode',
-          width: 220
+          width: 360
         }, {
           colName: '备注',
           prop: 'remark'

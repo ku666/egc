@@ -98,7 +98,7 @@ export default {
         {
           colName: '软件包批次名称',
           prop: 'name',
-          width: 400
+          width: 700
         }, {
           colName: '备注',
           prop: 'remark'

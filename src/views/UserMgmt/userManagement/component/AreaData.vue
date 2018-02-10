@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth" prop="city">
+        <el-form-item label="选择市" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.city" placeholder="请选择城市" class="user_el-select" @change="loadDistrictData" disabled>
             <el-option
               v-for="citie in citys"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth" prop="district">
+        <el-form-item label="选择区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.district" placeholder="请选择区县" class="user_el-select" @change="loadCourtsData" disabled>
             <el-option
               v-for="district in districts"
@@ -40,7 +40,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择小区" :label-width="formLabelWidth" prop="courtName">
+        <el-form-item label="选择小区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.courtName" placeholder="请选择小区" class="user_el-select" disabled>
             <el-option
               v-for="court in courts"
@@ -62,7 +62,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth" prop="city">
+        <el-form-item label="选择市" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.city" placeholder="请选择城市" class="user_el-select" @change="loadDistrictData">
             <el-option
               v-for="citie in citys"
@@ -72,7 +72,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth" prop="district">
+        <el-form-item label="选择区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.district" placeholder="请选择区县" class="user_el-select" @change="loadCourtsData">
             <el-option
               v-for="district in districts"
@@ -82,7 +82,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择小区" :label-width="formLabelWidth" prop="courtName">
+        <el-form-item label="选择小区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.courtName" placeholder="请选择小区" class="user_el-select">
             <el-option
               v-for="court in courts"
@@ -345,14 +345,14 @@ export default {
     },
     loadCourtsData () {
       var that = this
-      that.courts = []
+      // that.courts = []
       that.provParams.province = that.resourceDeviceGroupVue.province.trim()
       that.provParams.city = that.resourceDeviceGroupVue.city.trim()
       that.provParams.district = that.resourceDeviceGroupVue.district.trim()
-      if (that.resourceDeviceGroupVue.district !== '') {
-        that.resourceDeviceGroupVue.courtName = ''
-        that.courts = []
-        getCourtsDataList(that.provParams)
+      // if (that.resourceDeviceGroupVue.district !== '') {
+      that.resourceDeviceGroupVue.courtName = ''
+      that.courts = []
+      getCourtsDataList(that.provParams)
           .then(
             function (result) {
               console.log('courtsArr -- > ' + JSON.stringify(result))
@@ -372,9 +372,9 @@ export default {
               console.log(error)
             }
           )
-      } else {
-        that.resourceDeviceGroupVue.courtName = ''
-      }
+      // } else {
+      //   that.resourceDeviceGroupVue.courtName = ''
+      // }
     },
 
     changeProvince () {

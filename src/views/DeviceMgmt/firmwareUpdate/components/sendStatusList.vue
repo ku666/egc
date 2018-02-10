@@ -23,7 +23,7 @@
           :resizable="false"
           property="courtName"
           label="小区名称"
-          width="200">
+          width="300">
         </el-table-column>
         <el-table-column
           :resizable="false"
@@ -34,7 +34,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="provideCode"
+          property="provideName"
           label="厂商编码"
           width="200">
         </el-table-column>
