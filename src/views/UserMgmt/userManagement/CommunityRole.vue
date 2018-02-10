@@ -107,7 +107,8 @@
           currentPage: 1,
           pageSize: 10,
           cloudFlag: 0,
-          courtUuid: ''
+          courtUuid: '',
+          userType: ''
         },
         editQuery: {
           roleId: undefined,

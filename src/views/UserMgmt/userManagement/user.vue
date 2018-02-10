@@ -386,7 +386,6 @@ export default {
     },
     userCreateEvent (data) {
       console.log('新增用户')
-      data.userType = 1
       createUser(data)
         .then(
           function (result) {

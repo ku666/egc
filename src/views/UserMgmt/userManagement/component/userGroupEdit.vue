@@ -57,7 +57,7 @@
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
-          style='margin-top: 10px'>
+          style='margin-top: 10px; width:100%'>
         </grid-list>
         <el-pagination 
           :page-sizes="[5,10,20,30]" 
@@ -90,7 +90,7 @@
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
-          style='margin-top: 10px'
+          style='margin-top: 10px; width:100%'
         >
         </grid-list>
         <el-pagination 
@@ -220,8 +220,8 @@ export default {
     },
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
-      getRoleUser(1)
+      console.log('userType: ' + this.editForm.userType)
+      getRoleUser(1, this.editForm.userType)
         .then(
           function (result) {
             this.tmpUserList = result
@@ -260,7 +260,7 @@ export default {
     },
     getRoleOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      getRoleListAllMaindata(1)
+      getRoleListAllMaindata(1, this.editForm.userType)
         .then(
           function (result) {
             this.tmpRoleList = result

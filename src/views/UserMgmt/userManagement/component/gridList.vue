@@ -5,6 +5,7 @@
     :data="tableData"
     stripe
     max-height="680"
+    style="width:100%"
     >
     <el-table-column
       v-for="(item, index) in params"

@@ -193,7 +193,7 @@ export default {
   },
   methods: {
     getRoleUserGroupList () {
-      getRoleUserGroup(1)
+      getRoleUserGroup(1, this.form.userType)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -233,7 +233,7 @@ export default {
       }
     },
     getRoleUserList () {
-      getRoleUser(1)
+      getRoleUser(1, this.form.userType)
         .then(
           function (result) {
             this.tmpRoleUserList = result

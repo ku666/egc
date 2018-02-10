@@ -82,10 +82,10 @@
       </div>
     </div>
     <div v-show="gridUserGroup">
-      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-group>
+      <ass-user-group ref="associtedUserGroupVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true" :userType="this.user.userType"></ass-user-group>
     </div>
     <div v-show="gridUserRole">
-      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true"></ass-user-role>
+      <ass-user-role ref="associtedUserRoleVue" :userUuidValue="curUserUuidParm" :showSelect="true" :cloudFlag='1' :showOperation="true" :userType="this.user.userType"></ass-user-role>
     </div>
   </div>
 </template>
