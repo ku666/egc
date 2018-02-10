@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width"  show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -96,7 +96,7 @@ export default {
       netDeviceHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
-      loading: true,
+      loading: false,
       uploadFlag: 'ne',
       searchConditionList: {
         city: '',
