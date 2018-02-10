@@ -117,61 +117,6 @@ export default {
     gridList
   },
   methods: {
-    // getRoleUserGroupList () {
-    //   getRoleUserGroup(this.listUsergroupQuery)
-    //     .then(
-    //       function (result) {
-    //         this.tmpRoleUserGroupList = result
-    //         getRoleUserGroupFilter(this.form.uuid)
-    //           .then(
-    //             function (result) {
-    //               this.userGroupFilterList = result.roleUsergroupVoList
-    //               if (result.pageCount > 0) {
-    //                 for (var i = 0; i < this.userGroupFilterList.length; i++) {
-    //                   this.disableUserGroup(this.userGroupFilterList[i].usergroupUuid)
-    //                 }
-    //               }
-    //               this.roleUserGroupList = this.tmpRoleUserGroupList.filter(function (item) { return !item.isDisabled })
-    //             }.bind(this)
-    //           )
-    //           .catch(function (error) {
-    //             console.log(error)
-    //           })
-    //       }.bind(this)
-    //     )
-    //     .catch(function (error) {
-    //       console.log(error)
-    //     })
-    // },
-    // getRoleUserList () {
-    //   getRoleUser()
-    //     .then(
-    //       function (result) {
-    //         this.tmpRoleUserList = result
-    //         getRoleUserFilter(this.form.uuid)
-    //           .then(
-    //             function (result) {
-    //               console.log('获取筛选数据：' + result.pageCount)
-    //               this.userFilterList = result.roleUserVoList
-    //               if (result.pageCount > 0) {
-    //                 for (var i = 0; i < this.userFilterList.length; i++) {
-    //                   console.log('改变isDisabled状态：' + this.userFilterList[i].userUuid)
-    //                   this.disableUser(this.userFilterList[i].userUuid)
-    //                 }
-    //                 console.log(this.tmpRoleUserList)
-    //               }
-    //               this.roleUserList = this.tmpRoleUserList.filter(function (item) { return !item.isDisabled })
-    //             }.bind(this)
-    //           )
-    //           .catch(function (error) {
-    //             console.log(error)
-    //           })
-    //       }.bind(this)
-    //     )
-    //     .catch(function (error) {
-    //       console.log(error)
-    //     })
-    // },
     handleUserGroupSizeChange (val) {
       this.query.pageSize = val
       this.query.roleId = this.form.uuid
@@ -319,14 +264,6 @@ export default {
           title: '用户组名称',
           prop: 'usergroupName'
         },
-        // {
-        //   title: '上级用户组',
-        //   prop: 'parentUsergroupName'
-        // },
-        // {
-        //   title: '下级用户组',
-        //   prop: 'dirChildrenUsergroupsName'
-        // },
         {
           title: '直属用户',
           prop: 'dirctUsers'
