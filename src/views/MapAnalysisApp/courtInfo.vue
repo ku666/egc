@@ -148,8 +148,8 @@ export default {
           let perOutCount = []
           data.map(function (item, index) {
             timeDate.push(item.date.substr(0, 13) + '点')
-            if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
-            if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
+            // if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
+            // if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
             perInCount.push(parseFloat(item.perInCount))
             perOutCount.push(parseFloat(item.perOutCount))
           })
@@ -194,8 +194,8 @@ export default {
           let carOutCount = []
           data.map(function (item, index) {
             timeDate.push(item.date.substr(0, 13) + '点')
-            if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
-            if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
+            // if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
+            // if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
             carInCount.push(parseFloat(item.carInCount))
             carOutCount.push(parseFloat(item.carOutCount))
           })
