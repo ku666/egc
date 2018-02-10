@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -252,13 +252,12 @@ export default {
       syncMiddlewareInfo(eachRowUUID)
         .then(
           function (result) {
-            console.log(this.syncDataStatus = result.syncMessage.msg)
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 再次加载列表的数据
-              this.loadServerList()
-            // this.loadData()
+            // 加载数据
+              this.loadData()
               this.$message({
                 message: '刷新成功',
                 type: 'success'
@@ -273,8 +272,8 @@ export default {
         )
         .catch(
           function (error) {
-            this.synDataLoading = false
             console.log(error)
+            this.synDataLoading = false
           }
         )
     },

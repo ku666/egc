@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width"  show-overflow-tooltip>
             </el-table-column>
-            <el-table-column label="操作" width="140">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -66,9 +66,9 @@ import {
   getNetDeviceDetails,
   updateNetDeviceInfo,
   getauServersHistoryList,
-  syncNetDeviceData,
   downloadResultFile,
-  downloadEquipTemplate
+  downloadEquipTemplate,
+  syncNetDeviceData
 } from './apis/index'
 export default {
   components: {
@@ -96,7 +96,7 @@ export default {
       netDeviceHistoryData: undefined,
       synDataLoading: false,
       syncDataStatus: '',
-      loading: false,
+      loading: true,
       uploadFlag: 'ne',
       searchConditionList: {
         city: '',
@@ -284,23 +284,30 @@ export default {
       syncNetDeviceData(eachRowUUID)
         .then(
           function (result) {
-            console.log((this.syncDataStatus = result.syncMessage.msg))
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
+            // 加载数据
+              this.loadData()
               this.$message({
                 message: '刷新成功',
                 type: 'success'
               })
-              // 加载数据
-              this.loadData()
+            } else {
+              this.$message({
+                message: '刷新失败',
+                type: 'error'
+              })
             }
           }.bind(this)
         )
-        .catch(function (error) {
-          this.synDataLoading = false
-          console.log(error)
-        })
+        .catch(
+          function (error) {
+            console.log(error)
+            this.synDataLoading = false
+          }
+        )
     },
 
     // 历史记录

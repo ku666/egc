@@ -16,13 +16,6 @@
         <el-table-column prop="departmentName" label="部门"></el-table-column>
         <el-table-column prop="primaryPhone" label="手机号"></el-table-column>
         <el-table-column prop="idenNum" label="身份证号码"></el-table-column>
-        <el-table-column label="操作" align="center">
-          <template slot-scope="scope">
-            <span @click="handleDelete(scope.$index)" style="cursor:pointer">
-              <img :src="deleteImg" style="width:20px">
-            </span>
-          </template>
-        </el-table-column>
     </el-table>
     <div>
       <el-pagination
@@ -43,7 +36,6 @@
 
 <script>
   import {
-    deleteDirDepartmentUser,
     createDirectUser,
     getRoleUser,
     getDepartmentUserVoList,
@@ -52,8 +44,8 @@
 
 export default {
     props: {
-      departmentUuidValue: undefined
-      // departmentAllDataSelect: undefined
+      departmentUuidValue: undefined,
+      departmentTypeValue: undefined
     },
     data () {
       return {
@@ -68,7 +60,8 @@ export default {
           page: 1,
           limit: 5,
           cloudFlag: 1,
-          departmentUuid: ''
+          departmentUuid: '',
+          departmentType: ''
         },
         directUserInVo: {
           parentDepartmentUuid: '',
@@ -81,12 +74,14 @@ export default {
       handleSizeChange (val) {
         this.listQuery.limit = val
         this.listQuery.departmentUuid = this.departmentUuidValue
+        this.listQuery.departmentType = this.departmentTypeValue
         this.findDirectUserList(this.listQuery)
       },
       // 跳转页数
       handleCurrentChange (val) {
         this.listQuery.page = val
         this.listQuery.departmentUuid = this.departmentUuidValue
+        this.listQuery.departmentType = this.departmentTypeValue
         this.findDirectUserList(this.listQuery)
       },
       // 获取用户组列表
@@ -96,7 +91,7 @@ export default {
             function (result) {
               this.directUserData = result.departmentUserVoList  // 获取当前部门下的直属用户列表信息(带分页)
               this.total = result.pageCount
-              getRoleUser(1)
+              getRoleUser(1, this.departmentTypeValue)
                 .then(
                   function (result) {
                     this.directUserListSelect = result       // 获取用户下拉框值
@@ -132,53 +127,13 @@ export default {
             function (result) {
               this.selectedName = ''
               this.listQuery.departmentUuid = this.departmentUuidValue
+              this.listQuery.departmentType = this.departmentTypeValue
               this.findDirectUserList(this.listQuery)
             }.bind(this)
           )
           .catch(function (error) {
             console.log(error)
           })
-      },
-       // 确认是否将当前用户移除该用户组
-      handleDelete (row) {
-        var data = this.directUserData[row]
-        console.log('row:' + row)
-        console.log('data:' + JSON.stringify(data))
-        this.$confirm('确定删除此项？', '删除', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        })
-          .then(() => {
-            console.log('移除操作')
-            this.delete(data.userUuid)
-          })
-          .catch(() => {
-            this.$message({
-              type: 'info',
-              message: '已取消删除'
-            })
-          })
-      },
-      // 将当前用户移除该用户组
-      delete (uuid) {
-        console.log('移除操作:' + uuid)
-        deleteDirDepartmentUser(uuid)
-          .then(
-            function (result) {
-              this.listQuery.departmentUuid = this.departmentUuidValue
-              this.findDirectUserList(this.listQuery)
-              this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
       },
       handleChangeSelectedName () {
         this.selectedName = ''
@@ -197,7 +152,7 @@ export default {
 </script>
 <style scoped>
 #directTable >>> colgroup :nth-child(1) {
-  width: 15%;
+  width: 16%;
 }
 #directTable >>> colgroup :nth-child(2) {
   width: 15%;
@@ -206,15 +161,12 @@ export default {
   width: 15%;
 }
 #directTable >>> colgroup :nth-child(4) {
-  width: 15%;
+  width: 16%;
 }
 #directTable >>> colgroup :nth-child(5) {
-  width: 12%;
+  width: 15%;
 }
 #directTable >>> colgroup :nth-child(6) {
   width: 20%;
-}
-#directTable >>> colgroup :nth-child(7) {
-  width: 8%;
 }
 </style>

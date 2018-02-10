@@ -148,6 +148,7 @@ export default {
       disabledflag: false,
       activeTab: 'basic',
       attrSaved: true,
+      menu: null,
       // 检索条件用表单
       searchAttrForm: {
         uuid: '',
@@ -206,6 +207,10 @@ export default {
   },
   mounted () {
     this.search()
+    this.setMenuHightLight()
+  },
+  beforeDestroy () {
+    this.setUnHightLight()
   },
   computed: {
     title: function () {
@@ -219,13 +224,43 @@ export default {
     }
   },
   methods: {
+    setMenuHightLight: function () {
+      let sidemenu = document.getElementById('sidemenu')
+      if (sidemenu) {
+        // console.log('get side menu')
+        // let ul = sidemenu.querySelectorAll('ul[role="menu"]')
+        // if (ul) {
+        //   ul[0].style['display'] = 'block'
+        // }
+        // console.log(ul)
+        let menus = sidemenu.querySelectorAll('li.el-menu-item')
+        if (menus) {
+          this.menu = menus
+          for (let i = 0; i < menus.length; i++) {
+            if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+              menus[i].classList.add('is-active')
+            }
+          }
+        }
+      }
+    },
+    setUnHightLight: function () {
+      let menus = this.menu
+      if (menus) {
+        for (let i = 0; i < menus.length; i++) {
+          if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+            menus[i].classList.remove('is-active')
+          }
+        }
+      }
+    },
     // 根据条件查询设备分类数据到列表中
     search () {
       this.attrListLoading = true
       getDeviceAttributes(this.searchAttrForm)
         .then(
           function (result) {
-            console.log('get attr domain info')
+            console.log('getDeviceAttributes')
             this.attrList = result.data.result
             this.searchAttrForm.total = result.data.totalCount
             this.attrListLoading = false
