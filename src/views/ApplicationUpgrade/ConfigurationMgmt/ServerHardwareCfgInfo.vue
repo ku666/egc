@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" :title="detailsTitle" class="el-icon-view" style="font-size:15px;color: #0078f4">
                   </el-button>
@@ -131,12 +131,12 @@ export default {
         {
           colName: '服务器产品名称',
           prop: 'name',
-          width: 200
+          width: 180
         },
         {
           colName: '服务器SN',
           prop: 'serialNo',
-          width: 120
+          width: 260
         },
         {
           colName: '服务器厂商',
@@ -168,6 +168,11 @@ export default {
         getauServersByPage(params)
           .then(
             function (result) {
+              for (let i = 0; i < result.auServersList.length; i++) {
+                let element = result.auServersList[i]
+                let tempCourtDto = element.courtDtoList[0]
+                element.courtDto = tempCourtDto
+              }
               this.auServerListData = result.auServersList
               this.total = result.pageCount
               this.loading = false
@@ -223,6 +228,7 @@ export default {
       getauServersDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log('details --- > ' + JSON.stringify(result.auServers))
             this.auServerDetails = result.auServers
             this.dialogDetailsVisible = true
           }.bind(this)
@@ -273,30 +279,37 @@ export default {
     },
     // 比对刷新
     _handleSynData (rowIdx) {
-      // this.synDataLoading = true
+      this.synDataLoading = true
       var rowData = this.auServerListData[rowIdx]
       var eachRowUUID = rowData.uuid
       // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
-            console.log(' sync result --- > ' + JSON.strngify(result))
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
+            // 加载数据
+              this.loadData()
               this.$message({
-                message: '数据更新成功',
+                message: '刷新成功',
                 type: 'success'
               })
-              // 再次加载数据
-              this.loadData()
+            } else {
+              this.$message({
+                message: '刷新失败',
+                type: 'error'
+              })
             }
           }.bind(this)
         )
-        .catch(function (error) {
-          this.synDataLoading = false
-          console.log(error)
-        })
+        .catch(
+          function (error) {
+            console.log(error)
+            this.synDataLoading = false
+          }
+        )
     },
     // 历史记录
     _handleCheckHistory (rowIdx) {
@@ -324,8 +337,12 @@ export default {
       getauServersByPage(this.searchConditionList)
         .then(
           function (result) {
+            for (let i = 0; i < result.auServersList.length; i++) {
+              let element = result.auServersList[i]
+              let tempCourtDto = element.courtDtoList[0]
+              element.courtDto = tempCourtDto
+            }
             this.auServerListData = result.auServersList
-            console.log('auServerListData =  ' + JSON.stringify(result))
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
@@ -363,4 +380,31 @@ export default {
 
 <style scoped>
 @import 'assets/css/upgrademgmt.less';
+    #serverHardwareTable >>> colgroup col:nth-child(1) {
+    width: 4%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(2) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(3) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(4) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(5) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(6) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(7) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(8) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(9) {
+    width: 20%
+  }
 </style>

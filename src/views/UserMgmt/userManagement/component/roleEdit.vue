@@ -9,17 +9,19 @@
     <el-container style="margin-top:20px; text-align:center">
     <!-- Tab 角色概要 -->
     <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
-      <el-form-item label='用户类型' prop='userType' class="is-required">
+      <el-form-item label='用户类型' prop='userType' >
         <el-select 
         v-model='form.userType' 
         placeholder='请选择用户类型' 
-        style="width:650px" 
+        style="width:650px"
+        disabled
         >
           <el-option
             v-for='item in userTypeList'
             :key='item.itemCode'
             :label='item.itemName'
-            :value='item.itemCode'>
+            :value='item.itemCode'
+            :disabled="true">
           </el-option>
         </el-select>
       </el-form-item>
@@ -104,15 +106,16 @@
       <el-button-group style="margin-left:20px">
         <el-button type="info" plain  size="small" @click="handleAddApp">添加应用程序资源权限</el-button>
         <el-button type="info" plain  size="small" @click="handleAddService">添加服务权限</el-button>
-        <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button>
+        <!-- <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button> -->
+        <el-button type="info" plain  size="small" @click="handleAddRegionalData">添加区域数据权限</el-button>
       </el-button-group>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <add-app ref="addapp" v-show="showApp" :form="form" :cloudFlag="1" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
         ></add-app>
         <add-service ref="addservice" v-show="showService" :form="form" :cloudFlag="1" @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
         ></add-service>
-        <add-device ref="adddevice" v-show="showDevice" :form="form" :cloudFlag="1" @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
-        ></add-device>
+        <add-regional-data ref="addregionaldata" v-show="showRegionalData" :form="form" :cloudFlag="1" @createRegionalDataAuthorityEvent="createRegionalDataEvent"  @canelDialogEvent="cancelEvent"
+        ></add-regional-data>
       </el-dialog>
       <grid-list id="resourceTable"
         @listenToDeleteEvent='resourceDeleteEvent' 
@@ -140,7 +143,7 @@
 import gridList from './gridList'
 import addApp from './addApp'
 import addService from './addService'
-import addDevice from './addDevice'
+import addRegionalData from './addRegionalData'
 import {
   updateRole,
   getRoleUserGroup,
@@ -157,7 +160,7 @@ import {
   updateRoleResourceList,
   createAuthority,
   createService,
-  createDevice,
+  // createDevice,
   checkRoleName,
   getRoleAssResource
 } from '@/views/UserMgmt/userManagement/apis'
@@ -188,11 +191,11 @@ export default {
     gridList,
     addApp,
     addService,
-    addDevice
+    addRegionalData
   },
   methods: {
     getRoleUserGroupList () {
-      getRoleUserGroup(1)
+      getRoleUserGroup(1, this.form.userType)
         .then(
           function (result) {
             this.tmpRoleUserGroupList = result
@@ -232,7 +235,7 @@ export default {
       }
     },
     getRoleUserList () {
-      getRoleUser(1)
+      getRoleUser(1, this.form.userType)
         .then(
           function (result) {
             this.tmpRoleUserList = result
@@ -502,21 +505,21 @@ export default {
       this.dialogStatus = '添加' + this.form.roleName + '角色的应用程序权限'
       this.dialogFormVisible = true
       this.showApp = true
-      this.showDevice = false
+      this.showRegionalData = false
       this.showService = false
     },
     handleAddService (data) {
       this.dialogStatus = '添加' + this.form.roleName + '角色的应用服务权限'
       this.dialogFormVisible = true
       this.showApp = false
-      this.showDevice = false
+      this.showRegionalData = false
       this.showService = true
     },
-    handleAddDevice (data) {
-      this.dialogStatus = '添加' + this.form.roleName + '角色的设备资源权限'
+    handleAddRegionalData (data) {
+      this.dialogStatus = '添加' + this.form.roleName + '角色的区域数据权限'
       this.dialogFormVisible = true
       this.showApp = false
-      this.showDevice = true
+      this.showRegionalData = true
       this.showService = false
     },
     handleSave (form) {
@@ -613,16 +616,16 @@ export default {
       this.dialogFormVisible = false
       this.showService = false
     },
-    createDeviceEvent (data) {
-      console.log('createDeviceEvent Start')
-      createDevice(data)
+    createRegionalDataEvent (data) {
+      console.log('createRegionalDataEvent Start')
+      createService(data)
           .then(
             function (result) {
               this.$message({
                 message: '保存成功！',
                 type: 'success'
               })
-              this.$refs.adddevice.refresh()
+              this.$refs.addregionaldata.refresh()
               this.query.roleId = this.form.uuid
               console.log(this.query)
               getRoleAssResource(this.query)
@@ -644,9 +647,9 @@ export default {
               console.log(error)
             }
           )
-      console.log('createDeviceEvent End')
+      console.log('createRegionalDataEvent End')
       this.dialogFormVisible = false
-      this.showDevice = false
+      this.showRegionalData = false
     },
     cancelEvent () {
       console.log('dialog cancelEvent Start')
@@ -724,9 +727,6 @@ export default {
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
-        ],
-        userType: [
-          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       userTypeList: undefined,
@@ -772,6 +772,7 @@ export default {
       showApp: false,
       showService: false,
       showDevice: false,
+      showRegionalData: false,
       formData: undefined,
       userGroupParams: [
         {
@@ -789,7 +790,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '用户名',
+          title: '登录 ID',
           prop: 'userName'
         },
         {
@@ -819,20 +820,20 @@ export default {
           prop: 'resourceName'
         },
         {
-          title: 'URL',
+          title: 'URI',
           prop: 'resourceUrl'
         },
+        // {
+        //   title: '操作类型',
+        //   prop: 'actionTypeName'
+        // },
+        // {
+        //   title: '安装位置',
+        //   prop: 'houseOrgName'
+        // },
         {
-          title: '操作类型',
-          prop: 'actionTypeName'
-        },
-        {
-          title: '安装位置',
-          prop: 'houseOrgName'
-        },
-        {
-          title: '逻辑地址',
-          prop: 'logicalAddress'
+          title: '区域',
+          prop: 'regionName'
         }
       ]
     }
@@ -874,15 +875,15 @@ export default {
   }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 15%
+    width: 20%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 18%
+    width: 35%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 28%
+    width: 35%
   }
-  #resourceTable >>> colgroup col:nth-child(4) {
+  /* #resourceTable >>> colgroup col:nth-child(4) {
     width: 11%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
@@ -890,7 +891,7 @@ export default {
   }
   #resourceTable >>> colgroup col:nth-child(6) {
     width: 9%
-  }
+  } */
   #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
   }

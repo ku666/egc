@@ -1,10 +1,9 @@
 import Axios from '@/assets/js/AxiosPlugin'
+import { decodeResHeader } from '../assets/js/index'
 
 // 接口地址
-let contextPath = '/scp-upgradecomponent'
+// let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
-
-/** 主数据 */
 
 // 省
 export const getProvinceDataList = () => {
@@ -83,8 +82,9 @@ export const downloadAppServiceTemplate = (params) => {
 }
 
 // 导出结果
+
 export const downloadResultFile = (params1, params2) => {
-  console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + ' params2 ---> ' + params2)
+  console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + '    >>>>>>>> the second params2:  --->   ' + params2)
   return Axios.get(BASE_PATH + '/download/resultDownload?condition=' + encodeURI(JSON.stringify(params1)) + '&downloadCls=' + params2, {responseType: 'arraybuffer'}
     ).then(res => {
       console.log('res.headers --->  ' + JSON.stringify(res.headers))
@@ -101,22 +101,8 @@ export const downloadResultFile = (params1, params2) => {
         document.body.appendChild(link)
         link.click()
       }
-      console.log('decode --->  ' + decodeIsoToUTF(res.headers))
       return res.data
     })
-}
-
-const decodeResHeader = function (res) {
-  let resHeaderArr = JSON.stringify(res).split('filename=\\')
-  let tempNameArr = JSON.stringify(resHeaderArr[1]).split(',')
-  return decodeURI(tempNameArr[0].substring(3, tempNameArr[0].length - 6))
-}
-
-const decodeIsoToUTF = function (res) {
-  let resHeaderArr = JSON.stringify(res).split('filename=\\')
-  let tempNameArr = JSON.stringify(resHeaderArr[1]).split(',')
-  console.log('ISO to UTF8 -- > ' + decodeURIComponent(tempNameArr[0].substring(3, tempNameArr[0].length - 6)))
-  return decodeURI(tempNameArr[0].substring(3, tempNameArr[0].length - 6))
 }
 
 /** =================硬件服务器信息================================ */
@@ -152,12 +138,9 @@ export const updateAuServerInfor = (params) => {
 }
 
 // 刷新硬件服务器信息
-export const syncauServersData = (params) => {
-  console.log(' sync params --- > ' + params)
-  return Axios.get(BASE_PATH + '/auServers/updateComparsion?id=' + params
-  ).then(res => res.data)
-
-  // return Axios.get(contextPath + '/auServers/syncServerDataById/{id}').then(res => res.data)
+export const syncauServersData = (id) => {
+  console.log('refresh database param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auServers/updateComparsion?id=' + id).then(res => res.data)
 }
 
 // 获取硬件服务器历史记录信息
@@ -195,10 +178,9 @@ export const updateAppServiceInfo = (params) => {
 }
 
 // 刷新应用&服务
-export const syncAppServiceData = (params) => {
-  return Axios.get(BASE_PATH + '/auServers/syncServerDataById/{id}', params
-  ).then(res => res.data)
-  // return Axios.get(contextPath + '/auServers/syncServerDataById/{id}').then(res => res.data)
+export const syncAppServiceData = (id) => {
+  console.log('refresh app service param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auServices/updateComparsion?id=' + id).then(res => res.data)
 }
 
 // 获取应用&服务历史记录信息
@@ -239,15 +221,12 @@ export const updateOSInfo = (params) => {
 
 // 刷新操作系统
 export const syncOSData = (id) => {
-  return Axios.get(contextPath + '/auOss/updateComparsion?id=' + id
-  ).then(res => res.data)
-
-// return Axios.get(contextPath + '/auOss/get?id=').then(res => res.data)
+  console.log('refresh oss param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auOss/updateComparsion?id=' + id).then(res => res.data)
 }
 
 // 获取操作系统历史记录信息
 export const getOSHistoryList = (id) => {
-  // console.log('os history id ---- >' + id)
   return Axios.get(BASE_PATH + '/auOss/queryHistoryById?id=' + id
   ).then(res => res.data)
 
@@ -285,11 +264,9 @@ export const updateDatabaseInfo = (params) => {
 }
 
 // 刷新数据库
-export const syncDatabaseData = (params) => {
-  return Axios.post(BASE_PATH + '/auDbms/sync', params
-  ).then(res => res.data)
-
-  // return Axios.get(contextPath + '/osServers/syncServerDataById/{id}').then(res => res.data)
+export const syncDatabaseData = (id) => {
+  console.log('refresh database param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auMiddleware/updateComparsion?id=' + id).then(res => res.data)
 }
 
   // 获取数据库历史记录信息
@@ -329,9 +306,9 @@ export const updateMiddlewareInfo = (params) => {
 }
 
 // 刷新中间件
-export const syncMiddlewareInfo = (params) => {
-  return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
-  ).then(res => res.data)
+export const syncMiddlewareInfo = (id) => {
+  console.log('refresh middleware param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auMiddleware/updateComparsion?id=' + id).then(res => res.data)
 }
 
 // 获取中间件历史记录信息
@@ -364,8 +341,7 @@ export const updateOperMgmtInfo = (params) => {
 
 // 刷新运维管理
 export const syncOperMgmtInfo = (params) => {
-  return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
-  ).then(res => res.data)
+  return Axios.get(BASE_PATH + '/auMiddleware/updateComparsion?id=' + params).then(res => res.data)
 }
 
 // 运维管理历史记录信息
@@ -402,9 +378,9 @@ export const updateNetDeviceInfo = (params) => {
 }
 
 // 刷新网络设备
-export const syncNetDeviceData = (params) => {
-  return Axios.get(contextPath + '/osServers/syncServerDataById/{id}'
-  ).then(res => res.data)
+export const syncNetDeviceData = (id) => {
+  console.log('refresh net equipment param: uuid -- > ' + JSON.stringify(id))
+  return Axios.get(BASE_PATH + '/auNetequip/updateComparsion?id=' + id).then(res => res.data)
 }
 
 // 获取网络设备历史记录信息

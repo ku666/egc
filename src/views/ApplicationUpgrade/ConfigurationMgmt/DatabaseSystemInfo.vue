@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -64,7 +64,7 @@ import databaseDetails from './components/DatabaseDetails'
 import databaseEdit from './components/DatabaseEdit'
 import databaseHistory from './components/DatabaseHistory'
 
-import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData } from './apis/index'
+import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -124,7 +124,7 @@ export default {
         }, {
           colName: '数据库名称',
           prop: 'name',
-          width: 120
+          width: 160
         }, {
           colName: '数据库版本',
           prop: 'version',
@@ -132,11 +132,11 @@ export default {
         }, {
           colName: '数据库安装路径',
           prop: 'path',
-          width: 120
+          width: 240
         }, {
           colName: '服务器主机名称',
           prop: 'server.name',
-          width: 150
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'
@@ -150,9 +150,10 @@ export default {
   },
   methods: {
     // 条件查询
-    _handleFilter () {
-      this.loading = true
-      getDatabaseInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getDatabaseInfoByPage(params)
         .then(
           function (result) {
             console.log('database by page --- > ' + JSON.stringify(result))
@@ -167,6 +168,21 @@ export default {
             this.loading = false
           }.bind(this)
         )
+      } else if (type === 'download') {
+        let downloadCls = 4
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 详情
@@ -243,21 +259,19 @@ export default {
       syncDatabaseData(eachRowUUID)
         .then(
           function (result) {
-            console.log(this.syncDataStatus = result.syncMessage.msg)
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-              // setTimeout(() => {
-              // }, 12000)
+            // 加载数据
+              this.loadData()
               this.$message({
-                message: '保存成功',
+                message: '刷新成功',
                 type: 'success'
               })
-            // 再次加载
-              this.loadData()
             } else {
               this.$message({
-                message: '保存失败',
+                message: '刷新失败',
                 type: 'error'
               })
             }
@@ -265,8 +279,8 @@ export default {
         )
         .catch(
           function (error) {
-            this.synDataLoading = false
             console.log(error)
+            this.synDataLoading = false
           }
         )
     },

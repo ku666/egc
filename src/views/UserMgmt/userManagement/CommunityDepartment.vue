@@ -281,6 +281,10 @@
           .then(
             function (result) {
               this.departmentForm = result.departmentBaseVo
+              if (result.departmentBaseVo.parentDepartmentUuid) {
+                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
+                this.departmentOptions.push(chooseParentName)
+              }
               this.dialogStatus = '查看部门'
               this.addFlag = true
             }.bind(this)
@@ -295,9 +299,11 @@
           limit: 10,
           cloudFlag: 0,
           q_departName: '',
-          q_courtUuid: ''
+          q_courtUuid: this.listQuery.q_courtUuid
         }
-        this.loadData()
+        if (this.listQuery.q_courtUuid) {
+          this.loadData()
+        }
       },
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
@@ -308,6 +314,10 @@
             function (result) {
               console.log('<<<<<departmentOptions:' + JSON.stringify(this.departmentOptions))
               this.departmentForm = result.departmentBaseVo
+              if (result.departmentBaseVo.parentDepartmentUuid) {
+                let chooseParentName = {uuid: result.departmentBaseVo.parentDepartmentUuid, departmentName: result.departmentBaseVo.parentDepartmentName, disabled: false}
+                this.departmentOptions.push(chooseParentName)
+              }
               this.dialogStatus = '查看部门'
               this.addFlag = true
               this.dialogFormVisible = true

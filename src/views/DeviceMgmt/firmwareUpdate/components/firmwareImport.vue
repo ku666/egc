@@ -44,8 +44,8 @@
           <div class="grid-content bg-purple">
             <select-box title="厂商编码"
                         :required="true"
-                        code="providerCode"
-                        ref="providerCode"
+                        code="provideCode"
+                        ref="provideCode"
                         :options="providerType"
                         @listenToInput="_saveDeviceData">
             </select-box>
@@ -67,6 +67,7 @@
                        :required="true"
                        code="fileSize"
                        ref="fileSize"
+                       :disabled="true"
                        :value="(fileInfo.size)?(parseInt(fileInfo.size)/1000000).toString():''"
                        append="MB"
                        @listenToInput="_saveDeviceData">
@@ -115,11 +116,21 @@
     },
     methods: {
       _importFile () {
-        if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['providerCode'] && this.importData['providerCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
-          this.importData['fileName'] = this.importData['deviceType'] + this.importData['providerCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
+        if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['provideCode'] && this.importData['provideCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
+          this.importData['fileName'] = this.importData['deviceType'] + this.importData['provideCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
           importDmFotaFile(this.importData)
             .then(result => {
-
+              this.$message({
+                message: JSON.stringify(result),
+                type: 'success'
+              })
+              for (var key in this.importData) {
+                if (this.$refs[key]) {
+                  this.$refs[key].clearBox()
+                }
+              }
+              this.importData = {}
+              this.fileInfo = {}
             })
             .catch()
         } else {

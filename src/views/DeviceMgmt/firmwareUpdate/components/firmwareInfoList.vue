@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="filePath"
+          property="filePath2"
           label="文件路径"
           width="300">
         </el-table-column>
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="providerCode"
+          property="provideName"
           label="厂商编码"
           width="100">
         </el-table-column>
@@ -100,6 +100,9 @@
             .then(
               function (result) {
                 this.firmwareInfoData = result.listFotaFileVo
+                for (let i = 0; i < this.firmwareInfoData.length; i++) {
+                  this.firmwareInfoData[i]['isSend'] = (this.firmwareInfoData[i].isUpgraded) ? '已下发' : '未下发'
+                }
                 this.total = result.totalCount
               }.bind(this)
             )

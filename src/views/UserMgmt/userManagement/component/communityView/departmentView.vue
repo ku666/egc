@@ -15,7 +15,7 @@
        </el-select>
       </el-form-item>
       <el-form-item label='部门说明' :label-width="formLabelWidth">
-        <el-input type='textarea' v-model='department.remark' placeholder='无数据' class="el-textarea" readonly></el-input>
+        <el-input type='textarea' v-model='department.remark' :rows="3" placeholder='无数据' class="el-textarea" readonly></el-input>
       </el-form-item>
     </el-form>
     <div v-show="showDirectDepartment">

@@ -223,11 +223,11 @@ export default {
   border-radius: 4px;
   border-color: #0078f4;
 }
+
 /* 用于搜索等按钮 */
 .small-action-btn{
   width: 110px;
   height: 40px;
-  background: #0078f4;
   border-radius: 4px;
 }
 

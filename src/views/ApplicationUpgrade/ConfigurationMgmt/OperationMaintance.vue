@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width"  show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -64,7 +64,7 @@ import OperationMaintanceDetails from './components/OperationMaintanceDetails'
 import OperationMaintanceEdit from './components/OperationMaintanceEdit'
 import OperationMaintanceHistory from './components/OperationMaintanceHistory'
 
-import { getOperMgmtInfoByPage, getOperMgmtDetails, updateOperMgmtInfo, getOperMgmtHistoryList, syncOperMgmtInfo } from './apis/index'
+import { getOperMgmtInfoByPage, getOperMgmtDetails, updateOperMgmtInfo, getOperMgmtHistoryList, syncOperMgmtInfo, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -135,11 +135,11 @@ export default {
         }, {
           colName: '软件安装路径',
           prop: 'path',
-          width: 200
+          width: 240
         }, {
           colName: '服务器主机名称',
           prop: 'server.hostname',
-          width: 220
+          width: 260
         }, {
           colName: '描述',
           prop: 'remark'
@@ -149,9 +149,10 @@ export default {
   },
   methods: {
     // 条件查询
-    _handleFilter () {
-      this.loading = true
-      getOperMgmtInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getOperMgmtInfoByPage(params)
         .then(
           function (result) {
             this.operMainListData = result.middlewareList
@@ -165,6 +166,21 @@ export default {
             console.log(error)
           }
         )
+      } else if (type === 'download') {
+        let downloadCls = 6
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 详情

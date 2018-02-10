@@ -52,6 +52,7 @@
       userUuidValue: undefined,
       showSelect: undefined,
       cloudFlag: '',
+      userType: '',
       showOperation: undefined
     },
     watch: {
@@ -98,7 +99,7 @@
             function (result) {
               this.associtedUserRoleData = result.userRoleVoList  // 获取当前用户下所关联的角色列表(含分页)
               this.total = result.pageCount
-              getUserRoleListSelect(this.cloudFlag)
+              getUserRoleListSelect(this.cloudFlag, this.userType)
                 .then(
                   function (result) {
                     this.userRoleListSelect = result       // 获取关联角色下拉框值

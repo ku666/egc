@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
                 </el-button>
@@ -129,7 +129,7 @@ export default {
         }, {
           colName: '服务器主机名称',
           prop: 'hostname',
-          width: 220
+          width: 260
 
         }, {
           colName: '描述',
@@ -174,122 +174,19 @@ export default {
           }
         )
       } else if (type === 'download') {
-        this.loading = false
-        this.searchConditionList.pageSize = this.total
-        this.searchConditionList.total = this.total
-        this.searchConditionList.flag = 1
-        downloadResultFile(this.searchConditionList)
-        .then(
-          function (result) {
-            this.excelPath = result.data
-            console.log(' excel path -- > ' + this.excelPath)
-          }.bind(this)
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-        // getOSInfoByPage(params)
-        // .then(
-        //   function (result) {
-        //     this.downloadData = result.ossList
-        //     if (this.downloadData !== undefined && this.downloadData.length > 0) {
-        //       for (let i = 0; i < this.downloadData.length; i++) {
-        //         let element = this.downloadData[i]
-        //         if (element.hasOwnProperty('courtDto')) {
-        //           if (element.courtDto !== null) {
-        //             this.lineData.push(element.courtDto.province)
-        //             this.lineData.push(element.courtDto.city)
-        //             this.lineData.push(element.courtDto.name)
-        //           } else {
-        //             this.lineData.push('')
-        //             this.lineData.push('')
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('name')) {
-        //           if (element.name !== null) {
-        //             this.lineData.push(element.name)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('version')) {
-        //           if (element.version !== null) {
-        //             this.lineData.push(element.version)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('dataLength')) {
-        //           if (element.dataLength !== null) {
-        //             this.lineData.push(element.dataLength)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('hostname')) {
-        //           if (element.hostname !== null) {
-        //             this.lineData.push(element.hostname)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('remark')) {
-        //           if (element.remark !== null) {
-        //             this.lineData.push(element.remark)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('uuid')) {
-        //           if (element.uuid !== null) {
-        //             this.lineData.push(element.uuid)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         if (element.hasOwnProperty('updateUser')) {
-        //           if (element.updateUser !== null) {
-        //             this.lineData.push(element.updateUser)
-        //           } else {
-        //             this.lineData.push('')
-        //           }
-        //         }
-        //         this.excelData.result.push(this.lineData)
-        //         this.lineData = []
-        //       }
-        //       this.excelData.thead = ['省（直辖市）', '市', '区', '小区名称', '操作系统版本（服务包）', '操作系统位数', '服务器主机名称', '描述', '所在服务器UUID', '操作系统提供者']
-        //       downSearchResult(this.excelData)
-        //       .then(
-        //         function (result) {
-        //           this.excelPath = result.data
-        //           console.log(' excel path -- > ' + this.excelPath)
-        //           // 下载
-        //           downloadResultFile(this.excelPath)
-        //           .then(
-        //             function (result) {
-        //               this.$message.success('导出成功')
-        //             }.bind(this)
-        //           ).catch({
-        //             function (error) {
-        //               console.log(error)
-        //             }
-        //           }.bind(this)
-        //           )
-        //         }.bind(this)
-        //       ).catch(
-        //         function (error) {
-        //           console.log(error)
-        //         }
-        //       )
-        //     }
-        //   }.bind(this)
-        //   ).catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
+        let downloadCls = 3
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
       }
     },
 
@@ -369,13 +266,12 @@ export default {
       syncOSData(eachRowUUID)
         .then(
           function (result) {
-            console.log(this.syncDataStatus = result.syncMessage.msg)
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh oss result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 再次加载列表的数据
-              this.loadServerList()
-            // this.loadData()
+            // 加载数据
+              this.loadData()
               this.$message({
                 message: '刷新成功',
                 type: 'success'
@@ -383,15 +279,15 @@ export default {
             } else {
               this.$message({
                 message: '刷新失败',
-                type: 'success'
+                type: 'error'
               })
             }
           }.bind(this)
         )
         .catch(
           function (error) {
-            this.synDataLoading = false
             console.log(error)
+            this.synDataLoading = false
           }
         )
     },

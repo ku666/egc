@@ -5,23 +5,27 @@
       <el-tab-pane label='直属部门' name='1'></el-tab-pane>
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
     </el-tabs>
-    <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment">
-      <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
-        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别">
+    <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment" :inline="true">
+      <el-form-item label='用户类型' prop='departmentType' :label-width="formLabelWidth">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择用户类型" disabled>
           <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
        </el-select>
       </el-form-item>
-      <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
-        <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
-      </el-form-item>
-      <el-form-item label='上级部门' :label-width="formLabelWidth">
-        <el-select v-model='department.parentDepartmentUuid' class="user_el-select">
-          <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid'></el-option>
-       </el-select>
-      </el-form-item>
-      <el-form-item label='部门说明' :label-width="formLabelWidth">
-        <el-input type='textarea' v-model='department.remark' placeholder='请输入部门说明' class="el-textarea"></el-input>
-      </el-form-item>
+      <div>
+        <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
+          <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
+        </el-form-item>
+        <el-form-item label='上级部门' :label-width="formLabelWidth">
+          <el-select v-model='department.parentDepartmentUuid' class="user_el-select">
+            <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid'></el-option>
+        </el-select>
+        </el-form-item>
+      </div>
+      <div class="el-textarea">
+        <el-form-item label='部门说明' :label-width="formLabelWidth">
+          <el-input type='textarea' :rows="3" v-model='department.remark' placeholder='请输入部门说明'></el-input>
+        </el-form-item>
+      </div>
       <div class="user-button" align="center">
         <el-row>
           <el-col>
@@ -34,10 +38,10 @@
       </div>
     </el-form>
     <div v-show="showDirectDepartment">
-      <direct-department ref="directDepartmentVue" :departmentUuidValue="curDepartmentUuidParm" @gridDirecDepCreateEvent="refreshDir"></direct-department>
+      <direct-department ref="directDepartmentVue" :departmentUuidValue="curDepartmentUuidParm" @gridDirecDepCreateEvent="refreshDir" :departmentTypeValue="curDepartmentTypeParm"></direct-department>
     </div>
     <div v-show="showUserDepartment">
-      <direct-user ref="directUserVue" :departmentUuidValue="curDepartmentUuidParm"></direct-user>
+      <direct-user ref="directUserVue" :departmentUuidValue="curDepartmentUuidParm" :departmentTypeValue="curDepartmentTypeParm"></direct-user>
     </div>
   </div>
 </template>
@@ -58,7 +62,8 @@ export default {
     },
     curDepartmentUuidParm: undefined,
     departmentSelect: undefined,
-    departmentTypeSelect: undefined
+    departmentTypeSelect: undefined,
+    curDepartmentTypeParm: undefined
   },
   components: {
     gridList,
@@ -76,12 +81,14 @@ export default {
         this.showMainDepartment = false
         this.showUserDepartment = false
         this.listQuery.departmentUuid = this.curDepartmentUuidParm
+        this.listQuery.departmentType = this.curDepartmentTypeParm
         this.$refs.directDepartmentVue.findDirectDepartmentList(this.listQuery)
       } else if (tab.name === '2') {
         this.showDirectDepartment = false
         this.showMainDepartment = false
         this.showUserDepartment = true
         this.listQuery.departmentUuid = this.curDepartmentUuidParm
+        this.listQuery.departmentType = this.curDepartmentTypeParm
         this.$refs.directUserVue.findDirectUserList(this.listQuery)
       }
     },
@@ -147,9 +154,15 @@ export default {
         page: 1,
         limit: 5,
         cloudFlag: 1,
-        departmentUuid: ''
+        departmentUuid: '',
+        departmentType: ''
       }
     }
   }
 }
 </script>
+<style scoped>
+.el-textarea{
+  width: 392%;
+}
+</style>

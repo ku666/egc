@@ -1,48 +1,52 @@
 <template>
   <div class='ui-common'>
-    <el-form :inline="true" :model="searchConditionList">
-      <div class="search-container">
-          <el-form-item label="软件包批次名称">
-            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
-          </el-form-item>
-          <div class="btn-container">
-            <el-form-item>
-              <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-              <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-            </el-form-item>
-          </div>
+    <el-row class="flex-c" style="height: 100%">
+      <el-col :span="24" class="flex-1 flex-c">
+        <el-form :inline="true" :model="searchConditionList">
+          <div class="search-container">
+              <el-form-item label="软件包批次名称">
+                <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
+              </el-form-item>
+              <div class="btn-container">
+                <el-form-item>
+                  <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+                  <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
+                </el-form-item>
+              </div>
+            </div>
+          <div>
+            <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
         </div>
-      <div>
-        <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
-    </div>
-    </el-form>
-    <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softwareBatchDataList" stripe border v-loading="loading">
-            <el-table-column  type="index" label="序号" width="50">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
-              <template slot-scope="scope">
-                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                </el-button>
-                <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
+        </el-form>
+        <div style="margin-top: 20px" class="flex-1">
+              <el-table :data="softwareBatchDataList" stripe border v-loading="loading">
+                <el-table-column  type="index" label="序号" width="50">
+                </el-table-column>
+                <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+                </el-table-column>
+                <el-table-column label="操作" width="80" align="center">
+                  <template slot-scope="scope">
+                    <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                    </el-button>
+                    <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
+                    </el-button>
+                  </template>
+                </el-table-column>
+              </el-table>
+            </div>
+        <div>
+          <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="searchConditionList.currentPage"
+              :page-sizes="[10, 20, 50]"
+              :page-size="searchConditionList.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="total">
+          </el-pagination>
         </div>
-    <div>
-      <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="searchConditionList.currentPage"
-          :page-sizes="[10, 20, 50]"
-          :page-size="searchConditionList.pageSize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="total">
-      </el-pagination>
-    </div>
+      </el-col>
+    </el-row>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
       <software-pck-batch-edit :softwareBatchDetails="softwareBatchDetails" @saveSoftwareBatchEvent="_updateSoftwareBatchInfo"></software-pck-batch-edit>
     </el-dialog>
@@ -94,7 +98,7 @@ export default {
         {
           colName: '软件包批次名称',
           prop: 'name',
-          width: 400
+          width: 700
         }, {
           colName: '备注',
           prop: 'remark'

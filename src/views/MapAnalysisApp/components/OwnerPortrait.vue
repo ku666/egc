@@ -47,13 +47,13 @@
             </el-col>
             <el-col :span="6" class="stime">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' @blur="timeJudgment">
+                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' @blur="timeJudgment">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -68,8 +68,8 @@
         <!-- 业主人数显示 -->
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
-          <div v-show="isOwenrTable" style="width:100%">
-            <el-table :data="ownerTableData" width="100%" max-height="470" class="tableWidth" stripe fit>
+          <div v-if="isOwenrTable" style="width:100%">
+            <el-table :data="ownerTableData" width="100%" height="420" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
               <el-table-column style="width:100%" prop="countNum" label="人数">
@@ -85,7 +85,7 @@
         <div class="show" v-show='isRate'>
           <!-- 表格展示 -->
           <div v-show='isRateTable' width="100%">
-            <el-table :data='rateTableData' width="100%" max-height="380" class="tableWidth" stripe>
+            <el-table :data='rateTableData' width="100%" height="380" class="tableWidth" stripe>
               <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
               <el-table-column style="width:100%" prop="inCount" label="进入次数">
@@ -171,6 +171,8 @@ export default {
         perInCountList: [], // 入园人数集合
         perOutCountList: [] // 出园人数集合
       },
+      clearableDatepick: false,
+      editableDatepick: false,
       isOwner: true, // 默认显示业主人数
       isRate: false, // 显示出入频率
       isOwenrTable: true, // 默认显示业主表格
@@ -181,7 +183,7 @@ export default {
       clickTap: false, // 控制数据未变重复点击(图表)
       clickTable: false, // 控制数据未变重复点击(表格)
       myChartContainer: null,
-      tableOrMap: 0, // 控制当前是表格还是图表
+      tableOrMap: '0', // 控制当前是表格还是图表
       flagVal: '1', // 业主或出入频率条件
       flag: false // 开关
     }
@@ -219,7 +221,7 @@ export default {
             res.data.data.buildInfo.map(item => {
               this.form.buildList.push({
                 value: item.uuid,
-                label: item.name
+                label: item.memo.slice(item.memo.indexOf(' ') + 1)
               })
             })
           }
@@ -236,6 +238,7 @@ export default {
       if (id !== this.courtId) { // 选中的是楼栋
         this.buildId = id
       }
+      console.log(this.tempId, this.buildId, this.courtId)
     },
     reportTypeEvent (val) { // 报表选择
       switch (val) {
@@ -250,7 +253,7 @@ export default {
           break
         case '2':
           this.timeType = 'month'
-          this.startTime = new Date(this.endTime.getTime() - 31622400000)// 默认开始时间
+          this.startTime = new Date(this.endTime.getTime() - 86400000 * 366)// 默认开始时间
           break
         default:
           break
@@ -258,14 +261,14 @@ export default {
     },
     goToTable () { // 切换到表格显示
       this.tableOrMap = '0'
-      let tableHeader = document.querySelector('.el-table__header')
-      let tableBody = document.querySelector('.el-table__body')
-      tableHeader.style.width = '100%'
-      tableBody.style.width = '100%'
       switch (this.flagVal) {
         case '1': // 选择业主人数
           this.isOwenrTable = true
           this.isOwenrMap = false
+          let tableHeader = document.querySelector('.el-table__header')
+          let tableBody = document.querySelector('.el-table__body')
+          tableHeader.style.width = '100%'
+          tableBody.style.width = '100%'
           if (!this.clickTable) { // 控制多次点击
             return
           }
@@ -286,7 +289,7 @@ export default {
           if (this.tempId !== this.courtId && this.tempId !== '') {
             this.getBuildRateTableData() // 获取楼栋表格
           } else {
-            this.getRateTableData(this.courtId) // 获取小区表格
+            this.getRateTableData() // 获取小区表格
           }
           break
         default:
@@ -296,11 +299,19 @@ export default {
     sizeChange (pageSize) { // 切换每页条数
       this.parameter.pageSize = pageSize
       this.parameter.currentPage = 1
-      this.getRateTableData()
+      if (this.tempId !== this.courtId && this.tempId !== '') {
+        this.getBuildRateTableData() // 获取楼栋表格
+      } else {
+        this.getRateTableData() // 获取小区表格
+      }
     },
     currentChange (currentPage) { // 切换当前页
       this.parameter.currentPage = currentPage
-      this.getRateTableData()
+      if (this.tempId !== this.courtId && this.tempId !== '') {
+        this.getBuildRateTableData() // 获取楼栋表格
+      } else {
+        this.getRateTableData() // 获取小区表格
+      }
     },
     goToMap () { // 切换到图表显示
       this.tableOrMap = '1'
@@ -391,7 +402,7 @@ export default {
           break
       }
     },
-    timeJudgment (val) { // 判断选择的时间是否符合要求
+    timeJudgment () { // 判断选择的时间是否符合要求
       switch (this.parameter.reportType) {
         case '0':
           if (this.endTime.getTime() - this.startTime.getTime() > 2851200000) { // 一个月2851200000
@@ -463,11 +474,8 @@ export default {
           }
           break
         case '2': // 选择出入频率
+          this.timeJudgment()
           if (!this.isRequest) {
-            this.$message({
-              type: 'error',
-              message: '请选择正确的时间'
-            })
             return
           }
           this.isRate = true
@@ -494,16 +502,46 @@ export default {
       this.isRequest = true
       this.clickTap = false
       this.clickTable = false
-      this.tableOrMap = 0
+      this.tableOrMap = '0'
       this.flagVal = '1'
       this.flag = false
+      this.parameter = {
+        courtUuid: '',
+        classValue: '1',
+        reportType: '0',
+        currentPage: 1,
+        pageSize: 10,
+        startDate: null,
+        endDate: null
+      }
+      this.disabled = true
+      this.ownerTableData = []
     },
     getCourtTableData (courtId) { // 获取小区表格（业主人数）
       getCourtProfile({ courtUuid: courtId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
-            this.ownerTableData = res.data.data.ageGroupInfo
-            this.owerMapData = res.data.data
+            let ageGroupInfo = res.data.data.ageGroupInfo
+            let num = 0
+            let ageGroup = []
+            for (let i = 0; i < ageGroupInfo.length; i++) {
+              if (Number(ageGroupInfo[i].group.slice(0, ageGroupInfo[i].group.indexOf('-'))) >= 80) {
+                num += ageGroupInfo[i].countNum
+                if (i === ageGroupInfo.length - 1) {
+                  ageGroup.push({
+                    countNum: num,
+                    group: '80以上'
+                  })
+                }
+              } else {
+                ageGroup.push(ageGroupInfo[i])
+              }
+            }
+            this.ownerTableData = ageGroup
+            this.owerMapData = {
+              ageGroupInfo: ageGroup,
+              sexInfo: res.data.data.sexInfo
+            }
           }
         }).catch(err => {
           this.$message({
@@ -563,8 +601,27 @@ export default {
       getBuildProfile({ courtUuid: this.courtId, buildId: this.buildId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
-            this.ownerTableData = res.data.data.ageGroupInfo
-            this.owerMapData = res.data.data
+            let ageGroupInfo = res.data.data.ageGroupInfo
+            let num = 0
+            let ageGroup = []
+            for (let i = 0; i < ageGroupInfo.length; i++) {
+              if (Number(ageGroupInfo[i].group.slice(0, ageGroupInfo[i].group.indexOf('-'))) >= 80) {
+                num += ageGroupInfo[i].countNum
+                if (i === ageGroupInfo.length - 1) {
+                  ageGroup.push({
+                    countNum: num,
+                    group: '80以上'
+                  })
+                }
+              } else {
+                ageGroup.push(ageGroupInfo[i])
+              }
+            }
+            this.ownerTableData = ageGroup
+            this.owerMapData = {
+              ageGroupInfo: ageGroup,
+              sexInfo: res.data.data.sexInfo
+            }
           }
         }).catch(err => {
           this.$message({
