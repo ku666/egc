@@ -1,11 +1,11 @@
 import Axios from '@/assets/js/AxiosPlugin'
 // 以下地址是本地调试时使用
-// let contextPath = '/egcmapanalysis'
+// let contextPath = '/courtorg'
 // let personPath = '/mapAnalysis'
 // let devicePath = '/device'
 // let ownertPath = '/profile'
 // 以下地址是发布到服务器上时用
-let contextPath = '/egc-mapanalysiscomponent/egcmapanalysis'
+let contextPath = '/egc-smartcommunitymgmtapp/courtorg'
 let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
 let devicePath = '/egc-smartcommunitymgmtapp/device'
 let ownertPath = '/egc-smartcommunitymgmtapp/profile'
