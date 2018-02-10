@@ -34,19 +34,19 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="providerCode"
+          property="provideCode"
           label="厂商编码"
           width="200">
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="sendStatus"
+          property="issueStatus"
           label="下发状态"
           width="200">
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="sendTime"
+          property="createTime"
           label="下发时间">
         </el-table-column>
       </el-table-column>
@@ -68,6 +68,9 @@
 </template>
 
 <script>
+  import {getFotaIssueList} from '../apis/index.js'
+  import {getLocalTime} from '../../deviceInfoMaintain/assets/js/tool.js'
+
   export default {
     data () {
       return {
@@ -78,10 +81,19 @@
       }
     },
     methods: {
-      _loadSendStatusData () {
+      _loadSendStatusData (currentPage, pageSize) {
+        this.currentPage = currentPage
+        getFotaIssueList(currentPage, pageSize)
+          .then(result => {
+            this.sendStatusData = result.listFotaIssueRecordVo
+            for (let i = 0; i < this.sendStatusData.length; i++) {
+              this.sendStatusData[i]['createTime'] = getLocalTime(this.sendStatusData[i]['createTime'])
+            }
+            this.total = result.totalCount
+          })
       },
       _handlePageChange (val) {
-        this._loadSendStatusData(val, this.pageSize, this.selectData)
+        this._loadSendStatusData(val, this.pageSize)
       },
       _handleSizeChange (val) {
         this.pageSize = val

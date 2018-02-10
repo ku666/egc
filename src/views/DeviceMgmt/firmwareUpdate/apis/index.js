@@ -31,3 +31,8 @@ export const selectFotaFileList = (param) => {
   return Axios.post(BASE_PATH + 'selectFotaFileList', param
   ).then(res => res.data)
 }
+
+export const getFotaIssueList = (param1, param2) => {
+  return Axios.get(BASE_PATH + 'getFotaIssueList?currentPage=' + param1 + '&pageSize=' + param2
+  ).then(res => res.data)
+}

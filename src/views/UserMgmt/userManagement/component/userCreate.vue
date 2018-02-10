@@ -177,9 +177,9 @@ export default {
         }
       },
       rules: {
-        departmentUuid: [
-          { required: true, message: '请选择部门', trigger: 'change' }
-        ],
+        // departmentUuid: [
+        //   { required: true, message: '请选择部门', trigger: 'change' }
+        // ],
         fullName: [
           { required: true, message: '请输入姓名', trigger: 'blur' },
           { min: 2, max: 20, message: '长度在 2 到 20 个字符', trigger: 'blur' }
@@ -205,7 +205,7 @@ export default {
           { max: 128, message: '长度不能超过128个字符' }
         ],
         primaryPhone: [
-          { required: true, message: '请输入有效的手机号', trigger: 'blur' },
+          // { required: true, message: '请输入有效的手机号', trigger: 'blur' },
           { pattern: /^1[34578]\d{9}$/, message: '请输入有效的手机号' }
         ],
         effectiveDate: [

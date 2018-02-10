@@ -59,8 +59,8 @@ export default {
                 this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
                   this.$message({
-                    message: '上传成功!',
-                    type: 'error'
+                    message: '上传成功',
+                    type: 'success'
                   })
                 } else {
                   this.$message({
@@ -81,8 +81,8 @@ export default {
                 this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
                   this.$message({
-                    message: '上传成功!',
-                    type: 'error'
+                    message: '上传成功',
+                    type: 'success'
                   })
                 } else {
                   this.$message({
@@ -103,8 +103,8 @@ export default {
                 this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
                   this.$message({
-                    message: '上传成功!',
-                    type: 'error'
+                    message: '上传成功',
+                    type: 'success'
                   })
                 } else {
                   this.$message({

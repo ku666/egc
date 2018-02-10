@@ -8,10 +8,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
-          <el-input placeholder='请输入属性编码' v-model.trim='searchAttrForm.attrCode' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入属性编码' v-model.trim='searchAttrForm.attrCode' @keyup.enter.native = 'search' :maxlength="64"></el-input>
         </el-form-item>
         <el-form-item label='属性描述'>
-          <el-input placeholder='请输入属性描述' v-model.trim='searchAttrForm.attrDesc' @keyup.enter.native = 'search'></el-input>
+          <el-input placeholder='请输入属性描述' v-model.trim='searchAttrForm.attrDesc' @keyup.enter.native = 'search' :maxlength="128"></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
@@ -63,6 +63,7 @@
     </el-table>
 
     <el-pagination
+      ref='pager'
       background
       :current-page = 'searchAttrForm.currentPage'
       :page-sizes = '[10, 20, 50, 100]'
@@ -148,6 +149,7 @@ export default {
       disabledflag: false,
       activeTab: 'basic',
       attrSaved: true,
+      menu: null,
       // 检索条件用表单
       searchAttrForm: {
         uuid: '',
@@ -206,6 +208,11 @@ export default {
   },
   mounted () {
     this.search()
+    this.setMenuHightLight()
+    this.attatchEventToPager()
+  },
+  beforeDestroy () {
+    this.setUnHightLight()
   },
   computed: {
     title: function () {
@@ -219,13 +226,43 @@ export default {
     }
   },
   methods: {
+    setMenuHightLight: function () {
+      let sidemenu = document.getElementById('sidemenu')
+      if (sidemenu) {
+        // console.log('get side menu')
+        // let ul = sidemenu.querySelectorAll('ul[role="menu"]')
+        // if (ul) {
+        //   ul[0].style['display'] = 'block'
+        // }
+        // console.log(ul)
+        let menus = sidemenu.querySelectorAll('li.el-menu-item')
+        if (menus) {
+          this.menu = menus
+          for (let i = 0; i < menus.length; i++) {
+            if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+              menus[i].classList.add('is-active')
+            }
+          }
+        }
+      }
+    },
+    setUnHightLight: function () {
+      let menus = this.menu
+      if (menus) {
+        for (let i = 0; i < menus.length; i++) {
+          if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+            menus[i].classList.remove('is-active')
+          }
+        }
+      }
+    },
     // 根据条件查询设备分类数据到列表中
     search () {
       this.attrListLoading = true
       getDeviceAttributes(this.searchAttrForm)
         .then(
           function (result) {
-            console.log('get attr domain info')
+            console.log('getDeviceAttributes')
             this.attrList = result.data.result
             this.searchAttrForm.total = result.data.totalCount
             this.attrListLoading = false
@@ -483,6 +520,26 @@ export default {
       this.clear()
       this.attrSaved = false
       this.activeTab = 'basic'
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
+    },
+    attatchEventToPager: function (params) {
+      const self = this
+      // self.search()
+      var input = self.$refs.pager.$el.querySelectorAll('input')[1]
+      // console.log('input:' + input.value)
+      self.addEventHandler(input, 'keyup', function (e) {
+      // console.log('input:' + input.value)
+        if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchAttrForm.currentPage)) {
+          self.searchAttrForm.currentPage = parseInt(input.value)
+          self.search()
+        }
+      })
     }
   }
 }

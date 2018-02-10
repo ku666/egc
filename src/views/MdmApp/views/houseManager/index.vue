@@ -25,7 +25,7 @@
             </el-table-column>
           </el-table>
         </div>
-        <el-pagination :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+        <el-pagination ref='pager' :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
         </el-pagination>
       </div>
     </div>
@@ -81,9 +81,10 @@ export default {
       this.search(this.searchOption)
     },
     search: function (options) {
-      this.loading = true
-      options.pageSize = this.pageSize
-      options.currentPage = this.currentPage
+      const t = this
+      t.loading = true
+      options.pageSize = t.pageSize
+      options.currentPage = t.currentPage
       let func = null
       if (options.nodeLevel === 1) {
         func = getHousesByConditions
@@ -93,7 +94,7 @@ export default {
       func(options)
         .then(res => {
           var self = this
-          this.total = res.data.data.totalCount
+          self.total = res.data.data.totalCount
           const timeOut = setTimeout(function () {
             self.tableData = res.data.data.result
             self.loading = false
@@ -102,12 +103,29 @@ export default {
         })
         .catch(err => {
           console.log(err)
-          this.loading = false
+          self.loading = false
         })
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
     }
   },
   mounted: function () {
-
+    const self = this
+    // self.search()
+    var input = self.$refs.pager.$el.querySelectorAll('input')[1]
+    // console.log('input:' + input.value)
+    self.addEventHandler(input, 'keyup', function (e) {
+      // console.log('input:' + input.value)
+      if ((e.keyCode === 13) && (parseInt(input.value) !== self.currentPage)) {
+        self.currentPage = parseInt(input.value)
+        self.search(self.searchOption)
+      }
+    })
   }
 }
 </script>

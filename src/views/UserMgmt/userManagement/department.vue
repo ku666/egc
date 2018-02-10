@@ -43,13 +43,13 @@
         </el-pagination>
       </div>
 
-      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible">
+      <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <department-create ref="departmentCreateVue" :departmentSelect="departmentOptions" :departmentTypeSelect="departmentTypeOptions"  @gridCreateEvent="deptAddEvent" @canelDialogEvent="handleClose"></department-create>
       </el-dialog>
-      <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
+      <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <department-edit ref="departmentEditVue" @canelDialogEvent="handleClose" :isAddFlag="addFlag" :department="departmentForm" :departmentSelect="departmentOptions"
         @gridSaveEvent="deptUpdateEvent" :departmentTypeSelect="departmentTypeOptions"
-        :curDepartmentUuidParm="curDepartmentUuid"></department-edit>
+        :curDepartmentUuidParm="curDepartmentUuid" :curDepartmentTypeParm="curDepartmentType"></department-edit>
       </el-dialog>
     </div>
     <div v-show="showGrid == false" >
@@ -81,10 +81,10 @@
           <el-card class="box-card" style='margin-left:10px;' v-show="showEditTree">
             <department-edit ref="departmentEditTreeVue" @canelDialogEvent="handleClose" :department="departmentForm"
             :departmentSelect="departmentOptions" @gridSaveEvent="deptUpdateEvent" @gridRefreshDir="loadDepartmentTree"
-            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-edit>
+            :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions" :curDepartmentTypeParm="curDepartmentType"></department-edit>
           </el-card>
           <el-card class="box-card" style='margin-left:10px;' v-show="showCreateTree">
-            <department-create  ref="departmentCreateTreeVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent"
+            <department-create  ref="departmentCreateTreeVue" @gridCreateEvent="deptAddEvent"
             @canelDialogEvent="handleClose" :departmentTypeSelect="departmentTypeOptions"></department-create>
           </el-card>
         </el-col>
@@ -117,7 +117,7 @@
           title: '部门名称',
           prop: 'departmentName'
         }, {
-          title: '部门类别',
+          title: '用户类型',
           prop: 'departmentTypeName'
         }, {
           title: '上级部门',
@@ -165,6 +165,7 @@
         addFlag: false,
         departmentOptions: [],
         curDepartmentUuid: '',
+        curDepartmentType: '',
         dictData: {
           userStatusDict: 'CLOUD_USER_TYPE'
         },
@@ -237,12 +238,14 @@
         this.dialogCreateFormVisible = true
         this.addFlag = false
         // this.initDepartmentForm()
-        this.$refs.departmentCreateVue.initDepartmentInfo()
-        this.getDepartmentSelect(this.curDepartmentUuid, 1)
+        if (this.$refs.departmentCreateVue) {
+          this.$refs.departmentCreateVue.initDepartmentInfo()
+        }
+        // this.getDepartmentSelect(this.curDepartmentUuid, 1)
       },
-      getDepartmentSelect (uuid, cloudFlag) {
+      getDepartmentSelect (uuid, cloudFlag, departmentType) {
         // 获取部门信息
-        getParenetDepartmentSelect(uuid, cloudFlag)
+        getParenetDepartmentSelect(uuid, cloudFlag, departmentType)
           .then(
               function (result) {
                 console.log('<<<<<departmentOptions:' + JSON.stringify(result))
@@ -376,7 +379,8 @@
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)
         this.curDepartmentUuid = data.uuid
-        this.getDepartmentSelect(data.uuid, 1)
+        this.curDepartmentType = data.departmentType
+        this.getDepartmentSelect(data.uuid, 1, data.departmentType)
         getDepartmentDetail(data.uuid)
           .then(
             function (result) {

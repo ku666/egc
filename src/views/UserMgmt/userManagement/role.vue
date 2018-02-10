@@ -3,9 +3,22 @@
   <div class='ui-common'>
      <div class="flex-c flex-1">
       <el-row style="height: 100%;">
-        <el-col :span="8" style='height: 100%;' class="flex-c">
+        <el-col :span="10" style='height: 100%;' class="flex-c">
           <div>
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary">添加</el-button>
+            <el-select clearable
+              v-model='userType' 
+              placeholder='请选择用户类型'
+              style="width:260px; float:right"
+              @change='userTypeSelected'
+              >
+              <el-option
+                v-for='item in userTypeOptions'
+                :key='item.itemCode'
+                :label='item.itemName'
+                :value='item.itemCode'>
+              </el-option>
+            </el-select>
           </div>
           <div class="flex-1 flex-c">
           <grid-list id="roleTable"
@@ -41,7 +54,7 @@
               v-show="showCreate"
             ></role-add>
         </el-dialog>
-        <el-col :span="16" style='margin-top:40px;' v-show="showGrid">
+        <el-col :span="14" style='margin-top:40px;' v-show="showGrid">
           <el-card class="box-card" style='margin-left:10px; margin-top:15px'>
             <role-edit ref="roleedit"
               @listenToEditEvent="roleBaseVoEditEvent"
@@ -108,7 +121,8 @@
           currentPage: 1,
           pageSize: 10,
           cloudFlag: 1,
-          courtUuid: ''
+          courtUuid: '',
+          userType: ''
         },
         editQuery: {
           roleId: '',
@@ -130,6 +144,19 @@
       roleAdd
     },
     methods: {
+      getRoleListTable () {
+        getRoleList(this.query)
+          .then(
+            function (result) {
+              this.roleData = result
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+      },
       loadData () {
         this.roleListParam = [{
           title: '角色名称',
@@ -143,17 +170,7 @@
           title: '角色说明',
           prop: 'remark'
         }]
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListTable()
         listUserType()
           .then(
             function (result) {
@@ -179,17 +196,7 @@
                 message: '删除成功!'
               })
               this.showGrid = false
-              getRoleList(this.query)
-                .then(
-                  function (result) {
-                    this.roleData = result
-                  }.bind(this)
-                )
-                .catch(
-                  function (error) {
-                    console.log(error)
-                  }
-                )
+              this.getRoleListTable()
             }.bind(this)
           )
           .catch(
@@ -226,66 +233,23 @@
         this.$refs.roleedit.changeRoleEditDiaLogEvent()
       },
       roleAddEvent (data) {
-        console.log('role：添加了 ' + data)
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListTable()
         this.dialogFormVisible = false
         this.showCreate = false
       },
       roleBaseVoEditEvent (data) {
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListTable()
       },
       roleCloseEvent () {
         this.showGrid = false
       },
       handleRoleCurrentChange (val) {
         this.query.currentPage = val
-        // this.query.roleId = this.form.uuid
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListTable()
       },
       handleRoleSizeChange (val) {
         this.query.pageSize = val
-        // this.query.roleId = this.form.uuid
-        getRoleList(this.query)
-          .then(
-            function (result) {
-              this.roleData = result
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getRoleListTable()
       },
       handleCreate () {
         this.showCreate = true
@@ -296,6 +260,10 @@
         this.roleForm.uuid = undefined
         this.roleForm.userType = undefined
         this.dialogFormVisible = true
+      },
+      userTypeSelected (data) {
+        this.query.userType = data
+        this.getRoleListTable()
       }
     },
     created: function () {
