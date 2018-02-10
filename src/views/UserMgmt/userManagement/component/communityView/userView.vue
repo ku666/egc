@@ -7,11 +7,6 @@
       <el-tab-pane label="关联角色" name="3" v-if="isAddFlag"></el-tab-pane>
     </el-tabs>
     <el-form ref='user' v-show='gridUser' :inline="true" :model="user">
-      <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType" style="display:block">
-        <el-select v-model="user.userType" placeholder="无数据" class="user_el-select">
-          <el-option v-for="userType in userTypeList" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode" disabled> </el-option>
-        </el-select>
-      </el-form-item>
       <el-form-item label="登录 ID" :label-width="formLabelWidth">
         <el-input v-model="user.userName" auto-complete="off" placeholder="无数据" class="user_el-input" readonly></el-input>
       </el-form-item>
