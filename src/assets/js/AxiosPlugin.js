@@ -17,6 +17,12 @@ Axios.interceptors.request.use(config => {
     config.headers.Authorization = sessionStorage.token
     config.headers.FrontType = 'egc-admin-ui'
   }
+  if (config.method === 'get') {
+    config.params = {
+      _t: Date.parse(new Date()) / 1000,
+      ...config.params
+    }
+  }
   return config
 }, error => {
   return Promise.reject(error)

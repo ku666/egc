@@ -76,7 +76,7 @@ export default {
       getCourtList({courtName: this.searchCourtName}).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
-          let list = res.data.data
+          let list = res.data.data ? res.data.data : []
           this.courtList = list
           let pointdata = []
           let proObj = {}
@@ -177,6 +177,10 @@ export default {
     overflow: auto;
     margin: 7px 0px 0px 0px;
     box-sizing: border-box;
+    /deep/ .el-table{
+      max-height: 735px;
+      overflow: auto;
+    }
     .el-table__row {
       height: 60px;
     }

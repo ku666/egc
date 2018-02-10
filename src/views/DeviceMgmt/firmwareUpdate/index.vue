@@ -17,7 +17,7 @@
           </firmware-maintain>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="下发状态信息" name="third">
+      <el-tab-pane label="下发文件状态" name="third">
         <div class="maintain-container">
           <send-status-list></send-status-list>
         </div>

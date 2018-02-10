@@ -404,8 +404,8 @@ export default {
     queryParam: function () {
       // 获取查询参数
       return Object.assign({}, this.form, {
-        startDate: this.timeFomate(this.form.startDate),
-        endDate: this.timeFomate(this.form.endDate)
+        startTime: this.timeFomate(this.form.startDate),
+        endTime: this.timeFomate(this.form.endDate)
       })
     },
     timeFomate: function (date) {

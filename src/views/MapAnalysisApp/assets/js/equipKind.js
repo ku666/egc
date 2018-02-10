@@ -77,8 +77,9 @@ var option = {
     }
   ]
 }
+
 /**
- * 更新人员入园流量数据
+ * 更新小区设备种类数据
  * @param {*} data 人数的数据 []
  */
 var updateData = function (data) {

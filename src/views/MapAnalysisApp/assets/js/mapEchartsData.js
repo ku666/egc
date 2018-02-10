@@ -40,7 +40,8 @@ var provinceData = [
   { name: '海南', value: randomValue() },
   { name: '台湾', value: randomValue() },
   { name: '香港', value: randomValue() },
-  { name: '澳门', value: randomValue() }
+  { name: '澳门', value: randomValue() },
+  { name: '南海诸岛', value: randomValue() }
 ]
 
 var option = {
