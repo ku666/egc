@@ -13,7 +13,8 @@
         <el-select 
         v-model='form.userType' 
         placeholder='请选择用户类型' 
-        style="width:650px" 
+        style="width:650px"
+        disabled
         >
           <el-option
             v-for='item in userTypeList'
