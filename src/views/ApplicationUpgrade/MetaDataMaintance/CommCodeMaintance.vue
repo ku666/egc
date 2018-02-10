@@ -19,13 +19,13 @@
     <div>
       <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
     </div>
-    <div style="margin-top: 20px" class="flex-1">
+    <div style="margin-top: 20px">
           <el-table :data="commCodeDataList" stripe border v-loading="loading">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column label="操作" width="200">
+            <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
                 </el-button>

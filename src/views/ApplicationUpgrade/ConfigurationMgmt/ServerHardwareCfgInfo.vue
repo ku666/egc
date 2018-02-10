@@ -11,7 +11,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column label="操作" width="130">
+            <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" :title="detailsTitle" class="el-icon-view" style="font-size:15px;color: #0078f4">
                   </el-button>
@@ -273,30 +273,37 @@ export default {
     },
     // 比对刷新
     _handleSynData (rowIdx) {
-      // this.synDataLoading = true
+      this.synDataLoading = true
       var rowData = this.auServerListData[rowIdx]
       var eachRowUUID = rowData.uuid
       // 刷新
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
-            console.log(' sync result --- > ' + JSON.strngify(result))
-            this.syncDataStatus = result.syncMessage.msg
-            if (this.syncDataStatus) {
+            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
+            // 加载数据
+              this.loadData()
               this.$message({
-                message: '数据更新成功',
+                message: '刷新成功',
                 type: 'success'
               })
-              // 再次加载数据
-              this.loadData()
+            } else {
+              this.$message({
+                message: '刷新失败',
+                type: 'error'
+              })
             }
           }.bind(this)
         )
-        .catch(function (error) {
-          this.synDataLoading = false
-          console.log(error)
-        })
+        .catch(
+          function (error) {
+            console.log(error)
+            this.synDataLoading = false
+          }
+        )
     },
     // 历史记录
     _handleCheckHistory (rowIdx) {
