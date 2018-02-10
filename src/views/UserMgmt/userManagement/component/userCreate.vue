@@ -205,7 +205,7 @@ export default {
           { max: 128, message: '长度不能超过128个字符' }
         ],
         primaryPhone: [
-          { required: true, message: '请输入有效的手机号', trigger: 'blur' },
+          // { required: true, message: '请输入有效的手机号', trigger: 'blur' },
           { pattern: /^1[34578]\d{9}$/, message: '请输入有效的手机号' }
         ],
         effectiveDate: [

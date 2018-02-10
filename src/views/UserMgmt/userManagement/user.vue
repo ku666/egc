@@ -8,14 +8,6 @@
      <div v-show="showFirstTab" class="flex-1 flex-c">
       <el-form :inline="true" :model="listQuery" ref="listQuery">
         <div class="search-container">
-          <!-- <el-form-item label="用户姓名"> -->
-          <el-form-item>
-            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
-          </el-form-item>
-          <!-- <el-form-item label="　　登录ID"> -->
-          <el-form-item>
-            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
-          </el-form-item>
           <el-form-item>
             <el-select clearable
               v-model='listQuery.userType' 
@@ -30,6 +22,14 @@
                 :value='item.itemCode'>
               </el-option>
             </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="用户姓名"> -->
+          <el-form-item>
+            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
+          </el-form-item>
+          <!-- <el-form-item label="　　登录ID"> -->
+          <el-form-item>
+            <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
           </el-form-item>
           <!-- <el-form-item label="　　手机号"> -->
           <el-form-item>
@@ -191,7 +191,8 @@ export default {
       dictData: {
         userStatusDict: 'CLOUD_USER_ACC_STATUS',
         contactTypeDict: 'CLOUD_CONTACT_TYPE',
-        cloudFlag: 1
+        cloudFlag: 1,
+        departmentType: ''
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
@@ -252,6 +253,7 @@ export default {
           }
         )
       // 获取部门信息
+      this.dictData.departmentType = this.listQuery.userType
       getDepartmentOptions(this.dictData)
         .then(
             function (result) {
