@@ -3,7 +3,7 @@
   <div class='ui-common'>
      <div class="flex-c flex-1">
       <el-row style="height: 100%;">
-        <el-col :span="8" style='height: 100%;' class="flex-c">
+        <el-col :span="10" style='height: 100%;' class="flex-c">
           <div>
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary">添加</el-button>
             <el-select clearable
@@ -54,7 +54,7 @@
               v-show="showCreate"
             ></role-add>
         </el-dialog>
-        <el-col :span="16" style='margin-top:40px;' v-show="showGrid">
+        <el-col :span="14" style='margin-top:40px;' v-show="showGrid">
           <el-card class="box-card" style='margin-left:10px; margin-top:15px'>
             <role-edit ref="roleedit"
               @listenToEditEvent="roleBaseVoEditEvent"

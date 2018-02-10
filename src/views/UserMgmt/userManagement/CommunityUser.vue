@@ -114,13 +114,15 @@ export default {
         q_fullName: '',
         q_primaryPhone: '',
         cloudFlag: 0,
-        courtUuid: ''
+        courtUuid: '',
+        userType: ''
       },
       formLabelWidth: '120px',
       dictData: {
         userStatusDict: 'COURT_USER_ACC_STATUS',
         contactTypeDict: 'COURT_CONTACT_TYPE',
-        cloudFlag: 0
+        cloudFlag: 0,
+        departmentType: ''
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,

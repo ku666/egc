@@ -70,6 +70,7 @@
       </el-table>
 
     <el-pagination
+      ref='pager'
       background
       :current-page = 'searchProviderForm.currentPage'
       :page-sizes = '[10, 20, 50, 100]'
@@ -183,6 +184,7 @@ export default {
   },
   mounted () {
     this.search()
+    this.attatchEventToPager()
   },
   computed: {
     title: function () {
@@ -418,6 +420,26 @@ export default {
     clearValidate: function () {
       this.$nextTick(() => {
         this.$refs['providerForm'].clearValidate()
+      })
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
+    },
+    attatchEventToPager: function (params) {
+      const self = this
+      // self.search()
+      let input = self.$refs.pager.$el.querySelectorAll('input')[1]
+      // console.log('input:' + input.value)
+      self.addEventHandler(input, 'keyup', function (e) {
+      // console.log('input:' + input.value)
+        if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchProviderForm.currentPage)) {
+          self.searchProviderForm.currentPage = parseInt(input.value)
+          self.search()
+        }
       })
     }
   }

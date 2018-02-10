@@ -788,7 +788,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '用户名',
+          title: '登录 ID',
           prop: 'userName'
         },
         {
@@ -820,19 +820,19 @@ export default {
         {
           title: 'URL',
           prop: 'resourceUrl'
-        },
-        {
-          title: '操作类型',
-          prop: 'actionTypeName'
-        },
-        {
-          title: '安装位置',
-          prop: 'houseOrgName'
-        },
-        {
-          title: '逻辑地址',
-          prop: 'logicalAddress'
         }
+        // {
+        //   title: '操作类型',
+        //   prop: 'actionTypeName'
+        // },
+        // {
+        //   title: '安装位置',
+        //   prop: 'houseOrgName'
+        // },
+        // {
+        //   title: '逻辑地址',
+        //   prop: 'logicalAddress'
+        // }
       ]
     }
   }
@@ -873,15 +873,15 @@ export default {
   }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 15%
+    width: 20%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 18%
+    width: 35%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 28%
+    width: 35%
   }
-  #resourceTable >>> colgroup col:nth-child(4) {
+  /* #resourceTable >>> colgroup col:nth-child(4) {
     width: 11%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
@@ -889,7 +889,7 @@ export default {
   }
   #resourceTable >>> colgroup col:nth-child(6) {
     width: 9%
-  }
+  } */
   #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
   }

@@ -83,21 +83,21 @@ export default {
 </script>
 <style scoped>
 #directTable >>> colgroup :nth-child(1) {
-  width: 15%;
+  width: 16%;
 }
 #directTable >>> colgroup :nth-child(2) {
-  width: 15%;
+  width: 16%;
 }
 #directTable >>> colgroup :nth-child(3) {
-  width: 15%;
+  width: 16%;
 }
 #directTable >>> colgroup :nth-child(4) {
   width: 15%;
 }
 #directTable >>> colgroup :nth-child(5) {
-  width: 12%;
+  width: 18%;
 }
 #directTable >>> colgroup :nth-child(6) {
-  width: 28%;
+  width: 19%;
 }
 </style>

@@ -3,7 +3,7 @@
   <div class='ui-common'>
      <div class="flex-c flex-1">
       <el-row style="height: 100%;">
-        <el-col :span="8"  style='height: 100%;' class="flex-c">
+        <el-col :span="10"  style='height: 100%;' class="flex-c">
           <el-form :inline='true'>
             <el-form-item>
           <el-select filterable
@@ -43,7 +43,7 @@
             style="margin-top:15px; margin-bottom:20px">
           </el-pagination>
         </el-col>
-        <el-col :span="16" style='margin-top:75px;' v-show="showGrid">
+        <el-col :span="14" style='margin-top:75px;' v-show="showGrid">
           <el-card class="box-card" style='margin-left:10px; margin-top:20px'>
             <role-view 
               :roleUserData = 'subUserData'

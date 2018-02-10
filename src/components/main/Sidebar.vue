@@ -1,5 +1,5 @@
 <template>
-  <div class="egsc-admin-sidebar">
+  <div class="egsc-admin-sidebar" id='sidemenu'>
     <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="light" :default-openeds="openeds" unique-opened router>
       <template v-for="(item,i) in items">
         <template v-if="item.menus">

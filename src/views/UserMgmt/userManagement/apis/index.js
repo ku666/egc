@@ -8,7 +8,7 @@ let contextPath = '/egc-usermgmtcomponent'
 
 // 获取下属用户组数据
 export const listUserType = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=CLOUD_USER_TYPE'
   ).then(res => res.data)
 }
 
@@ -411,7 +411,7 @@ export const checkUserName = (userUuid, userName, userType) => {
 }
 // 获取部门下拉框
 export const getDepartmentOptions = (dictData) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listDepartment?cloudFlag=' + dictData.cloudFlag
+  return Axios.get(contextPath + '/usermgmt/maindata/listDepartment?cloudFlag=' + dictData.cloudFlag + '&departmentType=' + dictData.departmentType
   ).then(res => res.data)
 }
 // 获取用户状态下拉框

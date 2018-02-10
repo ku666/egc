@@ -178,6 +178,7 @@
     </el-table>
 
     <el-pagination
+      ref='pager'
       background
       :current-page='searchForm.currentPage'
       :page-sizes='[10, 20, 50, 100]'
@@ -245,6 +246,7 @@ export default {
     // 查询所有的供应商信息
     this.getProviders()
     this.getParents()
+    this.attatchEventToPager()
   },
   methods: {
     // 列表选择方法
@@ -500,6 +502,26 @@ export default {
       } else {
         return t
       }
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
+    },
+    attatchEventToPager: function (params) {
+      const self = this
+      // self.search()
+      let input = self.$refs.pager.$el.querySelectorAll('input')[1]
+      // console.log('input:' + input.value)
+      self.addEventHandler(input, 'keyup', function (e) {
+      // console.log('input:' + input.value)
+        if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchForm.currentPage)) {
+          self.searchForm.currentPage = parseInt(input.value)
+          self.search()
+        }
+      })
     }
   }
 }

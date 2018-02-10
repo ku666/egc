@@ -32,7 +32,7 @@
 import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import markerImg from '@/views/MapAnalysisApp/assets/images/icon.png'
 import chooseImg from '@/views/MapAnalysisApp/assets/images/u346.png'
-import hdmap from 'hdmap'
+// import hdmap from 'hdmap'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
@@ -59,63 +59,63 @@ export default {
   },
   mounted: function () {
     // 初始化地图
-    this.map = new hdmap.initMap({
-      gisEngine: 'baidu',
-      domId: 'map',
-      mapUrl: 'http://online1.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&p=1&scaler=1&udt=20171115',
-      sat: 0,
-      zoom: 5,
-      center: [108, 34], // 113.619942, 23.304629
-      popupDom: {
-        popup: 'popup',
-        popupcloser: 'popup-closer',
-        popupcontent: 'popup-content'
-      }
-    })
-    // 添加弹窗
-    this.map.addPopup('tipWin')
-    this.map.regEventListener('singleclick', this.handleSingleClick)
+    // this.map = new hdmap.initMap({
+    //   gisEngine: 'baidu',
+    //   domId: 'map',
+    //   mapUrl: 'http://online1.map.bdimg.com/onlinelabel/?qt=tile&x={x}&y={y}&z={z}&styles=pl&p=1&scaler=1&udt=20171115',
+    //   sat: 0,
+    //   zoom: 5,
+    //   center: [108, 34], // 113.619942, 23.304629
+    //   popupDom: {
+    //     popup: 'popup',
+    //     popupcloser: 'popup-closer',
+    //     popupcontent: 'popup-content'
+    //   }
+    // })
+    // // 添加弹窗
+    // this.map.addPopup('tipWin')
+    // this.map.regEventListener('singleclick', this.handleSingleClick)
     // 查询小区列表数据，初始化全国小区列表点位
-    getCourtList().then(res => {
-      // console.log(res)
-      if (res.data.code === '00000') {
-        let list = res.data.data
-        this.courtList = list
-        let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
-        list.map(function (item, index) {
-          if ((item.gpsLat && item.gpsLon) || index < test.length) {
-            if (!item.gpsLat) {
-              item.gpsLon = test[index][0]
-              item.gpsLat = test[index][1]
-            }
-            let tran = this.map.translate_4326_to_bd09([item.gpsLon, item.gpsLat])
-            tran = this.map.translate_4326_to_3857(tran)
-            item.gpsLon = tran[0]
-            item.gpsLat = tran[1]
-            if (item.gpsLat && item.gpsLon) {
-              this.map.addMarker({
-                id: item.courtUuid,
-                position: [item.gpsLon, item.gpsLat],
-                markerType: 'common',
-                name: item.courtName,
-                imgUrl: markerImg,
-                size: [32, 48]
-              })
-            }
-          }
-        }, this)
-      } else {
-        this.$message({
-          type: 'warning',
-          message: res.data.message
-        })
-      }
-    }).catch(err => {
-      this.$message({
-        type: 'warning',
-        message: err
-      })
-    })
+    // getCourtList().then(res => {
+    //   // console.log(res)
+    //   if (res.data.code === '00000') {
+    //     let list = res.data.data
+    //     this.courtList = list
+    //     let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
+    //     list.map(function (item, index) {
+    //       if ((item.gpsLat && item.gpsLon) || index < test.length) {
+    //         if (!item.gpsLat) {
+    //           item.gpsLon = test[index][0]
+    //           item.gpsLat = test[index][1]
+    //         }
+    //         let tran = this.map.translate_4326_to_bd09([item.gpsLon, item.gpsLat])
+    //         tran = this.map.translate_4326_to_3857(tran)
+    //         item.gpsLon = tran[0]
+    //         item.gpsLat = tran[1]
+    //         if (item.gpsLat && item.gpsLon) {
+    //           this.map.addMarker({
+    //             id: item.courtUuid,
+    //             position: [item.gpsLon, item.gpsLat],
+    //             markerType: 'common',
+    //             name: item.courtName,
+    //             imgUrl: markerImg,
+    //             size: [32, 48]
+    //           })
+    //         }
+    //       }
+    //     }, this)
+    //   } else {
+    //     this.$message({
+    //       type: 'warning',
+    //       message: res.data.message
+    //     })
+    //   }
+    // }).catch(err => {
+    //   this.$message({
+    //     type: 'warning',
+    //     message: err
+    //   })
+    // })
   },
   methods: {
     // 点击地图
