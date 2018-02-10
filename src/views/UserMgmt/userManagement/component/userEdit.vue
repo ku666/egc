@@ -212,9 +212,8 @@ export default {
           { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' },
           { max: 128, message: '长度不能超过128个字符' }
         ],
-
         primaryPhone: [
-          { required: true, message: '请输入有效的手机号', trigger: 'blur' },
+          // { required: true, message: '请输入有效的手机号', trigger: 'blur' },
           { pattern: /^1[34578]\d{9}$/, message: '请输入有效的手机号' }
         ],
         effectiveDate: [

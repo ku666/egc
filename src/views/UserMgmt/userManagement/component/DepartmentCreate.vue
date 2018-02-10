@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form :model='department' :rules="rules" ref="department">
-      <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
-        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别" @change="deptTypeSelected">
+      <el-form-item label='用户类型' prop='departmentType' :label-width="formLabelWidth">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择用户类型" @change="deptTypeSelected">
           <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
        </el-select>
       </el-form-item>
