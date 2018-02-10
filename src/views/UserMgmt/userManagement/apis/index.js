@@ -400,7 +400,7 @@ export const getUserListByPage = (listQuery) => {
   // console.log('<<<<<listQuery.page:' + listQuery.page)
   // console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
+  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid + '&userType=' + listQuery.userType
   ).then(res => res.data)
 }
 // 校验用户名是否唯一
