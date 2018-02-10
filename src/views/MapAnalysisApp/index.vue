@@ -84,6 +84,7 @@ export default {
           let list = res.data.data ? res.data.data : []
           this.courtList = list
           let pointdata = []
+          let prodata = []
           let proObj = {}
           // console.log(list)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
@@ -106,12 +107,12 @@ export default {
                 proObj[pname] = {}
                 proObj[pname].value = 0
                 proObj[pname].courts = []
-                this.provinArr.push({value: item.org, label: item.org})
+                prodata.push({value: item.org, label: item.org})
               }
               proObj[pname].value += 1
               proObj[pname].courts.push(item)
             }
-          }, this)
+          })
           // console.log(proObj)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
@@ -121,6 +122,7 @@ export default {
             mapData.updateData(pointdata)
             mapData.updateProvinceData(proObj)
             this.courtListTB = list.slice(0, 10)
+            if (prodata.length > 0) this.provinArr = this.provinArr.concat(prodata)
           }
           this.getMyCharts.setOption(mapData.option)
         } else {
