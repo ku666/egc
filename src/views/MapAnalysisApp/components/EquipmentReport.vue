@@ -70,7 +70,13 @@ export default {
           sums[index] = '总数量'
           return
         }
+        if (index === 1) {
+          sums[index] = ''
+          return
+        }
         const values = data.map(item => Number(item[column.property]))
+        console.log('values')
+        console.log(values)
         if (!values.every(value => isNaN(value))) {
           sums[index] = values.reduce((prev, curr) => {
             const value = Number(curr)
@@ -198,6 +204,7 @@ export default {
     },
     equipmentReport (courtId) {
       this.dialogReportVisible = true
+      if (!courtId) { courtId = '222b79f4a7b44d03b6f55f028992851f' }
       this.$nextTick(() => {
         // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {

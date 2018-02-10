@@ -2,6 +2,9 @@
   <div class="mapCon">
     <div class="mapCl ui-common">
       <div class="searchBox">
+        <el-select class="proSel" v-model="provinceSel" placeholder="请选择查询省份">
+          <el-option v-for="vo in provinArr" :key="vo.value" :label="vo.label" :value="vo.value"></el-option>
+        </el-select>
         <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
         <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
       </div>
@@ -40,7 +43,9 @@ export default {
       searchListTB: [],
       rowkeys: [0],
       activeName: 'first',
-      provinceName: '全省小区'
+      provinceName: '全省小区',
+      provinceSel: '',
+      provinArr: [{value: '', label: '-全国范围-'}]
     }
   },
   mounted: function () {
@@ -60,7 +65,7 @@ export default {
       mapData.updateChooseData([]) // 清空‘强调显示’的小区信息
       this.getMyCharts.setOption(mapData.option)
       console.log('点击地图')
-      console.log(e)
+      // console.log(e)
       if (e.seriesType === 'scatter' || e.seriesType === 'effectScatter') {
         // 跳转到指定的小区的详情页
         this.$router.push('/mapanalysisapp/courtinfo/' + e.data.courtUuid)
@@ -73,7 +78,7 @@ export default {
     // 获取小区列表数据
     getCourtListData: function (isSearch) {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
-      getCourtList({courtName: this.searchCourtName}).then(res => {
+      getCourtList({courtName: this.searchCourtName, org: this.provinceSel}).then(res => {
         // console.log(res)
         if (res.data.code === '00000') {
           let list = res.data.data ? res.data.data : []
@@ -101,6 +106,7 @@ export default {
                 proObj[pname] = {}
                 proObj[pname].value = 0
                 proObj[pname].courts = []
+                this.provinArr.push({value: item.org, label: item.org})
               }
               proObj[pname].value += 1
               proObj[pname].courts.push(item)
@@ -181,6 +187,9 @@ export default {
       max-height: 735px;
       overflow: auto;
     }
+    /deep/ .el-table::before{
+      display:none;
+    }
     .el-table__row {
       height: 60px;
     }
@@ -212,11 +221,15 @@ export default {
   box-sizing: border-box;
 }
 .searchBox{
-  width: 50%;
+  width: 60%;
   height: 60px;
   display: flex;
   display: -webkit-flex;
   flex-flow: row nowrap;
   align-items: center;
+  .proSel{
+    width: 40%;
+    // margin-right: 10px;
+  }
 }
 </style>
