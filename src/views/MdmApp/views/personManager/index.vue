@@ -78,8 +78,9 @@
         </el-table-column>
       </el-table>
       <el-pagination
+        ref='pager'
         background
-        :current-page='searchCondition.currentPage'
+        :current-page.sync='searchCondition.currentPage'
         :page-sizes='[10, 20, 50, 100]'
         :page-size='searchCondition.pageSize'
         layout='total, sizes, prev, pager, next, jumper'
@@ -289,18 +290,18 @@ export default {
       this.selections = val
     },
     sizeChange: function (val) {
-      console.log('sizeChange')
+      // console.log('sizeChange')
       this.searchCondition.pageSize = val
       this.searchCondition.currentPage = 1
       this.search()
     },
     currentChange: function (val) {
-      console.log('currentChange')
+      // console.log('currentChange:' + val)
       this.searchCondition.currentPage = val
       this.search()
     },
     search: function () {
-      console.log('search method')
+      // console.log('search method')
       this.loading = true
       getPersonList(this.searchCondition)
         .then(function (result) {
@@ -312,10 +313,32 @@ export default {
           console.log(err)
           this.loading = false
         })
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
+    },
+    removeEventHandler: function (target, type, fn) {
+      if (target.removeEventListener) {
+        target.removeEventListener(type, fn)
+      } else {
+        target.detachEvent('on' + type, fn)
+      }
     }
   },
   mounted: function () {
-    this.search()
+    const self = this
+    self.search()
+    var input = self.$refs.pager.$el.querySelectorAll('input')[1]
+    self.addEventHandler(input, 'keyup', function (e) {
+      if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchCondition.currentPage)) {
+        self.searchCondition.currentPage = parseInt(input.value)
+        self.search()
+      }
+    })
   }
 }
 </script>

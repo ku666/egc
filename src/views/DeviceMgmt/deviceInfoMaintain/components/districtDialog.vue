@@ -207,6 +207,8 @@
           }).then(() => {
             this.$emit('listenToRowSelected', this.listRows)
           }).catch()
+        } else {
+          this.$message.error('请先选择下发小区')
         }
       }
     },

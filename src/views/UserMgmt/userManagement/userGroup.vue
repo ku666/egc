@@ -10,6 +10,19 @@
       <div>
         <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
         <span style="float:right">
+          <el-select clearable
+            v-model='userType' 
+            placeholder='请选择用户类型'
+            style="width:260px; margin-right:10px"
+            @change='userTypeSelected'
+            >
+            <el-option
+              v-for='item in userTypeOptions'
+              :key='item.itemCode'
+              :label='item.itemName'
+              :value='item.itemCode'>
+            </el-option>
+          </el-select>
           <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入用户组名称" v-model="searchText"></el-input>
           <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
           <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
@@ -144,6 +157,20 @@
       userGroupCreate
     },
     methods: {
+      getUserGroupListTable () {
+        getUserGroupList(this.query)
+          .then(
+            function (result) {
+              this.userGroupList = result.usergroupBaseVoList
+              this.total = result.pageCount
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+      },
       loadData () {
         this.userGroupListParam = [{
           title: '用户组名称',
@@ -161,20 +188,7 @@
           title: '直属用户',
           prop: 'dirUsersName'
         }]
-        console.log(this.query)
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
         listUserType()
           .then(
             function (result) {
@@ -187,18 +201,6 @@
               console.log('错误：' + error)
             }
           )
-        // getTreeData()
-        //   .then(
-        //     function (result) {
-        //       this.treeData = result.treeData
-        //       console.log('用户组树形数据：' + JSON.stringify(result))
-        //     }.bind(this)
-        //   )
-        //   .catch(
-        //     function (error) {
-        //       console.log(error)
-        //     }
-        //   )
       },
       filterNode (value, data) {
         if (!value) return true
@@ -206,38 +208,12 @@
       },
       handleFilter () {
         this.query.userGroupName = this.searchText
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-              // this.query.userGroupName = undefined
-              // this.searchText = undefined
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       handleFilterReset () {
         this.searchText = ''
         this.query.userGroupName = ''
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       handleCreate () {
         this.dialogAddStatus = '添加用户组'
@@ -266,34 +242,12 @@
       handleSizeChange (val) {
         this.query.pageSize = val
         this.query.usergroupName = this.searchText
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       handleCurrentChange (val) {
         this.query.currentPage = val
         this.query.usergroupName = this.searchText
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       userGroupDeleteEvent (data) {
         console.log('userGroup：删除了第' + data.uuid + '行')
@@ -306,18 +260,7 @@
                 type: 'success',
                 message: '删除成功!'
               })
-              getUserGroupList(this.query)
-                .then(
-                  function (result) {
-                    this.userGroupList = result.usergroupBaseVoList
-                    this.total = result.pageCount
-                  }.bind(this)
-                )
-                .catch(
-                  function (error) {
-                    console.log(error)
-                  }
-                )
+              this.getUserGroupListTable()
             }.bind(this)
           )
           .catch(
@@ -393,55 +336,22 @@
             )
       },
       childEditEvent (data) {
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组child编辑：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       childDeleteEvent (data) {
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组child删除：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
       },
       userGroupAddEvent (data) {
-        console.log('角色组：添加了 ' + data)
-        getUserGroupList(this.query)
-          .then(
-            function (result) {
-              this.userGroupList = result.usergroupBaseVoList
-              this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        this.getUserGroupListTable()
         this.dialogFormAddVisible = false
         this.showCreate = false
       },
       childCloseEvent () {
         this.dialogFormEditVisible = false
+      },
+      userTypeSelected (data) {
+        this.query.userType = data
+        this.getUserGroupListTable()
       }
     },
     created () {
