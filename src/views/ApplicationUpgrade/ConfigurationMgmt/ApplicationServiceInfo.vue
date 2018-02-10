@@ -131,7 +131,7 @@ export default {
         {
           colName: '应用&服务名称',
           prop: 'name',
-          width: 120
+          width: 160
         },
         {
           colName: '应用&服务版本',
@@ -146,7 +146,7 @@ export default {
         {
           colName: '服务器主机名称',
           prop: 'oss.hostname',
-          width: 220
+          width: 260
         },
         {
           colName: '描述',
