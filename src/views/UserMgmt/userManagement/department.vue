@@ -84,7 +84,7 @@
             :curDepartmentUuidParm="curDepartmentUuid" :departmentTypeSelect="departmentTypeOptions"></department-edit>
           </el-card>
           <el-card class="box-card" style='margin-left:10px;' v-show="showCreateTree">
-            <department-create  ref="departmentCreateTreeVue" :departmentSelect="departmentOptions" @gridCreateEvent="deptAddEvent"
+            <department-create  ref="departmentCreateTreeVue" @gridCreateEvent="deptAddEvent"
             @canelDialogEvent="handleClose" :departmentTypeSelect="departmentTypeOptions"></department-create>
           </el-card>
         </el-col>

@@ -2,7 +2,7 @@
   <div>
     <el-form :model='department' :rules="rules" ref="department">
       <el-form-item label='部门类别' prop='departmentType' :label-width="formLabelWidth">
-        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别">
+        <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择部门类别" @change="deptTypeSelected">
           <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
        </el-select>
       </el-form-item>
@@ -32,12 +32,31 @@
 </template>
 
 <script>
+import { getDepartmentOptions } from '@/views/UserMgmt/userManagement/apis'
 export default {
   props: {
-    departmentSelect: undefined,
+    // departmentSelect: undefined,
     departmentTypeSelect: undefined
   },
   methods: {
+    getDepartmentList (params) {
+      getDepartmentOptions(params)
+        .then(
+          function (result) {
+            this.departmentSelect = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    deptTypeSelected (data) {
+      this.department.parentDepartmentUuid = ''
+      this.dictData.departmentType = this.department.departmentType
+      this.getDepartmentList(this.dictData)
+    },
     create (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -73,6 +92,7 @@ export default {
   },
   data () {
     return {
+      departmentSelect: undefined,
       formLabelWidth: '120px',
       department: {
         departmentName: undefined,
@@ -87,6 +107,10 @@ export default {
         departmentType: [
           { required: true, message: '请选择部门类别', trigger: 'change' }
         ]
+      },
+      dictData: {
+        cloudFlag: 1,
+        departmentType: ''
       }
     }
   }

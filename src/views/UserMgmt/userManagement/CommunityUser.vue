@@ -120,7 +120,8 @@ export default {
       dictData: {
         userStatusDict: 'COURT_USER_ACC_STATUS',
         contactTypeDict: 'COURT_CONTACT_TYPE',
-        cloudFlag: 0
+        cloudFlag: 0,
+        departmentType: ''
       },
       userAccStatusOptions: undefined,
       contactTypeOptions: undefined,
