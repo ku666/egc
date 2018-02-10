@@ -126,7 +126,7 @@
           title: '下级部门',
           prop: 'childrenDepartments'
         }, {
-          title: '直属员工',
+          title: '直属用户',
           prop: 'directUsers'
         }],
         listQuery: {
@@ -322,7 +322,8 @@
         if (this.selectDepartmentData.leaf) {
           this.$confirm('确定删除此项？', '删除', {
             confirmButtonText: '确定',
-            cancelButtonText: '取消'
+            cancelButtonText: '取消',
+            type: 'warning'
           })
           .then(() => {
             console.log('删除操作')

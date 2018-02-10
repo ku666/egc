@@ -84,12 +84,12 @@ export default {
         buildArea: '',
         floorArea: ''
       },
-      startDate: '',
+      startTime: '',
       isOwnerErrInfo: false, // 业主错误提提
       isPerErrInfo: false, // 人流错误提示
       isCarErrInfo: false, // 车流错误提示
       isEquiErrInfo: false, // 设备错误提示
-      endDate: '',
+      endTime: '',
       perErrImg: errImg,
       reportType: '0' // 报表类型：0日报 1月报 2年报
     }
@@ -100,8 +100,8 @@ export default {
     var sDate = new Date()
     var eDate = new Date()
     sDate.setTime(sDate.getTime() - 3600 * 1000 * 24 * 7) //
-    this.startDate = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
-    this.endDate = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
+    this.startTime = sDate.getFullYear() + '-' + (sDate.getMonth() + 1) + '-' + sDate.getDate()
+    this.endTime = eDate.getFullYear() + '-' + (eDate.getMonth() + 1) + '-' + eDate.getDate()
     this.getPeopleStreamData()
     this.getCarStreamData()
     this.getEquipKindsData()
@@ -134,8 +134,8 @@ export default {
       let param = {
         courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
-        startDate: this.startDate,
-        endDate: this.endDate
+        startTime: this.startTime,
+        endTime: this.endTime
       }
       getCourtPerAccessInfo(param).then(res => {
         // console.log(res)
@@ -181,8 +181,8 @@ export default {
       let param = {
         courtUuid: this.courtInfo.courtUuid,
         reportType: this.reportType,
-        startDate: this.startDate,
-        endDate: this.endDate
+        startTime: this.startTime,
+        endTime: this.endTime
       }
       getCourtCarAccessInfo(param).then(res => {
         // console.log(res)

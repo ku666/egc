@@ -250,7 +250,7 @@ export const createDirectUser = (data) => {
 
 // 查询角色清单
 export const getRoleList = (query) => {
-  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid
+  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid + '&userType=' + query.userType
   ).then(res => res.data)
 }
 // // 查询角色完整清单
@@ -259,8 +259,8 @@ export const getRoleList = (query) => {
 //   ).then(res => res.data)
 // }
 // 从Maindata查询角色完整清单
-export const getRoleListAllMaindata = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
+export const getRoleListAllMaindata = (cloudFlag, userType) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
 // 新建角色
@@ -289,8 +289,8 @@ export const updateRole = (data) => {
   ).then(res => res.data)
 }
 // 获取用户组清单
-export const getRoleUserGroup = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
+export const getRoleUserGroup = (cloudFlag, userType) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
 // 获取用户组筛选清单
@@ -319,8 +319,8 @@ export const updateRoleResourceList = (query) => {
 ).then(res => res.data)
 }
 // 获取用户清单
-export const getRoleUser = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUser?cloudFlag=' + cloudFlag
+export const getRoleUser = (cloudFlag, userType) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUser?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
 // 获取资源清单
@@ -445,8 +445,8 @@ export const getContactTypeOptions = (dictData) => {
 }
 // --------------用户组--------------
 // 获取用户组下拉框列表信息
-export const getUserGroupListSelect = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag
+export const getUserGroupListSelect = (cloudFlag, userType) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listUsergroup?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
 // 将当前用户添加到某用户组中
@@ -479,8 +479,8 @@ export const deleteUsergroup = (userUsergroupUuid) => {
 }
 // --------------关联角色--------------
 // 获取当前用户关联角色下拉框列表信息
-export const getUserRoleListSelect = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
+export const getUserRoleListSelect = (cloudFlag, userType) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
 // 将当前用户添加到某角色中
