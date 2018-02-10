@@ -1,4 +1,5 @@
 import Axios from '@/assets/js/AxiosPlugin'
+import { decodeResHeader } from '../assets/js/index'
 
 // 接口地址
 let contextPath = '/scp-upgradecomponent'
@@ -35,6 +36,7 @@ export const getDisctrictDataList = (params) => {
 export const uploadHardWareConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
+    // headers: {'Content-Type': 'application/x-www-form-urlencoded'}
   }
   return Axios.post(BASE_PATH + '/auServers/importExcel', params, config
   ).then(res => {
@@ -44,8 +46,7 @@ export const uploadHardWareConfigFile = (params) => {
 
 export const uploadNetEquipConfigFile = (params) => {
   let config = {
-    // headers: {'Content-Type': 'multipart/form-data'}
-    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
+    headers: {'Content-Type': 'multipart/form-data'}
   }
   return Axios.post(BASE_PATH + '/auNetequip/importExcel', params, config
   ).then(res => {
@@ -83,8 +84,9 @@ export const downloadAppServiceTemplate = (params) => {
 }
 
 // 导出结果
+
 export const downloadResultFile = (params1, params2) => {
-  console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + ' params2 ---> ' + params2)
+  console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + '    >>>>>>>> the second params2:  --->   ' + params2)
   return Axios.get(BASE_PATH + '/download/resultDownload?condition=' + encodeURI(JSON.stringify(params1)) + '&downloadCls=' + params2, {responseType: 'arraybuffer'}
     ).then(res => {
       console.log('res.headers --->  ' + JSON.stringify(res.headers))
@@ -101,22 +103,8 @@ export const downloadResultFile = (params1, params2) => {
         document.body.appendChild(link)
         link.click()
       }
-      console.log('decode --->  ' + decodeIsoToUTF(res.headers))
       return res.data
     })
-}
-
-const decodeResHeader = function (res) {
-  let resHeaderArr = JSON.stringify(res).split('filename=\\')
-  let tempNameArr = JSON.stringify(resHeaderArr[1]).split(',')
-  return decodeURI(tempNameArr[0].substring(3, tempNameArr[0].length - 6))
-}
-
-const decodeIsoToUTF = function (res) {
-  let resHeaderArr = JSON.stringify(res).split('filename=\\')
-  let tempNameArr = JSON.stringify(resHeaderArr[1]).split(',')
-  console.log('ISO to UTF8 -- > ' + decodeURIComponent(tempNameArr[0].substring(3, tempNameArr[0].length - 6)))
-  return decodeURI(tempNameArr[0].substring(3, tempNameArr[0].length - 6))
 }
 
 /** =================硬件服务器信息================================ */

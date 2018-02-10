@@ -64,8 +64,8 @@ export default {
                   })
                 } else {
                   this.$message({
-                    message: '上传失败!',
-                    type: 'success'
+                    message: '上传失败',
+                    type: 'error'
                   })
                 }
                 this.fileList = []
@@ -86,8 +86,8 @@ export default {
                   })
                 } else {
                   this.$message({
-                    message: '上传失败!',
-                    type: 'success'
+                    message: '上传失败',
+                    type: 'error'
                   })
                 }
                 this.fileList = []
@@ -108,8 +108,8 @@ export default {
                   })
                 } else {
                   this.$message({
-                    message: '上传失败!',
-                    type: 'success'
+                    message: '上传失败',
+                    type: 'error'
                   })
                 }
                 this.fileList = []

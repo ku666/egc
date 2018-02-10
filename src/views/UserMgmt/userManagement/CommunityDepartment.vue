@@ -295,9 +295,11 @@
           limit: 10,
           cloudFlag: 0,
           q_departName: '',
-          q_courtUuid: ''
+          q_courtUuid: this.listQuery.q_courtUuid
         }
-        this.loadData()
+        if (this.listQuery.q_courtUuid) {
+          this.loadData()
+        }
       },
       departmentEditEvent (data) {
         console.log('department：编辑了第' + data.uuid)

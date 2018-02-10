@@ -64,7 +64,7 @@ import databaseDetails from './components/DatabaseDetails'
 import databaseEdit from './components/DatabaseEdit'
 import databaseHistory from './components/DatabaseHistory'
 
-import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData } from './apis/index'
+import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -150,9 +150,10 @@ export default {
   },
   methods: {
     // 条件查询
-    _handleFilter () {
-      this.loading = true
-      getDatabaseInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getDatabaseInfoByPage(params)
         .then(
           function (result) {
             console.log('database by page --- > ' + JSON.stringify(result))
@@ -167,6 +168,21 @@ export default {
             this.loading = false
           }.bind(this)
         )
+      } else if (type === 'download') {
+        let downloadCls = 4
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 详情

@@ -174,21 +174,34 @@ export default {
           }
         )
       } else if (type === 'download') {
-        this.loading = false
-        this.searchConditionList.pageSize = this.total
-        this.searchConditionList.total = this.total
-        this.searchConditionList.flag = 1
-        downloadResultFile(this.searchConditionList)
-        .then(
-          function (result) {
-            this.excelPath = result.data
-            console.log(' excel path -- > ' + this.excelPath)
-          }.bind(this)
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        let downloadCls = 3
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+        // this.loading = false
+        // this.searchConditionList.pageSize = this.total
+        // this.searchConditionList.total = this.total
+        // this.searchConditionList.flag = 1
+        // downloadResultFile(this.searchConditionList)
+        // .then(
+        //   function (result) {
+        //     this.excelPath = result.data
+        //     console.log(' excel path -- > ' + this.excelPath)
+        //   }.bind(this)
+        // ).catch(
+        //   function (error) {
+        //     console.log(error)
+        //   }
+        // )
         // getOSInfoByPage(params)
         // .then(
         //   function (result) {

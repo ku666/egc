@@ -370,7 +370,9 @@ export default {
         q_appCode: '',
         q_courtUuid: this.listQuery.q_courtUuid
       }
-      this.handleFilter()
+      if (this.listQuery.q_courtUuid) {
+        this.handleFilter()
+      }
     },
     // 改变分页大小
     handleSizeChange (val) {

@@ -64,7 +64,7 @@ import middlewareDetails from './components/MiddlewareDetails'
 import middlewareEdit from './components/MiddlewareEdit'
 import middlewareHistory from './components/MiddlewareHistory'
 
-import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo } from './apis/index'
+import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo, downloadResultFile } from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -149,9 +149,10 @@ export default {
   },
   methods: {
     // 查询
-    _handleFilter () {
-      this.loading = true
-      getMiddlewareInfoByPage(this.searchConditionList)
+    _handleFilter (params, type) {
+      if (type === 'search') {
+        this.loading = true
+        getMiddlewareInfoByPage(params)
         .then(
           function (result) {
             this.middlewareListData = result.middlewareList
@@ -165,6 +166,21 @@ export default {
             console.log(error)
           }
         )
+      } else if (type === 'download') {
+        let downloadCls = 5
+        downloadResultFile(params, downloadCls)
+          .then(
+            function (result) {
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              this.loading = false
+              console.log(error)
+            }.bind(this)
+          )
+      }
     },
 
     // 查看中间件每条详细信息
