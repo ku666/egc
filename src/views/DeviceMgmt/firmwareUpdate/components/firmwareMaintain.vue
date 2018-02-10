@@ -113,7 +113,7 @@
       },
       _setDistrictInfo (data) {
         this.listCourtVo = data
-        var param = {'listDmFotaFile': this.listDmFotaFile, 'listCourtVo': this.listCourtVo}
+        var param = {'fotaFileViewVo': {'listFotaFileVo': this.listDmFotaFile}, 'courtViewVo': {'listCourtVo': this.listCourtVo}}
         sendToCourt(param)
           .then(result => {
             this.showDistrictDialog = false
