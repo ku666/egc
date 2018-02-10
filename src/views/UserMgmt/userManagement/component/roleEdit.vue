@@ -13,7 +13,8 @@
         <el-select 
         v-model='form.userType' 
         placeholder='请选择用户类型' 
-        style="width:650px" 
+        style="width:650px"
+        disabled
         >
           <el-option
             v-for='item in userTypeList'
@@ -105,7 +106,7 @@
       <el-button-group style="margin-left:20px">
         <el-button type="info" plain  size="small" @click="handleAddApp">添加应用程序资源权限</el-button>
         <el-button type="info" plain  size="small" @click="handleAddService">添加服务权限</el-button>
-        <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button>
+        <!-- <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button> -->
       </el-button-group>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <add-app ref="addapp" v-show="showApp" :form="form" :cloudFlag="1" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
@@ -513,13 +514,13 @@ export default {
       this.showDevice = false
       this.showService = true
     },
-    handleAddDevice (data) {
-      this.dialogStatus = '添加' + this.form.roleName + '角色的设备资源权限'
-      this.dialogFormVisible = true
-      this.showApp = false
-      this.showDevice = true
-      this.showService = false
-    },
+    // handleAddDevice (data) {
+    //   this.dialogStatus = '添加' + this.form.roleName + '角色的设备资源权限'
+    //   this.dialogFormVisible = true
+    //   this.showApp = false
+    //   this.showDevice = true
+    //   this.showService = false
+    // },
     handleSave (form) {
       this.formData = JSON.stringify(this.form)
       console.log(this.formData)

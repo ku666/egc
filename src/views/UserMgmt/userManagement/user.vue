@@ -8,13 +8,31 @@
      <div v-show="showFirstTab" class="flex-1 flex-c">
       <el-form :inline="true" :model="listQuery" ref="listQuery">
         <div class="search-container">
-          <el-form-item label="用户姓名">
+          <!-- <el-form-item label="用户姓名"> -->
+          <el-form-item>
             <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入用户姓名" v-model="listQuery.q_fullName"> </el-input>
           </el-form-item>
-          <el-form-item label="　　登录ID">
+          <!-- <el-form-item label="　　登录ID"> -->
+          <el-form-item>
             <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入登录ID" v-model="listQuery.q_userName"> </el-input>
           </el-form-item>
-          <el-form-item label="　　手机号">
+          <el-form-item>
+            <el-select clearable
+              v-model='listQuery.userType' 
+              placeholder='请选择用户类型'
+              style="width:260px; margin-right:10px"
+              @change='userTypeSelected'
+              >
+              <el-option
+                v-for='item in userTypeOptions'
+                :key='item.itemCode'
+                :label='item.itemName'
+                :value='item.itemCode'>
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <!-- <el-form-item label="　　手机号"> -->
+          <el-form-item>
             <el-input @keyup.enter.native="handleFilter" class="user_el-select" placeholder="请输入手机号" v-model="listQuery.q_primaryPhone"> </el-input>
           </el-form-item>
           <div class="btn-container">
@@ -166,7 +184,8 @@ export default {
         q_fullName: '',
         q_primaryPhone: '',
         cloudFlag: 1,
-        courtUuid: ''
+        courtUuid: '',
+        userType: ''
       },
       formLabelWidth: '120px',
       dictData: {
@@ -316,7 +335,8 @@ export default {
         'q_userName': '',
         'q_fullName': '',
         'q_primaryPhone': '',
-        'cloudFlag': 1
+        'cloudFlag': 1,
+        'userType': ''
       }
       this.loadData()
     },
@@ -562,6 +582,10 @@ export default {
             console.log(error)
           }
         )
+    },
+    userTypeSelected (data) {
+      this.listQuery.userType = data
+      this.loadData()
     }
   }
 }

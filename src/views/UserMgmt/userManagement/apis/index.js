@@ -176,15 +176,15 @@ export const getDepartmentDetail = (uuid) => {
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加直属部门下拉框)
-export const getDirectDepartmentSelect = (uuid, cloudFlag) => {
+export const getDirectDepartmentSelect = (uuid, cloudFlag, departmentType) => {
   console.log('getDirectDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
+  return Axios.get(contextPath + '/usermgmt/department/listExAllparSelfDirDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag + '&departmentType=' + departmentType
   ).then(res => res.data)
 }
 // 当前部门上级及本体以外的部门节点(追加上级部门下拉框)
-export const getParenetDepartmentSelect = (uuid, cloudFlag) => {
+export const getParenetDepartmentSelect = (uuid, cloudFlag, departmentType) => {
   console.log('getParenetDepartmentSelect<<<<<uuid:' + uuid)
-  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag
+  return Axios.get(contextPath + '/usermgmt/department/listExDirparSelfChildrenDep?departmentUuid=' + uuid + '&cloudFlag=' + cloudFlag + '&departmentType=' + departmentType
   ).then(res => res.data)
 }
 // 查询当前部门下的直属部门列表
@@ -195,7 +195,8 @@ export const getChildrenDepartmentVoList = (listQuery) => {
   console.log('<<<<<listQuery.cloudFlag:' + listQuery.cloudFlag)
   // console.log('<<<<<listQuery.q_courtUuid:' + listQuery.q_courtUuid)
   return Axios.get(contextPath + '/usermgmt/department/listChildrenDepartment?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
+  '&departmentUuid=' + listQuery.departmentUuid + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid +
+  '&departmentType=' + listQuery.departmentType
   ).then(res => res.data)
 }
 // 删除下属部门
@@ -400,7 +401,7 @@ export const getUserListByPage = (listQuery) => {
   // console.log('<<<<<listQuery.page:' + listQuery.page)
   // console.log('<<<<<listQuery.limit:' + listQuery.limit)
   return Axios.get(contextPath + '/usermgmt/user/list?currentPage=' + listQuery.page + '&pageSize=' + listQuery.limit +
-  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid
+  '&userName=' + encodeURI(listQuery.q_userName) + '&fullName=' + encodeURI(listQuery.q_fullName) + '&primaryPhone=' + listQuery.q_primaryPhone + '&cloudFlag=' + listQuery.cloudFlag + '&courtUuid=' + listQuery.courtUuid + '&userType=' + listQuery.userType
   ).then(res => res.data)
 }
 // 校验用户名是否唯一
