@@ -18,7 +18,6 @@
     "crypto-js": "^3.1.9-1",
     "echarts": "^3.8.5",
     "element-ui": "^2.0.9",
-    "hdmap": "git+http://gitlab/xiaxuanyin/UI-mapcomponent.git#master",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"
