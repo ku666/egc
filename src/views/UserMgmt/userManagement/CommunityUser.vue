@@ -114,7 +114,8 @@ export default {
         q_fullName: '',
         q_primaryPhone: '',
         cloudFlag: 0,
-        courtUuid: ''
+        courtUuid: '',
+        userType: ''
       },
       formLabelWidth: '120px',
       dictData: {
