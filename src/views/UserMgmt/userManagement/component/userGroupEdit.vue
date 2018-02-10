@@ -58,7 +58,7 @@
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
-          style='margin-top: 10px; width:100%'>
+          style='margin-top: 10px'>
         </grid-list>
         <el-pagination 
           :page-sizes="[5,10,20,30]" 
@@ -91,7 +91,7 @@
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
-          style='margin-top: 10px; width:100%'
+          style='margin-top: 10px'
         >
         </grid-list>
         <el-pagination 
