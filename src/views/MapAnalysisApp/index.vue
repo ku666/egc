@@ -114,31 +114,6 @@ export default {
               proObj[pname].courts.push(item)
             }
           }
-          // list.map((item, index) => {
-          //   if ((item.gpsLat && item.gpsLon) || index < test.length) {
-          //     if (!item.gpsLat) {
-          //       item.gpsLon = test[index][0]
-          //       item.gpsLat = test[index][1]
-          //     }
-          //     let obj = {
-          //       name: item.courtName,
-          //       value: [item.gpsLon, item.gpsLat],
-          //       courtUuid: item.courtUuid
-          //     }
-          //     pointdata.push(obj)
-          //   }
-          //   if (!isSearch) {
-          //     let pname = item.org.replace('省', '')
-          //     if (!proObj[pname]) {
-          //       proObj[pname] = {}
-          //       proObj[pname].value = 0
-          //       proObj[pname].courts = []
-          //       prodata.push({value: item.org, label: item.org})
-          //     }
-          //     proObj[pname].value += 1
-          //     proObj[pname].courts.push(item)
-          //   }
-          // })
           // console.log(proObj)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
