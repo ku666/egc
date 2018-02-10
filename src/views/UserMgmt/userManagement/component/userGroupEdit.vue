@@ -14,6 +14,7 @@
         placeholder='请选择用户类型' 
         style="width:650px" 
         @visible-change='getUserTypeList'
+        disabled
         >
           <el-option
             v-for='item in userTypeList'
