@@ -22,7 +22,7 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
-            <el-table-column fixed="right" label="操作" width="200">
+            <el-table-column label="操作" width="200">
               <template slot-scope="scope">
                 <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
                 </el-button>
