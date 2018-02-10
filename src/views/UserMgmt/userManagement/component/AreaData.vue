@@ -157,18 +157,12 @@ export default {
   components: {
 
   },
-  // watch: {
-  //   'resourceDeviceGroupVue.province' (newValue, oldValue) {
-  //     console.log('222')
-  //     this.loadCityData()
-  //   },
-  //   'resourceDeviceGroupVue.city' (newValue, oldValue) {
-  //     this.loadDistrictData()
-  //   },
-  //   'resourceDeviceGroupVue.district' (newValue, oldValue) {
-  //     this.loadCourtsData()
-  //   }
-  // },
+  watch: {
+    'resourceDeviceGroupVue.province' (newValue, oldValue) {
+      console.log('222')
+      this.loadCourtsData()
+    }
+  },
   mounted () {
     // this.loadProvinceData()
   },
@@ -208,15 +202,6 @@ export default {
         ],
         province: [
           { required: true, message: '请选择省份', trigger: 'change' }
-        ],
-        city: [
-          { required: true, message: '请选择城市', trigger: 'change' }
-        ],
-        district: [
-          { required: true, message: '请选择区县', trigger: 'change' }
-        ],
-        courtName: [
-          { required: true, message: '请选择小区', trigger: 'change' }
         ]
       },
       // provinces: [],
@@ -278,6 +263,7 @@ export default {
       this.$refs[resourceDeviceGroupVue].resetFields()
       this.$emit('cancelDialogEvent')
     },
+    // 加载市
     loadCityData () {
       var that = this
       if (that.resourceDeviceGroupVue.city !== '') {
@@ -303,6 +289,7 @@ export default {
                   }
                 )
               }
+              that.loadCourtsData()
             }
           )
           .catch(
@@ -311,10 +298,11 @@ export default {
             }
           )
     },
+    // 加载区县
     loadDistrictData () {
       var that = this
       that.districts = []
-      this.courts = []
+      that.courts = []
       that.provParams.province = that.resourceDeviceGroupVue.province.trim()
       that.provParams.city = that.resourceDeviceGroupVue.city.trim()
       if (that.resourceDeviceGroupVue.city !== '') {
@@ -333,6 +321,7 @@ export default {
                   }
                 )
               }
+              that.loadCourtsData()
             }
           ).catch(
             function (error) {
@@ -343,6 +332,7 @@ export default {
         that.resourceDeviceGroupVue.district = ''
       }
     },
+    // 加载小区列表
     loadCourtsData () {
       var that = this
       // that.courts = []
