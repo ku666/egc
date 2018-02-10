@@ -5,23 +5,27 @@
       <el-tab-pane label='直属部门' name='1'></el-tab-pane>
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
     </el-tabs>
-    <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment">
+    <el-form :model='department' :rules="rules" ref="department" v-show="showMainDepartment" :inline="true">
       <el-form-item label='用户类型' prop='departmentType' :label-width="formLabelWidth">
         <el-select v-model='department.departmentType' class="user_el-select" placeholder="请选择用户类型" disabled>
           <el-option v-for='item in departmentTypeSelect' :key='item.itemCode' :label='item.itemName' :value='item.itemCode'></el-option>
        </el-select>
       </el-form-item>
-      <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
-        <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
-      </el-form-item>
-      <el-form-item label='上级部门' :label-width="formLabelWidth">
-        <el-select v-model='department.parentDepartmentUuid' class="user_el-select" disabled>
-          <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid'></el-option>
-       </el-select>
-      </el-form-item>
-      <el-form-item label='部门说明' :label-width="formLabelWidth">
-        <el-input type='textarea' :rows="3" v-model='department.remark' placeholder='请输入部门说明' class="el-textarea"></el-input>
-      </el-form-item>
+      <div>
+        <el-form-item label='部门名称' prop='departmentName' :label-width="formLabelWidth">
+          <el-input v-model='department.departmentName' placeholder='请输入部门名称' class="user_el-input"></el-input>
+        </el-form-item>
+        <el-form-item label='上级部门' :label-width="formLabelWidth">
+          <el-select v-model='department.parentDepartmentUuid' class="user_el-select">
+            <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid'></el-option>
+        </el-select>
+        </el-form-item>
+      </div>
+      <div class="el-textarea">
+        <el-form-item label='部门说明' :label-width="formLabelWidth">
+          <el-input type='textarea' :rows="3" v-model='department.remark' placeholder='请输入部门说明'></el-input>
+        </el-form-item>
+      </div>
       <div class="user-button" align="center">
         <el-row>
           <el-col>
@@ -157,3 +161,8 @@ export default {
   }
 }
 </script>
+<style scoped>
+.el-textarea{
+  width: 392%;
+}
+</style>
