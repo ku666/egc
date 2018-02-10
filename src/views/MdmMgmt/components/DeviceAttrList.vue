@@ -63,6 +63,7 @@
     </el-table>
 
     <el-pagination
+      ref='pager'
       background
       :current-page = 'searchAttrForm.currentPage'
       :page-sizes = '[10, 20, 50, 100]'
@@ -208,6 +209,7 @@ export default {
   mounted () {
     this.search()
     this.setMenuHightLight()
+    this.attatchEventToPager()
   },
   beforeDestroy () {
     this.setUnHightLight()
@@ -518,6 +520,26 @@ export default {
       this.clear()
       this.attrSaved = false
       this.activeTab = 'basic'
+    },
+    addEventHandler: function (target, type, fn) {
+      if (target.addEventListener) {
+        target.addEventListener(type, fn)
+      } else {
+        target.attachEvent('on' + type, fn)
+      }
+    },
+    attatchEventToPager: function (params) {
+      const self = this
+      // self.search()
+      var input = self.$refs.pager.$el.querySelectorAll('input')[1]
+      // console.log('input:' + input.value)
+      self.addEventHandler(input, 'keyup', function (e) {
+      // console.log('input:' + input.value)
+        if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchAttrForm.currentPage)) {
+          self.searchAttrForm.currentPage = parseInt(input.value)
+          self.search()
+        }
+      })
     }
   }
 }
