@@ -88,11 +88,12 @@ export default {
           let proObj = {}
           // console.log(list)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
-          list.map((item, index) => {
-            if ((item.gpsLat && item.gpsLon) || index < test.length) {
+          for (let i = 0, len = list.length; i < len; i++) {
+            let item = list[i]
+            if ((item.gpsLat && item.gpsLon) || i < test.length) {
               if (!item.gpsLat) {
-                item.gpsLon = test[index][0]
-                item.gpsLat = test[index][1]
+                item.gpsLon = test[i][0]
+                item.gpsLat = test[i][1]
               }
               let obj = {
                 name: item.courtName,
@@ -112,7 +113,32 @@ export default {
               proObj[pname].value += 1
               proObj[pname].courts.push(item)
             }
-          })
+          }
+          // list.map((item, index) => {
+          //   if ((item.gpsLat && item.gpsLon) || index < test.length) {
+          //     if (!item.gpsLat) {
+          //       item.gpsLon = test[index][0]
+          //       item.gpsLat = test[index][1]
+          //     }
+          //     let obj = {
+          //       name: item.courtName,
+          //       value: [item.gpsLon, item.gpsLat],
+          //       courtUuid: item.courtUuid
+          //     }
+          //     pointdata.push(obj)
+          //   }
+          //   if (!isSearch) {
+          //     let pname = item.org.replace('省', '')
+          //     if (!proObj[pname]) {
+          //       proObj[pname] = {}
+          //       proObj[pname].value = 0
+          //       proObj[pname].courts = []
+          //       prodata.push({value: item.org, label: item.org})
+          //     }
+          //     proObj[pname].value += 1
+          //     proObj[pname].courts.push(item)
+          //   }
+          // })
           // console.log(proObj)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
