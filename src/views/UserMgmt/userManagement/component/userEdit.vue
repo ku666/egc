@@ -195,9 +195,9 @@ export default {
         }
       },
       rules: {
-        departmentUuid: [
-          { required: true, message: '请选择部门', trigger: 'change' }
-        ],
+        // departmentUuid: [
+        //   { required: true, message: '请选择部门', trigger: 'change' }
+        // ],
         // userAccStatus: [
         //   { required: true, message: '请选择账户状态', trigger: 'blur,change' }
         // ],
