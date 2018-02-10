@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-form>
-      <el-form-item label="添加直属部门">
+      <el-form-item label="添加下级部门">
           <el-select v-model="selectedName" placeholder="请选择需要添加的部门" class="user_el-select" @change='boxSelected'>
             <el-option v-for="item in directDepartmentListSelect" :key="item.uuid" :label="item.departmentName" :value="item.uuid" :disabled="item.disabled" filterable> </el-option>
           </el-select>
@@ -14,7 +14,7 @@
         <el-table-column prop="departmentTypeName" label="部门类别" ></el-table-column>
         <el-table-column prop="parentDepartmentName" label="上级部门"></el-table-column>
         <el-table-column prop="childrenDepartments" label="下级部门" ></el-table-column>
-        <el-table-column prop="directUsers" label="直属员工" ></el-table-column>
+        <el-table-column prop="directUsers" label="直属用户" ></el-table-column>
         <el-table-column label="操作" align="center" >
           <template slot-scope="scope">
             <span @click="handleDelete(scope.$index)" style="cursor:pointer">

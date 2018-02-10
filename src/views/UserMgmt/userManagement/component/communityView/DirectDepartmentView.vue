@@ -6,7 +6,7 @@
         <el-table-column prop="departmentName" label="部门名称" ></el-table-column>
         <el-table-column prop="parentDepartmentName" label="上级部门"></el-table-column>
         <el-table-column prop="childrenDepartments" label="下级部门" ></el-table-column>
-        <el-table-column prop="directUsers" label="直属员工" ></el-table-column>
+        <el-table-column prop="directUsers" label="直属用户" ></el-table-column>
     </el-table>
     <div>
       <el-pagination
