@@ -117,7 +117,7 @@ export default {
   mounted: function () {
     const self = this
     // self.search()
-    var input = self.$refs.pager.$el.querySelectorAll('input')[1]
+    let input = self.$refs.pager.$el.querySelectorAll('input')[1]
     // console.log('input:' + input.value)
     self.addEventHandler(input, 'keyup', function (e) {
       // console.log('input:' + input.value)
