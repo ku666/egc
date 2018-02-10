@@ -250,7 +250,7 @@ export const createDirectUser = (data) => {
 
 // 查询角色清单
 export const getRoleList = (query) => {
-  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid
+  return Axios.get(contextPath + '/usermgmt/role/list?currentPage=' + query.currentPage + '&pageSize=' + query.pageSize + '&cloudFlag=' + query.cloudFlag + '&courtUuid=' + query.courtUuid + '&userType=' + query.userType
   ).then(res => res.data)
 }
 // // 查询角色完整清单

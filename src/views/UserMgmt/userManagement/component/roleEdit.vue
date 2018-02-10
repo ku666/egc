@@ -9,7 +9,7 @@
     <el-container style="margin-top:20px; text-align:center">
     <!-- Tab 角色概要 -->
     <el-form  ref='form' v-show="showSummary" label-width='80px' :model='form' :rules="rules" style="margin: 0 auto">
-      <el-form-item label='用户类型' prop='userType' class="is-required">
+      <el-form-item label='用户类型' prop='userType' >
         <el-select 
         v-model='form.userType' 
         placeholder='请选择用户类型' 
@@ -19,7 +19,8 @@
             v-for='item in userTypeList'
             :key='item.itemCode'
             :label='item.itemName'
-            :value='item.itemCode'>
+            :value='item.itemCode'
+            :disabled="true">
           </el-option>
         </el-select>
       </el-form-item>
@@ -724,9 +725,6 @@ export default {
         ],
         remark: [
           { min: 3, max: 256, message: '长度在 3 到 256 个字符' }
-        ],
-        userType: [
-          { required: true, message: '请选择用户类型', trigger: 'blur' }
         ]
       },
       userTypeList: undefined,
