@@ -577,6 +577,9 @@ export default {
     //     this.dirUsergroupDetailData = val
     //   }
     // },
+  mounted: function () {
+    this.subActiveName = 0
+  },
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
@@ -584,7 +587,7 @@ export default {
         callback(new Error('用户组名称不能为空'))
       } else {
         let userType = this.editForm.userType
-        let usergroupUuid = this.editForm.usergroupUuid
+        let usergroupUuid = this.editForm.uuid
         checkUserGroupName(usergroupUuid, value, userType)
         .then(
           function (result) {
@@ -598,6 +601,7 @@ export default {
       }
     }
     return {
+      subActiveName: 0,
       rules: {
         usergroupName: [
           { required: true, message: '请填写用户组名称', trigger: 'blur' },
@@ -678,7 +682,6 @@ export default {
       tabPlaceholder: '添加下属用户组',
       selectedName: null,
       addUserList: undefined,
-      subActiveName: '0',
       gridTableData: undefined,
       gridParams: undefined,
       dirUsergroupParam: [
