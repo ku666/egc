@@ -191,3 +191,11 @@ export const catchError = function (error) {
   }
   return Promise.reject(error)
 }
+
+export const addEventHandler = function (target, type, fn) {
+  if (target.addEventListener) {
+    target.addEventListener(type, fn)
+  } else {
+    target.attachEvent('on' + type, fn)
+  }
+}
