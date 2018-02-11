@@ -70,7 +70,12 @@ export default {
         }
       }
       console.log('selected leaf data --->  ' + this.houseOrgCodeList.toString())
-      this.$emit('handleDispatchEvent', this.houseOrgCodeList)
+
+      if (this.houseOrgCodeList.length > 0) {
+        this.$emit('handleDispatchEvent', this.houseOrgCodeList)
+      } else {
+        this.$message.error('请选择下发小区')
+      }
     },
     handleNodeClick (orgsData) {
       console.log(orgsData)

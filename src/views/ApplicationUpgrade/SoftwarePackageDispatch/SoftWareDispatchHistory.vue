@@ -6,7 +6,7 @@
     <el-row class="flex-c" style="height: 100%">
       <el-col :span="24"  class="flex-1 flex-c">
         <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softDispatchHisList" stripe border>
+          <el-table :data="softDispatchHisList" stripe border  v-loading="synDataLoading">>
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
@@ -64,7 +64,6 @@ export default {
       softDispDetails: undefined,
       osHistoryData: undefined,
       synDataLoading: false,
-      syncDataStatus: '',
       tableTitleList: [
         {
           colName: '下发日期/时间',
@@ -126,49 +125,7 @@ export default {
     }
   },
   methods: {
-    // 查询
-    _handleFilter (params, type) {
-      console.log('===========type====== ' + type)
-      getDispatchHisByPage(params)
-        .then(
-          function (result) {
-            console.log('get data by page')
-            this.softDispatchHisList = result.dataList
-            this.total = result.pageCount
-          }.bind(this)
-        ).catch(
-          function (error) {
-            this.$message({
-              message: error,
-              center: true,
-              showClose: true,
-              type: 'error',
-              duration: 2000
-            }).bind(this)
-            console.log(error)
-          }
-        )
-    },
-
-    // 查看软件下发每条详细信息
-    _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '软件下发历史信息详情'
-      var rowData = this.softDispatchHisList[rowIdx]
-      var eachRowUUID = rowData.uuid
-      console.log('check rowData -- >' + eachRowUUID)
-      getDispatchHisDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log(result)
-              this.softDispDetails = result
-              console.log('dispatch history details --- > ' + JSON.stringify(this.softDispDetails, null, ' '))
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
-    },
-
-    // 初始加载软件下发历史的信息
+    // 加载软件下发历史的信息
     loadData () {
       getDispatchHisByPage(this.searchConditionList)
         .then(
@@ -183,20 +140,41 @@ export default {
           }
         )
     },
-
+    // 查询
+    _handleFilter () {
+      this.loadData()
+    },
+    // 软件下发详情
+    _handleCheckDetails (rowIdx) {
+      this.dialogStatus = '软件下发历史信息详情'
+      var rowData = this.softDispatchHisList[rowIdx]
+      var eachRowUUID = rowData.uuid
+      console.log('check rowData -- >' + eachRowUUID)
+      getDispatchHisDetails(eachRowUUID)
+          .then(
+            function (result) {
+              this.softDispDetails = result
+              console.log('dispatch history details --- > ' + JSON.stringify(this.softDispDetails, null, ' '))
+              this.dialogDetailsVisible = true
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
+    },
     // 改变分页大小
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
     }
   },
-
   mounted () {
     this.loadData()
   }

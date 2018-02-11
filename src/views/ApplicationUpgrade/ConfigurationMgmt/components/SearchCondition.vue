@@ -109,23 +109,22 @@ export default {
       return true
     },
     loadProvinceData () {
-      var that = this
-      that.cities = []
-      that.districts = []
+      this.cities = []
+      this.districts = []
       getProvinceDataList()
           .then(
             function (result) {
               console.log('province --- > ' + JSON.stringify(result))
               let provinceArr = result
               for (let i = 0; i < provinceArr.length; i++) {
-                that.provinces.push(
+                this.provinces.push(
                   {
                     label: provinceArr[i].province,
                     value: provinceArr[i].provinceAbbr
                   }
                 )
               }
-            }
+            }.bind(this)
           ).catch(
             function (error) {
               console.log(error)
@@ -133,30 +132,29 @@ export default {
           )
     },
     loadCityData () {
-      var that = this
-      if (that.searchConDetails.city !== '') {
-        that.searchConDetails.city = ''
+      if (this.searchConDetails.city !== '') {
+        this.searchConDetails.city = ''
       }
-      if (that.searchConDetails.district !== '') {
-        that.searchConDetails.district = ''
+      if (this.searchConDetails.district !== '') {
+        this.searchConDetails.district = ''
       }
-      that.cities = []
-      that.districts = []
-      that.provParams.province = that.searchConDetails.province.trim()
-      getCityDataList(that.provParams)
+      this.cities = []
+      this.districts = []
+      this.provParams.province = this.searchConDetails.province.trim()
+      getCityDataList(this.provParams)
           .then(
             function (result) {
               console.log('city -- > ' + JSON.stringify(result))
               let cityArr = result
               for (let i = 0; i < cityArr.length; i++) {
-                that.cities.push(
+                this.cities.push(
                   {
                     label: cityArr[i].city,
                     value: cityArr[i].cityAbbr
                   }
                 )
               }
-            }
+            }.bind(this)
           )
           .catch(
             function (error) {
@@ -165,34 +163,33 @@ export default {
           )
     },
     loadDistrictData () {
-      var that = this
-      that.districts = []
-      that.provParams.province = that.searchConDetails.province.trim()
-      that.provParams.city = that.searchConDetails.city.trim()
-      if (that.searchConDetails.city !== '') {
-        that.searchConDetails.district = ''
-        that.districts = []
-        getDisctrictDataList(that.provParams)
+      this.districts = []
+      this.provParams.province = this.searchConDetails.province.trim()
+      this.provParams.city = this.searchConDetails.city.trim()
+      if (this.searchConDetails.city !== '') {
+        this.searchConDetails.district = ''
+        this.districts = []
+        getDisctrictDataList(this.provParams)
           .then(
             function (result) {
               console.log('district -- > ' + JSON.stringify(result))
               let districtsArr = result
               for (let i = 0; i < districtsArr.length; i++) {
-                that.districts.push(
+                this.districts.push(
                   {
                     label: districtsArr[i].district,
                     value: districtsArr[i].districtAbbr
                   }
                 )
               }
-            }
+            }.bind(this)
           ).catch(
             function (error) {
               console.log(error)
             }
           )
       } else {
-        that.searchConDetails.district = ''
+        this.searchConDetails.district = ''
       }
     }
   },
