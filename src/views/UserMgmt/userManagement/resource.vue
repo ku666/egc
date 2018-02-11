@@ -385,7 +385,7 @@ export default {
       this.initResourceInfo()  // 调用初始信息
       this.defaultResourceType = this.listQuery.q_resourceType
       if (this.$refs.resourCreateVue) {
-        this.$refs.resourCreateVue.initCreateResource()
+        // this.$refs.resourCreateVue.initCreateResource()
         this.$refs.resourCreateVue.handleChange(this.defaultResourceType)
       }
       this.dialogStatus = '添加资源'
