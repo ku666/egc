@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup' @close="closeDialog">
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup-own' @close="closeDialog">
     <el-row>
       <el-col :span="4">
         <div class='court-info'>
@@ -707,8 +707,10 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.popup {
-  min-width: 710px;
+.popup-own {
+  /deep/.el-dialog{
+    min-width: 710px;
+  }
   /deep/.table-pager {
     padding: 0;
     padding-right: 10px;
@@ -718,7 +720,7 @@ export default {
     bottom: 35px;
   }
   /deep/.el-dialog__header {
-    /deep/.el-dialog__title {
+    .el-dialog__title {
       font-weight: 600;
       line-height: 24px;
       font-size: 18px;
