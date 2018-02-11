@@ -74,7 +74,7 @@
               for (let i = 0; i < this.providerList.length; i++) {
                 list.push({
                   value: this.providerList[i].providerCode,
-                  label: this.providerList[i].providerCode
+                  label: this.providerList[i].providerName
                 })
               }
               this.providerType = list

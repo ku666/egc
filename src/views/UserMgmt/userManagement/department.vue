@@ -128,7 +128,7 @@
         }, {
           title: '直属用户',
           prop: 'directUsers',
-          showTooltip: 'true'
+          showTooltip: true
         }],
         listQuery: {
           page: 1,
