@@ -128,6 +128,7 @@ import {
   insertProvider,
   updateProvider
 } from '@/views/MdmMgmt/apis/index'
+import { addEventHandler } from '@/assets/js/util'
 
 export default {
   data () {
@@ -422,23 +423,15 @@ export default {
         this.$refs['providerForm'].clearValidate()
       })
     },
-    addEventHandler: function (target, type, fn) {
-      if (target.addEventListener) {
-        target.addEventListener(type, fn)
-      } else {
-        target.attachEvent('on' + type, fn)
-      }
-    },
     attatchEventToPager: function (params) {
       const self = this
       // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
       // console.log('input:' + input.value)
-      self.addEventHandler(input, 'keyup', function (e) {
+      addEventHandler(input, 'keyup', function (e) {
       // console.log('input:' + input.value)
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchProviderForm.currentPage)) {
-          self.searchProviderForm.currentPage = parseInt(input.value)
-          self.search()
+          this.currentChange(parseInt(input.value))
         }
       })
     }

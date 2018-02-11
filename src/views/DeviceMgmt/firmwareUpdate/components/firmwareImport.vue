@@ -44,8 +44,8 @@
           <div class="grid-content bg-purple">
             <select-box title="厂商编码"
                         :required="true"
-                        code="provideCode"
-                        ref="provideCode"
+                        code="providerCode"
+                        ref="providerCode"
                         :options="providerType"
                         @listenToInput="_saveDeviceData">
             </select-box>
@@ -116,8 +116,8 @@
     },
     methods: {
       _importFile () {
-        if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['provideCode'] && this.importData['provideCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
-          this.importData['fileName'] = this.importData['deviceType'] + this.importData['provideCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
+        if (this.importData['deviceType'] && this.importData['deviceType'] !== '' && this.importData['providerCode'] && this.importData['providerCode'] !== '' && this.importData['firmwareVersion'] && this.importData['firmwareVersion'] !== '' && this.importData['fileSize'] && this.importData['fileSize'] !== '') {
+          this.importData['fileName'] = this.importData['deviceType'] + this.importData['providerCode'] + this.importData['firmwareVersion'] + getCurentTime().toString()
           importDmFotaFile(this.importData)
             .then(result => {
               this.$message({

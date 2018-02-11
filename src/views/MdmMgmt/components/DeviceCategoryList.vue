@@ -35,12 +35,12 @@
     </div>
 
     <div style="margin-top: 15px">
-      <div style="float: left">
+      <!-- <div style="float: left"> -->
         <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
-      </div>
+      <!-- </div>
       <div style="float: right">
         <el-button icon='el-icon-d-arrow-right' style="margin-center: 10px" plain type="primary" @click="gotoattrmgnt">设备属性管理</el-button>
-      </div>
+      </div> -->
     </div>
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
@@ -203,6 +203,7 @@ import {
   getAllProviders, // 查询所有供应商方法
   getDeviceCategories // 查询所有设备分类
 } from '@/views/MdmMgmt/apis/index'
+import { addEventHandler } from '@/assets/js/util'
 
 export default {
   data () {
@@ -503,23 +504,12 @@ export default {
         return t
       }
     },
-    addEventHandler: function (target, type, fn) {
-      if (target.addEventListener) {
-        target.addEventListener(type, fn)
-      } else {
-        target.attachEvent('on' + type, fn)
-      }
-    },
     attatchEventToPager: function (params) {
       const self = this
-      // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
-      // console.log('input:' + input.value)
-      self.addEventHandler(input, 'keyup', function (e) {
-      // console.log('input:' + input.value)
+      addEventHandler(input, 'keyup', function (e) {
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchForm.currentPage)) {
-          self.searchForm.currentPage = parseInt(input.value)
-          self.search()
+          self.currentChange(parseInt(input.value))
         }
       })
     }
