@@ -305,7 +305,7 @@ export default {
           prop: 'resourceName'
         },
         {
-          title: 'URL',
+          title: 'URI',
           prop: 'resourceUrl'
         },
         {

@@ -5,6 +5,7 @@
           class="avatar-uploader"
           :action="uploadUrl"
           drag
+          :multiple = "false"
           :limit=1
           :show-file-list="true"
           :on-exceed="handleExceed"
@@ -32,11 +33,9 @@ export default {
   methods: {
     handleOnchange (file, fileList) {
       console.info(fileList)
-      // this.uploadFiles.append('file', fileList[0].raw)
       if (this.beforeUpload(file)) {
         this.uploadFiles.append('file', fileList[0].raw)
       }
-      // this.uploadFiles.files = fileList[0]
     },
     _submitUpload () {
       var fileLength = this.$refs.upload._data.uploadFiles.length

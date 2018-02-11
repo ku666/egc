@@ -46,7 +46,7 @@
     },
     mounted () {
       this.listQuery.resourceUuid = this.resourceUuidValue
-      this.handResourceRoleList(this.listQuery)
+      // this.handResourceRoleList(this.listQuery)
     },
     data () {
       return {

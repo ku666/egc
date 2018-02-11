@@ -58,7 +58,7 @@
           @listenToDeleteEvent='userDeleteEvent' 
           :tableData='dirUserDetailData.usergroupUserVoList' 
           :params='userParam'
-          style='margin-top: 10px; width:100%'>
+          style='margin-top: 10px'>
         </grid-list>
         <el-pagination 
           :page-sizes="[5,10,20,30]" 
@@ -91,7 +91,7 @@
           @listenToDeleteEvent='roleDeleteEvent' 
           :tableData='roleDetailData.usergroupRoleVoList' 
           :params='roleParam'
-          style='margin-top: 10px; width:100%'
+          style='margin-top: 10px'
         >
         </grid-list>
         <el-pagination 
@@ -501,6 +501,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleUserCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
@@ -536,6 +537,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleRoleCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
@@ -554,32 +556,23 @@ export default {
           }
         )
     },
-    // // 校验用户组名的唯一性
-    // validateName (usergroupUuid, usergroupName, userType) {
-    //   checkUserGroupName(usergroupUuid, usergroupName, userType)
-    //     .then(
-    //       function (result) {
-    //         console.log('<<<<<userGroupNameFlag:' + result)
-    //         this.userGroupNameFlag = result
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log(error)
-    //       }
-    //     )
-    // },
     handleCancel (editForm) {
       this.$emit('listenToChildCloseEvent')
     }
   },
-    // watch: {
-    //   dirUsergroupDetailData (val) {
-    //     this.dirUsergroupDetailData = val
-    //   }
-    // },
   mounted: function () {
     this.subActiveName = 0
+  },
+  watch: {
+    'editForm.uuid': function (newVal, oldVal) {
+      console.log('watch: editForm!!!!!!!!!!!!!!!!')
+      this.subActiveName = '0'
+      this.showSummary = true
+      this.showDirUserGroup = false
+      this.showUser = false
+      this.showRole = false
+    },
+    deep: true
   },
   data () {
     // 用户组名的唯一性

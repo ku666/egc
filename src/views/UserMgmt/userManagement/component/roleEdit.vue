@@ -28,6 +28,7 @@
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
+      <!-- 角色说明 -->
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" v-model='form.remark' placeholder='请输入角色说明' rows="3" style="width:650px"></el-input>
       </el-form-item>
@@ -330,6 +331,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleUserGroupCurrentChange (val) {
       this.query.currentPage = val
       this.query.roleId = this.form.uuid
@@ -390,6 +392,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleResourceCurrentChange (val) {
       this.query.currentPage = val
       this.query.roleId = this.form.uuid
@@ -696,6 +699,20 @@ export default {
     //       }
     //     )
     // }
+  },
+  mounted: function () {
+    this.subActiveName = 0
+  },
+  watch: {
+    'form.uuid': function (newVal, oldVal) {
+      console.log('watch: form!!!!!!!!!!!!!!!!')
+      this.subActiveName = '0'
+      this.showSummary = true
+      this.showUserGroup = false
+      this.showUser = false
+      this.showResource = false
+    },
+    deep: true
   },
   data () {
     // 角色名的唯一性
