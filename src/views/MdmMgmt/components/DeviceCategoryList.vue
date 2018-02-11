@@ -10,16 +10,16 @@
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
         <el-form-item label='设备编码'>
-          <el-input placeholder='请输入设备编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="4"></el-input>
+          <el-input placeholder='请输入设备编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备型号'>
-          <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备名称'>
-          <el-input placeholder='请输入设备名称' v-model.trim='searchForm.typeName' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备名称' v-model.trim='searchForm.typeName' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备描述'>
-          <el-input placeholder='请输入设备描述' v-model.trim='searchForm.typeDesc' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备描述' v-model.trim='searchForm.typeDesc' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商'>
           <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
