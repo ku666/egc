@@ -99,23 +99,6 @@ export default {
       this.showUser = tab.name === '2'
       this.showRole = tab.name === '3'
     },
-    handleUserSizeChange (val) {
-      this.query.pageSize = val
-      this.query.usergroupUuid = this.usergroupUuid
-      getDirUserList(this.query)
-        .then(
-          function (result) {
-            console.log('result:' + JSON.stringify(result))
-            this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
-            this.dirUserDetailData.pageCount = result.pageCount
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
     handleUserCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
@@ -134,9 +117,27 @@ export default {
           }
         )
     },
-    handleRoleSizeChange (val) {
+    handleUserSizeChange (val) {
       this.query.pageSize = val
       this.query.usergroupUuid = this.usergroupUuid
+      getDirUserList(this.query)
+        .then(
+          function (result) {
+            console.log('result:' + JSON.stringify(result))
+            this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
+            this.dirUserDetailData.pageCount = result.pageCount
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
+    handleRoleCurrentChange (val) {
+      this.query.currentPage = val
+      this.query.usergroupUuid = this.usergroupUuid
+      console.log('翻页：' + JSON.stringify(this.query))
       getUsergroupRoleList(this.query)
         .then(
           function (result) {
@@ -151,10 +152,9 @@ export default {
           }
         )
     },
-    handleRoleCurrentChange (val) {
-      this.query.currentPage = val
+    handleRoleSizeChange (val) {
+      this.query.pageSize = val
       this.query.usergroupUuid = this.usergroupUuid
-      console.log('翻页：' + JSON.stringify(this.query))
       getUsergroupRoleList(this.query)
         .then(
           function (result) {
