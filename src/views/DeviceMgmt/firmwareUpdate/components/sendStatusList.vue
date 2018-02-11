@@ -1,5 +1,6 @@
 <template>
   <div style="margin-top: 10px">
+    <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
       class="deviceMgmTable"
       :data="sendStatusData"
@@ -99,6 +100,10 @@
         this.pageSize = val
         this.currentPage = 1
         this._loadSendStatusData(1, val)
+      },
+      _refresh () {
+        this.currentPage = 1
+        this._loadSendStatusData(1, this.pageSize)
       }
     },
     mounted () {

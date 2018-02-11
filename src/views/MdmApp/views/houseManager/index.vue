@@ -5,23 +5,23 @@
         <!-- 带分页表格 -->
         <div class="house-table">
           <el-table highlight-current-row :data="tableData" height="100%" v-loading="loading">
-            <el-table-column label="房屋号" prop="houseNum">
+            <el-table-column label="房屋号" prop="houseNum" sortable>
             </el-table-column>
-            <el-table-column label="房屋名称" prop="houseAddress">
+            <el-table-column label="房屋名称" prop="houseAddress" sortable>
             </el-table-column>
-            <el-table-column label="房屋用途" prop="houseUseFor">
+            <el-table-column label="房屋用途" prop="houseUseFor" sortable>
             </el-table-column>
-            <el-table-column label="居住人数" prop="residentNum">
+            <el-table-column label="居住人数" prop="residentNum" sortable>
             </el-table-column>
-            <el-table-column width="200" label="房产证编号" prop="houseCertificate">
+            <el-table-column width="200" label="房产证编号" prop="houseCertificate" sortable>
             </el-table-column>
-            <el-table-column width="200" label="土地证编号" prop="landCertificate">
+            <el-table-column width="200" label="土地证编号" prop="landCertificate" sortable>
             </el-table-column>
-            <el-table-column label="房屋面积" prop="buildingArea">
+            <el-table-column label="房屋面积" prop="buildingArea" sortable>
             </el-table-column>
-            <el-table-column label="楼层" prop="floor">
+            <el-table-column label="楼层" prop="floor" sortable>
             </el-table-column>
-            <el-table-column label="紧急联系电话" prop="emergencyPhone">
+            <el-table-column label="紧急联系电话" prop="emergencyPhone" sortable>
             </el-table-column>
           </el-table>
         </div>

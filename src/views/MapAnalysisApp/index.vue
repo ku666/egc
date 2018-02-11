@@ -186,11 +186,11 @@ export default {
     overflow: auto;
     margin: 7px 0px 0px 0px;
     box-sizing: border-box;
-    /deep/ .el-table{
+    .el-table{
       max-height: 735px;
       overflow: auto;
     }
-    /deep/ .el-table::before{
+    .el-table::before{
       display:none;
     }
     .el-table__row {

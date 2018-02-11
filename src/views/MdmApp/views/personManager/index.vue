@@ -49,32 +49,32 @@
       <el-table :data="tableData" @row-dblclick='showPersonDetail' height="100%" v-loading="loading" style="margin-top: 15px">
         <el-table-column type="index"></el-table-column>
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column label="姓名" prop="name">
+        <el-table-column label="姓名" prop="name" sortable>
         </el-table-column>
-        <el-table-column label="人员类型" props="userType">
+        <el-table-column label="人员类型" prop="userType" sortable>
           <template slot-scope="scope">
             {{scope.row.userType === '1' ? '业主' : '租户'}}
           </template>
         </el-table-column>
-        <el-table-column label="性别" prop="sex">
+        <el-table-column label="性别" prop="sex" sortable>
           <template slot-scope="scope">
             {{scope.row.sex === '1' ? '男' : '女'}}
           </template>
         </el-table-column>
-        <el-table-column label="生日" prop="birth">
+        <el-table-column label="生日" prop="birth" sortable>
         </el-table-column>
-        <el-table-column label="证件类型" prop="idenType">
+        <el-table-column label="证件类型" prop="idenType" sortable>
           <template slot-scope="scope">
           <div v-for='idType in idTypes' v-bind:key='idType.value'>
             {{scope.row.idenType === idType.value ? idType.label : ''}}
           </div>
         </template>
         </el-table-column>
-        <el-table-column label="证件号码" prop="idenNum" width="170">
+        <el-table-column label="证件号码" prop="idenNum" width="170" sortable>
         </el-table-column>
-        <el-table-column label="联系电话" prop="phone">
+        <el-table-column label="联系电话" prop="phone" sortable>
         </el-table-column>
-        <el-table-column label="电子邮箱" prop="email">
+        <el-table-column label="电子邮箱" prop="email" sortable>
         </el-table-column>
       </el-table>
       <el-pagination
