@@ -145,7 +145,7 @@
       },
       _deleteFirmware (index, row) {
         // 删除固件
-        deleteDmFotaFile({'fotaFileViewVo': row})
+        deleteDmFotaFile({'listFotaFileVo': [row]})
           .then(result => {
             this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
           })
