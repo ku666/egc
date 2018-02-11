@@ -145,7 +145,7 @@
           fileList.shift()
         }
         this.fileInfo = file
-        this.importData['fileSize'] = file.size
+        this.importData['fileSize'] = (parseInt(file.size) / 1000000).toString()
         readBlobAsDataURL(file.raw, (result) => {
           this.importData['fileData'] = result
         })

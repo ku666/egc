@@ -1,5 +1,6 @@
 <template>
   <div style="margin-top: 50px">
+    <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
       class="deviceMgmTable"
       :data="firmwareInfoData"
@@ -149,6 +150,10 @@
           .then(result => {
             this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
           })
+      },
+      _refresh () {
+        this.currentPage = 1
+        this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
       }
     },
     mounted () {
