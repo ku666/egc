@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
+  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup-peo'>
     <el-row>
       <el-col :span="4" class="leftText">
         <div>
@@ -506,7 +506,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.popup {
+.popup-peo {
   /deep/.el-dialog {
     min-width: 710px;
   }
