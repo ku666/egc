@@ -306,6 +306,12 @@ export default {
             console.log(error)
           }.bind(this)
         )
+      this.initData()
+    },
+    initData () {
+      this.listQuery.q_fullName = ''
+      this.listQuery.q_userName = ''
+      this.listQuery.q_primaryPhone = ''
     },
     // 初始新增用户信息
     initUserInfo () {
