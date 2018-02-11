@@ -197,6 +197,10 @@
               console.log(error)
             }
           )
+        this.initData()
+      },
+      initData () {
+        this.listQuery.q_departName = ''
       },
       loadDepartmentTree () {
         getDepartmentTreeData(this.listQuery)

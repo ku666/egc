@@ -295,6 +295,10 @@ export default {
             console.log(error)
           }
         )
+      this.initData()
+    },
+    initData () {
+      this.listQuery.q_resourceName = ''
     },
     loadSelectData () {
       // 获取资源类型下拉框信息
