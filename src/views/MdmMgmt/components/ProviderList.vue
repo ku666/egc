@@ -44,22 +44,22 @@
         <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column prop='providerCode' label='供应商编码' ></el-table-column>
-        <el-table-column prop='providerName' label='供应商名称' ></el-table-column>
-        <el-table-column prop='contact' label='联系方式' ></el-table-column>
-        <el-table-column prop='providerDesc' label='供应商描述' ></el-table-column>
+        <el-table-column prop='providerCode' label='供应商编码' sortable></el-table-column>
+        <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
+        <el-table-column prop='contact' label='联系方式' sortable></el-table-column>
+        <el-table-column prop='providerDesc' label='供应商描述' sortable></el-table-column>
         <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
-        <el-table-column label='供应商类别'>
+        <el-table-column label='供应商类别' sortable prop='category'>
           <template slot-scope="scope">
             <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
               {{scope.row.category === providerType.key ? providerType.value : ''}}
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-        <el-table-column prop='createUser' label='创建人'></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-        <el-table-column prop='updateUser' label='修改人'></el-table-column>
+        <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
+        <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
+        <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
+        <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
         <el-table-column label='操作' width='100'>
           <template slot-scope='scope'>
             <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->

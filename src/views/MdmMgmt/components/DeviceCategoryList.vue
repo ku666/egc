@@ -76,17 +76,17 @@
                 <!-- </div> -->
               </template>
             </el-table-column>
-            <el-table-column prop='typeModel' label='设备型号' >
+            <el-table-column prop='typeModel' label='设备型号'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeModel, searchForm.typeModel)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeName' label='设备名称' >
+            <el-table-column prop='typeName' label='设备名称'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeName, searchForm.typeName)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述' >
+            <el-table-column prop='typeDesc' label='设备描述'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeDesc, searchForm.typeDesc)"></p>
               </template>
@@ -99,10 +99,10 @@
                 </div>
               </template>
             </el-table-column> -->
-            <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
-            <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
+            <el-table-column prop='hardwareVersion' label='硬件版本'></el-table-column>
+            <el-table-column prop='softwareVersion' label='软件版本'></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-            <el-table-column prop='providerName' label='供应商' ></el-table-column>
+            <el-table-column prop='providerName' label='供应商'></el-table-column>
             <!-- <el-table-column label='供应商' >
               <template slot-scope="scope">
                 <div v-for='provider in providers' v-bind:key='provider.providerCode'>
@@ -111,9 +111,9 @@
               </template>
             </el-table-column> -->
             <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-            <el-table-column prop='createUser' label='创建人' ></el-table-column>
+            <el-table-column prop='createUser' label='创建人'></el-table-column>
             <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-            <el-table-column prop='updateUser' label='修改人' ></el-table-column>
+            <el-table-column prop='updateUser' label='修改人'></el-table-column>
             <el-table-column label='操作'>
               <template slot-scope='scope'>
                 <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -125,22 +125,22 @@
         </template>
       </el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备编码'>
+      <el-table-column prop='typeCode' label='设备编码' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeCode, searchForm.typeCode)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' >
+      <el-table-column prop='typeModel' label='设备型号' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeModel, searchForm.typeModel)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeName' label='设备名称' >
+      <el-table-column prop='typeName' label='设备名称' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeName, searchForm.typeName)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' >
+      <el-table-column prop='typeDesc' label='设备描述' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeDesc, searchForm.typeDesc)"></p>
         </template>
@@ -153,10 +153,10 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
-      <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
+      <el-table-column prop='hardwareVersion' label='硬件版本' sortable></el-table-column>
+      <el-table-column prop='softwareVersion' label='软件版本' sortable></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-      <el-table-column prop='providerName' label='供应商' ></el-table-column>
+      <el-table-column prop='providerName' label='供应商' sortable></el-table-column>
       <!-- <el-table-column label='供应商' >
         <template slot-scope="scope">
           <div v-for='provider in providers' v-bind:key='provider.providerCode'>
@@ -164,10 +164,10 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-      <el-table-column prop='createUser' label='创建人' ></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' ></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
