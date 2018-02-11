@@ -34,7 +34,7 @@
     <el-row style='height: 100%;'>
       <el-col style='height: 100%;'>
         <div style="margin-top: 15px; max-height: 100%;"> 
-          <el-table :data="softwarePackListData" v-loading="loading" style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
+          <el-table :data="softwarePackListData" stripe border v-loading="loading" style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -72,13 +72,13 @@
       </el-col>
     </el-row>
     <!-- 注册 -->
-    <div>
+    <div id="package_register">
       <el-dialog :title="dialogTitle" :visible.sync="dialogRegisterVisible" top="8vh" :before-close="closeDialog">
         <div>
           <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
             <el-row>
-              <el-col :span="12">
-                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesId" :autofocus="true">
+              <el-col :span="12"  class="flex-1 flex-c">
+                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesId" >
                   <el-select v-model="softwareDetails.batchesId" placeholder="请选择" :disabled="isHasSoftwareDetails.batchesIdIsDisable">
                     <el-option
                       v-for="item in batchs"
@@ -89,90 +89,90 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.developer" :disabled="isHasSoftwareDetails.developerIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.developer" :disabled="isHasSoftwareDetails.developerIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="软件名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.name" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.name" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="11" class="flex-1 flex-c">
                 <el-form-item label="版本号" :label-width="formLabelWidth" prop="version">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.version" :maxlength="maxlength" :disabled="isHasSoftwareDetails.versionIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.version" :maxlength="maxlength" :disabled="isHasSoftwareDetails.versionIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="latestPreName">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.latestPreName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="前续软件包版本" :label-width="formLabelWidth" prop="latestPreVer">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreVer" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreVerIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.latestPreVer" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreVerIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="24">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="软件包功能说明" :label-width="formLabelWidth" prop="functionDesc">
                   <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.functionDesc" :disabled="isHasSoftwareDetails.functionDescIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="24">
+               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
                   <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.remark" :disabled="isHasSoftwareDetails.remarkIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+            </el-row>
+            <el-row>
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="软件包英文名称" :label-width="formLabelWidth" prop="nameEn">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.nameEn" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameEnIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.nameEn" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameEnIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="Git仓库名" :label-width="formLabelWidth" prop="gitRepository">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.gitRepository" :maxlength="maxlength" :disabled="isHasSoftwareDetails.gitRepositoryIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.gitRepository" :maxlength="maxlength" :disabled="isHasSoftwareDetails.gitRepositoryIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="Maven工程名" :label-width="formLabelWidth" prop="mavenName">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.mavenName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.mavenNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.mavenName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.mavenNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth" prop="svrPkgName">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.svrPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.svrPkgNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.svrPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.svrPkgNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="client包名称" :label-width="formLabelWidth" prop="cltPkgName">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.cltPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.cltPkgNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.cltPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.cltPkgNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="端口" :label-width="formLabelWidth" prop="port">
-                  <el-input class="upgrade_el-input" v-model="softwareDetails.port" :maxlength="maxlength" :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.port" :maxlength="maxlength" :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="12">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="功能类型" :label-width="formLabelWidth" prop="functionType" :autofocus="true">
-                  <el-select v-model="softwareDetails.functionType" placeholder="请选择">
+                  <el-select v-model="softwareDetails.functionType" placeholder="请选择" :disabled="isHasSoftwareDetails.appTypeIsDisable">
                     <el-option
                       v-for="item in funType"
                       :key="item.value"
@@ -182,9 +182,9 @@
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="12">
+              <el-col :span="12"  class="flex-1 flex-c">
                 <el-form-item label="应用类型" :label-width="formLabelWidth" prop="appType" :autofocus="true">
-                  <el-select v-model="softwareDetails.appType" placeholder="请选择">
+                  <el-select v-model="softwareDetails.appType" placeholder="请选择" :disabled="isHasSoftwareDetails.functionTypeIsDisable">
                     <el-option
                       v-for="item in appType"
                       :key="item.value"
@@ -196,7 +196,7 @@
               </el-col>
             </el-row>
             <el-row>
-              <el-col :span="24">
+              <el-col :span="12"  class="flex-1 flex-c">
                 <template v-if="isHasSoftwareDetails.uploadFilesIsDisable">
                   <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
                     <el-upload
@@ -220,7 +220,22 @@
                 </template>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="23" class="flex-1 flex-c">
+                <el-form-item label="软件包源服务器名称" :label-width="formLabelWidth" prop="svrPkgName11">
+                  <el-input v-model="softwareDetails.svrPkgName11" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+             <el-row>
+              <el-col :span="23" class="flex-1 flex-c">
+                <el-form-item label="软件包源路径名称" :label-width="formLabelWidth" prop="ctlPkgName11">
+                  <el-input v-model="softwareDetails.ctlPkgName11" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
             <div style="text-align:center;">
+              <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
               <template v-if="this.optType === 'add' ">
                 <el-button type="primary" @click="_registerSoftware('softwareDetails')" class="search-btn">注 册</el-button>
               </template>
@@ -248,15 +263,14 @@
       </el-dialog>
     </div>
     <!--软件包批量导入 -->
-    <div style = 'height: 200px; width: 100px;'>
-      <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" top="8vh" :before-close="closeImportDialog">
+    <div>
+      <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" :before-close="closeImportDialog">
         <div>
           <el-form>
             <el-row>
               <el-col :span="24">
                 <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
                   <el-upload
-                    style = 'height: 200px; width: 100px;'
                     ref="uploadPackageJarFiles"
                     class="avatar-uploader"
                     action=""
@@ -404,20 +418,9 @@ export default {
       editTitle: '编辑',
       deleteTitle: '删除',
       historyTitle: '历史信息',
-      formLabelWidth: '160px',
+      formLabelWidth: '110px',
       fileList: [],
       maxlength: 30,
-      // batchs: [{
-      //   value: '1',
-      //   uuid: 'uuid019828393839948322229',
-      //   name: '智慧小区平sssss1',
-      //   label: '恒大智慧小区平台1.0'
-      // }, {
-      //   value: '2',
-      //   uuid: 'uuid019828393839948311119',
-      //   name: '智慧小区平ssssss2',
-      //   label: '恒大智慧小区平台1.1'
-      // }],
       funType: [{
         value: '软件',
         label: '软件'
@@ -642,6 +645,7 @@ export default {
       this.dialogRegisterVisible = false
       this.$refs.softwareDetails.resetFields()
       this.fileList = []
+      console.info('closeDialog')
     },
     // 清空软件包注册页面之前输入的值
     closeImportDialog () {
@@ -649,7 +653,7 @@ export default {
     },
     // 查看软件包每条详细信息
     _handleCheckDetails (rowIdx) {
-      this.dialogTitle = '软件包信息查询'
+      this.dialogTitle = '软件包详细信息'
       var rowData = this.softwarePackListData[rowIdx]
       console.log('rowData == >' + rowData)
       var eachRowUUID = rowData.uuid
@@ -883,8 +887,8 @@ export default {
   }
 }
 </script>
-
 <style scoped>
- /* @import 'assets/css/softwaremgmt.less' */
- @import '../ConfigurationMgmt/assets/css/upgrademgmt.less'
+deep/.el-input__inner{
+  width: 1500px;
+}
 </style>
