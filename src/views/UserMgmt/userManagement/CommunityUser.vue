@@ -75,7 +75,7 @@ import {
   getUserStatusOptions,
   getDepartmentOptions,
   getContactTypeOptions,
-  listUserType,
+  // listUserType,
   listCommunity
   // getRoleUser
 } from '@/views/UserMgmt/userManagement/apis'
@@ -165,50 +165,12 @@ export default {
   methods: {
     // 加载数据
     loadData () {
-      // getUserListByPage(this.listQuery)
-      //   .then(
-      //     function (result) {
-      //       // console.log('get data by page:' + JSON.stringify(result))
-      //       this.userList = result.baseUserVoList
-      //       this.total = result.pageCount
-      //     }.bind(this)
-      //   )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
-      listUserType()
-        .then(
-          function (result) {
-            this.userTypeOptions = result
-            console.log('user types: ' + result)
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log('错误：' + error)
-          }
-        )
       // 获取部门信息
       getDepartmentOptions(this.dictData)
         .then(
             function (result) {
               // console.log('<<<<<departmentOptions:' + JSON.stringify(result))
               this.departmentOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-      // 获取用户类型信息
-      listUserType()
-        .then(
-            function (result) {
-              // console.log('<<<<<userTypeOptions:' + JSON.stringify(result))
-              this.userTypeOptions = result
             }.bind(this)
           )
         .catch(

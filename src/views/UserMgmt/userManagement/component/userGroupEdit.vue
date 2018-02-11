@@ -501,6 +501,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleUserCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
@@ -536,6 +537,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleRoleCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
@@ -554,30 +556,10 @@ export default {
           }
         )
     },
-    // // 校验用户组名的唯一性
-    // validateName (usergroupUuid, usergroupName, userType) {
-    //   checkUserGroupName(usergroupUuid, usergroupName, userType)
-    //     .then(
-    //       function (result) {
-    //         console.log('<<<<<userGroupNameFlag:' + result)
-    //         this.userGroupNameFlag = result
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log(error)
-    //       }
-    //     )
-    // },
     handleCancel (editForm) {
       this.$emit('listenToChildCloseEvent')
     }
   },
-    // watch: {
-    //   dirUsergroupDetailData (val) {
-    //     this.dirUsergroupDetailData = val
-    //   }
-    // },
   mounted: function () {
     this.subActiveName = 0
   },

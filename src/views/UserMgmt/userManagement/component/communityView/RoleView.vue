@@ -117,21 +117,6 @@ export default {
     gridList
   },
   methods: {
-    handleUserGroupSizeChange (val) {
-      this.query.pageSize = val
-      this.query.roleId = this.form.uuid
-      updateRoleUserGroupList(this.query)
-        .then(
-          function (result) {
-            this.roleUsergroupData = result
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-    },
     handleUserGroupCurrentChange (val) {
       this.query.currentPage = val
       this.query.roleId = this.form.uuid
@@ -147,13 +132,13 @@ export default {
           }
         )
     },
-    handleUserSizeChange (val) {
+    handleUserGroupSizeChange (val) {
       this.query.pageSize = val
       this.query.roleId = this.form.uuid
-      updateRoleUserList(this.query)
+      updateRoleUserGroupList(this.query)
         .then(
           function (result) {
-            this.roleUserData = result
+            this.roleUsergroupData = result
           }.bind(this)
         )
         .catch(
@@ -177,13 +162,13 @@ export default {
           }
         )
     },
-    handleResourceSizeChange (val) {
+    handleUserSizeChange (val) {
       this.query.pageSize = val
       this.query.roleId = this.form.uuid
-      updateRoleResourceList(this.query)
+      updateRoleUserList(this.query)
         .then(
           function (result) {
-            this.roleResourceData = result
+            this.roleUserData = result
           }.bind(this)
         )
         .catch(
@@ -207,6 +192,21 @@ export default {
           }
         )
     },
+    handleResourceSizeChange (val) {
+      this.query.pageSize = val
+      this.query.roleId = this.form.uuid
+      updateRoleResourceList(this.query)
+        .then(
+          function (result) {
+            this.roleResourceData = result
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
+    },
     handleSubTabClick (tab, event) {
       this.showSummary = tab.name === '0'
       this.showUserGroup = tab.name === '1'
@@ -216,6 +216,12 @@ export default {
   },
   data () {
     return {
+      textMap: {
+        '0': '角色概要',
+        '1': '关联用户组',
+        '2': '关联用户',
+        '3': '资源权限'
+      },
       roleNameFlag: true,
       showSummary: true,
       showUserGroup: false,
@@ -224,12 +230,6 @@ export default {
       roleName: undefined,
       subActiveName: '0',
       tabTitle: '角色概要',
-      textMap: {
-        '0': '角色概要',
-        '1': '关联用户组',
-        '2': '关联用户',
-        '3': '资源权限'
-      },
       query: {
         currentPage: 1,
         pageSize: 5,

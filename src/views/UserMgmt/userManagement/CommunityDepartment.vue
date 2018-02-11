@@ -10,7 +10,7 @@
           <el-form :model="listQuery" ref="listQuery" :inline="true">
             <div class="search-container">
               <el-form-item label="小区列表">
-                <el-select v-model="listQuery.q_courtUuid" placeholder="请选择需要查询的小区" class="user_el-select" @change="communitySelected">
+                <el-select v-model="listQuery.q_courtUuid" placeholder="请选择需要查询的小区" class="user_el-select" @change="communitySelected" filterable>
                   <el-option v-for="community in communityList" :key="community.uuid" :label="community.name" :value="community.uuid"> </el-option>
                 </el-select>
               </el-form-item>

@@ -12,8 +12,8 @@
         <!-- <el-table-column width="55" type="index" label="序号" align="center"></el-table-column> -->
         <el-table-column prop="usergroupName" label="用户组名称"></el-table-column>
         <!-- <el-table-column prop="parentUsergroupName" label="上级用户组" width="234"></el-table-column> -->
-        <el-table-column prop="usergroupRemark" label="用户组说明" ></el-table-column>
-        <el-table-column prop="usergroupUsers" label="组成员"></el-table-column>
+        <el-table-column prop="usergroupRemark" label="用户组说明" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="usergroupUsers" label="组成员" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" align="center" v-if="showOperation">
             <template slot-scope="scope">
               <span @click="handleDelete(scope.$index)" content="删除" style="cursor:pointer" class="el-icon-delete">

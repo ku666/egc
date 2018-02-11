@@ -117,7 +117,7 @@
         sendToCourt(param)
           .then(result => {
             this.showDistrictDialog = false
-            this.$message(result.strDevice)
+            this.$message.success(result)
           })
       },
       _setFirmwareInfo (data) {
