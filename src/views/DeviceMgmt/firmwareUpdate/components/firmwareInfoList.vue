@@ -21,7 +21,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="filePath"
+          property="filePath2"
           label="文件路径"
           width="300">
         </el-table-column>
@@ -47,7 +47,7 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="provideCode"
+          property="provideName"
           label="厂商编码"
           width="100">
         </el-table-column>

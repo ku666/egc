@@ -58,7 +58,7 @@
           <div class="btn-container">
         <el-form-item>
           <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-          <el-button type="primary" @click="_callHandleFilter" class="search-btn">搜索</el-button>
+          <el-button type="primary" @click="_callHandleFilter" class="action-btn">搜索</el-button>
           <el-button type="primary" @click="_callHanderDownLoadResult" class="action-btn">导出</el-button>
         </el-form-item>
           </div>

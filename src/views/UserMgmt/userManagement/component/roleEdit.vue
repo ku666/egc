@@ -28,6 +28,7 @@
       <el-form-item label='角色名称' prop='roleName' class='is-required'>
         <el-input type="text" v-model='form.roleName' placeholder='请输入角色名称'></el-input>
       </el-form-item>
+      <!-- 角色说明 -->
       <el-form-item label='角色说明' prop='remark' style=" display: block">
         <el-input type="textarea" v-model='form.remark' placeholder='请输入角色说明' rows="3" style="width:650px"></el-input>
       </el-form-item>
@@ -107,14 +108,15 @@
         <el-button type="info" plain  size="small" @click="handleAddApp">添加应用程序资源权限</el-button>
         <el-button type="info" plain  size="small" @click="handleAddService">添加服务权限</el-button>
         <!-- <el-button type="info" plain  size="small" @click="handleAddDevice">添加设备资源权限</el-button> -->
+        <el-button type="info" plain  size="small" @click="handleAddRegionalData">添加区域数据权限</el-button>
       </el-button-group>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible">
         <add-app ref="addapp" v-show="showApp" :form="form" :cloudFlag="1" @createAppAuthorityEvent="createAppEvent" @canelDialogEvent="cancelEvent"
         ></add-app>
         <add-service ref="addservice" v-show="showService" :form="form" :cloudFlag="1" @createServiceAuthorityEvent="createServiceEvent" @canelDialogEvent="cancelEvent"
         ></add-service>
-        <add-device ref="adddevice" v-show="showDevice" :form="form" :cloudFlag="1" @createDeviceAuthorityEvent="createDeviceEvent"  @canelDialogEvent="cancelEvent"
-        ></add-device>
+        <add-regional-data ref="addregionaldata" v-show="showRegionalData" :form="form" :cloudFlag="1" @createRegionalDataAuthorityEvent="createRegionalDataEvent"  @canelDialogEvent="cancelEvent"
+        ></add-regional-data>
       </el-dialog>
       <grid-list id="resourceTable"
         @listenToDeleteEvent='resourceDeleteEvent' 
@@ -142,7 +144,7 @@
 import gridList from './gridList'
 import addApp from './addApp'
 import addService from './addService'
-import addDevice from './addDevice'
+import addRegionalData from './addRegionalData'
 import {
   updateRole,
   getRoleUserGroup,
@@ -159,7 +161,7 @@ import {
   updateRoleResourceList,
   createAuthority,
   createService,
-  createDevice,
+  // createDevice,
   checkRoleName,
   getRoleAssResource
 } from '@/views/UserMgmt/userManagement/apis'
@@ -190,7 +192,7 @@ export default {
     gridList,
     addApp,
     addService,
-    addDevice
+    addRegionalData
   },
   methods: {
     getRoleUserGroupList () {
@@ -329,6 +331,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleUserGroupCurrentChange (val) {
       this.query.currentPage = val
       this.query.roleId = this.form.uuid
@@ -389,6 +392,7 @@ export default {
           }
         )
     },
+    // 改变当前页
     handleResourceCurrentChange (val) {
       this.query.currentPage = val
       this.query.roleId = this.form.uuid
@@ -504,23 +508,23 @@ export default {
       this.dialogStatus = '添加' + this.form.roleName + '角色的应用程序权限'
       this.dialogFormVisible = true
       this.showApp = true
-      this.showDevice = false
+      this.showRegionalData = false
       this.showService = false
     },
     handleAddService (data) {
       this.dialogStatus = '添加' + this.form.roleName + '角色的应用服务权限'
       this.dialogFormVisible = true
       this.showApp = false
-      this.showDevice = false
+      this.showRegionalData = false
       this.showService = true
     },
-    // handleAddDevice (data) {
-    //   this.dialogStatus = '添加' + this.form.roleName + '角色的设备资源权限'
-    //   this.dialogFormVisible = true
-    //   this.showApp = false
-    //   this.showDevice = true
-    //   this.showService = false
-    // },
+    handleAddRegionalData (data) {
+      this.dialogStatus = '添加' + this.form.roleName + '角色的区域数据权限'
+      this.dialogFormVisible = true
+      this.showApp = false
+      this.showRegionalData = true
+      this.showService = false
+    },
     handleSave (form) {
       this.formData = JSON.stringify(this.form)
       console.log(this.formData)
@@ -615,16 +619,16 @@ export default {
       this.dialogFormVisible = false
       this.showService = false
     },
-    createDeviceEvent (data) {
-      console.log('createDeviceEvent Start')
-      createDevice(data)
+    createRegionalDataEvent (data) {
+      console.log('createRegionalDataEvent Start')
+      createService(data)
           .then(
             function (result) {
               this.$message({
                 message: '保存成功！',
                 type: 'success'
               })
-              this.$refs.adddevice.refresh()
+              this.$refs.addregionaldata.refresh()
               this.query.roleId = this.form.uuid
               console.log(this.query)
               getRoleAssResource(this.query)
@@ -646,9 +650,9 @@ export default {
               console.log(error)
             }
           )
-      console.log('createDeviceEvent End')
+      console.log('createRegionalDataEvent End')
       this.dialogFormVisible = false
-      this.showDevice = false
+      this.showRegionalData = false
     },
     cancelEvent () {
       console.log('dialog cancelEvent Start')
@@ -695,6 +699,20 @@ export default {
     //       }
     //     )
     // }
+  },
+  mounted: function () {
+    this.subActiveName = 0
+  },
+  watch: {
+    'form.uuid': function (newVal, oldVal) {
+      console.log('watch: form!!!!!!!!!!!!!!!!')
+      this.subActiveName = '0'
+      this.showSummary = true
+      this.showUserGroup = false
+      this.showUser = false
+      this.showResource = false
+    },
+    deep: true
   },
   data () {
     // 角色名的唯一性
@@ -771,6 +789,7 @@ export default {
       showApp: false,
       showService: false,
       showDevice: false,
+      showRegionalData: false,
       formData: undefined,
       userGroupParams: [
         {
@@ -788,7 +807,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '用户名',
+          title: '登录 ID',
           prop: 'userName'
         },
         {
@@ -818,9 +837,9 @@ export default {
           prop: 'resourceName'
         },
         {
-          title: 'URL',
+          title: 'URI',
           prop: 'resourceUrl'
-        }
+        },
         // {
         //   title: '操作类型',
         //   prop: 'actionTypeName'
@@ -829,10 +848,10 @@ export default {
         //   title: '安装位置',
         //   prop: 'houseOrgName'
         // },
-        // {
-        //   title: '逻辑地址',
-        //   prop: 'logicalAddress'
-        // }
+        {
+          title: '区域',
+          prop: 'regionName'
+        }
       ]
     }
   }

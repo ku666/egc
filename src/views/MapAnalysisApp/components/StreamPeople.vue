@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup'>
+  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup-peo'>
     <el-row>
       <el-col :span="4" class="leftText">
         <div>
@@ -506,7 +506,7 @@ export default {
 }
 </script>
 <style lang='less' scoped>
-.popup {
+.popup-peo {
   /deep/.el-dialog {
     min-width: 710px;
   }
@@ -535,43 +535,43 @@ export default {
     height: 430px;
     margin-top: 10px;
   }
-  .canvas {
+  /deep/.canvas {
     border: 1px solid #ccc;
     padding: 10px 8px 5px 5px;
-  }
-  #flowInformation {
-    height: 420px;
-    position: relative;
   }
   /deep/.el-dialog__body {
     padding: 0px 20px;
   }
-  .leftText {
-    padding: 5px 10px;
-    div {
-      line-height: 30px;
-      font-size: 12px;
-      span {
-        width: 65px;
-        font-size: 15px;
-        text-align: justify;
-        text-align-last: justify;
-        display: inline-block;
-        overflow: hidden;
-        vertical-align: top;
-      }
+}
+#flowInformation {
+  height: 420px;
+  position: relative;
+}
+.leftText {
+  padding: 5px 10px;
+  div {
+    line-height: 30px;
+    font-size: 12px;
+    span {
+      width: 65px;
+      font-size: 15px;
+      text-align: justify;
+      text-align-last: justify;
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: top;
     }
   }
-  .perErrInfo {
-    position: absolute;
-    top: 290px;
-    left: 190px;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-    font-size: 26px;
-    font-weight: bolder;
-  }
+}
+.perErrInfo {
+  position: absolute;
+  top: 290px;
+  left: 190px;
+  right: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 26px;
+  font-weight: bolder;
 }
 </style>
 

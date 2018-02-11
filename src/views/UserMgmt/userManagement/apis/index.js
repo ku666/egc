@@ -8,7 +8,7 @@ let contextPath = '/egc-usermgmtcomponent'
 
 // 获取下属用户组数据
 export const listUserType = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/listUserType'
+  return Axios.get(contextPath + '/usermgmt/maindata/getDictData?dictType=CLOUD_USER_TYPE'
   ).then(res => res.data)
 }
 
@@ -659,7 +659,7 @@ export const createAuthority = (data) => {
   return Axios.post(contextPath + '/usermgmt/authority/createMenuAuthority', data
   ).then(res => res.data)
 }
-// 保存应用服务List资源
+// 保存应用服务/区域数据List资源
 export const createService = (data) => {
   console.log('Axios createService' + JSON.stringify(data))
   return Axios.post(contextPath + '/usermgmt/authority/createList', data
@@ -691,12 +691,6 @@ export const getDeviceList = () => {
 // 获取角色的设备资源权限List
 export const getDeviceListPage = (data) => {
   return Axios.post(contextPath + '/usermgmt/resource/queryRoleUnauthoredDeviceList?currentPage=' + data.currentPage + '&pageSize=' + data.pageSize, data.roleDeviceQueryRequestVo
-  ).then(res => res.data)
-}
-// 获取角色的设备资源权限List
-export const createDevice = (data) => {
-  console.log('新增角色的设备实体：' + JSON.stringify(data))
-  return Axios.post(contextPath + '/usermgmt/resource/addDeviceAuthorityToRole', data
   ).then(res => res.data)
 }
 // 获取资源类型下拉框信息

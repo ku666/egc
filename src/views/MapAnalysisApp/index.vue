@@ -84,14 +84,16 @@ export default {
           let list = res.data.data ? res.data.data : []
           this.courtList = list
           let pointdata = []
+          let prodata = []
           let proObj = {}
           // console.log(list)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
-          list.map(function (item, index) {
-            if ((item.gpsLat && item.gpsLon) || index < test.length) {
+          for (let i = 0, len = list.length; i < len; i++) {
+            let item = list[i]
+            if ((item.gpsLat && item.gpsLon) || i < test.length) {
               if (!item.gpsLat) {
-                item.gpsLon = test[index][0]
-                item.gpsLat = test[index][1]
+                item.gpsLon = test[i][0]
+                item.gpsLat = test[i][1]
               }
               let obj = {
                 name: item.courtName,
@@ -106,12 +108,12 @@ export default {
                 proObj[pname] = {}
                 proObj[pname].value = 0
                 proObj[pname].courts = []
-                this.provinArr.push({value: item.org, label: item.org})
+                prodata.push({value: item.org, label: item.org})
               }
               proObj[pname].value += 1
               proObj[pname].courts.push(item)
             }
-          }, this)
+          }
           // console.log(proObj)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
@@ -121,6 +123,7 @@ export default {
             mapData.updateData(pointdata)
             mapData.updateProvinceData(proObj)
             this.courtListTB = list.slice(0, 10)
+            if (prodata.length > 0) this.provinArr = this.provinArr.concat(prodata)
           }
           this.getMyCharts.setOption(mapData.option)
         } else {
@@ -183,11 +186,11 @@ export default {
     overflow: auto;
     margin: 7px 0px 0px 0px;
     box-sizing: border-box;
-    /deep/ .el-table{
+    .el-table{
       max-height: 735px;
       overflow: auto;
     }
-    /deep/ .el-table::before{
+    .el-table::before{
       display:none;
     }
     .el-table__row {
