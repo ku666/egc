@@ -23,12 +23,12 @@
     </div>
 
     <div style="margin-top: 15px">
-      <div style="float: left">
+      <!-- <div style="float: left"> -->
         <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
-      </div>
+      <!-- </div>
       <div style="float: right">
         <el-button icon='el-icon-d-arrow-left' style="margin-center: 10px" plain type="primary" @click="gotodevicemgnt">设备主数据</el-button>
-      </div>
+      </div> -->
     </div>
 
     <!-- <hr/> -->
@@ -137,6 +137,7 @@ import {
   insertDeviceAttribute,
   updateDeviceAttribute
 } from '@/views/MdmMgmt/apis/index'
+import { addEventHandler } from '@/assets/js/util'
 
 export default {
   data () {
@@ -208,11 +209,11 @@ export default {
   },
   mounted () {
     this.search()
-    this.setMenuHightLight()
+    // this.setMenuHightLight()
     this.attatchEventToPager()
   },
   beforeDestroy () {
-    this.setUnHightLight()
+    // this.setUnHightLight()
   },
   computed: {
     title: function () {
@@ -226,36 +227,36 @@ export default {
     }
   },
   methods: {
-    setMenuHightLight: function () {
-      let sidemenu = document.getElementById('sidemenu')
-      if (sidemenu) {
-        // console.log('get side menu')
-        // let ul = sidemenu.querySelectorAll('ul[role="menu"]')
-        // if (ul) {
-        //   ul[0].style['display'] = 'block'
-        // }
-        // console.log(ul)
-        let menus = sidemenu.querySelectorAll('li.el-menu-item')
-        if (menus) {
-          this.menu = menus
-          for (let i = 0; i < menus.length; i++) {
-            if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
-              menus[i].classList.add('is-active')
-            }
-          }
-        }
-      }
-    },
-    setUnHightLight: function () {
-      let menus = this.menu
-      if (menus) {
-        for (let i = 0; i < menus.length; i++) {
-          if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
-            menus[i].classList.remove('is-active')
-          }
-        }
-      }
-    },
+    // setMenuHightLight: function () {
+    //   let sidemenu = document.getElementById('sidemenu')
+    //   if (sidemenu) {
+    //     // console.log('get side menu')
+    //     // let ul = sidemenu.querySelectorAll('ul[role="menu"]')
+    //     // if (ul) {
+    //     //   ul[0].style['display'] = 'block'
+    //     // }
+    //     // console.log(ul)
+    //     let menus = sidemenu.querySelectorAll('li.el-menu-item')
+    //     if (menus) {
+    //       this.menu = menus
+    //       for (let i = 0; i < menus.length; i++) {
+    //         if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+    //           menus[i].classList.add('is-active')
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
+    // setUnHightLight: function () {
+    //   let menus = this.menu
+    //   if (menus) {
+    //     for (let i = 0; i < menus.length; i++) {
+    //       if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
+    //         menus[i].classList.remove('is-active')
+    //       }
+    //     }
+    //   }
+    // },
     // 根据条件查询设备分类数据到列表中
     search () {
       this.attrListLoading = true
@@ -521,23 +522,12 @@ export default {
       this.attrSaved = false
       this.activeTab = 'basic'
     },
-    addEventHandler: function (target, type, fn) {
-      if (target.addEventListener) {
-        target.addEventListener(type, fn)
-      } else {
-        target.attachEvent('on' + type, fn)
-      }
-    },
     attatchEventToPager: function (params) {
       const self = this
-      // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
-      // console.log('input:' + input.value)
-      self.addEventHandler(input, 'keyup', function (e) {
-      // console.log('input:' + input.value)
+      addEventHandler(input, 'keyup', function (e) {
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchAttrForm.currentPage)) {
-          self.searchAttrForm.currentPage = parseInt(input.value)
-          self.search()
+          this.currentChange(parseInt(input.value))
         }
       })
     }
