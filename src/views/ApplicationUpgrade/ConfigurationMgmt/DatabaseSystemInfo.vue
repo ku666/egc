@@ -124,7 +124,7 @@ export default {
         }, {
           colName: '数据库名称',
           prop: 'name',
-          width: 120
+          width: 160
         }, {
           colName: '数据库版本',
           prop: 'version',
@@ -132,11 +132,11 @@ export default {
         }, {
           colName: '数据库安装路径',
           prop: 'path',
-          width: 120
+          width: 240
         }, {
           colName: '服务器主机名称',
           prop: 'server.name',
-          width: 150
+          width: 220
         }, {
           colName: '描述',
           prop: 'remark'

@@ -8,16 +8,16 @@
     <el-form :inline="true" :model="auServerDetails">
       <template v-if=" auServerDetails.courtDto !== null">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].province"></el-input>
         </el-form-item>
         <el-form-item label="市" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.city"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].city"></el-input>
         </el-form-item>
         <el-form-item label="区" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.district"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].district"></el-input>
         </el-form-item>
         <el-form-item label="小区名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].name"></el-input>
         </el-form-item>
       </template>
       <el-form-item label="服务器产品名称" :label-width="formLabelWidth">
@@ -120,7 +120,7 @@ export default {
   },
   data () {
     return {
-      formLabelWidth: '160px',
+      formLabelWidth: '200px',
       isInptDisabled: true
     }
   },

@@ -131,12 +131,12 @@ export default {
         {
           colName: '服务器产品名称',
           prop: 'name',
-          width: 200
+          width: 180
         },
         {
           colName: '服务器SN',
           prop: 'serialNo',
-          width: 120
+          width: 260
         },
         {
           colName: '服务器厂商',
@@ -168,6 +168,11 @@ export default {
         getauServersByPage(params)
           .then(
             function (result) {
+              for (let i = 0; i < result.auServersList.length; i++) {
+                let element = result.auServersList[i]
+                let tempCourtDto = element.courtDtoList[0]
+                element.courtDto = tempCourtDto
+              }
               this.auServerListData = result.auServersList
               this.total = result.pageCount
               this.loading = false
@@ -223,6 +228,7 @@ export default {
       getauServersDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log('details --- > ' + JSON.stringify(result.auServers))
             this.auServerDetails = result.auServers
             this.dialogDetailsVisible = true
           }.bind(this)
@@ -331,8 +337,12 @@ export default {
       getauServersByPage(this.searchConditionList)
         .then(
           function (result) {
+            for (let i = 0; i < result.auServersList.length; i++) {
+              let element = result.auServersList[i]
+              let tempCourtDto = element.courtDtoList[0]
+              element.courtDto = tempCourtDto
+            }
             this.auServerListData = result.auServersList
-            console.log('auServerListData =  ' + JSON.stringify(result))
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
@@ -370,4 +380,31 @@ export default {
 
 <style scoped>
 @import 'assets/css/upgrademgmt.less';
+    #serverHardwareTable >>> colgroup col:nth-child(1) {
+    width: 4%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(2) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(3) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(4) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(5) {
+    width: 7%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(6) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(7) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(8) {
+    width: 10%
+  }
+  #serverHardwareTable >>> colgroup col:nth-child(9) {
+    width: 20%
+  }
 </style>

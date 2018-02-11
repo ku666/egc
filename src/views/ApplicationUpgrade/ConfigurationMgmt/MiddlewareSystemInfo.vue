@@ -135,11 +135,11 @@ export default {
         }, {
           colName: '软件安装路径',
           prop: 'path',
-          width: 200
+          width: 240
         }, {
           colName: '服务器主机名称',
           prop: 'server.hostname',
-          width: 220
+          width: 260
         }, {
           colName: '描述',
           prop: 'remark'

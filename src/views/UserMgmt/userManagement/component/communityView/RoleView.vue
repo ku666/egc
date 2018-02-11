@@ -275,7 +275,7 @@ export default {
           prop: 'fullName'
         },
         {
-          title: '用户名',
+          title: '登录 ID',
           prop: 'userName'
         },
         {
@@ -305,7 +305,7 @@ export default {
           prop: 'resourceName'
         },
         {
-          title: 'URL',
+          title: 'URI',
           prop: 'resourceUrl'
         },
         {

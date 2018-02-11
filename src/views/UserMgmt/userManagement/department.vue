@@ -127,7 +127,8 @@
           prop: 'childrenDepartments'
         }, {
           title: '直属用户',
-          prop: 'directUsers'
+          prop: 'directUsers',
+          showTooltip: 'true'
         }],
         listQuery: {
           page: 1,
@@ -151,7 +152,7 @@
         activeName: '0',
         departmentForm: {
           departmentName: undefined,
-          parentDepartmentUuid: undefined,
+          parentDepartmentUuid: '',
           remark: undefined,
           departmentType: undefined,
           userType: undefined,
@@ -262,7 +263,7 @@
         if (tab.name === '0') {
           this.showGrid = true
           this.showSubGrid = false
-          // this.loadData()
+          this.loadData()
         } else if (tab.name === '1') {
           this.showGrid = false
           this.loadDepartmentTree()
@@ -273,6 +274,7 @@
         this.departmentOptions = []
         this.selectDepartmentData = data
         this.showSubGrid = true
+        this.curDepartmentType = data.departmentType
         if (!data.pid) {
           this.showEditTree = false
           this.showCreateTree = false
@@ -366,7 +368,7 @@
       initDepartmentForm () {
         this.departmentForm = {
           departmentName: undefined,
-          parentDepartmentUuid: undefined,
+          parentDepartmentUuid: '',
           remark: undefined,
           departmentType: undefined,
           userType: undefined,

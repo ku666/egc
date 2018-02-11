@@ -1,8 +1,8 @@
 <template>
   <div>
     <el-form ref='resourceDeviceGroupVue' :inline="true" :model="resourceDeviceGroupVue" :rules="rules">
-      <el-form-item label="区域名称" :label-width="formLabelWidth" prop="resourceName">  
-        <el-input v-model="resourceDeviceGroupVue.resourceName" auto-complete="off" placeholder="请输入区域名称" class="user_el-input"></el-input>
+      <el-form-item label="区域数据名称" :label-width="formLabelWidth" prop="resourceName">  
+        <el-input v-model="resourceDeviceGroupVue.resourceName" auto-complete="off" placeholder="请输入区域数据名称" class="user_el-input"></el-input>
       </el-form-item>
       <el-form-item label="所属应用" :label-width="formLabelWidth" prop="appCode">
         <el-select v-model="resourceDeviceGroupVue.appCode" placeholder="请选择所属应用" class="user_el-select">
@@ -20,7 +20,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth" prop="city">
+        <el-form-item label="选择市" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.city" placeholder="请选择城市" class="user_el-select" @change="loadDistrictData" disabled>
             <el-option
               v-for="citie in citys"
@@ -30,7 +30,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth" prop="district">
+        <el-form-item label="选择区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.district" placeholder="请选择区县" class="user_el-select" @change="loadCourtsData" disabled>
             <el-option
               v-for="district in districts"
@@ -40,7 +40,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择小区" :label-width="formLabelWidth" prop="courtName">
+        <el-form-item label="选择小区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.courtName" placeholder="请选择小区" class="user_el-select" disabled>
             <el-option
               v-for="court in courts"
@@ -62,7 +62,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth" prop="city">
+        <el-form-item label="选择市" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.city" placeholder="请选择城市" class="user_el-select" @change="loadDistrictData">
             <el-option
               v-for="citie in citys"
@@ -72,7 +72,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth" prop="district">
+        <el-form-item label="选择区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.district" placeholder="请选择区县" class="user_el-select" @change="loadCourtsData">
             <el-option
               v-for="district in districts"
@@ -82,7 +82,7 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="选择小区" :label-width="formLabelWidth" prop="courtName">
+        <el-form-item label="选择小区" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.courtName" placeholder="请选择小区" class="user_el-select">
             <el-option
               v-for="court in courts"
@@ -157,18 +157,12 @@ export default {
   components: {
 
   },
-  // watch: {
-  //   'resourceDeviceGroupVue.province' (newValue, oldValue) {
-  //     console.log('222')
-  //     this.loadCityData()
-  //   },
-  //   'resourceDeviceGroupVue.city' (newValue, oldValue) {
-  //     this.loadDistrictData()
-  //   },
-  //   'resourceDeviceGroupVue.district' (newValue, oldValue) {
-  //     this.loadCourtsData()
-  //   }
-  // },
+  watch: {
+    'resourceDeviceGroupVue.province' (newValue, oldValue) {
+      console.log('222')
+      this.loadCourtsData()
+    }
+  },
   mounted () {
     // this.loadProvinceData()
   },
@@ -176,14 +170,14 @@ export default {
     // 检查资源名称唯一性
     var validateResourceName = (rule, value, callback) => {
       if (value === '' || value === undefined) {
-        callback(new Error('请输入区域名称'))
+        callback(new Error('请输入区域数据名称'))
       } else {
         this.listParm.resourceType = '4'
         this.listParm.uuid = this.resourceDeviceGroupVue.uuid
         this.listParm.resourceName = value
         this.validateName(this.listParm)
         if (this.meunCodeFlag) {
-          callback(new Error('区域名称已存在，请修改!'))
+          callback(new Error('区域数据名称已存在，请修改!'))
         } else {
           callback()
         }
@@ -208,15 +202,6 @@ export default {
         ],
         province: [
           { required: true, message: '请选择省份', trigger: 'change' }
-        ],
-        city: [
-          { required: true, message: '请选择城市', trigger: 'change' }
-        ],
-        district: [
-          { required: true, message: '请选择区县', trigger: 'change' }
-        ],
-        courtName: [
-          { required: true, message: '请选择小区', trigger: 'change' }
         ]
       },
       // provinces: [],
@@ -278,6 +263,7 @@ export default {
       this.$refs[resourceDeviceGroupVue].resetFields()
       this.$emit('cancelDialogEvent')
     },
+    // 加载市
     loadCityData () {
       var that = this
       if (that.resourceDeviceGroupVue.city !== '') {
@@ -303,6 +289,7 @@ export default {
                   }
                 )
               }
+              that.loadCourtsData()
             }
           )
           .catch(
@@ -311,10 +298,11 @@ export default {
             }
           )
     },
+    // 加载区县
     loadDistrictData () {
       var that = this
       that.districts = []
-      this.courts = []
+      that.courts = []
       that.provParams.province = that.resourceDeviceGroupVue.province.trim()
       that.provParams.city = that.resourceDeviceGroupVue.city.trim()
       if (that.resourceDeviceGroupVue.city !== '') {
@@ -333,6 +321,7 @@ export default {
                   }
                 )
               }
+              that.loadCourtsData()
             }
           ).catch(
             function (error) {
@@ -343,16 +332,17 @@ export default {
         that.resourceDeviceGroupVue.district = ''
       }
     },
+    // 加载小区列表
     loadCourtsData () {
       var that = this
-      that.courts = []
+      // that.courts = []
       that.provParams.province = that.resourceDeviceGroupVue.province.trim()
       that.provParams.city = that.resourceDeviceGroupVue.city.trim()
       that.provParams.district = that.resourceDeviceGroupVue.district.trim()
-      if (that.resourceDeviceGroupVue.district !== '') {
-        that.resourceDeviceGroupVue.courtName = ''
-        that.courts = []
-        getCourtsDataList(that.provParams)
+      // if (that.resourceDeviceGroupVue.district !== '') {
+      that.resourceDeviceGroupVue.courtName = ''
+      that.courts = []
+      getCourtsDataList(that.provParams)
           .then(
             function (result) {
               console.log('courtsArr -- > ' + JSON.stringify(result))
@@ -372,9 +362,9 @@ export default {
               console.log(error)
             }
           )
-      } else {
-        that.resourceDeviceGroupVue.courtName = ''
-      }
+      // } else {
+      //   that.resourceDeviceGroupVue.courtName = ''
+      // }
     },
 
     changeProvince () {
