@@ -7,7 +7,6 @@
                       code="deviceTypeDesc"
                       ref="deviceTypeDesc"
                       :initValue="mainDeviceData.deviceTypeDesc"
-                      :required="true"
                       :disabled='true'>
           </select-box>
         </div>
@@ -18,7 +17,6 @@
                       code="providerCode"
                       ref="providerCode"
                       :initValue="mainDeviceData.providerCode"
-                      :required="true"
                       :disabled='true'>
           </select-box>
         </div>
@@ -30,7 +28,6 @@
                      :value="mainDeviceData.macAddress"
                      :disabled='true'
                      ref="macAddress"
-                     :required="true"
                      :maxlength=20>
           </input-box>
         </div>
@@ -43,23 +40,20 @@
                     code="orgId"
                     :value="mainDeviceData.orgId"
                     :disabled=true
-                    :required="true"
                     ref="orgId"
                     :maxlength=30>
           </inputBox>
         </div>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <div class="grid-content bg-purple">
           <input-box style="margin-right: 20px"
                      title="组织名称"
                      code="orgName"
                      :value="mainDeviceData.orgName"
                      ref="orgName"
-                     :required="true"
                      :disabled=true>
           </input-box>
-          <el-button plain :disabled="true">选择组织</el-button>
         </div>
       </el-col>
       <el-col :span="6">
@@ -67,7 +61,6 @@
           <select-box title="网关服务标识"
                       code="gatewayId"
                       ref="gatewayId"
-                      :required="true"
                       :disabled="true"
                       :initValue="mainDeviceData.gatewayId">
           </select-box>
