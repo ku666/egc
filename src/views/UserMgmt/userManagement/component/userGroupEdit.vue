@@ -600,7 +600,7 @@ export default {
         usergroupName: [
           { required: true, message: '请填写用户组名称', trigger: 'blur' },
           { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '用户组名称只能为字母、数字和汉字' },
+          { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '用户组名只能为字母、数字、空格和汉字' },
           { validator: validateUserGroupName }
         ],
         remark: [
