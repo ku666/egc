@@ -8,7 +8,7 @@
       <el-tab-pane label="设备基本信息" name = 'basic'>
         <div style="padding-left: 30px">
         <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
-          <el-form-item label='设备编码' prop='typeCode'>
+          <el-form-item label='设备主数据编码' prop='typeCode'>
             <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='设备名称' prop='typeName'>
