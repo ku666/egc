@@ -411,6 +411,7 @@ export default {
       }
     },
     clear: function () {
+      this.providerForm.uuid = ''
       this.providerForm.category = ''
       this.providerForm.providerCode = ''
       this.providerForm.providerName = ''
