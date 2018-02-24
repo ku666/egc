@@ -15,16 +15,16 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="中间件名称" :label-width="formLabelWidth">
+      <el-form-item label="中间件名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="中间件版本" :label-width="formLabelWidth">
+      <el-form-item label="中间件版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="中间件安装路径" :label-width="formLabelWidth">
+      <el-form-item label="中间件安装路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.path"></el-input>
       </el-form-item>
-       <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="middlewareDetails.server.name"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">

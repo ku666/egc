@@ -17,19 +17,19 @@ name	type	mgmt_ip	status	desc	serial_no	 bios_version	asset_no	vendor	vendor	dep
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="设备名称" :label-width="formLabelWidth">
+      <el-form-item label="设备名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="设备类型/型号" :label-width="formLabelWidth">
+      <el-form-item label="设备类型/型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.type"></el-input>
       </el-form-item>
-       <el-form-item label="软件版本" :label-width="formLabelWidth">
+      <el-form-item label="软件版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.osVersion"></el-input>
       </el-form-item>
-       <el-form-item label="管理IP" :label-width="formLabelWidth">
+      <el-form-item label="管理IP" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.mgmtIp"></el-input>
       </el-form-item>
-       <el-form-item label="运行状态" :label-width="formLabelWidth">
+      <el-form-item label="运行状态" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.status"></el-input>
       </el-form-item>
       <el-form-item label="设备SN/设备ID" :label-width="formLabelWidth">

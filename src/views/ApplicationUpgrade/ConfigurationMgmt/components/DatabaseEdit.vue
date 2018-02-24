@@ -15,16 +15,16 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="数据库名称" :label-width="formLabelWidth">
+      <el-form-item label="数据库名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="数据库版本" :label-width="formLabelWidth">
+      <el-form-item label="数据库版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="数据库安装路径" :label-width="formLabelWidth">
+      <el-form-item label="数据库安装路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.path"></el-input>
       </el-form-item>
-       <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.server.name"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
@@ -44,23 +44,25 @@
 
       <div style="text-align: center">
         <el-button class="action-btn" @click="updateDatabaseInfo" type="primary">保 存</el-button>
-        <el-popover
-            ref="newCIEventPop"
-            visible="showAddNewCIPop"
-            placement="right"
-            width="160"
-            :hide="clearData"
-            v-model="showAddNewEvent">
+        <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
+          <div>
             <div>
-              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
-              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+              <el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input>
             </div>
-            <div class="text-right margin-top-5">
-              <el-button size="mini" type="text" @click="clearData">取消</el-button>
-              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            <div class="margin-top-5">
+              <el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input>
             </div>
-          </el-popover>
-      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
+          </div>
+          <div class="text-right margin-top-5">
+            <el-button size="mini" type="text" @click="clearData">取消</el-button>
+            <el-button type="primary" size="mini" @click="addNewEvent">添加</el-button>
+          </div>
+        </el-popover>
+        <a v-popover:newCIEventPop>
+          <span>
+            <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
+          </span>
+        </a>
       </div>
     </el-form>
   </div>
@@ -106,7 +108,10 @@ export default {
         if (this.databaseEditDetails.extDataList === null) {
           this.databaseEditDetails.extDataList = []
         }
-        this.databaseEditDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        this.databaseEditDetails.extDataList.push({
+          fieldName: this.fieldName,
+          fieldValue: this.fieldValue
+        })
         console.info(JSON.stringify(this.databaseEditDetails))
       }
     },
