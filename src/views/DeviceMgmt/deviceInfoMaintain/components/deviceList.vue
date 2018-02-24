@@ -68,6 +68,12 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
+          prop="softwareVersion"
+          label="软件版本"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
           prop="isRegistered"
           label="注册状态"
           width="100">
