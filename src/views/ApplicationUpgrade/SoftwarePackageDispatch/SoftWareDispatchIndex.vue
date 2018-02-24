@@ -140,8 +140,8 @@ export default {
   },
   watch: {
     activeNames (newVal, oldValue) {
-      // this.loadData()
-      console.log(this.$refs.softwareTable)
+      this.loadDataAgain()
+      // console.log(this.$refs.softwareTable)
     },
 
     multipleSelection (newVal, oldValue) {
@@ -161,6 +161,17 @@ export default {
             this.dispatchDataList = result
             console.log('software paks ----- >  ' + JSON.stringify(this.dispatchDataList))
             this.activeNames = this.dispatchDataList[0].batchName
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    loadDataAgain () {
+      getAllRegisterPackages(this.queryList)
+        .then(
+          function (result) {
+            this.dispatchDataList = result
           }.bind(this)
         )
         .catch(function (error) {
