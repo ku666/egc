@@ -892,24 +892,21 @@ export default {
   }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 20%
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 35%
+    width: 25%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
+    width: 15%
+  }
+  #resourceTable >>> colgroup col:nth-child(4) {
     width: 35%
   }
-  /* #resourceTable >>> colgroup col:nth-child(4) {
-    width: 11%
-  }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 9%
-  }
-  #resourceTable >>> colgroup col:nth-child(6) {
-    width: 9%
-  } */
-  #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
   }
+  /* #resourceTable >>> colgroup col:nth-child(6) {
+    width: 9%
+  } */
 </style>
