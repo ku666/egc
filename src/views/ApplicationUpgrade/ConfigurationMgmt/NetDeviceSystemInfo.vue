@@ -333,7 +333,7 @@ export default {
       getNetDeviceInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            // console.log('netdevice result== > ' + JSON.stringify(result))
+            console.log('netdevice result== > ' + JSON.stringify(result))
             this.netDeviceListData = result.netequipList
             this.total = result.pageCount
             this.loading = false
