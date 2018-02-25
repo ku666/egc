@@ -197,6 +197,9 @@ export default {
       this.deviceCategoryDetailVisible = true
       this.viewFlagParent = false
       this.getAllAttr()
+      this.activeTab = 'basic'
+      this.selectAttr = []
+      this.deviceSaved = false
       // this.$parent.getParents()
     },
     // viewDeviceCategoryDialog: function (categoryDetail = {}) {
