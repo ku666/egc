@@ -154,9 +154,6 @@
       return {
         deviceType: [{value: '', label: ''}],
         providerType: [],
-        // 临时修改-------------------------
-        gatewayType: [{'label': '', 'value': ''}, {'label': '国标扩展网关', 'value': 'APP6003'}, {'label': '轻量级网关', 'value': 'APP8115'}, {'label': '广播网关', 'value': 'APP3333'}],
-        // --------------------
         selectedOrgVaue: {},
         selectedDistrictVaue: {},
         showOrgDialog: false,
@@ -273,12 +270,20 @@
       },
       _closeDistrict () {
         this.$refs.districtDialog.clearData()
+      },
+      _clearInputdata () {
+        for (var key in this.screeningData) {
+          if (this.$refs[key]) {
+            this.$refs[key].clearBox()
+          }
+        }
       }
     },
     mounted () {
       this._loadDeviceTypeList()
       this._loadProviderCode()
       this._loadGateway()
+      this._clearInputdata()
     }
   }
 </script>
