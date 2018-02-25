@@ -3,13 +3,13 @@
       <el-form align="left" :inline="true">
         <div class="search-container">
           <el-form-item label="软件包名称">
-            <el-input v-model="searchConditionList.name" placeholder="请输入软件包名称" clearable></el-input>
+            <el-input v-model="searchConditionList.name" placeholder="请输入软件包名称"  @keyup.enter.native="_handleFilter" clearable></el-input>
           </el-form-item>
           <el-form-item label="版本号">
-            <el-input v-model="searchConditionList.version" placeholder="请输入版本号" clearable></el-input>
+            <el-input v-model="searchConditionList.version" placeholder="请输入版本号"  @keyup.enter.native="_handleFilter" clearable></el-input>
           </el-form-item>
           <el-form-item label="开发者">
-            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者信息" clearable></el-input>
+            <el-input v-model="searchConditionList.provider" placeholder="请输入开发者信息"  @keyup.enter.native="_handleFilter" clearable></el-input>
           </el-form-item>
           <el-form-item label="搜索条件">
             <el-input v-model="searchConditionList.key"  class="appupgrade_el-select" placeholder="请输入搜索关键字" @keyup.enter.native="_handleFilter" clearable></el-input>
@@ -101,7 +101,7 @@
                   <el-input v-model="softwareDetails.name" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="11" class="flex-1 flex-c">
+              <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="版本号" :label-width="formLabelWidth" prop="version">
                   <el-input v-model="softwareDetails.version" :maxlength="maxlength" :disabled="isHasSoftwareDetails.versionIsDisable"></el-input>
                 </el-form-item>
@@ -152,7 +152,7 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
-                <el-form-item label="War/Jar名称/contextPath名称" :label-width="formLabelWidth" prop="svrPkgName">
+                <el-form-item label="War/Jar/contextPath名称" :label-width="formLabelWidth" prop="svrPkgName">
                   <el-input v-model="softwareDetails.svrPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.svrPkgNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
@@ -219,17 +219,13 @@
                   </el-form-item>
                 </template>
               </el-col>
-            </el-row>
-            <el-row>
-              <el-col :span="23" class="flex-1 flex-c">
-                <el-form-item label="软件包源服务器名称" :label-width="formLabelWidth" prop="svrPkgName11">
+              <el-col :span="12" class="flex-1 flex-c">
+                <el-form-item label="软件包源服务器" :label-width="formLabelWidth" prop="svrPkgName11">
                   <el-input v-model="softwareDetails.svrPkgName11" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
-            </el-row>
-             <el-row>
-              <el-col :span="23" class="flex-1 flex-c">
-                <el-form-item label="软件包源路径名称" :label-width="formLabelWidth" prop="ctlPkgName11">
+              <el-col :span="12" class="flex-1 flex-c">
+                <el-form-item label="软件包源路径" :label-width="formLabelWidth" prop="ctlPkgName11">
                   <el-input v-model="softwareDetails.ctlPkgName11" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
@@ -473,7 +469,7 @@ export default {
           { max: 32, message: '长度不能超过32个字符' }
         ],
         port: [
-          { max: 6, message: '长度不能超过6个字符' },
+          { max: 6, message: '长度不能超过6个数字' },
           { pattern: /^\+?[1-9][0-9]*$/, message: '请输入有效的端口号（数字）' }
         ]
       }
@@ -487,7 +483,6 @@ export default {
       this.loadData()
       // }
     },
-
     // 验证查询输入内容是否为空
     validateInput () {
       if (this.searchConditionList.name.trim() === '' && this.searchConditionList.version.trim() === '' && this.searchConditionList.provider.trim() === '') {
@@ -724,7 +719,7 @@ export default {
       var rowData = this.softwarePackListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.info('111-->' + eachRowUUID)
-      this.$confirm("确定要删除软件包'" + rowData.name + "'?', '提示'", {
+      this.$confirm('确定要删除 ' + rowData.name + ' 软件包？', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -768,19 +763,6 @@ export default {
     },
     // 初始加载软件包的信息
     loadData () {
-      // getBatchesList()
-      //   .then(
-      //       function (result) {
-      //         console.log('<<<<<getBatchesList:')
-      //         this.batchs = result
-      //         console.log(JSON.stringify(result))
-      //       }
-      //     ).bind(this)
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
       getSoftwarePackageByPage(this.searchConditionList)
         .then(
           function (result) {
@@ -888,7 +870,8 @@ export default {
 }
 </script>
 <style scoped>
-deep/.el-input__inner{
-  width: 1500px;
-}
+/* .el-select /deep/ .el-input /deep/ .el-input__inner{
+  width: 14px !important;
+  background: red !important;
+}  */
 </style>
