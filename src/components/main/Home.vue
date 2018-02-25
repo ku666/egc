@@ -77,9 +77,3 @@ export default {
   }
 }
 </script>
-
-// <style>
-//   .el-container {
-//     flex-basis: 0 !important;
-//   }
-// </style>
