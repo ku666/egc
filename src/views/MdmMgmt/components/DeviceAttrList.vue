@@ -527,7 +527,7 @@ export default {
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
       addEventHandler(input, 'keyup', function (e) {
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchAttrForm.currentPage)) {
-          this.currentChange(parseInt(input.value))
+          self.currentChange(parseInt(input.value))
         }
       })
     }
