@@ -35,7 +35,7 @@
               :page-size="searchConditionList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
-          </el-pagination>
+            </el-pagination>
           </div>
         </div>
       </el-col>
@@ -348,13 +348,12 @@ export default {
 
     // 改变分页大小
     handleSizeChange (val) {
-      this.searchConditionList.currentPage = val
+      this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.pageSize = val
+      this.searchConditionList.page = val
       this.loadData()
     },
     _handleCloseUploadDialog () {

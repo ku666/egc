@@ -17,16 +17,16 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="操作系统名称" :label-width="formLabelWidth">
+      <el-form-item label="操作系统名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="操作系统版本（服务包）" :label-width="formLabelWidth">
+      <el-form-item label="操作系统版本（服务包）" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="操作系统位数" :label-width="formLabelWidth">
+      <el-form-item label="操作系统位数" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.dataLength"></el-input>
       </el-form-item>
-       <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="osDetails.hostname"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">

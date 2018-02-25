@@ -8,7 +8,7 @@ import databaseSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/Dat
 import netDeviceSystemInfo from '@/views/ApplicationUpgrade/ConfigurationMgmt/NetDeviceSystemInfo'
 
 // 定义路由路径数组列表
-export default[
+export default [
   {
     path: '/applicationupgrade/serverhardwarecfginfo',
     name: 'serverHardwareCfgInfo',
