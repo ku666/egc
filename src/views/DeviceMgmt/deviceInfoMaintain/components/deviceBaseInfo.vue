@@ -272,10 +272,8 @@
         this.$refs.districtDialog.clearData()
       },
       _clearInputdata () {
-        for (var key in this.screeningData) {
-          if (this.$refs[key]) {
-            this.$refs[key].clearBox()
-          }
+        if (this.$refs.deviceName) {
+          this.$refs.deviceName.clearBox()
         }
       }
     },
