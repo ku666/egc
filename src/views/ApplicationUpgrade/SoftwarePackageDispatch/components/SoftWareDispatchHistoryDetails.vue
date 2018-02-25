@@ -19,16 +19,16 @@
       <el-form-item label="区" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softDispDetails.district"></el-input>
       </el-form-item>
-       <el-form-item label="目标小区名称" :label-width="formLabelWidth">
+      <el-form-item label="目标小区名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softDispDetails.courtName"></el-input>
       </el-form-item>
-       <el-form-item label="目标服务器名称" :label-width="formLabelWidth">
+      <el-form-item label="目标服务器名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softDispDetails.hostName"></el-input>
       </el-form-item>
-       <el-form-item label="目标路径" :label-width="formLabelWidth">
+      <el-form-item label="目标路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softDispDetails.path"></el-input>
       </el-form-item>
-       <el-form-item label="操作发起人" :label-width="formLabelWidth">
+      <el-form-item label="操作发起人" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softDispDetails.dispatcher"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">

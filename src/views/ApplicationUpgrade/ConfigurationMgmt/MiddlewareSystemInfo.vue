@@ -7,7 +7,7 @@
       <el-col :span="24" class="flex-1 flex-c">
         <div style="margin-top: 20px" class="flex-1">
           <el-table :data="middlewareListData" stripe border v-loading="loading">
-            <el-table-column  type="index" label="序号" width="50">
+            <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
@@ -27,22 +27,15 @@
         </div>
         <div>
           <div>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-          </el-pagination>
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
           </div>
         </div>
       </el-col>
     </el-row>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <middleware-details :middlewareDetails="middlewareDetails"></middleware-details >
+        <middleware-details :middlewareDetails="middlewareDetails"></middleware-details>
       </el-dialog>
     </div>
     <div>
@@ -64,7 +57,14 @@ import middlewareDetails from './components/MiddlewareDetails'
 import middlewareEdit from './components/MiddlewareEdit'
 import middlewareHistory from './components/MiddlewareHistory'
 
-import { getMiddlewareInfoByPage, getMiddlewareDetails, updateMiddlewareInfo, getMiddlewareHistoryList, syncMiddlewareInfo, downloadResultFile } from './apis/index'
+import {
+  getMiddlewareInfoByPage,
+  getMiddlewareDetails,
+  updateMiddlewareInfo,
+  getMiddlewareHistoryList,
+  syncMiddlewareInfo,
+  downloadResultFile
+} from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -91,12 +91,12 @@ export default {
       syncDataStatus: '',
       loading: true,
       searchConditionList: {
-        'city': '',
-        'condition': '',
-        'currentPage': 1,
-        'district': '',
-        'pageSize': 10,
-        'province': ''
+        city: '',
+        condition: '',
+        currentPage: 1,
+        district: '',
+        pageSize: 10,
+        province: ''
       },
       defaultProps: {
         label: 'name',
@@ -112,35 +112,43 @@ export default {
           colName: '省（直辖市）',
           prop: 'courtDto.province',
           width: 120
-        }, {
+        },
+        {
           colName: '市',
           prop: 'courtDto.city',
           width: 100
-        }, {
+        },
+        {
           colName: '区',
           prop: 'courtDto.district',
           width: 100
-        }, {
+        },
+        {
           colName: '小区名称',
           prop: 'courtDto.memo',
           width: 120
-        }, {
+        },
+        {
           colName: '软件名称',
           prop: 'name',
           width: 120
-        }, {
+        },
+        {
           colName: '软件版本',
           prop: 'version',
           width: 120
-        }, {
+        },
+        {
           colName: '软件安装路径',
           prop: 'path',
           width: 240
-        }, {
+        },
+        {
           colName: '服务器主机名称',
           prop: 'server.hostname',
           width: 260
-        }, {
+        },
+        {
           colName: '描述',
           prop: 'remark'
         }
@@ -153,19 +161,17 @@ export default {
       if (type === 'search') {
         this.loading = true
         getMiddlewareInfoByPage(params)
-        .then(
-          function (result) {
-            this.middlewareListData = result.middlewareList
-            this.total = result.pageCount
-            this.loading = false
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
+          .then(
+            function (result) {
+              this.middlewareListData = result.middlewareList
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(function (error) {
             this.loading = false
             console.log(error)
-          }
-        )
+          })
       } else if (type === 'download') {
         let downloadCls = 5
         downloadResultFile(params, downloadCls)
@@ -190,14 +196,14 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
       getMiddlewareDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log(result)
-              this.middlewareDetails = result.auMiddleware
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
+        .then(
+          function (result) {
+            console.log(result)
+            this.middlewareDetails = result.auMiddleware
+            this.dialogDetailsVisible = true
+          }.bind(this)
+        )
+        .catch()
     },
 
     // 编辑
@@ -207,17 +213,15 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getMiddlewareDetails(eachRowUUID)
-          .then(
-            function (result) {
-              this.middlewareDetails = result.auMiddleware
-              this.dialogEditVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.middlewareDetails = result.auMiddleware
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 更新
@@ -236,11 +240,9 @@ export default {
             this.loadData()
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 比对刷新
@@ -252,11 +254,13 @@ export default {
       syncMiddlewareInfo(eachRowUUID)
         .then(
           function (result) {
-            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            console.log(
+              'refresh middleware result -- > ' + JSON.stringify(result)
+            )
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 加载数据
+              // 加载数据
               this.loadData()
               this.$message({
                 message: '刷新成功',
@@ -270,12 +274,10 @@ export default {
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-            this.synDataLoading = false
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+          this.synDataLoading = false
+        })
     },
 
     // 历史记录
@@ -285,17 +287,15 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
       getMiddlewareHistoryList(eachRowUUID)
-          .then(
-            function (result) {
-              this.middlewareHistoryData = result.auServersHisList
-              this.dialogHistoryVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.middlewareHistoryData = result.auServersHisList
+            this.dialogHistoryVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 初始加载
@@ -309,12 +309,10 @@ export default {
             this.loading = false
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            this.loading = false
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          this.loading = false
+          console.log(error)
+        })
     },
 
     // 改变分页大小
@@ -336,5 +334,5 @@ export default {
 </script>
 
 <style>
-@import "assets/css/upgrademgmt.less";
+@import 'assets/css/upgrademgmt.less';
 </style>

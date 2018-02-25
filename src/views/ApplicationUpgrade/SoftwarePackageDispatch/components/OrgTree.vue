@@ -1,26 +1,14 @@
 <template>
   <div class="ui-common">
-    <el-input
-      placeholder="输入关键字进行过滤"
-      class="user_el-select"
-      v-model="filterText">
+    <el-input placeholder="输入关键字进行过滤" class="user_el-select" v-model="filterText">
     </el-input>
-      <div class="tree">
-        <el-tree
-          class="filter-tree"
-          node-key=""
-          :data="orgsData"
-          :props="defaultProps"
-          ref="tree"
-          show-checkbox
-          @check-change="handleCheckChange"
-          :filter-node-method="filterNode"
-          :default-expanded-keys="expandedKeys">
-        </el-tree>
-      </div>
-      <div style="margin-top: 20px; text-align: right;">
-        <el-button @click="_confirmDispatch" class="action-btn" type="primary">下发到小区</el-button>
-      </div>
+    <div class="tree">
+      <el-tree class="filter-tree" node-key="" :data="orgsData" :props="defaultProps" ref="tree" show-checkbox @check-change="handleCheckChange" :filter-node-method="filterNode" :default-expanded-keys="expandedKeys">
+      </el-tree>
+    </div>
+    <div style="margin-top: 20px; text-align: right;">
+      <el-button @click="_confirmDispatch" class="action-btn" type="primary">下发到小区</el-button>
+    </div>
   </div>
 </template>
 
@@ -54,22 +42,26 @@ export default {
             this.orgsData = result
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     _confirmDispatch () {
       this.houseOrgCodeList = []
-      for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
+      for (
+        let index = 0;
+        index < this.$refs.tree.getCheckedNodes().length;
+        index++
+      ) {
         let node = this.$refs.tree.getCheckedNodes()[index]
         console.log('node.courtUid --->  ' + node.courtUid)
         if (node.courtUid) {
           this.houseOrgCodeList.push(node.courtUid)
         }
       }
-      console.log('selected leaf data --->  ' + this.houseOrgCodeList.toString())
+      console.log(
+        'selected leaf data --->  ' + this.houseOrgCodeList.toString()
+      )
 
       if (this.houseOrgCodeList.length > 0) {
         this.$emit('handleDispatchEvent', this.houseOrgCodeList)
@@ -98,19 +90,19 @@ export default {
 </script>
 
 <style scoped>
-.tree{
-  overflow:auto;
-  height:200px;
-  width:920px;
+.tree {
+  overflow: auto;
+  height: 200px;
+  width: 920px;
   border: solid 1px lightgray;
   margin-top: 5px;
 }
-.el-org-tree{
+.el-org-tree {
   width: 100%;
-  height:199px;
+  height: 199px;
   overflow-x: scroll;
 }
-.el-tree>.el-tree-node{
+.el-tree > .el-tree-node {
   display: inline-block !important;
 }
 .user_el-select {

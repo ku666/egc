@@ -739,7 +739,7 @@ export default {
         roleName: [
           { required: true, message: '请填写角色名称', trigger: 'blur' },
           { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^[a-zA-Z0-9\u4e00-\u9fa5]+$/, message: '角色名只能为字母、数字和汉字' },
+          { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '角色名只能为字母、数字、空格和汉字' },
           { validator: validateRoleName }
         ],
         remark: [
@@ -892,24 +892,21 @@ export default {
   }
 
   #resourceTable >>> colgroup col:nth-child(1) {
-    width: 20%
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 35%
+    width: 25%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
+    width: 15%
+  }
+  #resourceTable >>> colgroup col:nth-child(4) {
     width: 35%
   }
-  /* #resourceTable >>> colgroup col:nth-child(4) {
-    width: 11%
-  }
   #resourceTable >>> colgroup col:nth-child(5) {
-    width: 9%
-  }
-  #resourceTable >>> colgroup col:nth-child(6) {
-    width: 9%
-  } */
-  #resourceTable >>> colgroup col:nth-child(7) {
     width: 10%
   }
+  /* #resourceTable >>> colgroup col:nth-child(6) {
+    width: 9%
+  } */
 </style>

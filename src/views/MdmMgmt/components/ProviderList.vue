@@ -6,8 +6,8 @@
     </el-breadcrumb> -->
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
-        <el-form-item label='供应商编码'>
-          <el-input placeholder='请输入供应商编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4" clearable></el-input>
+        <el-form-item label='供应商主数据编码'>
+          <el-input placeholder='请输入供应商主数据编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商名称'>
           <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search' :maxlength="100" clearable></el-input>
@@ -44,7 +44,7 @@
         <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column prop='providerCode' label='供应商编码' sortable></el-table-column>
+        <el-table-column prop='providerCode' label='供应商主数据编码' sortable></el-table-column>
         <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
         <el-table-column prop='contact' label='联系方式' sortable></el-table-column>
         <el-table-column prop='providerDesc' label='供应商描述' sortable></el-table-column>
@@ -92,7 +92,7 @@
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>
-          <el-form-item label='供应商编码' prop='providerCode'>
+          <el-form-item label='供应商主数据编码' prop='providerCode'>
             <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='供应商类别' prop='category'>
@@ -411,6 +411,7 @@ export default {
       }
     },
     clear: function () {
+      this.providerForm.uuid = ''
       this.providerForm.category = ''
       this.providerForm.providerCode = ''
       this.providerForm.providerName = ''
@@ -431,7 +432,7 @@ export default {
       addEventHandler(input, 'keyup', function (e) {
       // console.log('input:' + input.value)
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchProviderForm.currentPage)) {
-          this.currentChange(parseInt(input.value))
+          self.currentChange(parseInt(input.value))
         }
       })
     }

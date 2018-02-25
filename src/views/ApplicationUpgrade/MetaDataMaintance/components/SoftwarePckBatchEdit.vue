@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-form :inline="true" :model="softwareBatchDetails">
-        <el-form-item label="软件包批次名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
-        </el-form-item>
-       <el-form-item label="备注" :label-width="formLabelWidth">
+      <el-form-item label="软件包批次名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="softwareBatchDetails.name"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="softwareBatchDetails.remark"></el-input>
       </el-form-item>
 

@@ -2,52 +2,45 @@
   <div class='ui-common'>
     <el-row class="flex-c" style="height: 100%">
       <el-col :span="24" class="flex-1 flex-c">
-          <el-form :inline="true" :model="searchConditionList">
-            <div class="search-container">
-                <el-form-item label="代码中文名称">
-                  <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.codeName"> </el-input>
-                </el-form-item>
-                <el-form-item label="代码值" :label-width="formLabelWidth">
-                  <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.code"> </el-input>
-                </el-form-item>
-                <div class="btn-container">
-                  <el-form-item>
-                    <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-                    <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-                  </el-form-item>
-                </div>
-              </div>
-          </el-form>
-          <div>
-            <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
+        <el-form :inline="true" :model="searchConditionList">
+          <div class="search-container">
+            <el-form-item label="代码中文名称">
+              <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.codeName"> </el-input>
+            </el-form-item>
+            <el-form-item label="代码值" :label-width="formLabelWidth">
+              <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.code"> </el-input>
+            </el-form-item>
+            <div class="btn-container">
+              <el-form-item>
+                <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+                <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
+              </el-form-item>
+            </div>
           </div>
-          <div style="margin-top: 20px" class="flex-1">
-                <el-table :data="commCodeDataList" stripe border v-loading="loading">
-                  <el-table-column  type="index" label="序号" width="50">
-                  </el-table-column>
-                  <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-                  </el-table-column>
-                  <el-table-column label="操作" width="80" align="center">
-                    <template slot-scope="scope">
-                      <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                      </el-button>
-                      <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
-                      </el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-          <div>
-            <el-pagination
-                @size-change="handleSizeChange"
-                @current-change="handleCurrentChange"
-                :current-page.sync="searchConditionList.currentPage"
-                :page-sizes="[10, 20, 50]"
-                :page-size="searchConditionList.pageSize"
-                layout="total, sizes, prev, pager, next, jumper"
-                :total="total">
-            </el-pagination>
-          </div>
+        </el-form>
+        <div>
+          <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
+        </div>
+        <div style="margin-top: 20px" class="flex-1">
+          <el-table :data="commCodeDataList" stripe border v-loading="loading">
+            <el-table-column type="index" label="序号" width="50">
+            </el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="操作" width="80" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                </el-button>
+                <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
+        </div>
       </el-col>
     </el-row>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
@@ -60,11 +53,7 @@
             <el-col :span="12">
               <el-form-item label="代码大类名称" :label-width="formLabelWidth" prop="typeCode">
                 <el-select v-model="registerParaList.typeCode" placeholder="请选择代码大类名称" clearable>
-                  <el-option
-                    v-for="item in codeCategories"
-                    :key="item.value"
-                    :label="item.label"
-                    :value="item.value">
+                  <el-option v-for="item in codeCategories" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
@@ -105,7 +94,14 @@
 
 <script>
 import CommCodeEdit from './components/CommCodeEdit'
-import { getCommCodeByPage, getCommCodeDetails, registerCommCode, updateCommCode, deleteCommCode, getCodeInstances } from './apis/index'
+import {
+  getCommCodeByPage,
+  getCommCodeDetails,
+  registerCommCode,
+  updateCommCode,
+  deleteCommCode,
+  getCodeInstances
+} from './apis/index'
 export default {
   components: {
     CommCodeEdit
@@ -128,29 +124,33 @@ export default {
           colName: '代码中文名称',
           prop: 'name',
           width: 220
-        }, {
+        },
+        {
           colName: '代码英文名称',
           prop: 'nameEn',
           width: 220
-        }, {
+        },
+        {
           colName: '代码值',
           prop: 'code',
           width: 220
-        }, {
+        },
+        {
           colName: '代码大类名称',
           prop: 'codeTypes.typeName',
           width: 220
-        }, {
+        },
+        {
           colName: '备注',
           prop: 'remark'
         }
       ],
       searchConditionList: {
-        'currentPage': 1,
-        'pageSize': 10,
-        'codeName': '',
-        'code': '',
-        'vendor': ''
+        currentPage: 1,
+        pageSize: 10,
+        codeName: '',
+        code: '',
+        vendor: ''
       },
       registerParaList: {
         name: '',
@@ -161,13 +161,25 @@ export default {
       },
       rules: {
         typeCode: [
-          { required: true, message: '请选择代码大类名称', trigger: 'blur,change' }
+          {
+            required: true,
+            message: '请选择代码大类名称',
+            trigger: 'blur,change'
+          }
         ],
         name: [
-          { required: true, message: '请输入代码中文名称', trigger: 'blur,change' }
+          {
+            required: true,
+            message: '请输入代码中文名称',
+            trigger: 'blur,change'
+          }
         ],
         nameEn: [
-          { required: true, message: '请输入代码英文名称', trigger: 'blur,change' }
+          {
+            required: true,
+            message: '请输入代码英文名称',
+            trigger: 'blur,change'
+          }
         ],
         code: [
           { required: true, message: '请输入代码值', trigger: 'blur,change' }
@@ -187,12 +199,10 @@ export default {
             this.loading = false
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            this.loading = false
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          this.loading = false
+          console.log(error)
+        })
     },
     _handleFilter () {
       this.loadData()
@@ -207,45 +217,47 @@ export default {
     getCodeCategories () {
       var that = this
       getCodeInstances()
-        .then(
-          function (result) {
-            console.log(JSON.stringify(result))
-            let codeCategoryArr = result
-            for (let i = 0; i < codeCategoryArr.length; i++) {
-              that.codeCategories.push(
-                {
-                  label: codeCategoryArr[i].typeName,
-                  value: codeCategoryArr[i].typeCode
-                }
-              )
-            }
+        .then(function (result) {
+          console.log(JSON.stringify(result))
+          let codeCategoryArr = result
+          for (let i = 0; i < codeCategoryArr.length; i++) {
+            that.codeCategories.push({
+              label: codeCategoryArr[i].typeName,
+              value: codeCategoryArr[i].typeCode
+            })
           }
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     _registerCommCode (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          registerCommCode(this.registerParaList).then((result) => {
-            console.log('===>' + JSON.stringify(result))
-            this.beforeCloseDialog()
-            this.$message({
-              message: '保存成功',
-              type: 'success'
+          registerCommCode(this.registerParaList)
+            .then(result => {
+              console.log('===>' + JSON.stringify(result))
+              this.beforeCloseDialog()
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+              this.loadData()
             })
-            this.loadData()
-          }).catch(
-            function (error) {
+            .catch(function (error) {
               console.log(error)
             })
         }
       })
     },
     _handleClearQuery () {
-      this.searchConditionList = { 'currentPage': 1, 'pageSize': 10, 'codeName': '', 'code': '', 'vendor': '' }
+      this.searchConditionList = {
+        currentPage: 1,
+        pageSize: 10,
+        codeName: '',
+        code: '',
+        vendor: ''
+      }
       this.loadData()
     },
     beforeCloseDialog () {
@@ -258,17 +270,18 @@ export default {
       var codeTypeUuid = rowData.uuid
       console.log('edit codeTypeUuid -- >' + codeTypeUuid)
       getCommCodeDetails(codeTypeUuid)
-          .then(
-            function (result) {
-              console.log('comm code  details -- >' + JSON.stringify(result, null, ' '))
-              this.commCodeDetails = result
-              this.dialogEditVisible = true
-            }.bind(this)
-          ).catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            console.log(
+              'comm code  details -- >' + JSON.stringify(result, null, ' ')
+            )
+            this.commCodeDetails = result
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     _updateCommCode (params) {
       updateCommCode(params)
@@ -282,11 +295,10 @@ export default {
             // 加载数据
             this.loadData()
           }.bind(this)
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
         )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     // 删除
     _handleDeleteData (rowIdx) {
@@ -296,24 +308,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-      .then(() => {
+      }).then(() => {
         deleteCommCode(codeTypeUuid)
-        .then(
-          function (result) {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            })
-            // 加载数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
+          .then(
+            function (result) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              // 加载数据
+              this.loadData()
+            }.bind(this)
+          )
+          .catch(function (error) {
             console.log(error)
-          }
-        )
+          })
       })
     },
     handleSizeChange (val) {
@@ -340,5 +349,5 @@ export default {
 </script>
 
 <style scoped>
- @import "../ConfigurationMgmt/assets/css/upgrademgmt.less";
+@import '../ConfigurationMgmt/assets/css/upgrademgmt.less';
 </style>

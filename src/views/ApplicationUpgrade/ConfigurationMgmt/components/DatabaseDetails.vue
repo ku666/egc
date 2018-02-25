@@ -16,16 +16,16 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="数据库名称" :label-width="formLabelWidth">
+      <el-form-item label="数据库名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="数据库版本" :label-width="formLabelWidth">
+      <el-form-item label="数据库版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="数据库安装路径" :label-width="formLabelWidth">
+      <el-form-item label="数据库安装路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseDetails.path"></el-input>
       </el-form-item>
-       <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseDetails.server.name"></el-input>
       </el-form-item>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">

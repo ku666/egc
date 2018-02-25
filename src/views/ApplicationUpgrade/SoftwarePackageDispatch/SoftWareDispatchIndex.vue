@@ -23,15 +23,9 @@
     <div style="margin-top: 20px">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-          <el-table
-            ref="softwareTable"
-            :data="item.packageDataList"
-            tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            stripe border>
+          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column  type="index" label="编号" width="50"></el-table-column>
+            <el-table-column type="index" label="编号" width="50"></el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
           </el-table>
         </el-collapse-item>
@@ -44,7 +38,6 @@
       <dispatched-software-results :dispResultErrMsg="dispResultErrMsg" @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
     </el-dialog>
   </div>
-
 
 </template>
 
@@ -79,9 +72,9 @@ export default {
         developer: ''
       },
       queryList: {
-        'packageName': '',
-        'packageProvider': '',
-        'packageVersion': ''
+        packageName: '',
+        packageProvider: '',
+        packageVersion: ''
       },
       tableTitleList: [
         {
@@ -140,8 +133,8 @@ export default {
   },
   watch: {
     activeNames (newVal, oldValue) {
-      // this.loadData()
-      console.log(this.$refs.softwareTable)
+      this.loadDataAgain()
+      // console.log(this.$refs.softwareTable)
     },
 
     multipleSelection (newVal, oldValue) {
@@ -159,8 +152,21 @@ export default {
         .then(
           function (result) {
             this.dispatchDataList = result
-            console.log('software paks ----- >  ' + JSON.stringify(this.dispatchDataList))
+            console.log(
+              'software paks ----- >  ' + JSON.stringify(this.dispatchDataList)
+            )
             this.activeNames = this.dispatchDataList[0].batchName
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    loadDataAgain () {
+      getAllRegisterPackages(this.queryList)
+        .then(
+          function (result) {
+            this.dispatchDataList = result
           }.bind(this)
         )
         .catch(function (error) {
@@ -169,7 +175,9 @@ export default {
     },
     // 搜索
     _handleFilter () {
-      console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
+      console.log(
+        'this.searchConDetails is -- >' + JSON.stringify(this.searchCondition)
+      )
       this.loadData()
     },
     // 清空
@@ -200,7 +208,10 @@ export default {
           function (result) {
             this.dispatchResult = result.checkMsgList
             if (this.dispatchResult.length === 0) {
-              console.log('_dispatchSoftwareToCourt data === > ' + JSON.stringify(this.dispatchResult, null, ' '))
+              console.log(
+                '_dispatchSoftwareToCourt data === > ' +
+                  JSON.stringify(this.dispatchResult, null, ' ')
+              )
               this.activeNames = this.dispatchDataList[0].batchName
               this.loadData()
               this.$message.success('下发操作成功, 请查看历史')
@@ -211,7 +222,8 @@ export default {
               this.dialogTittle = '错误消息'
             }
           }.bind(this)
-        ).catch(function (error) {
+        )
+        .catch(function (error) {
           console.log(error)
         })
     },
@@ -219,8 +231,7 @@ export default {
       this.downloadResultVisible = false
       console.log('download dispath results')
       downloadDispatchResult(params, 50)
-        .then(function (result) {
-        })
+        .then(function (result) {})
         .catch(function (error) {
           console.log(error)
         })

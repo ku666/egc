@@ -15,16 +15,16 @@
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
-       <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务版本" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务端口" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务端口" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.port"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.startUser"></el-input>
       </el-form-item>
       <el-form-item label="服务进程名称" :label-width="formLabelWidth">
@@ -51,7 +51,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.oss.dataLength"></el-input>
       </el-form-item>
       <el-form-item label="服务域名" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input"  v-model="auappServiceDetails.domainName" :maxlength="maxlength"></el-input>
+        <el-input class="upgrade_el-input" v-model="auappServiceDetails.domainName" :maxlength="maxlength"></el-input>
       </el-form-item>
       <template v-if=" auappServiceDetails.upgradeServers !== null">
         <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
@@ -77,24 +77,26 @@
       </template>
       <div style="text-align:center;">
         <el-button @click="updateAppServiceInfo" class="action-btn" type="primary">保 存</el-button>
-        <el-popover
-            ref="newCIEventPop"
-            visible="showAddNewCIPop"
-            placement="right"
-            width="160"
-            :hide="clearData"
-            v-model="showAddNewEvent">
+        <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
+          <div>
             <div>
-              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
-              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+              <el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input>
             </div>
-            <div class="text-right margin-top-5">
-              <el-button size="mini" type="text" @click="clearData">取消</el-button>
-              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            <div class="margin-top-5">
+              <el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input>
             </div>
-          </el-popover>
-      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
-    </div>
+          </div>
+          <div class="text-right margin-top-5">
+            <el-button size="mini" type="text" @click="clearData">取消</el-button>
+            <el-button type="primary" size="mini" @click="addNewEvent">添加</el-button>
+          </div>
+        </el-popover>
+        <a v-popover:newCIEventPop>
+          <span>
+            <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
+          </span>
+        </a>
+      </div>
     </el-form>
   </div>
 </template>
@@ -138,13 +140,23 @@ export default {
     // 校验数据是否更改
     validateDetailsChanged () {
       if (this.auappServiceDetails.upgradeServers !== null) {
-        if (this.tempUpgradePublicIP === this.auappServiceDetails.upgradeServers.publicIp &&
-        this.tempUpgradeDomainName === this.auappServiceDetails.upgradeServers.hostname &&
-        this.tempUpgradeHostName === this.auappServiceDetails.upgradeServers.hostname &&
-        this.tempUpgradeIntranetIP === this.auappServiceDetails.upgradeServers.intranetIp) {
+        if (
+          this.tempUpgradePublicIP ===
+            this.auappServiceDetails.upgradeServers.publicIp &&
+          this.tempUpgradeDomainName ===
+            this.auappServiceDetails.upgradeServers.hostname &&
+          this.tempUpgradeHostName ===
+            this.auappServiceDetails.upgradeServers.hostname &&
+          this.tempUpgradeIntranetIP ===
+            this.auappServiceDetails.upgradeServers.intranetIp
+        ) {
           return false
         }
-      } else if (this.tempDomain === this.auappServiceDetails.domainName && this.tempRemark === this.auappServiceDetails.remark && this.tempExtDataList === this.auappServiceDetails.extDataList) {
+      } else if (
+        this.tempDomain === this.auappServiceDetails.domainName &&
+        this.tempRemark === this.auappServiceDetails.remark &&
+        this.tempExtDataList === this.auappServiceDetails.extDataList
+      ) {
         return false
       }
       return true
@@ -157,7 +169,10 @@ export default {
         if (this.auappServiceDetails.extDataList === null) {
           this.auappServiceDetails.extDataList = []
         }
-        this.auappServiceDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        this.auappServiceDetails.extDataList.push({
+          fieldName: this.fieldName,
+          fieldValue: this.fieldValue
+        })
         console.info(JSON.stringify(this.auappServiceDetails))
       }
     },
