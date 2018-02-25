@@ -178,7 +178,7 @@ export default {
           {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
         ],
         contact: [
-          {pattern: /^\d{11}$|^\d{3,4}-?\d{6,10}$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
+          {pattern: /^(\((\+|00)86\)(-|\s)?|(\+|00)86(-|\s)?)?(\d{11}|(\d{3,4})?(-|\s)?\d{6,10})$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
         ]
       }
     }

@@ -82,11 +82,11 @@
         console.log('<<<<<<<value:' + value)
         if (value === '') {
           callback(new Error('请输入联系方式'))
-        } else if (this.contact.contactType === '0' && !patten.test(value)) {
+        } else if (this.contact.contactType === '1' && !patten.test(value)) {
           callback(new Error('请输入正确的手机联系方式'))
-        } else if (this.contact.contactType === '3' && !regEmail.test(value)) {
+        } else if (this.contact.contactType === '4' && !regEmail.test(value)) {
           callback(new Error('请输入正确的邮箱联系方式'))
-        } else if ((this.contact.contactType === '1' || this.contact.contactType === '2') && !regTell.test(value)) {
+        } else if ((this.contact.contactType === '2' || this.contact.contactType === '3') && !regTell.test(value)) {
           callback(new Error('请输入正确的固定电话联系方式'))
         } else {
           callback()

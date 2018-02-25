@@ -197,6 +197,9 @@ export default {
       this.deviceCategoryDetailVisible = true
       this.viewFlagParent = false
       this.getAllAttr()
+      this.activeTab = 'basic'
+      this.selectAttr = []
+      this.deviceSaved = false
       // this.$parent.getParents()
     },
     // viewDeviceCategoryDialog: function (categoryDetail = {}) {
@@ -246,6 +249,7 @@ export default {
             this.$parent.getParents()
             this.viewFlagParent = true
             this.deviceSaved = true
+            this.getDeviceAttr()
             this.$message({
               message: '设备类别保存成功!',
               type: 'success'
@@ -265,9 +269,10 @@ export default {
       batchInsert({'typeUUID': this.deviceCategoryDetail.uuid, 'value': this.selectAttr})
       .then(res => {
         this.$parent.search({})
-        this.getDeviceAttr()
         this.deviceCategoryDetailVisible = false
         this.activeTab = 'basic'
+        this.selectAttr = []
+        this.deviceSaved = false
         this.$message({
           message: '设备类别属性保存成功!',
           type: 'success'

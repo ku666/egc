@@ -217,6 +217,8 @@
       handleFilterReset () {
         this.searchText = ''
         this.query.userGroupName = ''
+        this.userType = ''
+        this.query.userType = ''
         this.getUserGroupListTable()
       },
       handleCreate () {
