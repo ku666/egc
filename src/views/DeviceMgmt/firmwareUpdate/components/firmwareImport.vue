@@ -150,8 +150,7 @@
         if (fileList.length === 2) {
           fileList.shift()
         }
-        var array = file.name.split('-')
-
+        var array = file.name.split('_')
         // 判断文件名是否合法
         if (array.length === 4 && this._isValid(array[0], this.deviceType) && this._isValid(array[1], this.providerType)) {
           file['deviceType'] = array[0]
