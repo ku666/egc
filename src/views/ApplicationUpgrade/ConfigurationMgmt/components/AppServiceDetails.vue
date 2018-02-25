@@ -24,16 +24,16 @@
       <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.startUser"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.name"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务版本" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.version"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务端口" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务端口" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.port"></el-input>
       </el-form-item>
-       <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
+      <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.startUser"></el-input>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
@@ -100,11 +100,15 @@ export default {
   watch: {
     auappServiceDetails (newValue, oldValue) {
       this.auappServiceDetails = newValue
-      console.log(' details -  - - - >   ' + JSON.stringify(this.auappServiceDetails))
+      console.log(
+        ' details -  - - - >   ' + JSON.stringify(this.auappServiceDetails)
+      )
     }
   },
   mounted () {
-    console.log(' --------->' + (this.auappServiceDetails.applications !== null))
+    console.log(
+      ' --------->' + (this.auappServiceDetails.applications !== null)
+    )
   }
 }
 </script>

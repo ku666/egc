@@ -1,22 +1,14 @@
 <template>
-    <div id="fileUpload">
-      <el-upload
-          ref="upload"
-          class="avatar-uploader"
-          :action="actUrl"
-          drag
-          :limit=1
-          :show-file-list="true"
-          :on-exceed="handleExceed"
-          :on-change="handleOnchange"
-          :auto-upload="false"
-          :file-list="fileList">
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-          <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
-      </el-upload>
-      <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
-    </div>
+  <div id="fileUpload">
+    <el-upload ref="upload" class="avatar-uploader" :action="actUrl" drag :limit=1 :show-file-list="true" :on-exceed="handleExceed" :on-change="handleOnchange" :auto-upload="false" :file-list="fileList">
+      <i class="el-icon-upload"></i>
+      <div class="el-upload__text">将文件拖到此处，或
+        <em>点击上传</em>
+      </div>
+      <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
+    </el-upload>
+    <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+  </div>
 </template>
 
 <script>
@@ -157,9 +149,7 @@ export default {
       this.fileList = []
     }
   },
-  mounted () {
-
-  }
+  mounted () {}
 }
 </script>
 

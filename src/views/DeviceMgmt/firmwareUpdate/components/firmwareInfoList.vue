@@ -119,6 +119,9 @@
           selectFotaFileList(this.selectData)
             .then(result => {
               this.firmwareInfoData = result.listFotaFileVo
+              for (let i = 0; i < this.firmwareInfoData.length; i++) {
+                this.firmwareInfoData[i]['isSend'] = (this.firmwareInfoData[i].isUpgraded) ? '已下发' : '未下发'
+              }
               this.total = result.totalCount
             })
             .catch(

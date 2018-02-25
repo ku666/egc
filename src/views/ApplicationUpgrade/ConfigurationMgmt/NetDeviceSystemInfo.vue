@@ -35,7 +35,7 @@
               :page-size="searchConditionList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="total">
-          </el-pagination>
+            </el-pagination>
           </div>
         </div>
       </el-col>
@@ -333,7 +333,7 @@ export default {
       getNetDeviceInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('netdevice result== > ' + JSON.stringify(result))
+            // console.log('netdevice result== > ' + JSON.stringify(result))
             this.netDeviceListData = result.netequipList
             this.total = result.pageCount
             this.loading = false
@@ -344,12 +344,11 @@ export default {
         })
     },
 
-    // 改变分页大小
+   // 改变分页大小
     handleSizeChange (val) {
-      this.searchConditionList.limit = val
+      this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
       this.searchConditionList.page = val
