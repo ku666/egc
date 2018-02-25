@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container style="flex-basis: 0">
     <el-header>
       <egsc-header @getSelectedTitle="listenCheckedTitle"></egsc-header>
     </el-header>
@@ -77,9 +77,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .el-container {
-    flex-basis: 0 !important;
-  }
-</style>
