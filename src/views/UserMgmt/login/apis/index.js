@@ -21,6 +21,6 @@ export const checkUserPwd = (userName, userPwd) => {
 
 // 修改当前用户密码
 export const resetPassword = (userUuid, userPwd) => {
-  return Axios.post(contextPath + '/usermgmt/user/resetPassword?userUuid=' + userUuid + '&passWord=' + userPwd
+  return Axios.post(contextPath + '/usermgmt/user/resetPassword?userUuid=' + userUuid + '&passWord=' + encodeURIComponent(userPwd)
   ).then(res => res.data)
 }
