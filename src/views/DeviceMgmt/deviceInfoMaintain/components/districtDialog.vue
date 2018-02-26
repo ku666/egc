@@ -111,7 +111,7 @@
         provinceType: [],
         cityType: [],
         districtType: [],
-        tableList: [],
+        tableList: [{name: '', province: '空值', city: '', district: ''}],
         screeningData: {},
         listRows: []
       }
@@ -187,7 +187,7 @@
         this.cityType = []
         this.$refs.district.clearBox()
         this.districtType = []
-        this.tableList = []
+        this.tableList = [{name: '', province: '空值', city: '', district: ''}]
       },
       _getCurRow (row) {
         if (this.dialogType) {
