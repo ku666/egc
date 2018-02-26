@@ -1,6 +1,6 @@
 <template>
   <div class="ui-common">
-    <el-tabs v-model="activeName">
+    <el-tabs v-model="activeName" @tab-click="_tabClick">
       <el-tab-pane label="固件文件导入" name="first">
         <div class="maintain-container">
           <firmware-import :deviceTypeList="deviceTypeList"
@@ -13,13 +13,14 @@
         <div class="maintain-container">
           <firmware-maintain :deviceTypeList="deviceTypeList"
                              :deviceType="deviceType"
+                             ref="firmwareMaintain"
                              :providerType="providerType">
           </firmware-maintain>
         </div>
       </el-tab-pane>
       <el-tab-pane label="下发文件状态" name="third">
         <div class="maintain-container">
-          <send-status-list></send-status-list>
+          <send-status-list ref="sendStatusList"></send-status-list>
         </div>
       </el-tab-pane>
     </el-tabs>
@@ -81,6 +82,14 @@
             }.bind(this)
           )
           .catch()
+      },
+      _tabClick (data) {
+        if (data.label === '固件文件维护') {
+          this.$refs.firmwareMaintain._seekFirmware(1, 10)
+        }
+        if (data.label === '下发文件状态') {
+          this.$refs.sendStatusList._loadSendStatusData(1, 10)
+        }
       }
     },
     mounted () {
