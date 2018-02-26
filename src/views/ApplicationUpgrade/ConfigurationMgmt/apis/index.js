@@ -353,7 +353,7 @@ export const getOperMgmtHistoryList = (id) => {
 
 // 获取网络设备列表数据
 export const getNetDeviceInfoByPage = (params) => {
-  console.log('Netdevice params data :' + JSON.stringify(params))
+  // console.log('Netdevice params data :' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auNetequip/queryPageData', params
   ).then(res => res.data)
 
