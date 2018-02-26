@@ -895,13 +895,13 @@ export default {
     width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(2) {
-    width: 30%
+    width: 15%
   }
   #resourceTable >>> colgroup col:nth-child(3) {
-    width: 10%
+    width: 30%
   }
   #resourceTable >>> colgroup col:nth-child(4) {
-    width: 35%
+    width: 30%
   }
   #resourceTable >>> colgroup col:nth-child(5) {
     width: 10%
