@@ -315,7 +315,7 @@ export default {
             duration: 5000
           })
         } else {
-          resetPassword(this.user.uuid, value)
+          resetPassword(this.user.uuid, encodeURIComponent(value))
           this.$message({
             type: 'success',
             message: '重置密码成功'
