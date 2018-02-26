@@ -207,17 +207,14 @@ export default {
       if (this.fieldName.trim() === '') {
         this.$message.error('请输入新增项名称')
       } else {
-        // var extDataList = this.osDetails.extDataList
-        console.info(JSON.stringify(this.auServerDetails))
-        console.log(
-          'this.osDetails.extDataList --> ' + this.auServerDetails.extDataList
-        )
-        if (this.auServerDetails.extDataList) {
-          this.auServerDetails.extDataList.push({
-            fieldName: this.fieldName,
-            fieldValue: this.fieldValue
-          })
+        if (this.auServerDetails.extDataList === null) {
+          this.auServerDetails.extDataList = []
         }
+        this.auServerDetails.extDataList.push({
+          fieldName: this.fieldName,
+          fieldValue: this.fieldValue
+        })
+        console.info(JSON.stringify(this.auServerDetails))
       }
     },
     clearData () {

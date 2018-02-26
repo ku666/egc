@@ -1,28 +1,29 @@
 <template>
   <div class='ui-common'>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <el-form :inline="true" :model="searchConditionList">
-          <div class="search-container">
-            <el-form-item label="代码中文名称">
-              <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.codeName"> </el-input>
+    <div class="flex-c flex-1">
+      <el-form :inline="true" :model="searchConditionList">
+        <div class="search-container">
+          <el-form-item label="代码中文名称">
+            <el-input class="appupgrade_el-select" placeholder="请输入代码中文名称" v-model="searchConditionList.codeName"> </el-input>
+          </el-form-item>
+          <el-form-item label="代码值" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.code"> </el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
             </el-form-item>
-            <el-form-item label="代码值" :label-width="formLabelWidth">
-              <el-input class="appupgrade_el-select" placeholder="请输入代码值" v-model="searchConditionList.code"> </el-input>
-            </el-form-item>
-            <div class="btn-container">
-              <el-form-item>
-                <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-                <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-              </el-form-item>
-            </div>
           </div>
-        </el-form>
-        <div>
-          <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
         </div>
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="commCodeDataList" stripe border v-loading="loading">
+      </el-form>
+      <div>
+        <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
+      </div>
+      <div class="border-divide"></div>
+      <div class="table-container">
+        <div style="margin-top: 15px">
+          <el-table :data="commCodeDataList" stripe v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
@@ -37,12 +38,12 @@
             </el-table-column>
           </el-table>
         </div>
-        <div>
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-          </el-pagination>
-        </div>
-      </el-col>
-    </el-row>
+      </div>
+      <div>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
+      </div>
+    </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
       <comm-code-edit :commCodeDetails="commCodeDetails" @saveCommCodeEvent="_updateCommCode"></comm-code-edit>
     </el-dialog>
@@ -138,7 +139,7 @@ export default {
         {
           colName: '代码大类名称',
           prop: 'codeTypes.typeName',
-          width: 220
+          width: 320
         },
         {
           colName: '备注',
