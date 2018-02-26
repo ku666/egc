@@ -35,7 +35,7 @@ export default {
   },
   computed: {
     username () {
-      let username = localStorage.getItem('login_username')
+      let username = sessionStorage.getItem('login_username')
       return username || this.name || 'admin'
     },
     headerStataus () {
@@ -45,8 +45,11 @@ export default {
   methods: {
     handleCommand (command) {
       if (command === 'loginout') {
-        localStorage.removeItem('login_username')
-        localStorage.removeItem('token')
+        sessionStorage.removeItem('login_username')
+        sessionStorage.removeItem('token')
+        sessionStorage.removeItem('userRouters')
+        sessionStorage.removeItem('userResourcePermission')
+        sessionStorage.removeItem('userInfo')
         this.$router.push('/login')
       }
     },
