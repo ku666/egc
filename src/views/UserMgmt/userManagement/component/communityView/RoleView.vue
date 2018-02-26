@@ -312,10 +312,10 @@ export default {
           title: '操作类型',
           prop: 'actionTypeName'
         },
-        {
-          title: '安装位置',
-          prop: 'houseOrgName'
-        },
+        // {
+        //   title: '安装位置',
+        //   prop: 'houseOrgName'
+        // },
         {
           title: '逻辑地址',
           prop: 'logicalAddress'
