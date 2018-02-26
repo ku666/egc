@@ -3,10 +3,10 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="middlewareListData" stripe border v-loading="loading">
+    <div class="border-divide"></div>
+    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+        <div style="margin-top: 15px">
+          <el-table :data="middlewareListData" stripe v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
@@ -31,8 +31,7 @@
             </el-pagination>
           </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <middleware-details :middlewareDetails="middlewareDetails"></middleware-details>
