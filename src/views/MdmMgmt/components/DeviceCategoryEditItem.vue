@@ -1,9 +1,6 @@
 <template>
   <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' style="min-width: 750px;">
-    <!-- <attr-domain-item ref='openAttrDomainDialog'></attr-domain-item> -->
-
     <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
-
     <el-tabs style="margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name = 'basic'>
         <div style="padding-left: 30px">
@@ -41,8 +38,6 @@
         </el-form>
         </div>
         <div style='text-align: center; margin-top: 20px'>
-          <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled='viewFlag'>清空</el-button> -->
-          <!-- <el-button type='primary' @click='next' class='btn-plain'>下一步</el-button> -->
           <el-button type='primary' @click='save' class="action-btn">保存</el-button>
         </div>
       </el-tab-pane>
@@ -50,24 +45,19 @@
         <div>
           <el-form>
             <el-form-item>
-              <!-- <el-row type = 'flex'>
-                <el-col :span = '24'> -->
-                  <el-transfer style="padding-left: 190px;"
-                    filterable
-                    :titles="['可添加属性', '当前设备属性']"
-                    :button-texts="['删除属性', '添加属性']"
-                    :props= '{
-                      key: "uuid",
-                      label: "attrDesc"
-                    }'
-                    v-model='selectAttr'
-                    :data="transferData">
-                  </el-transfer>
-                <!-- </el-col>
-              </el-row> -->
+              <el-transfer style="padding-left: 190px;"
+                filterable
+                :titles="['可添加属性', '当前设备属性']"
+                :button-texts="['删除属性', '添加属性']"
+                :props= '{
+                  key: "uuid",
+                  label: "attrDesc"
+                }'
+                v-model='selectAttr'
+                :data="transferData">
+              </el-transfer>
             </el-form-item>
             <div style='text-align: center'>
-              <!-- <el-button type='primary' @click='back' class='btn-plain'>上一步</el-button> -->
               <el-button @click='saveMapping' type='primary' class="action-btn" :disabled='viewFlag'>保存</el-button>
             </div>
           </el-form>
@@ -180,7 +170,6 @@ export default {
       this.viewFlagParent = true
       this.getAllAttr()
       this.getDeviceAttr()
-      // this.$parent.getParents()
     },
     // 添加设备信息
     addDeviceCategoryDialog: function () {
@@ -200,21 +189,7 @@ export default {
       this.activeTab = 'basic'
       this.selectAttr = []
       this.deviceSaved = false
-      // this.$parent.getParents()
     },
-    // viewDeviceCategoryDialog: function (categoryDetail = {}) {
-    //   this.viewFlag = true
-    //   this.deviceCategoryDetail.uuid = categoryDetail.uuid
-    //   this.deviceCategoryDetail.parentUuid = categoryDetail.parentUuid
-    //   this.deviceCategoryDetail.typeCode = categoryDetail.typeCode
-    //   this.deviceCategoryDetail.typeName = categoryDetail.typeName
-    //   this.deviceCategoryDetail.typeDesc = categoryDetail.typeDesc
-    //   this.deviceCategoryDetail.typeModel = categoryDetail.typeModel
-    //   this.deviceCategoryDetail.hardwareVersion = categoryDetail.hardwareVersion
-    //   this.deviceCategoryDetail.softwareVersion = categoryDetail.softwareVersion
-    //   this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
-    //   this.deviceCategoryDetailVisible = true
-    // },
     // 取得所有的属性
     getAllAttr: function () {
       getDeviceAttributeList({})
@@ -243,7 +218,6 @@ export default {
           var func
           func = this.deviceCategoryDetail.uuid ? updateDeviceCategory : insertDeviceCategory
           func(Object.assign({}, this.deviceCategoryDetail)).then(res => {
-            // this.deviceCategoryDetailVisible = false
             this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
             this.$parent.getParents()
@@ -287,7 +261,6 @@ export default {
     },
     // 清除表单信息
     clear: function () {
-      // this.deviceCategoryDetail.uuid = ''
       if (this.mode !== 3) {
         this.deviceCategoryDetail.parentUuid = ''
       }
@@ -308,11 +281,6 @@ export default {
       this.selectAttr = []
       this.deviceSaved = false
     }
-    // // 打开设备属性域弹框
-    // openAttrDmnDialog: function (attr = {}) {
-    //   const attrTmp = Object.assign({}, attr)
-    //   this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
-    // }
   }
 }
 </script>
