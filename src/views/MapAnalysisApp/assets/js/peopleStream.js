@@ -1,7 +1,7 @@
 // 人流数据
-var timeData = [] // '周一', '周二'
-var data1 = [] // 120, 132
-var data2 = [] // 220, 182
+// var timeData = [] // '周一', '周二'
+// var data1 = [] // 120, 132
+// var data2 = [] // 220, 182
 var option = {
   title: {
     text: '人员流量',
@@ -49,7 +49,7 @@ var option = {
   ],
   xAxis: {
     type: 'category',
-    data: timeData,
+    data: [], // timeData
     boundaryGap: false,
     splitLine: {
       show: true,
@@ -103,7 +103,7 @@ var option = {
       showSymbol: false,
       symbol: 'circle',
       symbolSize: 6,
-      data: data1,
+      data: [], // data1
       areaStyle: {
         normal: {}
       },
@@ -125,7 +125,7 @@ var option = {
       showSymbol: false,
       symbol: 'circle',
       symbolSize: 6,
-      data: data2,
+      data: [], // data2
       areaStyle: {
         normal: {}
       },
