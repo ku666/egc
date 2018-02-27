@@ -1,15 +1,5 @@
 <template>
-  <!-- <el-dialog
-      :visible.sync = 'attrDomainVisible'
-      @open = 'clear'
-      :modal-append-to-body = 'false'
-      width = '40%'> -->
-    <!-- <div slot = 'title' class= 'head-text'>{{ categoryAttr.attrDesc }} 属性域</div> -->
-    <!-- <span>设备属性：{{ categoryAttr.attrDesc }}</span> -->
   <div>
-    <!-- <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ categoryAttr.attrDesc }} 属性域</div> -->
-
-    <!-- <hr/> -->
     <div class="flex-1">
       <el-table
         :data='domainList'
@@ -41,19 +31,16 @@
         </el-form-item>
       </el-form>
       <div style='text-align: center'>
-        <!-- <el-button type='primary' @click='clear' class="cancel-btn">清空</el-button> -->
         <el-button type='primary' @click='save' class="action-btn">保存</el-button>
       </div>
     </div>
   </div>
-  <!-- </el-dialog> -->
 </template>
 
 <script>
 import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmMgmt/apis/index'
 
 export default {
-  // props: ['deviceAttrMappingVisible'],
   props: ['attrUuid'],
   data () {
     return {
@@ -99,22 +86,6 @@ export default {
     this.getDomains()
   },
   methods: {
-    // 打开设备属性域弹窗
-    // openAttrDomainDialog: function (attr = {}) {
-    //   // 将父页面的设备分类信息传递到弹框中
-    //   this.categoryAttr.attrUuid = attr.uuid
-    //   this.categoryAttr.attrCode = attr.attrCode
-    //   this.categoryAttr.attrDesc = attr.attrDesc
-    //   this.categoryAttr.attrDataType = attr.attrDataType
-
-    //   this.domainForm.attrUuid = attr.uuid
-    //   this.domainForm.attrDesc = attr.attrDesc
-
-    //   this.getDomains()
-
-    //   // 显示弹框
-    //   this.attrDomainVisible = true
-    // },
     // 查询设备分类的属性
     getDomains: function () {
       let that = this
@@ -195,7 +166,6 @@ export default {
       })
     },
     clear: function () {
-      // this.domainForm.uuid = ''
       this.domainForm.domainValue = ''
       this.domainForm.domainValueCode = ''
       this.clearValidate()

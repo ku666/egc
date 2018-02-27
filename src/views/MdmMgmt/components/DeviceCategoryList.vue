@@ -1,12 +1,6 @@
 <template>
   <div class='ui-common'>
     <device-category-edit-item ref='deviceCategoryEditDiag' v-bind:providers='providers' v-bind:mode='mode' v-bind:parents='parents'></device-category-edit-item>
-    <!-- <device-attr-edit-item ref = 'deviceAttrListEditDialog'></device-attr-edit-item> -->
-
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>设备主数据</el-breadcrumb-item>
-    </el-breadcrumb> -->
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
         <el-form-item label='设备主数据编码' label-width="120px">
@@ -35,20 +29,12 @@
     </div>
 
     <div style="margin-top: 15px">
-      <!-- <div style="float: left"> -->
-        <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
-      <!-- </div>
-      <div style="float: right">
-        <el-button icon='el-icon-d-arrow-right' style="margin-center: 10px" plain type="primary" @click="gotoattrmgnt">设备属性管理</el-button>
-      </div> -->
+      <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
     </div>
-    <!-- <hr/> -->
-    <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
 
     <el-table
       ref='deviceTable'
       :expand-row-keys='expandRows'
-      :row-class-name='parentRowClassName'
       :row-key="getRowKeys"
       :data='tableData'
       v-loading='loading'
@@ -56,24 +42,17 @@
       element-loading-text='拼命加载中'
       height="100%"
       style='margin-top: 15px'>
-      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column type="expand">
         <template slot-scope="props">
           <el-table empty-text='无子设备'
             :data='props.row.slave'
             :show-header='false'
-            :row-class-name='childRowClassName'
             @row-dblclick='editDevicedbl'>
-            <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备主数据编码' width="180px">
               <template slot-scope="scope">
-                <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
-                <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
                 <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
-                <!-- <div style='padding-left: 20px; float: left'>{{highlightKeys(scope.row.typeCode, searchForm.typeCode)}}</div> -->
                 <p style='padding-left: 20px; float: left' v-html="highlightKeys(scope.row.typeCode, searchForm.typeCode)"></p>
-                <!-- </div> -->
               </template>
             </el-table-column>
             <el-table-column prop='typeModel' label='设备型号'>
@@ -92,31 +71,16 @@
               </template>
             </el-table-column>
             <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-            <!-- <el-table-column label='父设备' width="120" >
-              <template slot-scope="scope">
-                <div v-for='device in parents' v-bind:key='device.uuid'>
-                  {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
-                </div>
-              </template>
-            </el-table-column> -->
             <el-table-column prop='hardwareVersion' label='硬件版本'></el-table-column>
             <el-table-column prop='softwareVersion' label='软件版本'></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
             <el-table-column prop='providerName' label='供应商'></el-table-column>
-            <!-- <el-table-column label='供应商' >
-              <template slot-scope="scope">
-                <div v-for='provider in providers' v-bind:key='provider.providerCode'>
-                  {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
-                </div>
-              </template>
-            </el-table-column> -->
             <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
             <el-table-column prop='createUser' label='创建人'></el-table-column>
             <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
             <el-table-column prop='updateUser' label='修改人'></el-table-column>
             <el-table-column label='操作'>
               <template slot-scope='scope'>
-                <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
                 <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
                 <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
               </template>
@@ -146,31 +110,16 @@
         </template>
       </el-table-column>
       <el-table-column prop='parentUuid' label='父设备' v-if='showflag'></el-table-column>
-      <!-- <el-table-column label='父设备' width="120" >
-        <template slot-scope="scope">
-          <div v-for='device in parents' v-bind:key='device.uuid'>
-            {{scope.row.parentUuid === device.uuid ? device.typeName : ''}}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column prop='hardwareVersion' label='硬件版本' sortable></el-table-column>
       <el-table-column prop='softwareVersion' label='软件版本' sortable></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
       <el-table-column prop='providerName' label='供应商' sortable></el-table-column>
-      <!-- <el-table-column label='供应商' >
-        <template slot-scope="scope">
-          <div v-for='provider in providers' v-bind:key='provider.providerCode'>
-            {{scope.row.providerCode === provider.providerCode ? provider.providerName : ''}}
-          </div>
-        </template>
-      </el-table-column> -->
       <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
       <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
       <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
       <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
-          <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
           <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
           <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteDevice(scope.row)'></el-button>
         </template>
@@ -194,7 +143,6 @@
 <script>
 // 导入设备编辑组件，设备属性列表编辑组件
 import DeviceCategoryEditItem from './DeviceCategoryEditItem' // 设备编辑（查看，增加，修改）组件
-// import DeviceAttrEditItem from './DeviceAttrEditItem' // 设备属性列表编辑组件
 
 // 导入访问后端方法
 import {
@@ -250,10 +198,6 @@ export default {
     this.attatchEventToPager()
   },
   methods: {
-    // 列表选择方法
-    // getSelections: function (sel) {
-    //   this.selections = sel
-    // },
     // ********************新增设备********************
     addDevice: function () {
       this.mode = 2
@@ -285,12 +229,11 @@ export default {
           this.search()
           this.getParents()
         })
-      }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消删除'
-        // })
-      })
+      }).catch(
+        function (error) {
+          console.log(error)
+        }
+      )
     },
     deleteDevice: function (device = {}) {
       this.$confirm('确定要刪除吗?', '提示', {
@@ -307,12 +250,11 @@ export default {
           this.search()
           this.getParents()
         })
-      }).catch(() => {
-        // this.$message({
-        //   type: 'info',
-        //   message: '已取消删除'
-        // })
-      })
+      }).catch(
+        function (error) {
+          console.log(error)
+        }
+      )
     },
     // ********************修改设备********************
     editDevice: function () {
@@ -335,30 +277,6 @@ export default {
       this.mode = 3
       this.$refs['deviceCategoryEditDiag'].editDeviceCategoryDialog(device)
     },
-    // ********************查看设备详情********************
-    // viewDeviceClick: function () {
-    //   if (this.selections.length === 0) {
-    //     this.$message({
-    //       message: '请选择要查看的设备',
-    //       type: 'warning'
-    //     })
-    //   } else if (this.selections.length > 1) {
-    //     this.$message({
-    //       message: '一次只能查看一个设备',
-    //       type: 'warning'
-    //     })
-    //   } else {
-    //     this.mode = 1
-    //     this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(this.selections[0])
-    //   }
-    // },
-    // viewDeviceDblClick: function (device = {}) {
-    //   this.mode = 1
-    //   this.$refs['deviceCategoryEditDiag'].viewDeviceCategoryDialog(device)
-    // },
-    // checkrow: function (row) {
-    //   this.$refs['deviceTable'].toggleRowSelection(row)
-    // },
     // ********************查询设备********************
     search () {
       console.log('search method')
@@ -402,34 +320,25 @@ export default {
     },
     // 查询供应商信息
     getProviders: function () {
-      // let providersTemp = sessionStorage.getItem('PROVIDERS')
-      // if (providersTemp === null || providersTemp === undefined) {
       getAllProviders()
         .then(
         function (result) {
           console.log(result.data)
           this.providers = result.data
-          // sessionStorage.setItem('PROVIDERS', JSON.stringify(this.providers))
         }.bind(this)
         )
         .catch(
-        function (error) {
-          console.log(error)
-        }
+          function (error) {
+            console.log(error)
+          }
         )
-      // } else {
-      //   this.providers = JSON.parse(providersTemp)
-      // }
     },
     // 查询所有的设备
     getParents: function () {
-      // let parentsTemp = sessionStorage.getItem('DEVICES')
-      // if (parentsTemp === null || parentsTemp === undefined) {
       getDeviceCategories('')
         .then(
         function (result) {
           this.parents = result.data
-          // sessionStorage.setItem('DEVICES', JSON.stringify(this.parents))
         }.bind(this)
         )
         .catch(
@@ -437,27 +346,7 @@ export default {
           console.log(error)
         }
         )
-      // } else {
-      //   this.parents = JSON.parse(parentsTemp)
-      // }
     },
-    // 设备属性列表编辑页面
-    // openDeviceAttrDialog: function () {
-    //   if (this.selections.length === 0) {
-    //     this.$message({
-    //       message: '请选择要编辑的设备',
-    //       type: 'warning'
-    //     })
-    //   } else if (this.selections.length > 1) {
-    //     this.$message({
-    //       message: '一次只能编辑一个设备的属性列表信息',
-    //       type: 'warning'
-    //     })
-    //   } else {
-    //     this.mode = 1
-    //     this.$refs['deviceAttrListEditDialog'].openDeviceAttrDialog(this.selections[0])
-    //   }
-    // },
     // 打开设备属性列表管理页面
     gotoattrmgnt: function () {
       this.$router.push({
@@ -477,18 +366,6 @@ export default {
         providerCode: ''
       }
     },
-    childRowClassName ({ row, rowIndex }) {
-      // if (rowIndex === 1) {
-      //   return 'warning-row'
-      // } else if (rowIndex === 3) {
-      //   return 'success-row'
-      // }
-      // return ''
-      return 'child-row'
-    },
-    parentRowClassName ({ row, rowIndex }) {
-      return 'parent-row'
-    },
     getRowKeys: function (row) {
       return row.uuid
     },
@@ -496,8 +373,6 @@ export default {
       let t = txt
       let k = key
       if (t !== null && t.length > 0 && k !== null && k.length > 0) {
-        // txt.replace(key, '<span style = "color: red">' + key + '</span>')
-        // let temp = t.replace(k, '<span style = "color: red; font-weight: bold">' + k + '</span>')
         let temp = t.replace(k, '<span style = "background-color: antiquewhite;">' + k + '</span>')
         return temp
       } else {
@@ -534,17 +409,8 @@ export default {
 }
 .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
-  /* border-bottom: none; */
 }
 .el-table .child-row td {
   padding: 0px;
-  /* background-color:blanchedalmond; */
-  /* font-size: 10px; */
-  /* background-color:#f5f7fa; */
-}
-.el-table .parent-row {
-  /* background-color:#AAA */
-  /* border-top: 1px solid #ebeef5; */
-  /* border-bottom: 1px solid #ebeef5; */
 }
 </style>

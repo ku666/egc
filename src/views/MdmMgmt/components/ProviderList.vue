@@ -1,9 +1,5 @@
 <template>
   <div class='ui-common'>
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>供应商主数据</el-breadcrumb-item>
-    </el-breadcrumb> -->
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
         <el-form-item label='供应商主数据编码'>
@@ -22,10 +18,7 @@
     </div>
 
     <div>
-      <!-- <el-button @click='viewProvider' icon='el-icon-document' type="text" class='btn-text'>查看</el-button> -->
       <el-button @click='addProvider' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
-      <!-- <el-button @click='editProvider' icon='el-icon-edit' type="text" class='btn-text'>修改</el-button> -->
-      <!-- <el-button @click='deleteProviderBatch' icon='el-icon-delete' type="text" class='btn-text'>批量删除</el-button> -->
     </div>
 
     <!-- <hr/> -->
@@ -41,8 +34,6 @@
         @row-click = 'checkrow'
         element-loading-text='拼命加载中'
         style='margin-top: 15px'>
-        <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
-        <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column prop='providerCode' label='供应商主数据编码' sortable></el-table-column>
         <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
@@ -62,7 +53,6 @@
         <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
         <el-table-column label='操作' width='100'>
           <template slot-scope='scope'>
-            <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
             <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
             <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
           </template>
@@ -83,12 +73,6 @@
 
     <el-dialog :visible.sync='providerDialogVisible'
       :modal-append-to-body = 'false'>
-      <!-- <div slot='title' class='head-text'>
-        <span>{{title}}</span>
-      </div> -->
-      <!-- <el-steps :active='1' simple>
-        <el-step :title="title" icon="el-icon-edit"></el-step>
-      </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>
@@ -110,7 +94,6 @@
             <el-input v-model.trim='providerForm.providerDesc' :maxlength="64"></el-input>
           </el-form-item>
           <div style='text-align: center'>
-            <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
             <el-button type='primary' @click='save' class="action-btn">保存</el-button>
           </div>
         </el-form>
@@ -237,32 +220,6 @@ export default {
     getSelections: function (sel) {
       this.selections = sel
     },
-    // 查看供应商
-    /* viewProvider: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要查看的供应商',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能查看一个供应商',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.providerForm = {
-          uuid: this.selections[0].uuid,
-          category: this.selections[0].category,
-          providerCode: this.selections[0].providerCode,
-          providerName: this.selections[0].providerName,
-          contact: this.selections[0].contact,
-          providerDesc: this.selections[0].providerDesc
-        }
-        this.providerDialogVisible = true
-        this.disabledflag = true
-      }
-    }, */
     viewProvider: function (provider = {}) {
       this.mode = 1
       this.providerForm = {
@@ -283,32 +240,6 @@ export default {
       this.clear()
       this.providerDialogVisible = true
     },
-    // 选择行后，点击编辑供应商按钮打开供应商弹框
-    /* editProvider: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要修改的供应商',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能修改一个供应商',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 3
-        this.providerForm = {
-          uuid: this.selections[0].uuid,
-          category: this.selections[0].category,
-          providerCode: this.selections[0].providerCode,
-          providerName: this.selections[0].providerName,
-          contact: this.selections[0].contact,
-          providerDesc: this.selections[0].providerDesc
-        }
-        this.providerDialogVisible = true
-        this.disabledflag = false
-      }
-    }, */
     // 双击行打开编辑供应商弹框
     editProviderdbl: function (attr = {}) {
       console.log(attr)
@@ -426,11 +357,8 @@ export default {
     },
     attatchEventToPager: function (params) {
       const self = this
-      // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
-      // console.log('input:' + input.value)
       addEventHandler(input, 'keyup', function (e) {
-      // console.log('input:' + input.value)
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchProviderForm.currentPage)) {
           self.currentChange(parseInt(input.value))
         }
@@ -442,5 +370,4 @@ export default {
 
 <style lang='less' scoped>
   @import '~@/views/MdmMgmt/assets/css/index.less';
-
 </style>

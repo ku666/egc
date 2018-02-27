@@ -420,9 +420,6 @@ export default {
   text-align: left;
   color: #909399;
 }
-div:hover {
-  /* background: #f6faff; */
-}
 .el-collapse-item.is-active {
   background: #f6faff;
 }
@@ -448,7 +445,7 @@ div:hover {
   height: 40px;
 }
 .line-one {
-  /* line-height: 40px; */
+  line-height: 30px;
 }
 .header_style {
   padding: 13px 3%;
