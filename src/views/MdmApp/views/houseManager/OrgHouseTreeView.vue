@@ -21,7 +21,6 @@
   </div>
 </template>
 <script>
-// import { getAllOrgTreeByCourtUuid } from '../../apis/orgManager'
 import { getOrgTreeNextLevel } from '../../apis/orgManager'
 import { getCourtsByConditions } from '../../apis/courtManager'
 export default {
