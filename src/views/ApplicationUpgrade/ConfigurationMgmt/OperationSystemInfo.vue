@@ -3,46 +3,38 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24"  class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="osListData" stripe border v-loading="loading">
-            <el-table-column  type="index" label="序号" width="50">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" width="140" align="center">
-              <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                </el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                </el-button>
-                <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                </el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+    <div class="border-divide"></div>
+    <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+      <div style="margin-top: 15px">
+        <el-table :data="osListData" stripe v-loading="loading" height="680">
+          <el-table-column type="index" label="序号" width="50">
+          </el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="操作" width="140" align="center">
+            <template slot-scope="scope">
+              <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+              </el-button>
+              <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+              </el-button>
+              <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
+              </el-button>
+              <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
         <div>
-          <div>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
           </el-pagination>
-          </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <os-details :osDetails="osDetails"></os-details >
+        <os-details :osDetails="osDetails"></os-details>
       </el-dialog>
     </div>
     <div>
@@ -63,7 +55,14 @@ import searchCondition from './components/SearchCondition'
 import osDetails from './components/OsDetails'
 import osEdit from './components/OsEdit'
 import osHistory from './components/OsHistory'
-import { getOSInfoByPage, getOSDetails, updateOSInfo, getOSHistoryList, syncOSData, downloadResultFile } from './apis/index'
+import {
+  getOSInfoByPage,
+  getOSDetails,
+  updateOSInfo,
+  getOSHistoryList,
+  syncOSData,
+  downloadResultFile
+} from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -90,48 +89,55 @@ export default {
       syncDataStatus: '',
       loading: true,
       searchConditionList: {
-        'city': '',
-        'condition': '',
-        'currentPage': 1,
-        'district': '',
-        'pageSize': 10,
-        'province': ''
+        city: '',
+        condition: '',
+        currentPage: 1,
+        district: '',
+        pageSize: 10,
+        province: ''
       },
       tableTitleList: [
         {
           colName: '省（直辖市）',
           prop: 'courtDto.province',
           width: 120
-        }, {
+        },
+        {
           colName: '市',
           prop: 'courtDto.city',
           width: 100
-        }, {
+        },
+        {
           colName: '区',
           prop: 'courtDto.district',
           width: 100
-        }, {
+        },
+        {
           colName: '小区名称',
           prop: 'courtDto.name',
           width: 120
-        }, {
+        },
+        {
           colName: '操作系统名称',
           prop: 'name',
           width: 120
-        }, {
+        },
+        {
           colName: '操作系统版本（服务包）',
           prop: 'version',
           width: 180
-        }, {
+        },
+        {
           colName: '操作系统位数',
           prop: 'dataLength',
           width: 120
-        }, {
+        },
+        {
           colName: '服务器主机名称',
           prop: 'hostname',
           width: 260
-
-        }, {
+        },
+        {
           colName: '描述',
           prop: 'remark'
         }
@@ -155,14 +161,14 @@ export default {
       this.loading = true
       if (type === 'search') {
         getOSInfoByPage(params)
-        .then(
-          function (result) {
-            this.osListData = result.ossList
-            this.total = result.pageCount
-            this.loading = false
-          }.bind(this)
-        ).catch(
-          function (error) {
+          .then(
+            function (result) {
+              this.osListData = result.ossList
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(function (error) {
             this.$message({
               message: error,
               center: true,
@@ -171,8 +177,7 @@ export default {
               duration: 2000
             }).bind(this)
             console.log(error)
-          }
-        )
+          })
       } else if (type === 'download') {
         let downloadCls = 3
         downloadResultFile(params, downloadCls)
@@ -201,14 +206,14 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
       getOSDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log(result)
-              this.osDetails = result.auOss
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
+        .then(
+          function (result) {
+            console.log(result)
+            this.osDetails = result.auOss
+            this.dialogDetailsVisible = true
+          }.bind(this)
+        )
+        .catch()
     },
 
     // 编辑
@@ -218,18 +223,16 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getOSDetails(eachRowUUID)
-          .then(
-            function (result) {
-              this.osDetails = result.auOss
-              console.info('edit oss --- >  ' + JSON.stringify(this.osDetails))
-              this.dialogEditVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.osDetails = result.auOss
+            console.info('edit oss --- >  ' + JSON.stringify(this.osDetails))
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 更新
@@ -250,11 +253,9 @@ export default {
             this.loadData()
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 比对刷新
@@ -270,7 +271,7 @@ export default {
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 加载数据
+              // 加载数据
               this.loadData()
               this.$message({
                 message: '刷新成功',
@@ -284,12 +285,10 @@ export default {
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-            this.synDataLoading = false
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+          this.synDataLoading = false
+        })
     },
 
     // 历史记录
@@ -300,16 +299,14 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
       getOSHistoryList(eachRowUUID)
-          .then(
-            function (result) {
-              this.osHistoryData = result.auServersHisList
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.osHistoryData = result.auServersHisList
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 初始加载
@@ -317,17 +314,17 @@ export default {
       getOSInfoByPage(this.searchConditionList)
         .then(
           function (result) {
-            console.log('operating system result === > ' + JSON.stringify(result))
+            console.log(
+              'operating system result === > ' + JSON.stringify(result)
+            )
             this.osListData = result.ossList
             this.total = result.pageCount
             this.loading = false
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 改变分页大小
@@ -349,5 +346,5 @@ export default {
 </script>
 
 <style scoped>
- @import "assets/css/upgrademgmt.less"
+@import 'assets/css/upgrademgmt.less';
 </style>

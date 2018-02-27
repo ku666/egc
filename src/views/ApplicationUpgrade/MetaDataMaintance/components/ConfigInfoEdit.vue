@@ -1,16 +1,16 @@
 <template>
   <div>
     <el-form :inline="true" :model="configInfoDetails">
-        <el-form-item label="配置项名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="configInfoDetails.configItem"></el-input>
-        </el-form-item>
-        <el-form-item label="配置项的值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="configInfoDetails.value"></el-input>
-        </el-form-item>
-        <el-form-item label="配置项类别代码" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="configInfoDetails.configTypeCode"></el-input>
-        </el-form-item>
-       <el-form-item label="备注" :label-width="formLabelWidth">
+      <el-form-item label="配置项名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="configInfoDetails.configItem"></el-input>
+      </el-form-item>
+      <el-form-item label="配置项的值" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="configInfoDetails.value"></el-input>
+      </el-form-item>
+      <el-form-item label="配置项类别代码" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="configInfoDetails.configTypeCode"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="configInfoDetails.remark"></el-input>
       </el-form-item>
 

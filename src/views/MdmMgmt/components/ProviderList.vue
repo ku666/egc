@@ -6,11 +6,11 @@
     </el-breadcrumb> -->
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
-        <el-form-item label='供应商编码'>
-          <el-input placeholder='请输入供应商编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4"></el-input>
+        <el-form-item label='供应商主数据编码'>
+          <el-input placeholder='请输入供应商主数据编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商名称'>
-          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search' :maxlength="100"></el-input>
+          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search' :maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
@@ -44,22 +44,22 @@
         <!-- <el-table-column type='index' label='序号' width='50'></el-table-column> -->
         <!-- <el-table-column type='selection' width='50'></el-table-column> -->
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column prop='providerCode' label='供应商编码' ></el-table-column>
-        <el-table-column prop='providerName' label='供应商名称' ></el-table-column>
-        <el-table-column prop='contact' label='联系方式' ></el-table-column>
-        <el-table-column prop='providerDesc' label='供应商描述' ></el-table-column>
+        <el-table-column prop='providerCode' label='供应商主数据编码' sortable></el-table-column>
+        <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
+        <el-table-column prop='contact' label='联系方式' sortable></el-table-column>
+        <el-table-column prop='providerDesc' label='供应商描述' sortable></el-table-column>
         <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
-        <el-table-column label='供应商类别'>
+        <el-table-column label='供应商类别' sortable prop='category'>
           <template slot-scope="scope">
             <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
               {{scope.row.category === providerType.key ? providerType.value : ''}}
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-        <el-table-column prop='createUser' label='创建人'></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-        <el-table-column prop='updateUser' label='修改人'></el-table-column>
+        <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
+        <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
+        <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
+        <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
         <el-table-column label='操作' width='100'>
           <template slot-scope='scope'>
             <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -92,7 +92,7 @@
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>
-          <el-form-item label='供应商编码' prop='providerCode'>
+          <el-form-item label='供应商主数据编码' prop='providerCode'>
             <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='供应商类别' prop='category'>
@@ -128,6 +128,7 @@ import {
   insertProvider,
   updateProvider
 } from '@/views/MdmMgmt/apis/index'
+import { addEventHandler } from '@/assets/js/util'
 
 export default {
   data () {
@@ -177,7 +178,7 @@ export default {
           {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
         ],
         contact: [
-          {pattern: /^\d{11}$|^\d{3,4}-?\d{6,10}$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
+          {pattern: /^(\((\+|00)86\)(-|\s)?|(\+|00)86(-|\s)?)?(\d{11}|(\d{3,4})?(-|\s)?\d{6,10})$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
         ]
       }
     }
@@ -410,6 +411,7 @@ export default {
       }
     },
     clear: function () {
+      this.providerForm.uuid = ''
       this.providerForm.category = ''
       this.providerForm.providerCode = ''
       this.providerForm.providerName = ''
@@ -422,23 +424,15 @@ export default {
         this.$refs['providerForm'].clearValidate()
       })
     },
-    addEventHandler: function (target, type, fn) {
-      if (target.addEventListener) {
-        target.addEventListener(type, fn)
-      } else {
-        target.attachEvent('on' + type, fn)
-      }
-    },
     attatchEventToPager: function (params) {
       const self = this
       // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
       // console.log('input:' + input.value)
-      self.addEventHandler(input, 'keyup', function (e) {
+      addEventHandler(input, 'keyup', function (e) {
       // console.log('input:' + input.value)
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchProviderForm.currentPage)) {
-          self.searchProviderForm.currentPage = parseInt(input.value)
-          self.search()
+          self.currentChange(parseInt(input.value))
         }
       })
     }

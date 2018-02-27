@@ -9,17 +9,17 @@
     </el-breadcrumb> -->
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
-        <el-form-item label='设备编码'>
-          <el-input placeholder='请输入设备编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="4"></el-input>
+        <el-form-item label='设备主数据编码' label-width="120px">
+          <el-input placeholder='请输入设备主数据编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备型号'>
-          <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备名称'>
-          <el-input placeholder='请输入设备名称' v-model.trim='searchForm.typeName' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备名称' v-model.trim='searchForm.typeName' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备描述'>
-          <el-input placeholder='请输入设备描述' v-model.trim='searchForm.typeDesc' @keyup.enter.native='search' :maxlength="64"></el-input>
+          <el-input placeholder='请输入设备描述' v-model.trim='searchForm.typeDesc' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商'>
           <el-select clearable filterable v-model='searchForm.providerCode' placeholder='请选择供应商'>
@@ -35,12 +35,12 @@
     </div>
 
     <div style="margin-top: 15px">
-      <div style="float: left">
+      <!-- <div style="float: left"> -->
         <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
-      </div>
+      <!-- </div>
       <div style="float: right">
         <el-button icon='el-icon-d-arrow-right' style="margin-center: 10px" plain type="primary" @click="gotoattrmgnt">设备属性管理</el-button>
-      </div>
+      </div> -->
     </div>
     <!-- <hr/> -->
     <!-- <el-table ref='deviceTable' :data='tableData' v-loading='loading' max-height='560' @row-dblclick='editDevicedbl' @row-click='checkrow' @selection-change='getSelections' element-loading-text='拼命加载中' style='width: 99%'> -->
@@ -66,7 +66,7 @@
             @row-dblclick='editDevicedbl'>
             <!-- style = 'color: #0078F4;'  -->
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-            <el-table-column prop='typeCode' label='设备编码'>
+            <el-table-column prop='typeCode' label='设备主数据编码' width="180px">
               <template slot-scope="scope">
                 <!-- <div style= 'border-left: 1px solid #ebeef5; padding-left: 25px'> -->
                 <!-- <i class='fa fa-cog' style="float: left; color: #66b1ff"></i> -->
@@ -76,17 +76,17 @@
                 <!-- </div> -->
               </template>
             </el-table-column>
-            <el-table-column prop='typeModel' label='设备型号' >
+            <el-table-column prop='typeModel' label='设备型号'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeModel, searchForm.typeModel)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeName' label='设备名称' >
+            <el-table-column prop='typeName' label='设备名称'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeName, searchForm.typeName)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述' >
+            <el-table-column prop='typeDesc' label='设备描述'>
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeDesc, searchForm.typeDesc)"></p>
               </template>
@@ -99,10 +99,10 @@
                 </div>
               </template>
             </el-table-column> -->
-            <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
-            <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
+            <el-table-column prop='hardwareVersion' label='硬件版本'></el-table-column>
+            <el-table-column prop='softwareVersion' label='软件版本'></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-            <el-table-column prop='providerName' label='供应商' ></el-table-column>
+            <el-table-column prop='providerName' label='供应商'></el-table-column>
             <!-- <el-table-column label='供应商' >
               <template slot-scope="scope">
                 <div v-for='provider in providers' v-bind:key='provider.providerCode'>
@@ -111,9 +111,9 @@
               </template>
             </el-table-column> -->
             <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-            <el-table-column prop='createUser' label='创建人' ></el-table-column>
+            <el-table-column prop='createUser' label='创建人'></el-table-column>
             <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-            <el-table-column prop='updateUser' label='修改人' ></el-table-column>
+            <el-table-column prop='updateUser' label='修改人'></el-table-column>
             <el-table-column label='操作'>
               <template slot-scope='scope'>
                 <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -125,22 +125,22 @@
         </template>
       </el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备编码'>
+      <el-table-column prop='typeCode' label='设备主数据编码' width="180px" sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeCode, searchForm.typeCode)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeModel' label='设备型号' >
+      <el-table-column prop='typeModel' label='设备型号' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeModel, searchForm.typeModel)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeName' label='设备名称' >
+      <el-table-column prop='typeName' label='设备名称' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeName, searchForm.typeName)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' >
+      <el-table-column prop='typeDesc' label='设备描述' sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeDesc, searchForm.typeDesc)"></p>
         </template>
@@ -153,10 +153,10 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='hardwareVersion' label='硬件版本' ></el-table-column>
-      <el-table-column prop='softwareVersion' label='软件版本' ></el-table-column>
+      <el-table-column prop='hardwareVersion' label='硬件版本' sortable></el-table-column>
+      <el-table-column prop='softwareVersion' label='软件版本' sortable></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
-      <el-table-column prop='providerName' label='供应商' ></el-table-column>
+      <el-table-column prop='providerName' label='供应商' sortable></el-table-column>
       <!-- <el-table-column label='供应商' >
         <template slot-scope="scope">
           <div v-for='provider in providers' v-bind:key='provider.providerCode'>
@@ -164,10 +164,10 @@
           </div>
         </template>
       </el-table-column> -->
-      <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-      <el-table-column prop='createUser' label='创建人' ></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' ></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
           <!-- <el-button type='text' size = 'mini' icon='el-icon-document' @click='viewProvider(scope.row)'></el-button> -->
@@ -203,6 +203,7 @@ import {
   getAllProviders, // 查询所有供应商方法
   getDeviceCategories // 查询所有设备分类
 } from '@/views/MdmMgmt/apis/index'
+import { addEventHandler } from '@/assets/js/util'
 
 export default {
   data () {
@@ -503,23 +504,12 @@ export default {
         return t
       }
     },
-    addEventHandler: function (target, type, fn) {
-      if (target.addEventListener) {
-        target.addEventListener(type, fn)
-      } else {
-        target.attachEvent('on' + type, fn)
-      }
-    },
     attatchEventToPager: function (params) {
       const self = this
-      // self.search()
       let input = self.$refs.pager.$el.querySelectorAll('input')[1]
-      // console.log('input:' + input.value)
-      self.addEventHandler(input, 'keyup', function (e) {
-      // console.log('input:' + input.value)
+      addEventHandler(input, 'keyup', function (e) {
         if ((e.keyCode === 13) && (parseInt(input.value) !== self.searchForm.currentPage)) {
-          self.searchForm.currentPage = parseInt(input.value)
-          self.search()
+          self.currentChange(parseInt(input.value))
         }
       })
     }

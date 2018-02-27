@@ -65,7 +65,7 @@ export default {
       maxlength: 30,
       searchConditionList: {
         'key': '',
-        'currentPage': 1,
+        'pageNo': 1,
         'pageSize': 10
       },
       tableTitleList: [

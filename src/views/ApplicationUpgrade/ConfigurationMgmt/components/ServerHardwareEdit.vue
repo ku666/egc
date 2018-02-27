@@ -5,7 +5,7 @@
     物理网卡1名称？	物理网卡1 MAC？	物理网卡2名称？	物理网卡2 MAC？	硬盘1序列号SN？	硬盘1容量？	硬盘2序列号SN？	硬盘2序列号SN？
     服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
     <el-form :inline="true" :model="auServerDetails">
-      <template v-if=" auServerDetails.courtDto !== null">
+      <template v-if=" auServerDetails.courtDtoList.length !== 0">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].province"></el-input>
         </el-form-item>
@@ -25,7 +25,7 @@
       <el-form-item label="CPU核数" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfCore"></el-input>
       </el-form-item>
-       <el-form-item label="CPU主频（GHz）" :label-width="formLabelWidth">
+      <el-form-item label="CPU主频（GHz）" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.cpuFreq"></el-input>
       </el-form-item>
       <el-form-item label="服务器UUID" :label-width="formLabelWidth">
@@ -41,34 +41,33 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfPhd"></el-input>
       </el-form-item>
 
-
       <template v-if=" auServerDetails.auNetAdapters !== null">
         <div v-for="(detail, index) in auServerDetails.auNetAdapters" :key="detail.uuid">
-        <el-form-item :label="calNameLable(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.name"></el-input>
-        </el-form-item>
-        <el-form-item :label="calMacLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.mac"></el-input>
-        </el-form-item>
+          <el-form-item :label="calNameLable(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.name"></el-input>
+          </el-form-item>
+          <el-form-item :label="calMacLabel(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.mac"></el-input>
+          </el-form-item>
         </div>
-       </template>
-       <template v-if=" auServerDetails.auPhds !== null">
+      </template>
+      <template v-if=" auServerDetails.auPhds !== null">
         <div v-for="(item, index) in auServerDetails.auPhds" :key="index">
           <el-form-item :label="calSNLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.serialNo"></el-input>
-        </el-form-item>
-        <el-form-item :label="calSpaceTtotalLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.spaceTotal"></el-input>
-        </el-form-item>
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.serialNo"></el-input>
+          </el-form-item>
+          <el-form-item :label="calSpaceTtotalLabel(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.spaceTotal"></el-input>
+          </el-form-item>
         </div>
-       </template>
-       <el-form-item label="固资编号" :label-width="formLabelWidth">
+      </template>
+      <el-form-item label="固资编号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.aeestNo"></el-input>
       </el-form-item>
       <el-form-item label="管理IP" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.mgmtIp"></el-input>
       </el-form-item>
-       <el-form-item label="服务器用途" :label-width="formLabelWidth">
+      <el-form-item label="服务器用途" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.roles" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="物理机房" :label-width="formLabelWidth">
@@ -80,7 +79,7 @@
       <el-form-item label="安装的机柜位置（U）" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.cabU" :maxlength="maxlength"></el-input>
       </el-form-item>
-       <el-form-item label="运行状态" :label-width="formLabelWidth">
+      <el-form-item label="运行状态" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.status"></el-input>
       </el-form-item>
       <el-form-item label="维护人" :label-width="formLabelWidth">
@@ -98,30 +97,32 @@
 
       <template v-if="auServerDetails.extDataList">
         <el-form-item :label="item.fieldName" v-for="item in auServerDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
-      </el-form-item>
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
       </template>
 
       <div style="text-align: center">
         <el-button @click="callBackSaveEvent" class="action-btn" type="primary">保 存</el-button>
 
-        <el-popover
-            ref="newCIEventPop"
-            visible="showAddNewCIPop"
-            placement="right"
-            width="160"
-            :hide="clearData"
-            v-model="showAddNewEvent">
+        <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
+          <div>
             <div>
-              <div><el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input></div>
-              <div class="margin-top-5"><el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input></div>
+              <el-input :autofocus="true" placeholder="请输入新增项名称" size="small" v-model="fieldName"></el-input>
             </div>
-            <div class="text-right margin-top-5">
-              <el-button size="mini" type="text" @click="clearData">取消</el-button>
-              <el-button type="primary" size="mini" @click="addNewEvent" >添加</el-button>
+            <div class="margin-top-5">
+              <el-input placeholder="请输入新增项值" size="small" v-model="fieldValue"></el-input>
             </div>
-          </el-popover>
-      <a v-popover:newCIEventPop><span><el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button></span></a>
+          </div>
+          <div class="text-right margin-top-5">
+            <el-button size="mini" type="text" @click="clearData">取消</el-button>
+            <el-button type="primary" size="mini" @click="addNewEvent">添加</el-button>
+          </div>
+        </el-popover>
+        <a v-popover:newCIEventPop>
+          <span>
+            <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
+          </span>
+        </a>
       </div>
 
     </el-form>
@@ -183,12 +184,20 @@ export default {
     },
     // 校验数据是否更改
     validateDetailsChanged () {
-      if (this.tempRemark === this.auServerDetails.remark && this.tempFunctionName === this.auServerDetails.roles &&
-          this.tempDeployment === this.auServerDetails.deployment && this.tempDeployment === this.auServerDetails.deployment &&
-          this.tempCabinet === this.auServerDetails.cabinet && this.tempCabu === this.auServerDetails.cabU &&
-          this.tempAeestNo === this.auServerDetails.aeestNo && this.tempMgmtIp === this.auServerDetails.mgmtIp &&
-          this.tempOperator === this.auServerDetails.operator && this.tempServiceLevel === this.auServerDetails.serviceLevel &&
-          this.tempServiceDuring === this.auServerDetails.serviceDuring && this.tempExtDataList === this.auServerDetails.extDataList) {
+      if (
+        this.tempRemark === this.auServerDetails.remark &&
+        this.tempFunctionName === this.auServerDetails.roles &&
+        this.tempDeployment === this.auServerDetails.deployment &&
+        this.tempDeployment === this.auServerDetails.deployment &&
+        this.tempCabinet === this.auServerDetails.cabinet &&
+        this.tempCabu === this.auServerDetails.cabU &&
+        this.tempAeestNo === this.auServerDetails.aeestNo &&
+        this.tempMgmtIp === this.auServerDetails.mgmtIp &&
+        this.tempOperator === this.auServerDetails.operator &&
+        this.tempServiceLevel === this.auServerDetails.serviceLevel &&
+        this.tempServiceDuring === this.auServerDetails.serviceDuring &&
+        this.tempExtDataList === this.auServerDetails.extDataList
+      ) {
         return false
       }
       return true
@@ -198,12 +207,14 @@ export default {
       if (this.fieldName.trim() === '') {
         this.$message.error('请输入新增项名称')
       } else {
-        // var extDataList = this.osDetails.extDataList
-        console.info(JSON.stringify(this.auServerDetails))
-        console.log('this.osDetails.extDataList --> ' + this.auServerDetails.extDataList)
-        if (this.auServerDetails.extDataList) {
-          this.auServerDetails.extDataList.push({'fieldName': this.fieldName, 'fieldValue': this.fieldValue})
+        if (this.auServerDetails.extDataList === null) {
+          this.auServerDetails.extDataList = []
         }
+        this.auServerDetails.extDataList.push({
+          fieldName: this.fieldName,
+          fieldValue: this.fieldValue
+        })
+        console.info(JSON.stringify(this.auServerDetails))
       }
     },
     clearData () {

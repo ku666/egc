@@ -157,6 +157,9 @@
       userGroupCreate
     },
     methods: {
+      initData () {
+        this.searchText = ''
+      },
       getUserGroupListTable () {
         getUserGroupList(this.query)
           .then(
@@ -201,6 +204,7 @@
               console.log('错误：' + error)
             }
           )
+        this.initData()
       },
       filterNode (value, data) {
         if (!value) return true
@@ -213,6 +217,8 @@
       handleFilterReset () {
         this.searchText = ''
         this.query.userGroupName = ''
+        this.userType = ''
+        this.query.userType = ''
         this.getUserGroupListTable()
       },
       handleCreate () {

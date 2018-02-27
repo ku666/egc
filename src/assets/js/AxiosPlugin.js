@@ -12,13 +12,14 @@ const Axios = axios.create({
 // 添加请求拦截器
 Axios.defaults.headers['Cache-Control'] = 'no-cache'
 Axios.defaults.headers['Pragma'] = 'no-cache'
+Axios.defaults.headers['Expires'] = '-1'
 
 Axios.interceptors.request.use(config => {
   // 用户登录后,存储token，发送请求时，设置token sessionStorage.token
   if (sessionStorage.token) {
     config.headers.Authorization = sessionStorage.token
-    config.headers.FrontType = 'egc-admin-ui'
   }
+  config.headers.FrontType = 'egc-admin-ui'
   if (config.method === 'get') {
     config.params = {
       _t: Date.parse(new Date()) / 1000,

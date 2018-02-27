@@ -3,46 +3,38 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="databaseListData" stripe border>
-            <el-table-column  type="index" label="序号" width="50" v-loading="loading">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" width="140" align="center">
-              <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                </el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                </el-button>
-                <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                </el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+    <div class="border-divide"></div>
+    <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+      <div style="margin-top: 15px">
+        <el-table :data="databaseListData" stripe v-loading="loading" height="680">
+          <el-table-column type="index" label="序号" width="50">
+          </el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="操作" width="140" align="center">
+            <template slot-scope="scope">
+              <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+              </el-button>
+              <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+              </el-button>
+              <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
+              </el-button>
+              <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
         <div>
-          <div>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
           </el-pagination>
-          </div>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <database-details :databaseDetails="databaseDetails"></database-details >
+        <database-details :databaseDetails="databaseDetails"></database-details>
       </el-dialog>
     </div>
     <div>
@@ -64,7 +56,14 @@ import databaseDetails from './components/DatabaseDetails'
 import databaseEdit from './components/DatabaseEdit'
 import databaseHistory from './components/DatabaseHistory'
 
-import { getDatabaseInfoByPage, getDatabaseDetails, updateDatabaseInfo, getDatabaseHistoryList, syncDatabaseData, downloadResultFile } from './apis/index'
+import {
+  getDatabaseInfoByPage,
+  getDatabaseDetails,
+  updateDatabaseInfo,
+  getDatabaseHistoryList,
+  syncDatabaseData,
+  downloadResultFile
+} from './apis/index'
 export default {
   components: {
     searchCondition,
@@ -92,12 +91,12 @@ export default {
       syncDataStatus: '',
       loading: true,
       searchConditionList: {
-        'city': '',
-        'condition': '',
-        'currentPage': 1,
-        'district': '',
-        'pageSize': 10,
-        'province': ''
+        city: '',
+        condition: '',
+        currentPage: 1,
+        district: '',
+        pageSize: 10,
+        province: ''
       },
       defaultProps: {
         label: 'name',
@@ -109,35 +108,43 @@ export default {
           colName: '省（直辖市）',
           prop: 'courtDto.province',
           width: 120
-        }, {
+        },
+        {
           colName: '市',
           prop: 'courtDto.city',
           width: 100
-        }, {
+        },
+        {
           colName: '区',
           prop: 'courtDto.district',
           width: 100
-        }, {
+        },
+        {
           colName: '小区名称',
           prop: 'courtDto.name',
           width: 120
-        }, {
+        },
+        {
           colName: '数据库名称',
           prop: 'name',
           width: 160
-        }, {
+        },
+        {
           colName: '数据库版本',
           prop: 'version',
           width: 120
-        }, {
+        },
+        {
           colName: '数据库安装路径',
           prop: 'path',
           width: 240
-        }, {
+        },
+        {
           colName: '服务器主机名称',
           prop: 'server.name',
           width: 220
-        }, {
+        },
+        {
           colName: '描述',
           prop: 'remark'
         }
@@ -154,20 +161,20 @@ export default {
       if (type === 'search') {
         this.loading = true
         getDatabaseInfoByPage(params)
-        .then(
-          function (result) {
-            console.log('database by page --- > ' + JSON.stringify(result))
-            this.databaseListData = result.dbmsList
-            this.total = result.pageCount
-            this.loading = false
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-            this.loading = false
-          }.bind(this)
-        )
+          .then(
+            function (result) {
+              console.log('database by page --- > ' + JSON.stringify(result))
+              this.databaseListData = result.dbmsList
+              this.total = result.pageCount
+              this.loading = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+              this.loading = false
+            }.bind(this)
+          )
       } else if (type === 'download') {
         let downloadCls = 4
         downloadResultFile(params, downloadCls)
@@ -192,14 +199,14 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('check rowData -- >' + eachRowUUID)
       getDatabaseDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log(result)
-              this.databaseDetails = result.auDbms
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
+        .then(
+          function (result) {
+            console.log(result)
+            this.databaseDetails = result.auDbms
+            this.dialogDetailsVisible = true
+          }.bind(this)
+        )
+        .catch()
     },
 
     // 编辑
@@ -210,18 +217,19 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getDatabaseDetails(eachRowUUID)
-          .then(
-            function (result) {
-              this.databaseEditDetails = result.auDbms
-              console.log('edit each database details --- >  ' + JSON.stringify(this.databaseEditDetails))
-              this.dialogEditVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.databaseEditDetails = result.auDbms
+            console.log(
+              'edit each database details --- >  ' +
+                JSON.stringify(this.databaseEditDetails)
+            )
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 编辑
@@ -238,16 +246,14 @@ export default {
                 type: 'success',
                 duration: 2000
               })
-            // 再次加载列表的数据
+              // 再次加载列表的数据
               this.loadData()
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 更新
@@ -259,11 +265,13 @@ export default {
       syncDatabaseData(eachRowUUID)
         .then(
           function (result) {
-            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            console.log(
+              'refresh middleware result -- > ' + JSON.stringify(result)
+            )
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
-            // 加载数据
+              // 加载数据
               this.loadData()
               this.$message({
                 message: '刷新成功',
@@ -277,12 +285,10 @@ export default {
             }
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-            this.synDataLoading = false
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+          this.synDataLoading = false
+        })
     },
 
     // 历史记录
@@ -292,17 +298,15 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
       getDatabaseHistoryList(eachRowUUID)
-          .then(
-            function (result) {
-              this.databaseHistoryData = result.auServersHisList
-              this.dialogHistoryVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            this.databaseHistoryData = result.auServersHisList
+            this.dialogHistoryVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
 
     // 初始加载
@@ -326,13 +330,12 @@ export default {
 
     // 改变分页大小
     handleSizeChange (val) {
-      this.searchConditionList.currentPage = val
+      this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.pageSize = val
+      this.searchConditionList.page = val
       this.loadData()
     }
   },
@@ -343,5 +346,5 @@ export default {
 </script>
 
 <style scoped>
-@import "assets/css/upgrademgmt.less"
+@import 'assets/css/upgrademgmt.less';
 </style>

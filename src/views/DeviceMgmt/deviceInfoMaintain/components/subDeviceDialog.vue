@@ -8,8 +8,7 @@
                         code="deviceTypeDesc"
                         ref="deviceTypeDesc"
                         :initValue="childDeviceData.deviceTypeDesc"
-                        :disabled='true'
-                        :required="true">
+                        :disabled='true'>
             </select-box>
           </div>
         </el-col>
@@ -19,8 +18,7 @@
                         code="providerCode"
                         ref="providerCode"
                         :initValue="childDeviceData.providerCode"
-                        :disabled='true'
-                        :required="true">
+                        :disabled='true'>
             </select-box>
           </div>
         </el-col>
@@ -31,7 +29,6 @@
                        ref="macAddress"
                        :value="childDeviceData.macAddress"
                        :disabled='true'
-                       :required="true"
                        :maxlength=20>
             </input-box>
           </div>
@@ -113,7 +110,6 @@
             <select-box title="网关服务标识"
                         code="gatewayId"
                         ref="gatewayId"
-                        :required="true"
                         :disabled='true'
                         :initValue="childDeviceData.gatewayId">
             </select-box>
@@ -195,23 +191,20 @@
             <inputBox title="组织ID"
                       code="orgId"
                       ref="orgId"
-                      :required="true"
                       :value="childDeviceData.orgId"
                       :disabled=true>
             </inputBox>
           </div>
         </el-col>
-        <el-col :span="12">
+        <el-col :span="6">
           <div class="grid-content bg-purple">
             <input-box style="margin-right: 20px"
                        title="组织名称"
                        ref="orgName"
                        code="orgName"
-                       :required="true"
                        :value="childDeviceData.orgName"
                        :disabled=true>
             </input-box>
-            <el-button plain :disabled='true'>选择组织</el-button>
           </div>
         </el-col>
         <el-col :span="6">

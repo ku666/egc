@@ -4,10 +4,10 @@
       <search-condition @handleFilterEvent="_handleFilter" :searchConditionList="searchConditionList"></search-condition>
     </div>
     <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24"  class="flex-1 flex-c">
+      <el-col :span="24" class="flex-1 flex-c">
         <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softDispatchHisList" stripe border>
-            <el-table-column  type="index" label="序号" width="50">
+          <el-table :data="softDispatchHisList" stripe border v-loading="synDataLoading">>
+            <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
             </el-table-column>
@@ -21,15 +21,8 @@
         </div>
         <div>
           <div>
-            <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-          </el-pagination>
+            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+            </el-pagination>
           </div>
         </div>
       </el-col>
@@ -64,111 +57,78 @@ export default {
       softDispDetails: undefined,
       osHistoryData: undefined,
       synDataLoading: false,
-      syncDataStatus: '',
       tableTitleList: [
         {
           colName: '下发日期/时间',
           prop: 'dispatchStartTime',
           width: 120
-        }, {
+        },
+        {
           colName: '软件包名称',
           prop: 'packageName',
           width: 100
-        }, {
+        },
+        {
           colName: '软件包版本',
           prop: 'version',
           width: 100
-        }, {
+        },
+        {
           colName: '省（直辖市）',
           prop: 'province',
           width: 120
-        }, {
+        },
+        {
           colName: '市',
           prop: 'city',
           width: 120
-        }, {
+        },
+        {
           colName: '区',
           prop: 'district',
           width: 120
-        }, {
+        },
+        {
           colName: '目标小区名称',
           prop: 'courtName',
           width: 180
-        }, {
+        },
+        {
           colName: '目标服务器名称',
           prop: 'hostName',
           width: 120
-        }, {
+        },
+        {
           colName: '目标路径',
           prop: 'path',
           width: 150
-        }, {
+        },
+        {
           colName: '操作发起人',
           prop: 'dispatcher'
-        }, {
+        },
+        {
           colName: '备注',
           prop: 'remark'
         }
       ],
       detailsTitle: '查看详情',
       searchConditionList: {
-        'city': '',
-        'district': '',
-        'endDate': '',
-        'keyWord': '',
-        'packageName': '',
-        'pageNo': 1,
-        'pageSize': 10,
-        'province': '',
-        'startDate': '',
-        'version': ''
+        city: '',
+        district: '',
+        endDate: '',
+        keyWord: '',
+        packageName: '',
+        pageNo: 1,
+        pageSize: 10,
+        province: '',
+        startDate: '',
+        version: ''
       }
     }
   },
   methods: {
-    // 查询
-    _handleFilter (params, type) {
-      console.log('===========type====== ' + type)
-      getDispatchHisByPage(params)
-        .then(
-          function (result) {
-            console.log('get data by page')
-            this.softDispatchHisList = result.dataList
-            this.total = result.pageCount
-          }.bind(this)
-        ).catch(
-          function (error) {
-            this.$message({
-              message: error,
-              center: true,
-              showClose: true,
-              type: 'error',
-              duration: 2000
-            }).bind(this)
-            console.log(error)
-          }
-        )
-    },
-
-    // 查看软件下发每条详细信息
-    _handleCheckDetails (rowIdx) {
-      this.dialogStatus = '软件下发历史信息详情'
-      var rowData = this.softDispatchHisList[rowIdx]
-      var eachRowUUID = rowData.uuid
-      console.log('check rowData -- >' + eachRowUUID)
-      getDispatchHisDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log(result)
-              this.softDispDetails = result
-              console.log('dispatch history details --- > ' + JSON.stringify(this.softDispDetails, null, ' '))
-              this.dialogDetailsVisible = true
-            }.bind(this)
-          )
-          .catch()
-    },
-
-    // 初始加载软件下发历史的信息
+    // 加载软件下发历史的信息
     loadData () {
       getDispatchHisByPage(this.searchConditionList)
         .then(
@@ -177,26 +137,46 @@ export default {
             this.total = result.pageCount
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
-
+    // 查询
+    _handleFilter () {
+      this.loadData()
+    },
+    // 软件下发详情
+    _handleCheckDetails (rowIdx) {
+      this.dialogStatus = '软件下发历史信息详情'
+      var rowData = this.softDispatchHisList[rowIdx]
+      var eachRowUUID = rowData.uuid
+      console.log('check rowData -- >' + eachRowUUID)
+      getDispatchHisDetails(eachRowUUID)
+        .then(
+          function (result) {
+            this.softDispDetails = result
+            console.log(
+              'dispatch history details --- > ' +
+                JSON.stringify(this.softDispDetails, null, ' ')
+            )
+            this.dialogDetailsVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     // 改变分页大小
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
     },
-
     // 跳转页数
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
     }
   },
-
   mounted () {
     this.loadData()
   }
@@ -204,6 +184,6 @@ export default {
 </script>
 
 <style scoped>
- /* @import "assets/css/softwaredispatch.less" */
- @import "../ConfigurationMgmt/assets/css/upgrademgmt.less"
+/* @import "assets/css/softwaredispatch.less" */
+@import '../ConfigurationMgmt/assets/css/upgrademgmt.less';
 </style>

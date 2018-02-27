@@ -62,7 +62,7 @@ export default {
           {
             id: null,
             title: '设备主数据',
-            url: '/mdmmgmt/devicecategorylist',
+            url: '/mdmmgmt/device',
             icon: null,
             submenus: null,
             items: null

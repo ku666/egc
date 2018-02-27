@@ -8,7 +8,7 @@
       <el-tab-pane label="设备基本信息" name = 'basic'>
         <div style="padding-left: 30px">
         <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
-          <el-form-item label='设备编码' prop='typeCode'>
+          <el-form-item label='设备主数据编码' prop='typeCode'>
             <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='设备名称' prop='typeName'>
@@ -197,6 +197,9 @@ export default {
       this.deviceCategoryDetailVisible = true
       this.viewFlagParent = false
       this.getAllAttr()
+      this.activeTab = 'basic'
+      this.selectAttr = []
+      this.deviceSaved = false
       // this.$parent.getParents()
     },
     // viewDeviceCategoryDialog: function (categoryDetail = {}) {
@@ -246,6 +249,7 @@ export default {
             this.$parent.getParents()
             this.viewFlagParent = true
             this.deviceSaved = true
+            this.getDeviceAttr()
             this.$message({
               message: '设备类别保存成功!',
               type: 'success'
@@ -265,9 +269,10 @@ export default {
       batchInsert({'typeUUID': this.deviceCategoryDetail.uuid, 'value': this.selectAttr})
       .then(res => {
         this.$parent.search({})
-        this.getDeviceAttr()
         this.deviceCategoryDetailVisible = false
         this.activeTab = 'basic'
+        this.selectAttr = []
+        this.deviceSaved = false
         this.$message({
           message: '设备类别属性保存成功!',
           type: 'success'

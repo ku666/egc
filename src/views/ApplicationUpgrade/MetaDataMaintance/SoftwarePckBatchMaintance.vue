@@ -1,52 +1,46 @@
 <template>
   <div class='ui-common'>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <el-form :inline="true" :model="searchConditionList">
-          <div class="search-container">
-              <el-form-item label="软件包批次名称">
-                <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
-              </el-form-item>
-              <div class="btn-container">
-                <el-form-item>
-                  <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-                  <el-button  type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-                </el-form-item>
-              </div>
-            </div>
-          <div>
-            <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary" >添加</el-button>
+    <div class="flex-c flex-1">
+      <el-form :inline="true" :model="searchConditionList">
+        <div class="search-container">
+          <el-form-item label="软件包批次名称">
+            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
+            </el-form-item>
+          </div>
         </div>
-        </el-form>
-        <div style="margin-top: 20px" class="flex-1">
-              <el-table :data="softwareBatchDataList" stripe border v-loading="loading">
-                <el-table-column  type="index" label="序号" width="50">
-                </el-table-column>
-                <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-                </el-table-column>
-                <el-table-column label="操作" width="80" align="center">
-                  <template slot-scope="scope">
-                    <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                    </el-button>
-                    <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
-                    </el-button>
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
         <div>
-          <el-pagination
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
-              :page-sizes="[10, 20, 50]"
-              :page-size="searchConditionList.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="total">
-          </el-pagination>
+          <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
         </div>
-      </el-col>
-    </el-row>
+      </el-form>
+      <div class="border-divide"></div>
+      <div class="table-container">
+        <div style="margin-top: 15px">
+          <el-table :data="softwareBatchDataList" stripe border v-loading="loading" height="680">
+            <el-table-column type="index" label="序号" width="50">
+            </el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+            </el-table-column>
+            <el-table-column label="操作" width="80" align="center">
+              <template slot-scope="scope">
+                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+                </el-button>
+                <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+      </div>
+      <div>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
+      </div>
+    </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
       <software-pck-batch-edit :softwareBatchDetails="softwareBatchDetails" @saveSoftwareBatchEvent="_updateSoftwareBatchInfo"></software-pck-batch-edit>
     </el-dialog>
@@ -77,7 +71,13 @@
 
 <script>
 import SoftwarePckBatchEdit from './components/SoftwarePckBatchEdit'
-import { getSoftwareBatchByPage, getSoftwareBatchDetails, registerSoftwareBatchs, updateSoftwareBatch, deleteSoftwareBatchs } from './apis/index'
+import {
+  getSoftwareBatchByPage,
+  getSoftwareBatchDetails,
+  registerSoftwareBatchs,
+  updateSoftwareBatch,
+  deleteSoftwareBatchs
+} from './apis/index'
 export default {
   components: {
     SoftwarePckBatchEdit
@@ -99,15 +99,16 @@ export default {
           colName: '软件包批次名称',
           prop: 'name',
           width: 700
-        }, {
+        },
+        {
           colName: '备注',
           prop: 'remark'
         }
       ],
       searchConditionList: {
-        'currentPage': 1,
-        'pageSize': 10,
-        'codeName': ''
+        currentPage: 1,
+        pageSize: 10,
+        codeName: ''
       },
       registerParaList: {
         name: '',
@@ -115,7 +116,11 @@ export default {
       },
       rules: {
         name: [
-          { required: true, message: '请输入软件包批次名称', trigger: 'blur,change' }
+          {
+            required: true,
+            message: '请输入软件包批次名称',
+            trigger: 'blur,change'
+          }
         ]
       }
     }
@@ -132,12 +137,10 @@ export default {
             this.loading = false
           }.bind(this)
         )
-        .catch(
-          function (error) {
-            this.loading = false
-            console.log(error)
-          }
-        )
+        .catch(function (error) {
+          this.loading = false
+          console.log(error)
+        })
     },
     _handleFilter () {
       this.loadData()
@@ -149,23 +152,24 @@ export default {
     _registerSoftwareBatchs (formName) {
       this.$refs[formName].validate(valid => {
         if (valid) {
-          registerSoftwareBatchs(this.registerParaList).then((res) => {
-            console.log('===>' + res)
-            this.beforeCloseDialog()
-            this.$message({
-              message: '注册成功',
-              type: 'success'
+          registerSoftwareBatchs(this.registerParaList)
+            .then(res => {
+              console.log('===>' + res)
+              this.beforeCloseDialog()
+              this.$message({
+                message: '注册成功',
+                type: 'success'
+              })
+              this.loadData()
             })
-            this.loadData()
-          }).catch(
-            function (error) {
+            .catch(function (error) {
               console.log(error)
             })
         }
       })
     },
     _handleClearQuery () {
-      this.searchConditionList = { 'currentPage': 1, 'pageSize': 10, 'codeName': '' }
+      this.searchConditionList = { currentPage: 1, pageSize: 10, codeName: '' }
       this.loadData()
     },
     beforeCloseDialog () {
@@ -179,18 +183,16 @@ export default {
       var eachRowUUID = rowData.uuid
       console.log('edit rowData -- >' + eachRowUUID)
       getSoftwareBatchDetails(eachRowUUID)
-          .then(
-            function (result) {
-              console.log('each software details: --> ' + JSON.stringify(result))
-              this.softwareBatchDetails = result
-              this.dialogEditVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+        .then(
+          function (result) {
+            console.log('each software details: --> ' + JSON.stringify(result))
+            this.softwareBatchDetails = result
+            this.dialogEditVisible = true
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     // 编辑
     _updateSoftwareBatchInfo (params) {
@@ -202,11 +204,10 @@ export default {
             // 加载数据
             this.loadData()
           }.bind(this)
-        ).catch(
-          function (error) {
-            console.log(error)
-          }
         )
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     // 删除
     _handleDeleteData (rowIdx) {
@@ -216,24 +217,21 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      })
-      .then(() => {
+      }).then(() => {
         deleteSoftwareBatchs(codeTypeUuid)
-        .then(
-          function (result) {
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            })
-            // 加载数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
+          .then(
+            function (result) {
+              this.$message({
+                message: '删除成功',
+                type: 'success'
+              })
+              // 加载数据
+              this.loadData()
+            }.bind(this)
+          )
+          .catch(function (error) {
             console.log(error)
-          }
-        )
+          })
       })
     },
     handleSizeChange (val) {
@@ -252,5 +250,5 @@ export default {
 </script>
 
 <style scoped>
- @import "../ConfigurationMgmt/assets/css/upgrademgmt.less";
+@import '../ConfigurationMgmt/assets/css/upgrademgmt.less';
 </style>

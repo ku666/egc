@@ -1,19 +1,19 @@
 <template>
   <div>
     <el-form :inline="true" :model="codeInstDetails">
-        <el-form-item label="代码实例值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.code"></el-input>
-        </el-form-item>
-        <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.instanceName"></el-input>
-        </el-form-item>
-        <el-form-item label="提供商" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" v-model="codeInstDetails.sourceVendor"></el-input>
-        </el-form-item>
-        <el-form-item label="代码值" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.code"></el-input>
-        </el-form-item>
-       <el-form-item label="备注" :label-width="formLabelWidth">
+      <el-form-item label="代码实例值" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="codeInstDetails.code"></el-input>
+      </el-form-item>
+      <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="codeInstDetails.instanceName"></el-input>
+      </el-form-item>
+      <el-form-item label="提供商" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" v-model="codeInstDetails.sourceVendor"></el-input>
+      </el-form-item>
+      <el-form-item label="代码值" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.code"></el-input>
+      </el-form-item>
+      <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="codeInstDetails.remark"></el-input>
       </el-form-item>
 

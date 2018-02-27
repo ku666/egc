@@ -4,12 +4,7 @@ export default {
       'children': [{
         uuid: '235jklgdsj4543',
         name: '1幢'
-      },
-      {
-        uuid: '235jkl54gdsj4543',
-        name: '2幢'
-      }
-      ]
+      }]
     }
     return {
       data: data,
@@ -20,14 +15,9 @@ export default {
   getOrgTreeNextLevel: config => {
     var data = {
       'children': [{
-        uuid: '235jklgdsj4543',
-        name: '1幢'
-      },
-      {
         uuid: '235jkl54gdsj4543',
         name: '2幢'
-      }
-      ]
+      }]
     }
     return {
       data: data,
@@ -66,60 +56,8 @@ export default {
           uuid: '235432432jklgdsj4543',
           name: '1单元'
         }]
-      },
-      {
-        uuid: '235jkl54gdsj4543',
-        name: '2幢',
-        children: [{
-          uuid: '235432435432jklgdsj4543',
-          name: '1单元'
-        }]
-      }
-      ]
-    },
-    {
-      uuid: '234dsgsfd43534',
-      name: '恒大小区二',
-      children: [{
-        uuid: '235jklgdsj4543',
-        name: '1幢',
-        children: [{
-          uuid: '235432432jklgdsj4543',
-          name: '1单元'
-        }]
-      },
-      {
-        uuid: '235jkl54gdsj4543',
-        name: '2幢',
-        children: [{
-          uuid: '235432435432jklgdsj4543',
-          name: '1单元'
-        }]
-      }
-      ]
-    },
-    {
-      uuid: '234dsgsfd43534',
-      name: '恒大小区三',
-      children: [{
-        uuid: '235jklgdsj4543',
-        name: '1幢',
-        children: [{
-          uuid: '235432432jklgdsj4543',
-          name: '1单元'
-        }]
-      },
-      {
-        uuid: '235jkl54gdsj4543',
-        name: '2幢',
-        children: [{
-          uuid: '235432435432jklgdsj4543',
-          name: '1单元'
-        }]
-      }
-      ]
-    }
-    ]
+      }]
+    }]
     return {
       data: {
         pageData: data,
@@ -129,39 +67,24 @@ export default {
       msg: 'success'
     }
   },
+  dataTemp: {
+    data: 'success',
+    code: '0000',
+    msg: 'success'
+  },
   deleteOrg: config => {
-    return {
-      data: 'success',
-      code: '0000',
-      msg: 'success'
-    }
+    return this.dataTemp
   },
   batchDeleteOrg: config => {
-    return {
-      data: 'success',
-      code: '0000',
-      msg: 'success'
-    }
+    return this.dataTemp
   },
   insertOrg: config => {
-    return {
-      data: 'success',
-      code: '0000',
-      msg: 'success'
-    }
+    return this.dataTemp
   },
   updateOrg: config => {
-    return {
-      data: 'success',
-      code: '0000',
-      msg: 'success'
-    }
+    return this.dataTemp
   },
   uploadOrg: config => {
-    return {
-      data: 'success',
-      code: '0000',
-      msg: 'success'
-    }
+    return this.dataTemp
   }
 }

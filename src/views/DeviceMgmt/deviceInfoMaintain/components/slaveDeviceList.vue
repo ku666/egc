@@ -51,6 +51,12 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
+          prop="softwareVersion"
+          label="软件版本"
+          width="100">
+        </el-table-column>
+        <el-table-column
+          :resizable="false"
           property="updateTime"
           show-overflow-tooltip
           label="更新时间">

@@ -127,7 +127,8 @@
           prop: 'childrenDepartments'
         }, {
           title: '直属用户',
-          prop: 'directUsers'
+          prop: 'directUsers',
+          showTooltip: true
         }],
         listQuery: {
           page: 1,
@@ -196,6 +197,10 @@
               console.log(error)
             }
           )
+        this.initData()
+      },
+      initData () {
+        this.listQuery.q_departName = ''
       },
       loadDepartmentTree () {
         getDepartmentTreeData(this.listQuery)

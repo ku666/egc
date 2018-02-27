@@ -295,6 +295,10 @@ export default {
             console.log(error)
           }
         )
+      this.initData()
+    },
+    initData () {
+      this.listQuery.q_resourceName = ''
     },
     loadSelectData () {
       // 获取资源类型下拉框信息
@@ -385,7 +389,7 @@ export default {
       this.initResourceInfo()  // 调用初始信息
       this.defaultResourceType = this.listQuery.q_resourceType
       if (this.$refs.resourCreateVue) {
-        this.$refs.resourCreateVue.initCreateResource()
+        // this.$refs.resourCreateVue.initCreateResource()
         this.$refs.resourCreateVue.handleChange(this.defaultResourceType)
       }
       this.dialogStatus = '添加资源'

@@ -6,7 +6,7 @@
     服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
 
     <el-form :inline="true" :model="auServerDetails">
-      <template v-if=" auServerDetails.courtDto !== null">
+      <template v-if=" auServerDetails.courtDtoList.length !== 0">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].province"></el-input>
         </el-form-item>
@@ -47,10 +47,10 @@
       <el-form-item label="BIOS版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.biosVersion"></el-input>
       </el-form-item>
-       <el-form-item label="内存容量" :label-width="formLabelWidth">
+      <el-form-item label="内存容量" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfLhd"></el-input>
       </el-form-item>
-       <el-form-item label="硬盘容量" :label-width="formLabelWidth">
+      <el-form-item label="硬盘容量" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.numberOfPhd"></el-input>
       </el-form-item>
       <el-form-item label="固资编号" :label-width="formLabelWidth">
@@ -85,24 +85,24 @@
       </el-form-item>
       <template v-if=" auServerDetails.auNetAdapters !== null">
         <div v-for="(detail, index) in auServerDetails.auNetAdapters" :key="detail.uuid">
-        <el-form-item :label="calNameLable(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.name"></el-input>
-        </el-form-item>
-        <el-form-item :label="calMacLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input"  :disabled="isInptDisabled" v-model="detail.mac"></el-input>
-        </el-form-item>
+          <el-form-item :label="calNameLable(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.name"></el-input>
+          </el-form-item>
+          <el-form-item :label="calMacLabel(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="detail.mac"></el-input>
+          </el-form-item>
         </div>
-       </template>
-       <template v-if=" auServerDetails.auPhds !== null">
+      </template>
+      <template v-if=" auServerDetails.auPhds !== null">
         <div v-for="(item, index) in auServerDetails.auPhds" :key="index">
           <el-form-item :label="calSNLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.serialNo"></el-input>
-        </el-form-item>
-        <el-form-item :label="calSpaceTtotalLabel(index)" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.spaceTotal"></el-input>
-        </el-form-item>
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.serialNo"></el-input>
+          </el-form-item>
+          <el-form-item :label="calSpaceTtotalLabel(index)" :label-width="formLabelWidth">
+            <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="item.spaceTotal"></el-input>
+          </el-form-item>
         </div>
-       </template>
+      </template>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.remark"></el-input>
       </el-form-item>

@@ -14,37 +14,30 @@
         <div class="btn-container">
           <el-form-item>
             <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>
-            <el-button type="primary" @click="_callHandleFilter" class="action-btn">搜索</el-button>
+            <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
             <el-button @click="_selectOrg" class="action-btn" type="primary" :disabled="disabled">选择组织</el-button>
           </el-form-item>
         </div>
       </div>
     </el-form>
     <div style="margin-top: 20px">
-      <el-collapse v-model="activeNames" accordion  @change="handleChange" >
+      <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-          <el-table
-            ref="test0"
-            :data="item.packageDataList"
-            tooltip-effect="dark"
-            style="width: 100%"
-            @selection-change="handleSelectionChange"
-            stripe border>
+          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
             <el-table-column type="selection" width="55"></el-table-column>
-            <el-table-column  type="index" label="编号" width="50"></el-table-column>
+            <el-table-column type="index" label="编号" width="50"></el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>
     </div>
-    <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
-      <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
+    <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible" :before-close="resetOrgData">
+      <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt" ref="courts"></org-tree>
     </el-dialog>
-    <el-dialog :title="dispatchTittle" :visible.sync="downloadResultVisible">
-      <dispatched-software-results @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
+    <el-dialog :title="dialogTittle" :visible.sync="downloadResultVisible">
+      <dispatched-software-results :dispResultErrMsg="dispResultErrMsg" @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
     </el-dialog>
   </div>
-
 
 </template>
 
@@ -56,6 +49,7 @@ import {
   downloadDispatchResult,
   dispatchSoftwarePackage
 } from './apis/index'
+
 export default {
   components: {
     orgTree,
@@ -65,8 +59,8 @@ export default {
     return {
       selectOrgVisible: false,
       downloadResultVisible: false,
-      dialogTittle: '选择组织',
-      dispatchTittle: '下发结果详情',
+      dispResultErrMsg: undefined,
+      dialogTittle: '',
       activeNames: '',
       multipleSelection: [],
       disabled: true,
@@ -76,6 +70,11 @@ export default {
         name: '',
         version: '',
         developer: ''
+      },
+      queryList: {
+        packageName: '',
+        packageProvider: '',
+        packageVersion: ''
       },
       tableTitleList: [
         {
@@ -134,84 +133,27 @@ export default {
   },
   watch: {
     activeNames (newVal, oldValue) {
-      console.log('activeNames newVal --> ' + newVal)
-      console.log('activeNames oldValue --> ' + oldValue)
-      if (newVal === '') {
-        this.loadDataAgain()
-      } else if (newVal !== '' && oldValue !== '') {
-        this.loadDataAgain()
+      this.loadDataAgain()
+      // console.log(this.$refs.softwareTable)
+    },
+
+    multipleSelection (newVal, oldValue) {
+      if (newVal.length === 0) {
+        this.disabled = true
+      } else {
+        this.disabled = false
       }
     }
   },
   methods: {
-    _handleClearQuery () {
-      this.searchCondition = { name: '', version: '', developer: '' }
-    },
-    _callHandleFilter () {
-      console.log('this.searchConDetails is -- >' + JSON.stringify(this.searchCondition))
-    },
-    handleChange (val) {
-      // console.log('active name -- > ' + val)
-      // this.loadDataAgain()
-    },
-    loadDataAgain () {
-      getAllRegisterPackages()
-        .then(
-          function (result) {
-            // console.log('dispatch software packages result === > ' + JSON.stringify(result))
-            this.dispatchDataList = result.testData
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
+    // 加载数据
     loadData () {
-      let queryList = {
-        'packageName': '',
-        'packageProvider': '',
-        'packageVersion': ''
-      }
-      getAllRegisterPackages(queryList)
+      getAllRegisterPackages(this.queryList)
         .then(
           function (result) {
             this.dispatchDataList = result
-            this.activeNames = this.dispatchDataList[0].batchName
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error)
-        })
-    },
-    handleSelectionChange (val) {
-      this.multipleSelection = val
-      this.disabled = false
-      console.log(JSON.stringify(this.multipleSelection))
-    },
-    _selectOrg () {
-      // if (this.multipleSelection.length > 0) {
-      this.selectOrgVisible = true
-      // } else {
-      //   this.$message.error('请选择软件包!')
-      // }
-    },
-    _dispatchSoftwareToCourt (courtList) {
-      this.selectOrgVisible = false
-      // 需要获取当前登录人的信息
-      this.operator = 'SystemAdmin'
-      this.downloadResultVisible = true
-      var appList = []
-      for (let i = 0; i < this.multipleSelection.length; i++) {
-        let element = this.multipleSelection[i]
-        appList.push(element.packageId)
-      }
-      dispatchSoftwarePackage(appList, courtList, this.operator)
-        .then(
-          function (result) {
-            this.dispatchResult = result
             console.log(
-              '_dispatchSoftwareToCourt data === > ' +
-                JSON.stringify(this.dispatchResult, null, ' ')
+              'software paks ----- >  ' + JSON.stringify(this.dispatchDataList)
             )
             this.activeNames = this.dispatchDataList[0].batchName
           }.bind(this)
@@ -220,16 +162,83 @@ export default {
           console.log(error)
         })
     },
-    _downloadDispatchResult () {
-      this.downloadResultVisible = false
-      console.log('download dispath results')
-      downloadDispatchResult()
-        .then(function (result) {
-          this.$message.success('下载成功')
-        })
+    loadDataAgain () {
+      getAllRegisterPackages(this.queryList)
+        .then(
+          function (result) {
+            this.dispatchDataList = result
+          }.bind(this)
+        )
         .catch(function (error) {
           console.log(error)
         })
+    },
+    // 搜索
+    _handleFilter () {
+      console.log(
+        'this.searchConDetails is -- >' + JSON.stringify(this.searchCondition)
+      )
+      this.loadData()
+    },
+    // 清空
+    _handleClearQuery () {
+      this.searchCondition = { name: '', version: '', developer: '' }
+    },
+    handleSelectionChange (val) {
+      this.multipleSelection = val
+      this.disabled = false
+    },
+    // 选择小区
+    _selectOrg () {
+      this.dialogTittle = '小区组织'
+      this.selectOrgVisible = true
+    },
+    // 下发到小区
+    _dispatchSoftwareToCourt (courtList) {
+      this.selectOrgVisible = false
+      // 需要获取当前登录人的信息
+      this.operator = 'SystemAdmin'
+      var appList = []
+      for (let i = 0; i < this.multipleSelection.length; i++) {
+        let element = this.multipleSelection[i]
+        appList.push(element.packageId)
+      }
+      dispatchSoftwarePackage(appList, courtList, this.operator)
+        .then(
+          function (result) {
+            this.dispatchResult = result.checkMsgList
+            if (this.dispatchResult.length === 0) {
+              console.log(
+                '_dispatchSoftwareToCourt data === > ' +
+                  JSON.stringify(this.dispatchResult, null, ' ')
+              )
+              this.activeNames = this.dispatchDataList[0].batchName
+              this.loadData()
+              this.$message.success('下发操作成功, 请查看历史')
+            } else {
+              console.log(JSON.stringify(result))
+              this.downloadResultVisible = true
+              this.dispResultErrMsg = result
+              this.dialogTittle = '错误消息'
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    _downloadDispatchResult (params) {
+      this.downloadResultVisible = false
+      console.log('download dispath results')
+      downloadDispatchResult(params, 50)
+        .then(function (result) {})
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    resetOrgData () {
+      this.selectOrgVisible = false
+      this.$refs.courts._loadALlOrgs()
     }
   },
   mounted () {
@@ -238,17 +247,3 @@ export default {
 }
 </script>
 
-<style scoped>
-/* div.item-container{
-  display: flex;
-}
-.detail-span {
-  width: 200px;
-}
-.ui-common span.sub-title {
-  width: 140px;
-  color: #7b6f6f;
-  font-size: var(--font-size-el-table);
-  padding-top: 13px;
-} */
-</style>

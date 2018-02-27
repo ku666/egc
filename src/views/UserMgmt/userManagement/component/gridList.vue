@@ -12,6 +12,7 @@
       :prop="item.prop"
       :label="item.title"
       :key="index"
+      :show-overflow-tooltip="item.showTooltip"
     >
     </el-table-column>
     <el-table-column
