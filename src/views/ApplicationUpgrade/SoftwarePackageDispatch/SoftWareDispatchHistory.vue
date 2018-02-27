@@ -3,30 +3,35 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConditionList="searchConditionList"></search-condition>
     </div>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="softDispatchHisList" stripe border v-loading="synDataLoading">>
-            <el-table-column type="index" label="序号" width="50">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" width="80">
-              <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+    <div class="border-divide"></div>
+    <div class="flex-1 flex-c">
+      <div style="margin-top: 15px">
+        <el-table :data="softDispatchHisList" stripe v-loading="loading" height="680">
+          <el-table-column type="index" label="序号" width="50">
+          </el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="操作" width="80">
+            <template slot-scope="scope">
+              <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
         <div>
-          <div>
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-          </div>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="searchConditionList.pageNo"
+            :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <soft-ware-dispatch-history-details :softDispDetails="softDispDetails"></soft-ware-dispatch-history-details>
@@ -51,22 +56,21 @@ export default {
       selectOpts: [],
       total: 0,
       dialogStatus: '',
-      addr: '',
+      loading: true,
       dialogDetailsVisible: false,
       softDispatchHisList: undefined,
       softDispDetails: undefined,
       osHistoryData: undefined,
-      synDataLoading: false,
       tableTitleList: [
         {
           colName: '下发日期/时间',
           prop: 'dispatchStartTime',
-          width: 120
+          width: 140
         },
         {
           colName: '软件包名称',
           prop: 'packageName',
-          width: 100
+          width: 180
         },
         {
           colName: '软件包版本',
@@ -133,17 +137,37 @@ export default {
       getDispatchHisByPage(this.searchConditionList)
         .then(
           function (result) {
+            console.log('result - > ' + JSON.stringify(result))
+            this.loading = false
             this.softDispatchHisList = result.dataList
-            this.total = result.pageCount
+            this.total = result.totalCount
           }.bind(this)
         )
         .catch(function (error) {
+          this.loading = true
           console.log(error)
         })
     },
     // 查询
-    _handleFilter () {
-      this.loadData()
+    _handleFilter (params, type) {
+      console.log('type -- > ' + type)
+      if (type === 'search') {
+        this.loading = true
+        getDispatchHisByPage(params)
+          .then(
+            function (result) {
+              this.loading = false
+              this.softDispatchHisList = result.dataList
+              this.total = result.totalCount
+            }.bind(this)
+          )
+          .catch(function (error) {
+            this.loading = true
+            console.log(error)
+          })
+      } else {
+        console.log('begin to download the data!')
+      }
     },
     // 软件下发详情
     _handleCheckDetails (rowIdx) {
@@ -173,7 +197,7 @@ export default {
     },
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.currentPage = val
+      this.searchConditionList.pageNo = val
       this.loadData()
     }
   },
