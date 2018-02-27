@@ -2,35 +2,47 @@ import Vue from 'vue'
 import { Message } from 'element-ui'
 Vue.component(Message.name, Message)
 
-// sessionStorage localStorage
+// getPermission
 export const getPermission = function (userInfo, userResourcePermission) {
   let userRouters = ''
   let uiResources = userInfo.uiResources
-  if (uiResources != null) {
+  if (uiResources !== null && uiResources !== undefined) {
     uiResources.forEach(element => {
-      if (element.url != null && element.url.length > 0) {
+      if (element.url !== undefined && element.url !== null && element.url.length > 0) {
         userRouters = userRouters + '_' + element.url
       }
-      if (element.menus != null) {
-        element.menus.forEach(menu2 => {
-          if (menu2.url != null && menu2.url.length > 0) {
+      if (element.menus !== undefined && element.menus !== null) {
+        element.menus.forEach((menu2) => {
+          if (menu2.url !== undefined && menu2.url !== null && menu2.url.length > 0) {
             userRouters = userRouters + '_' + menu2.url
           }
-          if (menu2.items != null) {
+          if (menu2.items !== undefined && menu2.items !== null) {
             menu2.items.forEach(items2 => {
               // userResourcePermission.push(items2)
               userResourcePermission[items2] = true
             })
           }
-          if (menu2.submenus != null) {
+          if (menu2.submenus !== undefined && menu2.submenus !== null) {
             menu2.submenus.forEach(menu3 => {
-              if (menu3.url != null && menu3.url.length > 0) {
+              if (menu3.url !== undefined && menu3.url !== null && menu3.url.length > 0) {
                 userRouters = userRouters + '_' + menu3.url
               }
-              if (menu3.items != null) {
+              if (menu3.items !== undefined && menu3.items !== null) {
                 menu3.items.forEach(items3 => {
                   // userResourcePermission.push(items3)
                   userResourcePermission[items3] = true
+                })
+              }
+              if (menu3.submenus !== undefined && menu3.submenus !== null) {
+                menu3.submenus.forEach(menu4 => {
+                  if (menu4.url !== undefined && menu4.url !== null && menu4.url.length > 0) {
+                    userRouters = userRouters + '_' + menu4.url
+                  }
+                  if (menu4.items !== undefined && menu4.items !== null) {
+                    menu4.items.forEach(items4 => {
+                      userResourcePermission[items4] = true
+                    })
+                  }
                 })
               }
             })
@@ -40,6 +52,71 @@ export const getPermission = function (userInfo, userResourcePermission) {
     })
   }
   return userRouters
+}
+// getfirstRouters
+export const getfirstRouters = function (userInfo, title) {
+  let firstRouters = ''
+  let uiResources = userInfo.uiResources
+  if (uiResources !== null && uiResources !== undefined) {
+    uiResources.forEach(element => {
+      if (element.title !== undefined && element.title !== null && element.title === title) {
+        if (element.url !== undefined && element.url !== null && element.url.length > 0) {
+          firstRouters = element.url
+        }
+        if (element.menus !== undefined && element.menus !== null) {
+          element.menus.forEach((menu2, i) => {
+            if (i === 0) {
+              if (menu2.url !== undefined && menu2.url !== null && menu2.url.length > 0) {
+                firstRouters = menu2.url
+              }
+              if (menu2.submenus !== undefined && menu2.submenus !== null) {
+                menu2.submenus.forEach((menu3, i) => {
+                  if (i === 0) {
+                    if (menu3.url !== undefined && menu3.url !== null && menu3.url.length > 0) {
+                      firstRouters = menu3.url
+                    }
+                    if (menu3.submenus !== undefined && menu3.submenus !== null) {
+                      menu3.submenus.forEach((menu4, i) => {
+                        if (i === 0) {
+                          if (menu4.url !== undefined && menu4.url !== null && menu4.url.length > 0) {
+                            firstRouters = menu4.url
+                          }
+                        }
+                      })
+                    }
+                  }
+                })
+              }
+            }
+          })
+        }
+      }
+    })
+  }
+  return firstRouters
+}
+
+// getCurrentMenus
+export const getCurrentMenus = function (userInfo, menuTitle) {
+  let uiResources = userInfo.uiResources
+  let currentMenu = null
+  if (uiResources !== null && uiResources !== undefined) {
+    uiResources.forEach(element => {
+      if (element.title !== undefined && element.title !== null && element.title === menuTitle) {
+        currentMenu = element
+        return currentMenu
+      }
+      if (element.menus !== undefined && element.menus !== null) {
+        element.menus.forEach((menu2) => {
+          if (menu2.url !== undefined && menu2.url !== null && menu2.url.length > 0) {
+            currentMenu = menu2
+            return currentMenu
+          }
+        })
+      }
+    })
+  }
+  return currentMenu
 }
 
 // sessionStorage localStorage
@@ -159,32 +236,45 @@ export const dateFormat = function (source, ignoreMinute) {
 // ajax错误处理
 export const catchError = function (error) {
   if (error.response) {
+    let messageInfo = error.response.data.message
+    if (messageInfo === null || messageInfo === '' || messageInfo === undefined) {
+      messageInfo = error.response.data
+    }
     switch (error.response.status) {
       case 400:
         Vue.prototype.$message({
-          message: error.response.data || '请求参数异常',
+          message: messageInfo || '请求参数异常',
           type: 'error'
         })
         break
       case 401:
         // localStorage.removeItem('user')
         Vue.prototype.$message({
-          message: error.response.data || '密码错误或账号不存在！',
-          type: 'warning',
-          onClose: function () {
-            location.reload()
-          }
+          message: messageInfo || '密码错误或账号不存在！',
+          type: 'warning'
         })
         break
       case 403:
         Vue.prototype.$message({
-          message: error.response.data || '无访问权限，请联系企业管理员',
+          message: messageInfo || '无访问权限，请联系企业管理员',
           type: 'warning'
+        })
+        break
+      case 404:
+        Vue.prototype.$message({
+          message: messageInfo || '404错误，访问路径没找到，请联系技术支持',
+          type: 'error'
+        })
+        break
+      case 500:
+        Vue.prototype.$message({
+          message: messageInfo || '500服务器内部错误，请联系技术支持',
+          type: 'error'
         })
         break
       default:
         Vue.prototype.$message({
-          message: error.response.data || '服务端异常，请联系技术支持',
+          message: messageInfo || '服务端异常，请联系技术支持',
           type: 'error'
         })
     }
