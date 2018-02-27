@@ -83,6 +83,7 @@
       // 改变分页大小
       handleSizeChange (val) {
         this.listQueryUserRole.limit = val
+        this.listQueryUserRole.page = 1
         this.listQueryUserRole.userUuid = this.userUuidValue
         this.findUserRoleList(this.listQueryUserRole)
       },

@@ -84,6 +84,7 @@
       // 改变分页大小
       handleSizeChange (val) {
         this.listQuery.limit = val
+        this.listQuery.page = 1
         this.listQuery.userUuid = this.userUuidValue
         this.findUserGroupList(this.listQuery)
       },

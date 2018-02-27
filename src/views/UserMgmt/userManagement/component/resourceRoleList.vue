@@ -89,6 +89,7 @@
       // 改变分页大小
       handleSizeChange (val) {
         this.listQuery.limit = val
+        this.listQuery.page = 1
         this.listQuery.resourceUuid = this.resourceUuidValue
         this.handResourceRoleList(this.listQuery)
       },
