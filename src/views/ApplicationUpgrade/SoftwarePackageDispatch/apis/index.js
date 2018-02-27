@@ -43,7 +43,6 @@ export const downloadDispatchResult = (params1, params2) => {
   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + '    >>>>>>>> the second params2:  --->   ' + params2)
   return Axios.get(BASE_PATH + '/download/resultDownload?condition=' + encodeURI(params1) + '&downloadCls=' + params2, {responseType: 'arraybuffer'}
     ).then(res => {
-      console.log('res.headers --->  ' + JSON.stringify(res.headers))
       let fileName = decodeResHeader(res.headers)
       let blob = new Blob([res.data], { type: 'application/x-xls' })
       if ('msSaveOrOpenBlob' in navigator) {

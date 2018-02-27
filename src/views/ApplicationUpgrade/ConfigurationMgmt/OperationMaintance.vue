@@ -3,36 +3,35 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <el-row v-loading="synDataLoading" class="flex-c" style="height: 100%" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
-      <el-col :span="24" class="flex-1 flex-c">
-        <div style="margin-top: 20px" class="flex-1">
-          <el-table :data="operMainListData" stripe border v-loading="loading">
-            <el-table-column type="index" label="序号" width="50">
-            </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
-            </el-table-column>
-            <el-table-column label="操作" width="140" align="center">
-              <template slot-scope="scope">
-                <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
-                </el-button>
-                <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
-                </el-button>
-                <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
-                </el-button>
-                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                </el-button>
-              </template>
-            </el-table-column>
-          </el-table>
-        </div>
+    <div class="border-divide"></div>
+    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+      <div style="margin-top: 15px">
+        <el-table :data="operMainListData" stripe v-loading="loading" height="680">
+          <el-table-column type="index" label="序号" width="50">
+          </el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          </el-table-column>
+          <el-table-column label="操作" width="140" align="center">
+            <template slot-scope="scope">
+              <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
+              </el-button>
+              <el-button @click="_handleEdit(scope.$index)" type="text" class="el-icon-edit" style="font-size:15px;color: #0078f4" :title="editTitle">
+              </el-button>
+              <el-button @click="_handleSynData(scope.$index)" type="text" class="el-icon-refresh" style="font-size:15px;color: #0078f4" :title="refreshTitle">
+              </el-button>
+              <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+              </el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+      <div>
         <div>
-          <div>
-            <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-            </el-pagination>
-          </div>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
         </div>
-      </el-col>
-    </el-row>
+      </div>
+    </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <operation-maintance-details :operMainDetails="operMainDetails"></operation-maintance-details>

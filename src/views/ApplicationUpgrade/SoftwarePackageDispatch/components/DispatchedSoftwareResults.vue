@@ -19,23 +19,6 @@ export default {
   },
   data () {
     return {
-      changedData: [
-        {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          msg: '软件包依赖关系检查失败！如果需要重新下发， 请检查依赖关系'
-        },
-        {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          msg: '软件包依赖关系检查失败！如果需要重新下发， 请检查依赖关系'
-        },
-        {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          msg: '软件包依赖关系检查失败！如果需要重新下发， 请检查依赖关系'
-        }
-      ]
     }
   },
   methods: {

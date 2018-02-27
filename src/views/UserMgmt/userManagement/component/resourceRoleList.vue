@@ -41,7 +41,7 @@
     deleteResourceRole,
     createResourceRole,
     getResourceRoleList,
-    getRoleListAllMaindata,
+    getAllRoleList,
     getResourceRoleNoPageList
   } from '@/views/UserMgmt/userManagement/apis'
 
@@ -116,7 +116,7 @@
       // 获取角色下拉框信息（不分页）
       handResourceRoleSelect () {
       // 角色下拉框信息
-        getRoleListAllMaindata(1)// 1：为云端查询参数
+        getAllRoleList(1)// 1：为云端查询参数
         .then(
           function (result) {
             this.tmpRoleList = result

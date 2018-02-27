@@ -257,6 +257,7 @@
       },
       _setDistrictInfo (data) {
         this.showDistrictDialog = false
+        if (data.name === '') this.$refs.name.clearBox()
         this.screeningData['courtName'] = data.name
         this.screeningData['courtUuid'] = data.uuid
       },

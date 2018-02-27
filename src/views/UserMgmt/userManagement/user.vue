@@ -414,6 +414,7 @@ export default {
     },
     userCreateEvent (data) {
       console.log('新增用户')
+      data.password = encodeURIComponent(data.password)
       createUser(data)
         .then(
           function (result) {

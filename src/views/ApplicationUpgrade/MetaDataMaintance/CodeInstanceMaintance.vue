@@ -1,31 +1,32 @@
 <template>
   <div class='ui-common'>
-    <el-row class="flex-c" style="height: 100%">
-      <el-col :span="24" class="flex-1 flex-c">
-        <el-form :inline="true" :model="searchConditionList">
-          <div class="search-container">
-            <el-form-item label="代码实例值">
-              <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
+    <div class="flex-c flex-1">
+      <el-form :inline="true" :model="searchConditionList">
+        <div class="search-container">
+          <el-form-item label="代码实例值">
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
+          </el-form-item>
+          <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
+          </el-form-item>
+          <el-form-item label="提供商" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
+              <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
             </el-form-item>
-            <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-              <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
-            </el-form-item>
-            <el-form-item label="提供商" :label-width="formLabelWidth">
-              <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
-            </el-form-item>
-            <div class="btn-container">
-              <el-form-item>
-                <el-button @click="_handleClearQuery" type="primary" class="cancel-btn">清空</el-button>
-                <el-button type="primary" @click="_handleFilter" class="action-btn">搜索</el-button>
-              </el-form-item>
-            </div>
           </div>
-          <div>
-            <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
-          </div>
-        </el-form>
-        <div style="margin-top: 10px" class="flex-1">
-          <el-table :data="codeInstList" stripe border v-loading="loading" id="codeInstanceTable">
+        </div>
+        <div>
+          <el-button icon="el-icon-circle-plus-outline" @click="handleRegister" plain type="primary">添加</el-button>
+        </div>
+      </el-form>
+      <div class="border-divide"></div>
+      <div class="table-container">
+        <div style="margin-top: 15px">
+          <el-table :data="codeInstList" stripe v-loading="loading" id="codeInstanceTable" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip>
@@ -40,12 +41,12 @@
             </el-table-column>
           </el-table>
         </div>
-        <div>
-          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-          </el-pagination>
-        </div>
-      </el-col>
-    </el-row>
+      </div>
+      <div>
+        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+        </el-pagination>
+      </div>
+    </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
       <code-instance-edit :codeInstDetails="codeInstDetails" @saveCodeInstEvent="_updateCodeInstInfo"></code-instance-edit>
     </el-dialog>
