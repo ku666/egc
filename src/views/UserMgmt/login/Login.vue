@@ -4,10 +4,10 @@
       <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="0px">
         <div class="ms-title">恒大集团智慧云平台</div>
         <el-form-item prop="username">
-          <el-input v-model="ruleForm.username" placeholder="username"></el-input>
+          <el-input v-model="ruleForm.username" placeholder="用户名"></el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input type="password" placeholder="password" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+          <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
         </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click.native="submitForm('ruleForm')" :loading="isBtnLoading">{{btnText}}</el-button>
@@ -66,18 +66,21 @@ export default {
             if (result.data.token) {
               sessionStorage.setItem('login_username', self.ruleForm.username)
               sessionStorage.setItem('token', result.data.token)
-              sessionStorage.setItem('userInfo', qs.stringify(result.data))
+              sessionStorage.setItem('userInfo', JSON.stringify(result.data))
               // localStorage.setItem('routers', result.data.routers)
               console.log(result.data)
               this.$store.dispatch('setUserInfo', result.data)
+
+              let meuns = JSON.stringify(result.data.uiResources)
+              sessionStorage.setItem('meuns', meuns)
 
               // no login 20180118
               let userResourcePermission = {}
               let userRouters = ''
               userRouters = getPermission(this.$store.getters.getUserInfo, userResourcePermission)
 
-              sessionStorage.setItem('userRouters', qs.stringify(userRouters))
-              sessionStorage.setItem('userResourcePermission', qs.stringify(userResourcePermission))
+              sessionStorage.setItem('userRouters', JSON.stringify(userRouters))
+              sessionStorage.setItem('userResourcePermission', JSON.stringify(userResourcePermission))
 
               //  no login 20180118
             } else {
