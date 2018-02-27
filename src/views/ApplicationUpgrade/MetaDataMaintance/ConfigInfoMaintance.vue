@@ -52,16 +52,19 @@
         <el-form :model="registerParaList" :rules="rules" ref='registerParaList'>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="配置项类别代码" :label-width="formLabelWidth" prop="configTypeCode ">
-                <el-select v-model="registerParaList.configTypeCode" placeholder="请选择配置项类别代码" clearable>
+              <el-form-item label="代码类别" :label-width="formLabelWidth" prop="codeTypeUuid">
+                <el-select v-model="registerParaList.codeTypeUuid" placeholder="请选择代码类别" clearable>
                   <el-option v-for="item in codeCategories" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
-                <el-input v-model="registerParaList.remark"></el-input>
+              <el-form-item label="公共代码" :label-width="formLabelWidth" prop="configTypeCode">
+                <el-select v-model="registerParaList.configTypeCode" placeholder="请选择公共代码" clearable>
+                  <el-option v-for="item in instanceCodes" :key="item.value" :label="item.label" :value="item.value">
+                  </el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -72,9 +75,21 @@
                 <el-input v-model="registerParaList.configItem"></el-input>
               </el-form-item>
             </el-col>
+            <el-col :span="9">
+              <el-form-item label="配置项的值" label-width="100px" prop="value">
+                <el-input v-model="registerParaList.value" :type="inputType"></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :span="2" style="margin-left:10px; margin-top: 12px;">
+              <el-form-item label="" prop="checkStatus">
+                <el-checkbox v-model="checkStatus">是否加密</el-checkbox>
+              </el-form-item>
+            </el-col>
+          </el-row>
+          <el-row>
             <el-col :span="12">
-              <el-form-item label="配置项的值" :label-width="formLabelWidth" prop="value">
-                <el-input v-model="registerParaList.value"></el-input>
+              <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
+                <el-input v-model="registerParaList.remark"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
@@ -95,7 +110,8 @@ import {
   getConfigInfoDetails,
   registerConfigInfo,
   updateConfigInfo,
-  deleteConfigInfo
+  getInstanceCodes
+  // deleteConfigInfo
 } from './apis/index'
 export default {
   components: {
@@ -108,12 +124,15 @@ export default {
       configInfoDataList: undefined,
       configInfoDetails: undefined,
       codeCategories: [],
+      instanceCodes: [],
       total: 0,
       loading: true,
       codeInstDetails: undefined,
       dialogTittle: '',
+      checkStatus: false,
       editTitle: '编辑',
       deleteTitle: '删除',
+      inputType: 'text',
       formLabelWidth: '140px',
       tableTitleList: [
         {
@@ -144,12 +163,28 @@ export default {
         vendor: ''
       },
       registerParaList: {
-        configItem: '',
+        codeTypeUuid: '',
         configTypeCode: '',
+        configItem: '',
         value: '',
+        encryptFlag: 0,
         remark: ''
       },
       rules: {
+        codeTypeUuid: [
+          {
+            required: true,
+            message: '请选择公共代码',
+            trigger: 'blur,change'
+          }
+        ],
+        configTypeCode: [
+          {
+            required: true,
+            message: '请选择公共代码',
+            trigger: 'blur,change'
+          }
+        ],
         configItem: [
           {
             required: true,
@@ -159,13 +194,6 @@ export default {
         ],
         value: [
           { required: true, message: '请输入配置项值', trigger: 'blur,change' }
-        ],
-        configTypeCode: [
-          {
-            required: true,
-            message: '请选择配置项类别代码',
-            trigger: 'blur,change'
-          }
         ]
       }
     }
@@ -194,27 +222,51 @@ export default {
       this.dialogTittle = '配置项注册'
       this.dialogRegisterVisible = true
       this.codeCategories = []
+      this.instanceCodes = []
       this.getCodeCategories()
     },
     // 代码大类
     getCodeCategories () {
-      var that = this
+      // var that = this
       getCodeInstances()
+        .then(
+          function (result) {
+            console.log(JSON.stringify(result))
+            let codeCategoryArr = result
+            for (let i = 0; i < codeCategoryArr.length; i++) {
+              this.codeCategories.push({
+                label: codeCategoryArr[i].typeName,
+                value: codeCategoryArr[i].uuid
+              })
+            }
+          }.bind(this)
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    // 公共代码
+    _getCodeCategories () {
+      this.registerParaList.configTypeCode = ''
+      this.instanceCodes = []
+      console.log('this.registerParaList.codeTypeUuid -- > ' + this.registerParaList.codeTypeUuid)
+      getInstanceCodes(this.registerParaList.codeTypeUuid)
         .then(function (result) {
-          console.log(JSON.stringify(result))
-          let codeCategoryArr = result
-          for (let i = 0; i < codeCategoryArr.length; i++) {
-            that.codeCategories.push({
-              label: codeCategoryArr[i].typeName,
-              value: codeCategoryArr[i].typeCode
+          console.log('codes --->>>' + JSON.stringify(result))
+          let instanceCodesRes = result
+          for (let i = 0; i < instanceCodesRes.length; i++) {
+            this.instanceCodes.push({
+              label: instanceCodesRes[i].code,
+              value: instanceCodesRes[i].code
             })
           }
-        })
+        }.bind(this))
         .catch(function (error) {
           console.log(error)
         })
     },
     _registerConfigInfo (formName) {
+      console.log('checkedstatus : ' + this.checkStatus)
       this.$refs[formName].validate(valid => {
         if (valid) {
           registerConfigInfo(this.registerParaList)
@@ -245,6 +297,8 @@ export default {
     },
     beforeCloseDialog () {
       this.dialogRegisterVisible = false
+      this.checkStatus = false
+      this.registerParaList.encryptFlag = 0
       this.$refs.registerParaList.resetFields()
     },
     _handleEdit (rowIdx) {
@@ -282,30 +336,31 @@ export default {
         })
     },
     // 删除
-    _handleDeleteData (rowIdx) {
-      var rowData = this.configInfoDataList[rowIdx]
-      var codeTypeUuid = rowData.uuid
-      this.$confirm("确定要删除配置项'" + rowData.name + "'?', '提示'", {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        deleteConfigInfo(codeTypeUuid)
-          .then(
-            function (result) {
-              this.$message({
-                message: '删除成功',
-                type: 'success'
-              })
-              // 加载数据
-              this.loadData()
-            }.bind(this)
-          )
-          .catch(function (error) {
-            console.log(error)
-          })
-      })
-    },
+    // _handleDeleteData (rowIdx) {
+    //   var rowData = this.configInfoDataList[rowIdx]
+    //   var codeTypeUuid = rowData.uuid
+    //   this.$confirm("确定要删除配置项'" + rowData.name + "'?', '提示'", {
+    //     confirmButtonText: '确定',
+    //     cancelButtonText: '取消',
+    //     type: 'warning'
+    //   }).then(() => {
+    //     deleteConfigInfo(codeTypeUuid)
+    //       .then(
+    //         function (result) {
+    //           this.$message({
+    //             message: '删除成功',
+    //             type: 'success'
+    //           })
+    //           // 加载数据
+    //           this.loadData()
+    //         }.bind(this)
+    //       )
+    //       .catch(function (error) {
+    //         console.log(error)
+    //       })
+    //   })
+    // },
+    // },
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
@@ -313,6 +368,20 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    }
+  },
+  watch: {
+    'registerParaList.codeTypeUuid': function (newValue, oldValue) {
+      this._getCodeCategories()
+    },
+    'checkStatus': function (newValue, oldValue) {
+      if (newValue === true) {
+        this.inputType = 'password'
+        this.registerParaList.encryptFlag = 1
+      } else {
+        this.inputType = 'text'
+        this.registerParaList.encryptFlag = 0
+      }
     }
   },
   mounted () {
