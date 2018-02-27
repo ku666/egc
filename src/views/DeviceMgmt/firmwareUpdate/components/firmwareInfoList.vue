@@ -22,12 +22,6 @@
         </el-table-column>
         <el-table-column
           :resizable="false"
-          property="filePath2"
-          label="文件路径"
-          width="300">
-        </el-table-column>
-        <el-table-column
-          :resizable="false"
           property="firmwareVersion"
           label="固件版本"
           show-overflow-tooltip
