@@ -213,6 +213,7 @@ export default {
   },
   mounted () {
     this.loadData()
+    this.loadSelectData()
     this.userListParam = [{
       title: '用户姓名',
       prop: 'fullName'
@@ -252,20 +253,14 @@ export default {
             console.log(error)
           }
         )
-      // 获取部门信息
-      // this.dictData.departmentType = this.listQuery.userType
-      // getDepartmentOptions(this.dictData)
-      //   .then(
-      //       function (result) {
-      //         console.log('<<<<<departmentOptions:' + JSON.stringify(result))
-      //         this.departmentOptions = result
-      //       }.bind(this)
-      //     )
-      //   .catch(
-      //     function (error) {
-      //       console.log(error)
-      //     }
-      //   )
+      // this.initData()
+    },
+    initData () {
+      this.listQuery.q_fullName = ''
+      this.listQuery.q_userName = ''
+      this.listQuery.q_primaryPhone = ''
+    },
+    loadSelectData () {
       // 获取用户类型信息
       listUserType()
         .then(
@@ -306,12 +301,6 @@ export default {
             console.log(error)
           }.bind(this)
         )
-      this.initData()
-    },
-    initData () {
-      this.listQuery.q_fullName = ''
-      this.listQuery.q_userName = ''
-      this.listQuery.q_primaryPhone = ''
     },
     // 初始新增用户信息
     initUserInfo () {

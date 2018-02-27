@@ -106,7 +106,8 @@ export default {
       },
       rules: {
         departmentName: [
-          { required: true, message: '请输入部门名称', trigger: 'blur' }
+          { required: true, message: '请输入部门名称', trigger: 'blur' },
+          { max: 64, message: '长度不能超过64个字符' }
         ],
         departmentType: [
           { required: true, message: '请选择部门类别', trigger: 'change' }
