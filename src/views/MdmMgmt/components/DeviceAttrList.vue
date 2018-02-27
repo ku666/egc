@@ -1,10 +1,5 @@
 <template>
   <div class='ui-common'>
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item :to="{ name: 'deviceCategoryList' }">设备主数据</el-breadcrumb-item>
-      <el-breadcrumb-item>设备属性管理</el-breadcrumb-item>
-    </el-breadcrumb> -->
     <div class="search-container">
       <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
@@ -23,15 +18,9 @@
     </div>
 
     <div style="margin-top: 15px">
-      <!-- <div style="float: left"> -->
-        <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
-      <!-- </div>
-      <div style="float: right">
-        <el-button icon='el-icon-d-arrow-left' style="margin-center: 10px" plain type="primary" @click="gotodevicemgnt">设备主数据</el-button>
-      </div> -->
+      <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
     </div>
 
-    <!-- <hr/> -->
     <el-table
       ref='attrTable'
       :data='attrList'
@@ -40,7 +29,6 @@
       height="100%"
       element-loading-text='拼命加载中'
       style='margin-top: 15px'>
-      <!-- <el-table-column type='selection' width='50'></el-table-column> -->
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码' sortable></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' sortable></el-table-column>
@@ -54,8 +42,6 @@
       <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
-          <!-- <el-button type='text' size = 'mini' icon="el-icon-document" @click='openAttrDmnDialog(scope.row)' v-if = 'scope.row.attrDataType === "select"'></el-button> -->
-          <!-- <el-button type='text' icon="el-icon-document" @click='viewAttr(scope.row)'></el-button> -->
           <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
           <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
         </template>
@@ -78,12 +64,6 @@
       :modal-append-to-body = 'false'
       :before-close='closedialog'
       style="min-width: 750px">
-      <!-- <div slot='title'>
-        <span class = 'head-text'>{{title}}</span>
-      </div> -->
-      <!-- <el-steps :active='1' simple>
-        <el-step :title="title" icon="el-icon-edit"></el-step>
-      </el-steps> -->
       <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
       <el-tabs style="margin-top:-20px" v-model='activeTab'>
         <el-tab-pane label="属性基本信息" name = 'basic'>
@@ -113,7 +93,6 @@
               </el-form-item>
             </el-form>
             <div style='text-align: center; '>
-              <!-- <el-button type='primary' @click='clear' class="cancel-btn" :disabled = 'disabledflag'>清空</el-button> -->
               <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
             </div>
           </div>
@@ -209,11 +188,7 @@ export default {
   },
   mounted () {
     this.search()
-    // this.setMenuHightLight()
     this.attatchEventToPager()
-  },
-  beforeDestroy () {
-    // this.setUnHightLight()
   },
   computed: {
     title: function () {
@@ -227,36 +202,6 @@ export default {
     }
   },
   methods: {
-    // setMenuHightLight: function () {
-    //   let sidemenu = document.getElementById('sidemenu')
-    //   if (sidemenu) {
-    //     // console.log('get side menu')
-    //     // let ul = sidemenu.querySelectorAll('ul[role="menu"]')
-    //     // if (ul) {
-    //     //   ul[0].style['display'] = 'block'
-    //     // }
-    //     // console.log(ul)
-    //     let menus = sidemenu.querySelectorAll('li.el-menu-item')
-    //     if (menus) {
-    //       this.menu = menus
-    //       for (let i = 0; i < menus.length; i++) {
-    //         if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
-    //           menus[i].classList.add('is-active')
-    //         }
-    //       }
-    //     }
-    //   }
-    // },
-    // setUnHightLight: function () {
-    //   let menus = this.menu
-    //   if (menus) {
-    //     for (let i = 0; i < menus.length; i++) {
-    //       if (menus[i].innerText && menus[i].innerText.indexOf('设备主数据') > -1) {
-    //         menus[i].classList.remove('is-active')
-    //       }
-    //     }
-    //   }
-    // },
     // 根据条件查询设备分类数据到列表中
     search () {
       this.attrListLoading = true
@@ -282,10 +227,6 @@ export default {
         name: 'deviceCategoryList'
       })
     },
-    // 单击行时，勾选或者去掉勾选checkbox
-    // checkrow: function (row) {
-    //   this.$refs['attrTable'].toggleRowSelection(row)
-    // },
     // 改变分页大小
     sizeChange: function (val) {
       this.searchAttrForm.pageSize = val
@@ -297,56 +238,6 @@ export default {
       this.searchAttrForm.currentPage = val
       this.search()
     },
-    // 打开新增/修改设备域弹框页面
-    // openAttrDmnDialog: function (attr = {}) {
-    //   const attrTmp = Object.assign({}, attr)
-    //   this.$refs['openAttrDomainDialog'].openAttrDomainDialog(attrTmp)
-    // },
-    // checkbox勾选事件
-    // getSelections: function (sel) {
-    //   this.selections = sel
-    // },
-    // ************************查看属性*****************
-    /* viewAttr: function () {
-      if (this.selections.length === 0) {
-        this.$message({
-          message: '请选择要查看的设备属性',
-          type: 'warning'
-        })
-      } else if (this.selections.length > 1) {
-        this.$message({
-          message: '一次只能查看一个设备属性',
-          type: 'warning'
-        })
-      } else {
-        this.mode = 1
-        this.attrForm = {
-          uuid: this.selections[0].uuid,
-          attrCode: this.selections[0].attrCode,
-          attrDesc: this.selections[0].attrDesc,
-          attrType: this.selections[0].attrType,
-          attrDataType: this.selections[0].attrDataType,
-          unitDesc: this.selections[0].unitDesc,
-          unitCode: this.selections[0].unitCode
-        }
-        this.attrDialogVisible = true
-        this.disabledflag = true
-      }
-    }, */
-    // viewAttr: function (attr = {}) {
-    //   this.mode = 1
-    //   this.attrForm = {
-    //     uuid: this.selections[0].uuid,
-    //     attrCode: this.selections[0].attrCode,
-    //     attrDesc: this.selections[0].attrDesc,
-    //     attrType: this.selections[0].attrType,
-    //     attrDataType: this.selections[0].attrDataType,
-    //     unitDesc: this.selections[0].unitDesc,
-    //     unitCode: this.selections[0].unitCode
-    //   }
-    //   this.attrDialogVisible = true
-    //   this.disabledflag = true
-    // },
     // ************************添加属性*****************
     addAttr: function () {
       this.disabledflag = false
@@ -375,37 +266,6 @@ export default {
         this.attrSaved = false
       }
     },
-    // ************************点击修改属性按钮修改属性*****************
-    // editAttr: function () {
-    //   if (this.selections.length === 0) {
-    //     this.$message({
-    //       message: '请选择要修改的设备属性',
-    //       type: 'warning'
-    //     })
-    //   } else if (this.selections.length > 1) {
-    //     this.$message({
-    //       message: '一次只能修改一个设备属性',
-    //       type: 'warning'
-    //     })
-    //   } else {
-    //     this.mode = 3
-    //     this.attrForm = {
-    //       uuid: this.selections[0].uuid,
-    //       attrCode: this.selections[0].attrCode,
-    //       attrDesc: this.selections[0].attrDesc,
-    //       attrType: this.selections[0].attrType,
-    //       attrDataType: this.selections[0].attrDataType,
-    //       unitDesc: this.selections[0].unitDesc,
-    //       unitCode: this.selections[0].unitCode
-    //     }
-    //     if (this.attrForm.attrDataType === 'select') {
-    //       this.attrSaved = true
-    //     } else {
-    //       this.attrSaved = false
-    //     }
-    //     this.attrDialogVisible = true
-    //   }
-    // },
     // 删除属性
     delAttrBatch: function (attr = {}) {
       if (this.selections.length === 0) {
