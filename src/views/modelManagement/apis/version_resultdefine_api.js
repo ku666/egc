@@ -6,13 +6,13 @@ export const getTaskList = (data) => {
 }
 // 获取模型版本结果定义所有参数
 export const getResultByVersionID = (data) => {
-  return Axios.get(BASE_PATH + '/versionResult/getVerResParams/' + data + '?t=' + Date.now()).then(res => res.data)
+  return Axios.get(BASE_PATH + '/versionresult/getVerResParams/' + data + '?t=' + Date.now()).then(res => res.data)
 }
 // 根据结果文件parentCode获取子集metaCat
 export const getResTypeSubsetMetaCats = (params) => {
-  return Axios.get(BASE_PATH + '/versionResult/getResTypeSubsetMetaCats', { params }).then(res => res.data)
+  return Axios.get(BASE_PATH + '/versionresult/getResTypeSubsetMetaCats', { params }).then(res => res.data)
 }
 // 新增模型版本结果数据类型
 export const saveAlgVersResult = (params) => {
-  return Axios.post(BASE_PATH + '/versionResult/saveAlgVersResult', params).then(res => res.data)
+  return Axios.post(BASE_PATH + '/versionresult/saveAlgVersResult', params).then(res => res.data)
 }

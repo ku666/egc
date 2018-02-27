@@ -27,22 +27,68 @@
 
         <el-col :span="20">
           <div style="text-align: right">
-            <el-form :inline="true" :model="mgmtNodeListSearch" class="demo-form-inline">
-              <el-form-item label="节点名称">
-                <el-input id="search" @blur="inputBlur" v-model="mgmtNodeListSearch.name"></el-input>
+            <el-form :inline="true" :model="mgmtNodeListSearch" :rules="searchRules" ref="mgmtNodeListSearch" class="demo-form-inline">
+              <el-form-item label="节点类型" prop="nodeType">
+                <el-select @change="loadData" v-model="mgmtNodeListSearch.nodeType" placeholder="节点类型">
+                  <el-option key="0" label="全部" value="0"></el-option>
+                  <el-option
+                    v-for="item in systemNodeTypeList"
+                    :key="item.item_code"
+                    :label="item.item_name"
+                    :value="item.item_code"
+                  ></el-option>
+                </el-select>
               </el-form-item>
-              <!--<el-form-item label="运行时">-->
-              <!--<el-select v-model="modelListSearch.type" placeholder="运行时">-->
-              <!--<el-option label="全部" value="0"></el-option>-->
-              <!--<el-option label="Java" value="java"></el-option>-->
-              <!--<el-option label="Python" value="python"></el-option>-->
-              <!--</el-select>-->
-              <!--</el-form-item>-->
+              <el-form-item label="节点名称" prop="name">
+                <div class="item-info">
+                  <el-input @keyup.enter.native="onSubmit('mgmtNodeListSearch')" id="search" @blur="inputBlur" v-model="mgmtNodeListSearch.name"></el-input>
+                </div>
+              </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-
+                <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                <el-button class = "search-btn" type="primary" @click="onSubmit('mgmtNodeListSearch')">查询</el-button>
               </el-form-item>
             </el-form>
+            <!--<div class="form-info">-->
+              <!--<div class="item-info label">节点类型</div>-->
+              <!--<div class="item-info">-->
+                <!--<el-select @change="loadData" v-model="mgmtNodeListSearch.nodeType" placeholder="节点类型">-->
+                  <!--<el-option key="0" label="全部" value="0"></el-option>-->
+                  <!--<el-option-->
+                    <!--v-for="item in systemNodeTypeList"-->
+                    <!--:key="item.item_code"-->
+                    <!--:label="item.item_name"-->
+                    <!--:value="item.item_code"-->
+                  <!--&gt;</el-option>-->
+                <!--</el-select>-->
+                <!--&lt;!&ndash;<el-input @keyup.enter.native="loadData" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>&ndash;&gt;-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-info">-->
+              <!--<div class="item-info label">节点名称</div>-->
+              <!--<div class="item-info">-->
+                <!--<el-input @keyup.enter.native="loadData" id="search" @blur="inputBlur" v-model="mgmtNodeListSearch.name"></el-input>-->
+              <!--</div>-->
+              <!--<div class="item-info">-->
+                <!--<el-button type="primary" @click="onSubmit">查询</el-button>-->
+              <!--</div>-->
+            <!--</div>-->
+            <!--<el-form :inline="true" :model="mgmtNodeListSearch" class="demo-form-inline">-->
+            <!--<el-form-item label="节点名称">-->
+            <!--<el-input id="search" @blur="inputBlur" v-model="mgmtNodeListSearch.name"></el-input>-->
+            <!--</el-form-item>-->
+            <!--&lt;!&ndash;<el-form-item label="运行时">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-select v-model="modelListSearch.type" placeholder="运行时">&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option label="全部" value="0"></el-option>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option label="Java" value="java"></el-option>&ndash;&gt;-->
+            <!--&lt;!&ndash;<el-option label="Python" value="python"></el-option>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-select>&ndash;&gt;-->
+            <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+            <!--<el-form-item>-->
+            <!--<el-button type="primary" @click="onSubmit">查询</el-button>-->
+
+            <!--</el-form-item>-->
+            <!--</el-form>-->
           </div>
         </el-col>
       </el-row>
@@ -58,9 +104,9 @@
           <template slot-scope="props">
             <el-form label-position="left" inline class="demo-table-expand">
 
-              <el-form-item label="部署小区">
-                <span>{{ communityIdMap[props.row.communityId] }}</span>
-              </el-form-item>
+              <!--<el-form-item label="部署小区">-->
+                <!--<span>{{ communityIdListMap[props.row.communityId] }}</span>-->
+              <!--</el-form-item>-->
               <el-form-item label="主机名">
                 <span>{{ props.row.host }}</span>
               </el-form-item>
@@ -97,24 +143,27 @@
         <!--width="55">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
-          <!--prop="mgmtNodePk"-->
-          <!--label="ID"-->
-          <!--width="120">-->
+        <!--prop="mgmtNodePk"-->
+        <!--label="ID"-->
+        <!--width="120">-->
         <!--</el-table-column>-->
         <!--<el-table-column-->
         <!--label="部署小区ID"-->
         <!--width="120">-->
         <!--<template slot-scope="scope"><span>{{ communityIdMap[scope.row.communityId] }}</span></template>-->
         <!--</el-table-column>-->
-
+        <el-table-column
+          label="小区">
+          <template slot-scope="scope"><span>{{ communityIdListMap[scope.row.communityId] }}</span></template>
+        </el-table-column>
         <el-table-column
           prop="name"
           label="节点名称">
         </el-table-column>
         <!--<el-table-column-->
-          <!--label="节点类型"-->
-          <!--width="150">-->
-          <!--<template slot-scope="scope"><span>{{ systemNodeTypeMap[scope.row.nodeType] }}</span></template>-->
+        <!--label="节点类型"-->
+        <!--width="150">-->
+        <!--<template slot-scope="scope"><span>{{ systemNodeTypeMap[scope.row.nodeType] }}</span></template>-->
         <!--</el-table-column>-->
         <el-table-column
           prop="deviceId"
@@ -238,21 +287,6 @@
         <!--<el-form-item label="部署小区ID" prop="communityId">-->
         <!--<el-input size="small" v-model="newNode.communityId"></el-input>-->
         <!--</el-form-item>-->
-        <el-form-item label="节点名称" prop="name">
-          <el-input id="addName" @blur="inputBlur" size="small" v-model="newNode.name"></el-input>
-        </el-form-item>
-        <el-form-item label="主机名" prop="host">
-          <el-input id="addHost" @blur="inputBlur" size="small" v-model="newNode.host"></el-input>
-        </el-form-item>
-        <el-form-item label="节点IP" prop="ip">
-          <el-input id="addIp" @blur="inputBlur" size="small" v-model="newNode.ip"></el-input>
-        </el-form-item>
-        <el-form-item label="节点端口" prop="port">
-          <el-input id="addPort" @blur="inputBlur" size="small" v-model="newNode.port"></el-input>
-        </el-form-item>
-        <el-form-item label="设备ID" prop="deviceId">
-          <el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId"></el-input>
-        </el-form-item>
         <el-form-item label="节点类型" prop="nodeType">
           <el-select size="small" v-model="newNode.nodeType" placeholder="请选择节点类型">
             <el-option
@@ -263,15 +297,46 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="小区" prop="communityId">
+          <el-select size="small" v-model="newNode.communityId" placeholder="请选择一个小区">
+            <el-option
+              v-for="item in communityIdList"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="节点名称" prop="name">
+          <el-input id="addName" @blur="inputBlur" size="small" v-model="newNode.name"></el-input>
+        </el-form-item>
+        <el-form-item label="主机名" prop="host">
+          <el-input id="addHost" @blur="inputBlur" size="small" v-model="newNode.host"></el-input>
+        </el-form-item>
+        <el-form-item label="节点IP" prop="ip">
+          <el-input id="addIp" @blur="inputBlur" size="small" v-model="newNode.ip">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="节点端口" prop="port">
+          <el-input id="addPort" @blur="inputBlur" size="small" v-model="newNode.port"></el-input>
+        </el-form-item>
+        <el-form-item v-if="newNode.nodeType == currentNodeType" label="设备ID" prop="deviceId">
+          <el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId">
+            <template slot="prepend">{{ deviceIdPrefix }}</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item v-if="newNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">
+          <el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId"></el-input>
+        </el-form-item>
         <!--<el-form-item label="节点状态" prop="nodeStatus">-->
-          <!--<el-select size="small" v-model="newNode.nodeStatus" placeholder="请选择节点状态">-->
-            <!--<el-option-->
-              <!--v-for="item in systemNodeStatusList"-->
-              <!--:key="item.item_code"-->
-              <!--:label="item.item_name"-->
-              <!--:value="item.item_code"-->
-            <!--&gt;</el-option>-->
-          <!--</el-select>-->
+        <!--<el-select size="small" v-model="newNode.nodeStatus" placeholder="请选择节点状态">-->
+        <!--<el-option-->
+        <!--v-for="item in systemNodeStatusList"-->
+        <!--:key="item.item_code"-->
+        <!--:label="item.item_name"-->
+        <!--:value="item.item_code"-->
+        <!--&gt;</el-option>-->
+        <!--</el-select>-->
         <!--</el-form-item>-->
         <!--<el-form-item label="最新节点版本" prop="latestPublishVersion">-->
         <!--<el-input size="small" v-model="newNode.latestPublishVersion"></el-input>-->
@@ -299,21 +364,6 @@
 
       <el-form v-loading="loadingEditStep" :model="editNode" :rules="rules" ref="editNode" label-width="100px"
                class="demo-ruleForm">
-        <el-form-item label="节点名称" prop="name">
-          <el-input id="editName" @blur="inputBlur" size="small" v-model="editNode.name"></el-input>
-        </el-form-item>
-        <el-form-item label="主机名" prop="host">
-          <el-input id="editHost" @blur="inputBlur" size="small" v-model="editNode.host"></el-input>
-        </el-form-item>
-        <el-form-item label="节点IP" prop="ip">
-          <el-input id="editIp" @blur="inputBlur" size="small" v-model="editNode.ip"></el-input>
-        </el-form-item>
-        <el-form-item label="设备ID" prop="deviceId">
-          <el-input id="editDeviceId" @blur="inputBlur"size="small" v-model="editNode.deviceId"></el-input>
-        </el-form-item>
-        <el-form-item label="节点端口" prop="port">
-          <el-input id="editPort" @blur="inputBlur" size="small" v-model="editNode.port"></el-input>
-        </el-form-item>
         <el-form-item label="节点类型" prop="nodeType">
           <el-select size="small" v-model="editNode.nodeType" value="editNode.nodeType">
             <el-option
@@ -324,23 +374,46 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="节点名称" prop="name">
+          <el-input id="editName" @blur="inputBlur" size="small" v-model="editNode.name"></el-input>
+        </el-form-item>
+        <el-form-item label="主机名" prop="host">
+          <el-input id="editHost" @blur="inputBlur" size="small" v-model="editNode.host"></el-input>
+        </el-form-item>
+        <el-form-item label="节点IP" prop="ip">
+          <el-input id="editIp" @blur="inputBlur" size="small" v-model="editNode.ip"></el-input>
+        </el-form-item>
+        <el-form-item v-if="editNode.nodeType == currentNodeType" label="设备ID" prop="deviceId">
+          <el-input id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceIdMain">
+            <template slot="prepend">{{ deviceIdPrefix }}</template>
+          </el-input>
+        </el-form-item>
+        <el-form-item v-if="editNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">
+          <el-input id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId"></el-input>
+        </el-form-item>
+        <!--<el-form-item label="设备ID" prop="deviceId">-->
+          <!--<el-input id="editDeviceId" @blur="inputBlur"size="small" v-model="editNode.deviceId"></el-input>-->
+        <!--</el-form-item>-->
+        <el-form-item label="节点端口" prop="port">
+          <el-input id="editPort" @blur="inputBlur" size="small" v-model="editNode.port"></el-input>
+        </el-form-item>
         <!--<el-form-item label="节点状态" prop="nodeStatus">-->
-          <!--<el-select size="small" v-model="editNode.nodeStatus" value="editNode.nodeStatus">-->
-            <!--<el-option-->
-              <!--v-for="item in systemNodeStatusList"-->
-              <!--:key="item.item_code"-->
-              <!--:label="item.item_name"-->
-              <!--:value="item.item_code"-->
-            <!--&gt;</el-option>-->
-          <!--</el-select>-->
+        <!--<el-select size="small" v-model="editNode.nodeStatus" value="editNode.nodeStatus">-->
+        <!--<el-option-->
+        <!--v-for="item in systemNodeStatusList"-->
+        <!--:key="item.item_code"-->
+        <!--:label="item.item_name"-->
+        <!--:value="item.item_code"-->
+        <!--&gt;</el-option>-->
+        <!--</el-select>-->
         <!--</el-form-item>-->
 
         <!--<el-form-item label="最新节点版本" prop="latestPublishVersion">-->
-          <!--<el-input size="small" v-model="editNode.latestPublishVersion"></el-input>-->
+        <!--<el-input size="small" v-model="editNode.latestPublishVersion"></el-input>-->
         <!--</el-form-item>-->
 
         <!--<el-form-item label="最新能力" prop="latestEventTypeList">-->
-          <!--<el-input size="small" v-model="editNode.latestEventTypeList"></el-input>-->
+        <!--<el-input size="small" v-model="editNode.latestEventTypeList"></el-input>-->
         <!--</el-form-item>-->
         <!--<el-form-item label="模型描述" prop="description">-->
         <!--<el-input :autosize="{ minRows: 2, maxRows: 10}" type="textarea" v-model="editModel.description"></el-input>-->
@@ -386,70 +459,70 @@
 
     <!-- 查看管理节点发布历史 -->
     <!--<el-dialog-->
-      <!--title="管理节点发布历史"-->
-      <!--:close-on-click-modal=false-->
-      <!--:close-on-press-escape=false-->
-      <!--:visible.sync="viewNodePublishHistoryDialogVisible"-->
-      <!--width="60%"-->
-      <!--:before-close="handleClose">-->
-      <!--<el-table ref="publishHistory" :data="publishHistory" tooltip-effect="dark" style="width: 100%" v-loading="loading2" element-loading-text="拼命加载中" @selection-change="handleSelectionChange">-->
-        <!--<el-table-column-->
-          <!--prop="mgmtNodePk"-->
-          <!--label="管理节点ID"-->
-          <!--width="120">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="publishVersion"-->
-          <!--label="发布版本号"-->
-          <!--width="120">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--label="发布时间"-->
-          <!--width="200">-->
-          <!--<template slot-scope="scope">{{ scope.row.publishTime | formatDate }}</template>-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--label="创建时间"-->
-          <!--width="200">-->
-          <!--<template slot-scope="scope">{{ scope.row.createTime | formatDate }}</template>-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="createUser"-->
-          <!--label="创建人"-->
-          <!--width="200">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--label="更新时间"-->
-          <!--width="200">-->
-          <!--<template slot-scope="scope">{{ scope.row.updateTime | formatDate }}</template>-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-          <!--prop="updateUser"-->
-          <!--label="更新人"-->
-          <!--width="200">-->
-        <!--</el-table-column>-->
-        <!--&lt;!&ndash;<el-form-item label="管理节点ID" prop="mgmtNodePk">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.mgmtNodePk"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="发布版本号" prop="publishVersion">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.publishVersion"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="发布时间" prop="publishTime">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.publishTime"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="创建时间" prop="createTime">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.createTime"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="创建人" prop="createUser">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.createUser"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="更新时间" prop="updateTime">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.updateTime"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-form-item label="更新人" prop="updateUser">&ndash;&gt;-->
-        <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.updateUser"></el-input>&ndash;&gt;-->
-        <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
-      <!--</el-table>-->
+    <!--title="管理节点发布历史"-->
+    <!--:close-on-click-modal=false-->
+    <!--:close-on-press-escape=false-->
+    <!--:visible.sync="viewNodePublishHistoryDialogVisible"-->
+    <!--width="60%"-->
+    <!--:before-close="handleClose">-->
+    <!--<el-table ref="publishHistory" :data="publishHistory" tooltip-effect="dark" style="width: 100%" v-loading="loading2" element-loading-text="拼命加载中" @selection-change="handleSelectionChange">-->
+    <!--<el-table-column-->
+    <!--prop="mgmtNodePk"-->
+    <!--label="管理节点ID"-->
+    <!--width="120">-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--prop="publishVersion"-->
+    <!--label="发布版本号"-->
+    <!--width="120">-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--label="发布时间"-->
+    <!--width="200">-->
+    <!--<template slot-scope="scope">{{ scope.row.publishTime | formatDate }}</template>-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--label="创建时间"-->
+    <!--width="200">-->
+    <!--<template slot-scope="scope">{{ scope.row.createTime | formatDate }}</template>-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--prop="createUser"-->
+    <!--label="创建人"-->
+    <!--width="200">-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--label="更新时间"-->
+    <!--width="200">-->
+    <!--<template slot-scope="scope">{{ scope.row.updateTime | formatDate }}</template>-->
+    <!--</el-table-column>-->
+    <!--<el-table-column-->
+    <!--prop="updateUser"-->
+    <!--label="更新人"-->
+    <!--width="200">-->
+    <!--</el-table-column>-->
+    <!--&lt;!&ndash;<el-form-item label="管理节点ID" prop="mgmtNodePk">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.mgmtNodePk"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="发布版本号" prop="publishVersion">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.publishVersion"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="发布时间" prop="publishTime">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.publishTime"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="创建时间" prop="createTime">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.createTime"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="创建人" prop="createUser">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.createUser"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="更新时间" prop="updateTime">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.updateTime"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-form-item label="更新人" prop="updateUser">&ndash;&gt;-->
+    <!--&lt;!&ndash;<el-input size="small" v-model="publishHistory.updateUser"></el-input>&ndash;&gt;-->
+    <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
+    <!--</el-table>-->
     <!--</el-dialog>-->
 
 
@@ -506,6 +579,10 @@
     margin-left: -100px;
   }
 
+  .form-info {
+    display: inline-block;
+  }
+
 </style>
 
 
@@ -520,6 +597,8 @@
     SYSTEM_NODESTAT,
     SYSTEM_NODESTATUS_ENABLE,
     SYSTEM_NODESTATUS_DISABLE,
+    SYSTEM_MGMTNODE_DEVICEID_PREFIX,
+    SYSTEM_MGMTNODE_NODETYPE_STRUCTURED,
     COMMUNITY
   } from '@/views/modelManagement/assets/js/common'
   import {formatDate} from '../assets/js/format_date.js'
@@ -574,28 +653,37 @@
         editNode: {},
         mgmtNodeListSearch: {
           name: '',
-          type: '全部'
+          nodeType: '全部'
+        },
+        searchRules: {
+          name: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持中文,字母,数字和下划线', trigger: 'change'}
+          ]
         },
         rules: {
+          communityId: [
+            {required: true, message: '请选择一个小区', trigger: 'change'}
+          ],
           ip: [
             {required: true, message: '请输入节点IP', trigger: 'blur'},
             {pattern: /^(?:(?:1[0-9][0-9]\.)|(?:2[0-4][0-9]\.)|(?:25[0-5]\.)|(?:[1-9][0-9]\.)|(?:[0-9]\.)){3}(?:(?:1[0-9][0-9])|(?:2[0-4][0-9])|(?:25[0-5])|(?:[1-9][0-9])|(?:[0-9]))$/, message: '请输入符合规则的节点IP，如192.168.0.1', trigger: 'blur'}
           ],
           port: [
             {required: true, message: '请输入节点端口', trigger: 'blur'},
-            {pattern: /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-5]{2}[0-3][0-5])$/, message: '请输入端口数字，范围为 0 - 65535 ', trigger: 'blur'}
+            {pattern: /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/, message: '请输入端口数字，范围为 0 - 65535 ', trigger: 'blur'}
           ],
           name: [
             {required: true, message: '请输入节点名称', trigger: 'blur'},
-            {min: 1, max: 64, message: '节点名称长度在 1 到 64 个字符之间', trigger: 'blur'}
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）', trigger: 'blur'}
           ],
           deviceId: [
             {required: true, message: '请输入设备ID', trigger: 'blur'},
-            {min: 1, max: 32, message: '设备ID长度在 1 到 32 个字符之间', trigger: 'blur'}
+            {pattern: '^[A-Za-z0-9_]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持字母,数字和下划线）', trigger: 'blur'}
           ],
           host: [
             {required: true, message: '请输入主机名', trigger: 'blur'},
-            {min: 1, max: 32, message: '主机IP长度在 1 到 32 个字符之间', trigger: 'blur'}
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_.]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持中文,字母,数字,下划线和"."）', trigger: 'blur'}
           ],
           nodeType: [
             {required: true, message: '请选择节点类型', trigger: 'change'}
@@ -618,8 +706,10 @@
         publishHistory: [],
         systemNodeTypeMap: {},
         systemNodeStatusMap: {},
-        communityId: [],
-        communityIdMap: {}
+        communityIdList: [],
+        communityIdListMap: {},
+        deviceIdPrefix: SYSTEM_MGMTNODE_DEVICEID_PREFIX,
+        currentNodeType: SYSTEM_MGMTNODE_NODETYPE_STRUCTURED
       }
     },
     mounted () {
@@ -640,11 +730,11 @@
             this.systemNodeTypeMap = getSystemCodeNameMap(this.systemNodeTypeList)
             this.systemNodeStatusList = getSystemDataByCode(result.data, SYSTEM_NODESTAT)
             this.systemNodeStatusMap = getSystemCodeNameMap(this.systemNodeStatusList)
-            this.communityId = getSystemDataByCode(result.data, COMMUNITY)
-            this.communityIdMap = getSystemCodeNameMap(this.communityId)
+            this.communityIdList = getSystemDataByCode(result.data, COMMUNITY)
+            this.communityIdListMap = getSystemCodeNameMap(this.communityIdList)
             console.info('communityId')
             console.info(this.communityId)
-            console.info(this.systemNodeStatusList)
+            console.info(this.communityIdList)
             console.info(this.systemNodeTypeList)
             this.$nextTick(() => {
               loadingSystemSetting.close()
@@ -675,10 +765,17 @@
     methods: {
       loadData () {
         // this.loading2 = true
-        let condition = {
-          deleteFlag: 0,
-          name: this.mgmtNodeListSearch.name
+        let condition = {}
+        condition.name = '%' + this.mgmtNodeListSearch.name + '%'
+        if (this.mgmtNodeListSearch.nodeType && this.mgmtNodeListSearch.nodeType !== '全部' && this.mgmtNodeListSearch.nodeType !== '0') {
+          condition.nodeType = this.mgmtNodeListSearch.nodeType
+        } else {
+          condition.nodeType = undefined
         }
+        // let condition = {
+        //   deleteFlag: 0,
+        //   name: this.mgmtNodeListSearch.name
+        // }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
@@ -732,14 +829,18 @@
       },
       confirmCreateAlgNode () {
         // this.loadingStep = true
-        var params = this.newNode
+        var params = JSON.parse(JSON.stringify(this.newNode))
         console.log('1234321')
         console.log(this.communityId)
-        params.communityId = this.communityId[0].item_code
-        params.nodeStatus = this.systemNodeStatusList[0].item_code
+        // params.communityId = this.communityId[0].item_code
+        params.nodeStatus = SYSTEM_NODESTATUS_ENABLE
+        // console.log(this.systemNodeStatusList[0].item_code)
+        if (this.newNode.nodeType === this.currentNodeType) {
+          params.deviceId = this.deviceIdPrefix + this.newNode.deviceId
+        }
 
         console.log('00000000000000000000000000000000000000')
-        console.log(params.communityId)
+        console.log(params.deviceId)
         console.log(params.nodeStatus)
         let loadingCrate = startSystemLoading()
         createNode(params)
@@ -757,6 +858,14 @@
                 loadingCrate.close()
                 this.loadData()
               })
+              params.statusCode = result.data.statusCode.toString()
+              if (params.statusCode === '201') {
+                this.$message({
+                  type: 'warning',
+                  message: '小区端已存在该节点，系统已将小区端节点信息同步至云端',
+                  duration: '8000'
+                })
+              }
             }.bind(this)
           )
           .catch(
@@ -771,10 +880,19 @@
       },
       confirmEditAlgNode () {
         // this.loadingEditStep = true
-        var params = this.editNode
+        var params = JSON.parse(JSON.stringify(this.editNode))
+        console.log('youyouyou')
+        console.log(this.currentNodeType)
+        if (this.editNode.nodeType === this.currentNodeType) {
+          // this.editNode.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
+          // this.editNode.deviceIdMain = this.editNode.deviceId.split('_')[1]
+          params.deviceId = SYSTEM_MGMTNODE_DEVICEID_PREFIX + this.editNode.deviceIdMain
+        }
+        if (this.editNode.nodeType !== this.currentNodeType) {
+          params.deviceId = this.editNode.deviceId
+        }
         // params.shareFlag = this.editNode ? 1 : 0
         // params.realtimeFlag = this.realtimeFlag ? 1 : 0
-
         // console.log("FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF")
         console.log(params)
         let loadingEdit = startSystemLoading()
@@ -837,7 +955,7 @@
                 })
                 this.editNodeDialogVisible = false
               }.bind(this)
-          ).catch(
+            ).catch(
             function (error) {
               // this.loading2 = false
               this.$nextTick(() => {
@@ -907,9 +1025,18 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
-        console.log('submit!')
-        this.loadData()
+      onSubmit (formName) {
+        // console.log('submit!')
+        // this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -927,6 +1054,21 @@
           .then(
             function (result) {
               this.editNode = JSON.parse(JSON.stringify(this.displayedTableList[index]))
+              if (this.editNode.nodeType === this.currentNodeType) {
+                this.editNode.deviceIdPrefix = SYSTEM_MGMTNODE_DEVICEID_PREFIX
+                this.editNode.deviceIdMain = this.editNode.deviceId.split('_')[1]
+                // params.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
+                // params.deviceId = this.editNode.deviceId.split('_')[1]
+                // console.log(this.editNode.deviceId.split('_')[1])
+                // console.log(this.editNode.nodeType)
+              } else if (this.editNode.nodeType !== this.currentNodeType) {
+                params.deviceId = this.editNode.deviceId
+                this.editNode.deviceIdMain = params.deviceId
+              }
+              // if (this.editNode.nodeType !== this.currentNodeType) {
+              //   this.editNode.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
+              //   this.editNode.devicetest = this.editNode.deviceId.split('_')[1]
+              // }
               this.editNodeDialogVisible = true
             }.bind(this)
           ).catch(
@@ -1039,9 +1181,15 @@
         this.createNodeDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newNode']) {
+          this.$refs['newNode'].clearValidate()
+        }
+        if (this.$refs['editNode']) {
+          this.$refs['editNode'].clearValidate()
+        }
         this.createNodeDialogVisible = false
         this.editNodeDialogVisible = false
-        this.viewNodePublishHistoryDialogVisible = false
+        // this.viewNodePublishHistoryDialogVisible = false
         // this.$confirm('确认关闭？')
         //   .then(_ => {
         //     done()

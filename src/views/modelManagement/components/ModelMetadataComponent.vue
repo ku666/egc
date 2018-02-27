@@ -38,15 +38,30 @@
         <el-col :span="4">
           <div>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
-              <el-form-item label="" v-show="!currentMetacat.sysFlag">
+              <el-form-item label="" v-show="!currentMetacat.sysFlag && currentMetacat.catCode!='mm.evttyp'">
                 <el-button @click="showAddModelDialog()" type="primary" icon="el-icon-circle-plus-outline">添加元数据</el-button>
               </el-form-item>
+              &nbsp;
             </el-form>
           </div>
         </el-col>
         <el-col :span="20">
           <div class="text-right">
-            <div class="form-info">
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="占位符" v-show="false">
+                  <el-input  placeholder="占位符"></el-input>
+                </el-form-item>
+                <el-form-item label="元数据子项名称" prop="name">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <div class="form-info">
               <div class="item-info label">元数据子项名称</div>
               <div class="item-info">
                 <el-input @keyup.enter.native="searchModelByName" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>
@@ -54,7 +69,7 @@
               <div class="item-info">
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -90,19 +105,19 @@
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-tooltip class="item" effect="dark" content="编辑元数据" placement="top"  v-show="!currentMetacat.sysFlag">
+            <el-tooltip class="item" effect="dark" content="编辑元数据" placement="top"  v-show="!currentMetacat.sysFlag && currentMetacat.catCode!='mm.evttyp'">
               <i @click="handleEdit(scope.$index, scope.row)" class="cursor-hand model-eidt font-size-20 el-icon-edit-outline"></i>
             </el-tooltip>
-            <el-tooltip class="item" effect="dark" content="删除元数据" placement="top"  v-show="!currentMetacat.sysFlag">
+            <el-tooltip class="item" effect="dark" content="删除元数据" placement="top"  v-show="!currentMetacat.sysFlag && currentMetacat.catCode!='mm.evttyp'">
               <i @click="removeData(scope.$index, scope.row)" class="red cursor-hand model-delete font-size-20 el-icon-delete"></i>
             </el-tooltip>
             <!--<el-button-->
-              <!--size="mini"-->
-              <!--@click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+            <!--size="mini"-->
+            <!--@click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
             <!--<el-button-->
-              <!--size="mini"-->
-              <!--type="danger"-->
-              <!--@click="removeData(scope.$index, scope.row)">删除</el-button>-->
+            <!--size="mini"-->
+            <!--type="danger"-->
+            <!--@click="removeData(scope.$index, scope.row)">删除</el-button>-->
           </template>
         </el-table-column>
       </el-table>
@@ -129,23 +144,23 @@
       width="40%"
       :before-close="handleClose">
 
-        <el-form v-loading="loadingStep" :model="newModel" :rules="rules" ref="newModel" label-width="150px" class="demo-ruleForm">
-            <el-form-item label="元数据子项名称" prop="itemCustName">
-              <el-input id="addItemCustName" @blur="inputBlur" size="small" v-model="newModel.itemCustName"></el-input>
-            </el-form-item>
-            <el-form-item label="元数据子项代码" prop="itemCustCode">
-              <el-input id="addItemCustCode" @blur="inputBlur" size="small" v-model="newModel.itemCustCode"></el-input>
-            </el-form-item>
-            <el-form-item label="元数据子项次序" prop="itemSeq">
-              <el-input id="addItemSeq" @blur="inputBlur" size="small" v-model="newModel.itemSeq"></el-input>
-            </el-form-item>
+      <el-form v-loading="loadingStep" :model="newModel" :rules="rules" ref="newModel" label-width="150px" class="demo-ruleForm">
+        <el-form-item label="元数据子项名称" prop="itemCustName">
+          <el-input id="addItemCustName" @blur="inputBlur" size="small" v-model="newModel.itemCustName"></el-input>
+        </el-form-item>
+        <el-form-item label="元数据子项代码" prop="itemCustCode">
+          <el-input id="addItemCustCode" @blur="inputBlur" size="small" v-model="newModel.itemCustCode"></el-input>
+        </el-form-item>
+        <el-form-item label="元数据子项次序" prop="itemSeq">
+          <el-input id="addItemSeq" @blur="inputBlur" size="small" v-model="newModel.itemSeq"></el-input>
+        </el-form-item>
 
-            <el-form-item class="text-right add-model-button">
-              <el-button @click="addModelDialogVisible = false">取消</el-button>
-              <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
-            </el-form-item>
+        <el-form-item class="text-right add-model-button">
+          <el-button @click="handleClose">取消</el-button>
+          <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
+        </el-form-item>
 
-        </el-form>
+      </el-form>
 
     </el-dialog>
 
@@ -171,7 +186,7 @@
           <el-input size="small" v-model="editModel.itemSeq"></el-input>
         </el-form-item>
         <el-form-item class="text-right add-model-button">
-          <el-button @click="editModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
 
@@ -275,17 +290,23 @@
           name: '',
           type: '全部'
         },
+        searchRules: {
+          name: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持中文,字母,数字和下划线', trigger: 'change'}
+          ]
+        },
         rules: {
           catCode: [
             { required: true, message: '请选择元数据分类名称', trigger: 'blur' }
           ],
           itemCustCode: [
             { required: true, message: '请输入元数据子项代码', trigger: 'blur' },
-            { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_.]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持字母,数字,下划线和"."）', trigger: 'blur' }
           ],
           itemCustName: [
             { required: true, message: '请输入元数据子项名称', trigger: 'blur' },
-            { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
+            { pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）', trigger: 'blur' }
           ],
           itemSeq: [
             { pattern: /^[1-9][0-9]{0,4}$/, message: '请输入数字，范围为 1 - 99999', trigger: 'blur' }
@@ -478,9 +499,18 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
+      onSubmit (formName) {
         console.log('submit!')
-        this.loadData()
+        // this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -529,7 +559,8 @@
         }).then(() => {
           // this.loading2 = true
           var params = {
-            id: data.metaItemPk.toString()
+            id: data.metaItemPk.toString(),
+            itemSysCode: data.itemSysCode.toString()
           }
           let loadingDelete = startSystemLoading()
           deleteMetaItemById(params)
@@ -572,6 +603,12 @@
         this.addModelDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         // this.$confirm('确认关闭？')

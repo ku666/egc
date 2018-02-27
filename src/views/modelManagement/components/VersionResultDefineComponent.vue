@@ -98,7 +98,7 @@
             </div>
           </div>
           <div class="text-right add-model-button margin-top-30">
-            <el-button @click="addResultDialogVisible = false">取消</el-button>
+            <el-button @click="handleClose">取消</el-button>
             <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
           </div>
         </div>
@@ -131,7 +131,7 @@
           <el-input size="small" v-model="editModel.paramValue"></el-input>
         </el-form-item>
         <el-form-item class="text-right add-model-button">
-          <el-button @click="editResultDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
 
@@ -149,7 +149,6 @@
   // import { Loading } from 'element-ui'
   import {
     startSystemLoading,
-    SUCCESS_CODE,
     getSystemSettings,
     getSystemDataByCode,
     getSystemCodeNameMap,
@@ -178,6 +177,9 @@
           paramName: '',
           paramValue: ''
         },
+        curIndex: 0,
+        paramList: [],
+        curParamList: [],
         editModel: {},
         rules: {
           paramValue: [
@@ -186,6 +188,7 @@
             {
               required: true,
               validator: function (rule, value, callback) {
+                console.info(this.curParamList)
                 if (this.curParamList.length > 0) {
                   if (this.curParamList[this.curIndex].paramValue.length > 1024 || this.curParamList[this.curIndex].paramValue.length < 1) {
                     callback(new Error('请输入参数值,长度在 1 到 1024 个字符'))
@@ -205,8 +208,6 @@
         },
         paramId: this.$route.params.versionId,
         resultType: 'mm.restyp.file',
-        paramList: [],
-        curParamList: [],
         resulttypeList: [],
         chooseable: '',
         saveable: true,
@@ -283,7 +284,6 @@
               } else {
                 // 新增
                 this.curParamList = []
-                this.getTemplateStrByResultType(this.resultType)
                 this.chooseable = true
               }
             }.bind(this)
@@ -317,26 +317,23 @@
         var params = {
           parentItemCode: resultType
         }
+        this.curParamList = []
         // this.loadingStep = true
         let loadingInstance = startSystemLoading()
         getResTypeSubsetMetaCats(params)
           .then(
             function (result) {
-              if (result.code === SUCCESS_CODE) {
-                console.log(' result.data.total ' + result.data.length)
-                // this.loadingStep = false
-                this.curParamList = result.data
-                if (result.data.length < 1) {
-                  this.saveable = false
-                } else {
-                  this.saveable = true
-                }
+              console.log(' result.data.total ' + result.data.length)
+              // this.loadingStep = false
+              this.curParamList = result.data
+              if (result.data.length < 1) {
+                this.saveable = false
               } else {
-                this.$message.error(result)
-                // this.loadingStep = false
+                this.saveable = true
               }
               this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
                 loadingInstance.close()
+                this.addResultDialogVisible = true
               })
             }.bind(this)
           )
@@ -407,6 +404,7 @@
             function (result) {
               // this.loadingStep = false
               this.addResultDialogVisible = false
+              this.curParamList = []
               this.$nextTick(() => {
                 loadingCreate.close()
                 this.getResult()
@@ -417,6 +415,7 @@
           )
           .catch(
             function (error) {
+              this.curParamList = []
               // this.loadingStep = false
               this.$nextTick(() => {
                 loadingCreate.close()
@@ -473,12 +472,22 @@
           )
       },
       showAddModelDialog () {
-        this.addResultDialogVisible = true
+        // this.curParamList = []
+        this.getTemplateStrByResultType(this.resultType)
+        // this.curParamList.forEach(function (paramItem) {
+        //   paramItem.paramValue = ''
+        // })
       },
       confirmAddModel () {
         this.addResultDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addResultDialogVisible = false
         this.editResultDialogVisible = false
         // this.$confirm('确认关闭？')
