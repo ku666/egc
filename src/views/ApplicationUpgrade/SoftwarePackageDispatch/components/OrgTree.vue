@@ -3,7 +3,7 @@
     <el-input placeholder="输入关键字进行过滤" class="user_el-select" v-model="filterText">
     </el-input>
     <div class="tree">
-      <el-tree class="filter-tree" node-key="" :data="orgsData" :props="defaultProps" ref="tree" show-checkbox @check-change="handleCheckChange" :filter-node-method="filterNode" :default-expanded-keys="expandedKeys">
+      <el-tree class="filter-tree" node-key="uuid" :data="orgsData" :props="defaultProps" ref="tree" show-checkbox @check-change="handleCheckChange" :filter-node-method="filterNode" :default-expanded-keys="expandedKeys">
       </el-tree>
     </div>
     <div style="margin-top: 20px; text-align: right;">
@@ -40,6 +40,9 @@ export default {
           function (result) {
             console.log('org tree data--- >   ' + JSON.stringify(result))
             this.orgsData = result
+            if (result.length !== 0) {
+              this.expandedKeys.push(result[0].uuid)
+            }
           }.bind(this)
         )
         .catch(function (error) {

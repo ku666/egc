@@ -20,7 +20,8 @@
         </div>
       </div>
     </el-form>
-    <div style="margin-top: 20px">
+    <div class="border-divide"></div>
+    <div style="margin-top: 15px">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
           <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
@@ -152,10 +153,10 @@ export default {
         .then(
           function (result) {
             this.dispatchDataList = result
-            console.log(
-              'software paks ----- >  ' + JSON.stringify(this.dispatchDataList)
-            )
-            this.activeNames = this.dispatchDataList[0].batchName
+            console.log('software paks ----- >  ' + JSON.stringify(this.dispatchDataList))
+            if (this.dispatchDataList.length !== 0) {
+              this.activeNames = this.dispatchDataList[0].batchName
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -237,6 +238,7 @@ export default {
         })
     },
     resetOrgData () {
+      console.log('reset org data!')
       this.selectOrgVisible = false
       this.$refs.courts._loadALlOrgs()
     }
