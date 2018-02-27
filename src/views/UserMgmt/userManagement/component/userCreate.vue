@@ -2,7 +2,7 @@
   <div>
     <el-form ref='user' :inline="true" :rules="rules" :model="user">
       <el-form-item label="用户类型" :label-width="formLabelWidth" prop="userType" style="display:block" class="is-required">
-        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select">
+        <el-select v-model="user.userType" placeholder="请选择" class="user_el-select" @change="changeUserType">
           <el-option v-for="userType in userTypeSelect" :key="userType.itemCode" :label="userType.itemName" :value="userType.itemCode"> </el-option>
         </el-select>
       </el-form-item>
@@ -74,17 +74,17 @@
 </template>
 <script>
 import {
-  checkUserName
+  checkUserName,
+  getDepartmentOptions
 } from '@/views/UserMgmt/userManagement/apis'
 export default {
   props: {
     userAccStatusSelect: undefined,
-    departmentSelect: undefined,
     userTypeSelect: undefined
   },
   mounted () {
-    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + JSON.stringify(this.departmentSelect))
-    console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + this.departmentSelect[0].uuid)
+    // console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + JSON.stringify(this.departmentSelect))
+    // console.log('<<<<<<<<<<<<<<<<<<<<<<<<<<<<:' + this.departmentSelect[0].uuid)
     // this.user.departmentUuid = this.departmentSelect[0].uuid
     this.initUserInfo()
   },
@@ -147,6 +147,7 @@ export default {
     return {
       subActiveName: '0',
       formLabelWidth: '120px',
+      departmentSelect: undefined,
       user: {
         fullName: '',
         userName: '',
@@ -265,6 +266,25 @@ export default {
       this.user.expiryDate = ''
       this.user.effectiveDate = ''
       console.log('reset')
+    },
+    changeUserType (userType) {
+      this.departmentSelect = []
+      this.getDepartmentSelect(userType)
+    },
+    getDepartmentSelect (userType) {
+      // 获取部门信息
+      getDepartmentOptions(userType)
+        .then(
+            function (result) {
+              console.log('<<<<<departmentSelect:' + JSON.stringify(result))
+              this.departmentSelect = result
+            }.bind(this)
+          )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     }
   }
 }

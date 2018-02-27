@@ -47,18 +47,18 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login' })
     } else {
       // 根据后台返回的路由进行判断是否合法
-      var flag = true
+      // var flag = true
       //  var routers = sessionStorage.getItem('routers')
       //  routers.split('_').forEach(v => {
       //    if (v === to.path) {
       //      flag = true
       //    }
       //  })
-      if (flag) {
-        next()
-      } else {
-        next({ path: '/home' })
-      }
+      // if (flag) {
+      next()
+      // } else {
+        // next({ path: '/home' })
+      // }
     }
   } else {
     next()

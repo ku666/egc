@@ -109,8 +109,8 @@
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
-                <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="latestPreName">
-                  <el-input v-model="softwareDetails.latestPreName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreNameIsDisable"></el-input>
+                <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="updateSoftwarePackage">
+                  <el-input v-model="softwareDetails.lastestPreName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.lastestPreNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
@@ -345,7 +345,7 @@ export default {
         latestPreVer: '',
         remark: '',
         batchesId: '',
-        latestPreName: '',
+        lastestPreName: '',
         functionDesc: '',
         gitRepository: '',
         mavenName: '',
@@ -363,7 +363,7 @@ export default {
         latestPreVerIsDisable: false,
         remarkIsDisable: false,
         batchesIdIsDisable: false,
-        latestPreNameIsDisable: false,
+        lastestPreNameIsDisable: false,
         functionDescIsDisable: false,
         gitRepositoryIsDisable: false,
         mavenNameIsDisable: false,
@@ -453,7 +453,7 @@ export default {
         latestPreVer: [
           { max: 32, message: '长度不能超过32个字符' }
         ],
-        latestPreName: [
+        lastestPreName: [
           { max: 32, message: '长度不能超过32个字符' }
         ],
         functionDesc: [
@@ -789,7 +789,7 @@ export default {
         this.isHasSoftwareDetails.latestPreVerIsDisable = false
         this.isHasSoftwareDetails.remarkIsDisable = false
         this.isHasSoftwareDetails.batchesIdIsDisable = false
-        this.isHasSoftwareDetails.latestPreNameIsDisable = false
+        this.isHasSoftwareDetails.lastestPreNameIsDisable = false
         this.isHasSoftwareDetails.functionDescIsDisable = false
         this.isHasSoftwareDetails.gitRepositoryIsDisable = false
         this.isHasSoftwareDetails.mavenNameIsDisable = false
@@ -808,7 +808,7 @@ export default {
         this.isHasSoftwareDetails.latestPreVerIsDisable = false
         this.isHasSoftwareDetails.remarkIsDisable = false
         this.isHasSoftwareDetails.batchesIdIsDisable = true
-        this.isHasSoftwareDetails.latestPreNameIsDisable = false
+        this.isHasSoftwareDetails.lastestPreNameIsDisable = false
         this.isHasSoftwareDetails.functionDescIsDisable = false
         this.isHasSoftwareDetails.gitRepositoryIsDisable = false
         this.isHasSoftwareDetails.mavenNameIsDisable = false
@@ -827,7 +827,7 @@ export default {
         this.isHasSoftwareDetails.latestPreVerIsDisable = true
         this.isHasSoftwareDetails.remarkIsDisable = true
         this.isHasSoftwareDetails.batchesIdIsDisable = true
-        this.isHasSoftwareDetails.latestPreNameIsDisable = true
+        this.isHasSoftwareDetails.lastestPreNameIsDisable = true
         this.isHasSoftwareDetails.functionDescIsDisable = true
         this.isHasSoftwareDetails.gitRepositoryIsDisable = true
         this.isHasSoftwareDetails.mavenNameIsDisable = true

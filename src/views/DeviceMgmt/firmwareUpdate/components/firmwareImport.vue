@@ -44,7 +44,7 @@
         </el-col>
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <select-box title="厂商编码"
+            <select-box title="厂商名称"
                         :required="true"
                         code="providerCode"
                         :disabled="true"
