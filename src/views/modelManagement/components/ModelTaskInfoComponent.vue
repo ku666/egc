@@ -13,194 +13,241 @@
     </div>
 
     <div class="margin-top-30">
-    <el-collapse v-model="activeNames">
-      <el-collapse-item :title="currentTaskAndModelAndModelVersion.algTaskPk" name="1">
-        <!--<div class="model-desc">{{ currentModel.description }}</div>-->
-        <div>
-          <el-form v-loading="loading2" element-loading-text="拼命加载中" label-position="left" inline class="demo-table-expand">
-            <!--<el-form-item label="任务ID">-->
+      <el-collapse v-model="activeNames">
+        <el-collapse-item :title="currentTaskAndModelAndModelVersion.algTaskPk" name="1">
+          <!--<div class="model-desc">{{ currentModel.description }}</div>-->
+          <div>
+            <el-form v-loading="loading2" element-loading-text="拼命加载中" label-position="left" inline class="demo-table-expand">
+              <!--<el-form-item label="任务ID">-->
               <!--<span>{{ currentTaskAndModelAndModelVersion.algTaskPk }}</span>-->
-            <!--</el-form-item>-->
-            <el-form-item label="计划名称">
-              <span>{{ currentTaskAndModelAndModelVersion.taskPlanName }}</span>
-            </el-form-item>
-            <el-form-item label="模型名称">
-              <span>{{ currentTaskAndModelAndModelVersion.name }}</span>
-            </el-form-item>
-            <el-form-item label="模型版本">
-              <span>{{ currentTaskAndModelAndModelVersion.versionNo }}</span>
-            </el-form-item>
-            <el-form-item label="任务类型">
-              <span>{{ systemTaskTypeMap[currentTaskAndModelAndModelVersion.taskType] }}</span>
-            </el-form-item>
-            <el-form-item label="任务来源">
-              <span>{{ systemTaskResourceMap[currentTaskAndModelAndModelVersion.taskSource] }}</span>
-            </el-form-item>
-            <!--<el-form-item label="部署小区">-->
+              <!--</el-form-item>-->
+              <el-form-item label="计划名称">
+                <span>{{ currentTaskAndModelAndModelVersion.taskPlanName }}</span>
+              </el-form-item>
+              <el-form-item label="模型名称">
+                <span>{{ currentTaskAndModelAndModelVersion.name }}</span>
+              </el-form-item>
+              <el-form-item label="小区">
+                <span>{{ communityIdMap[currentTaskAndModelAndModelVersion.communityId] }}</span>
+              </el-form-item>
+              <el-form-item label="模型版本">
+                <span>{{ currentTaskAndModelAndModelVersion.versionNo }}</span>
+              </el-form-item>
+              <el-form-item label="任务类型">
+                <span>{{ systemTaskTypeMap[currentTaskAndModelAndModelVersion.taskType] }}</span>
+              </el-form-item>
+              <el-form-item label="任务来源">
+                <span>{{ systemTaskResourceMap[currentTaskAndModelAndModelVersion.taskSource] }}</span>
+              </el-form-item>
+              <!--<el-form-item label="部署小区">-->
               <!--<span>{{ communityIdMap[currentTask.communityId] }}</span>-->
-            <!--</el-form-item>-->
-            <el-form-item label="调用人">
-              <span>{{ currentTaskAndModelAndModelVersion.invokeUser }}</span>
-            </el-form-item>
-            <el-form-item label="开始时间">
-              <span>{{ currentTaskAndModelAndModelVersion.startTime | formatDate }}</span>
-            </el-form-item>
-            <el-form-item label="结束时间">
-              <span>{{ currentTaskAndModelAndModelVersion.endTime | formatDate }}</span>
-            </el-form-item>
-            <el-form-item label-width="140px" label="执行时间（秒）">
-              <span>{{ currentTaskAndModelAndModelVersion.exeTimeInSec }}</span>
-            </el-form-item>
-            <el-form-item label="创建时间">
-              <span>{{ currentTaskAndModelAndModelVersion.createTime | formatDate }}</span>
-            </el-form-item>
-            <el-form-item label="更新时间">
-              <span>{{ currentTaskAndModelAndModelVersion.updateTime | formatDate }}</span>
-            </el-form-item>
-            <el-form-item label="创建人">
-              <span>{{ currentTaskAndModelAndModelVersion.createUser }}</span>
-            </el-form-item>
-            <el-form-item label="更新人">
-              <span>{{ currentTaskAndModelAndModelVersion.updateUser }}</span>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+              <!--</el-form-item>-->
+              <el-form-item label="调用人">
+                <span>{{ currentTaskAndModelAndModelVersion.invokeUser }}</span>
+              </el-form-item>
+              <el-form-item label="开始时间">
+                <span v-if="currentTaskAndModelAndModelVersion.startTime">{{ currentTaskAndModelAndModelVersion.startTime | formatDate }}</span>
+              </el-form-item>
+              <el-form-item label="结束时间">
+                <span v-if="currentTaskAndModelAndModelVersion.endTime">{{ currentTaskAndModelAndModelVersion.endTime | formatDate }}</span>
+              </el-form-item>
+              <el-form-item label-width="140px" label="执行时间（秒）">
+                <span v-if="currentTaskAndModelAndModelVersion.exeTimeInSec">{{ currentTaskAndModelAndModelVersion.exeTimeInSec/1000 }}</span>
+              </el-form-item>
+              <el-form-item label="创建时间">
+                <span>{{ currentTaskAndModelAndModelVersion.createTime | formatDate }}</span>
+              </el-form-item>
+              <el-form-item label="更新时间">
+                <span>{{ currentTaskAndModelAndModelVersion.updateTime | formatDate }}</span>
+              </el-form-item>
+              <el-form-item label="创建人">
+                <span>{{ currentTaskAndModelAndModelVersion.createUser }}</span>
+              </el-form-item>
+              <el-form-item label="更新人">
+                <span>{{ currentTaskAndModelAndModelVersion.updateUser }}</span>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
 
 
     <div class="model-title margin-top-15"><i class="el-icon-news"></i> 任务结果</div>
 
     <!-- 显示计划结果信息 -->
-      <el-table
-        class="margin-top-25"
-        ref="multipleTable"
-        :data="displayedTableList"
-        tooltip-effect="dark"
-        style="width: 100%"
-        v-loading="loadingVersion" element-loading-text="拼命加载中">
+    <el-table
+      class="margin-top-25"
+      ref="multipleTable"
+      :data="displayedTableList"
+      tooltip-effect="dark"
+      style="width: 100%"
+      v-loading="loadingVersion" element-loading-text="拼命加载中">
 
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline class="demo-table-expand">
-              <!--<el-form-item label="模型名称">-->
-              <!--<span>{{ props.row.algModel.name }}</span>-->
-              <!--</el-form-item>-->
-              <el-form-item label="创建人">
-                <span>{{ props.row.createUser }}</span>
-              </el-form-item>
-              <el-form-item label="创建时间">
-                <span>{{ props.row.createTime | formatDate }}</span>
-              </el-form-item>
-              <el-form-item label="更新人">
-                <span>{{ props.row.updateUser }}</span>
-              </el-form-item>
-              <el-form-item label="更新时间">
-                <span>{{ props.row.updateTime | formatDate }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <!--<el-form-item label="模型名称">-->
+            <!--<span>{{ props.row.algModel.name }}</span>-->
+            <!--</el-form-item>-->
+            <el-form-item label="创建人">
+              <span>{{ props.row.createUser }}</span>
+            </el-form-item>
+            <el-form-item label="创建时间">
+              <span>{{ props.row.createTime | formatDate }}</span>
+            </el-form-item>
+            <el-form-item label="更新人">
+              <span>{{ props.row.updateUser }}</span>
+            </el-form-item>
+            <el-form-item label="更新时间">
+              <span>{{ props.row.updateTime | formatDate }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
 
 
-        <el-table-column
-          label="部署小区"
-          width="150">
-          <template slot-scope="scope"><span>{{ communityIdMap[scope.row.communityId] }}</span></template>
-          <!--{{ systemRuntimeTypeMap[scope.row.runtimeType] }}-->
-        </el-table-column>
-        <el-table-column
-          label="结果类型">
-          <template slot-scope="scope"><span>{{ systemResultTypeMap[scope.row.resultType] }}</span></template>
-        </el-table-column>
-        <el-table-column
-          prop="resultMessage"
-          label="结果信息">
-        </el-table-column>
-        <el-table-column
+      <!--<el-table-column-->
+      <!--label="小区"-->
+      <!--width="150">-->
+      <!--<template slot-scope="scope"><span>{{ communityIdMap[scope.row.communityId] }}</span></template>-->
+      <!--&lt;!&ndash;{{ systemRuntimeTypeMap[scope.row.runtimeType] }}&ndash;&gt;-->
+      <!--</el-table-column>-->
+      <el-table-column
+        label="结果类型">
+        <template slot-scope="scope"><span>{{ systemResultTypeMap[scope.row.resultType] }}</span></template>
+      </el-table-column>
+      <!-- <el-table-column
+        prop="resultMessage"
+        label="结果信息">
+      </el-table-column> -->
+      <el-table-column
         label="文件存储类型"
         width="120">
-          <template slot-scope="scope"><span>{{ systemFileStorageTypeMap[scope.row.fileStorageType] }}</span></template>
-        </el-table-column>
-        <el-table-column
+        <template slot-scope="scope"><span>{{ systemFileStorageTypeMap[scope.row.fileStorageType] }}</span></template>
+      </el-table-column>
+      <el-table-column
         label="文件上传时间"
         width="200">
-        <template slot-scope="scope">{{ scope.row.fileUploadTime | formatDate }}</template>
-        </el-table-column>
-        <el-table-column
+        <template slot-scope="scope" v-if="scope.row.fileUploadTime">{{ scope.row.fileUploadTime | formatDate }}</template>
+      </el-table-column>
+      <el-table-column
         prop="fileName"
         label="文件名称">
-        </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="filePath"-->
-          <!--label="文件路径">-->
-        <!--</el-table-column>-->
-        <!--<el-table-column-->
-        <!--prop="filePath"-->
-        <!--label="文件路径">-->
-        <!--&lt;!&ndash;<template slot-scope="scope">{{ scope.row.updateTime | formatDate }}</template>&ndash;&gt;-->
-        <!--</el-table-column>-->
+      </el-table-column>
+      <!--<el-table-column-->
+      <!--prop="filePath"-->
+      <!--label="文件路径">-->
+      <!--</el-table-column>-->
+      <!--<el-table-column-->
+      <!--prop="filePath"-->
+      <!--label="文件路径">-->
+      <!--&lt;!&ndash;<template slot-scope="scope">{{ scope.row.updateTime | formatDate }}</template>&ndash;&gt;-->
+      <!--</el-table-column>-->
 
-        <!--<el-table-column-->
-        <!--label="部署"-->
-        <!--width="150">-->
-        <!--<template slot-scope="scope">-->
-        <!--<el-button v-if="scope.row.algModel.modelStatus!='已发布'"-->
-        <!--size="mini"-->
-        <!--type="primary"-->
-        <!--@click="handleDeploy(scope.$index, scope.row)">部署</el-button>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
+      <!--<el-table-column-->
+      <!--label="部署"-->
+      <!--width="150">-->
+      <!--<template slot-scope="scope">-->
+      <!--<el-button v-if="scope.row.algModel.modelStatus!='已发布'"-->
+      <!--size="mini"-->
+      <!--type="primary"-->
+      <!--@click="handleDeploy(scope.$index, scope.row)">部署</el-button>-->
+      <!--</template>-->
+      <!--</el-table-column>-->
 
-        <el-table-column
-          label="下载结果文件"
-          width="150">
-          <template slot-scope="scope">
-
-
-            <a v-if="scope.row.filePath" v-bind:href="scope.row.filePath">
-              <el-button
-                size="mini"
-                type="primary"
-              >下载结果文件</el-button>
-            </a>
+      <el-table-column
+        label="查看结果"
+        width="150">
+        <template slot-scope="scope">
 
 
-            <!--<el-tooltip class="item" effect="dark" content="查看任务运行结果" placement="top">-->
-              <!--<i class="cursor-hand model-view font-size-20 el-icon-view"></i>-->
-            <!--</el-tooltip>-->
-            <!--&lt;!&ndash;<el-tooltip class="item" effect="dark" content="查看该计算节点的运行时信息" placement="top">&ndash;&gt;-->
-            <!--&lt;!&ndash;<i @click="handleView(scope.$index, scope.row)" class="cursor-hand model-view font-size-20 el-icon-view "></i>&ndash;&gt;-->
-            <!--&lt;!&ndash;</el-tooltip>&ndash;&gt;-->
-            <!--<el-tooltip class="item" effect="dark" content="下载任务运行结果" placement="top">-->
-              <!--<a href="/scp-mdm-app/user/downloadUsers">-->
-                <!--<i class="cursor-hand model-download font-size-20 el-icon-download">-->
-                <!--</i>-->
-              <!--</a>-->
-            <!--</el-tooltip>-->
-            <!--<el-button-->
-            <!--size="mini"-->
-            <!--@click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
-            <!--<el-button-->
-            <!--size="mini"-->
-            <!--type="danger"-->
-            <!--@click="removeData(scope.$index, scope.row)">删除</el-button>-->
-          </template>
-        </el-table-column>
-      </el-table>
-      <!--<div class="block text-center margin-top-20">-->
-        <!--<el-pagination-->
-          <!--@size-change="handleSizeChange"-->
-          <!--@current-change="handleCurrentChange"-->
-          <!--:current-page="currentPage"-->
-          <!--:page-sizes="[10, 20, 50, 100]"-->
-          <!--:page-size="10"-->
-          <!--layout="total, sizes, prev, pager, next, jumper"-->
-          <!--:total="total">-->
-        <!--</el-pagination>-->
-      <!--</div>-->
+          <a v-if="scope.row.filePath && scope.row.fileStorageType" v-bind:href="`/scp-modelmgmtcomponent/modelmgmt/web/download?filePath=${scope.row.filePath}&fileStorageType=${scope.row.fileStorageType}`">
+            <el-button
+              size="mini"
+              type="primary"
+            >下载结果文件</el-button>
+          </a >
+
+          <a v-if="scope.row.resultMessage">
+            <el-button
+              @click="showMessageResult(scope.$index, scope.row)"
+              size="mini"
+              type="primary"
+            >查看结果</el-button>
+          </a>
+
+
+          <!--<el-tooltip class="item" effect="dark" content="查看任务运行结果" placement="top">-->
+          <!--<i class="cursor-hand model-view font-size-20 el-icon-view"></i>-->
+          <!--</el-tooltip>-->
+          <!--&lt;!&ndash;<el-tooltip class="item" effect="dark" content="查看该计算节点的运行时信息" placement="top">&ndash;&gt;-->
+          <!--&lt;!&ndash;<i @click="handleView(scope.$index, scope.row)" class="cursor-hand model-view font-size-20 el-icon-view "></i>&ndash;&gt;-->
+          <!--&lt;!&ndash;</el-tooltip>&ndash;&gt;-->
+          <!--<el-tooltip class="item" effect="dark" content="下载任务运行结果" placement="top">-->
+          <!--<a href="/scp-mdm-app/user/downloadUsers">-->
+          <!--<i class="cursor-hand model-download font-size-20 el-icon-download">-->
+          <!--</i>-->
+          <!--</a>-->
+          <!--</el-tooltip>-->
+          <!--<el-button-->
+          <!--size="mini"-->
+          <!--@click="handleEdit(scope.$index, scope.row)">编辑</el-button>-->
+          <!--<el-button-->
+          <!--size="mini"-->
+          <!--type="danger"-->
+          <!--@click="removeData(scope.$index, scope.row)">删除</el-button>-->
+        </template>
+      </el-table-column>
+    </el-table>
+    <!--<div class="block text-center margin-top-20">-->
+    <!--<el-pagination-->
+    <!--@size-change="handleSizeChange"-->
+    <!--@current-change="handleCurrentChange"-->
+    <!--:current-page="currentPage"-->
+    <!--:page-sizes="[10, 20, 50, 100]"-->
+    <!--:page-size="10"-->
+    <!--layout="total, sizes, prev, pager, next, jumper"-->
+    <!--:total="total">-->
+    <!--</el-pagination>-->
     <!--</div>-->
+    <!--</div>-->
+
+    <!-- 添加模型版本对话框 -->
+    <el-dialog
+      title="任务结果"
+      :close-on-click-modal=false
+      :close-on-press-escape=false
+      :visible.sync="resultMessageDialogVisible"
+      width="50%">
+
+
+      <!--<div class="step-info">-->
+      <!--<el-steps :active="currentStep">-->
+      <!--<el-step title="填写版本信息" icon="el-icon-edit"></el-step>-->
+      <!--<el-step title="上传算法文件" icon="el-icon-upload"></el-step>-->
+      <!--<el-step title="完成" icon="el-icon-success"></el-step>-->
+      <!--</el-steps>-->
+      <!--</div>-->
+
+      <el-form ref="taskResultMessage" label-width="100px"
+               class="demo-ruleForm">
+
+        <div class="task-result-wrap">
+          {{showMessageItem.resultMessage}}
+        </div>
+
+        <el-form-item class="text-right add-model-button">
+          <el-button @click="resultMessageDialogVisible=false">关闭</el-button>
+          <!--<el-button @click="resetForm('newTaskPlan')">重置</el-button>-->
+          <!-- <el-button type="primary" @click="submitForm('newTaskPlan')">保存</el-button> -->
+        </el-form-item>
+
+
+      </el-form>
+
+      <!--</span>-->
+    </el-dialog>
 
 
   </div>
@@ -255,6 +302,12 @@
 
   .add-model-button {
     margin-left: -100px;
+  }
+
+  .task-result-wrap {
+    border:1px dashed #ccc;
+    padding:10px;
+    margin-bottom: 20px;
   }
 
 </style>
@@ -337,6 +390,9 @@
             { required: true, message: '请选择运行时类型', trigger: 'change' }
           ]
         },
+        showMessageItem: {},
+        curPlanExcuteParams: {},
+        resultMessageDialogVisible: false,
         loading2: false,
         loadingStep: false,
         loadingEditStep: false,
@@ -452,6 +508,10 @@
             }
           )
       },
+      showMessageResult (index, item) {
+        this.showMessageItem = item
+        this.resultMessageDialogVisible = true
+      },
       // loadRuntimeData () {
       //   this.loadingVersion = true
       //   var params = {
@@ -516,6 +576,32 @@
             }.bind(this)
           )
       }
+      // downloadFile (index, item) {
+      //   // this.loading2 = true
+      //   var params = {
+      //     filePath: this.displayedTableList[index].filePath,
+      //     fileStorageType: this.displayedTableList[index].fileStorageType
+      //   }
+      //   console.log('gfgfgfgfgfgfg' + params)
+      //   let loadingTaskInfo = startSystemLoading()
+      //   executeFileUpload(params)
+      //     .then(
+      //       function (result) {
+      //         this.$nextTick(() => {
+      //           loadingTaskInfo.close()
+      //         })
+      //       }.bind(this)
+      //     )
+      //     .catch(
+      //       function (error) {
+      //         // this.loading2 = false
+      //         this.$nextTick(() => {
+      //           loadingTaskInfo.close()
+      //         })
+      //         console.info(error)
+      //       }.bind(this)
+      //     )
+      // }
     }
   }
 </script>

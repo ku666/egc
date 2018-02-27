@@ -86,7 +86,21 @@
         </el-col>
         <el-col :span="20">
           <div class="text-right">
-            <div class="form-info">
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="占位符" v-show="false">
+                  <el-input  placeholder="占位符"></el-input>
+                </el-form-item>
+                <el-form-item label="版本号" prop="versionNo">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.versionNo"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <div class="form-info">
               <div class="item-info label">版本号</div>
               <div class="item-info">
                 <el-input @keyup.enter.native="loadData" id="searchName" @blur="inputBlur" v-model="modelListSearch.versionNo"></el-input>
@@ -94,7 +108,7 @@
               <div class="item-info">
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -164,18 +178,26 @@
           </template>
         </el-table-column>
 
-        <!--<el-table-column-->
-        <!--label="部署状态"-->
-        <!--width="120"-->
-        <!--&gt;-->
-        <!--<template slot-scope="scope">-->
-        <!--<span :class="{ 'online-status': scope.row.deployStatus=='deployed', 'offline-status': scope.row.deployStatus!='deployed'}" class="">{{ scope.row.deployStatus }}</span>-->
-        <!--</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+        label="部署脚本"
+        align="center"
+        width="120"
+        >
+          <template slot-scope="scope">
+            <a v-show="scope.row.fileUploadFlag" @click="showEditDeployCommand(scope.$index, scope.row)" class="blue cursor-hand">部署脚本</a>
+            <span v-show="!scope.row.fileUploadFlag">-</span>
+            <!--<el-button-->
+              <!--size="mini"-->
+              <!--type="primary"-->
+              <!--@click="show(scope.$index, scope.row)">部署命令-->
+            <!--</el-button>-->
+          </template>
+        </el-table-column>
 
 
         <el-table-column
           label="状态"
+          align="center"
           width="80"
         >
           <template slot-scope="scope">
@@ -186,19 +208,20 @@
         </el-table-column>
 
         <el-table-column
-          label="部署状态"
-          width="120"
+          label="部署发布状态"
+          width="180"
           align="center"
         >
           <template slot-scope="scope">
             <div v-if="scope.row.onCloud">
-              <el-button
+              <a @click="showDeployPublishStatus(scope.$index, scope.row)" class="blue cursor-hand">部署发布状态</a>
+             <!--  <el-button
                 size="mini"
                 type="primary"
-                @click="redirectToParamMgmt(scope.$index, scope.row)">部署状态
-              </el-button>
+                @click="showDeployPublishStatus(scope.$index, scope.row)">部署发布状态
+              </el-button> -->
             </div>
-            <div v-if="!scope.row.oncloud">
+            <div v-if="!scope.row.onCloud">
               <span v-if="scope.row.displayDeployStatus==versionDeployedStatus" class="green">
                 {{systemDeployStatusMap[scope.row.displayDeployStatus]}}
               </span>
@@ -212,7 +235,7 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+        <!--<el-table-column
           label="发布状态"
           width="120"
           align="center"
@@ -225,19 +248,19 @@
                 @click="redirectToParamMgmt(scope.$index, scope.row)">发布状态
               </el-button>
             </div>
-            <div v-if="!scope.row.oncloud">
+            <div v-if="!scope.row.onCloud">
               <span v-if="scope.row.displayPublishStatus==versionPublishedStatus" class="green">
                 {{systemPublishStatusMap[scope.row.displayPublishStatus]}}
               </span>
               <span v-if="scope.row.displayPublishStatus!=versionPublishedStatus" class="">
                 {{systemPublishStatusMap[scope.row.displayPublishStatus]}}
               </span>
-              <!--<span :class="{ 'green': scope.row.publishStatus==versionPublishedStatus, 'red': scope.row.publishStatus!=versionPublishedStatus}" >-->
-              <!--{{ systemPublishStatusMap[scope.row.publishStatus] }}-->
-              <!--</span>-->
+              <!~~<span :class="{ 'green': scope.row.publishStatus==versionPublishedStatus, 'red': scope.row.publishStatus!=versionPublishedStatus}" >~~>
+              <!~~{{ systemPublishStatusMap[scope.row.publishStatus] }}~~>
+              <!~~</span>~~>
             </div>
           </template>
-        </el-table-column>
+        </el-table-column>-->
 
         <el-table-column
           label="参数管理"
@@ -279,15 +302,15 @@
                 更多<i class="el-icon-arrow-down el-icon--right"></i>
               </span>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable' && deployCondition.indexOf(scope.row.displayDeployStatus)>=0" class="model-dropdown-item" command="deploy"><i class="el-icon-tickets"></i>部署</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable' && scope.row.displayDeployStatus == 'mm.depsts.deploy' && scope.row.displayPublishStatus != 'mm.pubsts.publish'" class="model-dropdown-item" command="publish"><i class="el-icon-upload2"></i>发布</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable' && scope.row.displayPublishStatus == 'mm.pubsts.publish'" class="model-dropdown-item" command="excuteTask"><i class="el-icon-tickets"></i>执行任务</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.displayDeployStatus == 'mm.depsts.deploy'" class="model-dropdown-item" command="taskplan"><i class="el-icon-time"></i>查看计划</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.displayDeployStatus == 'mm.depsts.deploy'" class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.displayPublishStatus == 'mm.pubsts.publish'" class="model-dropdown-item" command="excuteStatus"><i class="el-icon-search"></i>运行状况</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable'" class="model-dropdown-item" command="deploy"><i class="el-icon-tickets"></i>部署发布</el-dropdown-item>
+                <!-- <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable' && scope.row.displayDeployStatus == 'mm.depsts.deploy' && scope.row.displayPublishStatus != 'mm.pubsts.publish'" class="model-dropdown-item" command="publish"><i class="el-icon-upload2"></i>发布</el-dropdown-item> -->
+                <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable'" class="model-dropdown-item" command="excuteTask"><i class="el-icon-tickets"></i>执行任务</el-dropdown-item>
+                <el-dropdown-item class="model-dropdown-item" command="taskplan"><i class="el-icon-time"></i>查看计划</el-dropdown-item>
+                <el-dropdown-item class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
+                <el-dropdown-item class="model-dropdown-item" command="excuteStatus"><i class="el-icon-search"></i>运行状况</el-dropdown-item>
                 <!--<el-dropdown-item class="model-dropdown-item" command="params" ><i class="el-icon-upload"></i>参数管理</el-dropdown-item>-->
                 <!--<el-dropdown-item class="model-dropdown-item" command="result" ><i class="el-icon-upload"></i>结果定义</el-dropdown-item>-->
-                <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable' && scope.row.displayDeployStatus=='mm.depsts.none'" class="model-dropdown-item" command="updatefile"><i class="el-icon-upload"></i>更新模型文件</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable' && !scope.row.deployed" class="model-dropdown-item" command="updatefile"><i class="el-icon-upload"></i>更新模型文件</el-dropdown-item>
                 <el-dropdown-item v-if="!scope.row.fileUploadFlag" class="model-dropdown-item" command="updatefile"><i class="el-icon-upload"></i>上传算法文件</el-dropdown-item>
                 <!--<el-dropdown-item v-if="scope.row.versionStatus=='mm.versts.enable'" class="model-dropdown-item"><i class="el-icon-remove"></i>停用</el-dropdown-item>-->
                 <!--<el-dropdown-item v-if="scope.row.versionStatus=='mm.versts.disable'" class="model-dropdown-item"><i class="el-icon-remove"></i>启用</el-dropdown-item>-->
@@ -373,7 +396,7 @@
 
         <el-form-item class="text-right add-model-button">
           <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
-          <el-button @click="addModelDialogVisible=false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitForm('newModelVersion')">保存</el-button>
         </el-form-item>
 
@@ -407,8 +430,46 @@
 
         <el-form-item class="text-right add-model-button">
           <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
-          <el-button @click="editModelDialogVisible=false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="confirmEditModelVersion('editModelVersion')">保存</el-button>
+        </el-form-item>
+
+      </el-form>
+
+
+    </el-dialog>
+
+
+
+
+    <!-- 修改部署命令对话框 -->
+    <el-dialog
+      title="部署脚本"
+      @close="closeAddModel"
+      :close-on-click-modal=false
+      :close-on-press-escape=false
+      :visible.sync="deployCommandDialogVisible"
+      width="40%"
+      :before-close="handleClose">
+
+      <el-form v-loading="loadingStep" :model="deployCommand" :rules="commandRules" ref="deployCommand" label-width="100px" class="demo-ruleForm">
+
+        <el-form-item label="部署脚本" prop="command">
+          <el-input
+            :disabled="deployScriptDisabled?'disabled':undefined"
+            id="deployCommand" @blur="inputBlur" type="textarea" v-model="deployCommand.command"></el-input>
+        </el-form-item>
+
+        <el-form-item v-if="!deployScriptDisabled" class="text-right add-model-button">
+          <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
+          <el-button @click="handleClose">取消</el-button>
+          <el-button type="primary" @click="confirmEditDeployScript('deployCommand')">保存</el-button>
+        </el-form-item>
+
+        <el-form-item v-if="deployScriptDisabled" class="text-right add-model-button">
+          <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
+          <el-button @click="handleClose">关闭</el-button>
+          <!--<el-button type="primary" @click="confirmEditDeployScript('deployCommand')">保存</el-button>-->
         </el-form-item>
 
       </el-form>
@@ -494,26 +555,33 @@
 
     <!-- 部署显示小区和管理节点对话框 -->
     <el-dialog
-      :title="currentDeployPublishAction==='deploy'?'部署模型版本':'发布模型版本'"
+      :title="currentDeployPublishAction==='deploy'?'部署发布模型版本':'发布模型版本'"
       @close="closeDeployModel"
       :close-on-click-modal=false
       :close-on-press-escape=false
       :visible.sync="deployDialogVisible"
       width="40%"
       :before-close="handleClose">
-
       <el-form v-loading="deployLoading" class="demo-ruleForm">
-        <div v-if="currentDeployPublishAction==='deploy'" v-bind:class="[isEmptyNode ? 'red' : '']">请选择要部署的管理节点</div>
-        <div v-if="currentDeployPublishAction==='publish'" v-bind:class="[isEmptyNode ? 'red' : '']">请选择要发布的管理节点</div>
+        <div v-if="currentDeployPublishAction==='deploy'" v-bind:class="[isEmptyNode ? 'red' : '']">请选择要部署和发布的小区</div>
+        <!-- <div v-if="currentDeployPublishAction==='publish'" v-bind:class="[isEmptyNode ? 'red' : '']">请选择要发布的管理节点</div> -->
         <div class="text-center tree-padding" v-bind:class="[isEmptyNode ? 'emptyNode' : '']">
 
-          <el-tree v-if="currentDeployPublishAction == 'deploy'"
+          <!-- <el-tree v-if="currentDeployPublishAction == 'deploy'"
                    ref="deployTree"
                    :default-expand-all=false
                    node-key="code"
                    :props="deployTreeNode"
                    :load="loadDeployNode"
                    lazy
+                   show-checkbox>
+          </el-tree> -->
+          <el-tree v-if="currentDeployPublishAction == 'deploy'"
+                   ref="deployTree"
+                   :default-expand-all=true
+                   node-key="code"
+                   :props="deployTreeNode"
+                   :data="deployTreeData"
                    show-checkbox>
           </el-tree>
 
@@ -526,7 +594,16 @@
           <!--:props="defaultProps">-->
           <!--</el-tree>-->
 
-          <el-tree v-if="currentDeployPublishAction == 'publish'"
+          <!-- <el-tree v-if="currentDeployPublishAction == 'publish'"
+                   ref="publishTree"
+                   :default-expand-all=false
+                   node-key="code"
+                   :props="publishTreeNode"
+                   :data="publishTreeData"
+                   show-checkbox>
+          </el-tree> -->
+
+          <!-- <el-tree v-if="currentDeployPublishAction == 'publish'"
                    ref="publishTree"
                    node-key="code"
                    :default-expand-all=false
@@ -534,7 +611,7 @@
                    :load="loadPublishNode"
                    lazy
                    show-checkbox>
-          </el-tree>
+          </el-tree> -->
 
         </div>
 
@@ -565,7 +642,7 @@
         <div class="step-info">
           <el-steps :active="currentTaskExeStep">
             <el-step title="调整执行参数" icon="el-icon-edit"></el-step>
-            <el-step title="选择执行节点" icon="el-icon-upload"></el-step>
+            <el-step title="选择执行小区" icon="el-icon-upload"></el-step>
             <el-step title="执行成功" icon="el-icon-success"></el-step>
           </el-steps>
         </div>
@@ -578,6 +655,13 @@
                 <el-form-item :label="item.paramName" prop="item">
                   <el-input id="addNo" @blur="inputBlur" size="small" v-model="item.defaultValue"></el-input>
                 </el-form-item>
+              </el-col>
+              <el-col :span="24">
+                <div class="text-left" style="padding-left:40%;">
+                  <a :href="'/modelmgmt/model/'+excuteVersionInfo.algModelPk+'/version/'+excuteVersionInfo.algModelVersionPk+'/paramdefine'" class="blue">
+                    新增(删除)参数
+                  </a>
+                </div>
               </el-col>
             </el-row>
           </div>
@@ -601,7 +685,29 @@
 
         <div v-if="currentTaskExeStep == 2" class="excute-min-height">
           <div class="text-center tree-padding" v-bind:class="[isExeEmptyNode ? 'emptyNode' : '']" style="margin:0 15px 0;">
+
+            <div>
+              <!-- <el-select @change="loadData" placeholder="执行小区">
+                <el-option
+                  v-for="item in excuteCommunityList"
+                  :key="item.item_code"
+                  :label="item.item_name"
+                  :value="item.item_code"
+                ></el-option>
+              </el-select> -->
+            </div>
+
             <el-tree
+              empty-text="暂无可执行任务的小区"
+              ref="excuteTaskTree"
+              :default-expand-all=true
+              node-key="code"
+              @check-change="handleClick"
+              :props="excuteTaskTreeNode"
+              :data="excuteTaskTreeData"
+              show-checkbox>
+            </el-tree>
+            <!-- <el-tree
               ref="excuteTaskTree"
               node-key="code"
               :default-expand-all=false
@@ -609,26 +715,26 @@
               :load="loadExcuteNode"
               lazy
               show-checkbox>
-            </el-tree>
+            </el-tree> -->
           </div>
           <div style="height: 14px; line-height: 22px; padding: 0 0 0 15px;" class="red">
             <!-- <div v-if="isExeEmptyNode && currentDeployPublishAction==='deploy'">请选择要部署的管理节点</div> -->
             <!-- <div v-if="isExeEmptyNode && currentDeployPublishAction==='publish'">请选择要发布的管理节点</div> -->
-            <div v-if="isExeEmptyNode && currentDeployPublishAction==='excute'">请选择要执行任务的管理节点</div>
+            <div v-if="isExeEmptyNode && currentDeployPublishAction==='excute'">请选择要执行任务的小区</div>
           </div>
         </div>
 
 
         <div v-if="currentTaskExeStep == 3" class="excute-min-height">
-          <div class="text-center tree-padding" style="margin:0 15px 0;" v-if="excuteVersionInfo.warnCode">
-            <div class="yellow" style="font-size: 24px; margin:10px 0;"><i class="el-icon-warning margin-right-5"></i>{{errorMessageMap[excuteVersionInfo.warnCode]}}</div>
+          <div class="text-center tree-padding" style="margin:0 15px 0;" v-if="curTaskExecuteResult.warnCode">
+            <div class="yellow" style="font-size: 24px; margin:10px 0;"><i class="el-icon-warning margin-right-5"></i>{{errorMessageMap[curTaskExecuteResult.warnCode]}}</div>
             <div class="margin-top-25 margin-bottom-10">
               <a  :href="'/modelmgmt/model/'+excuteVersionInfo.algModelPk+'/version/'+excuteVersionInfo.algModelVersionPk+'/task'" class="blue">
                 <i class="el-icon-search margin-right-5"></i>查看执行结果
               </a>
             </div>
           </div>
-          <div class="text-center tree-padding" style="margin:0 15px 0;" v-if="!excuteVersionInfo.warnCode">
+          <div class="text-center tree-padding" style="margin:0 15px 0;" v-if="!curTaskExecuteResult.warnCode">
             <div class="green" style="font-size: 24px; margin:10px 0;"><i class="el-icon-success margin-right-5"></i>执行命令发送成功</div>
             <div class="margin-top-25 margin-bottom-10">
               <!-- <a  :href="'/modelmgmt/model/'+excuteVersionInfo.algModelPk+'/version/'+excuteVersionInfo.algModelVersionPk+'/task/'+curTaskExecuteResult.taskId" class="blue"> -->
@@ -643,7 +749,7 @@
         <div class="text-right add-model-button" v-if="currentTaskExeStep == 1">
           <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
           <el-button @click="excuteVersionVisible=false">取消</el-button>
-          <el-button @click="excuteChooseMgmtNode()">下一步:选择执行节点</el-button>
+          <el-button @click="excuteChooseMgmtNode()">下一步:选择执行小区</el-button>
         </div>
 
         <div class="add-model-button" v-if="currentTaskExeStep == 2">
@@ -673,6 +779,196 @@
 
 
 
+
+
+
+    <!-- 显示各小区部署发布情况 -->
+    <el-dialog
+      title="各小区部署发布情况"
+      @close="closeShowDeployPublish"
+      :close-on-click-modal=false
+      :close-on-press-escape=false
+      :visible.sync="showComDeployPublishVisible"
+      width="50%"
+      >
+
+      <el-form ref="deployPublishForm" class="demo-form-inline">
+
+      <!-- <el-form-item class="text-right add-model-button">
+        <div class="text-right">
+          <el-select @change="loadData" filterable v-model="modelListSearch.community" placeholder="小区">
+            <el-option key="0" label="全部" value="0"></el-option>
+            <el-option
+              v-for="item in systemCommunityList"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code"
+            ></el-option>
+          </el-select>
+        </div>
+      </el-form-item> -->
+
+      <el-form-item>
+
+         <el-table
+          ref="multipleTable"
+          :data="communityStatusList"
+          tooltip-effect="dark"
+          style="width: 100%"
+          v-loading="loadingVersion" element-loading-text="拼命加载中"
+          @selection-change="handleSelectionChange">
+
+          <!--<el-table-column type="expand">
+            <template slot-scope="props">
+              <el-form label-position="left" inline class="demo-table-expand">
+                <!~~<el-form-item label="模型名称">~~>
+                <!~~<span>{{ props.row.algModel.name }}</span>~~>
+                <!~~</el-form-item>~~>
+                <el-form-item label="更新人">
+                  <span>{{ props.row.updateUser }}</span>
+                </el-form-item>
+                <el-form-item label="更新时间">
+                  <span>{{ props.row.updateTime | formatDate }}</span>
+                </el-form-item>
+                <el-form-item label="创建人">
+                  <span>{{ props.row.createUser }}</span>
+                </el-form-item>
+                <el-form-item label="创建时间">
+                  <span>{{ props.row.createTime | formatDate }}</span>
+                </el-form-item>
+              </el-form>
+            </template>
+          </el-table-column>-->
+
+          <!--<el-table-column-->
+          <!--label="ID"-->
+          <!--width="50">-->
+          <!--<template slot-scope="scope">{{ scope.row.algModelVersionPk }}</template>-->
+          <!--</el-table-column>-->
+          <el-table-column
+            label="小区">
+            <template slot-scope="scope">
+              <span>{{systemCommunityMap[scope.row.communityId]}}</span>
+            </template>
+          </el-table-column>
+          <!-- <el-table-column
+            prop="description"
+            label="管理节点"
+            show-overflow-tooltip>
+          </el-table-column> -->
+          <!--<el-table-column-->
+          <!--prop="algModel.type"-->
+          <!--label="算法类型">-->
+          <!--</el-table-column>-->
+          <!--<el-table-column-->
+          <!--prop="enableStatus"-->
+          <!--label="启用状态"-->
+          <!--width="120">-->
+          <!--</el-table-column>-->
+          <!-- <el-table-column
+            label="同步状态"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span :class="{ 'green': scope.row.versionStatus==modelVersionEnableStatus, 'red': scope.row.versionStatus=='mm.versts.disable'}" >
+              </span>
+            </template>
+          </el-table-column> -->
+
+          <el-table-column
+            label="部署状态"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span :class="{ 'green': scope.row.deployStatus=='mm.depsts.deploy', 'red': scope.row.deployStatus=='mm.depsts.fail'}">{{systemDeployStatusMap[scope.row.deployStatus]}}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="发布状态"
+            align="center"
+          >
+            <template slot-scope="scope">
+              <span :class="{ 'green': scope.row.publishStatus=='mm.pubsts.publish'}">{{systemPublishStatusMap[scope.row.publishStatus]}}</span>
+            </template>
+          </el-table-column>
+
+          <!--<el-table-column-->
+          <!--label="当前版本">-->
+          <!--<template slot-scope="scope"><span>{{ scope.row.algModel.latestVersion }}</span></template>-->
+          <!--</el-table-column>-->
+
+          <!--<el-table-column
+            label="更多操作"
+            width="100"
+            align="center">
+            <template slot-scope="scope">
+
+              <el-dropdown @command="handleCloudCommand($event, scope.$index, scope.row)" trigger="click">
+                <span class="blue cursor-hand el-dropdown-link">
+                  更多<i class="el-icon-arrow-down el-icon--right"></i>
+                </span>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item class="model-dropdown-item" command="deploy"><i class="el-icon-tickets"></i>部署</el-dropdown-item>
+                  <el-dropdown-item class="model-dropdown-item" command="publish"><i class="el-icon-upload2"></i>发布</el-dropdown-item>
+                  <!~~ <el-dropdown-item class="model-dropdown-item" command="excuteTask"><i class="el-icon-tickets"></i>执行任务</el-dropdown-item>
+                  <el-dropdown-item class="model-dropdown-item" command="taskplan"><i class="el-icon-time"></i>查看计划</el-dropdown-item>
+                  <el-dropdown-item class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item> ~~>
+                </el-dropdown-menu>
+              </el-dropdown>
+
+            </template>
+          </el-table-column>-->
+
+          <!--<el-table-column-->
+          <!--label="操作"-->
+          <!--width="100">-->
+          <!--<template slot-scope="scope">-->
+          <!--<el-tooltip class="item" effect="dark" content="编辑模型" placement="top">-->
+          <!--<i @click="handleEdit(scope.$index, scope.row)" class="cursor-hand model-eidt font-size-20 el-icon-edit-outline"></i>-->
+          <!--</el-tooltip>-->
+          <!--<el-tooltip class="item" effect="dark" content="删除模型" placement="top">-->
+          <!--<i @click="removeData(scope.$index, scope.row)" class="red cursor-hand model-delete font-size-20 el-icon-delete"></i>-->
+          <!--</el-tooltip>-->
+          <!--&lt;!&ndash;<el-button&ndash;&gt;-->
+          <!--&lt;!&ndash;size="mini"&ndash;&gt;-->
+          <!--&lt;!&ndash;@click="handleEdit(scope.$index, scope.row)">编辑</el-button>&ndash;&gt;-->
+          <!--&lt;!&ndash;<el-button&ndash;&gt;-->
+          <!--&lt;!&ndash;size="mini"&ndash;&gt;-->
+          <!--&lt;!&ndash;type="danger"&ndash;&gt;-->
+          <!--&lt;!&ndash;@click="removeData(scope.$index, scope.row)">删除</el-button>&ndash;&gt;-->
+          <!--</template>-->
+          <!--</el-table-column>-->
+        </el-table>
+        <div class="block text-center margin-top-20">
+          <el-pagination
+            @size-change="handleSizeChangeCommunity"
+            @current-change="handleCurrentChangeCommunity"
+            :current-page="currentPageCommunity"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size=pageSizeCommunity
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="totalCommunity">
+          </el-pagination>
+        </div>
+
+
+      </el-form-item>
+
+     <el-form-item class="text-right add-model-button">
+          <!--<el-button type="text" @click="addModelDialogVisible=false">关闭</el-button>-->
+        <el-button @click="showComDeployPublishVisible=false">关闭</el-button>
+        <!--<el-button @click="excuteChooseMgmtNode()">下一步:选择执行节点</el-button>-->
+      </el-form-item>
+
+    </el-form>
+
+
+    </el-dialog>
+
+
+
+
   </div>
 </template>
 
@@ -682,10 +978,6 @@
   .model-version .model-desc {
     padding:3px;
     color:#888;
-  }
-
-  .model-version .tree-padding {
-    /*padding: 10px 0px;*/
   }
 
   .model-version .tree-padding {
@@ -762,7 +1054,17 @@
 
 
 <script>
-  import { getModelVersionList, updateModelVersion, deployVersion, publishVersion, addModelVersion, deleteModelVersionById } from '@/views/modelManagement/apis/model_version_api'
+  import {
+    getModelVersionList,
+    updateModelVersion,
+    publishVersion,
+    deployAndPublisVersion,
+    addModelVersion,
+    deleteModelVersionById,
+    getCommunityByStatus,
+    getCommunityStatusByVersionId,
+    updateDeployCommandById
+  } from '@/views/modelManagement/apis/model_version_api'
   import { getModelById } from '@/views/modelManagement/apis/model_api'
   import { getMgmtNodeByVersionAndCommunity } from '@/views/modelManagement/apis/node_action_apis'
   import { getVersionParamsByVersionId } from '@/views/modelManagement/apis/model_paramdefine_api'
@@ -800,28 +1102,31 @@
     data () {
       return {
         currentPage: 1,
+        currentPageCommunity: 1,
         pageSize: 10,
+        pageSizeCommunity: 10,
         currentStep: 1,
         currentTaskExeStep: 1,
         curDeployVersion: {},
         total: 0,
+        totalCommunity: 0,
         formInline: {
           user: '',
           region: ''
         },
         deployTreeNode: {
           label: 'name',
-          children: '',
+          children: 'children',
           isLeaf: 'leaf'
         },
         publishTreeNode: {
           label: 'name',
-          children: '',
+          children: 'children',
           isLeaf: 'leaf'
         },
         excuteTaskTreeNode: {
           label: 'name',
-          children: '',
+          children: 'children',
           isLeaf: 'leaf'
         },
         activeNames: ['1'],
@@ -835,17 +1140,28 @@
         modelListSearch: {
           versionNo: ''
         },
+        searchRules: {
+          versionNo: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[A-Za-z0-9_]+$', min: 0, max: 32, message: '只支持字母,数字和下划线', trigger: 'change'}
+          ]
+        },
+        commandRules: {
+          command: [
+            { min: 0, max: 4096, message: '长度在 0 到 4096 个字符', trigger: 'blur' }
+          ]
+        },
         rules: {
           versionNo: [
             { required: true, message: '请输入版本号', trigger: 'blur' },
-            { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持字母,数字和下划线）', trigger: 'blur' }
           ],
           description: [
             { min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur' }
           ]
         },
         uploadParam: {
-          url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
+          url: '/egc-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
           data: {}
         },
         deployCondition: [
@@ -853,6 +1169,12 @@
           'mm.depsts.deploypart',
           'mm.depsts.fail'
         ],
+        deployScriptDisabled: false,
+        editScriptVersion: {},
+        deployCommandDialogVisible: false,
+        excuteTaskTreeData: [],
+        publishTreeData: [],
+        deployTreeData: [],
         versionFileList: [],
         errorMessageMap: ERROR_MESSAGE_MAP,
         editModelVersion: {},
@@ -903,7 +1225,14 @@
         deployLoading: false,
         currentModel: {},
         modelVersionList: [],
-        multipleSelection: []
+        multipleSelection: [],
+        deployCommand: {},
+        excuteCommunityList: [],
+        communityStatusList: [],
+        showDeployPublishVersion: {},
+        checkedIndex: 0,
+        isClickChangeCheckbox: false,
+        showComDeployPublishVisible: false
       }
     },
     mounted () {
@@ -950,6 +1279,7 @@
             this.systemPublishStatusList = getSystemDataByCode(result.data, SYSTEM_PUBLISHSTATUS)
             this.systemPublishStatusMap = getSystemCodeNameMap(this.systemPublishStatusList)
             this.systemCommunityList = getSystemDataByCode(result.data, COMMUNITY)
+            this.systemCommunityMap = getSystemCodeNameMap(this.systemCommunityList)
             this.$nextTick(() => {
               loadingSystemSetting.close()
               this.getModelById()
@@ -971,26 +1301,6 @@
       }
     },
     methods: {
-
-      // imitateProgress (size) {
-      //   this.fileUploadProgress = 10
-      //   var target = this
-      //   const UPLOADBYTE_PER_MILLISECOND = 4000
-      //   let costTotalSeconds = parseInt(size / UPLOADBYTE_PER_MILLISECOND)
-      //   let intervalTime = parseInt(costTotalSeconds / 100)
-      //   // this.fileUploadProgress ++
-      //   // console.info(intervalTime)
-      //   this.uploadInterval = setInterval(function () {
-      //     console.info(target.fileUploadProgress)
-      //     if (target.uploadFileStatus !== 'success' && target.uploadFileStatus !== 'exception') {
-      //       if (target.fileUploadProgress < 95) {
-      //         target.fileUploadProgress ++
-      //       } else {
-      //         clearInterval(target.uploadInterval)
-      //       }
-      //     }
-      //   }, intervalTime)
-      // },
       showProgress () {
         console.info('In Progress')
       },
@@ -1022,7 +1332,8 @@
         console.info(response)
         console.info(file)
         console.info(fileList)
-        fileList = []
+        // fileList = []
+        this.$refs.versionUpload.clearFiles()
         this.showUploadArea = true
         this.fileUploadProgress = 100
         this.uploadFileStatus = 'success'
@@ -1035,7 +1346,8 @@
         console.info(err)
         console.info(file)
         console.info(fileList)
-        fileList = []
+        // fileList = []
+        this.$refs.versionUpload.clearFiles()
         // this.$message.error(err.Error)
         this.$message.error('上传失败')
         this.uploadFileStatus = 'exception'
@@ -1046,6 +1358,9 @@
         if (this.currentStep === 2) {
           this.loadData()
         }
+      },
+      closeShowDeployPublish () {
+        this.showComDeployPublishVisible = false
       },
       closeUploadModel () {
         this.loadData()
@@ -1082,6 +1397,38 @@
               // this.loadingVersion = false
               this.$nextTick(() => {
                 loadingSysModelInfo.close()
+              })
+              console.info(error)
+            }.bind(this)
+          )
+      },
+      loadCommunityStatus (item) {
+        var params = {
+          currentPage: this.currentPageCommunity,
+          pageSize: this.pageSizeCommunity,
+          condition: {
+            modelVerPk: this.showDeployPublishVersion.algModelVersionPk
+          }
+        }
+        let loadingCommunityData = startSystemLoading()
+        getCommunityStatusByVersionId(params)
+          .then(
+            function (result) {
+              console.info(result)
+              this.$nextTick(() => {
+                loadingCommunityData.close()
+              })
+              // if ()
+              this.communityStatusList = result.data.items
+              this.totalCommunity = result.data.pageCount
+              this.showComDeployPublishVisible = true
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              // this.loadingVersion = false
+              this.$nextTick(() => {
+                loadingCommunityData.close()
               })
               console.info(error)
             }.bind(this)
@@ -1216,6 +1563,8 @@
         if (this.$refs[formName] !== undefined) {
           this.$refs[formName].resetFields()
         }
+        this.newModelVersion.description = ''
+        this.newModelVersion.versionNo = ''
       },
       toggleSelection (rows) {
         if (rows) {
@@ -1229,19 +1578,37 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
+      onSubmit (formName) {
         console.log('submit!')
-        this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
         this.pageSize = val
         this.loadData()
       },
+      handleSizeChangeCommunity (val) {
+        console.log(`每页 ${val} 条`)
+        this.pageSizeCommunity = val
+        this.loadCommunityStatus()
+      },
       handleCurrentChange (val) {
         console.log(`当前页: ${val}`)
         this.currentPage = val
         this.loadData()
+      },
+      handleCurrentChangeCommunity (val) {
+        console.log(`当前页: ${val}`)
+        this.currentPageCommunity = val
+        this.loadCommunityStatus()
       },
       handleEdit (index, item) {
         console.info(index)
@@ -1323,28 +1690,37 @@
         this.showUploadArea = true
         this.uploadDialogVisible = true
       },
-      showDeployDialog (index, item) {
-        if (this.$refs.deployTree) {
-          this.$refs.deployTree.setCheckedKeys([])
-          for (let i = 0; i < this.$refs.deployTree.store._getAllNodes().length; i++) {
-            this.$refs.deployTree.store._getAllNodes()[i].expanded = false
-          }
+      showDeployDialog (index, item, type) {
+        if (type === 'deploy') {
+          this.loadDeployNodeData()
         }
-        if (this.$refs.publishTree) {
-          this.$refs.publishTree.setCheckedKeys([])
-          for (let i = 0; i < this.$refs.publishTree.store._getAllNodes().length; i++) {
-            this.$refs.publishTree.store._getAllNodes()[i].expanded = false
-          }
+        if (type === 'publish') {
+          this.loadPublishNodeData()
         }
-        if (this.$refs.excuteTaskTree) {
-          this.$refs.excuteTaskTree.setCheckedKeys([])
-          for (let i = 0; i < this.$refs.excuteTaskTree.store._getAllNodes().length; i++) {
-            this.$refs.excuteTaskTree.store._getAllNodes()[i].expanded = false
-          }
-        }
+        // if (this.$refs.deployTree) {
+        //   this.$refs.deployTree.setCheckedKeys([])
+        //   for (let i = 0; i < this.$refs.deployTree.store._getAllNodes().length; i++) {
+        //     this.$refs.deployTree.store._getAllNodes()[i].expanded = false
+        //   }
+        // }
+        // if (this.$refs.publishTree) {
+        //   this.$refs.publishTree.setCheckedKeys([])
+        //   for (let i = 0; i < this.$refs.publishTree.store._getAllNodes().length; i++) {
+        //     this.$refs.publishTree.store._getAllNodes()[i].expanded = false
+        //   }
+        // }
+        // if (this.$refs.excuteTaskTree) {
+        //   this.$refs.excuteTaskTree.setCheckedKeys([])
+        //   for (let i = 0; i < this.$refs.excuteTaskTree.store._getAllNodes().length; i++) {
+        //     this.$refs.excuteTaskTree.store._getAllNodes()[i].expanded = false
+        //   }
+        // }
         // setTimeout(function () {
-        this.deployDialogVisible = true
         // },50)
+      },
+      handleCloudCommand (event, index, item) {
+        console.info(event)
+        console.info(item)
       },
       handleCommand (event, index, item) {
         if (event === 'edit') {
@@ -1360,11 +1736,11 @@
           // this.beforeDeployVersion()
           this.currentDeployPublishAction = 'deploy'
           this.curDeployVersion = item
-          this.showDeployDialog(index, item)
+          this.showDeployDialog(index, item, 'deploy')
         } else if (event === 'publish') {
           this.currentDeployPublishAction = 'publish'
           this.curDeployVersion = item
-          this.showDeployDialog(index, item)
+          this.showDeployDialog(index, item, 'publish')
         } else if (event === 'delete') {
           this.removeData(index, item)
         } else if (event === 'params') {
@@ -1404,41 +1780,133 @@
           this.newModelVersion.description = this.editModelVersion.description.trim()
         }
       },
-      loadExcuteNode (node, resolve) {
-        // if (node.level === 0) {
-        //   return resolve([{ name: '全部小区', id: 0, code: 0 }])
-        // }
-        if (node.level === 0) {
-          let communityData = []
-          this.systemCommunityList.forEach(function (item) {
-            communityData.push({
-              isCommunity: true,
-              code: item.item_code,
-              name: item.item_name
-            })
-          })
-          return resolve(communityData)
-        }
-        if (node.level > 1) return resolve([])
+      loadExcuteNodeData () {
+        // this.deployTreeData = []
+        // let communityData = []
+        // let defaultCommunityData = {}
+        // if (this.systemCommunityList && this.systemCommunityList.length > 0) {
+        // let item = this.systemCommunityList[0]
+        // let allComData = {}
         let param = {
-          communityId: node.data.code,
+          // communityId: item.item_code,
+          modelVerId: this.excuteVersionInfo.algModelVersionPk
+          // ,
+          // publishStatus: this.versionPublishedStatus
+        }
+        let loadingExcuteNode = startSystemLoading()
+        getCommunityByStatus(param)
+          .then(
+            function (result) {
+              console.info(result.data)
+              // const data = []
+              // result.data.forEach(function (item) {
+              //   data.push({
+              //     code: item.mgmtNodePk,
+              //     name: item.name,
+              //     leaf: true
+              //   })
+              // })
+              // defaultCommunityData = {
+              //   isCommunity: true,
+              //   code: item.item_code,
+              //   name: item.item_name,
+              //   children: data
+              // }
+              // this.$refs.deployTree.updateKeyChildren(defaultCommunityData.code, data)
+              // defaultCommunityData.children = data
+              // this.excuteTaskTreeData.splice(0, this.excuteTaskTree.length)
+              // this.excuteTaskTreeData.push(defaultCommunityData)
+              console.info(this.excuteTaskTreeData)
+              this.excuteCommunityList = []
+              if (result.data && result.data.length > 0) {
+                result.data.forEach(function (element, index) {
+                  let tmpExcuteCom = {
+                    item_code: element.communityId,
+                    item_name: this.systemCommunityMap[element.communityId]
+                  }
+                  this.excuteCommunityList.push(tmpExcuteCom)
+                }.bind(this))
+              }
+              this.$nextTick(() => {
+                loadingExcuteNode.close()
+                this.excuteVersionVisible = true
+              })
+              // resolve(data)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              // // this.loadingStep = false
+              // this.deployLoading = false
+              // this.$message.error('获取节点失败')
+              console.info(error)
+            }
+          )
+        // }
+      },
+      loadExcuteNodeDataTree () {
+        // this.deployTreeData = []
+        // let communityData = []
+        // let defaultCommunityData = {}
+        // if (this.systemCommunityList && this.systemCommunityList.length > 0) {
+        // let item = this.systemCommunityList[0]
+        let allComData = {}
+        let param = {
+          // communityId: item.item_code,
           modelVerId: this.excuteVersionInfo.algModelVersionPk,
           publishStatus: this.versionPublishedStatus
         }
-        getMgmtNodeByVersionAndCommunity(param)
+        let loadingExcuteNode = startSystemLoading()
+        getCommunityByStatus(param)
           .then(
             function (result) {
               console.info(result.data)
-              const data = []
-              result.data.forEach(function (item) {
-                data.push({
-                  code: item.mgmtNodePk,
-                  name: item.name,
-                  leaf: true
-                })
+              // const data = []
+              // result.data.forEach(function (item) {
+              //   data.push({
+              //     code: item.mgmtNodePk,
+              //     name: item.name,
+              //     leaf: true
+              //   })
+              // })
+              // defaultCommunityData = {
+              //   isCommunity: true,
+              //   code: item.item_code,
+              //   name: item.item_name,
+              //   children: data
+              // }
+              // this.$refs.deployTree.updateKeyChildren(defaultCommunityData.code, data)
+              // defaultCommunityData.children = data
+              // this.excuteTaskTreeData.splice(0, this.excuteTaskTree.length)
+              // this.excuteTaskTreeData.push(defaultCommunityData)
+              console.info(this.excuteTaskTreeData)
+              if (result.data && result.data.length > 0) {
+                this.excuteTaskTreeData.splice(0, this.excuteTaskTreeData.length)
+                allComData = {
+                  name: '全部小区',
+                  id: 0,
+                  code: 0,
+                  disabled: true,
+                  children: []
+                }
+                let comListData = []
+                result.data.forEach(function (item) {
+                  comListData.push({
+                    code: item.communityId,
+                    mgmtNodePks: item.mgmtNodePks,
+                    name: this.systemCommunityMap[item.communityId],
+                    leaf: true
+                  })
+                }.bind(this))
+                allComData.children = comListData
+                this.excuteTaskTreeData.push(allComData)
+              }
+              this.$nextTick(() => {
+                loadingExcuteNode.close()
+                this.excuteVersionVisible = true
               })
-              resolve(data)
-            }
+              // resolve(data)
+            }.bind(this)
           )
           .catch(
             function (error) {
@@ -1448,87 +1916,125 @@
               console.info(error)
             }
           )
-      },
-      loadPublishNode (node, resolve) {
-        // if (node.level === 0) {
-        //   return resolve([{ name: '全部小区', id: 0, code: 0 }])
         // }
-        if (node.level === 0) {
-          let communityData = []
-          this.systemCommunityList.forEach(function (item) {
-            communityData.push({
-              isCommunity: true,
-              code: item.item_code,
-              name: item.item_name
-            })
-          })
-          return resolve(communityData)
-        }
-        if (node.level > 1) return resolve([])
-        let param = {
-          communityId: node.data.code,
-          modelVerId: this.curDeployVersion.algModelVersionPk,
-          deployStatus: SYSTEM_DEPLOY_STATUS_DEPLOY
-        }
-        getMgmtNodeByVersionAndCommunity(param)
-          .then(
-            function (result) {
-              console.info(result.data)
-              const data = []
-              result.data.forEach(function (item) {
-                data.push({
-                  code: item.mgmtNodePk,
-                  name: item.name,
-                  leaf: true
+      },
+      loadPublishNodeData () {
+        // this.deployTreeData = []
+        // let communityData = []
+        let defaultCommunityData = {}
+        if (this.systemCommunityList && this.systemCommunityList.length > 0) {
+          let item = this.systemCommunityList[0]
+          let param = {
+            communityId: item.item_code,
+            modelVerId: this.curDeployVersion.algModelVersionPk,
+            deployStatus: SYSTEM_DEPLOY_STATUS_DEPLOY
+          }
+          let loadingPublishNode = startSystemLoading()
+          getMgmtNodeByVersionAndCommunity(param)
+            .then(
+              function (result) {
+                console.info(result.data)
+                const data = []
+                result.data.forEach(function (item) {
+                  data.push({
+                    code: item.mgmtNodePk,
+                    name: item.name,
+                    leaf: true
+                  })
                 })
-              })
-              resolve(data)
-            }
-          )
-          .catch(
-            function (error) {
-              // // this.loadingStep = false
-              // this.deployLoading = false
-              // this.$message.error('获取节点失败')
-              // console.info(this.editModelVersion)
-              console.info(error)
-            }
-          )
-      },
-      loadDeployNode (node, resolve) {
-        // if (node.level === 0) {
-        //   return resolve([{ name: '全部小区', id: 0, code: 0 }])
-        // }
-        if (node.level === 0) {
-          let communityData = []
-          this.systemCommunityList.forEach(function (item) {
-            communityData.push({
-              isCommunity: true,
-              code: item.item_code,
-              name: item.item_name
-            })
-          })
-          return resolve(communityData)
+                defaultCommunityData = {
+                  isCommunity: true,
+                  code: item.item_code,
+                  name: item.item_name,
+                  children: data
+                }
+                // this.$refs.deployTree.updateKeyChildren(defaultCommunityData.code, data)
+                // defaultCommunityData.children = data
+                console.info('defaultCommunityData')
+                console.info(defaultCommunityData)
+                this.publishTreeData.splice(0, this.deployTreeData.length)
+                this.publishTreeData.push(defaultCommunityData)
+                console.info(this.deployTreeData)
+                this.$nextTick(() => {
+                  loadingPublishNode.close()
+                  this.deployDialogVisible = true
+                })
+                // resolve(data)
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                // // this.loadingStep = false
+                // this.deployLoading = false
+                // this.$message.error('获取节点失败')
+                console.info(error)
+              }
+            )
         }
-        if (node.level > 1) return resolve([])
+      },
+      loadDeployNodeData () {
+        // this.deployTreeData = []
+        // let communityData = []
+        // let defaultCommunityData = {}
+        // // if (this.systemCommunityList && this.systemCommunityList.length > 0) {
+        // let item = this.systemCommunityList[0]
         let param = {
-          communityId: node.data.code,
           modelVerId: this.curDeployVersion.algModelVersionPk
         }
-        getMgmtNodeByVersionAndCommunity(param)
+        let allComData = {}
+        console.info('999')
+        let loadingDeployNode = startSystemLoading()
+        getCommunityByStatus(param)
           .then(
             function (result) {
               console.info(result.data)
-              const data = []
-              result.data.forEach(function (item) {
-                data.push({
-                  code: item.mgmtNodePk,
-                  name: item.name,
-                  leaf: true
-                })
+              // const data = []
+              // result.data.forEach(function (item) {
+              //   data.push({
+              //     code: item.mgmtNodePk,
+              //     name: item.name,
+              //     leaf: true
+              //   })
+              // })
+              // defaultCommunityData = {
+              //   isCommunity: true,
+              //   code: item.item_code,
+              //   name: item.item_name,
+              //   children: data
+              // }
+              // // this.$refs.deployTree.updateKeyChildren(defaultCommunityData.code, data)
+              // // defaultCommunityData.children = data
+              // console.info('defaultCommunityData')
+              // console.info(defaultCommunityData)
+              if (result.data && result.data.length > 0) {
+                this.deployTreeData.splice(0, this.deployTreeData.length)
+                allComData = {
+                  name: '全部小区',
+                  id: 0,
+                  code: 0,
+                  isAll: true,
+                  children: []
+                }
+                let comListData = []
+                result.data.forEach(function (item) {
+                  comListData.push({
+                    code: item.communityId,
+                    mgmtNodePks: item.mgmtNodePks,
+                    name: this.systemCommunityMap[item.communityId],
+                    leaf: true
+                  })
+                }.bind(this))
+                allComData.children = comListData
+                this.deployTreeData.push(allComData)
+              }
+              // // this.deployTreeData.push(defaultCommunityData)
+              // console.info(this.deployTreeData)
+              this.$nextTick(() => {
+                loadingDeployNode.close()
+                this.deployDialogVisible = true
               })
-              resolve(data)
-            }
+              // resolve(data)
+            }.bind(this)
           )
           .catch(
             function (error) {
@@ -1538,6 +2044,7 @@
               console.info(error)
             }
           )
+        // }
       },
       closeExcuteVersion () {
         this.excuteVersionVisible = false
@@ -1545,7 +2052,6 @@
       showExcuteTaskModel (index, item) {
         this.currentTaskExeStep = 1
         this.excuteVersionInfo = item
-        this.excuteVersionVisible = true
         let params = {
           modelVersPk: item.algModelVersionPk
         }
@@ -1563,6 +2069,7 @@
               }
               this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
                 loadingInstance.close()
+                this.loadExcuteNodeDataTree()
               })
             }.bind(this)
           )
@@ -1583,44 +2090,39 @@
       handleDeployVersion () {
         // console.log(this.$refs.deployTree.getCheckedNodes())
         let checkedNodes = this.$refs.deployTree.getCheckedNodes()
-        let mgmtNodesArr = []
         let communityNodesArr = []
-        checkedNodes.forEach(function (community) {
-          if (community.isCommunity) {
-            communityNodesArr.push(community.code)
-          }
-        })
         checkedNodes.forEach(function (item) {
           console.log(item)
           if (item.leaf) {
-            mgmtNodesArr.push({
-              mgntNodePk: item.code
+            communityNodesArr.push({
+              mgmtNodePks: item.mgmtNodePks,
+              communityId: item.code
             })
           }
         })
-        let isSelectAll = false
-        let communityId = ''
-        if (communityNodesArr.length > 0) {
-          isSelectAll = true
-          communityId = communityNodesArr[0]
-        }
-        if (mgmtNodesArr.length <= 0 && communityNodesArr.length <= 0) {
+        if (communityNodesArr.length <= 0) {
           this.isEmptyNode = true
           this.timeoutHideTips()
           return
         }
         // console.log(this.$refs.deployTree.getCheckedKeys())
-        var params = {
-          algModelVersionWithExtStatus: this.curDeployVersion,
-          nodes: mgmtNodesArr,
-          selectAll: isSelectAll,
-          communityId: communityId
+        // var params = {
+        //   algModelVersionWithExtStatus: this.curDeployVersion,
+        //   nodes: mgmtNodesArr,
+        //   selectAll: isSelectAll,
+        //   communityId: communityId
+        // }
+        let params = {
+          communities: communityNodesArr,
+          modelPk: this.curDeployVersion.algModelPk,
+          modelVerPk: this.curDeployVersion.algModelVersionPk
         }
+
         // item.versionNo = item.versionNo + ' '
         // this.deployLoading = true
         // item.set("deployLoading", true)
         let loadingDeploy = startSystemLoading()
-        deployVersion(params)
+        deployAndPublisVersion(params)
           .then(
             function (result) {
               this.$nextTick(() => {
@@ -1628,11 +2130,15 @@
               })
               // this.deployLoading = false
               this.$message({
-                message: '部署成功',
+                message: '部署命令发送成功',
                 type: 'success'
               })
               // this.$refs.deployTree.setCheckedKeys([])
               this.deployDialogVisible = false
+              // setTimeout(function () {
+              //   console.info('000')
+              //   this.loadData()
+              // }.bind(this), 6000)
               // _that.loadData()
               // this.total = result.data.length
               // this.loadingStep = false
@@ -1721,28 +2227,31 @@
       },
       startToexcuteVersionTask (event) {
         let checkedNodes = this.$refs.excuteTaskTree.getCheckedNodes()
-        let mgmtNodesArr = []
+        // let mgmtNodesArr = []
         let communityNodesArr = []
-        checkedNodes.forEach(function (community) {
-          if (community.isCommunity) {
-            communityNodesArr.push(community.code)
-          }
-        })
+        // checkedNodes.forEach(function (community) {
+        //   if (community.isCommunity) {
+        //     communityNodesArr.push(community.code)
+        //   }
+        // })
         checkedNodes.forEach(function (item) {
           console.log(item)
           if (item.leaf) {
-            mgmtNodesArr.push(
-              item.code
-            )
+            communityNodesArr.push({
+              communityId: item.code,
+              mgmtNodePks: item.mgmtNodePks
+            })
           }
         })
         let isSelectAll = false
         let communityId = ''
+        let mgmtNodeId
         if (communityNodesArr.length > 0) {
-          isSelectAll = true
-          communityId = communityNodesArr[0]
+          // isSelectAll = true
+          communityId = communityNodesArr[0].communityId
+          mgmtNodeId = communityNodesArr[0].mgmtNodePks[0].mgmtNodePk
         }
-        if (mgmtNodesArr.length <= 0 && communityNodesArr.length <= 0) {
+        if (communityNodesArr.length <= 0) {
           this.isExeEmptyNode = true
           this.timeoutHideTips()
           return
@@ -1750,9 +2259,10 @@
         let exeTaskInfo = {
           versionId: this.excuteVersionInfo.algModelVersionPk,
           paramList: this.curExcuteVersionParams,
-          mgmtNodeId: mgmtNodesArr[0],
+          // mgmtNodeId: mgmtNodesArr[0],
           selectAll: isSelectAll,
-          communityId: communityId
+          communityId: communityId,
+          mgmtNodeId: mgmtNodeId
         }
         // this.loadingExcuteTask = true
         let loadingSystemExcuteTask = startSystemLoading()
@@ -1764,8 +2274,8 @@
                 loadingSystemExcuteTask.close()
               })
               this.currentTaskExeStep = 3
-              if (result && result.data && result.data.length > 0) {
-                this.curTaskExecuteResult = result.data[0]
+              if (result && result.data) {
+                this.curTaskExecuteResult = result.data
               } else {
                 this.$message.error('无结果信息')
               }
@@ -1792,6 +2302,66 @@
       showExecuteTaskResult () {
 
       },
+      confirmEditDeployScript (formName) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            let param = {
+              algModelPk: this.editScriptVersion.algModelPk,
+              algModelVersionPk: this.editScriptVersion.algModelVersionPk,
+              fileDeployScript: this.deployCommand.command
+            }
+            // this.loadingStep = true
+            let loadingEdit = startSystemLoading()
+            updateDeployCommandById(param)
+              .then(
+                function (result) {
+                  // this.currentStep = 2
+                  // console.log(result)
+                  // console.log(' result.data.total ' + result.data.items.length)
+                  // this.modelList = result.data
+                  // this.total = result.data.length
+                  // this.loadingStep = false
+                  this.$nextTick(() => {
+                    loadingEdit.close()
+                    this.loadData()
+                  })
+                  this.deployCommandDialogVisible = false
+                }.bind(this)
+              )
+              .catch(
+                function (error) {
+                  // this.loadingStep = false
+                  this.$nextTick(() => {
+                    loadingEdit.close()
+                  })
+                  console.info(error)
+                }.bind(this)
+              )
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
+      },
+      showEditDeployCommand (index) {
+        console.info(index)
+        this.editScriptVersion = this.modelVersionList[index]
+        let item = this.editScriptVersion
+        // if (item.statusInMNodes && item.statusInMNodes.length > 0) {
+        //   item.displayDeployStatus = item.statusInMNodes[0].deployStatus
+        //   item.displayPublishStatus = item.statusInMNodes[0].publishStatus
+        // } else {
+        //   item.displayDeployStatus = 'mm.depsts.none'
+        //   item.displayPublishStatus = 'mm.pubsts.none'
+        // }
+        if (item.deployed) {
+          this.deployScriptDisabled = true
+        } else {
+          this.deployScriptDisabled = false
+        }
+        this.deployCommand.command = this.editScriptVersion.fileDeployScript
+        this.deployCommandDialogVisible = true
+      },
       timeoutHideTips () {
         setTimeout(function () {
           // console.info('00')
@@ -1799,12 +2369,57 @@
           this.isExeEmptyNode = false
         }.bind(this), 2500)
       },
+      showDeployPublishStatus (index, item) {
+        console.info(item)
+        this.showDeployPublishVersion = this.modelVersionList[index]
+        this.loadCommunityStatus()
+      },
+      handleClick (nodeData, isChecked) {
+        // this.checkedIndex ++
+        // if (this.checkedIndex % 2 === 0) {
+        console.info('click')
+        console.info(nodeData)
+        console.info(isChecked)
+        // console.info(d)
+        if (isChecked) {
+          this.$refs.excuteTaskTree.setCheckedKeys([])
+          this.$refs.excuteTaskTree.setCheckedNodes([nodeData])
+        }
+        // isClickChangeCheckbox = false;
+        // }
+        // this.$refs.excuteTaskTree.setCheckedNodes([])
+        // this.$refs.excuteTaskTree.setCheckedNodes([a])
+        // this.checkedIndex ++
+        // if (this.checkedIndex % 2 === 0) {
+        //   console.info('one checked')
+        //   console.info(data)
+        //   console.info(node)
+        //   if (node.checked) {
+        //     this.$refs.excuteTaskTree.setCheckedNodes([])
+        //     this.$refs.excuteTaskTree.setCheckedNodes([data])
+        //     // 交叉点击节点
+        //   } else {
+        //     this.$refs.excuteTaskTree.setCheckedNodes([])
+        //     // 点击已经选中的节点，置空
+        //   }
+        // }
+      },
       handleClose (done) {
+        if (this.$refs['newModelVersion']) {
+          this.$refs['newModelVersion'].clearValidate()
+        }
+        if (this.$refs['editModelVersion']) {
+          this.$refs['editModelVersion'].clearValidate()
+        }
+        if (this.$refs['deployCommand']) {
+          this.$refs['deployCommand'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         this.uploadDialogVisible = false
         this.deployDialogVisible = false
         this.excuteVersionVisible = false
+        this.deployCommandDialogVisible = false
         clearInterval(this.uploadInterval)
         // this.$confirm('确认关闭？')
         //   .then(_ => {

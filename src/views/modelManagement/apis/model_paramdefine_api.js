@@ -15,7 +15,7 @@ export const deleteModelParamById = params => {
 
 // 根据模型版本查询相关参数
 export const getVersionParamsByVersionId = params => {
-  return Axios.get(BASE_PATH + '/versionParam/getAllVersParams/' + params.modelVersPk).then(res => res.data)
+  return Axios.get(BASE_PATH + '/versionParam/getallversparams/' + params.modelVersPk).then(res => res.data)
 }
 
 // 添加模型版本参数

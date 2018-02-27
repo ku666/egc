@@ -125,6 +125,7 @@
     position: absolute;
   }
   .right-content {
+    text-align: left;
     /*margin-left: 220px;*/
   }
 </style>
