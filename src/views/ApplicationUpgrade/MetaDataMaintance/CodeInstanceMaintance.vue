@@ -219,26 +219,26 @@ export default {
     },
     // 实例代码值
     _getCodeInstances () {
-      var that = this
-      that.instanceCodes = []
+      this.instanceCodes = []
       getCodeInstances()
         .then(function (result) {
           console.log(JSON.stringify(result))
           let instanceValueRes = result
           for (let i = 0; i < instanceValueRes.length; i++) {
-            that.instanceValues.push({
+            this.instanceValues.push({
               label: instanceValueRes[i].typeName,
-              value: instanceValueRes[i].typeCode
+              value: instanceValueRes[i].uuid
             })
           }
-        })
+        }.bind(this))
         .catch(function (error) {
           console.log(error)
         })
     },
+    // 代码值
     _getCodeCategories () {
-      var that = this
-      that.instanceCodes = []
+      this.registerParaList.code = ''
+      this.instanceCodes = []
       console.log(
         'this.registerParaList.instanceValue' +
           this.registerParaList.instanceValue
@@ -248,12 +248,12 @@ export default {
           console.log('codes --->>>' + JSON.stringify(result))
           let instanceCodesRes = result
           for (let i = 0; i < instanceCodesRes.length; i++) {
-            that.instanceCodes.push({
+            this.instanceCodes.push({
               label: instanceCodesRes[i].code,
               value: instanceCodesRes[i].code
             })
           }
-        })
+        }.bind(this))
         .catch(function (error) {
           console.log(error)
         })
