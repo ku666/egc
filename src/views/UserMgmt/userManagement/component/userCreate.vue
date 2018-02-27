@@ -269,6 +269,7 @@ export default {
     },
     changeUserType (userType) {
       this.departmentSelect = []
+      this.user.departmentUuid = ''
       this.getDepartmentSelect(userType)
     },
     getDepartmentSelect (userType) {

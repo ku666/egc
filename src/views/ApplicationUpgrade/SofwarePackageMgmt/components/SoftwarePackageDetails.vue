@@ -18,7 +18,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.functionDesc"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.latestPreName"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.lastestPreName"></el-input>
       </el-form-item>
       <el-form-item label="前续软件包版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="softwarePckDetails.latestPreVer"></el-input>
