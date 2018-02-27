@@ -57,7 +57,7 @@
 
       <el-dialog :title="dialogStatus" :visible.sync="dialogCreateFormVisible" :before-close="handleClose" :close-on-click-modal="false">
         <user-create ref="userCreateVue" :userAccStatusSelect="userAccStatusOptions"
-        :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions"
+        :contactTypeSelect="contactTypeOptions" :userTypeSelect="userTypeOptions"
         @gridCreateEvent="userCreateEvent"  @canelDialogEvent="handleClose"> </user-create>
       </el-dialog>
       <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
@@ -253,19 +253,19 @@ export default {
           }
         )
       // 获取部门信息
-      this.dictData.departmentType = this.listQuery.userType
-      getDepartmentOptions(this.dictData)
-        .then(
-            function (result) {
-              console.log('<<<<<departmentOptions:' + JSON.stringify(result))
-              this.departmentOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+      // this.dictData.departmentType = this.listQuery.userType
+      // getDepartmentOptions(this.dictData)
+      //   .then(
+      //       function (result) {
+      //         console.log('<<<<<departmentOptions:' + JSON.stringify(result))
+      //         this.departmentOptions = result
+      //       }.bind(this)
+      //     )
+      //   .catch(
+      //     function (error) {
+      //       console.log(error)
+      //     }
+      //   )
       // 获取用户类型信息
       listUserType()
         .then(
@@ -356,6 +356,7 @@ export default {
     // 跳转页数
     handleCurrentChange (val) {
       this.listQuery.page = val
+      this.listQuery.page = 1
       this.loadData()
     },
     handleFilter () {
@@ -460,14 +461,27 @@ export default {
           function (result) {
             this.userForm = result.baseUser  // 用户基本信息
             console.log('用户基本信息:' + JSON.stringify(result.baseUser))
-            console.log('生效日期>>>>>>>>>>>>>>：' + result.baseUser.effectiveDate)
-            console.log('失效日期>>>>>>>>：' + result.baseUser.expiryDate)
-            // console.log('subUserData<<<<<<<:' + result.baseUser.uuid)
             this.dialogStatus = '编辑用户'
             this.dialogFormVisible = true
             this.dialogCreateFormVisible = false
             if (this.$refs.userEditVue) {
               this.$refs.userEditVue.reset()
+            }
+            if (this.userForm.userType) {
+              // 获取部门信息
+              this.dictData.departmentType = this.userForm.userType
+              getDepartmentOptions(this.dictData)
+              .then(
+                  function (result) {
+                    console.log('<<<<<departmentOptions:' + JSON.stringify(result))
+                    this.departmentOptions = result
+                  }.bind(this)
+                )
+              .catch(
+                function (error) {
+                  console.log(error)
+                }
+              )
             }
             this.addFlag = true
           }.bind(this)

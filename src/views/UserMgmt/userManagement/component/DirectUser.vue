@@ -73,6 +73,7 @@ export default {
       // 改变分页大小
       handleSizeChange (val) {
         this.listQuery.limit = val
+        this.listQuery.page = 1
         this.listQuery.departmentUuid = this.departmentUuidValue
         this.listQuery.departmentType = this.departmentTypeValue
         this.findDirectUserList(this.listQuery)
