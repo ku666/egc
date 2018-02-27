@@ -2,7 +2,7 @@ import Axios from '@/assets/js/AxiosPlugin'
 import {Loading} from 'element-ui'
 
 export const MOCK_API_URL = '/modelmgmtcomponent'
-export const BASE_PATH = '/scp-modelmgmtcomponent'
+export const BASE_PATH = '/egc-modelmgmtcomponent'
 
 export const SUCCESS_CODE = '0000'
 
@@ -38,15 +38,20 @@ export const SYSTEM_PUBLISHSTATUS = 'mm.pubsts'
 export const SYSTEM_TASKSOURCE = 'mm.tsksrc'
 export const SYSTEM_FREQUENTTYPE = 'mm.frqtyp'
 export const SYSTEM_RESULTTYPE = 'mm.restyp'
+export const SYSTEM_ASYNCTYPE = 'mm.asytyp'
 
 export const SYSTEM_NODESTATUS_ENABLE = 'mm.nodsts.enable'
 export const SYSTEM_NODESTATUS_DISABLE = 'mm.nodsts.disable'
 export const SYSTEM_DEPLOY_STATUS_DEPLOY = 'mm.depsts.deploy'
 export const SYSTEM_PUBLISH_STATUS_PUBLISH = 'mm.pubsts.publish'
 export const SYSTEM_NODETYPE_STRUCTURED = 'mm.nodtyp.structured'
+export const SYSTEM_NODETYPE_VIDEO = 'mm.nodtyp.video'
 export const SYSTEM_VERSIONSTATUS_ENABLE = 'mm.versts.enable'
 export const SYSTEM_MODELSTATUS_ENABLE = 'mm.modsts.enable'
 export const COMMUNITY = 'community'
+
+export const SYSTEM_MGMTNODE_DEVICEID_PREFIX = 'MM_'
+export const SYSTEM_MGMTNODE_NODETYPE_STRUCTURED = 'mm.nodtyp.structured'
 
 export const getSystemSettings = (params) => {
   return Axios.get(BASE_PATH + '/modelmgmt/systemsettings/getsystemsettingsbycatcode', {params}).then(res => res.data)
@@ -77,7 +82,7 @@ export let startSystemLoading = () => {
 }
 
 export const getSystemDataByCode = (data, code) => {
-  if (data) {
+  if (data && data[code]) {
     return data[code].meta_item_list
   }
   return []

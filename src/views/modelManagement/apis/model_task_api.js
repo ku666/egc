@@ -16,3 +16,7 @@ export const runTask = (data) => {
 export const deleteTaskById = (params) => {
   return Axios.get(BASE_PATH + '/modeltask/algtask/delete', {params}).then(res => res.data)
 }
+// 查询异步任务信息
+export const getAsyncJobList = (data) => {
+  return Axios.post(BASE_PATH + '/sysayncjob/list', data).then(res => res.data)
+}

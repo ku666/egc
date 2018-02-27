@@ -33,3 +33,19 @@ export const getVersionInfoById = params => {
 export const publishLocal = (data) => {
   return Axios.post(BASE_PATH + '/modelversion/publishlocal', data).then(res => res.data)
 }
+// 修改版本部署命令
+export const updateDeployCommandById = (data) => {
+  return Axios.post(BASE_PATH + '/modelversion/updatedeployscriptbyversionid', data).then(res => res.data)
+}
+// 根据状态查询小区信息
+export const getCommunityByStatus = params => {
+  return Axios.get(BASE_PATH + '/community/listmatched', {params}).then(res => res.data)
+}
+// 云端部署发布
+export const deployAndPublisVersion = (data) => {
+  return Axios.post(BASE_PATH + '/modelversion/deployandpublish', data).then(res => res.data)
+}
+// 根据版本id获取小区部署信息
+export const getCommunityStatusByVersionId = (data) => {
+  return Axios.post(BASE_PATH + '/modelversion/relatedcommunities', data).then(res => res.data)
+}

@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-
+import { getfirstRouters } from '@/assets/js/util.js'
 export default {
   data () {
     return {
@@ -66,6 +66,9 @@ export default {
       }
       btnObj.icon = 'header_navbar_active'
       this.$emit('getSelectedTitle', btnObj.name)
+      let firstRouters = getfirstRouters(this.$store.getters.getUserInfo, btnObj.name)
+      console.log('firstRouters:' + firstRouters)
+      this.$router.push(firstRouters)
     },
     loadData () {
       let userInfo = this.$store.getters.getUserInfo

@@ -31,28 +31,28 @@
       <el-row :gutter="60" class="deviceElrow">
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <select-box title="设备类型"
+            <input-box title="设备类型"
                         :required="true"
                         code="deviceType"
                         :options="deviceType"
                         :disabled="true"
-                        :initValue="fileInfo.deviceType"
+                        :value="fileInfo.deviceType"
                         @listenToInput="_saveDeviceData"
                         ref="deviceType">
-            </select-box>
+            </input-box>
           </div>
         </el-col>
         <el-col :span="6">
           <div class="grid-content bg-purple">
-            <select-box title="厂商名称"
+            <input-box title="厂商名称"
                         :required="true"
                         code="providerCode"
                         :disabled="true"
                         ref="providerCode"
                         :options="providerType"
-                        :initValue="fileInfo.providerCode"
+                        :value="fileInfo.providerCode"
                         @listenToInput="_saveDeviceData">
-            </select-box>
+            </input-box>
           </div>
         </el-col>
         <el-col :span="6">

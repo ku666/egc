@@ -1,176 +1,176 @@
 <template>
   <div>
-      <div class="margin-top-15">
-          <el-breadcrumb separator="/">
-              <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-              <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-              <el-breadcrumb-item :to="{ path: '/modelmgmt/dispatchnodemgmt'}">管理节点管理</el-breadcrumb-item>
-              <el-breadcrumb-item>计算节点管理</el-breadcrumb-item>
-              <!--<el-breadcrumb-item>恒大绿洲模型</el-breadcrumb-item>-->
-          </el-breadcrumb>
-      </div>
+    <div class="margin-top-15">
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/modelmgmt/dispatchnodemgmt'}">管理节点管理</el-breadcrumb-item>
+        <el-breadcrumb-item>计算节点管理</el-breadcrumb-item>
+        <!--<el-breadcrumb-item>恒大绿洲模型</el-breadcrumb-item>-->
+      </el-breadcrumb>
+    </div>
 
     <div class="margin-top-30">
 
-    <!--<div class="model-title"><i class="el-icon-news"></i> 计算节点管理</div>-->
+      <!--<div class="model-title"><i class="el-icon-news"></i> 计算节点管理</div>-->
 
-    <el-collapse v-model="activeNames">
-      <el-collapse-item v-loading="loadingModelInfo" :title="currentNode.name" name="1">
-        <!--<div class="model-desc">{{ currentModel.description }}</div>-->
-        <div>
-          <el-form label-position="left" inline class="demo-table-expand">
+      <el-collapse v-model="activeNames">
+        <el-collapse-item v-loading="loadingModelInfo" :title="currentNode.name" name="1">
+          <!--<div class="model-desc">{{ currentModel.description }}</div>-->
+          <div>
+            <el-form label-position="left" inline class="demo-table-expand">
 
-            <!--<el-form-item label="部署小区ID">-->
+              <!--<el-form-item label="部署小区ID">-->
               <!--<template slot-scope="scope"><span>{{ communityIdMap[currentNode.communityId] }}</span></template>-->
-            <!--</el-form-item>-->
-            <el-form-item label="节点类型">
-              <template slot-scope="scope"><span>{{ systemNodeTypeMap[currentNode.nodeType] }}</span></template>
-            </el-form-item>
+              <!--</el-form-item>-->
+              <el-form-item label="节点类型">
+                <template slot-scope="scope"><span>{{ systemNodeTypeMap[currentNode.nodeType] }}</span></template>
+              </el-form-item>
 
-            <el-form-item label="节点名称">
-              <span>{{ currentNode.name }}</span>
-            </el-form-item>
+              <el-form-item label="节点名称">
+                <span>{{ currentNode.name }}</span>
+              </el-form-item>
 
-            <el-form-item label="主机IP">
-              <span>{{ currentNode.host }}</span>
-            </el-form-item>
-            <el-form-item label="节点IP">
-              <span>{{ currentNode.ip }}</span>
-            </el-form-item>
-            <el-form-item label="节点状态">
-              <template slot-scope="scope"><span>{{ systemNodeStatusMap[currentNode.nodeStatus] }}</span></template>
-            </el-form-item>
-            <el-form-item label="创建人">
-              <span>{{ currentNode.createUser }}</span>
-            </el-form-item>
-            <el-form-item label="创建时间">
-              <span>{{ currentNode.createTime | formatDate }}</span>
-            </el-form-item>
-            <el-form-item label="更新人">
-              <span>{{ currentNode.updateUser }}</span>
-            </el-form-item>
-            <el-form-item label="更新时间">
-              <span>{{ currentNode.updateTime | formatDate }}</span>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-collapse-item>
-    </el-collapse>
+              <el-form-item label="主机名">
+                <span>{{ currentNode.host }}</span>
+              </el-form-item>
+              <el-form-item label="节点IP">
+                <span>{{ currentNode.ip }}</span>
+              </el-form-item>
+              <el-form-item label="节点状态">
+                <template slot-scope="scope"><span>{{ systemNodeStatusMap[currentNode.nodeStatus] }}</span></template>
+              </el-form-item>
+              <el-form-item label="创建人">
+                <span>{{ currentNode.createUser }}</span>
+              </el-form-item>
+              <el-form-item label="创建时间">
+                <span>{{ currentNode.createTime | formatDate }}</span>
+              </el-form-item>
+              <el-form-item label="更新人">
+                <span>{{ currentNode.updateUser }}</span>
+              </el-form-item>
+              <el-form-item label="更新时间">
+                <span>{{ currentNode.updateTime | formatDate }}</span>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
 
-    <el-row :gutter="20" class="margin-top-30">
-      <el-col :span="4">
-        <div>
-          <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="">
-              <el-button v-if="displayedTableList.length!=0" :disabled="true" @click="showCreateNodeDialog()" type="primary" icon="el-icon-circle-plus-outline">添加计算节点</el-button>
-              <el-button v-if="displayedTableList.length===0" :disabled="false" @click="showCreateNodeDialog()" type="primary" icon="el-icon-circle-plus-outline">添加计算节点</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-      </el-col>
-      <el-col :span="20">
-        <!--<div class="grid-content bg-purple" style="text-align: right">-->
-        <!--<el-form :inline="true" :model="modelListSearch" class="demo-form-inline">-->
-        <!--<el-form-item label="模型名称">-->
-        <!--<el-input v-model="modelListSearch.name" placeholder="模型名称"></el-input>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item label="运行时">-->
-        <!--<el-select v-model="modelListSearch.type" placeholder="运行时">-->
-        <!--<el-option label="全部" value="0"></el-option>-->
-        <!--<el-option label="Java" value="java"></el-option>-->
-        <!--<el-option label="Python" value="python"></el-option>-->
-        <!--</el-select>-->
-        <!--</el-form-item>-->
-        <!--<el-form-item>-->
-        <!--<el-button type="primary" @click="onSubmit">查询</el-button>-->
-        <!--</el-form-item>-->
-        <!--</el-form>-->
-        <!--</div>-->
-      </el-col>
-    </el-row>
+      <el-row :gutter="20" class="margin-top-30">
+        <el-col :span="4">
+          <div>
+            <el-form :inline="true" :model="formInline" class="demo-form-inline">
+              <el-form-item label="">
+                <el-button v-if="displayedTableList.length!=0" :disabled="true" @click="showCreateNodeDialog()" type="primary" icon="el-icon-circle-plus-outline">添加计算节点</el-button>
+                <el-button v-if="displayedTableList.length===0" :disabled="false" @click="showCreateNodeDialog()" type="primary" icon="el-icon-circle-plus-outline">添加计算节点</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
+        </el-col>
+        <el-col :span="20">
+          <!--<div class="grid-content bg-purple" style="text-align: right">-->
+          <!--<el-form :inline="true" :model="modelListSearch" class="demo-form-inline">-->
+          <!--<el-form-item label="模型名称">-->
+          <!--<el-input v-model="modelListSearch.name" placeholder="模型名称"></el-input>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item label="运行时">-->
+          <!--<el-select v-model="modelListSearch.type" placeholder="运行时">-->
+          <!--<el-option label="全部" value="0"></el-option>-->
+          <!--<el-option label="Java" value="java"></el-option>-->
+          <!--<el-option label="Python" value="python"></el-option>-->
+          <!--</el-select>-->
+          <!--</el-form-item>-->
+          <!--<el-form-item>-->
+          <!--<el-button type="primary" @click="onSubmit">查询</el-button>-->
+          <!--</el-form-item>-->
+          <!--</el-form>-->
+          <!--</div>-->
+        </el-col>
+      </el-row>
 
 
-    <!-- 添加计算节点 -->
-    <el-dialog
-      title="添加计算节点"
-      :close-on-click-modal=false
-      :close-on-press-escape=false
-      @close="closeCreateProxyNode()"
-      :visible.sync="createNodeDialogVisible"
-      width="40%"
-      :before-close="handleClose">
+      <!-- 添加计算节点 -->
+      <el-dialog
+        title="添加计算节点"
+        :close-on-click-modal=false
+        :close-on-press-escape=false
+        @close="closeCreateProxyNode()"
+        :visible.sync="createNodeDialogVisible"
+        width="40%"
+        :before-close="handleClose">
 
-      <el-form v-loading="loadingStep" :model="newNode" :rules="rules" ref="newNode" label-width="150px" class="demo-ruleForm">
-        <el-form-item label="节点名称" prop="name">
-          <el-input id="addName" @blur="inputBlur" size="small" v-model="newNode.name"></el-input>
-        </el-form-item>
-        <!--<el-form-item label="设备ID" prop="deviceId">-->
+        <el-form v-loading="loadingStep" :model="newNode" :rules="rules" ref="newNode" label-width="150px" class="demo-ruleForm">
+          <el-form-item label="节点名称" prop="name">
+            <el-input id="addName" @blur="inputBlur" size="small" v-model="newNode.name"></el-input>
+          </el-form-item>
+          <!--<el-form-item label="设备ID" prop="deviceId">-->
           <!--<el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item label="节点IP" prop="ip">
-          <el-input id="addIp" @blur="inputBlur" size="small" v-model="newNode.ip"></el-input>
-        </el-form-item>
-        <el-form-item label="节点端口" prop="port">
-        <el-input id="addPort" @blur="inputBlur" size="small" v-model="newNode.port"></el-input>
+          <!--</el-form-item>-->
+          <el-form-item label="节点IP" prop="ip">
+            <el-input id="addIp" @blur="inputBlur" size="small" v-model="newNode.ip"></el-input>
+          </el-form-item>
+          <el-form-item label="节点端口" prop="port">
+            <el-input id="addPort" @blur="inputBlur" size="small" v-model="newNode.port"></el-input>
 
-      </el-form-item>
+          </el-form-item>
 
-        <el-form-item label="主机IP" prop="host">
-          <el-input id="addHost" @blur="inputBlur" size="small" v-model="newNode.host"></el-input>
-        </el-form-item>
-        <el-form-item label="最大任务数量" prop="maxTaskNum" >
-          <el-input id="addMaxTaskNum" @blur="inputBlur" size="small" v-model="newNode.maxTaskNum"></el-input>
-        </el-form-item>
-
-
-        <el-form-item class="text-right add-model-button">
-          <el-button @click="handleClose()">取消</el-button>
-          <el-button type="primary" @click="submitForm('newNode')">确定</el-button>
-        </el-form-item>
-
-      </el-form>
+          <el-form-item label="主机名" prop="host">
+            <el-input id="addHost" @blur="inputBlur" size="small" v-model="newNode.host"></el-input>
+          </el-form-item>
+          <el-form-item label="最大任务数量" prop="maxTaskNum" >
+            <el-input id="addMaxTaskNum" @blur="inputBlur" size="small" v-model="newNode.maxTaskNum"></el-input>
+          </el-form-item>
 
 
-    </el-dialog>
+          <el-form-item class="text-right add-model-button">
+            <el-button @click="handleClose()">取消</el-button>
+            <el-button type="primary" @click="submitForm('newNode')">确定</el-button>
+          </el-form-item>
 
-    <!-- 编辑计算节点 -->
-    <el-dialog
-      title="编辑计算节点"
-      :close-on-click-modal=false
-      :close-on-press-escape=false
-      :visible.sync="editNodeDialogVisible"
-      width="40%"
-      :before-close="handleClose">
-
-      <el-form v-loading="loadingEditStep" :model="editNode" :rules="rules" ref="editNode" label-width="150px" class="demo-ruleForm">
+        </el-form>
 
 
-        <!--<el-form-item label="部署小区ID" prop="communityId">-->
-        <!--<el-input size="small" v-model="editNode.communityId"></el-input>-->
-        <!--</el-form-item>-->
-        <el-form-item label="节点名称" prop="name">
-          <el-input id="editName" @blur="inputBlur" size="small" v-model="editNode.name"></el-input>
-        </el-form-item>
-        <el-form-item label="主机IP" prop="host">
-          <el-input disabled size="small" v-model="editNode.host"></el-input>
-        </el-form-item>
-        <el-form-item label="节点IP" prop="ip">
-          <el-input disabled size="small" v-model="editNode.ip"></el-input>
-        </el-form-item>
-        <el-form-item label="节点端口" prop="port">
-          <el-input disabled size="small" v-model="editNode.port"></el-input>
-        </el-form-item>
-        <el-form-item label="最大任务数量" prop="maxTaskNum">
-          <el-input id="editMaxTaskNum" @blur="inputBlur" size="small" v-model="editNode.maxTaskNum"></el-input>
-        </el-form-item>
-        <el-form-item class="text-right add-model-button">
-          <el-button @click="handleClose()">取消</el-button>
-          <el-button type="primary" @click="submitEditForm('editNode')">保存</el-button>
-        </el-form-item>
+      </el-dialog>
 
-      </el-form>
+      <!-- 编辑计算节点 -->
+      <el-dialog
+        title="编辑计算节点"
+        :close-on-click-modal=false
+        :close-on-press-escape=false
+        :visible.sync="editNodeDialogVisible"
+        width="40%"
+        :before-close="handleClose">
 
-    </el-dialog>
+        <el-form v-loading="loadingEditStep" :model="editNode" :rules="rules" ref="editNode" label-width="150px" class="demo-ruleForm">
+
+
+          <!--<el-form-item label="部署小区ID" prop="communityId">-->
+          <!--<el-input size="small" v-model="editNode.communityId"></el-input>-->
+          <!--</el-form-item>-->
+          <el-form-item label="节点名称" prop="name">
+            <el-input id="editName" @blur="inputBlur" size="small" v-model="editNode.name"></el-input>
+          </el-form-item>
+          <el-form-item label="主机名" prop="host">
+            <el-input disabled size="small" v-model="editNode.host"></el-input>
+          </el-form-item>
+          <el-form-item label="节点IP" prop="ip">
+            <el-input disabled size="small" v-model="editNode.ip"></el-input>
+          </el-form-item>
+          <el-form-item label="节点端口" prop="port">
+            <el-input disabled size="small" v-model="editNode.port"></el-input>
+          </el-form-item>
+          <el-form-item label="最大任务数量" prop="maxTaskNum">
+            <el-input id="editMaxTaskNum" @blur="inputBlur" size="small" v-model="editNode.maxTaskNum"></el-input>
+          </el-form-item>
+          <el-form-item class="text-right add-model-button">
+            <el-button @click="handleClose()">取消</el-button>
+            <el-button type="primary" @click="submitEditForm('editNode')">保存</el-button>
+          </el-form-item>
+
+        </el-form>
+
+      </el-dialog>
 
 
 
@@ -187,13 +187,13 @@
             <el-form label-position="left" inline class="demo-table-expand">
 
               <!--&lt;!&ndash;<el-form-item label="模型能力">&ndash;&gt;-->
-                <!--&lt;!&ndash;<span>{{ props.row.latestEventTypeList }}</span>&ndash;&gt;-->
+              <!--&lt;!&ndash;<span>{{ props.row.latestEventTypeList }}</span>&ndash;&gt;-->
               <!--&lt;!&ndash;</el-form-item>&ndash;&gt;-->
               <!--&lt;!&ndash;<el-form-item label="是否实时">&ndash;&gt;-->
-                <!--&lt;!&ndash;<span>{{ props.row.realtimeFlag }}</span>&ndash;&gt;-->
+              <!--&lt;!&ndash;<span>{{ props.row.realtimeFlag }}</span>&ndash;&gt;-->
               <!--</el-form-item>-->
               <!--<el-form-item label="是否共享">-->
-                <!--<span>{{ props.row.runtimeTypeList }}</span>-->
+              <!--<span>{{ props.row.runtimeTypeList }}</span>-->
               <!--</el-form-item>-->
               <el-form-item label="创建人">
                 <span>{{ props.row.createUser }}</span>
@@ -212,14 +212,14 @@
         </el-table-column>
 
         <!--<el-table-column-->
-          <!--type="selection"-->
-          <!--width="55">-->
+        <!--type="selection"-->
+        <!--width="55">-->
         <!--</el-table-column>-->
 
         <!--<el-table-column-->
-          <!--label="部署小区"-->
-          <!--width="150">-->
-          <!--<template slot-scope="scope"><span>{{ communityIdMap[currentNode.communityId] }}</span></template>-->
+        <!--label="部署小区"-->
+        <!--width="150">-->
+        <!--<template slot-scope="scope"><span>{{ communityIdMap[currentNode.communityId] }}</span></template>-->
         <!--</el-table-column>-->
         <el-table-column
           prop="name"
@@ -227,13 +227,13 @@
         </el-table-column>
         <el-table-column
           prop="host"
-          label="主机IP"
+          label="主机名"
           width="150"
           show-overflow-tooltip>
         </el-table-column>
         <!--<el-table-column-->
-          <!--prop="algModel.type"-->
-          <!--label="算法类型">-->
+        <!--prop="algModel.type"-->
+        <!--label="算法类型">-->
         <!--</el-table-column>-->
         <el-table-column
           prop="ip"
@@ -246,8 +246,8 @@
           <template slot-scope="scope"><span :class="{ 'green': scope.row.nodeStatus == currentNodeStatus, 'red': scope.row.nodeStatus != currentNodeStatus }"><b>{{ systemNodeStatusMap[scope.row.nodeStatus] }}</b></span></template>
         </el-table-column>
         <!--<el-table-column-->
-          <!--prop="deviceId"-->
-          <!--label="设备ID">-->
+        <!--prop="deviceId"-->
+        <!--label="设备ID">-->
         <!--</el-table-column>-->
 
         <el-table-column
@@ -255,10 +255,10 @@
           label="最大任务数量"
           width="150">
           <!--<template slot-scope="scope">-->
-            <!--<el-button-->
-            <!--size="mini"-->
-            <!--type="primary"-->
-            <!--@click="modelVersionMgmt(scope.$index, scope.row)">版本管理</el-button>-->
+          <!--<el-button-->
+          <!--size="mini"-->
+          <!--type="primary"-->
+          <!--@click="modelVersionMgmt(scope.$index, scope.row)">版本管理</el-button>-->
           <!--</template>-->
         </el-table-column>
         <el-table-column
@@ -410,7 +410,6 @@
           title: '节点运行时列表',
           prop: 'runtimeTypeList'
         }
-
         ],
         newNode: {
           name: '',
@@ -427,7 +426,8 @@
           updateUser: '',
           updateTime: '',
           nodeStatus: '',
-          deleteFlag: '0'
+          deleteFlag: '0',
+          statusCode: ''
         },
         newRunTimeOfProxyNode: {
           proxyNodePk: this.$route.params.proxyNodePk,
@@ -450,18 +450,18 @@
           ],
           port: [
             {required: true, message: '请输入节点端口', trigger: 'blur'},
-            {pattern: /^([0-9]|[1-9]\d{1,3}|[1-5]\d{4}|6[0-5]{2}[0-3][0-5])$/, message: '请输入端口数字，范围为 0 - 65535 ', trigger: 'blur'}
+            {pattern: /^([0-9]|[1-9]\d|[1-9]\d{2}|[1-9]\d{3}|[1-5]\d{4}|6[0-4]\d{3}|65[0-4]\d{2}|655[0-2]\d|6553[0-5])$/, message: '请输入端口数字，范围为 0 - 65535 ', trigger: 'blur'}
           ],
           name: [
             {required: true, message: '请输入节点名称', trigger: 'blur'},
-            {min: 1, max: 64, message: '节点名称长度在 1 到 64 个字符之间', trigger: 'blur'}
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）', trigger: 'blur'}
           ],
           // deviceId: [
           //   {required: true, message: '请输入设备ID', trigger: 'blur'}
           // ],
           host: [
-            {required: true, message: '请输入主机IP', trigger: 'blur'},
-            {min: 1, max: 32, message: '主机IP长度在 1 到 32 个字符之间', trigger: 'blur'}
+            {required: true, message: '请输入主机名', trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_.]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持中文,字母,数字,下划线和"."）', trigger: 'blur'}
           ],
           nodeStatus: [
             {required: true, message: '请选择节点状态', trigger: 'change'}
@@ -470,7 +470,7 @@
             {required: true, message: '请输入最大任务数量', trigger: 'blur'},
             {pattern: /^[1-9][0-9]{0,4}$/, message: '请输入数字，范围为 1 - 99999', trigger: 'blur'}
           ]
-            // { message: '请输入最大任务数量，最大数量不超过 99999 ', trigger: 'change'}
+          // { message: '请输入最大任务数量，最大数量不超过 99999 ', trigger: 'change'}
         },
         loadingModelInfo: false,
         loading2: false,
@@ -704,6 +704,7 @@
           .then(
             function (result) {
               console.log(result)
+              console.log(params1.statusCode)
               // this.currentStep = 2
               // console.log(' result.data.total ' + result.data.length)
               // this.modelList = result.data
@@ -714,6 +715,14 @@
                 loadingCreate.close()
                 this.loadData()
               })
+              params1.statusCode = result.data.statusCode.toString()
+              if (params1.statusCode === '201') {
+                this.$message({
+                  type: 'warning',
+                  message: '小区端已存在该节点，系统已将小区端节点信息同步至云端',
+                  duration: '8000'
+                })
+              }
             }.bind(this)
           )
           .catch(
@@ -894,6 +903,12 @@
         this.createNodeDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newNode']) {
+          this.$refs['newNode'].clearValidate()
+        }
+        if (this.$refs['editNode']) {
+          this.$refs['editNode'].clearValidate()
+        }
         this.createNodeDialogVisible = false
         this.editNodeDialogVisible = false
         this.viewRuntimeListVisible = false
@@ -957,7 +972,7 @@
                   loadingStartStop.close()
                 })
               }.bind(this)
-          )
+            )
         })
       },
       // moveToNextStep () {

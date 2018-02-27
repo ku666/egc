@@ -220,6 +220,10 @@ export default {
         page: 1,
         limit: 5,
         userUuid: ''
+      },
+      dictData: {
+        cloudFlag: 1,
+        departmentType: ''
       }
     }
   },
@@ -270,11 +274,12 @@ export default {
     changeUserType (userType) {
       this.departmentSelect = []
       this.user.departmentUuid = ''
-      this.getDepartmentSelect(userType)
+      this.dictData.departmentType = userType
+      this.getDepartmentSelect(this.dictData)
     },
-    getDepartmentSelect (userType) {
+    getDepartmentSelect (dictData) {
       // 获取部门信息
-      getDepartmentOptions(userType)
+      getDepartmentOptions(dictData)
         .then(
             function (result) {
               console.log('<<<<<departmentSelect:' + JSON.stringify(result))

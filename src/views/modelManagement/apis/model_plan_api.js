@@ -24,7 +24,7 @@ export const deleteTaskPlanById = params => {
   return Axios.get(BASE_PATH + '/modeltaskplan/delete', {params}).then(res => res.data)
 }
 // 停用计划
-export const stopTaskPlanById = (data) => {
-  return Axios.post(BASE_PATH + '/modeltaskplan/stop', data).then(res => res.data)
-  // return Axios.get(BASE_PATH + '/modeltaskplan/stop', {params}).then(res => res.data)
+export const stopTaskPlanById = params => {
+  // return Axios.post(BASE_PATH + '/modeltaskplan/stop', data).then(res => res.data)
+  return Axios.get(BASE_PATH + '/modeltaskplan/stop', {params}).then(res => res.data)
 }

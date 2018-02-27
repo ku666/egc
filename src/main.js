@@ -9,6 +9,7 @@ import router from './routers'
 import axios from '@/assets/js/AxiosPlugin'
 import store from './stores'
 import echarts from 'echarts'
+
 // import 'hdmap'
 // import 'hdmap/dist/hdmap.css'
 
