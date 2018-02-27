@@ -78,7 +78,8 @@
           </div>
           <!-- 图表展示 -->
           <div v-show="isOwenrMap" class="canvasOwner">
-            <div id="ownerFormation"></div>
+            <div id="ownerFormation" class='map'></div>
+            <img v-show='isErrData' :src='perErrImg' />
           </div>
         </div>
         <!-- 出入频率显示 -->
@@ -98,7 +99,8 @@
           </div>
           <!-- 图表展示  -->
           <div v-show="isRateMap" class="canvasRate" style="width:98%">
-            <div id="rateFormation"></div>
+            <div id="rateFormation" class='map'></div>
+            <img v-show='isErrData' :src='perErrImg' />
           </div>
         </div>
       </el-col>
@@ -108,6 +110,8 @@
 <script>
 import optionsData from '@/views/MapAnalysisApp/assets/js/ownerOptions.js'
 import { getCourtInfo, getCourtProfile, getBuildProfile } from '@/views/MapAnalysisApp/apis/index'
+import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
 export default {
   data () {
     return {
@@ -171,6 +175,8 @@ export default {
         perInCountList: [], // 入园人数集合
         perOutCountList: [] // 出园人数集合
       },
+      perErrImg: errImg, // 图表错误提示
+      isErrData: false,
       clearableDatepick: false,
       editableDatepick: false,
       isOwner: true, // 默认显示业主人数
@@ -199,6 +205,7 @@ export default {
           let result = res.data.data
           this.cellDetailsList = result
           this.form.buildList.unshift({ value: result.courtUuid, label: result.courtName })
+          console.log(LOG_TAG + '获取到小区名并插入到列表')
           this.form.buildValue = result.courtUuid
         }).catch(err => {
           this.$message({
@@ -224,6 +231,7 @@ export default {
                 label: item.memo.slice(item.memo.indexOf(' ') + 1)
               })
             })
+            console.log(LOG_TAG + '获取到小区楼栋名并插入到列表')
           }
         }).catch(err => {
           this.$message({
@@ -238,7 +246,6 @@ export default {
       if (id !== this.courtId) { // 选中的是楼栋
         this.buildId = id
       }
-      console.log(this.tempId, this.buildId, this.courtId)
     },
     reportTypeEvent (val) { // 报表选择
       switch (val) {
@@ -260,6 +267,7 @@ export default {
       }
     },
     goToTable () { // 切换到表格显示
+      console.log(LOG_TAG + '切换到表格显示')
       this.tableOrMap = '0'
       switch (this.flagVal) {
         case '1': // 选择业主人数
@@ -306,6 +314,7 @@ export default {
       }
     },
     currentChange (currentPage) { // 切换当前页
+      console.log(LOG_TAG + '当前页数:' + currentPage)
       this.parameter.currentPage = currentPage
       if (this.tempId !== this.courtId && this.tempId !== '') {
         this.getBuildRateTableData() // 获取楼栋表格
@@ -314,6 +323,7 @@ export default {
       }
     },
     goToMap () { // 切换到图表显示
+      console.log(LOG_TAG + '切换到图表显示')
       this.tableOrMap = '1'
       switch (this.flagVal) {
         case '1': // 选择业主人数
@@ -493,6 +503,7 @@ export default {
       }
     },
     closeDialog () { // 关闭弹窗（初始化数据）
+      console.log(LOG_TAG + '关闭弹窗')
       this.isOwner = true
       this.isRate = false
       this.isOwenrTable = true
@@ -516,11 +527,14 @@ export default {
       }
       this.disabled = true
       this.ownerTableData = []
+      this.isErrData = false
     },
     getCourtTableData (courtId) { // 获取小区表格（业主人数）
       getCourtProfile({ courtUuid: courtId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
+            console.log(LOG_TAG + '获取小区表格（业主人数')
+            this.isErrData = false
             let ageGroupInfo = res.data.data.ageGroupInfo
             let num = 0
             let ageGroup = []
@@ -544,6 +558,7 @@ export default {
             }
           }
         }).catch(err => {
+          this.isErrData = true
           this.$message({
             type: 'warning',
             message: err
@@ -601,6 +616,7 @@ export default {
       getBuildProfile({ courtUuid: this.courtId, buildId: this.buildId, type: 1 })
         .then(res => {
           if (res.data.code === '00000') {
+            this.isErrData = false
             let ageGroupInfo = res.data.data.ageGroupInfo
             let num = 0
             let ageGroup = []
@@ -624,6 +640,7 @@ export default {
             }
           }
         }).catch(err => {
+          this.isErrData = true
           this.$message({
             type: 'warning',
             message: err
@@ -642,6 +659,8 @@ export default {
       getCourtProfile(parmas)
         .then(res => {
           if (res.data.code === '00000') {
+            console.log(LOG_TAG + '获取小区图表数据(出入频率)')
+            this.isErrData = false
             this.rateMapData.dateList = res.data.data.flow.map(item => {
               return item.timeGroup
             })
@@ -660,6 +679,7 @@ export default {
           }
           this.resizeEcharts('#rateFormation', '.canvasRate', this.myChartContainer, this.myRateChart)
         }).catch(err => {
+          this.isErrData = true
           this.$message({
             type: 'warning',
             message: err
@@ -679,6 +699,8 @@ export default {
       getBuildProfile(parmas)
         .then(res => {
           if (res.data.code === '00000') {
+            console.log(LOG_TAG + '获取楼栋图表数据(出入频率)')
+            this.isErrData = false
             this.rateMapData.dateList = res.data.data.flow.map(item => {
               return item.timeGroup
             })
@@ -697,6 +719,7 @@ export default {
           }
           this.resizeEcharts('#rateFormation', '.canvasRate', this.myChartContainer, this.myRateChart)
         }).catch(err => {
+          this.isErrData = true
           this.$message({
             type: 'warning',
             message: err
@@ -708,7 +731,7 @@ export default {
 </script>
 <style lang='less' scoped>
 .popup-own {
-  /deep/.el-dialog{
+  /deep/.el-dialog {
     min-width: 710px;
   }
   /deep/.table-pager {
@@ -766,13 +789,21 @@ export default {
     vertical-align: middle;
   }
 }
-#ownerFormation {
-  width: 100%;
-  height: 430px;
-}
-#rateFormation {
-  height: 430px;
-  width: 100%;
+.canvasOwner,
+.canvasRate {
+  position: relative;
+  img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+  }
+  .map {
+    width: 100%;
+    height: 430px;
+  }
 }
 </style>
 

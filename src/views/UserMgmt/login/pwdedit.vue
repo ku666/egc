@@ -25,7 +25,7 @@
 </template>
 
 <script>
-  // import { getPermission } from '@/assets/js/util.js'
+  import CryptoJS from 'crypto-js'
   import {
     checkUserPwd,
     resetPassword
@@ -42,10 +42,12 @@
           callback()
         }
       }
-      // 用户名的唯一性
+      // 原密码的正确性
       var validateUserPwd = (rule, value, callback) => {
-        let userName = 'test'
-        this.validateOriginalPwd(userName, value)
+        let userName = sessionStorage.getItem('login_username')
+        let pwValue = CryptoJS.enc.Utf8.parse(value)
+        let paramBase64 = CryptoJS.enc.Base64.stringify(pwValue)
+        this.validateOriginalPwd(userName, paramBase64)
         if (!this.userPwdFlag) {
           callback(new Error('输入原密码有误'))
           // this.userPwdFlag = true   // 校验原密码不一致之后,再将 userPwdFlag 值还原初始值 true
@@ -81,15 +83,6 @@
       }
     },
     methods: {
-      loadData () {
-        // this.userUuid = sessionStorage.userUuid
-        // this.userId = sessionStorage.userId
-        // let userResourcePermission = {}
-        // let userUuid = ''
-        // userUuid = getPermission(this.$store.getters.getUserInfo, userResourcePermission)
-        // console.log('userResourcePermission: ' + JSON.stringify(userResourcePermission))
-        // console.log('getUserInfo: ' + JSON.stringify(userUuid))
-      },
       // 校验原密码是否正确
       validateOriginalPwd (userName, userPwd) {
         console.log('start validating... ')
@@ -111,8 +104,9 @@
           )
       },
       handleSave (changeForm) {
+        console.log(this.$store.state.mutations.userinfo.uuid)
         this.$refs[changeForm].validate((valid) => {
-          let userUuid = 'ce125da4e263434aa800d399ea211adf'
+          let userUuid = this.$store.state.mutations.userinfo.uuid
           if (valid) {
             resetPassword(userUuid, this.changeForm.newPwd)
               .then(
@@ -141,9 +135,6 @@
         this.$refs[changeForm].resetFields()
         this.$router.push('/login')
       }
-    },
-    created: function () {
-      this.loadData()
     }
   }
 </script>

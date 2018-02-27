@@ -14,7 +14,7 @@
       </el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple">
-          <select-box title="厂商编码"
+          <select-box title="厂商名称"
                       code="providerCode"
                       ref="providerCode"
                       :options="providerType"
@@ -154,9 +154,6 @@
       return {
         deviceType: [{value: '', label: ''}],
         providerType: [],
-        // 临时修改-------------------------
-        gatewayType: [{'label': '', 'value': ''}, {'label': '国标扩展网关', 'value': 'APP6003'}, {'label': '轻量级网关', 'value': 'APP8115'}, {'label': '广播网关', 'value': 'APP3333'}],
-        // --------------------
         selectedOrgVaue: {},
         selectedDistrictVaue: {},
         showOrgDialog: false,
@@ -260,6 +257,7 @@
       },
       _setDistrictInfo (data) {
         this.showDistrictDialog = false
+        if (data.name === '') this.$refs.name.clearBox()
         this.screeningData['courtName'] = data.name
         this.screeningData['courtUuid'] = data.uuid
       },
@@ -273,12 +271,18 @@
       },
       _closeDistrict () {
         this.$refs.districtDialog.clearData()
+      },
+      _clearInputdata () {
+        if (this.$refs.deviceName) {
+          this.$refs.deviceName.clearBox()
+        }
       }
     },
     mounted () {
       this._loadDeviceTypeList()
       this._loadProviderCode()
       this._loadGateway()
+      this._clearInputdata()
     }
   }
 </script>

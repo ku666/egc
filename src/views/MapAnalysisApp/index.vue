@@ -29,6 +29,7 @@
 import CourtTable from '@/views/MapAnalysisApp/components/CourtTable'
 import { getCourtList, getOrgList } from '@/views/MapAnalysisApp/apis/index.js'
 import mapData from '@/views/MapAnalysisApp/assets/js/mapEchartsData.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
 require('echarts/map/js/china')
 export default {
   components: {
@@ -49,6 +50,7 @@ export default {
     }
   },
   mounted: function () {
+    console.log(LOG_TAG + ' 初始化全国小区列表信息  ')
     this.getCourtListData()
     // this.getOrgListFn()
     this.getMyCharts.setOption(mapData.option)
@@ -87,6 +89,7 @@ export default {
           let prodata = []
           let proObj = {}
           // console.log(list)
+          console.log(LOG_TAG + ' 成功获取到小区列表数据; 小区数量： ' + list.length)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
           for (let i = 0, len = list.length; i < len; i++) {
             let item = list[i]

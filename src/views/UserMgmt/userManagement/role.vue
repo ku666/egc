@@ -278,10 +278,10 @@
     width: 25%;
   }
   #roleTable >>> colgroup col:nth-child(2) {
-    width: 25%;
+    width: 20%;
   }
   #roleTable >>> colgroup col:nth-child(3) {
-    width: 30%
+    width: 35%
   }
   #roleTable >>> colgroup col:nth-child(4) {
     width: 20%

@@ -31,8 +31,8 @@
         </el-collapse-item>
       </el-collapse>
     </div>
-    <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible">
-      <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt"></org-tree>
+    <el-dialog :title="dialogTittle" :visible.sync="selectOrgVisible" :before-close="resetOrgData">
+      <org-tree @handleDispatchEvent="_dispatchSoftwareToCourt" ref="courts"></org-tree>
     </el-dialog>
     <el-dialog :title="dialogTittle" :visible.sync="downloadResultVisible">
       <dispatched-software-results :dispResultErrMsg="dispResultErrMsg" @downloadEvent="_downloadDispatchResult"></dispatched-software-results>
@@ -235,6 +235,10 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    resetOrgData () {
+      this.selectOrgVisible = false
+      this.$refs.courts._loadALlOrgs()
     }
   },
   mounted () {

@@ -81,6 +81,7 @@
 </template>
 <script>
 import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   data () {
@@ -157,6 +158,7 @@ export default {
     },
     // 点击切换图表展示
     chartSwitch: function () {
+      console.log(LOG_TAG + ' 点击切换图表展示 ')
       this.isChartShow = true
       this.isTableShow = false
       // 自适应宽
@@ -342,6 +344,7 @@ export default {
     },
     // 点击切换表格展示
     tableSwitch: function () {
+      console.log(LOG_TAG + ' 点击切换表格展示 ')
       this.isChartShow = false
       this.isTableShow = true
       // 请求数据后重置表格宽度
@@ -365,11 +368,13 @@ export default {
       // 获取小区详细信息
       getCourtInfo({ courtUuid: _courtUuid }).then(res => {
         this.cellDetailsList = res.data.data
+        console.log(LOG_TAG + ' 成功获取到小区的详细信息 ')
       })
       this.dialogVisible = true
     },
     // 按时间（报表类型）查询
     timeQuery: function () {
+      console.log(LOG_TAG + ' 按时间（报表类型）查询 ')
       // 查询时页面初始化到第一页
       this.parameter.currentPage = 1
       this.timeJudgment()
@@ -435,6 +440,7 @@ export default {
       this.parameter.endTime = this.processingDate(this.endDate)
       getCourtPerAccessInfo(this.parameter).then(res => {
         if (res.data.code === '00000') {
+          console.log(LOG_TAG + ' 成功获取到小区人流信息(图表) ')
           let perData = res.data.data
           // 添加前先清空
           this.form.dateList = []
@@ -482,6 +488,7 @@ export default {
       this.parameter.endTime = this.processingDate(this.endDate)
       getPerAccessPageList(this.parameter).then(res => {
         if (res.data.code === '00000') {
+          console.log(LOG_TAG + ' 成功获取到小区人流信息(表格) ')
           this.tableData = res.data.data.result
           this.totalRows = res.data.data.totalRows
         } else {

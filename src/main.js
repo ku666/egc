@@ -22,6 +22,7 @@ Vue.prototype.$http = axios
 //   require('@/mocks/mock')
 // }
 Vue.use(ElementUI)
+
 // Vue.use(ajax)
 Vue.prototype.$echarts = echarts
 
@@ -29,6 +30,40 @@ Vue.config.productionTip = false
 
 // axios 统一配置
 // ajax.init()
+
+// 判断是否有token,没有则登陆
+router.beforeEach((to, from, next) => {
+  if (to.path !== '/login') {
+    var token = sessionStorage.getItem('token')
+    console.log(' beforeEach token: ' + token)
+
+    // let userResourcePermission = {}
+    // let userRouters = ''
+    // userRouters = getPermission(null, userResourcePermission)
+    // this.$store.dispatch('setUserResourcePermission', userResourcePermission)
+    // this.$store.dispatch('setUserRouters', userRouters)
+
+    if (token === null) {
+      next({ path: '/login' })
+    } else {
+      // 根据后台返回的路由进行判断是否合法
+      // var flag = true
+      //  var routers = sessionStorage.getItem('routers')
+      //  routers.split('_').forEach(v => {
+      //    if (v === to.path) {
+      //      flag = true
+      //    }
+      //  })
+      // if (flag) {
+      next()
+      // } else {
+        // next({ path: '/home' })
+      // }
+    }
+  } else {
+    next()
+  }
+})
 
 // 权限指令
 Vue.directive('has', {

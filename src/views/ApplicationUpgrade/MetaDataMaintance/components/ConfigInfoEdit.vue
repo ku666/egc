@@ -2,7 +2,7 @@
   <div>
     <el-form :inline="true" :model="configInfoDetails">
       <el-form-item label="配置项名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="configInfoDetails.configItem"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="configInfoDetails.configItem"></el-input>
       </el-form-item>
       <el-form-item label="配置项的值" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="configInfoDetails.value"></el-input>

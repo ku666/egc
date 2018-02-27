@@ -264,6 +264,11 @@ export const getRoleListAllMaindata = (cloudFlag, userType) => {
   return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag + '&userType=' + userType
   ).then(res => res.data)
 }
+// 从Maindata查询角色完整清单 不传用户类型
+export const getAllRoleList = (cloudFlag) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/listRole?cloudFlag=' + cloudFlag
+  ).then(res => res.data)
+}
 // 新建角色
 export const createRole = (data) => {
   console.log('新建角色数据：' + data)
