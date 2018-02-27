@@ -280,8 +280,8 @@ export const getDatabaseHistoryList = (id) => {
 
 // 获取中间件列表数据
 export const getMiddlewareInfoByPage = (params) => {
-  // console.log('<<<<<middleware params data :' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData', params
+  console.log('middle list param --> ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData?softwareType=middleware', params
   ).then(res => res.data)
 
   // return Axios.get(contextPath + '/auMiddleware/queryPageData'
@@ -324,8 +324,8 @@ export const getMiddlewareHistoryList = (id) => {
 
 // 运维管理列表数据
 export const getOperMgmtInfoByPage = (params) => {
-  // console.log('<<<<<middleware params data :' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData', params
+  console.log('operation params --->  ' + JSON.stringify(params))
+  return Axios.post(BASE_PATH + '/auMiddleware/queryPageData?softwareType=operation', params
   ).then(res => res.data)
 }
 
