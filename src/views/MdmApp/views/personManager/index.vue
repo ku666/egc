@@ -54,7 +54,9 @@
         </el-table-column>
         <el-table-column label="人员类型" prop="userType" sortable>
           <template slot-scope="scope">
-            {{scope.row.userType === '1' ? '业主' : '租户'}}
+            <div v-for='ut in userTypes' v-bind:key='ut.value'>
+              {{scope.row.userType === ut.value ? ut.label : ''}}
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="性别" prop="sex" sortable>
@@ -213,6 +215,21 @@ export default {
           value: '6',
           label: '其它'
         }
+      ],
+      userTypes: [
+        {
+          value: '1',
+          label: '业主' // 1-业主;2-家人;3-租户;4-访客
+        }, {
+          value: '2',
+          label: '家人'
+        }, {
+          value: '3',
+          label: '租户'
+        }, {
+          value: '4',
+          label: '访客'
+        }
       ]
     }
   },
@@ -220,7 +237,14 @@ export default {
   },
   computed: {
     userTypeName: function () {
-      return this.modelDetailForm.userType === '1' ? '业主' : '租户'
+      let that = this
+      let userType = that.modelDetailForm.userType
+      let temp = that.userTypes.find(e => e.value === userType)
+      if (temp) {
+        return temp.label
+      } else {
+        return ''
+      }
     },
     sexName: function () {
       return this.modelDetailForm.sex === '1' ? '男' : '女'
