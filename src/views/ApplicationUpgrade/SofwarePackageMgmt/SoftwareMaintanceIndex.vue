@@ -78,8 +78,8 @@
           <el-form :model="softwareDetails" :rules="rules" ref='softwareDetails'>
             <el-row>
               <el-col :span="12"  class="flex-1 flex-c">
-                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchesId" >
-                  <el-select v-model="softwareDetails.batchesId" placeholder="请选择" :disabled="isHasSoftwareDetails.batchesIdIsDisable">
+                <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="batchId" >
+                  <el-select v-model="softwareDetails.batchId" placeholder="请选择" :disabled="isHasSoftwareDetails.batchIdIsDisable">
                     <el-option
                       v-for="item in batchs"
                       :key="item.uuid"
@@ -243,7 +243,7 @@
         </div>
       </el-dialog>
     </div>
-    <div>
+    <!-- <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogDetailsVisible" top="8vh">
         <software-package-details :softwarePckDetails="softwarePckDetails"></software-package-details>
       </el-dialog>
@@ -257,7 +257,7 @@
       <el-dialog :title="dialogTitle" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <software-package-history :softwarePckHistory="softwarePckHistory"></software-package-history>
       </el-dialog>
-    </div>
+    </div> -->
     <!--软件包批量导入 -->
     <div>
       <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" :before-close="closeImportDialog">
@@ -344,7 +344,7 @@ export default {
         developer: '',
         latestPreVer: '',
         remark: '',
-        batchesId: '',
+        batchId: '',
         lastestPreName: '',
         functionDesc: '',
         gitRepository: '',
@@ -362,7 +362,7 @@ export default {
         developerIsDisable: false,
         latestPreVerIsDisable: false,
         remarkIsDisable: false,
-        batchesIdIsDisable: false,
+        batchIdIsDisable: false,
         lastestPreNameIsDisable: false,
         functionDescIsDisable: false,
         gitRepositoryIsDisable: false,
@@ -447,7 +447,7 @@ export default {
         uploadFiles: [
           {}
         ],
-        batchesId: [
+        batchId: [
           { required: true, message: '请选择注册软件包批次', trigger: 'blur,change' }
         ],
         latestPreVer: [
@@ -511,6 +511,8 @@ export default {
       this.dialogTitle = '软件包信息注册'
       this.dialogRegisterVisible = true
       this.switchInputDisable('add')
+      this.$refs['softwareDetails'].resetFields()
+      this.fileList = []
     },
     _registerSoftware (formName) {
       console.info(JSON.stringify(this.$refs.uploadJarFiles._data.uploadFiles))
@@ -661,6 +663,7 @@ export default {
               // this.dialogDetailsVisible = true
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
+              this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('search')
               console.log(' check software details -----------> ' + JSON.stringify(this.softwarePckDetails, null, ' '))
             }.bind(this)
@@ -678,9 +681,10 @@ export default {
               // this.softwarePckDetails = result.data
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
+              this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('edit')
               // this.dialogEditVisible = true
-              console.log('edit software details ----------->   ' + JSON.stringify(this.softwarePckDetails))
+              console.log('edit software details ----------->   ' + JSON.stringify(this.softwareDetails))
             }.bind(this)
           )
           .catch(
@@ -788,7 +792,7 @@ export default {
         this.isHasSoftwareDetails.developerIsDisable = false
         this.isHasSoftwareDetails.latestPreVerIsDisable = false
         this.isHasSoftwareDetails.remarkIsDisable = false
-        this.isHasSoftwareDetails.batchesIdIsDisable = false
+        this.isHasSoftwareDetails.batchIdIsDisable = false
         this.isHasSoftwareDetails.lastestPreNameIsDisable = false
         this.isHasSoftwareDetails.functionDescIsDisable = false
         this.isHasSoftwareDetails.gitRepositoryIsDisable = false
@@ -807,7 +811,7 @@ export default {
         this.isHasSoftwareDetails.developerIsDisable = false
         this.isHasSoftwareDetails.latestPreVerIsDisable = false
         this.isHasSoftwareDetails.remarkIsDisable = false
-        this.isHasSoftwareDetails.batchesIdIsDisable = true
+        this.isHasSoftwareDetails.batchIdIsDisable = true
         this.isHasSoftwareDetails.lastestPreNameIsDisable = false
         this.isHasSoftwareDetails.functionDescIsDisable = false
         this.isHasSoftwareDetails.gitRepositoryIsDisable = false
@@ -826,7 +830,7 @@ export default {
         this.isHasSoftwareDetails.developerIsDisable = true
         this.isHasSoftwareDetails.latestPreVerIsDisable = true
         this.isHasSoftwareDetails.remarkIsDisable = true
-        this.isHasSoftwareDetails.batchesIdIsDisable = true
+        this.isHasSoftwareDetails.batchIdIsDisable = true
         this.isHasSoftwareDetails.lastestPreNameIsDisable = true
         this.isHasSoftwareDetails.functionDescIsDisable = true
         this.isHasSoftwareDetails.gitRepositoryIsDisable = true

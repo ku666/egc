@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="软件包批次名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
-            <el-input class="upgrade_el-input" v-model="softwareDetails.batchesId"></el-input>
+            <el-input class="upgrade_el-input" v-model="softwareDetails.batchId"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -27,7 +27,7 @@
         </el-col>
         <el-col :span="12">
           <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="latestPreVer">
-            <el-input class="upgrade_el-input" v-model="softwareDetails.latestPreName"></el-input>
+            <el-input class="upgrade_el-input" v-model="softwareDetails.lastestPreName"></el-input>
           </el-form-item>
         </el-col>
         <el-col :span="12">
