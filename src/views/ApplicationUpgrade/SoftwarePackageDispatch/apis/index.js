@@ -30,7 +30,7 @@ export const dispatchSoftwarePackage = (params1, params2, params3) => {
 
 // 下发历史
 export const getDispatchHisByPage = (params) => {
-  console.log('dis history -->  ' + JSON.stringify(params))
+  console.log('dispatch history -->  ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/aupackagedispatches/listDispatchRecord', params).then(res => res.data)
 }
 
