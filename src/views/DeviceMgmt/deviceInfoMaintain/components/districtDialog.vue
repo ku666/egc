@@ -125,6 +125,7 @@
               value['label'] = value['province']
               value['value'] = value['province']
             })
+            list.splice(0, 0, {'label': '', 'value': ''})
             this.provinceType = list
           })
           .catch()
@@ -140,6 +141,7 @@
                   value['label'] = value['city']
                   value['value'] = value['city']
                 })
+                list.splice(0, 0, {'label': '', 'value': ''})
                 this.cityType = list
               })
               .catch()
@@ -156,6 +158,7 @@
                   value['label'] = value['district']
                   value['value'] = value['district']
                 })
+                list.splice(0, 0, {'label': '', 'value': ''})
                 this.districtType = list
               })
               .catch()
