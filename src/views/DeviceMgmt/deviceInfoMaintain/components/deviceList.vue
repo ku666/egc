@@ -38,7 +38,7 @@
         <el-table-column
           :resizable="false"
           prop="providerName"
-          label="设备厂商"
+          label="厂商名称"
           width="80">
         </el-table-column>
         <el-table-column

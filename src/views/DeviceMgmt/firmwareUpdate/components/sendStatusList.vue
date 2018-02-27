@@ -36,7 +36,7 @@
         <el-table-column
           :resizable="false"
           property="provideName"
-          label="厂商编码"
+          label="厂商名称"
           width="200">
         </el-table-column>
         <el-table-column
