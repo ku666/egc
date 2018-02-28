@@ -44,11 +44,15 @@
     data () {
       // 角色名的唯一性
       var validateRoleName = (rule, value, callback) => {
-        if (value === '' || value === undefined) {
+        let trimmedValue = this.trim(value)
+        let trimmedValueLength = trimmedValue.length
+        if (trimmedValue === '' || trimmedValue === undefined) {
           callback(new Error('角色名称不能为空'))
+        } else if (trimmedValueLength > 32 || trimmedValueLength < 2) {
+          callback(new Error('长度在 2 到 32 个字符'))
         } else {
           let userType = this.form.userType
-          checkRoleName('', value, userType)
+          checkRoleName('', trimmedValue, userType)
           .then(
             function (result) {
               if (!result) {
@@ -60,21 +64,12 @@
           )
         }
       }
-        // let roleUuid = this.form.uuid
-        // console.log('校验：' + roleUuid + value)
-        // this.validateName(roleUuid, value)
-        // if (!this.roleNameFlag) {
-        //   callback(new Error('角色名称已存在!'))
-        //   this.roleNameFlag = true   // 校验角色名称存在之后,再将roleNameFlag值还原初始值 true
-        // } else {
-        //   callback()
-        // }
       return {
         rules: {
           roleName: [
             { required: true, message: '请填写角色名称', trigger: 'blur' },
-            { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-            { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '角色名只能为字母、数字、空格和汉字' },
+            // { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
+            // { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '角色名只能为字母、数字、空格和汉字' },
             { validator: validateRoleName }
           ],
           remark: [
@@ -104,6 +99,9 @@
         }
         this.$refs.form.resetFields()
       },
+      trim (string) {
+        return string.replace(/(^\s*)|(\s*$)/g, '')
+      },
       // // 校验角色名的唯一性
       // validateName (roleUuid, roleName) {
       //   console.log('start validating...' + roleUuid + roleName)
@@ -123,8 +121,7 @@
       handleSave (form) {
         this.$refs[form].validate((valid) => {
           if (valid) {
-            // this.formData = JSON.stringify(this.form)
-            // this.formData = JSON.parse(this.formData)
+            this.form.roleName = this.trim(this.form.roleName)
             createRole(this.form)
               .then(
                 function (result) {

@@ -56,6 +56,7 @@ export default {
     handleSave (createForm) {
       this.$refs[createForm].validate((valid) => {
         if (valid) {
+          this.createForm.usergroupName = this.trim(this.createForm.usergroupName)
           createUserGroup(this.createForm)
             .then(
               function (result) {
@@ -88,23 +89,10 @@ export default {
       }
       this.$refs[createForm].resetFields()
       this.$emit('listenToAddEvent', this.createForm)
+    },
+    trim (string) {
+      return string.replace(/(^\s*)|(\s*$)/g, '')
     }
-    // // 校验用户组名的唯一性
-    // validateName (usergroupUuid, usergroupName, userType) {
-    //   console.log('start validating...' + usergroupUuid + usergroupName)
-    //   checkUserGroupName(usergroupUuid, usergroupName, userType)
-    //     .then(
-    //       function (result) {
-    //         console.log('<<<<<userGroupNameFlag:' + result)
-    //         this.userGroupNameFlag = result
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log(error)
-    //       }
-    //     )
-    // }
   },
   mounted: function () {
     this.initData()
@@ -112,11 +100,15 @@ export default {
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
-      if (value === '' || value === undefined) {
+      let trimmedValue = this.trim(value)
+      let trimmedValueLength = trimmedValue.length
+      if (trimmedValue === '' || trimmedValue === undefined) {
         callback(new Error('用户组名称不能为空'))
+      } else if (trimmedValueLength > 32 || trimmedValueLength < 2) {
+        callback(new Error('长度在 2 到 32 个字符'))
       } else {
         let userType = this.createForm.userType
-        checkUserGroupName('', value, userType)
+        checkUserGroupName('', trimmedValue, userType)
         .then(
           function (result) {
             if (!result) {
@@ -132,8 +124,8 @@ export default {
       rules: {
         usergroupName: [
           { required: true, message: '请填写用户组名称', trigger: 'blur' },
-          { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '用户组名只能为字母、数字、空格和汉字' },
+          // { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
+          // { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '用户组名只能为字母、数字、空格和汉字' },
           { validator: validateUserGroupName }
         ],
         remark: [
