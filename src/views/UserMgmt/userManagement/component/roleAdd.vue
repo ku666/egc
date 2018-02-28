@@ -46,7 +46,7 @@
       var validateRoleName = (rule, value, callback) => {
         let trimmedValue = this.trim(value)
         let trimmedValueLength = trimmedValue.length
-        if (trimmedValue === '' || trimmedValue === undefined) {
+        if (trimmedValue === '') {
           callback(new Error('角色名称不能为空'))
         } else if (trimmedValueLength > 32 || trimmedValueLength < 2) {
           callback(new Error('长度在 2 到 32 个字符'))
