@@ -897,7 +897,19 @@
           <!--label="当前版本">-->
           <!--<template slot-scope="scope"><span>{{ scope.row.algModel.latestVersion }}</span></template>-->
           <!--</el-table-column>-->
-
+          <el-table-column
+            label="更多操作"
+            width="150"
+            align="center">
+            <template slot-scope="scope">
+              <el-button
+                v-if="scope.row.deployStatus == 'mm.depsts.fail'||scope.row.deployStatus == 'mm.depsts.none'"
+                size="mini"
+                type="primary"
+                @click="reDeployPublishVersion(scope.$index, scope.row)">重新部署发布
+              </el-button>
+            </template>
+          </el-table-column>
           <!--<el-table-column
             label="更多操作"
             width="100"
@@ -906,7 +918,7 @@
 
               <el-dropdown @command="handleCloudCommand($event, scope.$index, scope.row)" trigger="click">
                 <span class="blue cursor-hand el-dropdown-link">
-                  更多<i class="el-icon-arrow-down el-icon--right"></i>
+                  更多<i class="el-icon-arrow-down el-icon-right"></i>
                 </span>
                 <el-dropdown-menu slot="dropdown">
                   <el-dropdown-item class="model-dropdown-item" command="deploy"><i class="el-icon-tickets"></i>部署</el-dropdown-item>
@@ -2403,6 +2415,70 @@
         //     // 点击已经选中的节点，置空
         //   }
         // }
+      },
+      reDeployPublishVersion (index, item) {
+        this.$confirm('确定要重新部署吗?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let checkedNodes = [this.communityStatusList[index]]
+          let communityNodesArr = []
+          checkedNodes.forEach(function (item) {
+            communityNodesArr.push({
+              mgmtNodePks: item.mgmtNodePks,
+              communityId: item.communityId
+            })
+          })
+          let params = {
+            communities: communityNodesArr,
+            modelPk: this.showDeployPublishVersion.algModelPk,
+            modelVerPk: this.showDeployPublishVersion.algModelVersionPk
+          }
+          // item.versionNo = item.versionNo + ' '
+          // this.deployLoading = true
+          // item.set("deployLoading", true)
+          let loadingDeploy = startSystemLoading()
+          deployAndPublisVersion(params)
+          .then(
+            function (result) {
+              this.$nextTick(() => {
+                loadingDeploy.close()
+              })
+              // this.deployLoading = false
+              this.$message({
+                message: '部署命令发送成功',
+                type: 'success'
+              })
+              this.loadCommunityStatus(checkedNodes)
+              // this.$refs.deployTree.setCheckedKeys([])
+              // this.deployDialogVisible = false
+              // setTimeout(function () {
+              //   console.info('000')
+              //   this.loadData()
+              // }.bind(this), 6000)
+              // _that.loadData()
+              // this.total = result.data.length
+              // this.loadingStep = false
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              // this.loadingStep = false
+              // this.deployLoading = false
+              this.$nextTick(() => {
+                loadingDeploy.close()
+              })
+              // this.$message.error('部署失败')
+              console.info(error)
+            }.bind(this)
+          )
+        }).catch(() => {
+          // this.$message({
+          //   type: 'info',
+          //   message: '已取消删除'
+          // })
+        })
       },
       handleClose (done) {
         if (this.$refs['newModelVersion']) {

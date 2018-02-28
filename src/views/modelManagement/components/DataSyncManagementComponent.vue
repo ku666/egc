@@ -70,19 +70,21 @@
       <el-row class="margin-top-25">
         <el-col :span="24">
           <div class="text-right">
-            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
-              <el-form-item label="开始时间" prop="startTime">
+            <el-form :inline="true" :model="modelListSearch" ref="modelListSearch" class="demo-form-inline">
+              <el-form-item label="任务创建时间区间：">
+              </el-form-item>
+              <el-form-item label="任务创建时间大于" prop="startTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
                   format="yyyy-MM-dd HH:mm"
                   v-model="modelListSearch.startTime"
                   type="datetime"
-                  placeholder="选择开始时间">
+                  placeholder="选择任务创建时间">
                 </el-date-picker>
               </el-form-item>
-                <!--<span v-if="isEndTimeErrorNoStart" class="red">请选择开始时间</span>-->
-                <!--<span v-if="isStartTimeError" class="red">开始时间不能早于当前时间</span>-->
-              <el-form-item label="结束时间" prop="endTime">
+              <!--<span v-if="isEndTimeErrorNoStart" class="red">请选择开始时间</span>-->
+              <!--<span v-if="isStartTimeError" class="red">开始时间不能早于当前时间</span>-->
+              <el-form-item label="任务创建时间小于" prop="endTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
                   :class="{ 'error-border': isEndTimeErrorBefore }"
@@ -90,12 +92,12 @@
                   @change="checkPlanEndTime"
                   v-model="modelListSearch.endTime"
                   type="datetime"
-                  placeholder="选择结束时间">
+                  placeholder="选择任务创建时间">
                 </el-date-picker>
-                <span v-if="isEndTimeErrorBefore" class="red">结束时间不能早于开始时间</span>
+                <span v-if="isEndTimeErrorBefore" class="red">任务创建时间最小值不能大于任务创建时间最大值</span>
               </el-form-item>
               <el-form-item>
-            <el-button :disabled="isEndTimeErrorBefore" class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                <el-button :disabled="isEndTimeErrorBefore" class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
                 <!--<el-button v-if="isEndTimeErrorBefore" disabled class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>-->
               </el-form-item>
             </el-form>
@@ -444,6 +446,8 @@
           name: '',
           modelCat: '全部',
           nodeType: '全部',
+          startTime: '',
+          endTime: '',
           type: '全部'
         },
         eventRules: {
@@ -661,17 +665,27 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit (formName) {
+      onSubmit () {
         console.log('submit!')
-        this.$refs[formName].validate((valid) => {
-          if (valid) {
-            // alert('submit!')
-            this.loadData()
-          } else {
-            console.log('error submit!!')
-            return false
-          }
-        })
+        let startTimeStamp = this.modelListSearch.startTime
+        let endTimeStamp = new Date(this.modelListSearch.endTime).getTime()
+        console.info('start time is:' + this.modelListSearch.startTime)
+        console.info('end time is:' + this.modelListSearch.endTime)
+        if (endTimeStamp < startTimeStamp) {
+          this.isEndTimeErrorBefore = true
+        } else {
+          this.isEndTimeErrorBefore = false
+          this.loadData()
+        }
+        // this.$refs[formName].validate((valid) => {
+        //   if (valid) {
+        //     // alert('submit!')
+        //     this.loadData()
+        //   } else {
+        //     console.log('error submit!!')
+        //     return false
+        //   }
+        // })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -810,12 +824,12 @@
         this.loadData()
       },
       checkPlanEndTime () {
-        console.info(this.modelListSearch.startTime)
-        console.info(this.modelListSearch.endTime)
+        console.info('start time is:' + this.modelListSearch.startTime)
+        console.info('end time is:' + this.modelListSearch.endTime)
         // let nowTimeStamp = new Date().getTime()
         let endTimeStamp = new Date(this.modelListSearch.endTime).getTime()
         let startTimeStamp = this.modelListSearch.startTime ? (new Date(this.modelListSearch.startTime).getTime()) : 0
-        if (endTimeStamp < startTimeStamp) {
+        if (startTimeStamp && endTimeStamp && endTimeStamp < startTimeStamp) {
           this.isEndTimeErrorBefore = true
         } else {
           this.isEndTimeErrorBefore = false
