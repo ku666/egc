@@ -1,16 +1,29 @@
 // 引用pages
-import personManager from '@/views/MdmApp/views/personManager/index.vue'
-import houseManager from '@/views/MdmApp/views/houseManager/index.vue'
+import mdmAppPersonMgmt from '@/views/MdmApp/views/personManager/index.vue'
+import mdmAppHouseMgmt from '@/views/MdmApp/views/houseManager/index.vue'
+import mdmAppProviderMgmt from '@/views/MdmApp/components/ProviderList'
+import mdmAppDeviceMgmt from '@/views/MdmApp/components/Device'
+
 // 定义路由路径数组列表
 export default [
   {
-    path: '/MdmApp/personManager',
-    name: 'personManager',
-    component: personManager
+    path: '/mdmapp/personmgmt',
+    name: 'mdmAppPersonMgmt',
+    component: mdmAppPersonMgmt
   },
   {
-    path: '/MdmApp/houseManager',
-    name: 'houseManager',
-    component: houseManager
+    path: '/mdmapp/housemgmt',
+    name: 'mdmAppHouseMgmt',
+    component: mdmAppHouseMgmt
+  },
+  {
+    path: '/mdmapp/providermgmt',
+    name: 'mdmAppProviderMgmt',
+    component: mdmAppProviderMgmt
+  },
+  {
+    path: '/mdmapp/devicemgmt',
+    name: 'mdmAppDeviceMgmt',
+    component: mdmAppDeviceMgmt
   }
 ]
