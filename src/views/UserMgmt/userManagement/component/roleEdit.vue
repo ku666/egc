@@ -526,15 +526,13 @@ export default {
       this.showService = false
     },
     handleSave (form) {
-      this.formData = JSON.stringify(this.form)
-      console.log(this.formData)
-      this.formData = JSON.parse(this.formData)
       this.$refs[form].validate((valid) => {
         if (valid) {
-          updateRole(this.formData)
+          this.form.roleName = this.trim(this.form.roleName)
+          updateRole(this.form)
             .then(
               function (result) {
-                this.$emit('listenToEditEvent', this.formData)
+                this.$emit('listenToEditEvent', this.form)
                 this.$emit('listenToCloseEvent')
                 this.$message({
                   message: '保存成功！',
@@ -683,22 +681,10 @@ export default {
         this.$refs.addservice.reset()
       }
       console.log('dialog changeRoleEditDiaLogEvent End')
+    },
+    trim (string) {
+      return string.replace(/(^\s*)|(\s*$)/g, '')
     }
-    // // 校验角色名的唯一性
-    // validateName (roleUuid, roleName, userType) {
-    //   checkRoleName(roleUuid, roleName, userType)
-    //     .then(
-    //       function (result) {
-    //         console.log('<<<<<roleNameFlag:' + result)
-    //         this.roleNameFlag = result
-    //       }.bind(this)
-    //     )
-    //     .catch(
-    //       function (error) {
-    //         console.log(error)
-    //       }
-    //     )
-    // }
   },
   mounted: function () {
     this.subActiveName = 0
@@ -717,12 +703,16 @@ export default {
   data () {
     // 角色名的唯一性
     var validateRoleName = (rule, value, callback) => {
-      if (value === '' || value === undefined) {
+      let trimmedValue = this.trim(value)
+      let trimmedValueLength = trimmedValue.length
+      if (trimmedValue === '') {
         callback(new Error('角色名称不能为空'))
+      } else if (trimmedValueLength > 32 || trimmedValueLength < 2) {
+        callback(new Error('长度在 2 到 32 个字符'))
       } else {
         let userType = this.form.userType
         let roleUuid = this.form.uuid
-        checkRoleName(roleUuid, value, userType)
+        checkRoleName(roleUuid, trimmedValue, userType)
         .then(
           function (result) {
             if (!result) {
@@ -738,8 +728,8 @@ export default {
       rules: {
         roleName: [
           { required: true, message: '请填写角色名称', trigger: 'blur' },
-          { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '角色名只能为字母、数字、空格和汉字' },
+          // { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
+          // { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '角色名只能为字母、数字、空格和汉字' },
           { validator: validateRoleName }
         ],
         remark: [

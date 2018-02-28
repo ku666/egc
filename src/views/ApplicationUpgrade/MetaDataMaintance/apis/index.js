@@ -13,7 +13,7 @@ export const getCodeInstances = () => {
 
 export const getInstanceCodes = (params) => {
   console.log('code instance code:: ---> ' + JSON.stringify(params, null, ' '))
-  return Axios.get(BASE_PATH + '/codes/queryCodes?typeCode=' + params).then(res => res.data)
+  return Axios.get(BASE_PATH + '/codes/queryCodes?codeTypeUuid=' + params).then(res => res.data)
 }
 
 //  ******************** 代码实例 ********************

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div  class="model-config">
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
@@ -24,15 +24,31 @@
         </el-col>
         <el-col :span="20">
           <div class="text-right">
-            <div class="form-info">
-              <div class="item-info label">系统参数代码</div>
-              <div class="item-info">
-                <el-input @keyup.enter.native="searchModelByName" id="searchName" @blur="inputBlur" v-model="modelListSearch.paramCode"></el-input>
-              </div>
-              <div class="item-info">
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-              </div>
-            </div>
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="小区">
+                  <div class="item-info">
+                    <el-select @change="loadData" v-model="modelListSearch.communityId" placeholder="小区">
+                      <!-- <el-option key="0" label="全部" value="0"></el-option> -->
+                      <el-option
+                        v-for="item in communityId"
+                        :key="item.item_code"
+                        :label="item.item_name"
+                        :value="item.item_code">
+                      </el-option>
+                    </el-select>
+                  </div>
+                </el-form-item>
+                <el-form-item label="系统参数代码" prop="paramCode">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.paramCode"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+
           </div>
         </el-col>
       </el-row>
@@ -45,6 +61,13 @@
         style="width: 100%"
         v-loading="loading2" element-loading-text="拼命加载中"
         @selection-change="handleSelectionChange">
+        <el-table-column
+          prop="communityId"
+          label="小区">
+          <template slot-scope="scope">
+            <span>{{ communityIdMap[scope.row.communityId] }}</span>
+          </template>
+        </el-table-column>
         <el-table-column
           prop="paramCat"
           label="系统参数类别">
@@ -110,7 +133,16 @@
       :before-close="handleClose">
 
       <el-form v-loading="loadingStep" :model="newModel" :rules="rules" ref="newModel" label-width="120px" class="demo-ruleForm">
-
+        <el-form-item label="小区名称" prop="communityId">
+          <el-select size="small" v-model="newModel.communityId" placeholder="请选择一个小区">
+            <el-option
+              v-for="item in communityId"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="系统参数类别" prop="paramCat">
           <el-select size="small" v-model="newModel.paramCat" placeholder="请选择系统参数类别">
             <!-- <el-option label="模型管理" value="mm.paramcat.modelmgmt"></el-option>
@@ -135,7 +167,7 @@
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">
-          <el-button @click="addModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
         </el-form-item>
 
@@ -155,7 +187,16 @@
       :before-close="handleClose">
 
       <el-form v-loading="loadingEditStep" :model="editModel" :rules="rules" ref="editModel" label-width="120px" class="demo-ruleForm">
-
+        <el-form-item label="小区名称" prop="communityId">
+          <el-select size="small" disabled v-model="editModel.communityId" placeholder="请选择一个小区">
+            <el-option
+              v-for="item in communityId"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="系统参数类别" prop="paramCat">
           <el-select size="small" v-model="editModel.paramCat" placeholder="请选择系统参数类别">
             <el-option
@@ -177,7 +218,7 @@
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">
-          <el-button @click="editModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
 
@@ -235,6 +276,10 @@
     margin-left: -100px;
   }
 
+  .model-config .form-info {
+    display: inline-block;
+  }
+
 </style>
 
 
@@ -246,7 +291,8 @@
     getSystemSettings,
     getSystemDataByCode,
     getSystemCodeNameMap,
-    SYSTEM_PROGRAMTYPE
+    SYSTEM_PROGRAMTYPE,
+    COMMUNITY
   } from '@/views/modelManagement/assets/js/common'
   import '../assets/css/common.less'
   import ElOption from 'element-ui/packages/select/src/option'
@@ -279,18 +325,30 @@
         },
         paramCatList: [],
         paramCatMap: [],
+        searchRules: {
+          paramCode: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持字母,数字和下划线', trigger: 'change'}
+          ]
+        },
         rules: {
+          // paramCat: [
+          //   { required: true, message: '请输入系统参数类别', trigger: 'blur' },
+          //   { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
+          // ],
+          communityId: [
+            {required: true, message: '请选择小区', trigger: 'change'}
+          ],
           paramCat: [
-            { required: true, message: '请输入系统参数类别', trigger: 'blur' },
-            { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
+            {required: true, message: '请选择系统参数类别', trigger: 'change'}
           ],
           paramCode: [
             { required: true, message: '请输入系统参数代码', trigger: 'blur' },
-            { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持字母,数字和下划线）', trigger: 'blur' }
           ],
           paramValue: [
             { message: '请输入系统参数值', trigger: 'blur' },
-            { min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_]+$', min: 0, max: 256, message: '长度在 0 到 256 个字符（只支持字母,数字和下划线）', trigger: 'blur' }
           ],
           paramDesc: [
             { message: '请输入系统参数描述', trigger: 'blur' },
@@ -303,7 +361,9 @@
         loadingStep: false,
         loadingEditStep: false,
         modelList: [],
-        multipleSelection: []
+        multipleSelection: [],
+        communityIdMap: {},
+        communityId: []
       }
     },
     mounted () {
@@ -312,7 +372,7 @@
       // this.loading2 = true
       var codeListParam = {
         catCodeList: SYSTEM_PROGRAMTYPE,
-        needCommunity: false
+        needCommunity: true
       }
       let loadingSystemSetting = startSystemLoading()
       getSystemSettings(codeListParam)
@@ -322,6 +382,9 @@
             console.log(result)
             this.paramCatList = getSystemDataByCode(result.data, SYSTEM_PROGRAMTYPE)
             this.paramCatMap = getSystemCodeNameMap(this.paramCatList)
+            this.communityId = getSystemDataByCode(result.data, COMMUNITY)
+            this.communityId.unshift({item_code: '0', item_name: '全部小区'})
+            this.communityIdMap = getSystemCodeNameMap(this.communityId)
             console.info(this.paramCatMap)
             this.$nextTick(() => {
               loadingSystemSetting.close()
@@ -351,6 +414,7 @@
           pageSize: this.pageSize,
           condition: {
             paramCode: '%' + this.modelListSearch.paramCode + '%',
+            communityId: this.modelListSearch.communityId ? this.modelListSearch.communityId : null,
             deleteFlag: 0
           },
           orderBy: 'createTime'
@@ -361,6 +425,13 @@
           .then(
             function (result) {
               this.modelList = result.data.items
+              this.modelList.forEach(function (item, index) {
+                if (item.communityId === '' || item.communityId === null) {
+                  item.communityId = '0'
+                } else {
+                  console.log('testtest')
+                }
+              })
               this.total = result.data.pageCount
               // this.loading2 = false
               this.$nextTick(() => {
@@ -534,8 +605,13 @@
           type: 'warning'
         }).then(() => {
           // this.loading2 = true
+          let comPk = 0
+          if (data.comSysParamPk) {
+            comPk = data.comSysParamPk.toString()
+          }
           var params = {
-            id: data.sysParamPk.toString()
+            id: data.sysParamPk.toString(),
+            comSysParamPk: comPk
           }
           let loadingDelete = startSystemLoading()
           deleteSysParamById(params)
@@ -578,6 +654,12 @@
         this.addModelDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         // this.$confirm('确认关闭？')

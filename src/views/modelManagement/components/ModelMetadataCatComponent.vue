@@ -24,7 +24,21 @@
         </el-col>
         <el-col :span="20">
           <div class="text-right">
-            <div class="form-info">
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="占位符" v-show="false">
+                  <el-input  placeholder="占位符"></el-input>
+                </el-form-item>
+                <el-form-item label="元数据分类名称" prop="catName">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.catName"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <div class="form-info">
               <div class="item-info label">元数据分类名称</div>
               <div class="item-info">
                 <el-input @keyup.enter.native="searchModelByName" id="searchName" @blur="inputBlur" v-model="modelListSearch.catName"></el-input>
@@ -32,7 +46,7 @@
               <div class="item-info">
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -124,7 +138,7 @@
               <el-input id="addCatDesc" @blur="inputBlur" :autosize="{ minRows: 2, maxRows: 10}" type="textarea" v-model="newModel.catDesc"></el-input>
             </el-form-item>
             <el-form-item class="text-right add-model-button">
-              <el-button @click="addModelDialogVisible = false">取消</el-button>
+              <el-button @click="handleClose">取消</el-button>
               <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
             </el-form-item>
 
@@ -156,7 +170,7 @@
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">
-          <el-button @click="editModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
 
@@ -254,14 +268,20 @@
           catName: '',
           type: '全部'
         },
+        searchRules: {
+          catName: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持中文,字母,数字和下划线', trigger: 'change'}
+          ]
+        },
         rules: {
           catName: [
             { required: true, message: '请输入元数据分类名称', trigger: 'blur' },
-            { min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur' }
+            { pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）', trigger: 'blur' }
           ],
           catCode: [
             { required: true, message: '请输入元数据分类代码', trigger: 'blur' },
-            { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_.]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持字母,数字,下划线和"."）', trigger: 'blur' }
           ],
           catDesc: [
             { min: 0, max: 256, message: '长度在 1 到 256 个字符', trigger: 'blur' }
@@ -432,9 +452,18 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
+      onSubmit (formName) {
         console.log('submit!')
-        this.loadData()
+        // this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -499,7 +528,8 @@
       delete (index, row) {
         // this.loading2 = true
         let param = {
-          id: index
+          id: index,
+          catCode: row.catCode
         }
         let loadingDelete = startSystemLoading()
         deleteMetaCatById(param)
@@ -549,6 +579,12 @@
         this.addModelDialogVisible = false
       },
       handleClose (done) {
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         // this.$confirm('确认关闭？')

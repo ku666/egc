@@ -17,6 +17,69 @@
         </el-col>
         <el-col :span="20">
           <div class="text-right">
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="节点类型" prop="nodeType">
+                  <el-select @change="loadData" v-model="modelListSearch.nodeType" placeholder="节点类型">
+                    <el-option key="0" label="全部" value="0"></el-option>
+                    <el-option
+                      v-for="item in systemNodeTypeList"
+                      :key="item.item_code"
+                      :label="item.item_name"
+                      :value="item.item_code"
+                    ></el-option>
+                  </el-select>
+                </el-form-item>
+                <el-form-item label="模型分类" prop="modelCat">
+                  <el-select @change="loadData" v-model="modelListSearch.modelCat" placeholder="模型分类">
+                  <el-option key="0" label="全部" value="0"></el-option>
+                  <el-option
+                    v-for="item in systemModelCatList"
+                    :key="item.item_code"
+                    :label="item.item_name"
+                    :value="item.item_code"
+                  ></el-option>
+                </el-select>
+                </el-form-item>
+                <el-form-item label="模型名称" prop="name">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <div class="form-info">
+              <div class="item-info label">节点类型</div>
+              <div class="item-info">
+                <el-select @change="loadData" v-model="modelListSearch.nodeType" placeholder="节点类型">
+                  <el-option key="0" label="全部" value="0"></el-option>
+                  <el-option
+                    v-for="item in systemNodeTypeList"
+                    :key="item.item_code"
+                    :label="item.item_name"
+                    :value="item.item_code"
+                  ></el-option>
+                </el-select>
+
+              </div>
+            </div>
+            <div class="form-info">
+              <div class="item-info label">模型分类</div>
+              <div class="item-info">
+                <el-select @change="loadData" v-model="modelListSearch.modelCat" placeholder="模型分类">
+                  <el-option key="0" label="全部" value="0"></el-option>
+                  <el-option
+                    v-for="item in systemModelCatList"
+                    :key="item.item_code"
+                    :label="item.item_name"
+                    :value="item.item_code"
+                  ></el-option>
+                </el-select>
+
+              </div>
+            </div>
             <div class="form-info">
               <div class="item-info label">模型名称</div>
               <div class="item-info">
@@ -25,7 +88,7 @@
               <div class="item-info">
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -276,6 +339,7 @@
             <el-form-item label="节点类型" prop="nodeType">
               <el-select size="small" v-model="newModel.nodeType" placeholder="请选择节点类型">
                 <el-option
+                  v-if="item.item_code != nodeTypeVideo"
                   v-for="item in systemNodeTypeList"
                   :key="item.item_code"
                   :label="item.item_name"
@@ -332,6 +396,7 @@
             <!--<el-form v-loading="addNewEventLoading" :model="modelNewEvent" :rules="eventRules" ref="modelNewEvent" label-width="0px"-->
             <!--class="demo-ruleForm">-->
             <el-tag
+              class="model-event"
               :key="item.item_code"
               v-for="item in systemAddModelEventList"
               closable
@@ -341,6 +406,7 @@
             </el-tag>
 
             <el-input
+              :class="{ 'error-border': eventNameError }"
               class="input-new-tag"
               v-if="showAddEventPop"
               v-loading="addNewEventLoading"
@@ -353,8 +419,11 @@
             >
             </el-input>
 
-            <el-button v-loading="addNewEventLoading" v-else class="button-new-tag" size="small" @click="beforeAddNewEvent('add')">+ 添加能力</el-button>
+            <el-button v-loading="addNewEventLoading" v-if="!showAddEventPop" class="button-new-tag" size="small" @click="beforeAddNewEvent('add')">+ 添加能力</el-button>
             <!--</el-form>-->
+            <div style="font-size:12px; margin-top:-5px; height:16px;">
+              <span  v-if="eventNameError" class="red">长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）</span>
+            </div>
           </div>
 
 
@@ -364,7 +433,7 @@
 
         <el-form-item class="text-right add-model-button">
           <!--<el-button type="text" >关闭</el-button>-->
-          <el-button @click="closeAddAndEditModal()">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
         </el-form-item>
 
@@ -399,7 +468,7 @@
         <el-row :gutter="0">
           <el-col :span="12">
             <el-form-item label="节点类型" prop="nodeType">
-              <el-select size="small" v-model="editModel.nodeType" placeholder="请选择节点类型">
+              <el-select :disabled="nodeTypeVideo=='mm.nodtyp.video'?'disabled':undefined" size="small" v-model="editModel.nodeType" placeholder="请选择节点类型">
                 <el-option
                   v-for="item in systemNodeTypeList"
                   :key="item.item_code"
@@ -453,6 +522,7 @@
             <!--<el-form v-loading="addNewEventLoading" :model="modelNewEvent" :rules="eventRules" ref="modelNewEvent" label-width="0px"-->
             <!--class="demo-ruleForm">-->
             <el-tag
+              class="model-event"
               :key="item.item_code"
               v-for="item in systemEditEventTypeList"
               closable
@@ -463,6 +533,7 @@
 
             <el-input
               class="input-new-tag"
+              :class="{ 'error-border': eventNameError }"
               v-if="showEditEventPop"
               v-loading="addNewEventLoading"
               v-model="modelNewEvent.name"
@@ -474,7 +545,11 @@
             >
             </el-input>
 
-            <el-button v-loading="addNewEventLoading" v-else class="button-new-tag" size="small" @click="beforeAddNewEvent('edit')">+ 添加能力</el-button>
+            <el-button v-loading="addNewEventLoading" v-if="!showEditEventPop" class="button-new-tag" size="small" @click="beforeAddNewEvent('edit')">+ 添加能力</el-button>
+
+            <div style="font-size:12px; margin-top:-5px; height:16px;">
+              <span  v-if="eventNameError" class="red">长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）</span>
+            </div>
             <!--</el-form>-->
           </div>
 
@@ -484,7 +559,7 @@
 
 
         <el-form-item class="text-right add-model-button">
-          <el-button @click="closeAddAndEditModal()">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <!--<el-button @click="resetForm('editModel')">重置</el-button>-->
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
@@ -578,16 +653,36 @@
   .model-list .el-tag + .el-tag {
     margin: 0;
   }
-  .model-list .el-tag {
-    margin: 0 10px 8px 0;
-  }
+
   .model-list .el-tag + .el-tag {
     margin: 0 10px 8px 0;
   }
 
+  .model-list .form-info {
+    display: inline-block;
+  }
 
 
 
+
+</style>
+
+<style>
+  .model-list .el-tag {
+    margin: 0 10px 8px 0;
+  }
+
+  .error-border input {
+    border:1px solid #F56C6C;
+  }
+
+  .error-border input:focus {
+    border:1px solid #F56C6C;
+  }
+
+  .el-tag {
+    margin: 0 8px 6px 0;
+  }
 </style>
 
 
@@ -603,6 +698,7 @@
     getSystemCodeNameMap,
     SYSTEM_MODELSTATUS,
     SYSTEM_NODETYPE,
+    SYSTEM_NODETYPE_VIDEO,
     SYSTEM_EVENTTYPE,
     SYSTEM_MODELCAT,
     SYSTEM_RUNTIMETYPE,
@@ -656,6 +752,8 @@
         },
         modelListSearch: {
           name: '',
+          modelCat: '全部',
+          nodeType: '全部',
           type: '全部'
         },
         eventRules: {
@@ -669,14 +767,25 @@
           //   {min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur'}
           // ]
         },
+        searchRules: {
+          name: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持中文,字母,数字和下划线', trigger: 'change'}
+          ]
+          // ,
+          // code: [
+          //   {required: true, message: '请输入能力Code', trigger: 'blur'},
+          //   {min: 1, max: 16, message: '长度在 1 到 16 个字符', trigger: 'blur'}
+          // ]
+        },
         rules: {
           name: [
             {required: true, message: '请输入模型名称', trigger: 'blur'},
-            {min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur'}
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持中文,字母,数字和下划线）', trigger: 'blur'}
           ],
           code: [
             {required: true, message: '请输入模型Code', trigger: 'blur'},
-            {min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur'}
+            {pattern: '^[A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持字母,数字和下划线）', trigger: 'blur'}
           ],
           description: [
             {min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur'}
@@ -691,8 +800,10 @@
             {required: true, message: '请选择运行时', trigger: 'change'}
           ]
         },
+        eventNameError: false,
         addingEventFlag: false,
         modelEnableStatus: SYSTEM_MODELSTATUS_ENABLE,
+        nodeTypeVideo: SYSTEM_NODETYPE_VIDEO,
         systemModelStatusList: [],
         systemNodeTypeList: [],
         systemModelEventList: [],
@@ -781,6 +892,16 @@
         let condition = {
           deleteFlag: 0,
           name: '%' + this.modelListSearch.name + '%'
+        }
+        if (this.modelListSearch.nodeType && this.modelListSearch.nodeType !== '全部' && this.modelListSearch.nodeType !== '0') {
+          condition.nodeType = this.modelListSearch.nodeType
+        } else {
+          condition.nodeType = undefined
+        }
+        if (this.modelListSearch.modelCat && this.modelListSearch.modelCat !== '全部' && this.modelListSearch.modelCat !== '0') {
+          condition.modelCat = this.modelListSearch.modelCat
+        } else {
+          condition.modelCat = undefined
         }
         // }
         var params = {
@@ -949,6 +1070,8 @@
                   this.$refs.saveTagInput.$refs.input.focus()
                 }.bind(this), 50)
               }
+              this.modelNewEvent.name = ''
+              this.eventNameError = false
               this.addingEventFlag = false
               this.modelNewEvent.code = result.data + 1
               // this.addNewEventLoading = false
@@ -985,9 +1108,17 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
+      onSubmit (formName) {
         console.log('submit!')
-        this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -1001,6 +1132,7 @@
       },
       handleEdit (index, item) {
         console.info(item)
+        this.eventNameError = false
         this.showEditEventPop = false
         let curEditEventTypeList = []
         if (item.eventTypeList && item.eventTypeList.length > 2) {
@@ -1172,6 +1304,7 @@
         })
       },
       showAddModelDialog () {
+        this.eventNameError = false
         this.resetForm('newModel')
         this.currentStep = 1
         this.showAddEventPop = false
@@ -1187,6 +1320,14 @@
         this.editModelDialogVisible = false
       },
       handleClose (done) {
+        console.info(1234)
+        console.info(this.$refs.newModel)
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         // this.$confirm('确认关闭？')
@@ -1236,20 +1377,35 @@
           this.modelNewEvent.code = this.modelNewEvent.code.trim()
         }
       },
+      getStrlen (str) {
+        return str.replace(/[\u0391-\uFFE5]/g, 'aa').length // 先把中文替换成两个字节的英文，在计算长度
+      },
       addNewEvent (formName, type) {
+        if (this.modelNewEvent.name === '') {
+          this.eventNameError = false
+          return
+        }
+        this.modelNewEvent.name = this.modelNewEvent.name.trim()
+        // var str = '374829348791';
+        var reg = /^[\u4E00-\u9FA5A-Za-z0-9_]+$/
+        // this.$refs[formName].validate((valid) => {
+        console.info(this.getStrlen(this.modelNewEvent.name) > 64)
+        console.info(this.modelNewEvent.name === '')
+        console.info(!reg.test(this.modelNewEvent.name))
+        if (this.getStrlen(this.modelNewEvent.name) > 64 || this.modelNewEvent.name === '' || !reg.test(this.modelNewEvent.name)) {
+          this.eventNameError = true
+          setTimeout(function () {
+            this.eventNameError = false
+          }.bind(this), 4000)
+        } else {
+          this.eventNameError = false
+          this.confirmAddNewEvent(formName, type)
+        }
+      },
+      confirmAddNewEvent (formName, type) {
         if (this.addingEventFlag) {
           return
         }
-        console.info(formName)
-        // console.info(valid)
-        console.info(this.$refs[formName])
-        this.modelNewEvent.name = this.modelNewEvent.name.trim()
-        // this.$refs[formName].validate((valid) => {
-        if (this.modelNewEvent.name === '') {
-          // console.info(valid)
-          return
-        }
-        console.info(this.modelNewEvent)
         let newEventInfo = {
           catCode: SYSTEM_EVENTTYPE,
           itemCustCode: this.modelNewEvent.code,
@@ -1269,6 +1425,7 @@
               this.$nextTick(() => {
                 loadingAddEvent.close()
               })
+              this.eventNameError = false
               if (result.code === SUCCESS_CODE) {
                 this.showAddNewEvent = false
                 if (type === 'add') {
@@ -1292,6 +1449,7 @@
 
                 this.modelNewEvent.name = ''
               } else {
+                this.eventNameError = false
                 this.$message({
                   message: result,
                   type: 'error'
@@ -1304,6 +1462,7 @@
           )
           .catch(
             function (error) {
+              this.eventNameError = false
               this.addingEventFlag = false
               // this.addNewEventLoading = false
               // this.loadingStep = false

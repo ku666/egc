@@ -91,7 +91,8 @@ export const downloadResultFile = (params1, params2) => {
       let fileName = decodeResHeader(res.headers)
       let blob = new Blob([res.data], { type: 'application/x-xls' })
       if ('msSaveOrOpenBlob' in navigator) {
-        window.navigator.msSaveOrOpenBlob(blob, fileName.trim())
+        console.log('res filename --->  ' + fileName.replace('\\', ''))
+        window.navigator.msSaveOrOpenBlob(blob, fileName.replace('\\', ''))
       } else {
         let url = window.URL.createObjectURL(blob)
         let link = document.createElement('a')

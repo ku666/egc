@@ -133,6 +133,11 @@
         </el-table-column>
 
         <el-table-column
+          label="执行小区">
+          <template slot-scope="scope">{{ systemCommunityMap[scope.row.communityId] }}</template>
+        </el-table-column>
+
+        <el-table-column
           label="任务类型"
           width="120">
           <template slot-scope="scope">{{ systemTaskTypeMap[scope.row.taskType] }}</template>
@@ -287,10 +292,22 @@
           <el-input id="addName" @blur="inputBlur" size="small" v-model="newTaskPlan.name"></el-input>
         </el-form-item>
 
+        <el-form-item label="执行小区" prop="communityId">
+          <el-select size="small" v-model="newTaskPlan.communityId" placeholder="请选择执行小区">
+            <el-option
+              v-for="item in curPlanPublishCommunityList"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+
         <el-form-item label="开始时间">
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              size="small"
               :class="{ 'error-border': isStartTimeError || isEndTimeErrorNoStart }"
               format="yyyy-MM-dd HH:mm"
               @change="checkPlanStartTime"
@@ -306,6 +323,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              size="small"
               :class="{ 'error-border': isEndTimeErrorBefore }"
               format="yyyy-MM-dd HH:mm"
               @change="checkPlanEndTime"
@@ -421,6 +439,17 @@
 
         <el-form-item label="计划名称" prop="name">
           <el-input id="addName" @blur="inputBlur" size="small" v-model="editTaskPlan.name"></el-input>
+        </el-form-item>
+
+        <el-form-item label="执行小区" prop="communityId">
+          <el-select size="small" v-model="editTaskPlan.communityId" placeholder="请选择执行小区">
+            <el-option
+              v-for="item in curPlanPublishCommunityList"
+              :key="item.item_code"
+              :label="item.item_name"
+              :value="item.item_code"
+            ></el-option>
+          </el-select>
         </el-form-item>
 
         <el-form-item label="开始时间">
@@ -589,7 +618,7 @@
   }
 
   .model-taskplan .error-border {
-    border:1px solid #F56C6C;
+    /*border:1px solid #F56C6C;*/
   }
 
   .model-taskplan .form-info {
@@ -603,7 +632,7 @@
 <script>
   import modelInfoComponenet from './model/ModelInfoComponenet'
   import modelVersionInfoComponenet from './model/ModelVersionInfoComponenet'
-  // import { publishLocal } from '@/views/modelManagement/apis/model_version_api'
+  import { getCommunityByStatus } from '@/views/modelManagement/apis/model_version_api'
   import { getPlanList, addNewTaskPlan, updateTaskPlan, deleteTaskPlanById, stopTaskPlanById } from '@/views/modelManagement/apis/model_plan_api'
   import { getVersionParamsByVersionId } from '@/views/modelManagement/apis/model_paramdefine_api'
   import {
@@ -621,6 +650,8 @@
     SYSTEM_EVENTTYPE,
     SYSTEM_MODELCAT,
     SYSTEM_RUNTIMETYPE,
+    COMMUNITY,
+    SYSTEM_PUBLISH_STATUS_PUBLISH,
     SYSTEM_MODELSTATUS_ENABLE,
     SYSTEM_VERSIONSTATUS_ENABLE
   } from '@/views/modelManagement/assets/js/common'
@@ -663,6 +694,9 @@
             {required: true, message: '请输入计划名称', trigger: 'blur'},
             {min: 1, max: 64, message: '长度在 1 到 64 个字符', trigger: 'blur'}
           ],
+          communityId: [
+            {required: true, message: '请选择执行小区', trigger: 'change'}
+          ],
           frequencyType: [
             {required: true, message: '请选择执行频率', trigger: 'change'}
           ]
@@ -689,6 +723,7 @@
         uploadInterval: '',
         uploadFileStatus: '',
         fileUploadProgress: 10,
+        versionPublishedStatus: SYSTEM_PUBLISH_STATUS_PUBLISH,
         modelVersionEnableStatus: SYSTEM_VERSIONSTATUS_ENABLE,
         modelEnableStatus: SYSTEM_MODELSTATUS_ENABLE,
         systemModelStatusList: [],
@@ -697,12 +732,14 @@
         systemModelEventList: [],
         systemModelCatList: [],
         systemModelRuntimeList: [],
+        curPlanPublishCommunityList: [],
         systemModelStatusMap: {},
         systemModelVersionStatusMap: {},
         systemTaskTypeList: [],
         systemTaskSourceList: [],
         systemPlanStatusList: [],
         systemFrequencyList: [],
+        systemCommunityList: [],
         systemNodeTypeMap: {},
         systemModelEventMap: {},
         systemModelCatMap: {},
@@ -711,6 +748,7 @@
         systemTaskSourceMap: {},
         systemPlanStatusMap: {},
         systemFrequencyMap: {},
+        systemCommunityMap: {},
         addModelDialogVisible: false,
         editModelDialogVisible: false,
         uploadDialogVisible: false,
@@ -743,7 +781,7 @@
         SYSTEM_PLANSTATUS + '|' +
         SYSTEM_TASKTYPE + '|' +
         SYSTEM_TASKSOURCE,
-        needCommunity: false
+        needCommunity: true
       }
       let loadingSystemSetting = startSystemLoading()
       getSystemSettings(codeListParam)
@@ -770,6 +808,8 @@
             this.systemPlanStatusMap = getSystemCodeNameMap(this.systemPlanStatusList)
             this.systemFrequencyList = getSystemDataByCode(result.data, SYSTEM_FREQUENTTYPE)
             this.systemFrequencyMap = getSystemCodeNameMap(this.systemFrequencyList)
+            this.systemCommunityList = getSystemDataByCode(result.data, COMMUNITY)
+            this.systemCommunityMap = getSystemCodeNameMap(this.systemCommunityList)
             // this.getModelById()
             this.$nextTick(() => {
               loadingSystemSetting.close()
@@ -895,6 +935,7 @@
         console.info(this.newTaskPlan)
         this.newTaskPlan.algModelVersionPk = this.currentVersionId
         this.newTaskPlan.executeParams = this.curExcuteVersionParams
+        this.newTaskPlan.communityIds = [this.newTaskPlan.communityId]
         let params = this.newTaskPlan
         // this.addNewPlanLoading = true
         let loadingCreate = startSystemLoading()
@@ -992,6 +1033,7 @@
         }
         // this.editNewPlanLoading = true
         this.editTaskPlan.executeParams = this.curEditExcuteVersionParams
+        this.editTaskPlan.communityIds = [this.editTaskPlan.communityId]
         console.info(this.editTaskPlan.executeParams)
         // return
         var params = this.editTaskPlan
@@ -1031,7 +1073,6 @@
         this.isStartTimeError = false
         this.isEndTimeErrorNoStart = false
         this.isEndTimeErrorBefore = false
-        this.editModelDialogVisible = true
         this.curEditExcuteVersionParams = []
         if (item && item.paramList) {
           // this.curEditExcuteVersionParams = JSON.parse(item.paramList)
@@ -1046,6 +1087,7 @@
           }.bind(this))
         }
         this.editTaskPlan = JSON.parse(JSON.stringify(item))
+        this.getModelVersionPublisCommunity('edit')
       },
       removeData (index, item) {
         // var data = this.tableData[row]
@@ -1150,6 +1192,50 @@
           })
         })
       },
+      getModelVersionPublisCommunity (type) {
+        let param = {
+          modelVerId: this.currentVersionId,
+          publishStatus: this.versionPublishedStatus
+        }
+        let loadingDeployNode = startSystemLoading()
+        getCommunityByStatus(param)
+          .then(
+            function (result) {
+              console.info(result.data)
+              this.curPlanPublishCommunityList = []
+              if (result.data && result.data.length > 0) {
+                console.info('11')
+                result.data.forEach(function (element, index) {
+                  let tmpCommunity = {
+                    item_code: element.communityId,
+                    item_name: this.systemCommunityMap[element.communityId]
+                  }
+                  this.curPlanPublishCommunityList.push(tmpCommunity)
+                }.bind(this))
+              }
+              // // this.deployTreeData.push(defaultCommunityData)
+              // console.info(this.deployTreeData)
+              this.$nextTick(() => {
+                loadingDeployNode.close()
+                // this.deployDialogVisible = true
+                if (type === 'add') {
+                  this.addModelDialogVisible = true
+                } else {
+                  this.editModelDialogVisible = true
+                }
+              })
+              // resolve(data)
+            }.bind(this)
+          )
+          .catch(
+            function (error) {
+              // // this.loadingStep = false
+              // this.deployLoading = false
+              // this.$message.error('获取节点失败')
+              console.info(error)
+            }
+          )
+      },
       showAddModelDialog () {
         this.isStartTimeError = false
         this.isEndTimeErrorNoStart = false
@@ -1158,7 +1244,6 @@
         this.resetForm('newTaskPlan')
         this.newTaskPlan.startTime = ''
         this.newTaskPlan.endTime = ''
-        this.addModelDialogVisible = true
         // this.addNewPlanLoading = true
         // this.loadingExcuteParam = true
         let params = {
@@ -1173,6 +1258,7 @@
               // this.loadingExcuteParam = false
               this.$nextTick(() => {
                 loadingParam.close()
+                this.getModelVersionPublisCommunity('add')
               })
               this.curExcuteVersionParams = result.data
             }.bind(this)

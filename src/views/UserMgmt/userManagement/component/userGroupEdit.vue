@@ -463,6 +463,7 @@ export default {
     handleSave (editForm) {
       this.$refs[editForm].validate((valid) => {
         if (valid) {
+          this.editForm.usergroupName = this.trim(this.editForm.usergroupName)
           updateUserGroup(this.editForm)
             .then(
               function (result) {
@@ -558,6 +559,9 @@ export default {
     },
     handleCancel (editForm) {
       this.$emit('listenToChildCloseEvent')
+    },
+    trim (string) {
+      return string.replace(/(^\s*)|(\s*$)/g, '')
     }
   },
   mounted: function () {
@@ -577,12 +581,16 @@ export default {
   data () {
     // 用户组名的唯一性
     var validateUserGroupName = (rule, value, callback) => {
-      if (value === '' || value === undefined) {
+      let trimmedValue = this.trim(value)
+      let trimmedValueLength = trimmedValue.length
+      if (trimmedValue === '') {
         callback(new Error('用户组名称不能为空'))
+      } else if (trimmedValueLength > 32 || trimmedValueLength < 2) {
+        callback(new Error('长度在 2 到 32 个字符'))
       } else {
         let userType = this.editForm.userType
         let usergroupUuid = this.editForm.uuid
-        checkUserGroupName(usergroupUuid, value, userType)
+        checkUserGroupName(usergroupUuid, trimmedValue, userType)
         .then(
           function (result) {
             if (!result) {
@@ -599,8 +607,8 @@ export default {
       rules: {
         usergroupName: [
           { required: true, message: '请填写用户组名称', trigger: 'blur' },
-          { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
-          { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '用户组名只能为字母、数字、空格和汉字' },
+          // { min: 2, max: 32, message: '长度在 2 到 32 个字符' },
+          // { pattern: /^\S[a-zA-Z\s\d\u4e00-\u9fa5]+\S$/, message: '用户组名只能为字母、数字、空格和汉字' },
           { validator: validateUserGroupName }
         ],
         remark: [

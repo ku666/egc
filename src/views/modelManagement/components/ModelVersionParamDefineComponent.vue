@@ -41,7 +41,21 @@
         </el-col>
         <el-col :span="18">
           <div class="text-right">
-            <div class="form-info">
+            <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
+                <el-form-item label="占位符" v-show="false">
+                  <el-input  placeholder="占位符"></el-input>
+                </el-form-item>
+                <el-form-item label="参数名称" prop="paramName">
+                  <div class="item-info">
+                    <el-input @keyup.enter.native="onSubmit('modelListSearch')" id="searchName" @blur="inputBlur" v-model="modelListSearch.paramName"></el-input>
+                  </div>
+                </el-form-item>
+                <el-form-item>
+                  <!-- <el-button class = "cancel-btn">清空</el-button> -->
+                  <el-button class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                </el-form-item>
+            </el-form>
+            <!-- <div class="form-info">
               <div class="item-info label">参数名称</div>
               <div class="item-info">
                 <el-input @keyup.enter.native="searchModelByName" id="searchName" @blur="inputBlur" v-model="modelListSearch.paramName"></el-input>
@@ -49,7 +63,7 @@
               <div class="item-info">
                 <el-button type="primary" @click="onSubmit">查询</el-button>
               </div>
-            </div>
+            </div> -->
           </div>
         </el-col>
       </el-row>
@@ -139,7 +153,7 @@
           <el-input id="addParamDesc" @blur="inputBlur" :autosize="{ minRows: 2, maxRows: 10}" type="textarea" v-model="newModel.paramDesc"></el-input>
         </el-form-item>
         <el-form-item class="text-right add-model-button">
-          <el-button @click="addModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitForm('newModel')">保存</el-button>
         </el-form-item>
 
@@ -180,7 +194,7 @@
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">
-          <el-button @click="editModelDialogVisible = false">取消</el-button>
+          <el-button @click="handleClose">取消</el-button>
           <el-button type="primary" @click="submitEditForm('editModel')">保存</el-button>
         </el-form-item>
 
@@ -341,10 +355,16 @@
           paramName: '',
           type: '全部'
         },
+        searchRules: {
+          paramName: [
+            {required: false, trigger: 'blur'},
+            {pattern: '^[\u4E00-\u9FA5A-Za-z0-9_]+$', min: 0, max: 256, message: '只支持中文,字母,数字和下划线', trigger: 'change'}
+          ]
+        },
         rules: {
           paramName: [
             { required: true, message: '请输入参数名称', trigger: 'blur' },
-            { min: 1, max: 64, message: '长度在 1 到 256 个字符', trigger: 'blur' }
+            { min: 1, max: 256, message: '长度在 1 到 256 个字符', trigger: 'blur' }
           ],
           paramType: [
             { required: true, message: '请选择参数类型', trigger: 'blur' }
@@ -576,9 +596,18 @@
       handleSelectionChange (val) {
         this.multipleSelection = val
       },
-      onSubmit () {
+      onSubmit (formName) {
         console.log('submit!')
-        this.loadData()
+        // this.loadData()
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            // alert('submit!')
+            this.loadData()
+          } else {
+            console.log('error submit!!')
+            return false
+          }
+        })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -823,6 +852,12 @@
         // })
       },
       handleClose (done) {
+        if (this.$refs['newModel']) {
+          this.$refs['newModel'].clearValidate()
+        }
+        if (this.$refs['editModel']) {
+          this.$refs['editModel'].clearValidate()
+        }
         this.addModelDialogVisible = false
         this.editModelDialogVisible = false
         this.uploadDialogVisible = false
