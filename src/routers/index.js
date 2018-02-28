@@ -8,11 +8,10 @@ import demorouters from '@/views/demo/routers/index'
 // 引入用户管理模块路由数据
 import userMgmtrouters from '@/views/UserMgmt/login/routers/index'
 import userManagementRouters from '@/views/UserMgmt/userManagement/routers/index'
-import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
 import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 // 引人大屏模块路由
 import HouseAllApp from '@/views/HouseAllApp/routers/index'
-import MdmApp from '@/views/MdmApp/routers/index'
+import mdmAppRouters from '@/views/MdmApp/routers/index'
 
 // 引入设备管理模块路由数据
 import deviceInfoMaintain from '@/views/DeviceMgmt/deviceInfoMaintain/routers/index'
@@ -58,9 +57,8 @@ export default new Router({
         ...demorouters,
         ...userMgmtrouters,
         ...userManagementRouters,
-        ...mdmMgmtrouters,
         ...MapAnalysisApp,
-        ...MdmApp,
+        ...mdmAppRouters,
         ...deviceInfoMaintain,
         ...firmwareUpdate,
         ...HouseAllApp,

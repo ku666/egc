@@ -150,7 +150,7 @@ import {
   deleteDeviceCategory,  // 删除设备方法
   getAllProviders, // 查询所有供应商方法
   getDeviceCategories // 查询所有设备分类
-} from '@/views/MdmMgmt/apis/index'
+} from '@/views/MdmApp/apis/index'
 import { addEventHandler } from '@/assets/js/util'
 
 export default {
@@ -393,14 +393,14 @@ export default {
 </script>
 
 <style lang='less' scoped>
-@import "~@/views/MdmMgmt/assets/css/index.less";
-@import "~@/views/MdmMgmt/assets/css/font-awesome/css/font-awesome.min.css";
+@import "~@/views/MdmApp/assets/css/index.less";
+@import "~@/views/MdmApp/assets/css/font-awesome/css/font-awesome.min.css";
 </style>
 <style >
 @font-face {
   font-family: 'FontAwesome';
-  src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
-  src: url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('~@/views/MdmMgmt/assets/css/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  src: url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
+  src: url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }

@@ -115,7 +115,7 @@ import {
   deleteDeviceAttribute,
   insertDeviceAttribute,
   updateDeviceAttribute
-} from '@/views/MdmMgmt/apis/index'
+} from '@/views/MdmApp/apis/index'
 import { addEventHandler } from '@/assets/js/util'
 
 export default {
@@ -396,5 +396,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmMgmt/assets/css/index.less';
+  @import '~@/views/MdmApp/assets/css/index.less';
 </style>

@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert} from '@/views/MdmMgmt/apis/index'
+import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert} from '@/views/MdmApp/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -286,5 +286,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-@import "~@/views/MdmMgmt/assets/css/index.less";
+@import "~@/views/MdmApp/assets/css/index.less";
 </style>

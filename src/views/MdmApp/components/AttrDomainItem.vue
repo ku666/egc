@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmMgmt/apis/index'
+import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmApp/apis/index'
 
 export default {
   props: ['attrUuid'],
@@ -175,7 +175,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmMgmt/assets/css/index.less';
+  @import '~@/views/MdmApp/assets/css/index.less';
 </style>
 <style scoped>
 div.cell {
