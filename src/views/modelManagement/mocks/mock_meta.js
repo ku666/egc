@@ -9,36 +9,7 @@ Mock.mock(MOCK_API_URL + '/modelmgmt/meta/metaItem/list', function () {
     'data': {
       'total': 5,
       'pageSize': 1000,
-      'items': [
-        {
-          metaItemPk: '1',
-          catCode: 'mm.eventtype',
-          itemSysCode: 'mm.eventtype.start',
-          itemCustCode: 'start',
-          itemCustName: '开始',
-          itemSeq: '1',
-          parentItemSysCode: '',
-          deleteFlag: '0',
-          createTime: '',
-          updateTime: '',
-          createUser: '',
-          updateUser: ''
-        },
-        {
-          metaItemPk: '2',
-          catCode: 'mm.eventtype',
-          itemSysCode: 'mm.eventtype.stop',
-          itemCustCode: 'stop',
-          itemCustName: '结束',
-          itemSeq: '2',
-          parentItemSysCode: '',
-          deleteFlag: '0',
-          createTime: '',
-          updateTime: '',
-          createUser: '',
-          updateUser: ''
-        }
-      ],
+      'items': [],
       'currentPage': 1
     }
   }
