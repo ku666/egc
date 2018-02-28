@@ -9,22 +9,7 @@ Mock.mock(MOCK_API_URL + '/modelmgmt/modeltask/task', function () {
     'data': {
       'pageCount': 1,
       'pageSize': 1,
-      'items': [
-        {
-          algTaskPk: 1,
-          type: 'type1',
-          taskSource: 'source1',
-          taskStatus: 'status1',
-          invokeUser: 'me',
-          startTime: '2016-05-02 12:34:56',
-          endTime: '2016-05-02 12:34:56',
-          exeTimeInSec: 10,
-          createTime: '2016-05-02 12:34:56',
-          updateTime: '2016-05-02 12:34:56',
-          createUser: 'me',
-          updateUser: 'you'
-        }
-      ],
+      'items': [],
       'currentPage': 1
     }
   }

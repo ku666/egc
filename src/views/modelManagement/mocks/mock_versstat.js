@@ -10,21 +10,7 @@ Mock.mock(MOCK_API_URL + '/modelmgmt/modelversion/status', function () {
     'data': {
       'pageCount': 1,
       'pageSize': 1,
-      'items': [
-        {
-          'algVersStatPk': 1,
-          'modelName': '模型名称1',
-          'totalInvokeNum': 2,
-          'successNum': 1,
-          'failNum': 1,
-          'avgExeTimeInSec': 30,
-          'deleteFlag': 0,
-          'createUser': 'iceman',
-          'updateUser': 'iceman',
-          'createTime': '2016-05-02 12:34:56',
-          'updateTime': '2016-05-22 12:34:56'
-        }
-      ],
+      'items': [],
       'currentPage': 1
     }
   }
