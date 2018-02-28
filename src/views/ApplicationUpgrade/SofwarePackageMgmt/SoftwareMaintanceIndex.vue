@@ -50,9 +50,9 @@
                 <el-button @click="_handleDeleteData(scope.$index)" type="text" class="el-icon-delete" style="font-size:15px;color: #0078f4" :title="deleteTitle">
                   <!-- <img :src="deleteImg"/> -->
                 </el-button>
-                <!-- <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
-                  <img :src="history"/>
-                </el-button> -->
+                <el-button @click="_handleCheckHistory(scope.$index)" type="text" class="el-icon-time" style="font-size:15px;color: #0078f4" :title="historyTitle">
+                  <!-- <img :src="history"/> -->
+                </el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -165,7 +165,7 @@
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="端口" :label-width="formLabelWidth" prop="port">
-                  <el-input v-model="softwareDetails.port" :maxlength="maxlength" :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.port" :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -236,7 +236,7 @@
                 <el-button type="primary" @click="_registerSoftware('softwareDetails')" class="search-btn">注 册</el-button>
               </template>
               <template v-if="this.optType === 'edit' ">
-                <el-button type="primary" @click="_updateSofwareInfo()" class="action-btn">保 存</el-button>
+                <el-button type="primary" @click="_updateSofwareInfo('softwareDetails')" class="action-btn">保 存</el-button>
               </template>
             </div>
           </el-form>
@@ -252,12 +252,12 @@
       <el-dialog :title="dialogTitle" :visible.sync="dialogEditVisible" top="8vh">
         <software-package-edit :softwarePckDetails="softwarePckDetails" @updateSoftwareInfoEvent="_updateSofwareInfo"></software-package-edit>
       </el-dialog>
-    </div>
+    </div> -->
     <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <software-package-history :softwarePckHistory="softwarePckHistory"></software-package-history>
+        <software-package-history ref="packageHistory" :rowIdx="rowIdx" :hisUuid ="hisUuid"></software-package-history>
       </el-dialog>
-    </div> -->
+    </div>
     <!--软件包批量导入 -->
     <div>
       <el-dialog :title="dialogImportTitle" :visible.sync="dialogImportVisible" :before-close="closeImportDialog">
@@ -300,7 +300,7 @@ import softwarePackageDetails from './components/SoftwarePackageDetails'
 import softwarePackageEdit from './components/SoftwarePackageEdit'
 import softwarePackageHistory from './components/SoftwarePackageHistory'
 
-import { getBatchesList, getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, getSoftwarePackageHistoryList, registerSoftwarePackage, uploadExcelFiles } from './apis/index'
+import { getBatchesList, getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, registerSoftwarePackage, uploadExcelFiles } from './apis/index'
 export default {
   components: {
     softwarePackageDetails,
@@ -333,6 +333,8 @@ export default {
       dialogEditVisible: false,
       dialogSynDataVisible: false,
       dialogHistoryVisible: false,
+      rowIdx: 0,
+      hisUuid: '',
       softwarePackListData: undefined,
       softwarePckDetails: undefined,
       softwarePckHistory: undefined,
@@ -444,9 +446,6 @@ export default {
           { required: true, message: '请输入开发者姓名', trigger: 'blur,change' },
           { max: 32, message: '长度不能超过32个字符' }
         ],
-        uploadFiles: [
-          {}
-        ],
         batchId: [
           { required: true, message: '请选择注册软件包批次', trigger: 'blur,change' }
         ],
@@ -469,7 +468,7 @@ export default {
           { max: 32, message: '长度不能超过32个字符' }
         ],
         port: [
-          { max: 6, message: '长度不能超过6个数字' },
+          { max: 6, message: '长度不能超过6个数字', trigger: 'blur' },
           { pattern: /^\+?[1-9][0-9]*$/, message: '请输入有效的端口号（数字）' }
         ]
       }
@@ -512,6 +511,7 @@ export default {
       this.dialogRegisterVisible = true
       this.switchInputDisable('add')
       this.$refs['softwareDetails'].resetFields()
+      this.$refs.softwareDetails.resetFields()
       this.fileList = []
     },
     _registerSoftware (formName) {
@@ -694,29 +694,35 @@ export default {
           )
     },
     // 编辑每条软件包信息
-    _updateSofwareInfo () {
+    _updateSofwareInfo (formName) {
       console.info('update software package!')
       console.info(JSON.stringify(this.softwareDetails))
-      updateSoftwarePackage(this.softwareDetails)
-        .then(
-          function (result) {
-            console.log('update response --- >' + JSON.stringify(result))
-            this.dialogRegisterVisible = false
-            this.$refs['softwareDetails'].resetFields()
-            this.fileList = []
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-            // 再次加载列表的数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          updateSoftwarePackage(this.softwareDetails)
+            .then(
+              function (result) {
+                console.log('update response --- >' + JSON.stringify(result))
+                this.dialogRegisterVisible = false
+                this.$refs['softwareDetails'].resetFields()
+                this.fileList = []
+                this.$message({
+                  message: '保存成功',
+                  type: 'success'
+                })
+                // 再次加载列表的数据
+                this.loadData()
+              }.bind(this)
+            )
+            .catch(
+              function (error) {
+                console.log(error)
+              }
+            )
+        } else {
+          return false
+        }
+      })
     },
     // 删除软件包信息
     _handleDeleteData (rowIdx) {
@@ -747,23 +753,14 @@ export default {
     },
     // 查看软件包信息的历史记录
     _handleCheckHistory (rowIdx) {
-      this.dialogTitle = '软件包历史信息详情'
       var rowData = this.softwarePackListData[rowIdx]
-      this.searchConditionHistroyList.packageUuid = rowData.uuid
-      console.log('history rowData -- >' + rowData.uuid)
-      getSoftwarePackageHistoryList(this.searchConditionHistroyList)
-          .then(
-            function (result) {
-              console.log('get history result -- >' + result)
-              this.softwarePckHistory = result.softwarePckHistoryList
-              this.dialogHistoryVisible = true
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              console.log(error)
-            }
-          )
+      console.info('histroy row index-->: ' + rowIdx)
+      this.dialogTitle = '软件包 ' + rowData.name + ' 版本号 ' + rowData.version + ' 历史信息'
+      // this.rowIdx = rowIdx
+      // this.hisUuid = rowData.uuid
+      this.dialogHistoryVisible = true
+      this.$refs.packageHistory.softwarePckHistory = []
+      this.$refs.packageHistory.loadData(rowData.uuid)
     },
     // 初始加载软件包的信息
     loadData () {

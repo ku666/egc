@@ -1,56 +1,88 @@
 <template>
-  <el-table :data="changedData" style="width: 100%" border>
-      <el-table-column label="编号" type="index"  width="50"></el-table-column>
-      <el-table-column  label="日期/时间"   prop="changeDate"></el-table-column>
-      <el-table-column  label="操作人"   prop="operator"></el-table-column>
-      <el-table-column  label="软件包源服务器名称"   prop="propertyName"></el-table-column>
-      <el-table-column  label="变更对象"   prop="propertyName"></el-table-column>
-      <el-table-column  label="变更项名称"   prop="desc"></el-table-column>
-      <el-table-column  label="变更项原值"   prop="oldValue"></el-table-column>
-      <el-table-column  label="变化项新值"   prop="newValue"></el-table-column>
-  </el-table>
+  <div class="ui-common">
+    <div style="max-height: 100%;"> 
+      <el-table :data="softwarePckHistory" style="margin-top: 15px; height: 500px;overflow-y: scroll;" stripe border>
+          <el-table-column label="编号" type="index"  width="20"></el-table-column>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+          </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
-
 <script>
+import { getSoftwarePackageHistoryList } from '../apis/index'
 export default {
   props: {
-    softwarePckHistory: {
-      type: Array
-    }
+    rowIdx: 0,
+    hisUuid: ''
   },
   data () {
     return {
       changeDetails: undefined,
-      serverName: '',
-      test: 'fdafdaf',
-      changedD: [],
-      details: [],
-      changedData: [
+      softwarePckHistory: undefined,
+      searchConditionHistroyList: {
+        packageUuid: '',
+        pageNo: 1,
+        pageSize: 20
+      },
+      tableTitleList: [
         {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          propertyName: 'hostName',
-          desc: '软件版本',
-          oldValue: '版本1.0',
-          newValue: '版本2.0'
-        },
-        {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          propertyName: 'hostName',
-          desc: '软件回滚',
-          oldValue: '版本5.0',
-          newValue: '版本3.0'
-        },
-        {
-          changeDate: '2017-01-02 00:59',
-          operator: 'systemAdmin',
-          propertyName: 'hostName',
-          desc: '软件源服务器地址',
-          oldValue: 'D:\\EGSC\\FrontEndDev',
-          newValue: 'D:\\EGSC\\'
+          colName: '日期/时间',
+          prop: 'changeDate',
+          width: 80
+        }, {
+          colName: '操作人',
+          prop: 'operator',
+          width: 80
+        }, {
+          colName: '变更项名称',
+          prop: 'desc',
+          width: 80
+        }, {
+          colName: '变更项原值',
+          prop: 'oldValue',
+          width: 120
+        }, {
+          colName: '变化项新值',
+          prop: 'newValue',
+          width: 120
         }
       ]
+    }
+  },
+  methods: {
+    // 初始加载硬件依赖的信息
+    loadData (hisUuid) {
+      this.searchConditionHistroyList.packageUuid = hisUuid
+      console.log('get history searchConditionHistroyList -- >' + JSON.stringify(this.searchConditionHistroyList))
+      getSoftwarePackageHistoryList(this.searchConditionHistroyList)
+        .then(
+          function (result) {
+            console.log('get history result -- >' + JSON.stringify(result))
+            let historyData = []
+            let changedData = []
+            let varInfo = {}
+            for (let i = 0; result.data.data !== null && i < result.data.data.length; i++) {
+              if (result.data.data[i].changedData !== null) {
+                changedData = JSON.parse(result.data.data[i].changedData)
+              }
+              for (let k = 0; k < changedData.length; k++) {
+                varInfo = changedData[k]
+                varInfo['changeDate'] = result.data.data[i].updateTime
+                varInfo['operator'] = result.data.data[i].updateUser
+                historyData.push(varInfo)
+              }
+            }
+            console.log('get history result historyData-- >' + JSON.stringify(historyData))
+            this.softwarePckHistory = historyData
+            this.total = result.pageCount
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
     }
   },
   watch: {
@@ -62,17 +94,4 @@ export default {
 </script>
 
 <style>
-.demo-table-expand {
-  font-size: 0;
-}
-.demo-table-expand label {
-  width: 160px;
-  color: #99a9bf;
-  margin-left: 50px;
-}
-.demo-table-expand .el-form-item {
-  margin-right: 0;
-  margin-bottom: 0;
-  width: 50%;
-}
 </style>
