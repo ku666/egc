@@ -265,7 +265,7 @@
           <el-form>
             <el-row>
               <el-col :span="24">
-                <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
+                <el-form-item label="选择导入模板" :label-width="formLabelWidth" prop="uploadFiles">
                   <el-upload
                     ref="uploadPackageJarFiles"
                     class="avatar-uploader"
@@ -284,6 +284,26 @@
                   </el-upload>
                 </el-form-item>
               </el-col>
+              <!-- <el-col :span="24">
+                <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
+                  <el-upload
+                    ref="uploadPackageJar1Files"
+                    class="avatar-uploader"
+                    action=""
+                    drag
+                    :multiple = "false"
+                    :limit=1
+                    :show-file-list="true"
+                    :on-exceed="handleImportExceed"
+                    :on-change="handleImportOnchange"
+                    :auto-upload="false"
+                    :file-list="fileList">
+                    <i class="el-icon-upload"></i>
+                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                  </el-upload>
+                </el-form-item> 
+              </el-col>-->
             </el-row>
             <div style="text-align:center;">
               <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
@@ -510,6 +530,7 @@ export default {
       this.dialogTitle = '软件包信息注册'
       this.dialogRegisterVisible = true
       this.switchInputDisable('add')
+      this.softwareDetails = []
       this.$refs['softwareDetails'].resetFields()
       this.$refs.softwareDetails.resetFields()
       this.fileList = []
@@ -704,6 +725,7 @@ export default {
               function (result) {
                 console.log('update response --- >' + JSON.stringify(result))
                 this.dialogRegisterVisible = false
+                this.softwareDetails = []
                 this.$refs['softwareDetails'].resetFields()
                 this.fileList = []
                 this.$message({
