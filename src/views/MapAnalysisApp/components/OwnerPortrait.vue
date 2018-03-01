@@ -69,7 +69,7 @@
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
           <div v-if="isOwenrTable" style="width:100%">
-            <el-table :data="ownerTableData" width="100%" height="420" class="tableWidth" stripe>
+            <el-table :data="ownerTableData" width="100%" height="420" class="table-width" stripe>
               <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
               <el-table-column style="width:100%" prop="countNum" label="人数">
@@ -86,7 +86,7 @@
         <div class="show" v-show='isRate'>
           <!-- 表格展示 -->
           <div v-show='isRateTable' width="100%">
-            <el-table :data='rateTableData' width="100%" height="380" class="tableWidth" stripe>
+            <el-table :data='rateTableData' width="100%" height="380" class="table-width" stripe>
               <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
               <el-table-column style="width:100%" prop="inCount" label="进入次数">
