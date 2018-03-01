@@ -11,6 +11,8 @@
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
             </el-table-column>
+            <el-table-column v-for="(item, index) in tableOsTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            </el-table-column>
             <!-- <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">
                 <el-button @click="_handleCheckDetails(scope.$index)" type="text" class="el-icon-view" style="font-size:15px;color: #0078f4" :title="detailsTitle">
@@ -58,7 +60,6 @@ export default {
       selectOpts: [],
       total: 0,
       dialogStatus: '',
-      addr: '',
       dialogDetailsVisible: false,
       middlewareDepListData: undefined,
       middlewareDepDetails: undefined,
@@ -99,6 +100,8 @@ export default {
           width: 150
         }
       ],
+      tableOsTitleExtData: [],
+      extMaxLenth: 6,
       detailsTitle: '查看详情',
       detailsImg: require('../assets/images/details.png')
     }
@@ -146,9 +149,25 @@ export default {
 
     // 初始加载中间件依赖的信息
     loadData () {
+      this.tableOsTitleExtData = []
+      for (let i = 1; i < this.extMaxLenth + 1; i++) {
+        var colName = '配置项' + i
+        var extData = 'extData' + i
+        var keyArr = ['colName', 'prop', 'width']
+        var valArr = [colName, extData, '100']
+        this.tableOsTitleExtData.push(this.getExtData(keyArr, valArr))
+      }
       getMiddlewareDepByPage(this.searchConditionList)
         .then(
           function (result) {
+            for (let i = 1; result.data.data !== null && i < result.data.data.length + 1; i++) {
+              for (let k = 1; result.data.data[i - 1].extData !== null && k < this.extMaxLenth + 1; k++) {
+                console.log('Data get2222 .....: ' + result.data.data[i - 1].extData[k - 1].value)
+                // var key = '配置项' + k
+                var key2 = 'extData' + k
+                result.data.data[i - 1][key2] = result.data.data[i - 1].extData[k - 1].value
+              }
+            }
             console.log('init middleware data -- >' + JSON.stringify(result))
             this.middlewareDepListData = result.data.data
             this.total = result.data.totalCount
@@ -171,6 +190,16 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    },
+    // data
+    getExtData (keyArr, valArr) {
+      var data = {}
+      for (let i = 0; i < keyArr.length; i++) {
+        var key = keyArr[i]
+        var val = valArr[i]
+        data[key] = val
+      }
+      return data
     }
   },
 
