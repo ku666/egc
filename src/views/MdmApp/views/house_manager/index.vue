@@ -129,20 +129,15 @@ export default {
   }
 }
 </script>
+<style lang='less' scoped>
+@import "~@/views/MdmApp/assets/css/index.less";
+</style>
 <style scoped>
 .house-manager {
   width: 100%;
   height: 100%;
   min-width: 1000px;
   min-height: 500px;
-}
-
-.house-list {
-  flex: 1;
-  position: relative;
-  margin-top: 10px;
-  display: flex;
-  flex-flow: column;
 }
 
 .tree-view-container {
@@ -153,12 +148,6 @@ export default {
   margin-left: 210px;
   padding: 10px;
   box-sizing: border-box;
-}
-
-.table-pager {
-  padding: 0;
-  margin-top: 10px;
-  text-align: right;
 }
 
 .house-table {

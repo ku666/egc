@@ -1,6 +1,6 @@
 <template>
   <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' style="min-width: 750px;">
-    <div slot='title' class='header_style'>
+    <div slot='title' class='header-style'>
       <i class='el-icon-edit'></i>{{title}}</div>
     <el-tabs style="margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name='basic'>

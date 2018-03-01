@@ -53,7 +53,7 @@
     </el-pagination>
 
     <el-dialog :visible.sync='providerDialogVisible' :modal-append-to-body='false'>
-      <div slot='title' class='header_style'>
+      <div slot='title' class='header-style'>
         <i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>

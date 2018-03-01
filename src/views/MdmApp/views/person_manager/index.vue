@@ -1,10 +1,5 @@
 <template>
   <div class='ui-common'>
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
-    </el-breadcrumb> -->
-
     <div class="person-list">
       <div>
         <el-form :inline='true' :model='searchCondition' ref='searchCondition' label-width="70px" style='margin-top: 20px;'>
@@ -75,7 +70,7 @@
 
     <!-- 弹出新窗口 -->
     <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 920px">
-      <div slot='title' class='header_style'>
+      <div slot='title' class='header-style'>
         <i class='el-icon-document'></i>{{ this.title }}</div>
       <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
@@ -348,14 +343,10 @@ export default {
   }
 }
 </script>
+<style lang='less' scoped>
+@import "~@/views/MdmApp/assets/css/index.less";
+</style>
 <style scoped>
-.person-manager {
-  width: 100%;
-  height: 100%;
-  min-width: 1000px;
-  min-height: 500px;
-}
-
 .person-list {
   flex: 1;
   position: relative;
@@ -364,89 +355,7 @@ export default {
   flex-flow: column;
 }
 
-.tree-view-container {
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-  border: 1px solid #dddee1;
-  /* margin-left: 210px; */
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.table-pager {
-  padding: 0;
-  margin-top: 10px;
-  text-align: right;
-}
-
-.table-column5 {
-  /* border-right: solid 0px #ddd; */
-  border-bottom: 0px solid #ddd;
-  width: 20%;
-  padding: 0;
-  margin: 0;
-  float: left;
-  text-align: left;
-  color: #909399;
-}
-
-.table-column15 {
-  /* border-right: solid 0px #ddd; */
-  border-bottom: 0px solid #ddd;
-  width: 15%;
-  padding: 0;
-  margin: 0;
-  float: left;
-  text-align: left;
-  color: #909399;
-}
-.el-collapse-item.is-active {
-  background: #f6faff;
-}
-
-.table-column-inner {
-  margin: 20px 20px 20px 0px;
-  font-weight: bold;
-}
-
-.btn-reset {
-  border: 1px solid #0078f4;
-  border-radius: 4px;
-  width: 90px;
-  height: 40px;
-  color: #0078f4;
-  background-color: #ffffff;
-}
-
-.btn-plain {
-  border: 1px solid #0078f4;
-  border-radius: 4px;
-  width: 90px;
-  height: 40px;
-}
 .line-one {
   line-height: 30px;
-}
-.header_style {
-  padding: 13px 3%;
-  border-radius: 4px;
-  /* background: #f5f7fa; */
-  width: 92%;
-  color: #0078f4;
-  font-size: 18px;
-}
-.el-input {
-  width: 200px;
-  height: 20px;
-  font-size: 13px;
-  border-radius: 4px;
-}
-
-.el-select {
-  width: 200px;
-  height: 20px;
-  font-size: 13px;
-  border-radius: 4px;
 }
 </style>
