@@ -7,12 +7,12 @@ import pwdedit from '@/views/UserMgmt/login/pwdedit.vue'
 export default[
   {
     path: '/userMgmtLogin',
-    name: 'userMgmtLogin',
+    name: '登录',
     component: userMgmtLogin
   },
   {
     path: '/usermgmt/userManagement/pwdedit',
-    name: 'pwdedit',
+    name: '修改密码',
     component: pwdedit
   }
 ]
