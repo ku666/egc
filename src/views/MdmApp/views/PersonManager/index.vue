@@ -1,28 +1,12 @@
 <template>
   <div class='ui-common'>
-    <!-- <el-breadcrumb separator-class="el-icon-arrow-right" style='margin-top:10px'>
-      <el-breadcrumb-item>主数据管理</el-breadcrumb-item>
-      <el-breadcrumb-item>人员主数据</el-breadcrumb-item>
-    </el-breadcrumb> -->
-
     <div class="person-list">
       <div>
         <el-form :inline='true' :model='searchCondition' ref='searchCondition' label-width="70px" style='margin-top: 20px;'>
           <el-form-item label='小区名称'>
             <!-- <el-input placeholder='请输入小区名称' v-model='searchCondition.courtName' @keyup.enter.native='search'></el-input> -->
-            <el-select
-              clearable
-              v-model='searchCondition.courtUuid'
-              :remote-method="getCourts"
-              :loading="getCourtsLoading"
-              placeholder="请输入小区名称"
-              remote
-              filterable>
-              <el-option
-                v-for="court in courts"
-                :key="court.uuid"
-                :label="court.name"
-                :value="court.uuid">
+            <el-select clearable v-model='searchCondition.courtUuid' :remote-method="getCourts" :loading="getCourtsLoading" placeholder="请输入小区名称" remote filterable>
+              <el-option v-for="court in courts" :key="court.uuid" :label="court.name" :value="court.uuid">
               </el-option>
             </el-select>
           </el-form-item>
@@ -68,10 +52,10 @@
         </el-table-column>
         <el-table-column label="证件类型" prop="idenType" sortable>
           <template slot-scope="scope">
-          <div v-for='idType in idTypes' v-bind:key='idType.value'>
-            {{scope.row.idenType === idType.value ? idType.label : ''}}
-          </div>
-        </template>
+            <div v-for='idType in idTypes' v-bind:key='idType.value'>
+              {{scope.row.idenType === idType.value ? idType.label : ''}}
+            </div>
+          </template>
         </el-table-column>
         <el-table-column label="证件号码" prop="idenNum" width="170" sortable>
         </el-table-column>
@@ -80,22 +64,14 @@
         <el-table-column label="电子邮箱" prop="email" sortable>
         </el-table-column>
       </el-table>
-      <el-pagination
-        ref='pager'
-        background
-        :current-page.sync='searchCondition.currentPage'
-        :page-sizes='[10, 20, 50, 100]'
-        :page-size='searchCondition.pageSize'
-        layout='total, sizes, prev, pager, next, jumper'
-        :total='searchCondition.total'
-        @size-change='sizeChange'
-        @current-change='currentChange'>
+      <el-pagination ref='pager' background :current-page.sync='searchCondition.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchCondition.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchCondition.total' @size-change='sizeChange' @current-change='currentChange'>
       </el-pagination>
     </div>
 
     <!-- 弹出新窗口 -->
     <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 920px">
-      <div slot='title' class='header_style'><i class='el-icon-document'></i>{{ this.title }}</div>
+      <div slot='title' class='header-style'>
+        <i class='el-icon-document'></i>{{ this.title }}</div>
       <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
         <el-tab-pane label="基本信息" name='basic'>
           <div>
@@ -272,17 +248,17 @@ export default {
       this.modelDetailForm.phone = rowData.phone
       this.modelDetailForm.email = rowData.email
       // 根据人员的uuid获取该人员的房产信息
-      getHousesByUserUuid({'userUuid': rowData.uuid})
-      .then(res => {
-        this.modelDetailForm.detail = res.data.data
-      })
-      .catch(err => {
-        console.log(err)
-      })
+      getHousesByUserUuid({ 'userUuid': rowData.uuid })
+        .then(res => {
+          this.modelDetailForm.detail = res.data.data
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     getCourts: function (query) {
       this.getCourtsLoading = true
-      getCourtsByConditions({'name': query, 'pageSize': 1000, 'currentPage': 1})
+      getCourtsByConditions({ 'name': query, 'pageSize': 1000, 'currentPage': 1 })
         .then(res => {
           this.getCourtsLoading = false
           this.courts = res.data.data.result
@@ -367,14 +343,10 @@ export default {
   }
 }
 </script>
+<style lang='less' scoped>
+@import "~@/views/MdmApp/assets/css/index.less";
+</style>
 <style scoped>
-.person-manager {
-  width: 100%;
-  height: 100%;
-  min-width: 1000px;
-  min-height: 500px;
-}
-
 .person-list {
   flex: 1;
   position: relative;
@@ -383,89 +355,7 @@ export default {
   flex-flow: column;
 }
 
-.tree-view-container {
-  height: 100%;
-  display: flex;
-  flex-flow: column;
-  border: 1px solid #dddee1;
-  /* margin-left: 210px; */
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.table-pager {
-  padding: 0;
-  margin-top: 10px;
-  text-align: right;
-}
-
-.table-column5 {
-  /* border-right: solid 0px #ddd; */
-  border-bottom: 0px solid #ddd;
-  width: 20%;
-  padding: 0;
-  margin: 0;
-  float: left;
-  text-align: left;
-  color: #909399;
-}
-
-.table-column15 {
-  /* border-right: solid 0px #ddd; */
-  border-bottom: 0px solid #ddd;
-  width: 15%;
-  padding: 0;
-  margin: 0;
-  float: left;
-  text-align: left;
-  color: #909399;
-}
-.el-collapse-item.is-active {
-  background: #f6faff;
-}
-
-.table-column-inner {
-  margin: 20px 20px 20px 0px;
-  font-weight: bold;
-}
-
-.btn-reset {
-  border: 1px solid #0078f4;
-  border-radius: 4px;
-  width: 90px;
-  height: 40px;
-  color: #0078f4;
-  background-color: #ffffff;
-}
-
-.btn-plain {
-  border: 1px solid #0078f4;
-  border-radius: 4px;
-  width: 90px;
-  height: 40px;
-}
 .line-one {
   line-height: 30px;
-}
-.header_style {
-  padding: 13px 3%;
-  border-radius: 4px;
-  /* background: #f5f7fa; */
-  width: 92%;
-  color: #0078F4;
-  font-size: 18px;
-}
-.el-input {
-  width: 200px;
-  height: 20px;
-  font-size: 13px;
-  border-radius: 4px;
-}
-
-.el-select {
-  width: 200px;
-  height: 20px;
-  font-size: 13px;
-  border-radius: 4px;
 }
 </style>

@@ -1,21 +1,15 @@
 <template>
   <div>
     <div class="flex-1">
-      <el-table
-        :data='domainList'
-        tooltip-effect='dark'
-        height = '200'
-        width = "100%"
-        v-loading = 'domainListLoading'
-        element-loading-text = '拼命加载中'>
+      <el-table :data='domainList' tooltip-effect='dark' height='200' width="100%" v-loading='domainListLoading' element-loading-text='拼命加载中'>
         <el-table-column type='index' label='序号' width="150px"></el-table-column>
         <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column prop='domainValue' label='域取值' width="300px"></el-table-column>
         <el-table-column prop='domainValueCode' label='域取值编码' width="300px"></el-table-column>
         <el-table-column label='操作' width="150px">
           <template slot-scope='scope'>
-            <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
-            <el-button type='text' size = 'mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
+            <el-button type='text' size='mini' icon="el-icon-edit" @click='editDomain(scope.row)'></el-button>
+            <el-button type='text' size='mini' icon="el-icon-delete" @click='deleteDomain(scope.row)'></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -23,7 +17,7 @@
 
     <div style='margin-top:20px'>
       <el-form :model='domainForm' ref='domainForm' label-width='160px' :rules='rules' :inline='true'>
-        <el-form-item label='域取值' prop='domainValue' >
+        <el-form-item label='域取值' prop='domainValue'>
           <el-input v-model.trim='domainForm.domainValue' :maxlength="64"></el-input>
         </el-form-item>
         <el-form-item label='域取值编码' prop='domainValueCode'>
@@ -38,7 +32,7 @@
 </template>
 
 <script>
-import {getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain} from '@/views/MdmApp/apis/index'
+import { getDeviceAttrDomains, insertDeviceAttrDomain, updateDeviceAttrDomain, deleteDeviceAttrDomain } from '@/views/MdmApp/apis/index'
 
 export default {
   props: ['attrUuid'],
@@ -73,11 +67,11 @@ export default {
       },
       rules: {
         domainValue: [
-          {required: true, message: '请输入域取值', trigger: 'blur'},
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { required: true, message: '请输入域取值', trigger: 'blur' },
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         domainValueCode: [
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ]
       }
     }
@@ -93,16 +87,16 @@ export default {
       that.domainForm.attrUuid = that.attrUuid
       getDeviceAttrDomains(that.attrUuid)
         .then(
-          function (result) {
-            that.domainList = result.data
-            that.domainListLoading = false
-          }
+        function (result) {
+          that.domainList = result.data
+          that.domainListLoading = false
+        }
         )
         .catch(
-          function (error) {
-            that.domainListLoading = false
-            console.log(error)
-          }
+        function (error) {
+          that.domainListLoading = false
+          console.log(error)
+        }
         )
     },
     editDomain: function (domain = {}) {
@@ -175,7 +169,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmApp/assets/css/index.less';
+@import "~@/views/MdmApp/assets/css/index.less";
 </style>
 <style scoped>
 div.cell {

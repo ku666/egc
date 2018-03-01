@@ -3,10 +3,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
         <el-form-item label='供应商主数据编码'>
-          <el-input placeholder='请输入供应商主数据编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native = 'search' :maxlength="4" clearable></el-input>
+          <el-input placeholder='请输入供应商主数据编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商名称'>
-          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native = 'search' :maxlength="100" clearable></el-input>
+          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native='search' :maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
@@ -23,65 +23,46 @@
 
     <!-- <hr/> -->
 
-      <el-table
-        ref = 'providerTable'
-        :data='providerList'
-        tooltip-effect='dark'
-        height="100%"
-        v-loading='providerListLoading'
-        @selection-change = 'getSelections'
-        @row-dblclick = 'editProviderdbl'
-        @row-click = 'checkrow'
-        element-loading-text='拼命加载中'
-        style='margin-top: 15px'>
-        <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
-        <el-table-column prop='providerCode' label='供应商主数据编码' sortable></el-table-column>
-        <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
-        <el-table-column prop='contact' label='联系方式' sortable></el-table-column>
-        <el-table-column prop='providerDesc' label='供应商描述' sortable></el-table-column>
-        <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
-        <el-table-column label='供应商类别' sortable prop='category'>
-          <template slot-scope="scope">
-            <div v-for ='providerType in providerTypes' v-bind:key = 'providerType.key'>
-              {{scope.row.category === providerType.key ? providerType.value : ''}}
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
-        <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
-        <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
-        <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
-        <el-table-column label='操作' width='100'>
-          <template slot-scope='scope'>
-            <el-button type='text' size = 'mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
-            <el-button type='text' size = 'mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+    <el-table ref='providerTable' :data='providerList' tooltip-effect='dark' height="100%" v-loading='providerListLoading' @selection-change='getSelections' @row-dblclick='editProviderdbl' @row-click='checkrow' element-loading-text='拼命加载中' style='margin-top: 15px'>
+      <el-table-column prop='uuid' label='uuid' v-if='uuidshow'></el-table-column>
+      <el-table-column prop='providerCode' label='供应商主数据编码' sortable></el-table-column>
+      <el-table-column prop='providerName' label='供应商名称' sortable></el-table-column>
+      <el-table-column prop='contact' label='联系方式' sortable></el-table-column>
+      <el-table-column prop='providerDesc' label='供应商描述' sortable></el-table-column>
+      <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
+      <el-table-column label='供应商类别' sortable prop='category'>
+        <template slot-scope="scope">
+          <div v-for='providerType in providerTypes' v-bind:key='providerType.key'>
+            {{scope.row.category === providerType.key ? providerType.value : ''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
+      <el-table-column label='操作' width='100'>
+        <template slot-scope='scope'>
+          <el-button type='text' size='mini' icon='el-icon-edit' @click='editProviderdbl(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon='el-icon-delete' @click='deleteProvider(scope.row)'></el-button>
+        </template>
+      </el-table-column>
+    </el-table>
 
-    <el-pagination
-      ref='pager'
-      background
-      :current-page = 'searchProviderForm.currentPage'
-      :page-sizes = '[10, 20, 50, 100]'
-      :page-size = 'searchProviderForm.pageSize'
-      layout = 'total, sizes, prev, pager, next, jumper'
-      :total = 'searchProviderForm.total'
-      @size-change = 'sizeChange'
-      @current-change = 'currentChange'>
+    <el-pagination ref='pager' background :current-page='searchProviderForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchProviderForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchProviderForm.total' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
 
-    <el-dialog :visible.sync='providerDialogVisible'
-      :modal-append-to-body = 'false'>
-      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
+    <el-dialog :visible.sync='providerDialogVisible' :modal-append-to-body='false'>
+      <div slot='title' class='header-style'>
+        <i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>
         <el-form :model='providerForm' ref='providerForm' label-width='160px' :rules='providerFormRules' :inline='true'>
           <el-form-item label='供应商主数据编码' prop='providerCode'>
-            <el-input v-model.trim='providerForm.providerCode' :disabled = 'disabledflag' :maxlength="4"></el-input>
+            <el-input v-model.trim='providerForm.providerCode' :disabled='disabledflag' :maxlength="4"></el-input>
           </el-form-item>
           <el-form-item label='供应商类别' prop='category'>
-            <el-select v-model = 'providerForm.category'>
-              <el-option v-for = 'providerType in providerTypes' :key = 'providerType.key' :value = 'providerType.key' :label = 'providerType.value'></el-option>
+            <el-select v-model='providerForm.category'>
+              <el-option v-for='providerType in providerTypes' :key='providerType.key' :value='providerType.key' :label='providerType.value'></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label='供应商名称' prop='providerName'>
@@ -143,25 +124,25 @@ export default {
       },
       // 供应商类型下拉列表
       providerTypes: [
-        {key: 1, value: '硬件供应商'},
-        {key: 2, value: '软件供应商'},
-        {key: 3, value: '其他'}
+        { key: 1, value: '硬件供应商' },
+        { key: 2, value: '软件供应商' },
+        { key: 3, value: '其他' }
       ],
       providerFormRules: {
         category: [{ required: true, message: '请选择供应商类别', trigger: 'change' }],
         providerCode: [
-          {required: true, message: '请输入供应商编码', trigger: 'blur'},
-          {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
+          { required: true, message: '请输入供应商编码', trigger: 'blur' },
+          { pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur' }
         ],
         providerName: [
-          {required: true, message: '请输入供应商名', trigger: 'blur'},
-          {max: 100, message: '输入内容应少于100位字符', trigger: 'blur'}
+          { required: true, message: '请输入供应商名', trigger: 'blur' },
+          { max: 100, message: '输入内容应少于100位字符', trigger: 'blur' }
         ],
         providerDesc: [
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         contact: [
-          {pattern: /^(\((\+|00)86\)(-|\s)?|(\+|00)86(-|\s)?)?(\d{11}|(\d{3,4})?(-|\s)?\d{6,10})$/, message: '请输入正确的电话或手机号', trigger: 'blur'}
+          { pattern: /^(\((\+|00)86\)(-|\s)?|(\+|00)86(-|\s)?)?(\d{11}|(\d{3,4})?(-|\s)?\d{6,10})$/, message: '请输入正确的电话或手机号', trigger: 'blur' }
         ]
       }
     }
@@ -187,18 +168,18 @@ export default {
       this.providerListLoading = true
       getProviders(this.searchProviderForm)
         .then(
-          function (result) {
-            console.log(result)
-            this.providerList = result.data.result
-            this.searchProviderForm.total = result.data.totalCount
-            this.providerListLoading = false
-          }.bind(this)
+        function (result) {
+          console.log(result)
+          this.providerList = result.data.result
+          this.searchProviderForm.total = result.data.totalCount
+          this.providerListLoading = false
+        }.bind(this)
         )
         .catch(
-          function (error) {
-            this.providerListLoading = false
-            console.log(error)
-          }.bind(this)
+        function (error) {
+          this.providerListLoading = false
+          console.log(error)
+        }.bind(this)
         )
     },
     // 改变分页大小
@@ -273,7 +254,7 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((provider) => uuidList.push(provider.uuid))
-        deleteProvider({'value': uuidList}).then(res => {
+        deleteProvider({ 'value': uuidList }).then(res => {
           this.search({})
           this.$message({
             message: '刪除成功!',
@@ -296,7 +277,7 @@ export default {
         type: 'warning',
         dangerouslyUseHTMLString: true
       }).then(() => {
-        deleteProvider({'value': uuidList}).then(res => {
+        deleteProvider({ 'value': uuidList }).then(res => {
           this.search({})
           this.$message({
             message: '刪除成功!',
@@ -369,5 +350,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmApp/assets/css/index.less';
+@import "~@/views/MdmApp/assets/css/index.less";
 </style>

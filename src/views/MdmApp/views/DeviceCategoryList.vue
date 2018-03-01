@@ -32,26 +32,16 @@
       <el-button @click='addDevice' icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
     </div>
 
-    <el-table
-      ref='deviceTable'
-      :expand-row-keys='expandRows'
-      :row-key="getRowKeys"
-      :data='tableData'
-      v-loading='loading'
-      @row-dblclick='editDevicedbl'
-      element-loading-text='拼命加载中'
-      height="100%"
-      style='margin-top: 15px'>
+    <el-table ref='deviceTable' :expand-row-keys='expandRows' :row-key="getRowKeys" :data='tableData' v-loading='loading' @row-dblclick='editDevicedbl' element-loading-text='拼命加载中' height="100%" style='margin-top: 15px'>
       <el-table-column type="expand">
         <template slot-scope="props">
-          <el-table empty-text='无子设备'
-            :data='props.row.slave'
-            :show-header='false'
-            @row-dblclick='editDevicedbl'>
+          <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' @row-dblclick='editDevicedbl'>
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
             <el-table-column prop='typeCode' label='设备主数据编码' width="180px">
               <template slot-scope="scope">
-                <div style="float: left; vertical-align: middle; color: #aaa"><i class='fa fa-cog'></i></div>
+                <div style="float: left; vertical-align: middle; color: #aaa">
+                  <i class='fa fa-cog'></i>
+                </div>
                 <p style='padding-left: 20px; float: left' v-html="highlightKeys(scope.row.typeCode, searchForm.typeCode)"></p>
               </template>
             </el-table-column>
@@ -126,16 +116,7 @@
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      ref='pager'
-      background
-      :current-page='searchForm.currentPage'
-      :page-sizes='[10, 20, 50, 100]'
-      :page-size='searchForm.pageSize'
-      layout='total, sizes, prev, pager, next, jumper'
-      :total='searchForm.totalCount'
-      @size-change='sizeChange'
-      @current-change='currentChange'>
+    <el-pagination ref='pager' background :current-page='searchForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchForm.totalCount' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
   </div>
 </template>
@@ -233,7 +214,7 @@ export default {
         function (error) {
           console.log(error)
         }
-      )
+        )
     },
     deleteDevice: function (device = {}) {
       this.$confirm('确定要刪除吗?', '提示', {
@@ -254,7 +235,7 @@ export default {
         function (error) {
           console.log(error)
         }
-      )
+        )
     },
     // ********************修改设备********************
     editDevice: function () {
@@ -283,26 +264,26 @@ export default {
       this.loading = true
       getDeviceCategoryList(this.searchForm)
         .then(
-          function (result) {
-            let haveChilds = []
-            this.tableData = result.data.result
-            this.searchForm.totalCount = result.data.totalCount
-            if (Array.isArray(this.tableData) && this.tableData.length > 0) {
-              this.tableData.forEach(element => {
-                if (Array.isArray(element.slave) && element.slave.length > 0) {
-                  haveChilds.push(element.uuid)
-                }
-              })
-            }
-            this.expandRows = haveChilds
-            this.loading = false
-          }.bind(this)
+        function (result) {
+          let haveChilds = []
+          this.tableData = result.data.result
+          this.searchForm.totalCount = result.data.totalCount
+          if (Array.isArray(this.tableData) && this.tableData.length > 0) {
+            this.tableData.forEach(element => {
+              if (Array.isArray(element.slave) && element.slave.length > 0) {
+                haveChilds.push(element.uuid)
+              }
+            })
+          }
+          this.expandRows = haveChilds
+          this.loading = false
+        }.bind(this)
         )
         .catch(
-          function (error) {
-            this.loading = false
-            console.log(error)
-          }.bind(this)
+        function (error) {
+          this.loading = false
+          console.log(error)
+        }.bind(this)
         )
     },
     // 改变分页大小
@@ -328,9 +309,9 @@ export default {
         }.bind(this)
         )
         .catch(
-          function (error) {
-            console.log(error)
-          }
+        function (error) {
+          console.log(error)
+        }
         )
     },
     // 查询所有的设备
@@ -398,9 +379,18 @@ export default {
 </style>
 <style >
 @font-face {
-  font-family: 'FontAwesome';
-  src: url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0');
-  src: url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'), url('~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+  font-family: "FontAwesome";
+  src: url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0");
+  src: url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0")
+      format("embedded-opentype"),
+    url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff2?v=4.7.0")
+      format("woff2"),
+    url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.woff?v=4.7.0")
+      format("woff"),
+    url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.ttf?v=4.7.0")
+      format("truetype"),
+    url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular")
+      format("svg");
   font-weight: normal;
   font-style: normal;
 }
