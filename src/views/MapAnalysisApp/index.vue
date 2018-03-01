@@ -2,7 +2,7 @@
   <div class="mapCon">
     <div class="mapCl ui-common">
       <div class="searchBox">
-        <el-select class="proSel" v-model="provinceSel" placeholder="请选择查询省份">
+        <el-select class="proSel" v-model="provinceSel">
           <el-option v-for="vo in provinArr" :key="vo.value" :label="vo.label" :value="vo.value"></el-option>
         </el-select>
         <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
@@ -27,7 +27,7 @@
 </template>
 <script>
 import CourtTable from '@/views/MapAnalysisApp/components/CourtTable'
-import { getCourtList, getOrgList } from '@/views/MapAnalysisApp/apis/index.js'
+import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
 import mapData from '@/views/MapAnalysisApp/assets/js/mapEchartsData.js'
 import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
 require('echarts/map/js/china')
@@ -52,14 +52,8 @@ export default {
   mounted: function () {
     console.log(LOG_TAG + ' 初始化全国小区列表信息  ')
     this.getCourtListData()
-    // this.getOrgListFn()
     this.getMyCharts.setOption(mapData.option)
     this.getMyCharts.on('click', this.handleClickMap)
-  },
-  computed: {
-    getMyCharts: function () {
-      return this.mycharts ? this.mycharts : this.$echarts.init(document.getElementById('mapECarts'))
-    }
   },
   methods: {
     // 点击小区点位事件
@@ -157,16 +151,16 @@ export default {
       }
       this.getCourtListData('search')
     },
-    getOrgListFn: function () {
-      getOrgList().then(res => {
-        console.log(res)
-      })
-    },
     handleRowClick: function (row, e) {
       // console.log(row)
       this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     },
     tableRowClassName: function (row, rowIndex) {
+    }
+  },
+  computed: {
+    getMyCharts: function () {
+      return this.mycharts ? this.mycharts : this.$echarts.init(document.getElementById('mapECarts'))
     }
   }
 }
@@ -184,16 +178,16 @@ export default {
   /* justify-content: space-between; */
   /* align-items: center; */
   // border: 1px solid #ccc;
-  /deep/ .listTB{
+  /deep/ .listTB {
     width: 500px;
     overflow: auto;
     margin: 7px 0px 0px 0px;
     box-sizing: border-box;
-    .el-table{
+    .el-table {
       max-height: 735px;
       overflow: auto;
     }
-    .el-table::before{
+    .el-table::before {
       display:none;
     }
     .el-table__row {
@@ -209,24 +203,26 @@ export default {
     .demo-table-expand span {
       color: rgb(224, 127, 15);
     }
-    .demo-table-expand .el-form-item {
+    .demo-table-expand 
+    .el-form-item {
       margin-right: 0;
       margin-bottom: 0;
       width: 50%;
     }
-    .demo-table-expand .el-form-item.itemlarge{
+    .demo-table-expand 
+    .el-form-item.itemlarge {
       width: 100%;
     }
   }
 }
-.mapCl{
+.mapCl {
   display: flex;
   display: -webkit-flex;
   flex-flow: column nowrap;
   align-items: center;
   box-sizing: border-box;
 }
-.searchBox{
+.searchBox {
   width: 60%;
   height: 60px;
   display: flex;

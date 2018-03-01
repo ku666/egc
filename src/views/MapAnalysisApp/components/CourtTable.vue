@@ -26,14 +26,14 @@
 <script>
 export default {
   name: 'courttable',
-  data () {
-    return {
-
-    }
-  },
   props: {
     tableData: {
       type: Array
+    }
+  },
+  data () {
+    return {
+
     }
   },
   methods: {

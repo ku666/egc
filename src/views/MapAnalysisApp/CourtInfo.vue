@@ -366,7 +366,7 @@ export default {
   text-align: center;
   vertical-align: middle;
 }
-.infoTitle{
+.infoTitle {
   margin-top: 23px;
 }
 .itemCl {
