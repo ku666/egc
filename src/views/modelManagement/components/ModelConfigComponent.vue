@@ -415,7 +415,7 @@
           pageSize: this.pageSize,
           condition: {
             paramCode: '%' + this.modelListSearch.paramCode + '%',
-            communityId: this.modelListSearch.communityId === '0' ? '' : this.modelListSearch.communityId,
+            communityId: this.modelListSearch.communityId,
             deleteFlag: 0
           },
           orderBy: 'createTime'
