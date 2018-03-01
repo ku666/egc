@@ -1,14 +1,14 @@
 import Axios from '@/assets/js/AxiosPlugin'
 // 以下地址是本地调试时使用
-// let contextPath = '/courtorg'
-// let personPath = '/mapAnalysis'
-// let devicePath = '/device'
-// let ownertPath = '/profile'
+let contextPath = '/courtorg'
+let personPath = '/mapAnalysis'
+let devicePath = '/device'
+let ownertPath = '/profile'
 // 以下地址是发布到服务器上时用
-let contextPath = '/egc-smartcommunitymgmtapp/courtorg'
-let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
-let devicePath = '/egc-smartcommunitymgmtapp/device'
-let ownertPath = '/egc-smartcommunitymgmtapp/profile'
+// let contextPath = '/egc-smartcommunitymgmtapp/courtorg'
+// let personPath = '/egc-smartcommunitymgmtapp/mapAnalysis'
+// let devicePath = '/egc-smartcommunitymgmtapp/device'
+// let ownertPath = '/egc-smartcommunitymgmtapp/profile'
 
 /**
  * 条件查询小区列表
@@ -92,17 +92,6 @@ export const getPerAccessPageList = data => {
   return Axios({
     method: 'get',
     url: personPath + '/listHumanFlowPage',
-    params: data
-  })
-}
-/**
- *  获取行政区划列表
- * @param orgCode 区划组织code
- */
-export const getOrgList = data => {
-  return Axios({
-    method: 'get',
-    url: contextPath + '/getOrgList',
     params: data
   })
 }

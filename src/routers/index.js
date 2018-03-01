@@ -11,7 +11,6 @@ import userManagementRouters from '@/views/UserMgmt/userManagement/routers/index
 import mdmMgmtrouters from '@/views/MdmMgmt/routers/index'
 import MapAnalysisApp from '@/views/MapAnalysisApp/routers/index'
 // 引人大屏模块路由
-import HouseAllApp from '@/views/HouseAllApp/routers/index'
 import MdmApp from '@/views/MdmApp/routers/index'
 
 // 引入设备管理模块路由数据
@@ -63,7 +62,6 @@ export default new Router({
         ...MdmApp,
         ...deviceInfoMaintain,
         ...firmwareUpdate,
-        ...HouseAllApp,
         ...upgradeMgmt,
         ...modelManagementrouters,
         ...logServiceComponentrouters,
