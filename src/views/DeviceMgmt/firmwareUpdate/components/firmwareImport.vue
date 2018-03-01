@@ -2,7 +2,7 @@
   <div class="main">
     <div class="importFile-container">
       <el-row :gutter="60" class="deviceElrow">
-        <el-col :span="6">
+        <el-col :span="10">
           <div class="grid-content bg-purple">
             <input-box title="固件名称"
                        class="uploadInput"
@@ -153,21 +153,28 @@
         var array = file.name.split('_')
         // 判断文件名是否合法
         if (array.length === 4 && this._isValid(array[0], this.deviceType) && this._isValid(array[1], this.providerType)) {
-          file['deviceType'] = array[0]
-          file['providerCode'] = array[1]
-          file['firmwareVersion'] = array[2]
-          this.fileInfo = file
-          this.importData['deviceType'] = array[0]
-          this.importData['providerCode'] = array[1]
-          this.importData['firmwareVersion'] = array[2]
-          this.importData['fileName'] = file.name
-          this.importData['fileSize'] = (parseInt(file.size) / 1000000).toString()
-          readBlobAsDataURL(file.raw, (result) => {
-            this.importData['fileData'] = result
-          })
+          if (file.size !== 0 && file.size < 52428800) {
+            file['deviceType'] = array[0]
+            file['providerCode'] = array[1]
+            file['firmwareVersion'] = array[2]
+            this.fileInfo = file
+            this.importData['deviceType'] = array[0]
+            this.importData['providerCode'] = array[1]
+            this.importData['firmwareVersion'] = array[2]
+            this.importData['fileName'] = file.name
+            this.importData['fileSize'] = (parseInt(file.size) / 1000000).toString()
+            readBlobAsDataURL(file.raw, (result) => {
+              this.importData['fileData'] = result
+            })
+          } else {
+            this.$message({
+              message: '导入文件不能为空文件或大于50M的文件',
+              type: 'error'
+            })
+          }
         } else {
           this.$message({
-            message: '请导入正确命名的固件文件（设备类型+厂商编码+版本号+日期）',
+            message: '请导入与主数据（设备编码+厂商编码）有效匹配的固件文件（设备编码_厂商编码_版本号_日期yyyyMMdd.后缀）',
             type: 'error'
           })
         }
