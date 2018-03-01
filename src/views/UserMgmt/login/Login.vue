@@ -9,6 +9,13 @@
         <el-form-item prop="password">
           <el-input type="password" placeholder="密码" v-model="ruleForm.password" @keyup.enter.native="submitForm('ruleForm')"></el-input>
         </el-form-item>
+        <el-form-item prop="verifycode">
+          <el-input placeholder="验证码" v-model="ruleForm.verifycode" @keyup.enter.native="submitForm('ruleForm')"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <s-identify :identifyCode="identifyCode" :contentWidth="contentWidth" :contentHeight="contentHeight" @click="refreshCode"></s-identify>
+          <el-button class="el-icon-refresh" @click="refreshCode" type="text">看不清，换一张验证码</el-button>
+        </el-form-item>
         <div class="login-btn">
           <el-button type="primary" @click.native="submitForm('ruleForm')" :loading="isBtnLoading">{{btnText}}</el-button>
         </div>
@@ -18,20 +25,41 @@
 </template>
 
 <script>
+import SIdentify from '@/components/identify/identify.vue'
 import { login } from '@/views/UserMgmt/login/apis'
 import { getPermission, catchError } from '@/assets/js/util.js'
 import CryptoJS from 'crypto-js'
 
 export default {
+  components: {
+    SIdentify
+  },
   data: function () {
+    var validateVerifycode = (rule, value, callback) => {
+      console.log('validateVerifycode:' + value)
+      if (value === '') {
+        callback(new Error('请输入验证码'))
+      } else if (value !== this.identifyCode) {
+        callback(new Error('验证码不正确!'))
+      } else {
+        callback()
+      }
+    }
     return {
+      identifyCodes: '1234567890',
+      identifyCode: '',
+      contentWidth: 330,
+      contentHeight: 40,
       ruleForm: {
         username: 'test',
-        password: 'test'
+        password: 'test',
+        verifycode: ''
       },
       rules: {
         username: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+        verifycode: [{ required: true, message: '请输入验证码', trigger: 'blur' },
+        { validator: validateVerifycode, trigger: 'blur' }]
       },
       isBtnLoading: false
     }
@@ -113,8 +141,24 @@ export default {
         }
       })
       // end 20171212
+    },
+    // 生成一个随机数
+    randomNum (min, max) {
+      return Math.floor(Math.random() * (max - min) + min)
+    },
+    refreshCode () {
+      this.identifyCode = ''
+      this.makeCode(this.identifyCodes, 4)
+    },
+    makeCode (o, l) {
+      for (let i = 0; i < l; i++) {
+        this.identifyCode += this.identifyCodes[this.randomNum(0, this.identifyCodes.length)]
+      }
     }
-
+  },
+  mounted () {
+    this.identifyCode = ''
+    this.makeCode(this.identifyCodes, 4)
   }
 
 }
@@ -126,9 +170,9 @@ export default {
   position: absolute;
   left: 50%;
   top: 50%;
-  margin: -175px 0 0 -200px;
+  margin: -250px 0 0 -200px;
   width: 100%;
-  height: 350px;
+  height: 500px;
   -webkit-border-radius: 5px;
   border-radius: 5px;
   -moz-border-radius: 5px;

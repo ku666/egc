@@ -10,6 +10,11 @@
           <el-table-column label="房屋名称" prop="houseAddress" sortable>
           </el-table-column>
           <el-table-column label="房屋用途" prop="houseUseFor" sortable>
+            <template slot-scope="scope">
+              <div v-for='huf in houseUseFors' v-bind:key='huf.value'>
+                {{scope.row.houseUseFor === huf.value ? huf.label : ''}}
+              </div>
+          </template>
           </el-table-column>
           <el-table-column label="居住人数" prop="residentNum" sortable>
           </el-table-column>
@@ -44,7 +49,19 @@ export default {
       pageSize: 10,
       tableData: [],
       loading: false,
-      searchOption: {}
+      searchOption: {},
+      houseUseFors: [
+        {
+          value: '1',
+          label: '自住' // 1-自住;2-出租;3-其他
+        }, {
+          value: '2',
+          label: '出租'
+        }, {
+          value: '3',
+          label: '其他'
+        }
+      ]
     }
   },
   components: {
