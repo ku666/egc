@@ -31,14 +31,8 @@ export default {
       type: Array
     }
   },
-  data () {
-    return {
-
-    }
-  },
   methods: {
     handleRowClick: function (row, e) {
-      // console.log(row)
       this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     }
   }

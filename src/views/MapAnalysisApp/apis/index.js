@@ -12,8 +12,11 @@ let ownertPath = '/egc-smartcommunitymgmtapp/profile'
 
 /**
  * 条件查询小区列表
- * @param orgID 所属组织编码
- * @param courtName 小区名称
+ * @param data 小区查询时所需参数
+ * {
+ *   org 所属组织编码
+ *   courtName 小区名称
+ * }
  */
 export const getCourtList = data => {
   return Axios({
@@ -24,7 +27,10 @@ export const getCourtList = data => {
 }
 /**
  * 获取小区详细信息
- * @param courtId 小区ID
+ * @param data
+ * {
+ *   courtUuid 小区id
+ * }
  */
 export const getCourtInfo = data => {
   return Axios({
