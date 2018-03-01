@@ -10,6 +10,7 @@
           :show-file-list="true"
           :on-exceed="handleExceed"
           :on-change="handleOnchange"
+          :on-remove="handleOnchange"
           :auto-upload="false"
           :file-list="fileList">
           <i class="el-icon-upload"></i>
@@ -33,6 +34,7 @@ export default {
   methods: {
     handleOnchange (file, fileList) {
       console.info(fileList)
+      this.uploadFiles = new FormData()
       if (this.beforeUpload(file)) {
         this.uploadFiles.append('file', fileList[0].raw)
       }
