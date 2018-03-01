@@ -363,29 +363,6 @@ export default {
           } else {
             this.getCourtTableData(this.courtId) // 获取小区图表数据
           }
-          this.$nextTick(() => { // 图表赋值
-            optionsData.owenrOptionData.legend.data = this.owerMapData.ageGroupInfo.map(item => {
-              return item.group
-            })
-            optionsData.owenrOptionData.series[1].data = this.owerMapData.ageGroupInfo.map(item => {
-              return { value: item.countNum, name: item.group }
-            })
-            if (this.owerMapData.sexInfo.length) {
-              optionsData.owenrOptionData.series[0].data = [{
-                value: this.owerMapData.sexInfo[0].femaleOwner,
-                name: '女',
-                selected: true
-              }, {
-                value: this.owerMapData.sexInfo[0].maleOwner,
-                name: '男'
-              }]
-            } else {
-              optionsData.owenrOptionData.series[0].data = []
-            }
-            this.myOwenrChart = this.$echarts.init(document.getElementById('owner-formation'))
-            this.myOwenrChart.setOption(optionsData.owenrOptionData)
-            this.resizeEcharts('#owner-formation', '.canvas-owner', this.myChartContainer, this.myOwenrChart)
-          })
           break
         case '2': // 选择出入频率
           this.isRateTable = false
@@ -550,6 +527,32 @@ export default {
       }
     },
     /**
+     * @description 业主图表赋值
+     */
+    owenrChart () {
+      optionsData.owenrOptionData.legend.data = this.owerMapData.ageGroupInfo.map(item => {
+        return item.group
+      })
+      optionsData.owenrOptionData.series[1].data = this.owerMapData.ageGroupInfo.map(item => {
+        return { value: item.countNum, name: item.group }
+      })
+      if (this.owerMapData.sexInfo.length) {
+        optionsData.owenrOptionData.series[0].data = [{
+          value: this.owerMapData.sexInfo[0].femaleOwner,
+          name: '女',
+          selected: true
+        }, {
+          value: this.owerMapData.sexInfo[0].maleOwner,
+          name: '男'
+        }]
+      } else {
+        optionsData.owenrOptionData.series[0].data = []
+      }
+      this.myOwenrChart = this.$echarts.init(document.getElementById('owner-formation'))
+      this.myOwenrChart.setOption(optionsData.owenrOptionData)
+      this.resizeEcharts('#owner-formation', '.canvas-owner', this.myChartContainer, this.myOwenrChart)
+    },
+    /**
      * @description 关闭弹窗（初始化数据）
      */
     closeDialog () {
@@ -609,6 +612,9 @@ export default {
             this.owerMapData = {
               ageGroupInfo: ageGroup,
               sexInfo: res.data.data.sexInfo
+            }
+            if (this.tableOrMap === '1') {
+              this.owenrChart()
             }
           }
         }).catch(err => {
@@ -700,6 +706,9 @@ export default {
             this.owerMapData = {
               ageGroupInfo: ageGroup,
               sexInfo: res.data.data.sexInfo
+            }
+            if (this.tableOrMap === '1') {
+              this.owenrChart()
             }
           }
         }).catch(err => {
@@ -850,13 +859,11 @@ export default {
     height: 430px;
     margin-top: 10px;
   }
-  /deep/.table-header
-   .el-col {
+  /deep/.table-header .el-col {
     padding-right: 10px;
     vertical-align: top;
   }
-  /deep/.table-header
-   .el-input__inner {
+  /deep/.table-header .el-input__inner {
     vertical-align: middle;
   }
 }
