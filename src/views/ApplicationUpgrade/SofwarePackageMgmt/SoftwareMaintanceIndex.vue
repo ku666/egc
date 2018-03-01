@@ -244,17 +244,7 @@
         </div>
       </el-dialog>
     </div>
-    <!-- <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogDetailsVisible" top="8vh">
-        <software-package-details :softwarePckDetails="softwarePckDetails"></software-package-details>
-      </el-dialog>
-    </div>
-    <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogEditVisible" top="8vh">
-        <software-package-edit :softwarePckDetails="softwarePckDetails" @updateSoftwareInfoEvent="_updateSofwareInfo"></software-package-edit>
-      </el-dialog>
-    </div> -->
-    <!--软件包历史数据-->
+    <!--软件包历史数据 dialog-->
     <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <software-package-history ref="packageHistory" :rowIdx="rowIdx" :hisUuid ="hisUuid"></software-package-history>
@@ -283,7 +273,7 @@
                     :file-list="fileList">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                    <div class="el-upload__tip" slot="tip">上传文件，且不超过10M</div>
                   </el-upload>
                 </el-form-item>
               </el-col>
@@ -351,7 +341,6 @@ export default {
       dialogTitle: '',
       dialogImportTitle: '',
       dialogImportVisible: false,
-      addr: '',
       dialogRegisterVisible: false,
       dialogDetailsVisible: false,
       dialogEditVisible: false,
@@ -749,9 +738,6 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              // console.log(JSON.stringify(result))
-              // this.softwarePckDetails = result.data
-              // this.dialogDetailsVisible = true
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
@@ -769,12 +755,10 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              // this.softwarePckDetails = result.data
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('edit')
-              // this.dialogEditVisible = true
               console.log('edit software details ----------->   ' + JSON.stringify(this.softwareDetails))
             }.bind(this)
           )
