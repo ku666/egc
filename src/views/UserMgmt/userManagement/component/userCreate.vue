@@ -161,7 +161,7 @@ export default {
         primaryEmail: '',
         effectiveDate: '',
         expiryDate: '',
-        userAccStatus: '1',
+        userAccStatus: '2',
         uuid: '',
         userType: ''
       },
@@ -261,7 +261,7 @@ export default {
         primaryEmail: '',
         effectiveDate: '',
         expiryDate: '',
-        userAccStatus: '1',
+        userAccStatus: '2',
         uuid: ''
       }
     },
