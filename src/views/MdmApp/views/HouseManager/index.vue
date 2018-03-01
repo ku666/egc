@@ -111,9 +111,9 @@ export default {
       func(options)
         .then(res => {
           var self = this
-          self.total = res.data.data.totalCount
+          self.total = res.data.totalCount
           const timeOut = setTimeout(function () {
-            self.tableData = res.data.data.result
+            self.tableData = res.data.result
             self.loading = false
             clearTimeout(timeOut)
           }, 1000)
