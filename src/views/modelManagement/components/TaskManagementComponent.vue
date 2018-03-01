@@ -153,20 +153,22 @@
         <el-col :span="24">
           <div class="text-right">
             <el-form :inline="true" :model="modelListSearch" ref="modelListSearch" class="demo-form-inline">
-              <el-form-item label="任务创建时间区间：">
+              <el-form-item label="查询任务创建时间区间选择：">
               </el-form-item>
-              <el-form-item label="任务创建时间大于" prop="startCreateTime">
+              <el-form-item label="从" prop="startCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   v-model="modelListSearch.startCreateTime"
+                  @change="checkPlanEndTime"
                   type="datetime"
-                  placeholder="选择任务创建时间">
+                  placeholder="请选择一个日期">
                 </el-date-picker>
               </el-form-item>
               <!--<span v-if="isEndTimeErrorNoStart" class="red">请选择开始时间</span>-->
               <!--<span v-if="isStartTimeError" class="red">开始时间不能早于当前时间</span>-->
-              <el-form-item label="任务创建时间小于" prop="endCreateTime">
+              <el-form-item label="到" prop="endCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
                   :class="{ 'error-border': isEndTimeErrorBefore }"
@@ -174,7 +176,7 @@
                   @change="checkPlanEndTime"
                   v-model="modelListSearch.endCreateTime"
                   type="datetime"
-                  placeholder="选择任务创建时间">
+                  placeholder="请选择一个日期">
                 </el-date-picker>
                 <span v-if="isEndTimeErrorBefore" class="red">任务创建时间最小值不能大于任务创建时间最大值</span>
               </el-form-item>
@@ -798,7 +800,7 @@
         let endTimeStamp = new Date(this.modelListSearch.endCreateTime).getTime()
         console.info('start time is:' + this.modelListSearch.startCreateTime)
         console.info('end time is:' + this.modelListSearch.endCreateTime)
-        if (endTimeStamp < startTimeStamp) {
+        if (startTimeStamp && endTimeStamp && endTimeStamp < startTimeStamp) {
           this.isEndTimeErrorBefore = true
         } else {
           this.isEndTimeErrorBefore = false
