@@ -321,6 +321,7 @@
         editModel: {},
         modelListSearch: {
           paramCode: '',
+          communityId: '0',
           type: '全部'
         },
         paramCatList: [],
@@ -414,7 +415,7 @@
           pageSize: this.pageSize,
           condition: {
             paramCode: '%' + this.modelListSearch.paramCode + '%',
-            communityId: this.modelListSearch.communityId ? this.modelListSearch.communityId : null,
+            communityId: this.modelListSearch.communityId === '0' ? '' : this.modelListSearch.communityId,
             deleteFlag: 0
           },
           orderBy: 'createTime'
@@ -453,6 +454,9 @@
         // this.loadingStep = true
         var params = this.newModel
         console.log(params)
+        if (params.communityId === '0') {
+          params.communityId = ''
+        }
         let loadingCreate = startSystemLoading()
         addModelConfig(params)
           .then(
@@ -498,6 +502,9 @@
         params.realtimeFlag = this.realtimeFlag ? 1 : 0
 
         console.log(params)
+        if (params.communityId === '0') {
+          params.communityId = ''
+        }
         let loadingEdit = startSystemLoading()
         editSysParam(params)
           .then(
@@ -605,7 +612,7 @@
           type: 'warning'
         }).then(() => {
           // this.loading2 = true
-          let comPk = 0
+          let comPk = ''
           if (data.comSysParamPk) {
             comPk = data.comSysParamPk.toString()
           }

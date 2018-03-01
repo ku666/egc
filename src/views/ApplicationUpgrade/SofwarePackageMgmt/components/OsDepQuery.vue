@@ -37,11 +37,11 @@
         </div>
       </el-col>
     </el-row>
-    <div>
+    <!-- <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
         <os-dep-details :osDepDetails="osDepDetails"></os-dep-details>
       </el-dialog>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -60,7 +60,6 @@ export default {
       selectOpts: [],
       total: 0,
       dialogStatus: '',
-      addr: '',
       dialogDetailsVisible: false,
       osDepListData: undefined,
       osDepDetails: undefined,
@@ -69,11 +68,6 @@ export default {
         'key': '',
         'pageNo': 1,
         'pageSize': 10
-      },
-      searchItemList: {
-        'item1': '11',
-        'item2': '22',
-        'item3': '33'
       },
       tableTitleList: [
         {
@@ -102,8 +96,7 @@ export default {
           width: 120
         }
       ],
-      tableOsTitleExtData: [
-      ],
+      tableOsTitleExtData: [],
       extMaxLenth: 6,
       detailsTitle: '查看详情',
       detailsImg: require('../assets/images/details.png')
@@ -156,7 +149,7 @@ export default {
         var colName = '配置项' + i
         var extData = 'extData' + i
         var keyArr = ['colName', 'prop', 'width']
-        var valArr = [colName, extData, '80']
+        var valArr = [colName, extData, '100']
         this.tableOsTitleExtData.push(this.getExtData(keyArr, valArr))
       }
       console.log('loadData.....mounted tableOsTitleExtData over')
@@ -167,10 +160,10 @@ export default {
             console.log('Data get .....' + result.data.data.length)
             for (let i = 1; result.data.data !== null && i < result.data.data.length + 1; i++) {
               for (let k = 1; result.data.data[i - 1].extData !== null && k < this.extMaxLenth + 1; k++) {
-                console.log('Data get2222 .....')
-                var key = '配置项' + k
+                console.log('Data get2222 .....: ' + result.data.data[i - 1].extData[k - 1].value)
+                // var key = '配置项' + k
                 var key2 = 'extData' + k
-                result.data.data[i - 1][key2] = result.data.data[i - 1].extData[key]
+                result.data.data[i - 1][key2] = result.data.data[i - 1].extData[k - 1].value
               }
             }
             this.osDepListData = result.data.data

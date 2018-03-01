@@ -94,6 +94,33 @@
               <!--</div>-->
             </div>
             <!--<div class="form-info">-->
+              <!--<div class="item-info label">任务创建时间</div>-->
+              <!--<div class="item-info">-->
+                <!--<el-select @change="loadData" v-model="modelListSearch.createTime" placeholder="全部">-->
+                  <!--<el-option key="0" label="全部" value="0"></el-option>-->
+                  <!--<el-option-->
+                    <!--v-for="item in selectTimeSpan"-->
+                    <!--:key="item.value"-->
+                    <!--:label="item.label"-->
+                    <!--:value="item.value"-->
+                  <!--&gt;</el-option>-->
+                  <!--&lt;!&ndash;<el-option key="1" label="最近24小时" value="curTimestamp/1000 - 24*60*60"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="2" label="最近72小时" value="20"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="3" label="最近7天" value="30"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="4" label="最近30天" value="40"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="5" label="最近90天" value="50"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="2" label="最近72小时" value="curTimestamp/1000 - 72*60*60"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="3" label="最近7天" value="curTimestamp/1000 - 7*24*60*60"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="4" label="最近30天" value="curTimestamp/1000 - 30*24*60*60"></el-option>&ndash;&gt;-->
+                  <!--&lt;!&ndash;<el-option key="5" label="最近90天" value="curTimestamp/1000 - 90*24*60*60"></el-option>&ndash;&gt;-->
+                <!--</el-select>-->
+                <!--&lt;!&ndash;<el-input @keyup.enter.native="loadData" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>&ndash;&gt;-->
+              <!--</div>-->
+              <!--&lt;!&ndash;<div class="item-info">&ndash;&gt;-->
+              <!--&lt;!&ndash;<el-button type="primary" @click="onSubmit">查询</el-button>&ndash;&gt;-->
+              <!--&lt;!&ndash;</div>&ndash;&gt;-->
+            <!--</div>-->
+            <!--<div class="form-info">-->
               <!--<div class="item-info label">执行IP</div>-->
               <!--<div class="item-info">-->
                 <!--<el-input @keyup.enter.native="loadData" id="searchIp" @blur="inputBlur" v-model="modelListSearch.ip"></el-input>-->
@@ -120,6 +147,43 @@
           <!--</el-form-item>-->
           <!--</el-form>-->
           <!--</div>-->
+        </el-col>
+      </el-row>
+      <el-row class="margin-top-25">
+        <el-col :span="24">
+          <div class="text-right">
+            <el-form :inline="true" :model="modelListSearch" ref="modelListSearch" class="demo-form-inline">
+              <el-form-item label="任务创建时间区间：">
+              </el-form-item>
+              <el-form-item label="任务创建时间大于" prop="startCreateTime">
+                <!--<span class="demonstration">默认</span>-->
+                <el-date-picker
+                  format="yyyy-MM-dd HH:mm"
+                  v-model="modelListSearch.startCreateTime"
+                  type="datetime"
+                  placeholder="选择任务创建时间">
+                </el-date-picker>
+              </el-form-item>
+              <!--<span v-if="isEndTimeErrorNoStart" class="red">请选择开始时间</span>-->
+              <!--<span v-if="isStartTimeError" class="red">开始时间不能早于当前时间</span>-->
+              <el-form-item label="任务创建时间小于" prop="endCreateTime">
+                <!--<span class="demonstration">默认</span>-->
+                <el-date-picker
+                  :class="{ 'error-border': isEndTimeErrorBefore }"
+                  format="yyyy-MM-dd HH:mm"
+                  @change="checkPlanEndTime"
+                  v-model="modelListSearch.endCreateTime"
+                  type="datetime"
+                  placeholder="选择任务创建时间">
+                </el-date-picker>
+                <span v-if="isEndTimeErrorBefore" class="red">任务创建时间最小值不能大于任务创建时间最大值</span>
+              </el-form-item>
+              <el-form-item>
+                <el-button :disabled="isEndTimeErrorBefore" class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>
+                <!--<el-button v-if="isEndTimeErrorBefore" disabled class = "search-btn" type="primary" @click="onSubmit('modelListSearch')">查询</el-button>-->
+              </el-form-item>
+            </el-form>
+          </div>
         </el-col>
       </el-row>
 
@@ -186,17 +250,17 @@
             <span v-if="!scope.row.paramListJson">无参数</span>
           </template>
         </el-table-column>
-        <el-table-column
-          label="任务开始时间">
-          <template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>
-        </el-table-column>
+        <!--<el-table-column-->
+          <!--label="任务开始时间">-->
+          <!--<template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>-->
+        <!--</el-table-column>-->
         <el-table-column
           label="任务结束时间">
           <template slot-scope="scope" v-if="scope.row.endTime">{{ scope.row.endTime | formatDate }}</template>
         </el-table-column>
         <el-table-column
           label="任务执行时间（秒）">
-          <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec/1000 }}</template>
+          <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec }}</template>
         </el-table-column>
 
         <el-table-column
@@ -320,7 +384,7 @@
               </el-form-item>
             </el-col>
             <el-col :span="24" v-for="(item, index) in curPlanExcuteParams.pl" :key="index">
-              <el-form-item>
+              <el-form-item :label="item.n" prop="item">
                 <el-input disabled="disabled" size="small" v-model="item.dv"></el-input>
                 <!-- <span>{{item.v}}</span> -->
               </el-form-item>
@@ -462,6 +526,7 @@
           taskType: 'mm.tsktyp.exe',
           taskSource: '全部',
           taskStatus: '全部',
+          communityId: '全部',
           ip: ''
         },
         rules: {
@@ -474,6 +539,22 @@
           url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
           data: {}
         },
+        // selectTimeSpan: [{
+        //   value: this.getTimeSpan(86400000),
+        //   label: '最近24小时'
+        // }, {
+        //   value: this.getTimeSpan(259200000),
+        //   label: '最近72小时'
+        // }, {
+        //   value: this.getTimeSpan(604800000),
+        //   label: '最近7天'
+        // }, {
+        //   value: this.getTimeSpan(2592000000),
+        //   label: '最近30天'
+        // }, {
+        //   value: this.getTimeSpan(7776000000),
+        //   label: '最近90天'
+        // }],
         showModelInfo: false,
         showUploadArea: true,
         curPlanExcuteParams: {},
@@ -510,7 +591,10 @@
         modelPlanList: [],
         multipleSelection: [],
         communityIdList: [],
-        communityIdListMap: {}
+        communityIdListMap: {},
+        isStartTimeError: false,
+        isEndTimeErrorNoStart: false,
+        isEndTimeErrorBefore: false
       }
     },
     mounted () {
@@ -630,6 +714,18 @@
         } else {
           condition.communityId = undefined
         }
+        if (this.modelListSearch.startCreateTime && this.modelListSearch.startCreateTime !== '全部' && this.modelListSearch.startCreateTime !== '0') {
+          condition.startCreateTime = new Date(this.modelListSearch.startCreateTime)
+          console.log('create time is: ' + this.modelListSearch.startCreateTime)
+        } else {
+          condition.startCreateTime = undefined
+        }
+        if (this.modelListSearch.endCreateTime && this.modelListSearch.endCreateTime !== '全部' && this.modelListSearch.endCreateTime !== '0') {
+          condition.endCreateTime = new Date(this.modelListSearch.endCreateTime)
+          console.log('end time is: ' + condition.endCreateTime)
+        } else {
+          condition.endCreateTime = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
@@ -644,7 +740,7 @@
               this.modelPlanList = result.data.items
               this.total = result.data.pageCount
               for (let i = 0; i < this.modelPlanList.length; i++) {
-                if (this.modelPlanList[i].paramList.indexOf('{') > -1 && this.modelPlanList[i].paramList.indexOf('pl') > -1) {
+                if (this.modelPlanList[i].paramList && this.modelPlanList[i].paramList.indexOf('{') > -1 && this.modelPlanList[i].paramList.indexOf('pl') > -1) {
                   this.modelPlanList[i].paramList = JSON.parse(this.modelPlanList[i].paramList)
                   this.modelPlanList[i].paramListJson = this.modelPlanList[i].paramList.ep.pl
                   let length = this.modelPlanList[i].paramListJson.length
@@ -698,7 +794,25 @@
       },
       onSubmit () {
         console.log('submit!')
-        this.loadData()
+        let startTimeStamp = this.modelListSearch.startCreateTime
+        let endTimeStamp = new Date(this.modelListSearch.endCreateTime).getTime()
+        console.info('start time is:' + this.modelListSearch.startCreateTime)
+        console.info('end time is:' + this.modelListSearch.endCreateTime)
+        if (endTimeStamp < startTimeStamp) {
+          this.isEndTimeErrorBefore = true
+        } else {
+          this.isEndTimeErrorBefore = false
+          this.loadData()
+        }
+        // this.$refs[formName].validate((valid) => {
+        //   if (valid) {
+        //     // alert('submit!')
+        //     this.loadData()
+        //   } else {
+        //     console.log('error submit!!')
+        //     return false
+        //   }
+        // })
       },
       handleSizeChange (val) {
         console.log(`每页 ${val} 条`)
@@ -765,6 +879,9 @@
           })
         })
       },
+      // selectChange (event) {
+      //   console.log(this.modelListSearch.startTime)
+      // },
       showAddModelDialog () {
         this.currentStep = 1
         this.resetForm('newModelVersion')
@@ -817,6 +934,24 @@
         //     done()
         //   })
         //   .catch(_ => {})
+      },
+      getTimeSpan (days) {
+        var curTimestamp = new Date().getTime()
+        console.log(curTimestamp)
+        console.log(curTimestamp - days)
+        return curTimestamp - days
+      },
+      checkPlanEndTime () {
+        console.info(this.modelListSearch.startCreateTime)
+        console.info(this.modelListSearch.endCreateTime)
+        // let nowTimeStamp = new Date().getTime()
+        let endTimeStamp = new Date(this.modelListSearch.endCreateTime).getTime()
+        let startTimeStamp = this.modelListSearch.startCreateTime ? (new Date(this.modelListSearch.startCreateTime).getTime()) : 0
+        if (endTimeStamp && endTimeStamp < startTimeStamp) {
+          this.isEndTimeErrorBefore = true
+        } else {
+          this.isEndTimeErrorBefore = false
+        }
       }
     }
   }
