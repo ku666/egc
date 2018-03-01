@@ -1,17 +1,11 @@
-import fetch from '../utils/fetch'
+import Axios from '@/assets/js/AxiosPlugin'
 
-export function getHousesByOrgUuid (data) {
-  return fetch({
-    url: '/egc-mdmmgmtapp/org/getHousesByOrgUuid',
-    method: 'POST',
-    data: data
-  })
+export const getHousesByOrgUuid = (data) => {
+  return Axios.post('/egc-mdmmgmtapp/org/getHousesByOrgUuid', data
+  ).then(res => res.data)
 }
 
-export function getOrgTreeNextLevel (data) {
-  return fetch({
-    url: '/egc-mdmmgmtapp/org/getOrgTreeNextLevel',
-    method: 'POST',
-    data: data
-  })
+export const getOrgTreeNextLevel = (data) => {
+  return Axios.post('/egc-mdmmgmtapp/org/getOrgTreeNextLevel', data
+  ).then(res => res.data)
 }

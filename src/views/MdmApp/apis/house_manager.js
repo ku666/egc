@@ -1,17 +1,11 @@
-import fetch from '../utils/fetch'
+import Axios from '@/assets/js/AxiosPlugin'
 
-export function getHousesByConditions (data) {
-  return fetch({
-    url: '/egc-mdmmgmtapp/house/getHousesByConditions',
-    method: 'POST',
-    data: data
-  })
+export const getHousesByConditions = (data) => {
+  return Axios.post('/egc-mdmmgmtapp/house/getHousesByConditions', data
+  ).then(res => res.data)
 }
 
-export function getHousesByUserUuid (data) {
-  return fetch({
-    url: '/egc-mdmmgmtapp/house/getHousesByUserUuid',
-    method: 'POST',
-    data: data
-  })
+export const getHousesByUserUuid = (data) => {
+  return Axios.post('/egc-mdmmgmtapp/house/getHousesByUserUuid', data
+  ).then(res => res.data)
 }
