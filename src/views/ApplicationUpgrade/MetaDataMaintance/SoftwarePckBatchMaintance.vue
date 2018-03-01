@@ -4,7 +4,7 @@
       <el-form :inline="true" :model="searchConditionList">
         <div class="search-container">
           <el-form-item label="软件包批次名称">
-            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>

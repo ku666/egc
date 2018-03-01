@@ -28,13 +28,13 @@
 
       <div class="search-container">
         <el-form-item label="软件包名称">
-          <el-input v-model="searchConditionList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="dispthpckg_el-input"></el-input>
+          <el-input v-model="searchConditionList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="dispthpckg_el-input" @keyup.enter.native="_callHandleFilter"></el-input>
         </el-form-item>
         <el-form-item label="软件包版本" :label-width="formLabelWidth">
-          <el-input v-model="searchConditionList.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="dispthsearch_el-input"></el-input>
+          <el-input v-model="searchConditionList.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="dispthsearch_el-input" @keyup.enter.native="_callHandleFilter"></el-input>
         </el-form-item>
         <el-form-item label="搜索关键字" :label-width="formLabelWidth">
-          <el-input v-model="searchConditionList.keyWord" placeholder="请输入搜索关键字" clearable :maxlength="maxlength" class="dispthsearch_el-input"></el-input>
+          <el-input v-model="searchConditionList.keyWord" placeholder="请输入搜索关键字" clearable :maxlength="maxlength" class="dispthsearch_el-input" @keyup.enter.native="_callHandleFilter"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>

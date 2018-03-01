@@ -21,7 +21,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="搜索条件">
-          <el-input v-model="searchConDetails.condition" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
+          <el-input v-model="searchConDetails.condition" @keyup.enter.native="_callHandleFilter" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
