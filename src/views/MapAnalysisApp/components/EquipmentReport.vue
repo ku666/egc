@@ -1,28 +1,24 @@
 <template>
   <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="closeDialog">
-    <!-- <div slot="title">
-      <span class="pull-left">设备数报表</span>
-    </div> -->
     <div class="container">
       <el-button type="primary" @click="chartSwitch">图表</el-button>
       <el-button type="success" @click="tableSwitch">表格</el-button>
-      <div class="courtName">{{cellDetailsList.courtName}}</div>
-      <div v-show="isChartShow" class="chartContainer">
-        <div id="equipmentchartsbox">
+      <div class="court-name">{{cellDetailsList.courtName}}</div>
+      <div v-show="isChartShow" class="chart-container">
+        <div id="equipment-chartsbox">
           <span v-show="noDataTips">暂无数据 </span>
           <img v-show="isReponseData" src="../assets/images/err.png">
-          <div id="equipmentcharts"></div>
+          <div id="equipment-charts"></div>
         </div>
-        <div id="equipmentonlinechartsbox">
+        <div id="equipment-online-chartsbox">
           <span v-show="noDataTips">暂无数据 </span>
           <img v-show="isReponseData" src="../assets/images/err.png">
-          <div id="equipmentonlinecharts"></div>
+          <div id="equipment-online-charts"></div>
         </div>
-        <!-- <div class="clear"></div> -->
       </div>
       <div v-show="isTableShow">
-        <div class="equipmentTable">
-          <el-table :data="tableData1" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
+        <div class="equipment-table">
+          <el-table :data="tableData" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
             <el-table-column prop="deviceType" label="设备ID" align="center">
             </el-table-column>
             <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
@@ -32,8 +28,6 @@
             <el-table-column prop="onlineCount" label="在网数量" align="center">
             </el-table-column>
           </el-table>
-          <!-- <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
-          </el-pagination> -->
         </div>
       </div>
     </div>
@@ -45,67 +39,41 @@ export default {
   name: 'EquipmentReport',
   data () {
     return {
-      dialogReportVisible: false,
-      isChartShow: true,
-      isTableShow: false,
-      isReponseData: false,
-      noDataTips: false,
-      tableData: [],
-      names: [],
-      onlinenames: [],
-      tableData1: [],
-      onlinedata: [],
-      totaldata: [],
+      dialogReportVisible: false, // 显示设备信息弹框
+      isChartShow: true, // echarts图表显示
+      isTableShow: false, // 表格显示
+      isReponseData: false, // ajax是否成功获取数据
+      noDataTips: false, // 没有数据是显示“暂无数据”
+      tableData: [], // 表格数据
+      names: [], // 设备总数echarts图表图例数据
+      onlinenames: [], // 实时在网设备echart图表图例数据
+      onlinedata: [], // 实时在网设备echart图表数据
+      totaldata: [], // 设备总数echarts图表数据
       cellDetailsList: {}, // 小区详细信息
-      equipmentcharts: {},
-      equipmentonlinecharts: {}
+      equipmentcharts: {}, // 总设备数据echarts实例
+      equipmentonlinecharts: {} // 实时在网设备数据echarts实例
     }
   },
   methods: {
-    getSummaries (param) {
-      const { columns, data } = param
-      const sums = []
-      columns.forEach((column, index) => {
-        if (index === 0) {
-          sums[index] = '总数量'
-          return
-        }
-        if (index === 1) {
-          sums[index] = ''
-          return
-        }
-        const values = data.map(item => Number(item[column.property]))
-        console.log('values')
-        console.log(values)
-        if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr)
-            if (!isNaN(value)) {
-              return prev + curr
-            } else {
-              return prev
-            }
-          }, 0)
-          sums[index] += ''
-        } else {
-          sums[index] = 'N/A'
-        }
-      })
-      return sums
-    },
-    // 点击图标
+    /**
+     * echarts图表展示
+     */
     chartSwitch () {
       this.isChartShow = true
       this.isTableShow = false
     },
-    // 点击表格
+    /**
+     * 表格展示
+     */
     tableSwitch () {
       this.isChartShow = false
       this.isTableShow = true
-      this.tableData1 = this.tableData
     },
+    /**
+     * 设备总数据echart初始化
+     */
     chartInit () {
-      let equipmentcharts = this.$echarts.init(document.getElementById('equipmentcharts'))
+      let equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
       console.log(equipmentcharts)
       this.equipmentcharts = equipmentcharts
       // 设备数量数据
@@ -159,8 +127,11 @@ export default {
       }
       equipmentcharts.setOption(option)
     },
+    /**
+     * 实时在网设备数据echart初始化
+     */
     onlineChartInit () {
-      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipmentonlinecharts'))
+      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
       this.equipmentonlinecharts = equipmentonlinecharts
       let option1 = {
         // backgroundColor: 'rgba(0,0,33,0.1)',
@@ -202,6 +173,9 @@ export default {
       }
       equipmentonlinecharts.setOption(option1)
     },
+    /**
+     * ajax获取设备小区设备数据
+     */
     equipmentReport (courtId) {
       this.dialogReportVisible = true
       if (!courtId) { courtId = '222b79f4a7b44d03b6f55f028992851f' }
@@ -280,6 +254,9 @@ export default {
         })
       })
     },
+    /**
+     * 关闭小区设备信息弹窗
+     */
     closeDialog () {
       this.isChartShow = true
       this.isTableShow = false
@@ -288,6 +265,39 @@ export default {
       this.totaldata = []
       if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
       if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
+    },
+    /**
+     * 表格数据求和
+     * @param {Object} param elementUI隐式传递参数
+     */
+    getSummaries (param) {
+      const { columns, data } = param
+      const sums = []
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '总数量'
+          return
+        }
+        if (index === 1) {
+          sums[index] = ''
+          return
+        }
+        const values = data.map(item => Number(item[column.property]))
+        if (!values.every(value => isNaN(value))) {
+          sums[index] = values.reduce((prev, curr) => {
+            const value = Number(curr)
+            if (!isNaN(value)) {
+              return prev + curr
+            } else {
+              return prev
+            }
+          }, 0)
+          sums[index] += ''
+        } else {
+          sums[index] = 'N/A'
+        }
+      })
+      return sums
     }
   }
 }
@@ -296,21 +306,21 @@ export default {
 .container {
   margin-top: -25px;
 }
-.courtName {
+.court-name {
   color: #000;
   font-size: 20px;
   font-weight: bold;
   margin: -30px 0 35px;
   text-align: center;
 }
-.chartContainer {
+.chart-container {
   display: flex;
   flex-flow: row wrap;
   align-items: flex-start;
   justify-content: center;
   margin-top: 10px;
 }
-#equipmentchartsbox {
+#equipment-chartsbox {
   width: 620px;
   height: 600px;
   border: 1px solid #ccc;
@@ -319,13 +329,13 @@ export default {
   overflow: hidden;
   margin: 0 2px 2px 2px;
 }
-#equipmentchartsbox img {
+#equipment-chartsbox img {
   margin-top: 200px;
 }
-#equipmentcharts {
+#equipment-charts {
   height: 600px;
 }
-#equipmentonlinechartsbox {
+#equipment-online-chartsbox {
   width: 620px;
   height: 600px;
   border: 1px solid #ccc;
@@ -333,10 +343,10 @@ export default {
   line-height: 600px;
   overflow: hidden;
 }
-#equipmentonlinechartsbox img {
+#equipment-online-chartsbox img {
   margin-top: 200px;
 }
-#equipmentonlinecharts {
+#equipment-online-charts {
   height: 600px;
 }
 .clear {

@@ -1,50 +1,50 @@
 <template>
   <el-container>
-    <div class="mapCon">
-      <div class="infoCon">
-        <h2 class="infoTitle">{{courtInfo.courtName}}</h2>
-        <div class="itemCl">
-          <span class="itemlabel">小区地址：</span>
-          <span class="itemvalue">{{courtInfo.regionName}}</span>
+    <div class="map-con">
+      <div class="info-con">
+        <h2 class="info-title">{{courtInfo.courtName}}</h2>
+        <div class="item-row">
+          <span class="item-label">小区地址：</span>
+          <span class="item-value">{{courtInfo.regionName}}</span>
         </div>
-        <div class="itemCl">
-          <span class="itemlabel">房屋总数：</span>
-          <span class="itemvalue">{{courtInfo.houseCount}}栋</span>
+        <div class="item-row">
+          <span class="item-label">房屋总数：</span>
+          <span class="item-value">{{courtInfo.houseCount}}栋</span>
         </div>
-        <div class="itemCl">
-          <span class="itemlabel">户数总数：</span>
-          <span class="itemvalue">{{courtInfo.homeCount}}户</span>
+        <div class="item-row">
+          <span class="item-label">户数总数：</span>
+          <span class="item-value">{{courtInfo.homeCount}}户</span>
         </div>
-        <div class="itemCl">
-          <span class="itemlabel">建筑面积：</span>
-          <span class="itemvalue">{{courtInfo.buildArea}}平方米</span>
+        <div class="item-row">
+          <span class="item-label">建筑面积：</span>
+          <span class="item-value">{{courtInfo.buildArea}}平方米</span>
         </div>
-        <div class="itemCl">
-          <span class="itemlabel">占地面积：</span>
-          <span class="itemvalue">{{courtInfo.floorArea}}平方米</span>
+        <div class="item-row">
+          <span class="item-label">占地面积：</span>
+          <span class="item-value">{{courtInfo.floorArea}}平方米</span>
         </div>
       </div>
-      <!-- end infoCon -->
-      <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
-        <div id="mapECarts2" style="width:480px; height:330px"></div>
-        <div v-show="isPerErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      <!-- end info-con -->
+      <el-card class="echarts-box">
+        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
+        <div id="map-ecarts2" style="width:480px; height:330px"></div>
+        <div v-show="isPerErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
-      <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
-        <div id="mapECarts3" style="width:480px; height:330px"></div>
-        <div v-show="isCarErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      <el-card class="echarts-box">
+        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
+        <div id="map-ecarts3" style="width:480px; height:330px"></div>
+        <div v-show="isCarErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
-      <el-card class="echartsBox1">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
-        <div id="mapECarts0" class="smallBox" style="width:420px; height:330px"></div>
-        <div id="mapECarts1" class="smallBox" style="width:570px; height:330px"></div>
-        <div v-show="isOwnerErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      <el-card class="echarts-box1">
+        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
+        <div id="map-ecarts0" class="small-box" style="width:420px; height:330px"></div>
+        <div id="map-ecarts1" class="small-box" style="width:570px; height:330px"></div>
+        <div v-show="isOwnerErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
-      <el-card class="echartsBox">
-        <el-button class="checkmoreBtn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
-        <div id="mapECarts4" style="width:480px; height:330px"></div>
-        <div v-show="isEquiErrInfo" class="errInfo"><img :src="perErrImg"></div>
+      <el-card class="echarts-box">
+        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
+        <div id="map-ecarts4" style="width:480px; height:330px"></div>
+        <div v-show="isEquiErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
       <car-stream ref="carStream"></car-stream>
       <stream-people ref="streamPeople"></stream-people>
@@ -63,6 +63,7 @@ import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   components: {
@@ -96,6 +97,7 @@ export default {
   },
   mounted: function () {
     this.courtInfo.courtUuid = this.$route.params.courtUuid
+    console.log(LOG_TAG + ' 初始化小区详情页面  ')
     this.getCourtInfoData()
     var sDate = new Date()
     var eDate = new Date()
@@ -112,7 +114,7 @@ export default {
     getCourtInfoData: function () {
       let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
-        // console.log(res)
+        console.log(LOG_TAG + ' 获取到小区详细信息  ')
         if (res.data.code === '00000') {
           let list = res.data.data
           this.courtInfo = Object.assign({}, list)
@@ -138,7 +140,6 @@ export default {
         endTime: this.endTime
       }
       getCourtPerAccessInfo(param).then(res => {
-        // console.log(res)
         let isEmpty = true // 人流报表数据是否为空
         if (res.data.code === '00000') {
           let data = res.data.data
@@ -148,8 +149,6 @@ export default {
           let perOutCount = []
           data.map(function (item, index) {
             timeDate.push(item.date.substr(0, 13) + '点')
-            // if (item.perInCount === '0') item.perInCount = Math.round(Math.random() * 1000)
-            // if (item.perOutCount === '0') item.perOutCount = Math.round(Math.random() * 1000)
             perInCount.push(parseFloat(item.perInCount))
             perOutCount.push(parseFloat(item.perOutCount))
           })
@@ -185,7 +184,6 @@ export default {
         endTime: this.endTime
       }
       getCourtCarAccessInfo(param).then(res => {
-        // console.log(res)
         if (res.data.code === '00000') {
           let data = res.data.data
           data = data.reverse()
@@ -194,8 +192,6 @@ export default {
           let carOutCount = []
           data.map(function (item, index) {
             timeDate.push(item.date.substr(0, 13) + '点')
-            // if (item.carInCount === '0') item.carInCount = Math.round(Math.random() * 1000)
-            // if (item.carOutCount === '0') item.carOutCount = Math.round(Math.random() * 1000)
             carInCount.push(parseFloat(item.carInCount))
             carOutCount.push(parseFloat(item.carOutCount))
           })
@@ -281,8 +277,6 @@ export default {
           let list = res.data.data
           let lastAge = 80
           let lastAgeNum = 0
-          if (!list.sexInfo) list.sexInfo[0].maleOwner = Math.round(Math.random() * 1000)
-          if (!list.sexInfo) list.sexInfo[0].femaleOwner = Math.round(Math.random() * 1000)
           let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
           list = list.ageGroupInfo
           list.map(function (item, index) {
@@ -323,7 +317,6 @@ export default {
     },
     // 查看各个报表的详情
     handleCheckDetail: function (index) {
-      // console.log('查看各个报表的详情 ' + index)
       switch (index) {
         case 0:
           this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtUuid)
@@ -340,13 +333,13 @@ export default {
       }
     },
     getMyCharts: function (index) {
-      return this.echartsList[index] ? this.echartsList[index] : this.$echarts.init(document.getElementById('mapECarts' + index))
+      return this.echartsList[index] ? this.echartsList[index] : this.$echarts.init(document.getElementById('map-ecarts' + index))
     }
   }
 }
 </script>
 <style lang="less" scoped>
-.mapCon {
+.map-con {
   width: 100%;
   height: 800px;
   min-width: 1650px;
@@ -360,29 +353,29 @@ export default {
     padding: 10px 20px;
   }
 }
-.infoCon {
+.info-con {
   display: inline-block;
   width: 520px;
   text-align: center;
   vertical-align: middle;
 }
-.infoTitle{
+.info-title {
   margin-top: 23px;
 }
-.itemCl {
+.item-row {
   margin: 35px 0px;
 }
-.itemlabel {
+.item-label {
   color: rgb(180, 154, 154);
 }
-.itemvalue {
+.item-value {
   display: inline-block;
   width: 300px;
   text-align: left;
   padding-left: 10px;
   border-bottom: 1px solid #ccc;
 }
-.echartsBox1 {
+.echarts-box1 {
   position: relative;
   display: inline-block;
   width: 1045px;
@@ -390,7 +383,7 @@ export default {
   margin: 15px 0px 10px 15px;
   vertical-align: middle;
 }
-.echartsBox {
+.echarts-box {
   position: relative;
   display: inline-block;
   width: 520px;
@@ -398,10 +391,10 @@ export default {
   margin: 15px 0px 10px 15px;
   vertical-align: middle;
 }
-.smallBox {
+.small-box {
   display: inline-block;
 }
-.errInfo {
+.err-info {
   position: absolute;
   top: 60px;
   left: 0;
@@ -413,7 +406,7 @@ export default {
   font-size: 20px;
   font-weight: bold;
 }
-.checkmoreBtn {
+.checkmore-btn {
   display: inline-block;
   width: 70px;
   height: 30px;
