@@ -250,7 +250,7 @@ export default {
       // 根据人员的uuid获取该人员的房产信息
       getHousesByUserUuid({ 'userUuid': rowData.uuid })
         .then(res => {
-          this.modelDetailForm.detail = res.data.data
+          this.modelDetailForm.detail = res.data
         })
         .catch(err => {
           console.log(err)
@@ -261,7 +261,7 @@ export default {
       getCourtsByConditions({ 'name': query, 'pageSize': 1000, 'currentPage': 1 })
         .then(res => {
           this.getCourtsLoading = false
-          this.courts = res.data.data.result
+          this.courts = res.data.result
         })
         .catch(
         function (error) {
