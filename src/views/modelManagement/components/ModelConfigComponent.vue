@@ -321,7 +321,7 @@
         editModel: {},
         modelListSearch: {
           paramCode: '',
-          communityId: '0',
+          // communityId: '0',
           type: '全部'
         },
         paramCatList: [],

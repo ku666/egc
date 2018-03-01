@@ -34,7 +34,7 @@
     <el-row style='height: 100%;'>
       <el-col style='height: 100%;'>
         <div style="margin-top: 15px; max-height: 100%;"> 
-          <el-table :data="softwarePackListData" stripe border v-loading="loading" style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
+          <el-table :data="softwarePackListData" stripe border style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
@@ -206,10 +206,11 @@
                       drag
                       multiple
                       :visible="false"
-                      :limit=10
+                      :limit=100
                       :show-file-list="true"
                       :on-exceed="handleExceed"
                       :on-change="handleOnchange"
+                      :on-remove="handleOnchange"
                       :auto-upload="false"
                       :file-list="fileList">
                       <i class="el-icon-upload"></i>
@@ -253,6 +254,7 @@
         <software-package-edit :softwarePckDetails="softwarePckDetails" @updateSoftwareInfoEvent="_updateSofwareInfo"></software-package-edit>
       </el-dialog>
     </div> -->
+    <!--软件包历史数据-->
     <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <software-package-history ref="packageHistory" :rowIdx="rowIdx" :hisUuid ="hisUuid"></software-package-history>
@@ -267,15 +269,16 @@
               <el-col :span="24">
                 <el-form-item label="选择导入模板" :label-width="formLabelWidth" prop="uploadFiles">
                   <el-upload
-                    ref="uploadPackageJarFiles"
+                    ref="uploadPackageExcelTemplate"
                     class="avatar-uploader"
                     action=""
                     drag
                     :multiple = "false"
                     :limit=1
                     :show-file-list="true"
-                    :on-exceed="handleImportExceed"
-                    :on-change="handleImportOnchange"
+                    :on-exceed="handleImportExcelTemplateExceed"
+                    :on-change="handleImportExcelTemplateOnchange"
+                    :on-remove="handleImportExcelTemplateOnchange"
                     :auto-upload="false"
                     :file-list="fileList">
                     <i class="el-icon-upload"></i>
@@ -284,26 +287,27 @@
                   </el-upload>
                 </el-form-item>
               </el-col>
-              <!-- <el-col :span="24">
-                <el-form-item label="选择软件包" :label-width="formLabelWidth" prop="uploadFiles">
+              <el-col :span="24">
+                <el-form-item label="选择软件包以及关联附件" :label-width="formLabelWidth" prop="uploadJarAttachmentFiles">
                   <el-upload
-                    ref="uploadPackageJar1Files"
+                    ref="uploadPackageJarAttachmentFiles"
                     class="avatar-uploader"
                     action=""
                     drag
-                    :multiple = "false"
-                    :limit=1
+                    :multiple = "true"
+                    :limit=100
                     :show-file-list="true"
-                    :on-exceed="handleImportExceed"
-                    :on-change="handleImportOnchange"
+                    :on-exceed="handleImportJarAttachmentExceed"
+                    :on-change="handleImportJarAttachmentOnchange"
+                    :on-remove="handleImportJarAttachmentOnchange"
                     :auto-upload="false"
-                    :file-list="fileList">
+                    :file-list="fileJarAttachmentList">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                    <div class="el-upload__tip" slot="tip">上传文件，且不超过500M</div>
                   </el-upload>
                 </el-form-item> 
-              </el-col>-->
+              </el-col>
             </el-row>
             <div style="text-align:center;">
               <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
@@ -357,6 +361,7 @@ export default {
       hisUuid: '',
       softwarePackListData: undefined,
       softwarePckDetails: undefined,
+      batchs: undefined,
       softwarePckHistory: undefined,
       loading: false,
       softwareDetails: {
@@ -398,6 +403,10 @@ export default {
       },
       optType: '',
       uploadFiles: new FormData(),
+      uploadJarAttachmentFiles: new FormData(),
+      importFiles: new FormData(),
+      excelArray: [],
+      JarAttachmentArray: [],
       tableTitleList: [
         {
           colName: '软件包名称',
@@ -438,6 +447,7 @@ export default {
       historyTitle: '历史信息',
       formLabelWidth: '110px',
       fileList: [],
+      fileJarAttachmentList: [],
       maxlength: 30,
       funType: [{
         value: '软件',
@@ -524,24 +534,42 @@ export default {
       this.searchConditionList.provider = ''
       this.searchConditionList.key = ''
     },
-
-    // 软件包注册
+    _handleClearRegister (detail) {
+      detail.name = ''
+      detail.nameEn = ''
+      detail.version = ''
+      detail.developer = ''
+      detail.latestPreVer = ''
+      detail.remark = ''
+      detail.batchId = ''
+      detail.lastestPreName = ''
+      detail.functionDesc = ''
+      detail.gitRepository = ''
+      detail.mavenName = ''
+      detail.svrPkgName = ''
+      detail.cltPkgName = ''
+      detail.port = ''
+      detail.functionType = ''
+      detail.appType = ''
+    },
     _handleRegister () {
       this.dialogTitle = '软件包信息注册'
-      this.dialogRegisterVisible = true
-      this.switchInputDisable('add')
-      this.softwareDetails = []
-      this.$refs['softwareDetails'].resetFields()
-      this.$refs.softwareDetails.resetFields()
       this.fileList = []
+      this.dialogRegisterVisible = true
+      this.$refs['softwareDetails'].resetFields()
+      this._handleClearRegister(this.softwareDetails)
+      this.switchInputDisable('add')
     },
+    // 软件包注册
     _registerSoftware (formName) {
-      console.info(JSON.stringify(this.$refs.uploadJarFiles._data.uploadFiles))
+      console.info('_registerSoftware')
+      console.info(JSON.stringify(this.softwareDetails))
       if (!this.beforeUploadCheckedFiles(this.$refs.uploadJarFiles._data.uploadFiles)) {
         this.$message.error('上传文件中至少要有1个指定的软件包 jar/war 格式的文件!')
         return false
       }
-      console.info(JSON.stringify(this.uploadFiles))
+      console.info('_registerSoftware add')
+      console.info(this.uploadFiles)
       var fileLength = this.$refs.uploadJarFiles._data.uploadFiles.length
       this.$refs[formName].validate(valid => {
         if (valid) {
@@ -588,7 +616,12 @@ export default {
         return false
       }
       for (let i = 0; i < fileList.length; i++) {
+        console.info('handleOnchange add file')
         this.uploadFiles.append('files', fileList[i].raw)
+        console.info(fileList[i].raw)
+        console.info(this.uploadFiles)
+        console.info(JSON.stringify(this.uploadFiles))
+        console.info('handleOnchange add file end')
       }
     },
     beforeUploadCheckedFiles (files) {
@@ -617,19 +650,31 @@ export default {
       this.dialogImportVisible = true
     },
     _importRegisterSoftware () {
-      console.info('_importRegisterSoftware')
-      console.info(JSON.stringify(this.uploadFiles))
-      var fileLength = this.$refs.uploadPackageJarFiles._data.uploadFiles.length
-      if (fileLength > 0) {
-        uploadExcelFiles(this.uploadFiles)
+      console.info('uploadPackageExcelTemplate')
+      console.info(this.uploadFiles)
+      console.info('uploadPackageJarAttachmentFiles')
+      console.info(this.uploadJarAttachmentFiles)
+      var fileLength = this.$refs.uploadPackageExcelTemplate._data.uploadFiles.length
+      var fileJarAttachmentLength = this.$refs.uploadPackageJarAttachmentFiles._data.uploadFiles.length
+      if (fileLength > 0 && fileJarAttachmentLength > 0) {
+        this.importFiles = new FormData()
+        this.importFiles.append('excelfile', this.excelArray[0])
+        console.info('JarAttachmentArray 包含文件数:' + this.JarAttachmentArray.length)
+        for (let i = 0; i < this.JarAttachmentArray.length; i++) {
+          this.importFiles.append('multipartFiles', this.JarAttachmentArray[i])
+        }
+        uploadExcelFiles(this.importFiles)
         .then((res) => {
           console.log('===>' + res)
           this.$message.success('上传成功', 2000)
           this.dialogImportVisible = false
           this.fileList = []
+          this.fileJarAttachmentList = []
+          this.importFiles = new FormData()
           this.loadData()
         }).catch(
           function (error) {
+            console.log('上传成功失败===>' + error.message)
             this.$message({
               message: error.message,
               center: true,
@@ -649,14 +694,39 @@ export default {
         })
       }
     },
-    handleImportOnchange (file, fileList) {
-      console.info('handleImportOnchange')
+    // 软件包导入模板关联方法
+    handleImportExcelTemplateOnchange (file, fileList) {
+      console.info('handleImportExcelTemplateOnchange')
+      console.info(file)
+      console.info(fileList)
+      this.excelArray = []
       for (let i = 0; i < fileList.length; i++) {
-        this.uploadFiles.append('file', fileList[i].raw)
+        console.info('append importExcelTemp')
+        console.info(fileList[i].raw)
+        this.excelArray.push(fileList[i].raw)
       }
+      console.info('append importFiles')
+      console.info(this.excelArray)
     },
-    handleImportExceed (files, fileList) {
+    handleImportExcelTemplateExceed (files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    // 软件包导入Jar and Attachment
+    handleImportJarAttachmentOnchange (file, fileList) {
+      console.info('handleImportJarAttachmentOnchange')
+      console.info(file)
+      console.info(fileList)
+      this.JarAttachmentArray = []
+      for (let i = 0; i < fileList.length; i++) {
+        console.info('append handleImportJarAttachment')
+        console.info(fileList[i].raw)
+        this.JarAttachmentArray.push(fileList[i].raw)
+      }
+      console.info('append JarAttachmentArray')
+      console.info(this.JarAttachmentArray)
+    },
+    handleImportJarAttachmentExceed (files, fileList) {
+      // this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
     // 清空软件包注册页面之前输入的值
     closeDialog () {
@@ -875,6 +945,8 @@ export default {
     }
   },
   mounted () {
+    console.log('mounted start')
+    this._handleFilter()
     getBatchesList()
       .then(
           function (result) {
@@ -889,6 +961,7 @@ export default {
           console.log(error)
         }
       )
+    console.log('mounted end')
   }
 }
 </script>

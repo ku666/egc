@@ -72,9 +72,9 @@ export default {
       condition.pageSize = this.pageSize
       condition.currentPage = this.currentPage
       getCourtsByConditions(condition).then(res => {
-        this.total = res.data.data.totalCount
+        this.total = res.data.totalCount
         setTimeout(() => {
-          this.treeData = res.data.data.result
+          this.treeData = res.data.result
           this.loading = false
         }, 1000)
       })
@@ -89,8 +89,8 @@ export default {
         let condition = {}
         condition.uuid = node.data.uuid
         getOrgTreeNextLevel(condition).then(res => {
-          if (res.data.data != null && res.data.data.children != null) {
-            resolve(res.data.data.children)
+          if (res.data != null && res.data.children != null) {
+            resolve(res.data.children)
           } else {
             resolve([])
           }

@@ -4,14 +4,31 @@
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
     <div class="border-divide"></div>
+    <div>
+      <el-button type="primary" class="action-btn" style="float:right" icon="el-icon-setting" @click="dialogVisible = true">列表设置</el-button>
+      <el-dialog
+        title="列表设置"
+        :visible.sync="dialogVisible"
+        :close-on-click-modal="false"
+        width="30%"
+        :before-close="resetCheckbox">
+          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
+          <el-checkbox-group v-model="checkedCols" @change="handleCheckedColsChange" style="margin-bottom: 20px; margin-top:15px">
+            <el-checkbox v-for="(item, index) in tableTitleList" :label="item.colName" :key="index">{{item.colName}}</el-checkbox>
+          </el-checkbox-group>
+        <div style="text-align:center">
+          <el-button type="primary" @click="handleSave" class="action-btn" style="margin: 0 auto">保存</el-button>
+        </div>
+      </el-dialog>
+    </div>
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="auServerListData" stripe v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" :width="item.width" show-overflow-tooltip>
           </el-table-column>
-          <el-table-column label="操作" width="140" align="center">
+          <el-table-column label="操作" width="140" align="center" fixed="right">
             <template slot-scope="scope">
               <el-button @click="_handleCheckDetails(scope.$index)" type="text" :title="detailsTitle" class="el-icon-view" style="font-size:15px;color: #0078f4">
               </el-button>
@@ -73,6 +90,11 @@ export default {
   },
   data () {
     return {
+      tableTitleArray: [],
+      checkAll: false,
+      checkedCols: [],
+      isIndeterminate: false,
+      dialogVisible: false,
       queryInput: '',
       selectOpts: [],
       total: 0,
@@ -103,46 +125,55 @@ export default {
         {
           colName: '省（直辖市）',
           prop: 'courtDto.province',
-          width: 120
+          width: 120,
+          showColumn: true
         },
         {
           colName: '市',
           prop: 'courtDto.city',
-          width: 100
+          width: 100,
+          showColumn: true
         },
         {
           colName: '区',
           prop: 'courtDto.district',
-          width: 100
+          width: 100,
+          showColumn: true
         },
         {
           colName: '小区名称',
           prop: 'courtDto.name',
-          width: 120
+          width: 120,
+          showColumn: true
         },
         {
           colName: '服务器产品名称',
           prop: 'name',
-          width: 180
+          width: 180,
+          showColumn: true
         },
         {
           colName: '服务器SN',
           prop: 'serialNo',
-          width: 260
+          width: 260,
+          showColumn: true
         },
         {
           colName: '服务器厂商',
           prop: 'vendor',
-          width: 120
+          width: 120,
+          showColumn: true
         },
         {
           colName: '服务器类型/型号',
           prop: 'model',
-          width: 340
+          width: 340,
+          showColumn: true
         },
         {
           colName: '描述',
-          prop: 'remark'
+          prop: 'remark',
+          showColumn: true
         }
       ],
       detailsTitle: '查看详情',
@@ -152,6 +183,37 @@ export default {
     }
   },
   methods: {
+    handleSave () {
+      for (var i = 0; i < this.tableTitleList.length; i++) {
+        this.tableTitleList[i].showColumn = false
+        for (var j = 0; j < this.checkedCols.length; j++) {
+          if (this.tableTitleList[i].colName === this.checkedCols[j]) {
+            this.tableTitleList[i].showColumn = true
+          }
+        }
+      }
+      this.dialogVisible = false
+    },
+    resetCheckbox (done) {
+      // this.checkedCols = []
+      // this.tableTitleArray = []
+      // this.checkAll = false
+      // this.isIndeterminate = false
+      done()
+    },
+    handleCheckAllChange (val) {
+      for (var i = 0; i < this.tableTitleList.length; i++) {
+        this.tableTitleArray[i] = this.tableTitleList[i].colName
+      }
+      this.checkedCols = val ? this.tableTitleArray : []
+      this.isIndeterminate = false
+    },
+    handleCheckedColsChange (value) {
+      let checkedCount = value.length
+      this.checkAll = checkedCount === this.tableTitleList.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableTitleList.length
+      console.log(value)
+    },
     // 条件查询
     _handleFilter (params, type) {
       delete params.pageFlag

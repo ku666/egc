@@ -10,7 +10,8 @@ export const uploadExcelFiles = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  return Axios.post(BASE_PATH + '/package/importPackageExcel', params, config
+  // params
+  return Axios.post(BASE_PATH + '/package/importPackageExcelTemplate', params, config
   ).then(res => {
     console.log('---------------upload excel files  result ---------- ')
     console.info(res)
@@ -22,7 +23,7 @@ export const uploadDependencyExcelFiles = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  return Axios.post(BASE_PATH + '/package/importPackageDependenciesExcel', params, config
+  return Axios.post(BASE_PATH + '/package/importPackageDependenciesExcelTemplate', params, config
   ).then(res => {
     console.log('---------------upload excel files  result ---------- ')
     console.info(res)
@@ -36,7 +37,7 @@ export const registerSoftwarePackage = (params1, params2) => {
   let contentType = {
     headers: {'Content-Type': 'multipart/form-data'}
   }
-  console.log('<<<<< software register  params:' + JSON.stringify(JSON.stringify(params1) + ' =============== > ' + JSON.stringify(params2)))
+  console.log('<<<<< software register  params:' + JSON.stringify(params1) + ' =============== > ' + params2)
 
   return Axios.post(BASE_PATH + '/package/create?' + 'batchesId=' + params1.batchId + '&name=' + params1.name + '&version=' + params1.version + '&developer=' + params1.developer +
   '&latestPreVer=' + params1.latestPreVer + '&lastestPreName=' + params1.lastestPreName + '&functionDesc=' + params1.functionDesc +

@@ -1,9 +1,6 @@
-import fetch from '../utils/fetch'
+import Axios from '@/assets/js/AxiosPlugin'
 
-export function getCourtsByConditions (data) {
-  return fetch({
-    url: '/egc-mdmmgmtapp/court/getCourtsByConditions',
-    method: 'post',
-    data: data
-  })
+export const getCourtsByConditions = (data) => {
+  return Axios.post('/egc-mdmmgmtapp/court/getCourtsByConditions', data
+  ).then(res => res.data)
 }
