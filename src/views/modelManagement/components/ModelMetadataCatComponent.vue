@@ -537,27 +537,15 @@
             function (result) {
               // console.log(userID)
               // this.loading2 = false
-
-              if (result.code === '0000') {
-                this.modelList.splice(row, 1)
-                this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                this.$nextTick(() => {
-                  loadingDelete.close()
-                  this.loadData()
-                })
-              } else {
-                this.$message({
-                  type: 'info',
-                  message: '该元数据分类下存在元数据子项，无法删除'
-                })
-                this.$nextTick(() => {
-                  loadingDelete.close()
-                  // this.loadData()
-                })
-              }
+              this.modelList.splice(row, 1)
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.$nextTick(() => {
+                loadingDelete.close()
+                this.loadData()
+              })
             }.bind(this)
           )
           .catch(
