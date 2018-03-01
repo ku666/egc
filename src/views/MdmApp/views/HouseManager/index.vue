@@ -14,7 +14,7 @@
               <div v-for='huf in houseUseFors' v-bind:key='huf.value'>
                 {{scope.row.houseUseFor === huf.value ? huf.label : ''}}
               </div>
-          </template>
+            </template>
           </el-table-column>
           <el-table-column label="居住人数" prop="residentNum" sortable>
           </el-table-column>
@@ -118,10 +118,12 @@ export default {
             clearTimeout(timeOut)
           }, 1000)
         })
-        .catch(err => {
-          console.log(err)
-          self.loading = false
-        })
+        .catch(
+        function (error) {
+          this.loading = false
+          console.log(error)
+        }.bind(this)
+        )
     },
     addEventHandler: function (target, type, fn) {
       if (target.addEventListener) {
