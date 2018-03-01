@@ -3,13 +3,13 @@
     <el-form :inline="true" :model="queryList">
       <div class="search-container">
         <el-form-item label="软件包名称">
-          <el-input v-model="queryList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <el-form-item label="软件包版本">
-          <el-input v-model="queryList.packageVersion" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageVersion" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <el-form-item label="开发者">
-          <el-input v-model="queryList.packageProvider" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageProvider" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
@@ -218,6 +218,7 @@ export default {
               this.downloadResultVisible = true
               this.dispResultErrMsg = result
               this.dialogTittle = '错误消息'
+              this.resetOrgData()
             }
           }.bind(this)
         )

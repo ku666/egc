@@ -26,7 +26,7 @@
         <el-table :data="auServerListData" stripe v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" show-overflow-tooltip>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center" fixed="right">
             <template slot-scope="scope">
@@ -78,7 +78,8 @@ import {
   getauServersHistoryList,
   syncauServersData,
   downloadResultFile,
-  downHardwareTemplate
+  downHardwareTemplate,
+  getHardwareList
 } from './apis/index'
 export default {
   components: {
@@ -121,61 +122,54 @@ export default {
         province: '',
         pageFlag: 'hw'
       },
-      tableTitleList: [
-        {
-          colName: '省（直辖市）',
-          prop: 'courtDto.province',
-          width: 120,
-          showColumn: true
-        },
-        {
-          colName: '市',
-          prop: 'courtDto.city',
-          width: 100,
-          showColumn: true
-        },
-        {
-          colName: '区',
-          prop: 'courtDto.district',
-          width: 100,
-          showColumn: true
-        },
-        {
-          colName: '小区名称',
-          prop: 'courtDto.name',
-          width: 120,
-          showColumn: true
-        },
-        {
-          colName: '服务器产品名称',
-          prop: 'name',
-          width: 180,
-          showColumn: true
-        },
-        {
-          colName: '服务器SN',
-          prop: 'serialNo',
-          width: 260,
-          showColumn: true
-        },
-        {
-          colName: '服务器厂商',
-          prop: 'vendor',
-          width: 120,
-          showColumn: true
-        },
-        {
-          colName: '服务器类型/型号',
-          prop: 'model',
-          width: 340,
-          showColumn: true
-        },
-        {
-          colName: '描述',
-          prop: 'remark',
-          showColumn: true
-        }
-      ],
+      tableTitleList: [],
+      // tableTitleList: [
+      //   {
+      //     colName: '省（直辖市）',
+      //     prop: 'courtDto.province',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '市',
+      //     prop: 'courtDto.city',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '区',
+      //     prop: 'courtDto.district',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '小区名称',
+      //     prop: 'courtDto.name',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '服务器产品名称',
+      //     prop: 'name',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '服务器SN',
+      //     prop: 'serialNo',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '服务器厂商',
+      //     prop: 'vendor',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '服务器类型/型号',
+      //     prop: 'model',
+      //     showColumn: true
+      //   },
+      //   {
+      //     colName: '描述',
+      //     prop: 'remark',
+      //     showColumn: true
+      //   }
+      // ],
       detailsTitle: '查看详情',
       editTitle: '编辑',
       refreshTitle: '比对更新',
@@ -406,6 +400,18 @@ export default {
             this.loading = false
             console.log(error)
           }.bind(this)
+        )
+      getHardwareList()
+        .then(
+          function (result) {
+            this.tableTitleList = result.hardwareList
+            console.log(this.tableTitleList)
+          }.bind(this)
+        )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
         )
     },
     // 改变分页大小
