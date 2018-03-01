@@ -10,6 +10,9 @@ let contextPath = '/egc-usermgmtcomponent'
 // 用户登录
 export const login = params => { return Axios.post(contextPath + '/admin/login', params).then(res => res.data) }
 
+// 用户退出
+export const logout = params => { return Axios.post(contextPath + '/admin/logout', params).then(res => res.data) }
+
 // 首页加载数据
 export const loadData = params => { return Axios.get(`${BASE_PATH}/home/loadData`).then(res => res.data) }
 

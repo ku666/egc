@@ -5,24 +5,15 @@
       </el-input>
       <!-- <el-button @click='getCourts' type="primary" icon='el-icon-search' style="float:left; padding-left:5px; padding-right:5px;margin-top:10px;margin-left:-10px;"></el-button> -->
     </div>
-    <el-tree ref="tree"
-      :highlight-current="true"
-      :data="treeData"
-      node-key="uuid"
-      :props="defaultProps"
-      :load="getTree"
-      :expand-on-click-node="false"
-      lazy
-      style="max-height: 800px; overflow: auto; font-size: 14px"
-      @node-click="clickNode">
+    <el-tree ref="tree" :highlight-current="true" :data="treeData" node-key="uuid" :props="defaultProps" :load="getTree" :expand-on-click-node="false" lazy style="max-height: 800px; overflow: auto; font-size: 14px" @node-click="clickNode">
     </el-tree>
     <el-pagination class="table-pager" :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, prev, next" :total="total" @size-change="sizeChange" @current-change="currentChange">
     </el-pagination>
   </div>
 </template>
 <script>
-import { getOrgTreeNextLevel } from '../../apis/orgManager'
-import { getCourtsByConditions } from '../../apis/courtManager'
+import { getOrgTreeNextLevel } from '../../apis/org_manager.js'
+import { getCourtsByConditions } from '../../apis/court_manager.js'
 export default {
   props: {
     search: {

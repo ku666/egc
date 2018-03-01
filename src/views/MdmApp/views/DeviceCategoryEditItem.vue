@@ -1,60 +1,55 @@
 <template>
   <el-dialog :visible.sync='deviceCategoryDetailVisible' :modal-append-to-body='false' :before-close='closeDialog' style="min-width: 750px;">
-    <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{title}}</div>
+    <div slot='title' class='header-style'>
+      <i class='el-icon-edit'></i>{{title}}</div>
     <el-tabs style="margin-top:-20px" v-model='activeTab'>
-      <el-tab-pane label="设备基本信息" name = 'basic'>
+      <el-tab-pane label="设备基本信息" name='basic'>
         <div style="padding-left: 30px">
-        <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true' >
-          <el-form-item label='设备主数据编码' prop='typeCode'>
-            <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
-          </el-form-item>
-          <el-form-item label='设备名称' prop='typeName'>
-            <el-input v-model.trim='deviceCategoryDetail.typeName' :disabled='viewFlag' :maxlength="64"></el-input>
-          </el-form-item>
-          <el-form-item label='设备描述' prop='typeDesc'>
-            <el-input v-model.trim='deviceCategoryDetail.typeDesc' :disabled='viewFlag' :maxlength="64"></el-input>
-          </el-form-item>
-          <el-form-item label='父设备' prop='parentUuid'>
-            <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
-              <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeCode + ":" + parent.typeName' :value='parent.uuid'>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label='设备型号' prop='typeModel'>
-            <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag' :maxlength="64"></el-input>
-          </el-form-item>
-          <el-form-item label='供应商' prop='providerCode'>
-            <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
-              <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
-              </el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label='硬件版本' prop='hardwareVersion'>
-            <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
-          </el-form-item>
-          <el-form-item label='软件版本' prop='softwareVersion'>
-            <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
-          </el-form-item>
-        </el-form>
+          <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true'>
+            <el-form-item label='设备主数据编码' prop='typeCode'>
+              <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
+            </el-form-item>
+            <el-form-item label='设备名称' prop='typeName'>
+              <el-input v-model.trim='deviceCategoryDetail.typeName' :disabled='viewFlag' :maxlength="64"></el-input>
+            </el-form-item>
+            <el-form-item label='设备描述' prop='typeDesc'>
+              <el-input v-model.trim='deviceCategoryDetail.typeDesc' :disabled='viewFlag' :maxlength="64"></el-input>
+            </el-form-item>
+            <el-form-item label='父设备' prop='parentUuid'>
+              <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
+                <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeCode + ":" + parent.typeName' :value='parent.uuid'>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label='设备型号' prop='typeModel'>
+              <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag' :maxlength="64"></el-input>
+            </el-form-item>
+            <el-form-item label='供应商' prop='providerCode'>
+              <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
+                <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label='硬件版本' prop='hardwareVersion'>
+              <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
+            </el-form-item>
+            <el-form-item label='软件版本' prop='softwareVersion'>
+              <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
+            </el-form-item>
+          </el-form>
         </div>
         <div style='text-align: center; margin-top: 20px'>
           <el-button type='primary' @click='save' class="action-btn">保存</el-button>
         </div>
       </el-tab-pane>
-      <el-tab-pane label="设备属性信息" name = 'attr' v-if = 'deviceSaved'>
+      <el-tab-pane label="设备属性信息" name='attr' v-if='deviceSaved'>
         <div>
           <el-form>
             <el-form-item>
-              <el-transfer style="padding-left: 190px;"
-                filterable
-                :titles="['可添加属性', '当前设备属性']"
-                :button-texts="['删除属性', '添加属性']"
-                :props= '{
+              <el-transfer style="padding-left: 190px;" filterable :titles="['可添加属性', '当前设备属性']" :button-texts="['删除属性', '添加属性']" :props='{
                   key: "uuid",
                   label: "attrDesc"
-                }'
-                v-model='selectAttr'
-                :data="transferData">
+                }' v-model='selectAttr' :data="transferData">
               </el-transfer>
             </el-form-item>
             <div style='text-align: center'>
@@ -68,7 +63,7 @@
 </template>
 
 <script>
-import {insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert} from '@/views/MdmApp/apis/index'
+import { insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert } from '@/views/MdmApp/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -115,25 +110,25 @@ export default {
       viewFlagParent: true,
       rules: {
         typeCode: [
-          {required: true, message: '请输入类别编码', trigger: 'blur'},
-          {pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur'}
+          { required: true, message: '请输入类别编码', trigger: 'blur' },
+          { pattern: /^[A-Za-z0-9]{4}$/, message: '输入内容应为4位的字母或数字', trigger: 'blur' }
         ],
         typeName: [
           { required: true, message: '请输入类别名称', trigger: 'blur' },
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         typeDesc: [
           { required: true, message: '请输入类别描述', trigger: 'blur' },
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         typeModel: [
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         hardwareVersion: [
-          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+          { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
         ],
         softwareVersion: [
-          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+          { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
         ]
       }
     }
@@ -193,23 +188,23 @@ export default {
     // 取得所有的属性
     getAllAttr: function () {
       getDeviceAttributeList({})
-      .then(res => {
-        this.transferData = res.data
-      })
+        .then(res => {
+          this.transferData = res.data
+        })
     },
     // 取得当前设备的属性
     getDeviceAttr: function () {
-      getDeviceAttributeList({'typeCode': this.deviceCategoryDetail.typeCode})
-      .then(res => {
-        let temp = []
-        if (res.data !== null) {
-          res.data.forEach(element => {
-            temp.push(element.uuid)
-          })
-          this.selectAttr = []
-          this.selectAttr = temp
-        }
-      })
+      getDeviceAttributeList({ 'typeCode': this.deviceCategoryDetail.typeCode })
+        .then(res => {
+          let temp = []
+          if (res.data !== null) {
+            res.data.forEach(element => {
+              temp.push(element.uuid)
+            })
+            this.selectAttr = []
+            this.selectAttr = temp
+          }
+        })
     },
     // 保存设备基本信息
     save: function () {
@@ -240,18 +235,18 @@ export default {
     },
     // 保存设备属性信息
     saveMapping: function () {
-      batchInsert({'typeUUID': this.deviceCategoryDetail.uuid, 'value': this.selectAttr})
-      .then(res => {
-        this.$parent.search({})
-        this.deviceCategoryDetailVisible = false
-        this.activeTab = 'basic'
-        this.selectAttr = []
-        this.deviceSaved = false
-        this.$message({
-          message: '设备类别属性保存成功!',
-          type: 'success'
+      batchInsert({ 'typeUUID': this.deviceCategoryDetail.uuid, 'value': this.selectAttr })
+        .then(res => {
+          this.$parent.search({})
+          this.deviceCategoryDetailVisible = false
+          this.activeTab = 'basic'
+          this.selectAttr = []
+          this.deviceSaved = false
+          this.$message({
+            message: '设备类别属性保存成功!',
+            type: 'success'
+          })
         })
-      })
     },
     // 清除验证信息
     clearValidate: function () {

@@ -1,15 +1,15 @@
 <template>
   <div class="ui-common">
-    <el-form :inline="true" :model="searchCondition">
+    <el-form :inline="true" :model="queryList">
       <div class="search-container">
         <el-form-item label="软件包名称">
-          <el-input v-model="searchCondition.name" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
         </el-form-item>
         <el-form-item label="软件包版本">
-          <el-input v-model="searchCondition.version" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageVersion" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
         </el-form-item>
         <el-form-item label="开发者">
-          <el-input v-model="searchCondition.developer" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageProvider" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
@@ -67,11 +67,6 @@ export default {
       disabled: true,
       formLabelWidth: '160px',
       maxlength: 30,
-      searchCondition: {
-        name: '',
-        version: '',
-        developer: ''
-      },
       queryList: {
         packageName: '',
         packageProvider: '',
@@ -176,14 +171,16 @@ export default {
     },
     // 搜索
     _handleFilter () {
-      console.log(
-        'this.searchConDetails is -- >' + JSON.stringify(this.searchCondition)
-      )
       this.loadData()
     },
     // 清空
     _handleClearQuery () {
-      this.searchCondition = { name: '', version: '', developer: '' }
+      this.queryList = {
+        packageName: '',
+        packageProvider: '',
+        packageVersion: ''
+      }
+      this.loadData()
     },
     handleSelectionChange (val) {
       this.multipleSelection = val

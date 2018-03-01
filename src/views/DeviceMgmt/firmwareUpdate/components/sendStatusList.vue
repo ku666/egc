@@ -48,7 +48,8 @@
         <el-table-column
           :resizable="false"
           property="createTime"
-          label="下发时间">
+          label="下发时间"
+          show-overflow-tooltip>
         </el-table-column>
       </el-table-column>
     </el-table>

@@ -3,10 +3,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
-          <el-input placeholder='请输入属性编码' v-model.trim='searchAttrForm.attrCode' @keyup.enter.native = 'search' :maxlength="64" clearable></el-input>
+          <el-input placeholder='请输入属性编码' v-model.trim='searchAttrForm.attrCode' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='属性描述'>
-          <el-input placeholder='请输入属性描述' v-model.trim='searchAttrForm.attrDesc' @keyup.enter.native = 'search' :maxlength="128" clearable></el-input>
+          <el-input placeholder='请输入属性描述' v-model.trim='searchAttrForm.attrDesc' @keyup.enter.native='search' :maxlength="128" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
@@ -21,14 +21,7 @@
       <el-button @click='addAttr' icon='el-icon-circle-plus-outline' style="margin-center: 10px" plain type="primary">添加</el-button>
     </div>
 
-    <el-table
-      ref='attrTable'
-      :data='attrList'
-      v-loading='attrListLoading'
-      @row-dblclick = 'editAttrdbl'
-      height="100%"
-      element-loading-text='拼命加载中'
-      style='margin-top: 15px'>
+    <el-table ref='attrTable' :data='attrList' v-loading='attrListLoading' @row-dblclick='editAttrdbl' height="100%" element-loading-text='拼命加载中' style='margin-top: 15px'>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码' sortable></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' sortable></el-table-column>
@@ -42,63 +35,52 @@
       <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
-          <el-button type='text' size = 'mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
-          <el-button type='text' size = 'mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon="el-icon-edit" @click='editAttrdbl(scope.row)'></el-button>
+          <el-button type='text' size='mini' icon="el-icon-delete" @click='delAttr(scope.row)'></el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-pagination
-      ref='pager'
-      background
-      :current-page = 'searchAttrForm.currentPage'
-      :page-sizes = '[10, 20, 50, 100]'
-      :page-size = 'searchAttrForm.pageSize'
-      layout = 'total, sizes, prev, pager, next, jumper'
-      :total = 'searchAttrForm.total'
-      @size-change = 'sizeChange'
-      @current-change = 'currentChange'>
+    <el-pagination ref='pager' background :current-page='searchAttrForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchAttrForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchAttrForm.total' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
 
-    <el-dialog :visible.sync='attrDialogVisible'
-      :modal-append-to-body = 'false'
-      :before-close='closedialog'
-      style="min-width: 750px">
-      <div slot= 'title' class = 'header_style'><i class='el-icon-edit'></i>{{ title }}</div>
+    <el-dialog :visible.sync='attrDialogVisible' :modal-append-to-body='false' :before-close='closedialog' style="min-width: 750px">
+      <div slot='title' class='header-style'>
+        <i class='el-icon-edit'></i>{{ title }}</div>
       <el-tabs style="margin-top:-20px" v-model='activeTab'>
-        <el-tab-pane label="属性基本信息" name = 'basic'>
+        <el-tab-pane label="属性基本信息" name='basic'>
           <div style="padding-left: 30px">
             <el-form :model='attrForm' ref='attrForm' label-width='160px' :rules='attrFormRules' :inline='true'>
-              <el-form-item label='属性编码' prop='attrCode' >
-                <el-input v-model.trim='attrForm.attrCode' :disabled = 'disabledflag' :maxlength="64"></el-input>
+              <el-form-item label='属性编码' prop='attrCode'>
+                <el-input v-model.trim='attrForm.attrCode' :disabled='disabledflag' :maxlength="64"></el-input>
               </el-form-item>
               <el-form-item label='属性描述' prop='attrDesc'>
-                <el-input v-model.trim='attrForm.attrDesc' :disabled = 'disabledflag' :maxlength="128"></el-input>
+                <el-input v-model.trim='attrForm.attrDesc' :disabled='disabledflag' :maxlength="128"></el-input>
               </el-form-item>
               <el-form-item label='属性类型' prop='attrType'>
-                <el-select v-model = 'attrForm.attrType' :disabled = 'disabledflag'>
-                  <el-option v-for = 'attrType in attrTypes' :key = 'attrType.key' :value = 'attrType.value'></el-option>
+                <el-select v-model='attrForm.attrType' :disabled='disabledflag'>
+                  <el-option v-for='attrType in attrTypes' :key='attrType.key' :value='attrType.value'></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label='数据类型' prop='attrDataType'>
-                <el-select v-model = 'attrForm.attrDataType' :disabled = 'disabledflag'>
-                  <el-option v-for = 'attrDataType in attrDataTypes' :key = 'attrDataType.key' :value = 'attrDataType.value'></el-option>
+                <el-select v-model='attrForm.attrDataType' :disabled='disabledflag'>
+                  <el-option v-for='attrDataType in attrDataTypes' :key='attrDataType.key' :value='attrDataType.value'></el-option>
                 </el-select>
               </el-form-item>
-                <el-form-item label='单位描述' prop='unitDesc'>
-                <el-input v-model.trim='attrForm.unitDesc' :disabled = 'disabledflag' :maxlength="32"></el-input>
+              <el-form-item label='单位描述' prop='unitDesc'>
+                <el-input v-model.trim='attrForm.unitDesc' :disabled='disabledflag' :maxlength="32"></el-input>
               </el-form-item>
               <el-form-item label='单位编码' prop='unitCode'>
-                <el-input v-model.trim='attrForm.unitCode' :disabled = 'disabledflag' :maxlength="32"></el-input>
+                <el-input v-model.trim='attrForm.unitCode' :disabled='disabledflag' :maxlength="32"></el-input>
               </el-form-item>
             </el-form>
             <div style='text-align: center; '>
-              <el-button type='primary' @click='save' class="action-btn" :disabled = 'disabledflag'>保存</el-button>
+              <el-button type='primary' @click='save' class="action-btn" :disabled='disabledflag'>保存</el-button>
             </div>
           </div>
         </el-tab-pane>
-        <el-tab-pane label="属性域信息" name = 'domain' v-if = 'attrSaved'>
-          <attr-domain-item ref='openAttrDomainDialog' v-bind:attrUuid = 'attrForm.uuid'></attr-domain-item>
+        <el-tab-pane label="属性域信息" name='domain' v-if='attrSaved'>
+          <attr-domain-item ref='openAttrDomainDialog' v-bind:attrUuid='attrForm.uuid'></attr-domain-item>
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
@@ -143,16 +125,16 @@ export default {
       attrList: [],
       // 属性类型下拉列表
       attrTypes: [
-        {key: 'manual_attribute', value: 'manual_attribute'},
-        {key: 'device_attribute', value: 'device_attribute'},
-        {key: 'tech_parameter', value: 'tech_parameter'}
+        { key: 'manual_attribute', value: 'manual_attribute' },
+        { key: 'device_attribute', value: 'device_attribute' },
+        { key: 'tech_parameter', value: 'tech_parameter' }
       ],
       // 属性数据类型下拉列表
       attrDataTypes: [
-        {key: 'integer', value: 'integer'},
-        {key: 'string', value: 'string'},
-        {key: 'select', value: 'select'},
-        {key: 'boolean', value: 'boolean'}
+        { key: 'integer', value: 'integer' },
+        { key: 'string', value: 'string' },
+        { key: 'select', value: 'select' },
+        { key: 'boolean', value: 'boolean' }
       ],
       attrForm: {
         uuid: '',
@@ -165,20 +147,20 @@ export default {
       },
       attrFormRules: {
         attrCode: [
-          {required: true, message: '请输入属性编码', trigger: 'blur'},
-          {max: 64, message: '输入内容应少于64位字符', trigger: 'blur'}
+          { required: true, message: '请输入属性编码', trigger: 'blur' },
+          { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         attrDesc: [
           { required: true, message: '请输入属性描述', trigger: 'blur' },
-          {max: 128, message: '输入内容应少于128位字符', trigger: 'blur'}
+          { max: 128, message: '输入内容应少于128位字符', trigger: 'blur' }
         ],
         attrType: [{ required: true, message: '请选择属性类型', trigger: 'change' }],
         attrDataType: [{ required: true, message: '请选择数据类型', trigger: 'change' }],
         unitDesc: [
-          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+          { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
         ],
         unitCode: [
-          {max: 32, message: '输入内容应少于32位字符', trigger: 'blur'}
+          { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
         ]
       }
     }
@@ -207,18 +189,18 @@ export default {
       this.attrListLoading = true
       getDeviceAttributes(this.searchAttrForm)
         .then(
-          function (result) {
-            console.log('getDeviceAttributes')
-            this.attrList = result.data.result
-            this.searchAttrForm.total = result.data.totalCount
-            this.attrListLoading = false
-          }.bind(this)
+        function (result) {
+          console.log('getDeviceAttributes')
+          this.attrList = result.data.result
+          this.searchAttrForm.total = result.data.totalCount
+          this.attrListLoading = false
+        }.bind(this)
         )
         .catch(
-          function (error) {
-            this.attrListLoading = false
-            console.log(error)
-          }.bind(this)
+        function (error) {
+          this.attrListLoading = false
+          console.log(error)
+        }.bind(this)
         )
     },
     // 跳转到设备主数据页面
@@ -283,7 +265,7 @@ export default {
       }).then(() => {
         let uuidList = []
         this.selections.forEach((attr) => uuidList.push(attr.uuid))
-        deleteDeviceAttribute({'value': uuidList}).then(res => {
+        deleteDeviceAttribute({ 'value': uuidList }).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'warning'
@@ -306,7 +288,7 @@ export default {
       }).then(() => {
         let uuidList = []
         uuidList.push(attr.uuid)
-        deleteDeviceAttribute({'value': uuidList}).then(res => {
+        deleteDeviceAttribute({ 'value': uuidList }).then(res => {
           this.$message({
             message: '刪除成功!',
             type: 'success'
@@ -396,5 +378,5 @@ export default {
 </script>
 
 <style lang='less' scoped>
-  @import '~@/views/MdmApp/assets/css/index.less';
+@import "~@/views/MdmApp/assets/css/index.less";
 </style>

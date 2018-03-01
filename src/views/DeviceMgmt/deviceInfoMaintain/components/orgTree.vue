@@ -14,8 +14,12 @@
     </div>
     <br>
     <div  class="grid-content bg-purple" >
+      <el-tooltip :content="orgId" placement="top" effect="light" :disabled="orgId===''">
         <inputBox style="margin-right: 20px" title="组织ID" :value="orgId" ref="orgId" :disabled=true></inputBox>
+      </el-tooltip>
+      <el-tooltip :content="orgName" placement="top" effect="light" :disabled="orgName===''">
         <inputBox style="margin-right: 20px" title="组织名称" :value="orgName" ref="orgName" :disabled=true></inputBox>
+      </el-tooltip>
     </div>
     <div class="action-container">
       <el-button  @click="_onSubmit" type="primary">确定</el-button>

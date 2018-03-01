@@ -165,7 +165,7 @@
 
         <el-table-column
           label="最后一次执行时间">
-          <template slot-scope="scope">{{ scope.row.latestTaskStartTime }}</template>
+          <template slot-scope="scope" v-if="scope.row.latestTaskStartTime">{{ scope.row.latestTaskStartTime | formatDate }}</template>
         </el-table-column>
 
         <el-table-column

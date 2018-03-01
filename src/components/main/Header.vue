@@ -22,6 +22,7 @@
 </template>
 <script>
 import { getfirstRouters } from '@/assets/js/util.js'
+import { logout } from '@/views/UserMgmt/login/apis'
 export default {
   data () {
     return {
@@ -50,6 +51,10 @@ export default {
         sessionStorage.removeItem('userRouters')
         sessionStorage.removeItem('userResourcePermission')
         sessionStorage.removeItem('userInfo')
+        sessionStorage.removeItem('meuns')
+        logout(null).then(result => {
+          console.log(result)
+        })
         this.$router.push('/login')
       }
     },
