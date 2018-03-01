@@ -41,10 +41,10 @@ export const getCourtInfo = data => {
 }
 /**
  * 条件查询车辆出入统计信息
- * @param courtID 小区ID
+ * @param courtUuid 小区ID
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
+ * @param startTime 开始日期
+ * @param endTime 结束日期
  */
 export const getCourtCarAccessInfo = data => {
   return Axios({
@@ -57,11 +57,11 @@ export const getCourtCarAccessInfo = data => {
  * 条件查询车辆出入统计信息（分页获取）
  * @param OrgCode 区划组织code，可以为空
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
+ * @param startTime 开始日期
+ * @param endTime 结束日期
  * @param courtID 小区ID
  * @param pageSize 页面数据条数
- * @param pageNum 请求页码
+ * @param currentPage 请求页码
  */
 export const getCarAccessPageList = data => {
   return Axios({
