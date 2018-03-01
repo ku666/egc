@@ -1084,7 +1084,6 @@
   // import { Loading } from 'element-ui'
   import {
     startSystemLoading,
-    SUCCESS_CODE,
     getSystemSettings,
     getSystemDataByCode,
     getSystemCodeNameMap,
@@ -2073,12 +2072,8 @@
         getVersionParamsByVersionId(params)
           .then(
             function (result) {
-              if (result.code === SUCCESS_CODE) {
-                console.info(result.data)
-                this.curExcuteVersionParams = result.data
-              } else {
-                this.$message.error(result)
-              }
+              console.info(result.data)
+              this.curExcuteVersionParams = result.data
               this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
                 loadingInstance.close()
                 this.loadExcuteNodeDataTree()

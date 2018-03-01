@@ -915,7 +915,12 @@
         getModelListPage(params)
           .then(
             function (result) {
-              console.log(' result.data.total ' + result.data.items.length)
+              // console.log(' result.data.total ' + result.data.items.length)
+              if (result.data && result.data.items) {
+                result.data.items.forEach(function (tmpItem) {
+                  tmpItem.eventTypeList = tmpItem.eventTypeList ? tmpItem.eventTypeList : ''
+                })
+              }
               this.modelList = result.data.items
               this.total = result.data.pageCount
               // this.loading2 = false

@@ -603,6 +603,9 @@
       if (this.$route.params.modelId) {
         this.showModelInfo = true
       }
+      if (this.$route.params.planId) {
+        this.modelListSearch.taskSource = '全部'
+      }
       clearInterval(this.uploadInterval)
       // console.log(this.$route.params.modelId)
       // const userInfo = sessionStorage.getItem('user')
@@ -918,7 +921,7 @@
       checkExcuteResult (index, item) {
         let curItem = this.modelPlanList[index]
         if (!this.$route.params.versionId && this.$route.params.modelId) {
-          this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/plan/' + item.$route.params.planId + '/task/' + curItem.algTaskPk + '/taskinfo'})
+          this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/plan/' + this.$route.params.planId + '/task/' + curItem.algTaskPk + '/taskinfo'})
         } else if (this.$route.params.versionId) {
           this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/version/' + this.$route.params.versionId + '/plan/' + item.algTaskPlanPk + '/task/' + curItem.algTaskPk + '/taskinfo'})
         } else {
