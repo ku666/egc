@@ -191,7 +191,7 @@ export default {
       myChartContainer: null,
       tableOrMap: '0', // 控制当前是表格还是图表
       flagVal: '1', // 业主或出入频率条件
-      flag: false // 开关
+      flag: false // 控制业主图表重复点击
     }
   },
   methods: {
@@ -478,6 +478,7 @@ export default {
     /**
      * @description 处理日期对象
      * @param date 日期对象
+     * @returns 返回日期 xxxx-xx-xx
      */
     processingDate (date) {
       let year = date.getFullYear()
@@ -849,11 +850,13 @@ export default {
     height: 430px;
     margin-top: 10px;
   }
-  /deep/.table-header .el-col {
+  /deep/.table-header
+   .el-col {
     padding-right: 10px;
     vertical-align: top;
   }
-  /deep/.table-header .el-input__inner {
+  /deep/.table-header
+   .el-input__inner {
     vertical-align: middle;
   }
 }
