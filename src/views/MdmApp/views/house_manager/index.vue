@@ -32,8 +32,8 @@
 </template>
 <script>
 import OrgHouseTreeView from './OrgHouseTreeView'
-import { getHousesByConditions } from '../../apis/houseManager'
-import { getHousesByOrgUuid } from '../../apis/orgManager'
+import { getHousesByConditions } from '../../apis/house_manager.js'
+import { getHousesByOrgUuid } from '../../apis/org_manager.js'
 export default {
   data () {
     return {

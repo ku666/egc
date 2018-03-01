@@ -1,6 +1,6 @@
 // 引用pages
-import mdmAppPersonMgmt from '@/views/MdmApp/views/personManager/index.vue'
-import mdmAppHouseMgmt from '@/views/MdmApp/views/houseManager/index.vue'
+import mdmAppPersonMgmt from '@/views/MdmApp/views/person_manager/index.vue'
+import mdmAppHouseMgmt from '@/views/MdmApp/views/house_manager/index.vue'
 import mdmAppProviderMgmt from '@/views/MdmApp/components/ProviderList'
 import mdmAppDeviceMgmt from '@/views/MdmApp/components/Device'
 

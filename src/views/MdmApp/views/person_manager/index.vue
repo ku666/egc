@@ -158,9 +158,9 @@
   </div>
 </template>
 <script>
-import { getPersonList } from '../../apis/personManager'
-import { getHousesByUserUuid } from '../../apis/houseManager'
-import { getCourtsByConditions } from '../../apis/courtManager'
+import { getPersonList } from '../../apis/person_manager.js'
+import { getHousesByUserUuid } from '../../apis/house_manager.js'
+import { getCourtsByConditions } from '../../apis/court_manager.js'
 export default {
   data () {
     return {

@@ -21,8 +21,8 @@
   </div>
 </template>
 <script>
-import { getOrgTreeNextLevel } from '../../apis/orgManager'
-import { getCourtsByConditions } from '../../apis/courtManager'
+import { getOrgTreeNextLevel } from '../../apis/org_manager.js'
+import { getCourtsByConditions } from '../../apis/court_manager.js'
 export default {
   props: {
     search: {
