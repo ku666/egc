@@ -1,34 +1,34 @@
 <template>
   <div class="house-manager">
-    <org-house-tree-view :search="search" class="org-view-tree" @searchOptionChange = 'setSearchOption'></org-house-tree-view>
+    <org-house-tree-view :search="search" class="org-view-tree" @searchOptionChange='setSearchOption'></org-house-tree-view>
     <div class="tree-view-container">
-        <!-- 带分页表格 -->
-        <div class="house-table">
-          <el-table highlight-current-row :data="tableData" height="100%" v-loading="loading">
-            <el-table-column label="房屋号" prop="houseNum" sortable>
-            </el-table-column>
-            <el-table-column label="房屋名称" prop="houseAddress" sortable>
-            </el-table-column>
-            <el-table-column label="房屋用途" prop="houseUseFor" sortable>
-            </el-table-column>
-            <el-table-column label="居住人数" prop="residentNum" sortable>
-            </el-table-column>
-            <el-table-column width="200" label="房产证编号" prop="houseCertificate" sortable>
-            </el-table-column>
-            <el-table-column width="200" label="土地证编号" prop="landCertificate" sortable>
-            </el-table-column>
-            <el-table-column label="房屋面积" prop="buildingArea" sortable>
-            </el-table-column>
-            <el-table-column label="楼层" prop="floor" sortable>
-            </el-table-column>
-            <el-table-column label="紧急联系电话" prop="emergencyPhone" sortable>
-            </el-table-column>
-          </el-table>
-        </div>
-        <el-pagination ref='pager' :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
-        </el-pagination>
+      <!-- 带分页表格 -->
+      <div class="house-table">
+        <el-table highlight-current-row :data="tableData" height="100%" v-loading="loading">
+          <el-table-column label="房屋号" prop="houseNum" sortable>
+          </el-table-column>
+          <el-table-column label="房屋名称" prop="houseAddress" sortable>
+          </el-table-column>
+          <el-table-column label="房屋用途" prop="houseUseFor" sortable>
+          </el-table-column>
+          <el-table-column label="居住人数" prop="residentNum" sortable>
+          </el-table-column>
+          <el-table-column width="200" label="房产证编号" prop="houseCertificate" sortable>
+          </el-table-column>
+          <el-table-column width="200" label="土地证编号" prop="landCertificate" sortable>
+          </el-table-column>
+          <el-table-column label="房屋面积" prop="buildingArea" sortable>
+          </el-table-column>
+          <el-table-column label="楼层" prop="floor" sortable>
+          </el-table-column>
+          <el-table-column label="紧急联系电话" prop="emergencyPhone" sortable>
+          </el-table-column>
+        </el-table>
       </div>
+      <el-pagination ref='pager' :current-page="currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+      </el-pagination>
     </div>
+  </div>
 </template>
 <script>
 import OrgHouseTreeView from './OrgHouseTreeView'
