@@ -123,7 +123,7 @@ export default {
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
       perErrImg: errImg, // 图表错误提示
-      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
+      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
       endDate: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
@@ -364,7 +364,10 @@ export default {
       this.tableClickNum++
       this.getPgingData()
     },
-    // 打开组件的回调
+    /**
+    * 打开组件的回调 *
+    * @param {string} _courtUuid 从主页传入的当前小区id
+    */
     streamPeople: function (_courtUuid) {
       this.getPgingData()
       this.parameter.courtUuid = _courtUuid
