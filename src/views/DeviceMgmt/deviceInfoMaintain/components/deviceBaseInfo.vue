@@ -57,25 +57,29 @@
       </el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple">
-          <inputBox title="组织ID"
-                    code="orgId"
-                    ref="orgId"
-                    @listenToInput="_saveDeviceData"
-                    :disabled=true
-                    :value="selectedOrgVaue.orgId"
-                    :maxlength=30>
-            ></inputBox>
+          <el-tooltip :content="selectedOrgVaue.orgId" placement="top" effect="light" :disabled="!selectedOrgVaue.orgId">
+            <inputBox title="组织ID"
+                      code="orgId"
+                      ref="orgId"
+                      @listenToInput="_saveDeviceData"
+                      :disabled=true
+                      :value="selectedOrgVaue.orgId"
+                      :maxlength=30>
+            </inputBox>
+          </el-tooltip>
         </div>
       </el-col>
       <el-col :span="8">
         <div class="grid-content bg-purple">
-          <input-box style="margin-right: 20px"
-                     title="组织名称"
-                     code="orgName"
-                     :value="selectedOrgVaue.orgName"
-                     :disabled=true
-                     ref="orgName">
-          </input-box>
+          <el-tooltip :content="selectedOrgVaue.orgName" placement="top" effect="light" :disabled="!selectedOrgVaue.orgName">
+            <input-box style="margin-right: 20px"
+                       title="组织名称"
+                       code="orgName"
+                       :value="selectedOrgVaue.orgName"
+                       :disabled=true
+                       ref="orgName">
+            </input-box>
+          </el-tooltip>
           <el-button plain @click="_selectOrgani">选择组织</el-button>
           <el-dialog
             title="选择组织"
