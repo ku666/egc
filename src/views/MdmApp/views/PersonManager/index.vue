@@ -263,10 +263,12 @@ export default {
           this.getCourtsLoading = false
           this.courts = res.data.data.result
         })
-        .catch(err => {
-          console.log(err)
+        .catch(
+        function (error) {
           this.getCourtsLoading = false
-        })
+          console.log(error)
+        }.bind(this)
+        )
     },
     closeDetailDialog: function () {
       this.detailDialogVisible = false
@@ -310,10 +312,12 @@ export default {
           this.tableData = result.data.result
           this.loading = false
         }.bind(this))
-        .catch(err => {
-          console.log(err)
+        .catch(
+        function (error) {
           this.loading = false
-        })
+          console.log(error)
+        }.bind(this)
+        )
     },
     addEventHandler: function (target, type, fn) {
       if (target.addEventListener) {
