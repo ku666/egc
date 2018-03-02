@@ -11,6 +11,7 @@
           :on-exceed="handleExceed"
           :on-change="handleOnchange"
           :on-remove="handleOnchange"
+          :headers="tokenHeaders"
           :auto-upload="false"
           :file-list="fileList">
           <i class="el-icon-upload"></i>
