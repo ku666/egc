@@ -108,10 +108,10 @@
   </el-dialog>
 </template>
 <script>
-import optionsData from '@/views/MapAnalysisApp/assets/js/ownerOptions.js'
+import optionsData from '@/views/MapAnalysisApp/assets/js/owneroptions.js'
 import { getCourtInfo, getCourtProfile, getBuildProfile } from '@/views/MapAnalysisApp/apis/index'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 export default {
   data () {
     return {
