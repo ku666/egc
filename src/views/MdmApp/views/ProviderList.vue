@@ -32,8 +32,8 @@
       <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
       <el-table-column label='供应商类别' sortable prop='category'>
         <template slot-scope="scope">
-          <div v-for='providerType in providerTypes' v-bind:key='providerType.key'>
-            {{scope.row.category === providerType.key ? providerType.value : ''}}
+          <div v-for='providerType in providerTypes' v-bind:key='providerType.itemCode'>
+            {{scope.row.category == providerType.itemCode ? providerType.itemName : ''}}
           </div>
         </template>
       </el-table-column>
