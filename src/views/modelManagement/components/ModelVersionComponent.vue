@@ -517,6 +517,7 @@
           class="upload-demo"
           drag
           :action="uploadParam.url"
+          :headers="myHeaders"
           :data="uploadParam.data"
         >
           <i class="el-icon-upload"></i>
@@ -1170,6 +1171,9 @@
           description: [
             { min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur' }
           ]
+        },
+        myHeaders: {
+          Authorization: sessionStorage.token
         },
         uploadParam: {
           url: '/egc-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
