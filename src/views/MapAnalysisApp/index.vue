@@ -137,6 +137,7 @@ export default {
           type: 'warning',
           message: err
         })
+        console.warn(LOG_TAG + ' 获取到小区列表数据失败： ' + err)
       })
     },
     /** 按条件查询小区列表 */

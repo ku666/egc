@@ -1,8 +1,5 @@
-// 人流数据
-// var timeData = [] // '周一', '周二'
-// var data1 = [] // 120, 132
-// var data2 = [] // 220, 182
-var option = {
+// 小区详情 人员进出echarts图表数据
+var peoOption = {
   title: {
     text: '人员流量',
     textStyle: {
@@ -144,34 +141,34 @@ var option = {
 }
 /**
  * 更新人员流量时间轴数据
- * @param {*} data 时间点的数据 []
+ * @param {Array} data 时间点的数据 []
  */
 var updateTimeData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.xAxis.data = data
+    peoOption.xAxis.data = data
   }
 }
 /**
  * 更新人员入园流量数据
- * @param {*} data 人数的数据 []
+ * @param {Array} data 人数的数据 []
  */
 var updateInData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[0].data = data
+    peoOption.series[0].data = data
   }
 }
 /**
  * 更新人员出园流量数据
- * @param {*} data 人数的数据 []
+ * @param {Array} data 人数的数据 []
  */
 var updateOutData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[1].data = data
+    peoOption.series[1].data = data
   }
 }
 
 var peopleOption = {
-  option: option,
+  option: peoOption,
   updateTimeData: updateTimeData,
   updateInData: updateInData,
   updateOutData: updateOutData
