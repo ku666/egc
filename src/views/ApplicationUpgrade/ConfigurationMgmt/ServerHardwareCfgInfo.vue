@@ -78,8 +78,7 @@ import {
   getauServersHistoryList,
   syncauServersData,
   downloadResultFile,
-  downHardwareTemplate,
-  getHardwareList
+  downHardwareTemplate
 } from './apis/index'
 export default {
   components: {
@@ -403,18 +402,6 @@ export default {
             this.loading = false
             console.log(error)
           }.bind(this)
-        )
-      getHardwareList()
-        .then(
-          function (result) {
-            this.tableTitleList = result.hardwareList
-            console.log(this.tableTitleList)
-          }.bind(this)
-        )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
         )
     },
     // 改变分页大小

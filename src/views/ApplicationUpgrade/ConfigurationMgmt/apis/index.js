@@ -5,12 +5,6 @@ import { decodeResHeader } from '../assets/js/index'
 // let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
 
-// mock 服务器硬件清单
-export const getHardwareList = () => {
-  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/listHardware'
-  ).then(res => res.data)
-}
-
 // 省
 export const getProvinceDataList = () => {
   return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getProvince'
