@@ -517,6 +517,7 @@
           class="upload-demo"
           drag
           :action="uploadParam.url"
+          :headers="myHeaders"
           :data="uploadParam.data"
         >
           <i class="el-icon-upload"></i>
@@ -1084,7 +1085,6 @@
   // import { Loading } from 'element-ui'
   import {
     startSystemLoading,
-    SUCCESS_CODE,
     getSystemSettings,
     getSystemDataByCode,
     getSystemCodeNameMap,
@@ -1171,6 +1171,9 @@
           description: [
             { min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur' }
           ]
+        },
+        myHeaders: {
+          Authorization: sessionStorage.token
         },
         uploadParam: {
           url: '/egc-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
@@ -2073,12 +2076,8 @@
         getVersionParamsByVersionId(params)
           .then(
             function (result) {
-              if (result.code === SUCCESS_CODE) {
-                console.info(result.data)
-                this.curExcuteVersionParams = result.data
-              } else {
-                this.$message.error(result)
-              }
+              console.info(result.data)
+              this.curExcuteVersionParams = result.data
               this.$nextTick(() => { // 以服务的方式调用的 Loading 需要异步关闭
                 loadingInstance.close()
                 this.loadExcuteNodeDataTree()

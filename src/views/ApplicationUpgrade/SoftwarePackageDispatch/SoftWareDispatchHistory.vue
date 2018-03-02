@@ -6,7 +6,7 @@
     <div class="border-divide"></div>
     <div class="flex-1 flex-c">
       <div style="margin-top: 15px">
-        <el-table :data="softDispatchHisList" stripe v-loading="loading" height="680">
+        <el-table :data="softDispatchHisList" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
           <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>

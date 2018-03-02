@@ -692,7 +692,6 @@
   import { formatDate } from '../assets/js/format_date.js'
   import {
     startSystemLoading,
-    SUCCESS_CODE,
     getSystemSettings,
     getSystemDataByCode,
     getSystemCodeNameMap,
@@ -916,7 +915,12 @@
         getModelListPage(params)
           .then(
             function (result) {
-              console.log(' result.data.total ' + result.data.items.length)
+              // console.log(' result.data.total ' + result.data.items.length)
+              if (result.data && result.data.items) {
+                result.data.items.forEach(function (tmpItem) {
+                  tmpItem.eventTypeList = tmpItem.eventTypeList ? tmpItem.eventTypeList : ''
+                })
+              }
               this.modelList = result.data.items
               this.total = result.data.pageCount
               // this.loading2 = false
@@ -1426,35 +1430,35 @@
                 loadingAddEvent.close()
               })
               this.eventNameError = false
-              if (result.code === SUCCESS_CODE) {
-                this.showAddNewEvent = false
-                if (type === 'add') {
-                  this.systemAddModelEventList.push({
-                    item_code: this.modelNewEvent.code,
-                    item_name: this.modelNewEvent.name
-                  })
-                  this.showAddEventPop = false
-                }
-                console.info(this.systemAddModelEventList)
-                if (type === 'edit') {
-                  console.info(this.editModel.eventTypeList)
-                  this.systemEditEventTypeList.push({
-                    item_code: this.modelNewEvent.code,
-                    item_name: this.modelNewEvent.name
-                  })
-                  this.showEditEventPop = false
-                  // this.editModel.eventTypeList += this.modelNewEvent.code
-                }
-                this.systemModelEventMap[this.modelNewEvent.code] = this.modelNewEvent.name
-
-                this.modelNewEvent.name = ''
-              } else {
-                this.eventNameError = false
-                this.$message({
-                  message: result,
-                  type: 'error'
+              // if (result.code === SUCCESS_CODE) {
+              this.showAddNewEvent = false
+              if (type === 'add') {
+                this.systemAddModelEventList.push({
+                  item_code: this.modelNewEvent.code,
+                  item_name: this.modelNewEvent.name
                 })
+                this.showAddEventPop = false
               }
+              console.info(this.systemAddModelEventList)
+              if (type === 'edit') {
+                console.info(this.editModel.eventTypeList)
+                this.systemEditEventTypeList.push({
+                  item_code: this.modelNewEvent.code,
+                  item_name: this.modelNewEvent.name
+                })
+                this.showEditEventPop = false
+                // this.editModel.eventTypeList += this.modelNewEvent.code
+              }
+              this.systemModelEventMap[this.modelNewEvent.code] = this.modelNewEvent.name
+
+              this.modelNewEvent.name = ''
+              // } else {
+              //   this.eventNameError = false
+              //   this.$message({
+              //     message: result,
+              //     type: 'error'
+              //   })
+              // }
               // this.addModelDialogVisible = false
               // this.modelList.push(params)
               // this.loadData()
