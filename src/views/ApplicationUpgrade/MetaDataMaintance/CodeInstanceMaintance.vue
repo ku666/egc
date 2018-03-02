@@ -29,7 +29,7 @@
           <el-table :data="codeInstList" stripe border v-loading="loading" id="codeInstanceTable" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
