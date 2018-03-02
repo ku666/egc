@@ -74,11 +74,9 @@ export default {
      */
     chartInit () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
-      console.log(equipmentcharts)
       this.equipmentcharts = equipmentcharts
       // 设备数量数据
       let option = {
-        // backgroundColor: 'rgba(0,0,20,0.1)',
         title: {
           text: '设备总数量',
           x: 'center'
@@ -180,7 +178,6 @@ export default {
       this.dialogReportVisible = true
       if (!courtId) { courtId = '222b79f4a7b44d03b6f55f028992851f' }
       this.$nextTick(() => {
-        // this.getData()
         getCourtInfo({ courtUuid: courtId }).then(res => {
           if (res.data.code === '00000') {
             this.cellDetailsList = res.data.data
@@ -206,7 +203,6 @@ export default {
               if (this.tableData[i].onlineCount !== 0) {
                 this.onlinenames.push(this.tableData[i].deviceTypeDesc)
               }
-              // console.log(this.onlinenames)
               this.onlinedata.push(
                 {
                   name: this.tableData[i].deviceTypeDesc,
@@ -237,7 +233,6 @@ export default {
             } else {
               this.noDataTips = false
               this.isReponseData = false
-              console.log('执行图表')
               this.chartInit()
               this.onlineChartInit()
             }

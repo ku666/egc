@@ -55,15 +55,15 @@
 </template>
 <script>
 import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getCourtProfile } from '@/views/MapAnalysisApp/apis/index.js'
-import peopleOption from '@/views/MapAnalysisApp/assets/js/peopleStream.js'
-import carOption from '@/views/MapAnalysisApp/assets/js/carStream.js'
-import equipKind from '@/views/MapAnalysisApp/assets/js/equipKind.js'
-import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerInfo.js'
+import peopleOption from '@/views/MapAnalysisApp/assets/js/people-stream.js'
+import carOption from '@/views/MapAnalysisApp/assets/js/car-stream.js'
+import equipKind from '@/views/MapAnalysisApp/assets/js/equipkind.js'
+import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerinfo.js'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   components: {
@@ -129,6 +129,7 @@ export default {
           type: 'warning',
           message: err
         })
+        console.warn(LOG_TAG + ' 获取到小区详情数据失败： ' + err)
       })
     },
     /** 获取最近一个月内的人员流量日报数据 */
@@ -270,7 +271,6 @@ export default {
     getCourtOwnerData: function () {
       let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
-        // console.log(res)
         if (res.data.code === '00000') {
           let ageData = []
           let ageLevelData = []

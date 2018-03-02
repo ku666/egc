@@ -340,12 +340,12 @@ export default {
     // 改变分页大小
     handleSizeChange (val) {
       this.listQuery.limit = val
+      this.listQuery.page = 1
       this.loadData()
     },
     // 跳转页数
     handleCurrentChange (val) {
       this.listQuery.page = val
-      this.listQuery.page = 1
       this.loadData()
     },
     handleFilter () {

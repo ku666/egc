@@ -1,10 +1,7 @@
-// 人流数据
-// var timeData = [] // '周一', '周二'
-// var data1 = [] // 120, 132
-// var data2 = [] // 220, 182
-var option = {
+// 小区详情 车流进出echarts图表数据
+var optioncar = {
   title: {
-    text: '人员流量',
+    text: '车行流量',
     textStyle: {
       fontSize: '14',
       fontWeight: 'bold'
@@ -25,7 +22,7 @@ var option = {
     extraCssText: 'box-shadow: 0 0 5px rgba(0,0,0,0.3)'
   },
   legend: {
-    data: ['进园人流量', '出园人流量']
+    data: ['进园车流量', '出园车流量']
   },
   toolbox: {
     feature: {
@@ -97,7 +94,7 @@ var option = {
   },
   series: [
     {
-      name: '进园人流量',
+      name: '进园车流量',
       type: 'line',
       smooth: true,
       showSymbol: false,
@@ -109,7 +106,7 @@ var option = {
       },
       itemStyle: {
         normal: {
-          color: '#87CEFA'
+          color: '#f7b851'
         }
       },
       lineStyle: {
@@ -119,7 +116,7 @@ var option = {
       }
     },
     {
-      name: '出园人流量',
+      name: '出园车流量',
       type: 'line',
       smooth: true,
       showSymbol: false,
@@ -131,7 +128,7 @@ var option = {
       },
       itemStyle: {
         normal: {
-          color: '#FFE4E1'
+          color: '#58c8da'
         }
       },
       lineStyle: {
@@ -143,37 +140,37 @@ var option = {
   ]
 }
 /**
- * 更新人员流量时间轴数据
- * @param {*} data 时间点的数据 []
+ * 更新车行流量时间轴数据
+ * @param {Array} data 时间点的数据 []
  */
 var updateTimeData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.xAxis.data = data
+    optioncar.xAxis.data = data
   }
 }
 /**
- * 更新人员入园流量数据
- * @param {*} data 人数的数据 []
+ * 更新车行入园流量数据
+ * @param {Array} data 人数的数据 []
  */
 var updateInData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[0].data = data
+    optioncar.series[0].data = data
   }
 }
 /**
- * 更新人员出园流量数据
- * @param {*} data 人数的数据 []
+ * 更新车行出园流量数据
+ * @param {Array} data 人数的数据 []
  */
 var updateOutData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[1].data = data
+    optioncar.series[1].data = data
   }
 }
 
-var peopleOption = {
-  option: option,
+var carOption = {
+  option: optioncar,
   updateTimeData: updateTimeData,
   updateInData: updateInData,
   updateOutData: updateOutData
 }
-export default peopleOption
+export default carOption

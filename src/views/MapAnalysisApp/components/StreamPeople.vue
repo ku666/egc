@@ -81,7 +81,7 @@
 </template>
 <script>
 import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   data () {
