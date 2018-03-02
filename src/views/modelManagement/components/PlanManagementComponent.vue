@@ -217,8 +217,8 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now'" class="model-dropdown-item" command="stop"><i class="el-icon-remove"></i>停用</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now'" class="model-dropdown-item" command="edit" divided><i
+                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now'" class="model-dropdown-item" command="stop"><i class="el-icon-remove"></i>中止</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now' && scope.row.planStatus == 'mm.plnsts.create' " class="model-dropdown-item" command="edit" divided><i
                   class="el-icon-edit-outline"></i>修改
                 </el-dropdown-item>
                 <el-dropdown-item class="model-dropdown-item" command="delete"><i class="el-icon-delete"></i>删除

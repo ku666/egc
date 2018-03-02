@@ -320,15 +320,20 @@
         <el-form-item label="节点端口" prop="port">
           <el-input id="addPort" @blur="inputBlur" size="small" v-model="newNode.port"></el-input>
         </el-form-item>
-        <el-form-item v-if="newNode.nodeType == currentNodeType" label="设备ID" prop="deviceId">
-          <el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId">
+        <el-form-item label="设备ID" prop="deviceId">
+          <el-input v-if="newNode.nodeType == currentNodeType" id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId">
             <template slot="prepend">{{ deviceIdPrefix }}</template>
           </el-input>
-          <span v-if="DeviceIdLengthError" class="red">设备ID总长度不能超过32位</span>
+          <span v-if="newNode.nodeType == currentNodeType && newNode.deviceId.length > 29" class="red">设备ID总长度不能超过32位</span>
+          <el-input v-if="newNode.nodeType != currentNodeType" id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId"></el-input>
+          <span v-if="newNode.nodeType != currentNodeType && newNode.deviceId.length > 32" class="red">设备ID总长度不能超过32位</span>
+          <!--<span v-if="DeviceIdEmptyError" class="red">请输入设备ID</span>-->
+          <!--<span v-if="DeviceIdInputError" class="red">设备ID总长度在 4 到 32 个字符（只支持字母,数字和下划线）</span>-->
         </el-form-item>
-        <el-form-item v-if="newNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">
-          <el-input id="addDeviceId" @blur="inputBlur" size="small" v-model="newNode.deviceId"></el-input>
-        </el-form-item>
+        <!--<el-form-item v-if="newNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">-->
+          <!---->
+          <!---->
+        <!--</el-form-item>-->
         <!--<el-form-item label="节点状态" prop="nodeStatus">-->
         <!--<el-select size="small" v-model="newNode.nodeStatus" placeholder="请选择节点状态">-->
         <!--<el-option-->
@@ -365,7 +370,7 @@
 
       <el-form v-loading="loadingEditStep" :model="editNode" :rules="rules" ref="editNode" label-width="100px"
                class="demo-ruleForm">
-        <el-form-item label="节点类型" prop="nodeType">
+        <el-form-item @change="changeNodeType" label="节点类型" prop="nodeType">
           <el-select size="small" v-model="editNode.nodeType" value="editNode.nodeType">
             <el-option
               v-for="item in systemNodeTypeList"
@@ -384,17 +389,19 @@
         <el-form-item label="节点IP" prop="ip">
           <el-input id="editIp" @blur="inputBlur" size="small" v-model="editNode.ip"></el-input>
         </el-form-item>
-        <el-form-item v-if="editNode.nodeType == currentNodeType" label="设备ID" prop="deviceId">
-          <el-input id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceIdMain">
+        <el-form-item label="设备ID" prop="deviceId">
+          <el-input v-if="editNode.nodeType == currentNodeType" id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId">
             <template slot="prepend">{{ deviceIdPrefix }}</template>
           </el-input>
-          <span v-if="DeviceIdLengthError" class="red">设备ID总长度不能超过32位</span>
-          <span v-if="DeviceIdEmptyError" class="red">请输入设备ID</span>
-          <span v-if="DeviceIdInputError" class="red">设备ID总长度在 4 到 32 个字符（只支持字母,数字和下划线）</span>
+          <span v-if="editNode.nodeType == currentNodeType && editNode.deviceId.length > 29" class="red">设备ID总长度不能超过32位</span>
+          <el-input v-if="editNode.nodeType != currentNodeType" id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId"></el-input>
+          <span v-if="editNode.nodeType != currentNodeType && editNode.deviceId.length > 32" class="red">设备ID总长度不能超过32位</span>
+          <!--<span v-if="DeviceIdEmptyError" class="red">请输入设备ID</span>-->
+          <!--<span v-if="DeviceIdInputError" class="red">设备ID总长度在 4 到 32 个字符（只支持字母,数字和下划线）</span>-->
         </el-form-item>
-        <el-form-item v-if="editNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">
-          <el-input id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId"></el-input>
-        </el-form-item>
+        <!--<el-form-item v-if="editNode.nodeType != currentNodeType" label="设备ID" prop="deviceId">-->
+          <!--<el-input id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId"></el-input>-->
+        <!--</el-form-item>-->
         <!--<el-form-item label="设备ID" prop="deviceId">-->
           <!--<el-input id="editDeviceId" @blur="inputBlur"size="small" v-model="editNode.deviceId"></el-input>-->
         <!--</el-form-item>-->
@@ -655,7 +662,7 @@
           deleteFlag: '0'
         },
         editNode: {
-          deviceIdMain: ''
+          deviceId: ''
         },
         mgmtNodeListSearch: {
           name: '',
@@ -685,7 +692,7 @@
           ],
           deviceId: [
             {required: true, message: '请输入设备ID', trigger: 'blur'},
-            {pattern: '^[A-Za-z0-9_]+$', min: 1, max: 32, message: '长度在 1 到 32 个字符（只支持字母,数字和下划线）', trigger: 'blur'}
+            {pattern: '^[A-Za-z0-9_]+$', message: '只支持字母,数字和下划线', trigger: 'blur'}
           ],
           // deviceIdMain: [
           //   {required: true, message: '请输入设备ID123', trigger: 'blur'},
@@ -850,13 +857,13 @@
         // console.log(this.systemNodeStatusList[0].item_code)
         if (this.newNode.nodeType === this.currentNodeType) {
           params.deviceId = this.deviceIdPrefix + this.newNode.deviceId
-          let actualLength = params.deviceId.length
-          if (actualLength > 32) {
-            this.DeviceIdLengthError = true
-            return
-          } else {
-            this.DeviceIdLengthError = false
-          }
+        //   let actualLength = params.deviceId.length
+        //   if (actualLength > 32) {
+        //     this.DeviceIdLengthError = true
+        //     return
+        //   } else {
+        //     this.DeviceIdLengthError = false
+        //   }
         }
         console.log('00000000000000000000000000000000000000')
         console.log(params.deviceId)
@@ -905,33 +912,33 @@
         if (this.editNode.nodeType === this.currentNodeType) {
           // this.editNode.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
           // this.editNode.deviceIdMain = this.editNode.deviceId.split('_')[1]
-          let reg = /^[A-Za-z0-9_]+$/
-          params.deviceId = SYSTEM_MGMTNODE_DEVICEID_PREFIX + this.editNode.deviceIdMain
-          let actualLength = params.deviceIdMain.length
-          if (actualLength > (32 - this.deviceIdPrefix.length)) {
-            this.DeviceIdLengthError = true
-            this.DeviceIdEmptyError = false
-            this.DeviceIdInputError = false
-            return
-          } else {
-            this.DeviceIdLengthError = false
-          }
-          if (this.editNode.deviceIdMain.length === 0) {
-            this.DeviceIdEmptyError = true
-            this.DeviceIdInputError = false
-            this.DeviceIdLengthError = false
-            return
-          } else {
-            this.DeviceIdEmptyError = false
-          }
-          if (this.editNode.deviceIdMain.length !== 0 && !reg.test(this.editNode.deviceIdMain)) {
-            this.DeviceIdInputError = true
-            this.DeviceIdEmptyError = false
-            this.DeviceIdLengthError = false
-            return
-          } else {
-            this.DeviceIdInputError = false
-          }
+          // let reg = /^[A-Za-z0-9_]+$/
+          params.deviceId = SYSTEM_MGMTNODE_DEVICEID_PREFIX + this.editNode.deviceId
+          // let actualLength = params.deviceIdMain.length
+          // if (actualLength > (32 - this.deviceIdPrefix.length)) {
+          //   this.DeviceIdLengthError = true
+          //   this.DeviceIdEmptyError = false
+          //   this.DeviceIdInputError = false
+          //   return
+          // } else {
+          //   this.DeviceIdLengthError = false
+          // }
+          // if (this.editNode.deviceIdMain.length === 0) {
+          //   this.DeviceIdEmptyError = true
+          //   this.DeviceIdInputError = false
+          //   this.DeviceIdLengthError = false
+          //   return
+          // } else {
+          //   this.DeviceIdEmptyError = false
+          // }
+          // if (this.editNode.deviceIdMain.length !== 0 && !reg.test(this.editNode.deviceIdMain)) {
+          //   this.DeviceIdInputError = true
+          //   this.DeviceIdEmptyError = false
+          //   this.DeviceIdLengthError = false
+          //   return
+          // } else {
+          //   this.DeviceIdInputError = false
+          // }
         }
         if (this.editNode.nodeType !== this.currentNodeType) {
           params.deviceId = this.editNode.deviceId
@@ -1101,14 +1108,14 @@
               this.editNode = JSON.parse(JSON.stringify(this.displayedTableList[index]))
               if (this.editNode.nodeType === this.currentNodeType) {
                 this.editNode.deviceIdPrefix = SYSTEM_MGMTNODE_DEVICEID_PREFIX
-                this.editNode.deviceIdMain = this.editNode.deviceId.split('_')[1]
+                this.editNode.deviceId = this.editNode.deviceId.split('_')[1]
                 // params.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
                 // params.deviceId = this.editNode.deviceId.split('_')[1]
                 // console.log(this.editNode.deviceId.split('_')[1])
                 // console.log(this.editNode.nodeType)
               } else if (this.editNode.nodeType !== this.currentNodeType) {
                 params.deviceId = this.editNode.deviceId
-                this.editNode.deviceIdMain = params.deviceId
+                // this.editNode.deviceIdMain = params.deviceId
               }
               // if (this.editNode.nodeType !== this.currentNodeType) {
               //   this.editNode.deviceIdPrefix = this.editNode.deviceId.split('_')[0]
@@ -1232,15 +1239,15 @@
       handleClose (done) {
         if (this.$refs['newNode']) {
           this.$refs['newNode'].clearValidate()
-          this.DeviceIdLengthError = false
+          // this.DeviceIdLengthError = false
           // this.DeviceIdEmptyError = false
           // this.DeviceIdInputError = false
         }
         if (this.$refs['editNode']) {
           this.$refs['editNode'].clearValidate()
-          this.DeviceIdLengthError = false
-          this.DeviceIdEmptyError = false
-          this.DeviceIdInputError = false
+          // this.DeviceIdLengthError = false
+          // this.DeviceIdEmptyError = false
+          // this.DeviceIdInputError = false
         }
         this.createNodeDialogVisible = false
         this.editNodeDialogVisible = false
@@ -1263,6 +1270,9 @@
         } else if (event === 'changeStatusToEnable') {
           this.nodeStatusChange(index, item, 'changeStatusToEnable')
         }
+      },
+      changeNodeType () {
+
       }
       // checkDeviceIdLength () {
       //   if (this.newNode.nodeType === SYSTEM_MGMTNODE_NODETYPE_STRUCTURED) {

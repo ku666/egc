@@ -6,10 +6,10 @@
     <div class="border-divide"></div>
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
-        <el-table :data="netDeviceListData" stripe v-loading="loading" height="680">
+        <el-table :data="netDeviceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable show-overflow-tooltip>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -128,7 +128,7 @@ export default {
         {
           colName: '设备类型/型号',
           prop: 'type',
-          width: 120
+          width: 140
         },
         {
           colName: '管理IP',
@@ -212,7 +212,7 @@ export default {
       getNetDeviceDetails(eachRowUUID)
         .then(
           function (result) {
-            console.log(result)
+            console.log(JSON.stringify(result))
             this.netDeviceDetails = result.auNetequip
             this.dialogDetailsVisible = true
           }.bind(this)

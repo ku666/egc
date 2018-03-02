@@ -5,12 +5,6 @@ import { decodeResHeader } from '../assets/js/index'
 // let contextPath = '/scp-upgradecomponent'
 const BASE_PATH = '/egc-applicationupgradecomponent'
 
-// mock 服务器硬件清单
-export const getHardwareList = () => {
-  return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/listHardware'
-  ).then(res => res.data)
-}
-
 // 省
 export const getProvinceDataList = () => {
   return Axios.get(BASE_PATH + '/aupackagedispatches/maindata/getProvince'
@@ -40,7 +34,6 @@ export const getDisctrictDataList = (params) => {
 export const uploadHardWareConfigFile = (params) => {
   let config = {
     headers: {'Content-Type': 'multipart/form-data'}
-    // headers: {'Content-Type': 'application/x-www-form-urlencoded'}
   }
   return Axios.post(BASE_PATH + '/auServers/importExcel', params, config
   ).then(res => {
@@ -71,19 +64,19 @@ export const uploadAppServiceConfigFile = (params) => {
 // 导出模板
 export const downHardwareTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
   ).then(res => res.data)
 }
 
 export const downloadEquipTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
   ).then(res => res.data)
 }
 
 export const downloadAppServiceTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/common/generateExcel', params
+  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
   ).then(res => res.data)
 }
 

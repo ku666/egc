@@ -81,7 +81,7 @@ export const deleteSoftwarePack = (id) => {
 // 获取历史记录信息
 export const getSoftwarePackageHistoryList = (params) => {
   console.log('get softwre package history ---- >' + params)
-  return Axios.post(BASE_PATH + '/package/his/list', params).then(res => res.data)
+  return Axios.post(BASE_PATH + '/package/his/listAll', params).then(res => res.data)
 }
 
 // export const uploadSoftwarePackageFiles = (params) => {

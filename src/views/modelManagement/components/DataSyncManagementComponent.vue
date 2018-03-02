@@ -166,11 +166,19 @@
         </el-table-column>
 
         <el-table-column
-          label="首次触发时间"
+          label="最后更新时间"
           width="180">
         	<template slot-scope="scope">
-        		<span v-if="scope.row.firstIssueTime">{{ scope.row.firstIssueTime | formatDate }}</span>
+        		<span v-if="scope.row.updateTime">{{ scope.row.updateTime | formatDate }}</span>
         	</template>
+        </el-table-column>
+
+        <el-table-column
+          label="首次触发时间"
+          width="180">
+          <template slot-scope="scope">
+            <span v-if="scope.row.firstIssueTime">{{ scope.row.firstIssueTime | formatDate }}</span>
+          </template>
         </el-table-column>
 
         <el-table-column

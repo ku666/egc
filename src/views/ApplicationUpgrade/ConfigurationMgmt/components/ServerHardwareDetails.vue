@@ -106,6 +106,11 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.remark"></el-input>
       </el-form-item>
+      <template v-if="auServerDetails.extDataList">
+        <el-form-item :label="item.fieldName" v-for="item in auServerDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :disabled="isInptDisabled"></el-input>
+        </el-form-item>
+      </template>
     </el-form>
 
   </div>
