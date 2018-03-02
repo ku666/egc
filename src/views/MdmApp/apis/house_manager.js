@@ -6,6 +6,6 @@ export const getHousesByConditions = (data) => {
 }
 
 export const getHousesByUserUuid = (data) => {
-  return Axios.post('/egc-mdmmgmtapp/house/getHousesByUserUuid', data
+  return Axios.post('/egc-mdmmgmtapp/house/getHousesByUser', data
   ).then(res => res.data)
 }

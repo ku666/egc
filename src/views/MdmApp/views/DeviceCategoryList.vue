@@ -4,7 +4,7 @@
     <div>
       <el-form :inline='true' :model='searchForm' ref='searchForm' label-width="68px" style='margin-top:20px'>
         <el-form-item label='设备主数据编码' label-width="120px">
-          <el-input placeholder='请输入设备主数据编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
+          <el-input placeholder='请输入设备主数据编码' v-model.trim='searchForm.typeCode' @keyup.enter.native='search' :maxlength="12" clearable></el-input>
         </el-form-item>
         <el-form-item label='设备型号'>
           <el-input placeholder='请输入设备型号' v-model.trim='searchForm.typeModel' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
@@ -37,7 +37,7 @@
         <template slot-scope="props">
           <el-table empty-text='无子设备' :data='props.row.slave' :show-header='false' @row-dblclick='editDevicedbl'>
             <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-            <el-table-column prop='typeCode' label='设备主数据编码' width="180px">
+            <el-table-column prop='typeCode' label='设备主数据编码' width="155px">
               <template slot-scope="scope">
                 <div style="float: left; vertical-align: middle; color: #aaa">
                   <i class='fa fa-cog'></i>
@@ -50,12 +50,12 @@
                 <p v-html="highlightKeys(scope.row.typeModel, searchForm.typeModel)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeName' label='设备名称'>
+            <el-table-column prop='typeName' label='设备名称' width="160px">
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeName, searchForm.typeName)"></p>
               </template>
             </el-table-column>
-            <el-table-column prop='typeDesc' label='设备描述'>
+            <el-table-column prop='typeDesc' label='设备描述' width="160px">
               <template slot-scope="scope">
                 <p v-html="highlightKeys(scope.row.typeDesc, searchForm.typeDesc)"></p>
               </template>
@@ -65,10 +65,10 @@
             <el-table-column prop='softwareVersion' label='软件版本'></el-table-column>
             <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
             <el-table-column prop='providerName' label='供应商'></el-table-column>
-            <el-table-column prop='createTime' label='创建时间' width="180px"></el-table-column>
-            <el-table-column prop='createUser' label='创建人'></el-table-column>
-            <el-table-column prop='updateTime' label='修改时间' width="180px"></el-table-column>
-            <el-table-column prop='updateUser' label='修改人'></el-table-column>
+            <el-table-column prop='createTime' label='创建时间' width="155px" show-overflow-tooltip></el-table-column>
+            <el-table-column prop='createUser' label='创建人' width="90px"></el-table-column>
+            <el-table-column prop='updateTime' label='修改时间' width="155px"></el-table-column>
+            <el-table-column prop='updateUser' label='修改人' width="90px"></el-table-column>
             <el-table-column label='操作'>
               <template slot-scope='scope'>
                 <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
@@ -79,7 +79,7 @@
         </template>
       </el-table-column>
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
-      <el-table-column prop='typeCode' label='设备主数据编码' width="180px" sortable>
+      <el-table-column prop='typeCode' label='设备主数据编码' width="155px" sortable>
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeCode, searchForm.typeCode)"></p>
         </template>
@@ -89,12 +89,12 @@
           <p v-html="highlightKeys(scopeParent.row.typeModel, searchForm.typeModel)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeName' label='设备名称' sortable>
+      <el-table-column prop='typeName' label='设备名称' sortable width="160px">
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeName, searchForm.typeName)"></p>
         </template>
       </el-table-column>
-      <el-table-column prop='typeDesc' label='设备描述' sortable>
+      <el-table-column prop='typeDesc' label='设备描述' sortable width="160px">
         <template slot-scope="scopeParent">
           <p v-html="highlightKeys(scopeParent.row.typeDesc, searchForm.typeDesc)"></p>
         </template>
@@ -104,10 +104,10 @@
       <el-table-column prop='softwareVersion' label='软件版本' sortable></el-table-column>
       <el-table-column prop='providerCode' label='供应商编码' v-if='showflag'></el-table-column>
       <el-table-column prop='providerName' label='供应商' sortable></el-table-column>
-      <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
-      <el-table-column prop='createUser' label='创建人' sortable></el-table-column>
-      <el-table-column prop='updateTime' label='修改时间' width="180px" sortable></el-table-column>
-      <el-table-column prop='updateUser' label='修改人' sortable></el-table-column>
+      <el-table-column prop='createTime' label='创建时间' width="155px" sortable show-overflow-tooltip></el-table-column>
+      <el-table-column prop='createUser' label='创建人' sortable width="90px"></el-table-column>
+      <el-table-column prop='updateTime' label='修改时间' width="155px" sortable></el-table-column>
+      <el-table-column prop='updateUser' label='修改人' sortable width="90px"></el-table-column>
       <el-table-column label='操作'>
         <template slot-scope='scope'>
           <el-button type='text' size='mini' icon='el-icon-edit' @click='editDevicedbl(scope.row)'></el-button>
