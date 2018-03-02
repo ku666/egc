@@ -129,6 +129,7 @@ export default {
           type: 'warning',
           message: err
         })
+        console.warn(LOG_TAG + ' 获取到小区详情数据失败： ' + err)
       })
     },
     /** 获取最近一个月内的人员流量日报数据 */
@@ -270,7 +271,6 @@ export default {
     getCourtOwnerData: function () {
       let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
-        // console.log(res)
         if (res.data.code === '00000') {
           let ageData = []
           let ageLevelData = []

@@ -1,7 +1,5 @@
-// var timeData = [] // '周一', '周二'
-// var data1 = [] // 120, 132, 101
-// var data2 = [] // 820, 932, 901
-var option = {
+// 小区详情 车流进出echarts图表数据
+var optioncar = {
   title: {
     text: '车行流量',
     textStyle: {
@@ -143,34 +141,34 @@ var option = {
 }
 /**
  * 更新车行流量时间轴数据
- * @param {*} data 时间点的数据 []
+ * @param {Array} data 时间点的数据 []
  */
 var updateTimeData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.xAxis.data = data
+    optioncar.xAxis.data = data
   }
 }
 /**
  * 更新车行入园流量数据
- * @param {*} data 人数的数据 []
+ * @param {Array} data 人数的数据 []
  */
 var updateInData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[0].data = data
+    optioncar.series[0].data = data
   }
 }
 /**
  * 更新车行出园流量数据
- * @param {*} data 人数的数据 []
+ * @param {Array} data 人数的数据 []
  */
 var updateOutData = function (data) {
   if (data instanceof Array && data.length > 0) {
-    option.series[1].data = data
+    optioncar.series[1].data = data
   }
 }
 
 var carOption = {
-  option: option,
+  option: optioncar,
   updateTimeData: updateTimeData,
   updateInData: updateInData,
   updateOutData: updateOutData
