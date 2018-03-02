@@ -20,7 +20,9 @@ exports.assertion = function (selector, count) {
     return this.api.execute(function (selector) {
       return document.querySelectorAll(selector).length
     }, [selector], function (res) {
-      cb.call(self, res)
+      if (cb && cb !== undefined) {
+        cb.call(self, res)
+      }
     })
   }
 }
