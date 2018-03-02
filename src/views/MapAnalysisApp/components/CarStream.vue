@@ -78,12 +78,10 @@
               </el-pagination>
             </div>
             <!-- 地图展示 -->
-            <!-- <div v-show="isShowChart"> -->
             <div id="car-info-Mapbox" v-show="isShowChart">
               <img v-show="isReponseData" src="../assets/images/err.png">
               <div id="car-info-map" v-show="isShowChart"></div>
             </div>
-            <!-- </div> -->
           </div>
         </el-col>
       </el-row>
@@ -369,7 +367,7 @@ export default {
     closeDialog: function () {
       this.clickCount = 0
       this.isReponseData = false
-      if (this.myChart.dispose) { this.myChart.dispose() }
+      if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
       this.myChart = null
     },
     /**
@@ -412,6 +410,7 @@ export default {
   computed: {
     // echarts配置信息
     optionData: function () {
+      console.log('computedoptiondata')
       return {
         title: {
           text: '小区车流量d'
@@ -560,13 +559,6 @@ export default {
   }
   /deep/.first-row .el-col:nth-of-type(3n) {
     padding-right: 0;
-  }
-  .leftText {
-    line-height: 35px;
-    font-size: 15px;
-    span {
-      font-weight: 400;
-    }
   }
 }
 </style>
