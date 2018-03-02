@@ -7,7 +7,8 @@
       </div>
       <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
     </el-upload>
-    <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+    <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px" icon="el-icon-upload2">上传服务器</el-button>
+    <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button>
   </div>
 </template>
 
@@ -147,6 +148,17 @@ export default {
     },
     clearFileList () {
       this.fileList = []
+    },
+    _callDownTemplate () {
+      let tempFlag = 0
+      if (this.uploadFlag === 'hw') {
+        tempFlag = 70
+      } else if (this.uploadFlag === 'ne') {
+        tempFlag = 71
+      } else if (this.uploadFlag === 'as') {
+        tempFlag = 72
+      }
+      this.$emit('handleFilterEvent', tempFlag, 'downtemplate')
     }
   },
   mounted () {}

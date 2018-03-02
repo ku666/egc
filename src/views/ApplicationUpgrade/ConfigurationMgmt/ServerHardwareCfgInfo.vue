@@ -14,7 +14,7 @@
         :before-close="resetCheckbox">
           <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
           <el-checkbox-group v-model="checkedCols" @change="handleCheckedColsChange" style="margin-bottom: 20px; margin-top:15px">
-            <el-checkbox v-for="(item, index) in tableTitleList" :label="item.colName" :key="index">{{item.colName}}</el-checkbox>
+            <el-checkbox v-for="(item, index) in allTableTitleList" :label="item.colName" :key="index">{{item.colName}}</el-checkbox>
           </el-checkbox-group>
         <div style="text-align:center">
           <el-button type="primary" @click="handleSave" class="action-btn" style="margin: 0 auto">保存</el-button>
@@ -23,10 +23,10 @@
     </div>
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
-        <el-table :data="auServerListData" stripe v-loading="loading" height="680">
+        <el-table :data="auServerListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center" fixed="right">
             <template slot-scope="scope">
@@ -122,54 +122,55 @@ export default {
         province: '',
         pageFlag: 'hw'
       },
-      tableTitleList: [],
-      // tableTitleList: [
-      //   {
-      //     colName: '省（直辖市）',
-      //     prop: 'courtDto.province',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '市',
-      //     prop: 'courtDto.city',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '区',
-      //     prop: 'courtDto.district',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '小区名称',
-      //     prop: 'courtDto.name',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '服务器产品名称',
-      //     prop: 'name',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '服务器SN',
-      //     prop: 'serialNo',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '服务器厂商',
-      //     prop: 'vendor',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '服务器类型/型号',
-      //     prop: 'model',
-      //     showColumn: true
-      //   },
-      //   {
-      //     colName: '描述',
-      //     prop: 'remark',
-      //     showColumn: true
-      //   }
-      // ],
+      allTableTitleList: [],
+      temptableTitleList: [],
+      tableTitleList: [
+        {
+          colName: '省（直辖市）',
+          prop: 'courtDto.province',
+          showColumn: true
+        },
+        {
+          colName: '市',
+          prop: 'courtDto.city',
+          showColumn: true
+        },
+        {
+          colName: '区',
+          prop: 'courtDto.district',
+          showColumn: true
+        },
+        {
+          colName: '小区名称',
+          prop: 'courtDto.name',
+          showColumn: true
+        },
+        {
+          colName: '服务器产品名称',
+          prop: 'name',
+          showColumn: true
+        },
+        {
+          colName: '服务器SN',
+          prop: 'serialNo',
+          showColumn: true
+        },
+        {
+          colName: '服务器厂商',
+          prop: 'vendor',
+          showColumn: true
+        },
+        {
+          colName: '服务器类型/型号',
+          prop: 'model',
+          showColumn: true
+        },
+        {
+          colName: '描述',
+          prop: 'remark',
+          showColumn: true
+        }
+      ],
       detailsTitle: '查看详情',
       editTitle: '编辑',
       refreshTitle: '比对更新',
@@ -178,12 +179,14 @@ export default {
   },
   methods: {
     handleSave () {
-      for (var i = 0; i < this.tableTitleList.length; i++) {
-        this.tableTitleList[i].showColumn = false
+      console.log(this.checkedCols)
+      for (var i = 0; i < this.allTableTitleList.length; i++) {
+        this.temptableTitleList[i].showColumn = false
         for (var j = 0; j < this.checkedCols.length; j++) {
-          if (this.tableTitleList[i].colName === this.checkedCols[j]) {
+          if (this.temptableTitleList[i].colName === this.checkedCols[j]) {
             this.tableTitleList[i].showColumn = true
           }
+          this.tableTitleList = this.temptableTitleList
         }
       }
       this.dialogVisible = false
@@ -196,16 +199,16 @@ export default {
       done()
     },
     handleCheckAllChange (val) {
-      for (var i = 0; i < this.tableTitleList.length; i++) {
-        this.tableTitleArray[i] = this.tableTitleList[i].colName
+      for (var i = 0; i < this.allTableTitleList.length; i++) {
+        this.tableTitleArray[i] = this.allTableTitleList[i].colName
       }
       this.checkedCols = val ? this.tableTitleArray : []
       this.isIndeterminate = false
     },
     handleCheckedColsChange (value) {
       let checkedCount = value.length
-      this.checkAll = checkedCount === this.tableTitleList.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.tableTitleList.length
+      this.checkAll = checkedCount === this.allTableTitleList.length
+      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allTableTitleList.length
       console.log(value)
     },
     // 条件查询
@@ -253,16 +256,8 @@ export default {
         downHardwareTemplate(params)
           .then(
             function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
-              this.loading = false
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.loading = false
-              console.log(error)
-            }.bind(this)
+            }
+          ).catch(
           )
       }
     },
@@ -385,6 +380,14 @@ export default {
       getauServersByPage(this.searchConditionList)
         .then(
           function (result) {
+            console.log('hardware lsit --> ' + JSON.stringify(result))
+            this.allTableTitleList = result.columnDtoList
+            for (let i = 0; i < this.allTableTitleList.length; i++) {
+              if (this.allTableTitleList[i].showColumn === true) {
+                this.checkedCols.push(this.allTableTitleList[i].colName)
+              }
+            }
+            this.temptableTitleList = result.columnDtoList
             for (let i = 0; i < result.auServersList.length; i++) {
               let element = result.auServersList[i]
               let tempCourtDto = element.courtDtoList[0]
@@ -440,31 +443,4 @@ export default {
 
 <style scoped>
 @import 'assets/css/upgrademgmt.less';
-#serverHardwareTable>>>colgroup col:nth-child(1) {
-  width: 4%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(2) {
-  width: 7%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(3) {
-  width: 7%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(4) {
-  width: 7%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(5) {
-  width: 7%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(6) {
-  width: 10%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(7) {
-  width: 10%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(8) {
-  width: 10%;
-}
-#serverHardwareTable>>>colgroup col:nth-child(9) {
-  width: 20%;
-}
 </style>

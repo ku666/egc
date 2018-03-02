@@ -21,9 +21,7 @@ export default {
       changeDetails: undefined,
       softwarePckHistory: undefined,
       searchConditionHistroyList: {
-        packageUuid: '',
-        pageNo: 1,
-        pageSize: 20
+        packageUuid: ''
       },
       tableTitleList: [
         {
@@ -62,14 +60,14 @@ export default {
             let historyData = []
             let changedData = []
             let varInfo = {}
-            for (let i = 0; result.data.data !== null && i < result.data.data.length; i++) {
-              if (result.data.data[i].changedData !== null) {
-                changedData = JSON.parse(result.data.data[i].changedData)
+            for (let i = 0; result.data !== null && i < result.data.length; i++) {
+              if (result.data[i].changedData !== null) {
+                changedData = JSON.parse(result.data[i].changedData)
               }
               for (let k = 0; k < changedData.length; k++) {
                 varInfo = changedData[k]
-                varInfo['changeDate'] = result.data.data[i].updateTime
-                varInfo['operator'] = result.data.data[i].updateUser
+                varInfo['changeDate'] = result.data[i].updateTime
+                varInfo['operator'] = result.data[i].updateUser
                 historyData.push(varInfo)
               }
             }

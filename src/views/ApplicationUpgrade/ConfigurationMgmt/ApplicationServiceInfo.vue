@@ -9,7 +9,7 @@
         <el-table :data="appServiceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -123,17 +123,17 @@ export default {
         {
           colName: '应用&服务名称',
           prop: 'name',
-          width: 160
+          width: 200
         },
         {
           colName: '应用&服务版本',
           prop: 'version',
-          width: 120
+          width: 180
         },
         {
           colName: '应用&服务端口',
           prop: 'port',
-          width: 120
+          width: 180
         },
         {
           colName: '服务器主机名称',
