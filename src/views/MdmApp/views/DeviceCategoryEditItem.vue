@@ -7,19 +7,17 @@
         <div style="padding-left: 30px">
           <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true'>
             <el-form-item label='设备主数据编码' prop='typeCode'>
-              <el-input v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag' :maxlength="4"></el-input>
+              <el-select v-if="mode === 2" v-model='deviceCategoryDetail.typeCode'>
+                <el-option v-for='tp in typeCodes' :key='tp.itemCode' :label='tp.itemCode + ":" + tp.itemName' :value='tp.itemName'>
+                </el-option>
+              </el-select>
+              <el-input v-else v-model.trim='deviceCategoryDetail.typeCode' :disabled='true'></el-input>
             </el-form-item>
             <el-form-item label='设备名称' prop='typeName'>
               <el-input v-model.trim='deviceCategoryDetail.typeName' :disabled='viewFlag' :maxlength="64"></el-input>
             </el-form-item>
             <el-form-item label='设备描述' prop='typeDesc'>
               <el-input v-model.trim='deviceCategoryDetail.typeDesc' :disabled='viewFlag' :maxlength="64"></el-input>
-            </el-form-item>
-            <el-form-item label='父设备' prop='parentUuid'>
-              <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
-                <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeCode + ":" + parent.typeName' :value='parent.uuid'>
-                </el-option>
-              </el-select>
             </el-form-item>
             <el-form-item label='设备型号' prop='typeModel'>
               <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag' :maxlength="64"></el-input>
@@ -30,11 +28,17 @@
                 </el-option>
               </el-select>
             </el-form-item>
-            <el-form-item label='硬件版本' prop='hardwareVersion'>
-              <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
-            </el-form-item>
             <el-form-item label='软件版本' prop='softwareVersion'>
               <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
+            </el-form-item>
+            <el-form-item label='父设备' prop='parentUuid'>
+              <el-select clearable filterable v-model='deviceCategoryDetail.parentUuid' :disabled='viewFlagParent'>
+                <el-option v-for='parent in parents' :key='parent.uuid' :label='parent.typeCode + ":" + parent.typeName' :value='parent.uuid'>
+                </el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label='硬件版本' prop='hardwareVersion'>
+              <el-input v-model.trim='deviceCategoryDetail.hardwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
             </el-form-item>
           </el-form>
         </div>
@@ -63,7 +67,7 @@
 </template>
 
 <script>
-import { insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert } from '@/views/MdmApp/apis/index'
+import { insertDeviceCategory, updateDeviceCategory, getDeviceAttributeList, batchInsert, getDictItem } from '@/views/MdmApp/apis/index'
 import AttrDomainItem from './AttrDomainItem'
 export default {
   props: {
@@ -81,7 +85,7 @@ export default {
     }
   },
   mounted () {
-
+    this.getDictData()
   },
   data () {
     return {
@@ -106,6 +110,7 @@ export default {
       viewFlag: false,
       selectAttr: [],
       transferData: [],
+      typeCodes: [],
       deviceSaved: false,
       viewFlagParent: true,
       rules: {
@@ -122,14 +127,17 @@ export default {
           { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         typeModel: [
+          { required: true, message: '请输入设备型号', trigger: 'blur' },
           { max: 64, message: '输入内容应少于64位字符', trigger: 'blur' }
         ],
         hardwareVersion: [
           { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
         ],
         softwareVersion: [
+          { required: true, message: '请输入软件版本', trigger: 'blur' },
           { max: 32, message: '输入内容应少于32位字符', trigger: 'blur' }
-        ]
+        ],
+        providerCode: [{ required: true, message: '请选择供应商', trigger: 'change' }]
       }
     }
   },
@@ -148,6 +156,13 @@ export default {
     }
   },
   methods: {
+    // 取得字典数据
+    getDictData: function () {
+      const DEVICE_CATEGORY = '15'
+      getDictItem({ 'itemType': DEVICE_CATEGORY })
+      .then(res => { this.typeCodes = res.data })
+      .catch(err => { console.log(err) })
+    },
     // 编辑设备信息
     editDeviceCategoryDialog: function (categoryDetail = {}) {
       this.viewFlag = false

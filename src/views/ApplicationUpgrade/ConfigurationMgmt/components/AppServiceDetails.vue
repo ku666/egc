@@ -36,9 +36,6 @@
       <el-form-item label="应用&服务启动用户" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.startUser"></el-input>
       </el-form-item>
-      <el-form-item label="描述" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.remark"></el-input>
-      </el-form-item>
       <el-form-item label="服务进程名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.processName"></el-input>
       </el-form-item>
@@ -77,6 +74,14 @@
         </el-form-item>
         <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.upgradeServers.intranetIp"></el-input>
+        </el-form-item>
+      </template>
+      <el-form-item label="描述" :label-width="formLabelWidth">
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.remark"></el-input>
+      </el-form-item>
+      <template v-if=" auappServiceDetails.extDataList.length > 0 ">
+        <el-form-item :label="item.fieldName" v-for="item in auappServiceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :disabled="isInptDisabled"></el-input>
         </el-form-item>
       </template>
     </el-form>
