@@ -86,7 +86,6 @@
             :visible.sync="showOrgDialog"
             @close="_closeOrgTree"
             :close-on-click-modal="false"
-            :modal="false"
             :modal-append-to-body="true"
             width="35%">
             <org-tree @changeDialogStatus="_changeSatus" ref="orgTree" :parentUuid="screeningData.courtUuid"></org-tree>
