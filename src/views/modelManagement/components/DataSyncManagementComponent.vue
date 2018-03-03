@@ -47,6 +47,24 @@
               <!--</div>-->
             </div>
             <div class="form-info">
+              <div class="item-info label">任务类型</div>
+              <div class="item-info">
+                <el-select @change="loadData" v-model="modelListSearch.taskType" placeholder="全部">
+                  <el-option key="0" label="全部" value="0"></el-option>
+                  <el-option
+                    v-for="item in systemAsyncTypeList"
+                    :key="item.item_code"
+                    :label="item.item_name"
+                    :value="item.item_code"
+                  ></el-option>
+                </el-select>
+                <!--<el-input @keyup.enter.native="loadData" id="searchName" @blur="inputBlur" v-model="modelListSearch.name"></el-input>-->
+              </div>
+              <!--<div class="item-info">-->
+              <!--<el-button type="primary" @click="onSubmit">查询</el-button>-->
+              <!--</div>-->
+            </div>
+            <div class="form-info">
               <div class="item-info label">小区</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.communityId" placeholder="全部">
@@ -559,6 +577,8 @@
             this.systemTaskStatusMap = getSystemCodeNameMap(this.systemTaskStatusList)
             this.systemAsyncTypeList = getSystemDataByCode(result.data, SYSTEM_ASYNCTYPE)
             this.systemAsyncTypeMap = getSystemCodeNameMap(this.systemAsyncTypeList)
+            // this.systemTaskTypeList = getSystemDataByCode(result.data, SYSTEM_TASKTYPE)
+            // this.systemTaskTypeMap = getSystemCodeNameMap(this.systemTaskTypeList)
             this.$nextTick(() => {
               loadingSystemSetting.close()
               this.loadData()
@@ -600,6 +620,11 @@
           condition.taskStatus = this.modelListSearch.taskStatus
         } else {
           condition.taskStatus = undefined
+        }
+        if (this.modelListSearch.taskType && this.modelListSearch.taskType !== '全部' && this.modelListSearch.taskType !== '0') {
+          condition.taskType = this.modelListSearch.taskType
+        } else {
+          condition.taskType = undefined
         }
         if (this.modelListSearch.startTime && this.modelListSearch.startTime !== '全部' && this.modelListSearch.startTime !== '0') {
           condition.startTime = new Date(this.modelListSearch.startTime)
