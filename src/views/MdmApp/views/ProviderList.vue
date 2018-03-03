@@ -32,8 +32,8 @@
       <el-table-column prop='category' label='供应商类别' v-if='uuidshow'></el-table-column>
       <el-table-column label='供应商类别' sortable prop='category'>
         <template slot-scope="scope">
-          <div v-for='providerType in providerTypes' v-bind:key='providerType.key'>
-            {{scope.row.category === providerType.key ? providerType.value : ''}}
+          <div v-for='providerType in providerTypes' v-bind:key='providerType.itemCode'>
+            {{scope.row.category == providerType.itemCode ? providerType.itemName : ''}}
           </div>
         </template>
       </el-table-column>
@@ -62,7 +62,7 @@
           </el-form-item>
           <el-form-item label='供应商类别' prop='category'>
             <el-select v-model='providerForm.category'>
-              <el-option v-for='providerType in providerTypes' :key='providerType.key' :value='providerType.key' :label='providerType.value'></el-option>
+              <el-option v-for='providerType in providerTypes' :key='providerType.itemCode' :value='providerType.itemCode' :label='providerType.itemName'></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label='供应商名称' prop='providerName'>
@@ -87,6 +87,7 @@
 
 // 导入各种get，pos等请求方法
 import {
+  getDictItem,
   getProviders,
   deleteProvider,
   insertProvider,
@@ -123,11 +124,7 @@ export default {
         providerDesc: ''
       },
       // 供应商类型下拉列表
-      providerTypes: [
-        { key: 1, value: '硬件供应商' },
-        { key: 2, value: '软件供应商' },
-        { key: 3, value: '其他' }
-      ],
+      providerTypes: [],
       providerFormRules: {
         category: [{ required: true, message: '请选择供应商类别', trigger: 'change' }],
         providerCode: [
@@ -150,6 +147,7 @@ export default {
   mounted () {
     this.search()
     this.attatchEventToPager()
+    this.getDictData()
   },
   computed: {
     title: function () {
@@ -163,6 +161,13 @@ export default {
     }
   },
   methods: {
+    // 取得字典数据
+    getDictData: function () {
+      const PROVIDER_CATEGORY = '17'
+      getDictItem({ 'itemType': PROVIDER_CATEGORY })
+      .then(res => { this.providerTypes = res.data })
+      .catch(err => { console.log(err) })
+    },
     // 根据条件检索供应商
     search () {
       this.providerListLoading = true

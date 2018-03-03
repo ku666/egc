@@ -141,3 +141,11 @@ export const batchInsert = (data) => {
   return Axios.post(DEVICE_ATTR_MAPPING_PATH + '/batchInsert', data
   ).then(res => res.data)
 }
+
+// 获取数据字典数据
+const DICT_API = '/egc-mdmmgmtapp/dict'
+
+export const getDictItem = (data) => {
+  return Axios.get(DICT_API + '/getDictItem', { params: data }
+  ).then(res => res.data)
+}

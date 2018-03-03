@@ -59,12 +59,12 @@
               </el-form-item>
               <el-form-item label='属性类型' prop='attrType'>
                 <el-select v-model='attrForm.attrType' :disabled='disabledflag'>
-                  <el-option v-for='attrType in attrTypes' :key='attrType.key' :value='attrType.value'></el-option>
+                  <el-option v-for='attrType in attrTypes' :key='attrType.itemCode' :value='attrType.itemName'></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label='数据类型' prop='attrDataType'>
                 <el-select v-model='attrForm.attrDataType' :disabled='disabledflag'>
-                  <el-option v-for='attrDataType in attrDataTypes' :key='attrDataType.key' :value='attrDataType.value'></el-option>
+                  <el-option v-for='attrDataType in attrDataTypes' :key='attrDataType.itemCode' :value='attrDataType.itemName'></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label='单位描述' prop='unitDesc'>
@@ -96,7 +96,8 @@ import {
   getDeviceAttributes,
   deleteDeviceAttribute,
   insertDeviceAttribute,
-  updateDeviceAttribute
+  updateDeviceAttribute,
+  getDictItem
 } from '@/views/MdmApp/apis/index'
 import { addEventHandler } from '@/assets/js/util'
 
@@ -124,18 +125,9 @@ export default {
       // 检索返回数据
       attrList: [],
       // 属性类型下拉列表
-      attrTypes: [
-        { key: 'manual_attribute', value: 'manual_attribute' },
-        { key: 'device_attribute', value: 'device_attribute' },
-        { key: 'tech_parameter', value: 'tech_parameter' }
-      ],
+      attrTypes: [],
       // 属性数据类型下拉列表
-      attrDataTypes: [
-        { key: 'integer', value: 'integer' },
-        { key: 'string', value: 'string' },
-        { key: 'select', value: 'select' },
-        { key: 'boolean', value: 'boolean' }
-      ],
+      attrDataTypes: [],
       attrForm: {
         uuid: '',
         attrCode: '',
@@ -171,6 +163,7 @@ export default {
   mounted () {
     this.search()
     this.attatchEventToPager()
+    this.getDictData()
   },
   computed: {
     title: function () {
@@ -184,6 +177,18 @@ export default {
     }
   },
   methods: {
+    // 取得字典数据
+    getDictData: function () {
+      const ATTR_DATA_TYPE = '19'
+      getDictItem({ 'itemType': ATTR_DATA_TYPE })
+      .then(res => { this.attrDataTypes = res.data })
+      .catch(err => { console.log(err) })
+
+      const ATTR_TYPE = '18'
+      getDictItem({ 'itemType': ATTR_TYPE })
+      .then(res => { this.attrTypes = res.data })
+      .catch(err => { console.log(err) })
+    },
     // 根据条件查询设备分类数据到列表中
     search () {
       this.attrListLoading = true
