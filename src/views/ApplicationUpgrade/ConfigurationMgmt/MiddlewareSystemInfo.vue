@@ -9,7 +9,7 @@
           <el-table :data="middlewareListData" stripe border v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
             </el-table-column>
             <el-table-column label="操作" width="140" align="center">
               <template slot-scope="scope">
@@ -44,7 +44,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <middleware-history :middlewareHistoryData="middlewareHistoryData"></middleware-history>
+        <comm-history :commHistoryList="middlewareHistoryData"></comm-history>
       </el-dialog>
     </div>
   </div>
@@ -54,7 +54,7 @@
 import searchCondition from './components/SearchCondition'
 import middlewareDetails from './components/MiddlewareDetails'
 import middlewareEdit from './components/MiddlewareEdit'
-import middlewareHistory from './components/MiddlewareHistory'
+import CommHistory from './components/CommHistory'
 
 import {
   getMiddlewareInfoByPage,
@@ -69,7 +69,7 @@ export default {
     searchCondition,
     middlewareDetails,
     middlewareEdit,
-    middlewareHistory
+    CommHistory
   },
   data () {
     return {
@@ -288,7 +288,8 @@ export default {
       getMiddlewareHistoryList(eachRowUUID)
         .then(
           function (result) {
-            this.middlewareHistoryData = result.auServersHisList
+            console.log('history -- > ' + JSON.stringify(result))
+            this.middlewareHistoryData = result.auMiddlewareHisList
             this.dialogHistoryVisible = true
           }.bind(this)
         )

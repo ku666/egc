@@ -56,7 +56,7 @@
       <server-hardware-edit :auServerDetails="auServerDetails" @saveServInfoEvent="_updateServerInfo"></server-hardware-edit>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-      <server-hardware-history :auServerHistory="auServerHistory"></server-hardware-history>
+      <comm-history :commHistoryList="auServerHistory"></comm-history>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogUploadVisible" width="40%" :before-close="_handleBeforClose">
       <config-file-upload ref="uploadCmpt" :uploadFlag="uploadFlag" @handleUploadSuccessEvent="_handleCloseUploadDialog"></config-file-upload>
@@ -68,7 +68,7 @@
 import searchCondition from './components/SearchCondition'
 import serverHardwareDetails from './components/ServerHardwareDetails'
 import serverHardwareEdit from './components/ServerHardwareEdit'
-import serverHardwareHistory from './components/ServerHardwareHistory'
+import CommHistory from './components/CommHistory'
 import ConfigFileUpload from './components/ConfigFileUpload'
 
 import {
@@ -85,7 +85,7 @@ export default {
     searchCondition,
     serverHardwareDetails,
     serverHardwareEdit,
-    serverHardwareHistory,
+    CommHistory,
     ConfigFileUpload
   },
   data () {
@@ -362,6 +362,7 @@ export default {
       getauServersHistoryList(eachRowUUID)
         .then(
           function (result) {
+            console.log('history --> ' + JSON.stringify(result))
             this.auServerHistory = result.auServersHisList
             this.dialogHistoryVisible = true
           }.bind(this)

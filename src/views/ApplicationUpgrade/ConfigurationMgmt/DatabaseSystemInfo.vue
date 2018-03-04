@@ -9,7 +9,7 @@
         <el-table :data="databaseListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -44,7 +44,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <database-history :databaseHistoryData="databaseHistoryData"></database-history>
+        <comm-history :commHistoryList="databaseHistoryData"></comm-history>
       </el-dialog>
     </div>
   </div>
@@ -54,7 +54,7 @@
 import searchCondition from './components/SearchCondition'
 import databaseDetails from './components/DatabaseDetails'
 import databaseEdit from './components/DatabaseEdit'
-import databaseHistory from './components/DatabaseHistory'
+import CommHistory from './components/CommHistory'
 
 import {
   getDatabaseInfoByPage,
@@ -69,7 +69,7 @@ export default {
     searchCondition,
     databaseDetails,
     databaseEdit,
-    databaseHistory
+    CommHistory
   },
   data () {
     return {
@@ -300,7 +300,8 @@ export default {
       getDatabaseHistoryList(eachRowUUID)
         .then(
           function (result) {
-            this.databaseHistoryData = result.auServersHisList
+            console.log('hisrory -- > ' + JSON.stringify(result))
+            this.databaseHistoryData = result.auDbmsHisList
             this.dialogHistoryVisible = true
           }.bind(this)
         )
