@@ -11,8 +11,8 @@
           </el-table-column>
           <el-table-column label="房屋用途" prop="houseUseFor" sortable>
             <template slot-scope="scope">
-              <div v-for='huf in houseUseFors' v-bind:key='huf.value'>
-                {{scope.row.houseUseFor === huf.value ? huf.label : ''}}
+              <div v-for='huf in houseUseFors' v-bind:key='huf.itemCode'>
+                {{scope.row.houseUseFor === huf.itemCode ? huf.itemName : ''}}
               </div>
             </template>
           </el-table-column>
@@ -36,6 +36,7 @@
   </div>
 </template>
 <script>
+import { getDictItem } from '../../apis/index.js'
 import OrgHouseTreeView from './OrgHouseTreeView'
 import { getHousesByConditions } from '../../apis/house_manager.js'
 import { getHousesByOrgUuid } from '../../apis/org_manager.js'
@@ -50,18 +51,7 @@ export default {
       tableData: [],
       loading: false,
       searchOption: {},
-      houseUseFors: [
-        {
-          value: '1',
-          label: '自住' // 1-自住;2-出租;3-其他
-        }, {
-          value: '2',
-          label: '出租'
-        }, {
-          value: '3',
-          label: '其他'
-        }
-      ]
+      houseUseFors: []
     }
   },
   components: {
@@ -70,6 +60,13 @@ export default {
     // Upload
   },
   methods: {
+    // 获得字典数据
+    getDictData: function () {
+      const HOUSE_USE_FOR = '14'
+      getDictItem({ 'itemType': HOUSE_USE_FOR })
+      .then(res => { this.houseUseFors = res.data })
+      .catch(err => { console.log(err) })
+    },
     /**
      * @description 点击table组件复选框触发
      * @param Array val 所有选中行数据
@@ -135,6 +132,7 @@ export default {
   },
   mounted: function () {
     const self = this
+    self.getDictData()
     // self.search()
     let input = self.$refs.pager.$el.querySelectorAll('input')[1]
     // console.log('input:' + input.value)
