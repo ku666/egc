@@ -56,21 +56,21 @@ export default {
   },
   methods: {
     /**
-     * echarts图表展示
+     * @description echarts图表展示
      */
     chartSwitch () {
       this.isChartShow = true
       this.isTableShow = false
     },
     /**
-     * 表格展示
+     * @description 表格展示
      */
     tableSwitch () {
       this.isChartShow = false
       this.isTableShow = true
     },
     /**
-     * 设备总数据echart初始化
+     * @description 设备总数据echart初始化
      */
     chartInit () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
@@ -126,7 +126,7 @@ export default {
       equipmentcharts.setOption(option)
     },
     /**
-     * 实时在网设备数据echart初始化
+     * @description 实时在网设备数据echart初始化
      */
     onlineChartInit () {
       let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
@@ -172,7 +172,7 @@ export default {
       equipmentonlinecharts.setOption(option1)
     },
     /**
-     * ajax获取设备小区设备数据
+     * @description ajax获取设备小区设备数据
      */
     equipmentReport (courtId) {
       this.dialogReportVisible = true
@@ -250,7 +250,7 @@ export default {
       })
     },
     /**
-     * 关闭小区设备信息弹窗
+     * @description 关闭小区设备信息弹窗
      */
     closeDialog () {
       this.isChartShow = true
@@ -262,7 +262,7 @@ export default {
       if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     },
     /**
-     * 表格数据求和
+     * @description 表格数据求和
      * @param {Object} param elementUI隐式传递参数
      */
     getSummaries (param) {
