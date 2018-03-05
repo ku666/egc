@@ -25,8 +25,20 @@
       <el-table-column prop='uuid' label='uuid' v-if='showflag'></el-table-column>
       <el-table-column prop='attrCode' label='属性编码' sortable></el-table-column>
       <el-table-column prop='attrDesc' label='属性描述' sortable></el-table-column>
-      <el-table-column prop='attrType' label='属性类型' sortable></el-table-column>
-      <el-table-column prop='attrDataType' label='数据类型' sortable></el-table-column>
+      <el-table-column prop='attrType' label='属性类型' sortable>
+        <template slot-scope="scope">
+          <div v-for='at in attrTypes' v-bind:key='at.itemCode'>
+            {{scope.row.attrType == at.itemCode ? at.itemName : ''}}
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop='attrDataType' label='数据类型' sortable>
+        <template slot-scope="scope">
+          <div v-for='adt in attrDataTypes' v-bind:key='adt.itemCode'>
+            {{scope.row.attrDataType == adt.itemCode ? adt.itemName : ''}}
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop='unitDesc' label='单位描述' sortable></el-table-column>
       <el-table-column prop='unitCode' label='单位编码' sortable></el-table-column>
       <el-table-column prop='createTime' label='创建时间' width="180px" sortable></el-table-column>
@@ -59,12 +71,12 @@
               </el-form-item>
               <el-form-item label='属性类型' prop='attrType'>
                 <el-select v-model='attrForm.attrType' :disabled='disabledflag'>
-                  <el-option v-for='attrType in attrTypes' :key='attrType.itemCode' :value='attrType.itemName'></el-option>
+                  <el-option v-for='attrType in attrTypes' :key='attrType.itemCode' :value='attrType.itemCode' :label='attrType.itemName'></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label='数据类型' prop='attrDataType'>
                 <el-select v-model='attrForm.attrDataType' :disabled='disabledflag'>
-                  <el-option v-for='attrDataType in attrDataTypes' :key='attrDataType.itemCode' :value='attrDataType.itemName'></el-option>
+                  <el-option v-for='attrDataType in attrDataTypes' :key='attrDataType.itemCode' :value='attrDataType.itemCode' :label='attrDataType.itemName'></el-option>
                 </el-select>
               </el-form-item>
               <el-form-item label='单位描述' prop='unitDesc'>
@@ -247,7 +259,7 @@ export default {
         unitCode: attr.unitCode
       }
       this.attrDialogVisible = true
-      if (this.attrForm.attrDataType === 'select') {
+      if (this.attrForm.attrDataType === '3') {
         this.attrSaved = true
       } else {
         this.attrSaved = false
@@ -319,7 +331,7 @@ export default {
               type: 'success'
             })
             this.attrForm.uuid = res.data.uuid
-            if (this.attrForm.attrDataType === 'select') {
+            if (this.attrForm.attrDataType === '3') {
               this.attrSaved = true
             } else {
               this.attrSaved = false
