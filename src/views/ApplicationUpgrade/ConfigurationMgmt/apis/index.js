@@ -64,7 +64,7 @@ export const uploadAppServiceConfigFile = (params) => {
 // 导出模板
 export const downCfgMgmtTemplate = (params) => {
   console.log(' generate download template excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
+  return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params
   ).then(res => res.data)
 }
 

@@ -31,7 +31,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.serverId"></el-input>
       </el-form-item>
       <el-form-item label="操作系统提供者" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="databaseEditDetails.provider" :maxlength="maxlength"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled"  v-model="databaseEditDetails.provider" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="databaseEditDetails.remark" :maxlength="maxlength"></el-input>
