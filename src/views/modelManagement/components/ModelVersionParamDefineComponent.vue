@@ -225,6 +225,7 @@
         :on-success="handleSuccess"
         :on-error="handleError"
         :on-change="handleFileChange"
+        :headers="myHeaders"
         :file-list="fileList"
         :before-upload="handleBeforeUpload"
         :on-exceed="handleExceed"
@@ -334,6 +335,9 @@
         formInline: {
           user: '',
           region: ''
+        },
+        myHeaders: {
+          Authorization: sessionStorage.token
         },
         activeNames: ['1'],
         newModel: {
