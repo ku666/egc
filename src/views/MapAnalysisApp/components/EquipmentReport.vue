@@ -132,7 +132,6 @@ export default {
       let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
       this.equipmentonlinecharts = equipmentonlinecharts
       let option1 = {
-        // backgroundColor: 'rgba(0,0,33,0.1)',
         title: {
           text: '设备实时在网数量',
           x: 'center'
@@ -190,7 +189,7 @@ export default {
         }).catch(() => {
         })
         let equiData = {}
-        equiData.courtUuid = courtId// 'c69aeede4f6341929721e2892beec3cb'
+        equiData.courtUuid = courtId
         getListDeviceType(equiData).then(res => {
           if (res.data.code === '00000') {
             this.isOnlineReponseData = false
