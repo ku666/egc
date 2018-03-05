@@ -61,8 +61,10 @@ export default {
       getOrg(param)
         .then(
           function (result) {
-            this.$set(this.expandedKeys, 0, result.uuid)
-            this.$set(this.orgsData, 0, result)
+            if (result.uuid) {
+              this.$set(this.expandedKeys, 0, result.uuid)
+              this.$set(this.orgsData, 0, result)
+            }
           }.bind(this)
         )
         .catch(
