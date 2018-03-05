@@ -45,6 +45,16 @@ export default new Router({
         require(['@/views/UserMgmt/login/Login.vue'], resolve)
     },
     {
+      path: '/401',
+      name: '无权访问',
+      component: resolve => require(['@/components/error/page401.vue'], resolve)
+    },
+    {
+      path: '/404',
+      name: '找不到页面',
+      component: resolve => require(['@/components/error/page404.vue'], resolve)
+    },
+    {
       path: '/home',
       component: resolve => require(['@/components/main/Home.vue'], resolve),
       children: [

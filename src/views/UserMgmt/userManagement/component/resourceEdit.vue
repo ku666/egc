@@ -22,7 +22,7 @@
     @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceServiceVue="resource"></resource-service>
     
     <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :provincesSelect="provincesOptions"
-    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource"></resource-device-group>
+    @saveDialogEvent="update" @createDialogEvent="create" @cancelDialogEvent="cancelEvent" :resourceDeviceGroupVue="resource" :appCodeSelectOption="appCodeSelect"></resource-device-group>
 
     <div v-show="gridResourceRole">
       <div class="flex-1">
@@ -179,6 +179,9 @@ export default {
         this.showMenu = false
         this.showApplication = false
         this.showDevice = false
+        if (this.$refs.resourceMenuVue) {
+          this.$refs.resourceDeviceGroupVue.methodsOfUpdate()
+        }
       }
     },
     initCreateResource () {

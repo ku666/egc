@@ -287,7 +287,7 @@
         this.showEditTree = true
         this.showCreateTree = false
         this.curDepartmentUuid = data.id
-        this.getDepartmentSelect(data.id, 1)
+        this.getDepartmentSelect(data.id, 1, data.departmentType)
         getDepartmentDetail(data.id)
           .then(
             function (result) {

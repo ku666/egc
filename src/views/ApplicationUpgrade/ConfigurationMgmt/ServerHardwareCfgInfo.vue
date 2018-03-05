@@ -4,7 +4,7 @@
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
     <div class="border-divide"></div>
-    <div>
+    <!-- <div>
       <el-button type="primary" class="action-btn" style="float:right" icon="el-icon-setting" @click="dialogVisible = true">列表设置</el-button>
       <el-dialog
         title="列表设置"
@@ -20,7 +20,7 @@
           <el-button type="primary" @click="handleSave" class="action-btn" style="margin: 0 auto">保存</el-button>
         </div>
       </el-dialog>
-    </div>
+    </div> -->
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="auServerListData" stripe border v-loading="loading" height="680">
@@ -212,6 +212,7 @@ export default {
     },
     // 条件查询
     _handleFilter (params, type) {
+      console.log('type -->' + type)
       delete params.pageFlag
       if (type === 'search') {
         this.loading = true
@@ -252,6 +253,7 @@ export default {
         this.dialogStatus = '上传硬件服务器配置信息'
         this.dialogUploadVisible = true
       } else if (type === 'downtemplate') {
+        console.log('down begin')
         downHardwareTemplate(params)
           .then(
             function (result) {

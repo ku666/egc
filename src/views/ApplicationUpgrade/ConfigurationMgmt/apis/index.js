@@ -62,6 +62,12 @@ export const uploadAppServiceConfigFile = (params) => {
 }
 
 // 导出模板
+export const downCfgMgmtTemplate = (params) => {
+  console.log(' generate download template excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params
+  ).then(res => res.data)
+}
+
 export const downHardwareTemplate = (params) => {
   console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
@@ -213,6 +219,7 @@ export const getOSDetails = (id) => {
 
 // 更新操作系统信息
 export const updateOSInfo = (params) => {
+  console.log('update para --> ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auOss/update', params
   ).then(res => res.data)
 
