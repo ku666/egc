@@ -1,10 +1,6 @@
 var data = [
-  // { name: '海门', value: [121.15, 31.89, 9] },
-  // { name: '克拉玛依', value: [84.77, 45.59, 72] }
 ]
 var datachoose = [
-  // { name: '齐齐哈尔', value: [123.97, 47.33, 14] },
-  // { name: '泉州', value: [118.58, 24.93, 21] }
 ]
 var provinceData = [
   { name: '北京', value: randomValue() },
@@ -60,8 +56,6 @@ var option = {
     text: ['High', 'Low'],
     seriesIndex: [1],
     inRange: {
-      // color: ['#e0ffff', '#006edd']
-      // color: ['LightSkyBlue', 'lightgreen']
       color: [
         'LightSkyBlue',
         'lightgreen',
@@ -172,7 +166,7 @@ var option = {
 }
 /**
  * 更新地图散点数据
- * @param {*} data 点的数据
+ * @param {Array} data 点的数据
  * {
  *  name: '',
  *  value: [经度，纬度，数量]
@@ -186,7 +180,7 @@ var updateData = function (data) {
 }
 /**
  * 更新已选中的小区的数据
- * @param {*} data 选中的小区点的数据
+ * @param {Array} data 选中的小区点的数据
  * {
  *  name: '',
  *  value: [经度，纬度，数量]
@@ -201,7 +195,7 @@ var updateChooseData = function (data) {
 
 /**
  * 更新全国各省拥有的小区数量
- * @param {*} data
+ * @param {Object} data
  * {
  *  name: '广东',
  *  value: 小区数量
@@ -232,8 +226,6 @@ var mapData = {
 
 function randomValue () {
   return 0
-  // return Math.round(Math.random() * 100)
 }
 
-// window.mapData = mapData
 export default mapData
