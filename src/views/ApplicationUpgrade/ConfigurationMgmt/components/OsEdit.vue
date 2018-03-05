@@ -115,7 +115,7 @@ export default {
           fieldName: this.fieldName,
           fieldValue: this.fieldValue
         })
-        console.info(JSON.stringify(this.osDetails))
+        // console.info(JSON.stringify(this.osDetails))
       }
     },
     clearData () {
