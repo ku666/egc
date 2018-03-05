@@ -385,7 +385,7 @@
           { required: true, message: '请输入参数缺省值', trigger: 'blur' }
         ],
         uploadParam: {
-          url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelParamFile',
+          url: '/egc-modelmgmtcomponent/modelmgmt/web/uploadModelParamFile',
           data: {
             'algModelVersionId': '',
             'opType': 'replace'
