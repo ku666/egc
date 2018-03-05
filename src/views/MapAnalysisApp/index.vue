@@ -28,7 +28,7 @@
 <script>
 import CourtTable from '@/views/MapAnalysisApp/components/CourtTable'
 import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
-import mapData from '@/views/MapAnalysisApp/assets/js/map-echarts-data.js'
+import mapData from '@/views/MapAnalysisApp/assets/js/mapechartsdata.js'
 import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 require('echarts/map/js/china')
 export default {
