@@ -9,7 +9,7 @@
         <el-table :data="osListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable >
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -44,7 +44,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <os-history :osHistoryData="osHistoryData"></os-history>
+        <comm-history :commHistoryList="osHistoryData"></comm-history>
       </el-dialog>
     </div>
   </div>
@@ -54,7 +54,7 @@
 import searchCondition from './components/SearchCondition'
 import osDetails from './components/OsDetails'
 import osEdit from './components/OsEdit'
-import osHistory from './components/OsHistory'
+import CommHistory from './components/CommHistory'
 import {
   getOSInfoByPage,
   getOSDetails,
@@ -68,7 +68,7 @@ export default {
     searchCondition,
     osDetails,
     osEdit,
-    osHistory
+    CommHistory
   },
   data () {
     return {
@@ -123,9 +123,9 @@ export default {
           width: 120
         },
         {
-          colName: '操作系统版本（服务包）',
+          colName: '操作系统版本',
           prop: 'version',
-          width: 180
+          width: 260
         },
         {
           colName: '操作系统位数',
@@ -301,7 +301,8 @@ export default {
       getOSHistoryList(eachRowUUID)
         .then(
           function (result) {
-            this.osHistoryData = result.auServersHisList
+            console.log('History - > ' + JSON.stringify(result))
+            this.osHistoryData = result.auOssHisList
           }.bind(this)
         )
         .catch(function (error) {

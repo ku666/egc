@@ -386,7 +386,7 @@ export const syncNetDeviceData = (id) => {
 // 获取网络设备历史记录信息
 export const getNetDeviceHistoryList = (id) => {
   // console.log('os history id ---- >' + id)
-  return Axios.get(BASE_PATH + '/auNetequip/queryHistoryById/' + id
+  return Axios.get(BASE_PATH + '/auNetequip/queryHistoryById?id=' + id
     ).then(res => res.data)
 
   // return Axios.get(BASE_PATH + '/osServices/queryHistoryById/{id}').then(res => res.data)
