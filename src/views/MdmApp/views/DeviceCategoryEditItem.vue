@@ -7,11 +7,11 @@
         <div style="padding-left: 30px">
           <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true'>
             <el-form-item label='设备主数据编码' prop='typeCode'>
-              <el-select v-if="mode === 2" v-model='deviceCategoryDetail.typeCode' filterable>
+              <el-select v-if="!viewFlag" v-model='deviceCategoryDetail.typeCode' filterable>
                 <el-option v-for='tp in typeCodes' :key='tp.itemCode' :label='tp.itemCode + ":" + tp.itemName' :value='tp.itemCode'>
                 </el-option>
               </el-select>
-              <el-input v-else v-model.trim='deviceCategoryDetail.typeCode' :disabled='true'></el-input>
+              <el-input v-else v-model.trim='deviceCategoryDetail.typeCode' :disabled='viewFlag'></el-input>
             </el-form-item>
             <el-form-item label='设备名称' prop='typeName'>
               <el-input v-model.trim='deviceCategoryDetail.typeName' :maxlength="64"></el-input>
@@ -227,7 +227,6 @@ export default {
             this.deviceCategoryDetail.uuid = res.data.uuid
             this.$parent.search({})
             this.$parent.getParents()
-            this.mode = 3
             this.viewFlag = true
             this.deviceSaved = true
             this.getDeviceAttr()
