@@ -90,32 +90,44 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
-                <el-form-item label="开发者" :label-width="formLabelWidth" prop="developer">
-                  <el-input v-model="softwareDetails.developer" :disabled="isHasSoftwareDetails.developerIsDisable"></el-input>
+                <el-form-item label="开发者" :label-width="formLabelWidth" prop="provider">
+                  <el-input v-model="softwareDetails.provider" :disabled="isHasSoftwareDetails.developerIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="软件名称" :label-width="formLabelWidth" prop="name" :autofocus="true">
-                  <el-input v-model="softwareDetails.name" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.name" :disabled="isHasSoftwareDetails.nameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="版本号" :label-width="formLabelWidth" prop="version">
-                  <el-input v-model="softwareDetails.version" :maxlength="maxlength" :disabled="isHasSoftwareDetails.versionIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.version" :disabled="isHasSoftwareDetails.versionIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="前续软件包名称" :label-width="formLabelWidth" prop="updateSoftwarePackage">
-                  <el-input v-model="softwareDetails.lastestPreName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.lastestPreNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.lastestPreName" :disabled="isHasSoftwareDetails.lastestPreNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="前续软件包版本" :label-width="formLabelWidth" prop="latestPreVer">
-                  <el-input v-model="softwareDetails.latestPreVer" :maxlength="maxlength" :disabled="isHasSoftwareDetails.latestPreVerIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.latestPreVer" :disabled="isHasSoftwareDetails.latestPreVerIsDisable"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="12" class="flex-1 flex-c">
+                <el-form-item label="应用/组件名称" :label-width="formLabelWidth" prop="softwareName">
+                  <el-input v-model="softwareDetails.softwareName" :disabled="isHasSoftwareDetails.softwareNameIsDisable"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12" class="flex-1 flex-c">
+                <el-form-item label="应用/组件英语名称" :label-width="formLabelWidth" prop="softwareNameEn">
+                  <el-input v-model="softwareDetails.softwareNameEn" :disabled="isHasSoftwareDetails.softwareNameEnIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -136,43 +148,43 @@
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="软件包英文名称" :label-width="formLabelWidth" prop="nameEn">
-                  <el-input v-model="softwareDetails.nameEn" :maxlength="maxlength" :disabled="isHasSoftwareDetails.nameEnIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.nameEn" :disabled="isHasSoftwareDetails.nameEnIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="Git仓库名" :label-width="formLabelWidth" prop="gitRepository">
-                  <el-input v-model="softwareDetails.gitRepository" :maxlength="maxlength" :disabled="isHasSoftwareDetails.gitRepositoryIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.gitRepository" :disabled="isHasSoftwareDetails.gitRepositoryIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="Maven工程名" :label-width="formLabelWidth" prop="mavenName">
-                  <el-input v-model="softwareDetails.mavenName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.mavenNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.mavenName" :disabled="isHasSoftwareDetails.mavenNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="War/Jar/contextPath名称" :label-width="formLabelWidth" prop="svrPkgName">
-                  <el-input v-model="softwareDetails.svrPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.svrPkgNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.svrPkgName" :disabled="isHasSoftwareDetails.svrPkgNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="client包名称" :label-width="formLabelWidth" prop="cltPkgName">
-                  <el-input v-model="softwareDetails.cltPkgName" :maxlength="maxlength" :disabled="isHasSoftwareDetails.cltPkgNameIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.cltPkgName" :disabled="isHasSoftwareDetails.cltPkgNameIsDisable"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="端口" :label-width="formLabelWidth" prop="port">
-                  <el-input v-model="softwareDetails.port" :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
+                  <el-input v-model="softwareDetails.port" :maxlength = '6' :disabled="isHasSoftwareDetails.portIsDisable"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row>
               <el-col :span="12" class="flex-1 flex-c">
                 <el-form-item label="功能类型" :label-width="formLabelWidth" prop="functionType" :autofocus="true">
-                  <el-select v-model="softwareDetails.functionType" placeholder="请选择" :disabled="isHasSoftwareDetails.appTypeIsDisable">
+                  <el-select v-model="softwareDetails.functionType" placeholder="请选择" :disabled="isHasSoftwareDetails.functionTypeIsDisable">
                     <el-option
                       v-for="item in funType"
                       :key="item.value"
@@ -184,7 +196,7 @@
               </el-col>
               <el-col :span="12"  class="flex-1 flex-c">
                 <el-form-item label="应用类型" :label-width="formLabelWidth" prop="appType" :autofocus="true">
-                  <el-select v-model="softwareDetails.appType" placeholder="请选择" :disabled="isHasSoftwareDetails.functionTypeIsDisable">
+                  <el-select v-model="softwareDetails.appType" placeholder="请选择" :disabled="isHasSoftwareDetails.appTypeIsDisable">
                     <el-option
                       v-for="item in appType"
                       :key="item.value"
@@ -216,19 +228,21 @@
                       :file-list="fileList">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                      <!-- <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div> -->
                     </el-upload>
                   </el-form-item>
                 </template>
-              </el-col>
-              <el-col :span="12" class="flex-1 flex-c">
-                <el-form-item label="软件包源服务器" :label-width="formLabelWidth" prop="svrPkgName11">
-                  <el-input v-model="softwareDetails.svrPkgName11" :disabled="true"></el-input>
+                <el-form-item label="软件包及其附件" :label-width="formLabelWidth" prop="attachmentFiles" v-if="isHasSoftwareDetails.attachmentFilesIsDisable">
+                    <el-input type="textarea" :rows="4" class="upgrade_el-textarea" v-model="softwareDetails.attachmentFiles" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="12" class="flex-1 flex-c">
-                <el-form-item label="软件包源路径" :label-width="formLabelWidth" prop="ctlPkgName11">
-                  <el-input v-model="softwareDetails.ctlPkgName11" :disabled="true"></el-input>
+                <el-form-item label="软件包源服务器" :label-width="formLabelWidth" prop="serverId">
+                  <el-input v-model="softwareDetails.serverId" :disabled="true"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12" class="flex-1 flex-c">
+                <el-form-item label="软件包源路径" :label-width="formLabelWidth" prop="path">
+                  <el-input v-model="softwareDetails.path" :disabled="true"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -360,7 +374,7 @@ export default {
         name: '',
         nameEn: '',
         version: '',
-        developer: '',
+        provider: '',
         latestPreVer: '',
         remark: '',
         batchId: '',
@@ -372,7 +386,12 @@ export default {
         cltPkgName: '',
         port: '',
         functionType: '',
-        appType: ''
+        appType: '',
+        serverId: '',
+        path: '',
+        softwareName: '',
+        softwareNameEn: '',
+        attachmentFiles: ''
       },
       isHasSoftwareDetails: {
         nameIsDisable: false,
@@ -391,13 +410,17 @@ export default {
         portIsDisable: false,
         functionTypeIsDisable: false,
         appTypeIsDisable: false,
-        uploadFilesIsDisable: true
+        uploadFilesIsDisable: true,
+        softwareNameIsDisable: false,
+        softwareNameEnIsDisable: false,
+        attachmentFilesIsDisable: false
       },
       optType: '',
       tokenHeaders: {'FrontType': 'scp-admin-ui', 'Authorization': sessionStorage.token},
       uploadFiles: new FormData(),
       uploadJarAttachmentFiles: new FormData(),
       importFiles: new FormData(),
+      uploadFilesArray: [],
       excelArray: [],
       JarAttachmentArray: [],
       tableTitleList: [
@@ -411,7 +434,7 @@ export default {
           width: 150
         }, {
           colName: '开发者',
-          prop: 'developer',
+          prop: 'provider',
           width: 120
         }, {
           colName: '软件包功能说明',
@@ -465,7 +488,7 @@ export default {
           { required: true, message: '请输入软件版本', trigger: 'blur,change' },
           { max: 32, message: '长度不能超过32个字符' }
         ],
-        developer: [
+        provider: [
           { required: true, message: '请输入开发者姓名', trigger: 'blur,change' },
           { max: 32, message: '长度不能超过32个字符' }
         ],
@@ -478,11 +501,24 @@ export default {
         lastestPreName: [
           { max: 32, message: '长度不能超过32个字符' }
         ],
+        softwareName: [
+          { required: true, message: '请输入开发者姓名', trigger: 'blur,change' },
+          { max: 32, message: '长度不能超过32个字符' }
+        ],
+        softwareNameEn: [
+          { required: true, message: '应用/组件英语英文名字', trigger: 'blur,change' },
+          { max: 64, message: '长度不能超过64个字符' },
+          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入英数字' }
+        ],
         functionDesc: [
           { max: 256, message: '长度不能超过256个字符' }
         ],
         remark: [
           { max: 256, message: '长度不能超过256个字符' }
+        ],
+        nameEn: [
+          { max: 64, message: '长度不能超过64个字符' },
+          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入英数字' }
         ],
         svrPkgName: [
           { max: 32, message: '长度不能超过32个字符' }
@@ -490,9 +526,14 @@ export default {
         cltPkgName: [
           { max: 32, message: '长度不能超过32个字符' }
         ],
+        gitRepository: [
+          { max: 64, message: '长度不能超过64个字符' }
+        ],
         port: [
-          { max: 6, message: '长度不能超过6个数字', trigger: 'blur' },
-          { pattern: /^\+?[1-9][0-9]*$/, message: '请输入有效的端口号（数字）' }
+          { pattern: /^[0-9]/, message: '请输入有效的端口号（数字）' }
+        ],
+        mavenName: [
+          { max: 64, message: '长度不能超过64个字符' }
         ]
       }
     }
@@ -531,7 +572,7 @@ export default {
       detail.name = ''
       detail.nameEn = ''
       detail.version = ''
-      detail.developer = ''
+      detail.provider = ''
       detail.latestPreVer = ''
       detail.remark = ''
       detail.batchId = ''
@@ -544,6 +585,11 @@ export default {
       detail.port = ''
       detail.functionType = ''
       detail.appType = ''
+      detail.serverId = ''
+      detail.path = ''
+      detail.softwareName = ''
+      detail.softwareNameEn = ''
+      detail.attachmentFiles = ''
     },
     _handleRegister () {
       this.dialogTitle = '软件包信息注册'
@@ -606,6 +652,7 @@ export default {
     handleOnchange (file, fileList) {
       console.info('handleOnchange')
       console.info(JSON.stringify(fileList))
+      this.uploadFiles = new FormData()
       if (!this.beforeUploadCheckedFiles(fileList)) {
         this.$message.error('上传文件必须要有1个（且只能有1个）指定的软件包 jar/war 格式的文件!')
         return false
@@ -747,6 +794,15 @@ export default {
           .then(
             function (result) {
               this.dialogRegisterVisible = true
+              let tmpString = ''
+              for (let i = 0; result.data.pkgfileList != null && i < result.data.pkgfileList.length; i++) {
+                tmpString += result.data.pkgfileList[i].fileName
+                if (i + 1 < result.data.pkgfileList.length) {
+                  tmpString += ',  '
+                }
+              }
+              console.log(' attachmentFiles -----------> ' + tmpString)
+              result.data['attachmentFiles'] = tmpString
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('search')
@@ -764,6 +820,15 @@ export default {
           .then(
             function (result) {
               this.dialogRegisterVisible = true
+              let tmpString = ''
+              for (let i = 0; result.data.pkgfileList != null && i < result.data.pkgfileList.length; i++) {
+                tmpString += result.data.pkgfileList[i].fileName
+                if (i + 1 < result.data.pkgfileList.length) {
+                  tmpString += ',  '
+                }
+              }
+              console.log(' attachmentFiles -----------> ' + tmpString)
+              result.data['attachmentFiles'] = tmpString
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('edit')
@@ -884,6 +949,9 @@ export default {
         this.isHasSoftwareDetails.functionTypeIsDisable = false
         this.isHasSoftwareDetails.appTypeIsDisable = false
         this.isHasSoftwareDetails.uploadFilesIsDisable = true
+        this.isHasSoftwareDetails.softwareNameIsDisable = false
+        this.isHasSoftwareDetails.softwareNameEnIsDisable = false
+        this.isHasSoftwareDetails.attachmentFilesIsDisable = false
       }
       if (this.optType === 'edit') {
         this.isHasSoftwareDetails.nameIsDisable = true
@@ -903,6 +971,9 @@ export default {
         this.isHasSoftwareDetails.functionTypeIsDisable = false
         this.isHasSoftwareDetails.appTypeIsDisable = false
         this.isHasSoftwareDetails.uploadFilesIsDisable = false
+        this.isHasSoftwareDetails.softwareNameIsDisable = true
+        this.isHasSoftwareDetails.softwareNameEnIsDisable = true
+        this.isHasSoftwareDetails.attachmentFilesIsDisable = true
       }
       if (this.optType === 'search') {
         this.isHasSoftwareDetails.nameIsDisable = true
@@ -922,6 +993,9 @@ export default {
         this.isHasSoftwareDetails.functionTypeIsDisable = true
         this.isHasSoftwareDetails.appTypeIsDisable = true
         this.isHasSoftwareDetails.uploadFilesIsDisable = false
+        this.isHasSoftwareDetails.softwareNameIsDisable = true
+        this.isHasSoftwareDetails.softwareNameEnIsDisable = true
+        this.isHasSoftwareDetails.attachmentFilesIsDisable = true
       }
     },
     // 改变分页大小

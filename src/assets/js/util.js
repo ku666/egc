@@ -240,6 +240,9 @@ export const catchError = function (error) {
     if (messageInfo === null || messageInfo === '' || messageInfo === undefined) {
       messageInfo = error.response.data
     }
+    if (messageInfo !== undefined && ((messageInfo.indexOf('499') !== -1) || (messageInfo.indexOf('00499') !== -1) || (messageInfo.indexOf('非法请求【缓存无效】') !== -1))) {
+      window.location.href = '/login'
+    }
     switch (error.response.status) {
       case 400:
         Vue.prototype.$message({
