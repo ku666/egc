@@ -247,7 +247,7 @@ export default {
         unitCode: attr.unitCode
       }
       this.attrDialogVisible = true
-      if (this.attrForm.attrDataType === 'select') {
+      if (this.attrForm.attrDataType === '3') {
         this.attrSaved = true
       } else {
         this.attrSaved = false
@@ -319,7 +319,7 @@ export default {
               type: 'success'
             })
             this.attrForm.uuid = res.data.uuid
-            if (this.attrForm.attrDataType === 'select') {
+            if (this.attrForm.attrDataType === '3') {
               this.attrSaved = true
             } else {
               this.attrSaved = false
