@@ -3,24 +3,6 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <div class="border-divide"></div>
-    <!-- <div>
-      <el-button type="primary" class="action-btn" style="float:right" icon="el-icon-setting" @click="dialogVisible = true">列表设置</el-button>
-      <el-dialog
-        title="列表设置"
-        :visible.sync="dialogVisible"
-        :close-on-click-modal="false"
-        width="30%"
-        :before-close="resetCheckbox">
-          <el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange">全选</el-checkbox>
-          <el-checkbox-group v-model="checkedCols" @change="handleCheckedColsChange" style="margin-bottom: 20px; margin-top:15px">
-            <el-checkbox v-for="(item, index) in allTableTitleList" :label="item.colName" :key="index">{{item.colName}}</el-checkbox>
-          </el-checkbox-group>
-        <div style="text-align:center">
-          <el-button type="primary" @click="handleSave" class="action-btn" style="margin: 0 auto">保存</el-button>
-        </div>
-      </el-dialog>
-    </div> -->
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="auServerListData" stripe border v-loading="loading" height="680">
@@ -61,6 +43,9 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogUploadVisible" width="40%" :before-close="_handleBeforClose">
       <config-file-upload ref="uploadCmpt" :uploadFlag="uploadFlag" @handleUploadSuccessEvent="_handleCloseUploadDialog"></config-file-upload>
     </el-dialog>
+    <el-dialog :title="dialogStatus" :visible.sync="dialogShowColsVisible">
+      <select-table-columns :allTableTitleList="allTableTitleList" @showColsEvent="handleSave"></select-table-columns>
+    </el-dialog>
   </div>
 </template>
 
@@ -70,6 +55,7 @@ import serverHardwareDetails from './components/ServerHardwareDetails'
 import serverHardwareEdit from './components/ServerHardwareEdit'
 import CommHistory from './components/CommHistory'
 import ConfigFileUpload from './components/ConfigFileUpload'
+import SelectTableColumns from './components/SelectTableColumns'
 
 import {
   getauServersDetails,
@@ -77,8 +63,7 @@ import {
   updateAuServerInfor,
   getauServersHistoryList,
   syncauServersData,
-  downloadResultFile,
-  downHardwareTemplate
+  downloadResultFile
 } from './apis/index'
 export default {
   components: {
@@ -86,15 +71,12 @@ export default {
     serverHardwareDetails,
     serverHardwareEdit,
     CommHistory,
-    ConfigFileUpload
+    ConfigFileUpload,
+    SelectTableColumns
   },
   data () {
     return {
-      tableTitleArray: [],
-      checkAll: false,
-      checkedCols: [],
-      isIndeterminate: false,
-      dialogVisible: false,
+      dialogShowColsVisible: false,
       queryInput: '',
       selectOpts: [],
       total: 0,
@@ -177,38 +159,18 @@ export default {
     }
   },
   methods: {
-    handleSave () {
-      console.log(this.checkedCols)
+    handleSave (checkedColumns) {
+      console.log('begin to save columns--> ' + checkedColumns)
       for (var i = 0; i < this.allTableTitleList.length; i++) {
         this.temptableTitleList[i].showColumn = false
-        for (var j = 0; j < this.checkedCols.length; j++) {
-          if (this.temptableTitleList[i].colName === this.checkedCols[j]) {
+        for (var j = 0; j < checkedColumns.length; j++) {
+          if (this.temptableTitleList[i].colName === checkedColumns[j]) {
             this.tableTitleList[i].showColumn = true
           }
           this.tableTitleList = this.temptableTitleList
         }
       }
-      this.dialogVisible = false
-    },
-    resetCheckbox (done) {
-      // this.checkedCols = []
-      // this.tableTitleArray = []
-      // this.checkAll = false
-      // this.isIndeterminate = false
-      done()
-    },
-    handleCheckAllChange (val) {
-      for (var i = 0; i < this.allTableTitleList.length; i++) {
-        this.tableTitleArray[i] = this.allTableTitleList[i].colName
-      }
-      this.checkedCols = val ? this.tableTitleArray : []
-      this.isIndeterminate = false
-    },
-    handleCheckedColsChange (value) {
-      let checkedCount = value.length
-      this.checkAll = checkedCount === this.allTableTitleList.length
-      this.isIndeterminate = checkedCount > 0 && checkedCount < this.allTableTitleList.length
-      console.log(value)
+      this.dialogShowColsVisible = false
     },
     // 条件查询
     _handleFilter (params, type) {
@@ -252,14 +214,9 @@ export default {
       } else if (type === 'upload') {
         this.dialogStatus = '上传硬件服务器配置信息'
         this.dialogUploadVisible = true
-      } else if (type === 'downtemplate') {
-        console.log('down begin')
-        downHardwareTemplate(params)
-          .then(
-            function (result) {
-            }
-          ).catch(
-          )
+      } else if (type === 'showcols') {
+        this.dialogStatus = '选择需要显示的列'
+        this.dialogShowColsVisible = true
       }
     },
 
@@ -384,11 +341,6 @@ export default {
           function (result) {
             console.log('hardware lsit --> ' + JSON.stringify(result))
             this.allTableTitleList = result.columnDtoList
-            for (let i = 0; i < this.allTableTitleList.length; i++) {
-              if (this.allTableTitleList[i].showColumn === true) {
-                this.checkedCols.push(this.allTableTitleList[i].colName)
-              }
-            }
             this.temptableTitleList = result.columnDtoList
             for (let i = 0; i < result.auServersList.length; i++) {
               let element = result.auServersList[i]
