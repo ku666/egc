@@ -34,7 +34,7 @@ Vue.config.productionTip = false
 
 // 判断是否有token,没有则登陆
 router.beforeEach((to, from, next) => {
-  if (to.path !== '/login') {
+  if (to.path !== '/login' && to.path !== '/401' && to.path !== '/404') {
     var token = sessionStorage.getItem('token')
     console.log(' beforeEach token: ' + token)
 
