@@ -39,8 +39,8 @@ export const registerSoftwarePackage = (params1, params2) => {
   }
   console.log('<<<<< software register  params:' + JSON.stringify(params1) + ' =============== > ' + params2)
 
-  return Axios.post(BASE_PATH + '/package/create?' + 'batchesId=' + params1.batchId + '&name=' + params1.name + '&version=' + params1.version + '&developer=' + params1.developer +
-  '&latestPreVer=' + params1.latestPreVer + '&lastestPreName=' + params1.lastestPreName + '&functionDesc=' + params1.functionDesc +
+  return Axios.post(BASE_PATH + '/package/create?' + 'batchesId=' + params1.batchId + '&name=' + params1.name + '&version=' + params1.version + '&provider=' + params1.provider +
+  '&latestPreVer=' + params1.latestPreVer + '&lastestPreName=' + params1.lastestPreName + '&softwareName=' + params1.softwareName + '&softwareNameEn=' + params1.softwareNameEn + '&functionDesc=' + params1.functionDesc +
   '&remark=' + params1.remark + '&nameEn=' + params1.nameEn + '&gitRepository=' + params1.gitRepository + '&mavenName=' + params1.mavenName +
   '&svrPkgName=' + params1.svrPkgName + '&cltPkgName=' + params1.cltPkgName + '&cltPkgName=' + params1.cltPkgName + '&port=' + params1.port +
   '&functionType=' + params1.functionType + '&appType=' + params1.appType,
@@ -86,7 +86,7 @@ export const getSoftwarePackageHistoryList = (params) => {
 
 // export const uploadSoftwarePackageFiles = (params) => {
 //   console.log('<<<<< software register  params:' + JSON.stringify(params))
-//   return Axios.post(BASE_PATH + '/package/create?name=' + params.softName + '&version=' + params.softVersion + '&developer=' + params.developerName +
+//   return Axios.post(BASE_PATH + '/package/create?name=' + params.softName + '&version=' + params.softVersion + '&provider=' + params.developerName +
 //   '&earliestPreVer=' + params.preVersion + '&newFunction=' + params.newFuncName
 //   ).then(res => res.data)
 // }
