@@ -301,10 +301,10 @@ export default {
       that.provParams.district = that.resourceDeviceGroupVue.district.trim()
       // if (that.resourceDeviceGroupVue.district !== '') {
       that.resourceDeviceGroupVue.courtName = ''
-      that.courts = []
       getCourtsDataList(that.provParams)
           .then(
             function (result) {
+              that.courts = []
               // console.log('courtsArr -- > ' + JSON.stringify(result))
               let courtsArr = result
               for (let i = 0; i < courtsArr.length; i++) {
@@ -316,16 +316,16 @@ export default {
                   }
                 )
               }
+              if (that.courts.indexOf('') === -1) {
+                let unChoose = {label: '', value: ''}
+                that.courts.unshift(unChoose)
+              }
             }
           ).catch(
             function (error) {
               console.log(error)
             }
           )
-      if (that.courts.indexOf('') === -1) {
-        let unChoose = {label: '', value: ''}
-        that.courts.unshift(unChoose)
-      }
 
       // } else {
       //   that.resourceDeviceGroupVue.courtName = ''
