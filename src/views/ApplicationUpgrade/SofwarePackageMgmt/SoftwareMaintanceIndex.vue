@@ -797,6 +797,9 @@ export default {
               let tmpString = ''
               for (let i = 0; result.data.pkgfileList != null && i < result.data.pkgfileList.length; i++) {
                 tmpString += result.data.pkgfileList[i].fileName
+                if (i + 1 < result.data.pkgfileList.length) {
+                  tmpString += ',  '
+                }
               }
               console.log(' attachmentFiles -----------> ' + tmpString)
               result.data['attachmentFiles'] = tmpString
@@ -820,6 +823,9 @@ export default {
               let tmpString = ''
               for (let i = 0; result.data.pkgfileList != null && i < result.data.pkgfileList.length; i++) {
                 tmpString += result.data.pkgfileList[i].fileName
+                if (i + 1 < result.data.pkgfileList.length) {
+                  tmpString += ',  '
+                }
               }
               console.log(' attachmentFiles -----------> ' + tmpString)
               result.data['attachmentFiles'] = tmpString
