@@ -9,7 +9,7 @@
         <el-table :data="softDispatchHisList" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable >
           </el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
@@ -64,52 +64,47 @@ export default {
       tableTitleList: [
         {
           colName: '下发日期/时间',
-          prop: 'dispatchStartTime',
-          width: 140
+          prop: 'dispatchStartTime'
         },
         {
           colName: '软件包名称',
-          prop: 'packageName',
-          width: 180
+          prop: 'packageName'
         },
         {
           colName: '软件包版本',
-          prop: 'version',
-          width: 100
+          prop: 'version'
         },
         {
           colName: '省（直辖市）',
-          prop: 'province',
-          width: 120
+          prop: 'province'
         },
         {
           colName: '市',
-          prop: 'city',
-          width: 120
+          prop: 'city'
         },
         {
           colName: '区',
-          prop: 'district',
-          width: 120
+          prop: 'district'
         },
         {
           colName: '目标小区名称',
-          prop: 'courtName',
-          width: 180
+          prop: 'courtName'
         },
         {
           colName: '目标服务器名称',
-          prop: 'hostName',
-          width: 120
+          prop: 'hostName'
         },
-        {
-          colName: '目标路径',
-          prop: 'path',
-          width: 150
-        },
+        // {
+        //   colName: '目标路径',
+        //   prop: 'path'
+        // },
         {
           colName: '操作发起人',
           prop: 'dispatcher'
+        },
+        {
+          colName: '操作结果',
+          prop: 'dispatchResult'
         },
         {
           colName: '备注',

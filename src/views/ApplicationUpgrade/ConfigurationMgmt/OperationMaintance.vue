@@ -6,10 +6,10 @@
     <div class="border-divide"></div>
     <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
-        <el-table :data="operMainListData" stripe v-loading="loading" height="680">
+        <el-table :data="operMainListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -44,7 +44,8 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-        <operation-maintance-history :operMainHistoryData="operMainHistoryData"></operation-maintance-history>
+        <!-- <operation-maintance-history :operMainHistoryData="operMainHistoryData"></operation-maintance-history> -->
+        <comm-history :commHistoryList="operMainHistoryData"></comm-history>
       </el-dialog>
     </div>
   </div>
@@ -54,7 +55,7 @@
 import searchCondition from './components/SearchCondition'
 import OperationMaintanceDetails from './components/OperationMaintanceDetails'
 import OperationMaintanceEdit from './components/OperationMaintanceEdit'
-import OperationMaintanceHistory from './components/OperationMaintanceHistory'
+import CommHistory from './components/CommHistory'
 
 import {
   getOperMgmtInfoByPage,
@@ -69,7 +70,7 @@ export default {
     searchCondition,
     OperationMaintanceDetails,
     OperationMaintanceEdit,
-    OperationMaintanceHistory
+    CommHistory
   },
   data () {
     return {
@@ -278,7 +279,8 @@ export default {
       getOperMgmtHistoryList(eachRowUUID)
         .then(
           function (result) {
-            this.operMainHistoryData = result.auServersHisList
+            console.log('history -- > ' + JSON.stringify(result))
+            this.operMainHistoryData = result.auMiddlewareHisList
             this.dialogHistoryVisible = true
           }.bind(this)
         )

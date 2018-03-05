@@ -225,6 +225,7 @@
         :on-success="handleSuccess"
         :on-error="handleError"
         :on-change="handleFileChange"
+        :headers="myHeaders"
         :file-list="fileList"
         :before-upload="handleBeforeUpload"
         :on-exceed="handleExceed"
@@ -335,6 +336,9 @@
           user: '',
           region: ''
         },
+        myHeaders: {
+          Authorization: sessionStorage.token
+        },
         activeNames: ['1'],
         newModel: {
           algVersParamPk: '',
@@ -381,7 +385,7 @@
           { required: true, message: '请输入参数缺省值', trigger: 'blur' }
         ],
         uploadParam: {
-          url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelParamFile',
+          url: '/egc-modelmgmtcomponent/modelmgmt/web/uploadModelParamFile',
           data: {
             'algModelVersionId': '',
             'opType': 'replace'

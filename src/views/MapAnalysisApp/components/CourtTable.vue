@@ -26,11 +26,6 @@
 <script>
 export default {
   name: 'courttable',
-  data () {
-    return {
-
-    }
-  },
   props: {
     tableData: {
       type: Array
@@ -38,7 +33,6 @@ export default {
   },
   methods: {
     handleRowClick: function (row, e) {
-      // console.log(row)
       this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     }
   }

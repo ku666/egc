@@ -24,10 +24,10 @@
     <div style="margin-top: 15px">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
+          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border fit>
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="编号" width="50"></el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" sortable></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>
@@ -75,23 +75,19 @@ export default {
       tableTitleList: [
         {
           colName: '软件包名称',
-          prop: 'name',
-          width: 120
+          prop: 'name'
         },
         {
           colName: '软件包版本',
-          prop: 'version',
-          width: 100
+          prop: 'version'
         },
         {
           colName: '开发者',
-          prop: 'provider',
-          width: 100
+          prop: 'provider'
         },
         {
           colName: '软件包源服务器名称',
-          prop: 'hostname',
-          width: 150
+          prop: 'hostname'
         },
         {
           colName: '软件包源路径名称',
@@ -99,24 +95,20 @@ export default {
           width: 140
         },
         {
-          colName: '软件包登记日期/时间',
-          prop: 'registerTime',
-          width: 180
+          colName: '软件包登记时间',
+          prop: 'registerTime'
         },
         {
           colName: '软件包登记操作者',
-          prop: 'register',
-          width: 140
+          prop: 'register'
         },
         {
           colName: '前续软件包名称',
-          prop: 'preName',
-          width: 150
+          prop: 'preName'
         },
         {
           colName: '前续软件包版本',
-          prop: 'latestPreVer',
-          width: 120
+          prop: 'latestPreVer'
         },
         {
           colName: '备注',

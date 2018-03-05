@@ -31,11 +31,9 @@
 
     <div class="border-divide"></div>
     <div class="table-container">
-      <div class="flex-1">
         <resource-list :tableData="resourceList" :params="resourceListParam" style="margin-top: 15px" 
           @listenDeleteEvent="resourceDeleteEvent" @listenEditEvent="resourceEditEvent" :editable="true" :deletable="true" :viewable="false">
         </resource-list>
-      </div>
     </div>
 
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">

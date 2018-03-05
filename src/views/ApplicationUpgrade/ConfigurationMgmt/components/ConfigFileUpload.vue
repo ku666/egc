@@ -7,7 +7,8 @@
       </div>
       <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
     </el-upload>
-    <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+    <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px" icon="el-icon-upload2">上传服务器</el-button>
+    <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button>
   </div>
 </template>
 
@@ -15,7 +16,8 @@
 import {
   uploadHardWareConfigFile,
   uploadNetEquipConfigFile,
-  uploadAppServiceConfigFile
+  uploadAppServiceConfigFile,
+  downCfgMgmtTemplate
 } from '../apis/index'
 export default {
   props: {
@@ -147,6 +149,35 @@ export default {
     },
     clearFileList () {
       this.fileList = []
+    },
+    _callDownTemplate () {
+      console.log('download')
+      let tempFlag = 0
+      if (this.uploadFlag === 'hw') {
+        tempFlag = 70
+        downCfgMgmtTemplate(tempFlag)
+          .then(
+            function (result) {
+            }
+          ).catch(
+          )
+      } else if (this.uploadFlag === 'ne') {
+        tempFlag = 71
+        downCfgMgmtTemplate(tempFlag)
+          .then(
+            function (result) {
+            }
+          ).catch(
+          )
+      } else if (this.uploadFlag === 'as') {
+        tempFlag = 72
+        downCfgMgmtTemplate(tempFlag)
+          .then(
+            function (result) {
+            }
+          ).catch(
+          )
+      }
     }
   },
   mounted () {}

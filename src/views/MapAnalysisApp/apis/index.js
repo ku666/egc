@@ -12,8 +12,11 @@ let ownertPath = '/egc-smartcommunitymgmtapp/profile'
 
 /**
  * 条件查询小区列表
- * @param orgID 所属组织编码
- * @param courtName 小区名称
+ * @param data 小区查询时所需参数
+ * {
+ *   org 所属组织编码
+ *   courtName 小区名称
+ * }
  */
 export const getCourtList = data => {
   return Axios({
@@ -24,7 +27,10 @@ export const getCourtList = data => {
 }
 /**
  * 获取小区详细信息
- * @param courtId 小区ID
+ * @param data
+ * {
+ *   courtUuid 小区id
+ * }
  */
 export const getCourtInfo = data => {
   return Axios({
@@ -35,10 +41,10 @@ export const getCourtInfo = data => {
 }
 /**
  * 条件查询车辆出入统计信息
- * @param courtID 小区ID
+ * @param courtUuid 小区ID
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
+ * @param startTime 开始日期
+ * @param endTime 结束日期
  */
 export const getCourtCarAccessInfo = data => {
   return Axios({
@@ -51,11 +57,11 @@ export const getCourtCarAccessInfo = data => {
  * 条件查询车辆出入统计信息（分页获取）
  * @param OrgCode 区划组织code，可以为空
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
+ * @param startTime 开始日期
+ * @param endTime 结束日期
  * @param courtID 小区ID
  * @param pageSize 页面数据条数
- * @param pageNum 请求页码
+ * @param currentPage 请求页码
  */
 export const getCarAccessPageList = data => {
   return Axios({
@@ -66,10 +72,10 @@ export const getCarAccessPageList = data => {
 }
 /**
  * 条件查询人员出入统计信息
- * @param courtID 小区ID
+ * @param courtUuid 小区ID
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
+ * @param startTime 开始日期
+ * @param endTime 结束日期
  */
 export const getCourtPerAccessInfo = data => {
   return Axios({
@@ -80,29 +86,17 @@ export const getCourtPerAccessInfo = data => {
 }
 /**
  * 条件查询人员出入统计信息（分页获取）
- * @param OrgCode 区划组织code，可以为空
  * @param reportType 报表类型：日报表，月报表，年报表
- * @param startDate 开始日期
- * @param endDate 结束日期
- * @param courtID 小区ID
+ * @param startTime 开始日期
+ * @param endTime 结束日期
+ * @param courtUuid 小区ID
  * @param pageSize 页面数据条数
- * @param pageNum 请求页码
+ * @param currentPage 请求页码
  */
 export const getPerAccessPageList = data => {
   return Axios({
     method: 'get',
     url: personPath + '/listHumanFlowPage',
-    params: data
-  })
-}
-/**
- *  获取行政区划列表
- * @param orgCode 区划组织code
- */
-export const getOrgList = data => {
-  return Axios({
-    method: 'get',
-    url: contextPath + '/getOrgList',
     params: data
   })
 }

@@ -6,10 +6,10 @@
     <div class="border-divide"></div>
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
-        <el-table :data="netDeviceListData" stripe v-loading="loading" height="680">
+        <el-table :data="netDeviceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable show-overflow-tooltip>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -39,7 +39,7 @@
       <net-device-edit :netDeviceDetails="netDeviceDetails" @saveOsInfoEvent="_updateOsInfo"></net-device-edit>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-      <net-device-history :netDeviceHistoryData="netDeviceHistoryData"></net-device-history>
+      <comm-history :commHistoryList="netDeviceHistoryData"></comm-history>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogUploadVisible" width="40%" :before-close="_handleBeforClose">
       <config-file-upload ref="uploadCmpt" :uploadFlag="uploadFlag" @handleUploadSuccessEvent="_handleCloseUploadDialog"></config-file-upload>
@@ -51,13 +51,13 @@
 import searchCondition from './components/SearchCondition'
 import netDeviceDetails from './components/NetDeviceDetails'
 import netDeviceEdit from './components/NetDeviceEdit'
-import netDeviceHistory from './components/NetDeviceHistory'
+import CommHistory from './components/CommHistory'
 import ConfigFileUpload from './components/ConfigFileUpload'
 import {
   getNetDeviceInfoByPage,
   getNetDeviceDetails,
   updateNetDeviceInfo,
-  getauServersHistoryList,
+  getNetDeviceHistoryList,
   downloadResultFile,
   downloadEquipTemplate,
   syncNetDeviceData
@@ -67,7 +67,7 @@ export default {
     searchCondition,
     netDeviceDetails,
     netDeviceEdit,
-    netDeviceHistory,
+    CommHistory,
     ConfigFileUpload
   },
   data () {
@@ -128,7 +128,7 @@ export default {
         {
           colName: '设备类型/型号',
           prop: 'type',
-          width: 120
+          width: 140
         },
         {
           colName: '管理IP',
@@ -212,7 +212,7 @@ export default {
       getNetDeviceDetails(eachRowUUID)
         .then(
           function (result) {
-            console.log(result)
+            console.log(JSON.stringify(result))
             this.netDeviceDetails = result.auNetequip
             this.dialogDetailsVisible = true
           }.bind(this)
@@ -308,9 +308,10 @@ export default {
       var rowData = this.netDeviceListData[rowIdx]
       var eachRowUUID = rowData.uuid
       console.log('history rowData -- >' + eachRowUUID)
-      getauServersHistoryList(eachRowUUID)
+      getNetDeviceHistoryList(eachRowUUID)
         .then(
           function (result) {
+            console.log('history -- > ' + JSON.stringify(result))
             this.netDeviceHistoryData = result.auNetequipHisList
             this.dialogHistoryVisible = true
           }.bind(this)
