@@ -211,11 +211,12 @@
                       :on-exceed="handleExceed"
                       :on-change="handleOnchange"
                       :on-remove="handleOnchange"
+                      :headers="tokenHeaders"
                       :auto-upload="false"
                       :file-list="fileList">
                       <i class="el-icon-upload"></i>
                       <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                      <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                      <!-- <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div> -->
                     </el-upload>
                   </el-form-item>
                 </template>
@@ -244,17 +245,7 @@
         </div>
       </el-dialog>
     </div>
-    <!-- <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogDetailsVisible" top="8vh">
-        <software-package-details :softwarePckDetails="softwarePckDetails"></software-package-details>
-      </el-dialog>
-    </div>
-    <div>
-      <el-dialog :title="dialogTitle" :visible.sync="dialogEditVisible" top="8vh">
-        <software-package-edit :softwarePckDetails="softwarePckDetails" @updateSoftwareInfoEvent="_updateSofwareInfo"></software-package-edit>
-      </el-dialog>
-    </div> -->
-    <!--软件包历史数据-->
+    <!--软件包历史数据 dialog-->
     <div>
       <el-dialog :title="dialogTitle" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
         <software-package-history ref="packageHistory" :rowIdx="rowIdx" :hisUuid ="hisUuid"></software-package-history>
@@ -266,7 +257,7 @@
         <div>
           <el-form>
             <el-row>
-              <el-col :span="24">
+              <el-col :span="36">
                 <el-form-item label="选择导入模板" :label-width="formLabelWidth" prop="uploadFiles">
                   <el-upload
                     ref="uploadPackageExcelTemplate"
@@ -279,15 +270,16 @@
                     :on-exceed="handleImportExcelTemplateExceed"
                     :on-change="handleImportExcelTemplateOnchange"
                     :on-remove="handleImportExcelTemplateOnchange"
+                    :headers="tokenHeaders"
                     :auto-upload="false"
                     :file-list="fileList">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">上传文件，且不超过200M</div>
+                    <!-- <div class="el-upload__tip" slot="tip">上传文件，且不超过10M</div> -->
                   </el-upload>
                 </el-form-item>
               </el-col>
-              <el-col :span="24">
+              <el-col :span="36">
                 <el-form-item label="选择软件包以及关联附件" :label-width="formLabelWidth" prop="uploadJarAttachmentFiles">
                   <el-upload
                     ref="uploadPackageJarAttachmentFiles"
@@ -300,11 +292,12 @@
                     :on-exceed="handleImportJarAttachmentExceed"
                     :on-change="handleImportJarAttachmentOnchange"
                     :on-remove="handleImportJarAttachmentOnchange"
+                    :headers="tokenHeaders"
                     :auto-upload="false"
                     :file-list="fileJarAttachmentList">
                     <i class="el-icon-upload"></i>
                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                    <div class="el-upload__tip" slot="tip">上传文件，且不超过500M</div>
+                    <!-- <div class="el-upload__tip" slot="tip">上传文件，且不超过500M</div> -->
                   </el-upload>
                 </el-form-item> 
               </el-col>
@@ -351,7 +344,6 @@ export default {
       dialogTitle: '',
       dialogImportTitle: '',
       dialogImportVisible: false,
-      addr: '',
       dialogRegisterVisible: false,
       dialogDetailsVisible: false,
       dialogEditVisible: false,
@@ -402,6 +394,7 @@ export default {
         uploadFilesIsDisable: true
       },
       optType: '',
+      tokenHeaders: {'FrontType': 'scp-admin-ui', 'Authorization': sessionStorage.token},
       uploadFiles: new FormData(),
       uploadJarAttachmentFiles: new FormData(),
       importFiles: new FormData(),
@@ -555,8 +548,10 @@ export default {
     _handleRegister () {
       this.dialogTitle = '软件包信息注册'
       this.fileList = []
+      if (this.$refs['softwareDetails'] != null && this.$refs.addapp !== undefined) {
+        this.$refs['softwareDetails'].resetFields()
+      }
       this.dialogRegisterVisible = true
-      this.$refs['softwareDetails'].resetFields()
       this._handleClearRegister(this.softwareDetails)
       this.switchInputDisable('add')
     },
@@ -728,6 +723,8 @@ export default {
     handleImportJarAttachmentExceed (files, fileList) {
       // this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
     },
+    beforeUpload (file) {
+    },
     // 清空软件包注册页面之前输入的值
     closeDialog () {
       this.dialogRegisterVisible = false
@@ -749,9 +746,6 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              // console.log(JSON.stringify(result))
-              // this.softwarePckDetails = result.data
-              // this.dialogDetailsVisible = true
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
@@ -769,12 +763,10 @@ export default {
       getsoftwarePckById(eachRowUUID)
           .then(
             function (result) {
-              // this.softwarePckDetails = result.data
               this.dialogRegisterVisible = true
               this.softwareDetails = result.data
               this.softwareDetails.batchId = rowData.batchId
               this.switchInputDisable('edit')
-              // this.dialogEditVisible = true
               console.log('edit software details ----------->   ' + JSON.stringify(this.softwareDetails))
             }.bind(this)
           )

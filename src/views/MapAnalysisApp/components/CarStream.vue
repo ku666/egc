@@ -91,7 +91,7 @@
   
 <script>
 import { getCourtCarAccessInfo, getCarAccessPageList, getCourtInfo } from '../apis/index'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 export default {
   name: 'CarStream',
   data () {

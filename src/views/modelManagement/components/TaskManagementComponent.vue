@@ -43,7 +43,7 @@
               <div class="item-info label">任务来源</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.taskSource" placeholder="任务来源">
-                  <el-option key="0" label="全部" value="0"></el-option>
+                  <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                   <el-option
                     v-for="item in systemTaskSourceList"
                     :key="item.item_code"
@@ -525,8 +525,8 @@
           deleteFlag: 0
         },
         modelListSearch: {
-          taskType: 'mm.tsktyp.exe',
-          taskSource: '全部',
+          taskType: '全部',
+          taskSource: 'mm.tsksrc.direct',
           taskStatus: '全部',
           communityId: '全部',
           ip: ''
@@ -602,6 +602,9 @@
     mounted () {
       if (this.$route.params.modelId) {
         this.showModelInfo = true
+      }
+      if (this.$route.params.planId) {
+        this.modelListSearch.taskSource = '全部'
       }
       clearInterval(this.uploadInterval)
       // console.log(this.$route.params.modelId)
@@ -918,7 +921,7 @@
       checkExcuteResult (index, item) {
         let curItem = this.modelPlanList[index]
         if (!this.$route.params.versionId && this.$route.params.modelId) {
-          this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/plan/' + item.$route.params.planId + '/task/' + curItem.algTaskPk + '/taskinfo'})
+          this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/plan/' + this.$route.params.planId + '/task/' + curItem.algTaskPk + '/taskinfo'})
         } else if (this.$route.params.versionId) {
           this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/version/' + this.$route.params.versionId + '/plan/' + item.algTaskPlanPk + '/task/' + curItem.algTaskPk + '/taskinfo'})
         } else {

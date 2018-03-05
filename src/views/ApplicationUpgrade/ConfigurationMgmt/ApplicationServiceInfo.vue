@@ -6,10 +6,10 @@
     <div class="border-divide"></div>
     <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
-        <el-table :data="appServiceListData" stripe v-loading="loading" height="680">
+        <el-table :data="appServiceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -39,7 +39,7 @@
       <app-service-edit :auappServiceDetails="auappServiceData" @saveAppServiceInfoEvent="_updateAppServiceInfo"></app-service-edit>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogHistoryVisible" top="8vh" width="80%">
-      <app-service-history :auappServiceHistory="auappServiceHistory"></app-service-history>
+      <comm-history :commHistoryList="auappServiceHistory"></comm-history>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogUploadVisible" width="40%" :before-close="_handleBeforClose">
       <config-file-upload ref="uploadCmpt" :uploadFlag="uploadFlag" @handleUploadSuccessEvent="_handleCloseUploadDialog"></config-file-upload>
@@ -51,7 +51,7 @@
 import searchCondition from './components/SearchCondition'
 import appServiceDetails from './components/AppServiceDetails'
 import appServiceEdit from './components/AppServiceEdit'
-import appServiceHistory from './components/AppServiceHistory'
+import CommHistory from './components/CommHistory'
 import ConfigFileUpload from './components/ConfigFileUpload'
 
 import {
@@ -68,7 +68,7 @@ export default {
     searchCondition,
     appServiceDetails,
     appServiceEdit,
-    appServiceHistory,
+    CommHistory,
     ConfigFileUpload
   },
   data () {
@@ -123,17 +123,17 @@ export default {
         {
           colName: '应用&服务名称',
           prop: 'name',
-          width: 160
+          width: 200
         },
         {
           colName: '应用&服务版本',
           prop: 'version',
-          width: 120
+          width: 180
         },
         {
           colName: '应用&服务端口',
           prop: 'port',
-          width: 120
+          width: 180
         },
         {
           colName: '服务器主机名称',
@@ -308,8 +308,8 @@ export default {
       getAppServiceHistoryList(eachRowUUID)
         .then(
           function (result) {
+            console.log('history -- > ' + JSON.stringify(result))
             this.auappServiceHistory = result.auServicesHisList
-            console.log('searvices history  -- >' + JSON.stringify(result))
             this.dialogHistoryVisible = true
           }.bind(this)
         )

@@ -4,7 +4,7 @@
       <el-form :inline="true" :model="searchConditionList">
         <div class="search-container">
           <el-form-item label="软件包批次名称">
-            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入软件包批次名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -23,7 +23,7 @@
           <el-table :data="softwareBatchDataList" stripe border v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">

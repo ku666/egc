@@ -4,7 +4,7 @@ import {Loading} from 'element-ui'
 export const MOCK_API_URL = '/modelmgmtcomponent'
 export const BASE_PATH = '/egc-modelmgmtcomponent'
 
-export const SUCCESS_CODE = '0000'
+// export const SUCCESS_CODE = '0000'
 
 export const ERROR_MESSAGE_MAP = {
   'scp.modelmgmt.modeltask.timeout': '执行命令发送超时'

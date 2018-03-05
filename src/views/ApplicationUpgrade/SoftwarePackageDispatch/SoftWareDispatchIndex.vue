@@ -3,13 +3,13 @@
     <el-form :inline="true" :model="queryList">
       <div class="search-container">
         <el-form-item label="软件包名称">
-          <el-input v-model="queryList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageName" placeholder="请输入软件包名称" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <el-form-item label="软件包版本">
-          <el-input v-model="queryList.packageVersion" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageVersion" placeholder="请输入软件包版本" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <el-form-item label="开发者">
-          <el-input v-model="queryList.packageProvider" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select"></el-input>
+          <el-input v-model="queryList.packageProvider" placeholder="请输入开发者" clearable :maxlength="maxlength" class="appupgrade_el-select" @keyup.enter.native="_handleFilter"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
@@ -24,10 +24,10 @@
     <div style="margin-top: 15px">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
+          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border fit>
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="编号" width="50"></el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" sortable></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>
@@ -218,6 +218,7 @@ export default {
               this.downloadResultVisible = true
               this.dispResultErrMsg = result
               this.dialogTittle = '错误消息'
+              this.resetOrgData()
             }
           }.bind(this)
         )

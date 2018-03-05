@@ -45,7 +45,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :span="6" class="stime">
+            <el-col :span="6">
               <el-form-item label="开始时间">
                 <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
                 </el-date-picker>
@@ -69,7 +69,7 @@
         <div class="show" v-show='isOwner'>
           <!-- 表格展示 -->
           <div v-if="isOwenrTable" style="width:100%">
-            <el-table :data="ownerTableData" width="100%" height="420" class="table-width" stripe>
+            <el-table :data="ownerTableData" width="100%" height="420" stripe>
               <el-table-column style="width:100%" prop="group" label="年龄段">
               </el-table-column>
               <el-table-column style="width:100%" prop="countNum" label="人数">
@@ -86,7 +86,7 @@
         <div class="show" v-show='isRate'>
           <!-- 表格展示 -->
           <div v-show='isRateTable' width="100%">
-            <el-table :data='rateTableData' width="100%" height="380" class="table-width" stripe>
+            <el-table :data='rateTableData' width="100%" height="380" stripe>
               <el-table-column style="width:100%" prop="timeGroup" label="时间">
               </el-table-column>
               <el-table-column style="width:100%" prop="inCount" label="进入次数">
@@ -108,10 +108,10 @@
   </el-dialog>
 </template>
 <script>
-import optionsData from '@/views/MapAnalysisApp/assets/js/ownerOptions.js'
+import optionsData from '@/views/MapAnalysisApp/assets/js/owneroptions.js'
 import { getCourtInfo, getCourtProfile, getBuildProfile } from '@/views/MapAnalysisApp/apis/index'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 export default {
   data () {
     return {
@@ -231,7 +231,7 @@ export default {
             res.data.data.buildInfo.map(item => {
               this.form.buildList.push({
                 value: item.uuid,
-                label: item.memo.slice(item.memo.indexOf(' ') + 1)
+                label: item.memo
               })
             })
             console.log(LOG_TAG + '获取到小区楼栋名并插入到列表')

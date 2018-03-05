@@ -36,24 +36,26 @@
         <el-table-column prop='uuid' v-if='uuidshow'></el-table-column>
         <el-table-column label="姓名" prop="name" sortable>
         </el-table-column>
-        <el-table-column label="人员类型" prop="userType" sortable>
+        <!-- <el-table-column label="人员类型" prop="userType" sortable>
           <template slot-scope="scope">
             <div v-for='ut in userTypes' v-bind:key='ut.value'>
               {{scope.row.userType === ut.value ? ut.label : ''}}
             </div>
           </template>
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column label="性别" prop="sex" sortable>
           <template slot-scope="scope">
-            {{scope.row.sex === '1' ? '男' : '女'}}
+            <div v-for='sx in sexs' v-bind:key='sx.itemCode'>
+              {{scope.row.sex === sx.itemCode ? sx.itemName : ''}}
+            </div>
           </template>
         </el-table-column>
         <el-table-column label="生日" prop="birth" sortable>
         </el-table-column>
         <el-table-column label="证件类型" prop="idenType" sortable>
           <template slot-scope="scope">
-            <div v-for='idType in idTypes' v-bind:key='idType.value'>
-              {{scope.row.idenType === idType.value ? idType.label : ''}}
+            <div v-for='idType in idTypes' v-bind:key='idType.itemCode'>
+              {{scope.row.idenType === idType.itemCode ? idType.itemName : ''}}
             </div>
           </template>
         </el-table-column>
@@ -81,16 +83,16 @@
                   <label>姓名：</label>
                   <label>{{this.modelDetailForm.name}}</label>
                 </el-col>
-                <el-col :span="12">
+                <!-- <el-col :span="12">
                   <label>人员类型：</label>
                   <label>{{this.userTypeName}}</label>
-                </el-col>
-              </el-row>
-              <el-row class="line-one">
+                </el-col> -->
                 <el-col :span="12">
                   <label>性别：</label>
                   <label>{{this.sexName}}</label>
                 </el-col>
+              </el-row>
+              <el-row class="line-one">
                 <el-col :span="12">
                   <label>生日：</label>
                   <label>{{this.modelDetailForm.birth}}</label>
@@ -134,6 +136,7 @@
   </div>
 </template>
 <script>
+import { getDictItem } from '../../apis/index.js'
 import { getPersonList } from '../../apis/person_manager.js'
 import { getHousesByUserUuid } from '../../apis/house_manager.js'
 import { getCourtsByConditions } from '../../apis/court_manager.js'
@@ -152,7 +155,7 @@ export default {
       activeName: 'basic',
       modelDetailForm: {
         name: '',
-        userType: '',
+        // userType: '',
         sex: '',
         birth: '',
         idenType: '',
@@ -171,76 +174,72 @@ export default {
         phone: '',
         email: ''
       },
-      idTypes: [
-        {
-          value: '1',
-          label: '身份证' // 1-身份证（默认）;2-驾驶证;3-学生证;4-军官证;5-护照;6-其它
-        }, {
-          value: '2',
-          label: '驾驶证'
-        }, {
-          value: '3',
-          label: '学生证'
-        }, {
-          value: '4',
-          label: '军官证'
-        }, {
-          value: '5',
-          label: '护照'
-        }, {
-          value: '6',
-          label: '其它'
-        }
-      ],
-      userTypes: [
-        {
-          value: '1',
-          label: '业主' // 1-业主;2-家人;3-租户;4-访客
-        }, {
-          value: '2',
-          label: '家人'
-        }, {
-          value: '3',
-          label: '租户'
-        }, {
-          value: '4',
-          label: '访客'
-        }
-      ]
+      idTypes: [],
+      sexs: []
+      // userTypes: [
+      //   {
+      //     value: '1',
+      //     label: '业主' // 1-业主;2-家人;3-租户;4-访客
+      //   }, {
+      //     value: '2',
+      //     label: '家人'
+      //   }, {
+      //     value: '3',
+      //     label: '租户'
+      //   }, {
+      //     value: '4',
+      //     label: '访客'
+      //   }
+      // ]
     }
   },
   components: {
   },
   computed: {
-    userTypeName: function () {
-      let that = this
-      let userType = that.modelDetailForm.userType
-      let temp = that.userTypes.find(e => e.value === userType)
-      if (temp) {
-        return temp.label
-      } else {
-        return ''
-      }
-    },
+    // userTypeName: function () {
+    //   let that = this
+    //   let userType = that.modelDetailForm.userType
+    //   let temp = that.userTypes.find(e => e.value === userType)
+    //   if (temp) {
+    //     return temp.label
+    //   } else {
+    //     return ''
+    //   }
+    // },
     sexName: function () {
-      return this.modelDetailForm.sex === '1' ? '男' : '女'
+      return this.getNameFromCode(this.modelDetailForm.sex, this.sexs)
     },
     idenTypeName: function () {
-      let that = this
-      let idenType = that.modelDetailForm.idenType
-      let temp = that.idTypes.find(e => e.value === idenType)
-      if (temp) {
-        return temp.label
-      } else {
-        return ''
-      }
+      return this.getNameFromCode(this.modelDetailForm.idenType, this.idTypes)
     }
   },
   methods: {
+    // 获得字典数据
+    getDictData: function () {
+      const SEX = '3'
+      getDictItem({ 'itemType': SEX })
+      .then(res => { this.sexs = res.data })
+      .catch(err => { console.log(err) })
+
+      const IDEN_TYPE = '4'
+      getDictItem({ 'itemType': IDEN_TYPE })
+      .then(res => { this.idTypes = res.data })
+      .catch(err => { console.log(err) })
+    },
+    // 根据code从字典数据中获取该code对应的name
+    getNameFromCode: function (code, codeValues) {
+      let temp = codeValues.find(e => e.itemCode === code)
+      if (temp) {
+        return temp.itemName
+      } else {
+        return ''
+      }
+    },
+    // 显示人员详细信息
     showPersonDetail: function (rowData = {}) {
       this.detailDialogVisible = true
       this.modelDetailForm.name = rowData.name
-      this.modelDetailForm.userType = rowData.userType
+      // this.modelDetailForm.userType = rowData.userType
       this.modelDetailForm.sex = rowData.sex
       this.modelDetailForm.birth = rowData.birth
       this.modelDetailForm.idenType = rowData.idenType
@@ -248,7 +247,7 @@ export default {
       this.modelDetailForm.phone = rowData.phone
       this.modelDetailForm.email = rowData.email
       // 根据人员的uuid获取该人员的房产信息
-      getHousesByUserUuid({ 'userUuid': rowData.uuid })
+      getHousesByUserUuid({ 'userUuid': rowData.uuid, 'userType': '1' })
         .then(res => {
           this.modelDetailForm.detail = res.data
         })
@@ -336,6 +335,7 @@ export default {
   },
   mounted: function () {
     const self = this
+    self.getDictData()
     self.search()
     var input = self.$refs.pager.$el.querySelectorAll('input')[1]
     self.addEventHandler(input, 'keyup', function (e) {

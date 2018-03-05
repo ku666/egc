@@ -329,7 +329,7 @@
         searchRules: {
           paramCode: [
             {required: false, trigger: 'blur'},
-            {pattern: '^[A-Za-z0-9_]+$', min: 0, max: 64, message: '只支持字母,数字和下划线', trigger: 'change'}
+            {pattern: '^[A-Za-z0-9_.]+$', min: 0, max: 64, message: '只支持字母,数字,下划线和"."', trigger: 'change'}
           ]
         },
         rules: {
@@ -345,7 +345,7 @@
           ],
           paramCode: [
             { required: true, message: '请输入系统参数代码', trigger: 'blur' },
-            { pattern: '^[A-Za-z0-9_]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持字母,数字和下划线）', trigger: 'blur' }
+            { pattern: '^[A-Za-z0-9_.]+$', min: 1, max: 64, message: '长度在 1 到 64 个字符（只支持字母,数字,下划线和"."）', trigger: 'blur' }
           ],
           paramValue: [
             { message: '请输入系统参数值', trigger: 'blur' },
@@ -415,7 +415,7 @@
           pageSize: this.pageSize,
           condition: {
             paramCode: '%' + this.modelListSearch.paramCode + '%',
-            communityId: this.modelListSearch.communityId === '0' ? '' : this.modelListSearch.communityId,
+            communityId: this.modelListSearch.communityId,
             deleteFlag: 0
           },
           orderBy: 'createTime'

@@ -55,15 +55,15 @@
 </template>
 <script>
 import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getCourtProfile } from '@/views/MapAnalysisApp/apis/index.js'
-import peopleOption from '@/views/MapAnalysisApp/assets/js/peopleStream.js'
-import carOption from '@/views/MapAnalysisApp/assets/js/carStream.js'
-import equipKind from '@/views/MapAnalysisApp/assets/js/equipKind.js'
-import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerInfo.js'
+import peopleOption from '@/views/MapAnalysisApp/assets/js/peoplestream.js'
+import carOption from '@/views/MapAnalysisApp/assets/js/carstream.js'
+import equipKind from '@/views/MapAnalysisApp/assets/js/equipkind.js'
+import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerinfo.js'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
 import CarStream from '@/views/MapAnalysisApp/components/CarStream'
 import EquipmentReport from '@/views/MapAnalysisApp/components/EquipmentReport'
 import OwnerPortrait from '@/views/MapAnalysisApp/components/OwnerPortrait'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   components: {

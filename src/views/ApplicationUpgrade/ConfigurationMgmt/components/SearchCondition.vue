@@ -1,5 +1,6 @@
 <template>
   <div class="ui-common">
+    <div>
     <el-form :inline="true" :model="searchConDetails">
       <div class="search-container">
         <el-form-item label="选择省">
@@ -21,7 +22,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="搜索条件">
-          <el-input v-model="searchConDetails.condition" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
+          <el-input v-model="searchConDetails.condition" @keyup.enter.native="_callHandleFilter" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
         </el-form-item>
         <div class="btn-container">
           <el-form-item>
@@ -29,11 +30,11 @@
             <el-button type="primary" @click="_callHandleFilter" :class="actionBtnClsName">搜索</el-button>
             <el-button type="primary" @click="_callHanderDownLoadResult" :class="actionBtnClsName">导出</el-button>
             <el-button type="primary" @click="_callUploadFile" :class="actionBtnClsName" v-show="isShowBtn">导入</el-button>
-            <!-- <el-button type="primary" @click="_callDownTemplate" :class="actionBtnClsName" v-show="isShowBtn">模板下载</el-button> -->
           </el-form-item>
         </div>
       </div>
     </el-form>
+    </div>
   </div>
 </template>
 
@@ -83,9 +84,6 @@ export default {
     },
     _callUploadFile () {
       this.$emit('handleFilterEvent', this.searchConDetails, 'upload')
-    },
-    _callDownTemplate () {
-      this.$emit('handleFilterEvent', this.searchConDetails, 'downtemplate')
     },
     setBtnVisible () {
       if (

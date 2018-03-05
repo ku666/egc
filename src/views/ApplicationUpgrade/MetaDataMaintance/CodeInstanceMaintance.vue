@@ -4,13 +4,13 @@
       <el-form :inline="true" :model="searchConditionList">
         <div class="search-container">
           <el-form-item label="代码实例值">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="提供商" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -26,10 +26,10 @@
       <div class="border-divide"></div>
       <div class="table-container">
         <div style="margin-top: 15px">
-          <el-table :data="codeInstList" stripe v-loading="loading" id="codeInstanceTable" height="680">
+          <el-table :data="codeInstList" stripe border v-loading="loading" id="codeInstanceTable" height="680">
             <el-table-column type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
