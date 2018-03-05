@@ -225,6 +225,7 @@ export default {
           func = this.deviceCategoryDetail.uuid ? updateDeviceCategory : insertDeviceCategory
           func(Object.assign({}, this.deviceCategoryDetail)).then(res => {
             this.deviceCategoryDetail.uuid = res.data.uuid
+            this.deviceCategoryDetail.typeCode = res.data.typeCode
             this.$parent.search({})
             this.$parent.getParents()
             this.viewFlag = true
