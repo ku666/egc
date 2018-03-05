@@ -24,10 +24,10 @@
     <div style="margin-top: 15px">
       <el-collapse v-model="activeNames" accordion>
         <el-collapse-item v-for="(item , index) in dispatchDataList" :key="index" :title="item.batchName" :name="item.batchName">
-          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border>
+          <el-table ref="softwareTable" :data="item.packageDataList" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange" stripe border fit>
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column type="index" label="编号" width="50"></el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" :width="item.width"></el-table-column>
+            <el-table-column v-for="(item, index) in tableTitleList" :key="index" :prop="item.prop" :label="item.colName" sortable></el-table-column>
           </el-table>
         </el-collapse-item>
       </el-collapse>

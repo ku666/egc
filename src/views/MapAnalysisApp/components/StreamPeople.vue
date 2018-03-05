@@ -1,7 +1,7 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="closeCallback" class='popup-peo'>
+  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="onCloseCallback" class='popup-peo'>
     <el-row>
-      <el-col :span="4" class="leftText">
+      <el-col :span="4" class="left-text">
         <div>
           <div>
             <span>小区名称</span>
@@ -29,7 +29,7 @@
           <el-row>
             <el-col :span="8">
               <el-form-item label="报表类型">
-                <el-select v-model="parameter.reportType" placeholder="请选择" @change="reportTypeEvent" style="width:95%">
+                <el-select v-model="parameter.reportType" placeholder="请选择" @change="onReportTypeEvent" style="width:95%">
                   <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -37,26 +37,26 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="timeJudgment">
+                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="timeJudgment">
+                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="24" style="text-align:right">
-              <el-button type="primary" @click="timeQuery">查询</el-button>
-              <el-button type="success" @click="tableSwitch" plain>表单</el-button>
-              <el-button type="danger" @click="chartSwitch" plain>图表</el-button>
+              <el-button type="primary" @click="onTimeQuery">查询</el-button>
+              <el-button type="success" @click="onTableSwitch" plain>表单</el-button>
+              <el-button type="danger" @click="onChartSwitch" plain>图表</el-button>
             </el-col>
           </el-row>
         </el-form>
         <div class="show">
           <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" height="380" class="tableWidth" stripe border>
+            <el-table :data="tableData" width="100%" height="380" stripe border>
               <el-table-column prop="date" label="时间">
               </el-table-column>
               <el-table-column prop="courtName" label="小区名称">
@@ -66,13 +66,13 @@
               <el-table-column prop="perOutCount" label="出园人数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" @size-change="onSizeChange" @current-change="onCurrentChange">
             </el-pagination>
           </div>
           <!-- 图表展示 -->
-          <div class="canvas" style="width:100%" v-show="isChartShow">
-            <div id="flowInformation"></div>
-            <div v-show="isPerErrInfo" class="perErrInfo"><img :src="perErrImg"></div>
+          <div class="echarts-frame" style="width:100%" v-show="isChartShow">
+            <div id="flow-information"></div>
+            <div v-show="isPerErrInfo" class="pererr-info"><img :src="perErrImg"></div>
           </div>
         </div>
       </el-col>
@@ -81,7 +81,7 @@
 </template>
 <script>
 import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
-import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapAnalysisLog.js'
+import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 import errImg from '@/views/MapAnalysisApp/assets/images/err.png'
 export default {
   data () {
@@ -123,7 +123,7 @@ export default {
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
       perErrImg: errImg, // 图表错误提示
-      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间new Date(new Date().setDate(new Date().getDate() - 1))
+      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
       endDate: new Date(), // 结束时间
       myChart: null,
       myChartNode: null,
@@ -146,8 +146,11 @@ export default {
     }
   },
   methods: {
-    // 选择报表
-    reportTypeEvent: function (val) {
+    /**
+    * 选择报表类型加载不同的日期选择器和默认的时间 *
+    * @param {string} val 报表类型：日报(0) 月报(1) 年报(2)
+    */
+    onReportTypeEvent: function (val) {
       if (val === '0' || val === '1') { // 1年31622400000  7天604800000
         this.timeType = 'date'
         this.startDate = new Date(this.endDate.getTime() - 604800000)
@@ -157,7 +160,7 @@ export default {
       }
     },
     // 点击切换图表展示
-    chartSwitch: function () {
+    onChartSwitch: function () {
       console.log(LOG_TAG + ' 点击切换图表展示 ')
       this.isChartShow = true
       this.isTableShow = false
@@ -171,8 +174,8 @@ export default {
         this.myChart.resize()
       })
       // echarts图表
-      this.myChartNode = document.querySelector('#flowInformation')
-      this.canvasNode = document.querySelector('.canvas')
+      this.myChartNode = document.querySelector('#flow-information')
+      this.canvasNode = document.querySelector('.echarts-frame')
       this.myChart = this.$echarts.init(this.myChartNode)
       this.myChart.setOption(this.echartsData())
       // 多次点击
@@ -343,7 +346,7 @@ export default {
       return options
     },
     // 点击切换表格展示
-    tableSwitch: function () {
+    onTableSwitch: function () {
       console.log(LOG_TAG + ' 点击切换表格展示 ')
       this.isChartShow = false
       this.isTableShow = true
@@ -361,7 +364,10 @@ export default {
       this.tableClickNum++
       this.getPgingData()
     },
-    // 打开组件的回调
+    /**
+    * 打开组件的回调 *
+    * @param {string} _courtUuid 从主页传入的当前小区id
+    */
     streamPeople: function (_courtUuid) {
       this.getPgingData()
       this.parameter.courtUuid = _courtUuid
@@ -373,11 +379,11 @@ export default {
       this.dialogVisible = true
     },
     // 按时间（报表类型）查询
-    timeQuery: function () {
+    onTimeQuery: function () {
       console.log(LOG_TAG + ' 按时间（报表类型）查询 ')
       // 查询时页面初始化到第一页
       this.parameter.currentPage = 1
-      this.timeJudgment()
+      this.onTimeJudgment()
       if (this.isRequest) {
         if (this.isTableShow) this.getPgingData()
         else this.getData()
@@ -394,7 +400,7 @@ export default {
         this.tableClickNum = 0
       }
     },
-    timeJudgment () {
+    onTimeJudgment () {
       switch (this.parameter.reportType) {
         case '0':
           if (this.endDate.getTime() - this.startDate.getTime() > 30 * 24 * 60 * 60 * 1000) {
@@ -423,14 +429,20 @@ export default {
           break
       }
     },
-    // 分页组件单页总数变化
-    sizeChange: function (val) {
+    /**
+    * 分页组件单页总数变化 *
+    * @param {string} val 每页显示数据条数
+    */
+    onSizeChange: function (val) {
       this.parameter.pageSize = val
       this.parameter.currentPage = 1
       this.getPgingData()
     },
-    // 分页组件当前页变化
-    currentChange: function (val) {
+    /**
+    * 分页组件当前页变化 *
+    * @param {string} val 显示的页数
+    */
+    onCurrentChange: function (val) {
       this.parameter.currentPage = val
       this.getPgingData()
     },
@@ -475,7 +487,11 @@ export default {
         })
       })
     },
-    // 处理日期对象
+    /**
+    * 处理日期对象 *
+    * @param {Object} date 要处理的日期对象
+    * @return {String} 返回后台所需要的日期格式（2018-2-16）
+    */
     processingDate: function (date) {
       let year = date.getFullYear()
       let month = date.getMonth() + 1
@@ -505,11 +521,10 @@ export default {
       })
     },
     // 关闭窗口(dialog)前重置数据
-    closeCallback: function () {
+    onCloseCallback: function () {
       this.chartClickNum = 0
     }
-  },
-  mounted: function () { }
+  }
 }
 </script>
 <style lang='less' scoped>
@@ -542,7 +557,7 @@ export default {
     height: 430px;
     margin-top: 10px;
   }
-  /deep/.canvas {
+  /deep/.echarts-frame {
     border: 1px solid #ccc;
     padding: 10px 8px 5px 5px;
   }
@@ -550,11 +565,11 @@ export default {
     padding: 0px 20px;
   }
 }
-#flowInformation {
+#flow-information {
   height: 420px;
   position: relative;
 }
-.leftText {
+.left-text {
   padding: 5px 10px;
   div {
     line-height: 30px;
@@ -570,7 +585,7 @@ export default {
     }
   }
 }
-.perErrInfo {
+.pererr-info {
   position: absolute;
   top: 290px;
   left: 190px;

@@ -197,7 +197,7 @@
               console.log(error)
             }
           )
-        this.initData()
+        // this.initData()
       },
       initData () {
         this.listQuery.q_departName = ''
