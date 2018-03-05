@@ -9,49 +9,6 @@
           <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
       </el-form-item>
-      <div v-if="isAddFlagParm">
-        <el-form-item label="选择省" :label-width="formLabelWidth" prop="province">
-          <el-select v-model="resourceDeviceGroupVue.province" placeholder="请选择省份" class="user_el-select" @change="loadCityData" disabled>
-            <el-option
-              v-for="province in provincesSelect"
-              :key="province.label"
-              :label="province.label"
-              :value="province.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth">
-          <el-select v-model="resourceDeviceGroupVue.city" placeholder="请选择城市" class="user_el-select" @change="loadDistrictData" disabled>
-            <el-option
-              v-for="citie in citys"
-              :key="citie.label"
-              :label="citie.label"
-              :value="citie.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth">
-          <el-select v-model="resourceDeviceGroupVue.district" placeholder="请选择区县" class="user_el-select" @change="loadCourtsData" disabled>
-            <el-option
-              v-for="district in districts"
-              :key="district.label"
-              :label="district.label"
-              :value="district.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择小区" :label-width="formLabelWidth">
-          <el-select v-model="resourceDeviceGroupVue.courtName" placeholder="请选择小区" class="user_el-select" disabled>
-            <el-option
-              v-for="court in courts"
-              :key="court.uuid"
-              :label="court.label"
-              :value="court.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-      </div>
-      <div v-else>
         <el-form-item label="选择省" :label-width="formLabelWidth" prop="province">
           <el-select v-model="resourceDeviceGroupVue.province" placeholder="请选择省份" class="user_el-select" @change="loadCityData">
             <el-option
@@ -92,14 +49,13 @@
             </el-option>
           </el-select>
         </el-form-item>
-      </div>
       <div class="user-button" align="center">
           <el-row align="center">
             <el-col align="center">
               <span class="dialog-footer">
                 <el-button class='cancel-btn' @click="handelCancel('resourceDeviceGroupVue')" type='primary'>取消</el-button>
-                <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceDeviceGroupVue')" class='action-btn'>保 存11</el-button>
-                <el-button v-else type="primary" @click="handleCreate('resourceDeviceGroupVue')" class='action-btn'>保 存22</el-button>
+                <el-button v-if="isAddFlagParm" type="primary" @click="handleUpdate('resourceDeviceGroupVue')" class='action-btn'>保 存</el-button>
+                <el-button v-else type="primary" @click="handleCreate('resourceDeviceGroupVue')" class='action-btn'>保 存</el-button>
               </span>
             </el-col>
         </el-row>
@@ -158,13 +114,9 @@ export default {
 
   },
   watch: {
-    'resourceDeviceGroupVue.province' (newValue, oldValue) {
-      console.log('222')
-      this.loadCourtsData()
-    }
   },
   mounted () {
-    // this.loadProvinceData()
+    this.methodsOfUpdate()
   },
   data () {
     // 检查资源名称唯一性
@@ -289,7 +241,6 @@ export default {
                   }
                 )
               }
-              that.loadCourtsData()
             }
           )
           .catch(
@@ -297,6 +248,11 @@ export default {
               console.log(error)
             }
           )
+      that.loadCourtsData()
+      if (that.courts.indexOf('') === -1) {
+        let unChoose = {label: '', value: ''}
+        that.citys.unshift(unChoose)
+      }
     },
     // 加载区县
     loadDistrictData () {
@@ -321,13 +277,17 @@ export default {
                   }
                 )
               }
-              that.loadCourtsData()
             }
           ).catch(
             function (error) {
               console.log(error)
             }
           )
+        that.loadCourtsData()
+        if (that.courts.indexOf('') === -1) {
+          let unChoose = {label: '', value: ''}
+          that.districts.unshift(unChoose)
+        }
       } else {
         that.resourceDeviceGroupVue.district = ''
       }
@@ -341,11 +301,11 @@ export default {
       that.provParams.district = that.resourceDeviceGroupVue.district.trim()
       // if (that.resourceDeviceGroupVue.district !== '') {
       that.resourceDeviceGroupVue.courtName = ''
-      that.courts = []
       getCourtsDataList(that.provParams)
           .then(
             function (result) {
-              console.log('courtsArr -- > ' + JSON.stringify(result))
+              that.courts = []
+              // console.log('courtsArr -- > ' + JSON.stringify(result))
               let courtsArr = result
               for (let i = 0; i < courtsArr.length; i++) {
                 that.courts.push(
@@ -356,12 +316,17 @@ export default {
                   }
                 )
               }
+              if (that.courts.indexOf('') === -1) {
+                let unChoose = {label: '', value: ''}
+                that.courts.unshift(unChoose)
+              }
             }
           ).catch(
             function (error) {
               console.log(error)
             }
           )
+
       // } else {
       //   that.resourceDeviceGroupVue.courtName = ''
       // }
@@ -409,6 +374,11 @@ export default {
           break
         }
       }
+    },
+    methodsOfUpdate () {
+      this.loadCityData()
+      this.loadDistrictData()
+      this.loadCourtsData()
     }
 
   }

@@ -13,7 +13,7 @@ let owenrOptionData = {
     orient: 'vertical',
     x: 'left',
     y: 'top',
-    data: [] // data: ['20-30', '30-40', '40-50', '50-60', '60-70', '70-80', '80-90', '90-100']
+    data: []
   },
   series: [{
     name: '参数',
@@ -30,7 +30,7 @@ let owenrOptionData = {
         show: true
       }
     },
-    data: [] // data: [{value: 1300, name: '女',selected: true }, {value: 1564, name: '男' }]
+    data: []
   }, {
     name: '参数',
     type: 'pie',
@@ -68,7 +68,7 @@ let owenrOptionData = {
         }
       }
     },
-    data: [] // data: [{value: 335, name: '20-30' }, {value: 310, name: '30-40' }, { value: 234, name: '40-50'}]
+    data: []
   }]
 }
 // 出入频率图表数据
@@ -105,8 +105,6 @@ let rateOptionData = {
   dataZoom: [{ // 这个dataZoom组件，默认控制x轴。
     type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
     start: 0, // 左边在 10% 的位置。
-    // end: 10 // 滑块结束位置设置。
-    // end: this.form.dateList.length > 31 ? 10 : 100 // 滑块结束位置设置。
     end: 20
   }, { // 这个dataZoom组件，也控制x轴。
     type: 'inside', // 这个 dataZoom 组件是 inside 型 dataZoom 组件
@@ -119,7 +117,7 @@ let rateOptionData = {
   },
   xAxis: {
     type: 'category',
-    data: [], // data: ['00:00', '2:00', '4:00', '6:00', '8:00', '10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'],
+    data: [],
     boundaryGap: false,
     splitLine: {
       show: true,
@@ -172,17 +170,9 @@ let rateOptionData = {
     showSymbol: false,
     symbol: 'circle',
     symbolSize: 6,
-    data: [], // data: ['1200', '1400', '1008', '1411', '1026', '1288', '1300', '800', '1100', '1000', '1118', '1322'],
+    data: [],
     areaStyle: {
-      normal: {
-        // color: new Vue.prototype.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-        //   offset: 0,
-        //   color: 'rgba(199, 237, 250,0.5)'
-        // }, {
-        //   offset: 1,
-        //   color: 'rgba(199, 237, 250,0.2)'
-        // }], false)
-      }
+      normal: {}
     },
     itemStyle: {
       normal: {
@@ -201,17 +191,9 @@ let rateOptionData = {
     showSymbol: false,
     symbol: 'circle',
     symbolSize: 6,
-    data: [], // data: ['1200', '1400', '808', '811', '626', '488', '1600', '1100', '500', '300', '1998', '822'],
+    data: [],
     areaStyle: {
-      normal: {
-        // color: new Vue.prototype.$echarts.graphic.LinearGradient(0, 0, 0, 1, [{
-        //   offset: 0,
-        //   color: 'rgba(216, 244, 247,1)'
-        // }, {
-        //   offset: 1,
-        //   color: 'rgba(216, 244, 247,1)'
-        // }], false)
-      }
+      normal: {}
     },
     itemStyle: {
       normal: {
