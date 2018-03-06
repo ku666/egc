@@ -42,7 +42,9 @@
         </el-form-item>
       </template>
     </el-form>
-
+   <div style="text-align: center">
+       <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
+    </div>
   </div>
 </template>
 
@@ -57,6 +59,11 @@ export default {
     return {
       formLabelWidth: '160px',
       isInptDisabled: true
+    }
+  },
+  methods: {
+    closeDialog () {
+      this.$emit('closeDialogEvent')
     }
   },
   watch: {

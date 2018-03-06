@@ -71,13 +71,15 @@ name	type	mgmt_ip	status	desc	serial_no	 bios_version	asset_no	vendor	vendor	dep
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.remark"></el-input>
       </el-form-item>
-       <template v-if="netDeviceDetails.extDataList">
-          <el-form-item :label="item.fieldName" v-for="item in netDeviceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
-            <el-input class="upgrade_el-input" v-model="item.fieldValue" :disabled="isInptDisabled"></el-input>
-          </el-form-item>
-        </template>
+      <template v-if="netDeviceDetails.extDataList">
+        <el-form-item :label="item.fieldName" v-for="item in netDeviceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :disabled="isInptDisabled"></el-input>
+        </el-form-item>
+      </template>
     </el-form>
-
+    <div style="text-align: center">
+      <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
+    </div>
   </div>
 </template>
 
@@ -92,6 +94,11 @@ export default {
     return {
       formLabelWidth: '160px',
       isInptDisabled: true
+    }
+  },
+  methods: {
+    callBackCloseDialogEvent () {
+      this.$emit('closeDialogEvent')
     }
   },
   watch: {
