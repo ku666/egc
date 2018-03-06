@@ -1,8 +1,8 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="closeDialog">
+  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="onCloseDialog">
     <div class="container">
-      <el-button type="primary" @click="chartSwitch">图表</el-button>
-      <el-button type="success" @click="tableSwitch">表格</el-button>
+      <el-button type="primary" @click="onChartSwitch">图表</el-button>
+      <el-button type="success" @click="onTableSwitch">表格</el-button>
       <div class="court-name">{{cellDetailsList.courtName}}</div>
       <div v-show="isChartShow" class="chart-container">
         <div id="equipment-chartsbox">
@@ -58,14 +58,14 @@ export default {
     /**
      * @description echarts图表展示
      */
-    chartSwitch () {
+    onChartSwitch () {
       this.isChartShow = true
       this.isTableShow = false
     },
     /**
      * @description 表格展示
      */
-    tableSwitch () {
+    onTableSwitch () {
       this.isChartShow = false
       this.isTableShow = true
     },
@@ -171,7 +171,8 @@ export default {
       equipmentonlinecharts.setOption(option1)
     },
     /**
-     * @description ajax获取设备小区设备数据
+     * @description ajax获取小区名，及小区设备数据
+     * @param {string} courtId 小区ID
      */
     equipmentReport (courtId) {
       this.dialogReportVisible = true
@@ -251,7 +252,7 @@ export default {
     /**
      * @description 关闭小区设备信息弹窗
      */
-    closeDialog () {
+    onCloseDialog () {
       this.isChartShow = true
       this.isTableShow = false
       this.isReponseData = false

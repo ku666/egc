@@ -5,8 +5,8 @@
         <el-select class="pro-select" v-model="provinceSel">
           <el-option v-for="vo in provinArr" :key="vo.value" :label="vo.label" :value="vo.value"></el-option>
         </el-select>
-        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-        <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
+        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="onSearchCourt" clearable></el-input>
+        <el-button class="search-btn" type="primary" @click="onSearchCourt">查询</el-button>
       </div>
       <div id="map-ecarts" style="width:1000px; height:800px"></div>
     </div>
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     /**
-     * 点击地图
+     * @description 点击地图
      * @param e 点击事件对象
      */
     handleClickMap: function (e) {
@@ -73,7 +73,7 @@ export default {
       }
     },
     /**
-     * 获取小区列表数据
+     * @description 获取小区列表数据
      * @param {String} isSearch 是否要查询部分小区
      */
     getCourtListData: function (isSearch) {
@@ -138,8 +138,10 @@ export default {
         console.warn(LOG_TAG + ' 获取到小区列表数据失败： ' + err)
       })
     },
-    /** 按条件查询小区列表 */
-    searchCourt: function () {
+    /**
+     * @description 按条件查询小区列表
+     */
+    onSearchCourt: function () {
       let str = this.searchCourtName // 把多个空格合并成一个空格
       str = str.trim() // 去掉字符串前后的空格
       str = str.replace(/s+/g, ' ')
@@ -152,9 +154,6 @@ export default {
         return
       }
       this.getCourtListData('search')
-    },
-    handleRowClick: function (row, e) {
-      this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     }
   },
   computed: {
