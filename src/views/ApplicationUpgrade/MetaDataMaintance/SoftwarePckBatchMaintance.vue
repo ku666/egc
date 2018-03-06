@@ -18,7 +18,7 @@
         </div>
       </el-form>
       <div class="border-divide"></div>
-      <div class="table-container">
+      <div class="flex-1 flex-c">
         <div style="margin-top: 15px">
           <el-table :data="softwareBatchDataList" stripe border v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
@@ -35,10 +35,10 @@
             </el-table-column>
           </el-table>
         </div>
-      </div>
-      <div>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-        </el-pagination>
+        <div>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">

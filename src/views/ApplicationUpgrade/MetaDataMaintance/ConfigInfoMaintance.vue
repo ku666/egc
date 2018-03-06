@@ -21,7 +21,7 @@
         </div>
       </el-form>
       <div class="border-divide"></div>
-      <div class="table-container">
+      <div class="flex-1 flex-c">
         <div style="margin-top: 15px">
           <el-table :data="configInfoDataList" stripe border v-loading="loading" height="680">
             <el-table-column type="index" label="序号" width="50">
@@ -38,10 +38,10 @@
             </el-table-column>
           </el-table>
         </div>
-      </div>
-      <div>
-        <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
-        </el-pagination>
+        <div>
+          <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="searchConditionList.currentPage" :page-sizes="[10, 20, 50]" :page-size="searchConditionList.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total">
+          </el-pagination>
+        </div>
       </div>
     </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
@@ -249,18 +249,23 @@ export default {
     _getCodeCategories () {
       this.registerParaList.configTypeCode = ''
       this.instanceCodes = []
-      console.log('this.registerParaList.codeTypeUuid -- > ' + this.registerParaList.codeTypeUuid)
+      console.log(
+        'this.registerParaList.codeTypeUuid -- > ' +
+          this.registerParaList.codeTypeUuid
+      )
       getInstanceCodes(this.registerParaList.codeTypeUuid)
-        .then(function (result) {
-          console.log('codes --->>>' + JSON.stringify(result))
-          let instanceCodesRes = result
-          for (let i = 0; i < instanceCodesRes.length; i++) {
-            this.instanceCodes.push({
-              label: instanceCodesRes[i].code,
-              value: instanceCodesRes[i].code
-            })
-          }
-        }.bind(this))
+        .then(
+          function (result) {
+            console.log('codes --->>>' + JSON.stringify(result))
+            let instanceCodesRes = result
+            for (let i = 0; i < instanceCodesRes.length; i++) {
+              this.instanceCodes.push({
+                label: instanceCodesRes[i].code,
+                value: instanceCodesRes[i].code
+              })
+            }
+          }.bind(this)
+        )
         .catch(function (error) {
           console.log(error)
         })
@@ -374,7 +379,7 @@ export default {
     'registerParaList.codeTypeUuid': function (newValue, oldValue) {
       this._getCodeCategories()
     },
-    'checkStatus': function (newValue, oldValue) {
+    checkStatus: function (newValue, oldValue) {
       if (newValue === true) {
         this.inputType = 'password'
         this.registerParaList.encryptFlag = 1
