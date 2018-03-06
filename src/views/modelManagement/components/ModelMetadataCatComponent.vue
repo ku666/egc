@@ -257,7 +257,6 @@
           catCode: '',
           catDesc: '',
           sysFlag: '0',
-          deleteFlag: '0',
           createTime: '',
           updateTime: '',
           createUser: '',
@@ -314,13 +313,16 @@
     methods: {
       loadData () {
         // this.loading2 = true
+        let condition = {}
+        if (this.modelListSearch.catName.length > 0) {
+          condition.catName = this.modelListSearch.catName
+        } else {
+          condition.catName = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          condition: {
-            deleteFlag: 0,
-            catName: this.modelListSearch.catName
-          },
+          condition: condition,
           orderBy: 'createTime'
         }
         console.log(params)

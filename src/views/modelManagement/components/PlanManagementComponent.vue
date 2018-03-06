@@ -148,7 +148,14 @@
           width="120">
           <template slot-scope="scope">{{ systemTaskSourceMap[scope.row.taskSource] }}</template>
         </el-table-column>
-
+        <el-table-column
+          label="执行参数"
+          width="100">
+          <template slot-scope="scope">
+            <a v-if="scope.row.paramList" class="blue cursor-hand" @click="showPlanParams(scope.$index, scope.row)">查看参数</a>
+            <span v-if="!scope.row.paramList">无参数</span>
+          </template>
+        </el-table-column>
         <el-table-column
           label="计划开始时间">
           <template slot-scope="scope">{{ scope.row.startTime | formatDate }}</template>
@@ -162,7 +169,10 @@
           label="执行频率">
           <template slot-scope="scope">{{ systemFrequencyMap[scope.row.frequencyType] }}</template>
         </el-table-column>
-
+        <el-table-column
+          label="频率Cron表达式">
+          <template slot-scope="scope">{{ scope.row.frequencyCron }}</template>
+        </el-table-column>
         <el-table-column
           label="最后一次执行时间">
           <template slot-scope="scope" v-if="scope.row.latestTaskStartTime">{{ scope.row.latestTaskStartTime | formatDate }}</template>
@@ -347,6 +357,12 @@
           </el-select>
         </el-form-item>
 
+        <!--<el-form-item labbel="频次表达式" prop="frequencyCron">-->
+          <!--<el-input disabled v-if="item.item_code == 'mm.frqtyp.dayone'">{{}}</el-input>-->
+          <!--<el-input disabled v-if="item.item_code == 'mm.frqtyp.weekone'">{{}}</el-input>-->
+          <!--<el-input disabled v-if="item.item_code == 'mm.frqtyp.monthone'">{{}}</el-input>-->
+        <!--</el-form-item>-->
+
         <el-form-item label="执行参数" prop="description">
           <div class="excute-warp exe-params" v-if="curExcuteVersionParams && curExcuteVersionParams.length>0">
             <el-form  label-width="40%">
@@ -411,6 +427,54 @@
       <!--<el-button size="small" type="primary" @click="addModelDialogVisible = false">确 定</el-button>-->
       <!--</span>-->
     </el-dialog>
+
+    <el-dialog
+      title="执行参数"
+      :close-on-click-modal=false
+      :close-on-press-escape=false
+      :visible.sync="excuteParamsDialogVisible"
+      width="50%">
+
+      <!--<div class="step-info">-->
+      <!--<el-steps :active="currentStep">-->
+      <!--<el-step title="填写版本信息" icon="el-icon-edit"></el-step>-->
+      <!--<el-step title="上传算法文件" icon="el-icon-upload"></el-step>-->
+      <!--<el-step title="完成" icon="el-icon-success"></el-step>-->
+      <!--</el-steps>-->
+      <!--</div>-->
+
+      <el-form ref="taskResultMessage" label-width="100px"
+               class="demo-ruleForm">
+
+        <el-form  label-width="40%">
+          <el-row :gutter="0">
+            <el-col :span="24">
+              <el-form-item label='参数名' style="font-weight:bold;">
+                <!-- <el-input size="small" v-model="item.defaultValue"></el-input> -->
+                <span><b>参数值</b></span>
+              </el-form-item>
+            </el-col>
+            <el-col :span="24" v-for="(item, index) in curPlanExcuteParams" :key="index">
+              <el-form-item :label="item.n" prop="item">
+                <el-input disabled="disabled" size="small" v-model="item.v"></el-input>
+                <!-- <span>{{item.v}}</span> -->
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
+
+        <el-form-item class="text-right add-model-button">
+          <el-button @click="excuteParamsDialogVisible=false">关闭</el-button>
+          <!--<el-button @click="resetForm('newTaskPlan')">重置</el-button>-->
+          <!-- <el-button type="primary" @click="submitForm('newTaskPlan')">保存</el-button> -->
+        </el-form-item>
+
+
+      </el-form>
+
+      <!--</span>-->
+    </el-dialog>
+
 
 
 
@@ -705,6 +769,8 @@
           url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
           data: {}
         },
+        excuteParamsDialogVisible: false,
+        curPlanExcuteParams: [],
         curEditExcuteVersionParams: [],
         isStartTimeError: false,
         isEndTimeErrorNoStart: false,
@@ -863,7 +929,11 @@
       loadData () {
         // this.loadingVersion = true
         let condition = {}
-        condition.name = '%' + this.modelListSearch.name + '%'
+        if (this.modelListSearch.name.length > 0) {
+          condition.name = this.modelListSearch.name
+        } else {
+          condition.name = undefined
+        }
         if (this.$route.params.versionId) {
           condition.algModelVersionPk = this.$route.params.versionId
         }
@@ -1384,6 +1454,12 @@
         //     done()
         //   })
         //   .catch(_ => {})
+      },
+      showPlanParams (index, item) {
+        this.excuteParamsDialogVisible = true
+        if (this.modelPlanList[index].paramList) {
+          this.curPlanExcuteParams = JSON.parse(this.modelPlanList[index].paramList)
+        }
       }
     }
   }

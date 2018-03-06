@@ -29,7 +29,6 @@ Mock.mock(MOCK_API_URL + '/modelmgmt/meta/metaCat/get', function () {
         'catCode': 'mm.eventtype',
         'catDesc': '',
         'sysFlag': 0,
-        'deleteFlag': 0,
         'createTime': 1514766467693,
         'updateTime': 1514766467693,
         'createUser': null,

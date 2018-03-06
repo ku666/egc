@@ -1146,8 +1146,7 @@
           algModelPk: this.$route.params.modelId,
           versionNo: '',
           description: '',
-          versionStatus: SYSTEM_VERSIONSTATUS_ENABLE,
-          deleteFlag: 0
+          versionStatus: SYSTEM_VERSIONSTATUS_ENABLE
         },
         modelListSearch: {
           versionNo: ''
@@ -1323,6 +1322,10 @@
         console.info('start')
         // console.info(event)
         console.info(file)
+        if (/.*[\u4e00-\u9fa5]+.*$/.test(file.name)) {
+          this.$message.error('不支持中文文件名，请重命名文件')
+          return false
+        }
         console.info(this.$refs.versionUpload)
         if (this.isStructuredNode && (file.size > FILE_SIZE.MAX_STRUCT)) {
           this.isUpdateFileFlag = false
@@ -1451,13 +1454,18 @@
       },
       loadData () {
         // this.loadingVersion = true
+        let condition = {
+          algModelPk: this.$route.params.modelId
+        }
+        if (this.modelListSearch.versionNo.length > 0) {
+          condition.versionNo = this.modelListSearch.versionNo
+        } else {
+          condition.versionNo = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          condition: {
-            versionNo: '%' + this.modelListSearch.versionNo + '%',
-            algModelPk: this.$route.params.modelId
-          }
+          condition: condition
         }
         let loadingData = startSystemLoading()
         getModelVersionList(params)

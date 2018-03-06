@@ -17,3 +17,26 @@ export const getTaskResultByAlgTaskPk = (data) => {
 export const executeFileUpload = params => {
   return Axios.get(BASE_PATH + '/modelmgmt/web/download', {params}).then(res => res.data)
 }
+export const downloadFile = (filePath, fileStorageType) => {
+  return Axios.get(BASE_PATH + '/modelmgmt/web/download?filePath=' + filePath + '&fileStorageType=' + fileStorageType, {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: sessionStorage.token
+    }
+  }).then(res => {
+    let tokens = filePath.split('/')
+    let filename = tokens[tokens.length - 1]
+    let blob = new Blob([res.data], {type: 'Files'})
+    if (navigator.appVersion.toString().indexOf('.NET') > 0) {
+      window.navigator.msSaveBlob(blob, filename)
+    } else {
+      let link = document.createElement('a')
+      link.href = window.URL.createObjectURL(blob)
+      link.download = filename
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+    return res.data
+  })
+}

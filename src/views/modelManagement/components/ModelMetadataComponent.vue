@@ -281,8 +281,7 @@
           itemCustCode: '',
           itemCustName: '',
           itemSeq: '',
-          parentItemSysCode: '',
-          deleteFlag: '0'
+          parentItemSysCode: ''
         },
         editModel: {},
         currentMetacat: {},
@@ -367,14 +366,18 @@
       },
       loadData () {
         // this.loading2 = true
+        let condition = {
+          catCode: this.currentMetacat.catCode
+        }
+        if (this.modelListSearch.name.length > 0) {
+          condition.itemCustName = this.modelListSearch.name
+        } else {
+          condition.itemCustName = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          condition: {
-            catCode: this.currentMetacat.catCode,
-            itemCustName: this.modelListSearch.name,
-            deleteFlag: 0
-          },
+          condition: condition,
           orderBy: 'createTime'
         }
         console.log(params)
