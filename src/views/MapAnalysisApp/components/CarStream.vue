@@ -31,9 +31,9 @@
               <el-col :span="8">
                 <el-form-item label="报表类型">
                   <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
-                    <el-option label="日报表" value="0"></el-option>
-                    <el-option label="月报表" value="1"></el-option>
-                    <el-option label="年报表" value="2"></el-option>
+                    <el-option label="日报" value="0"></el-option>
+                    <el-option label="月报" value="1"></el-option>
+                    <el-option label="年报" value="2"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
