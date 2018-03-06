@@ -426,7 +426,6 @@
           updateUser: '',
           updateTime: '',
           nodeStatus: '',
-          deleteFlag: '0',
           statusCode: ''
         },
         newRunTimeOfProxyNode: {

@@ -262,7 +262,7 @@
         </el-table-column>
         <el-table-column
           label="任务执行时间（秒）">
-          <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec }}</template>
+          <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec/1000 }}</template>
         </el-table-column>
 
         <el-table-column
@@ -521,8 +521,7 @@
           algModelPk: this.$route.params.id,
           versionNo: '',
           description: '',
-          versionStatus: SYSTEM_VERSIONSTATUS_ENABLE,
-          deleteFlag: 0
+          versionStatus: SYSTEM_VERSIONSTATUS_ENABLE
         },
         modelListSearch: {
           taskType: '全部',

@@ -379,8 +379,7 @@
           createUser: '',
           createTime: '',
           updateUser: '',
-          updateTime: '',
-          deleteFlag: '0'
+          updateTime: ''
         },
         // newRunTimeOfProxyNode: {
         //   proxyNodePk: this.$route.params.proxyNodePk,
