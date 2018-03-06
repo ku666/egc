@@ -506,8 +506,9 @@ export default {
               this.errorMsg = result.msg
               this.errorList = '<p><strong>' + result.msg + '</strong>'
               if (result.errorList != null) {
-                this.errorMsg += '：'
-                this.errorList += '：<br>'
+                // this.errorMsg += '：'
+                // this.errorList += '：<br>'
+                this.errorList += '<br>'
                 for (var i = 0; i < result.errorList.length; i++) {
                   this.errorMsg += result.errorList[i].errorMsg + '、'
                   this.errorList += result.errorList[i].errorMsg + '<br>'
