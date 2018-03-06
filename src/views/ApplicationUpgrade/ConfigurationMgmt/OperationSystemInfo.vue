@@ -207,6 +207,7 @@ export default {
       getOSDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log(' detail result ->>>>>>>>>>>>>   ' + JSON.stringify(result))
             console.log(result)
             this.osDetails = result.auOss
             this.dialogDetailsVisible = true
@@ -224,8 +225,8 @@ export default {
       getOSDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log('edit result --> ' + JSON.stringify(result))
             this.osDetails = result.auOss
-            console.info('edit oss --- >  ' + JSON.stringify(this.osDetails))
             this.dialogEditVisible = true
           }.bind(this)
         )
