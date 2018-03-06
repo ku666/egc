@@ -47,7 +47,7 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose" :close-on-click-modal="false">
       <user-view ref="userEditVue" :user="userForm" :isAddFlag="addFlag" :userAccStatusSelect="userAccStatusOptions"
       :contactTypeSelect="contactTypeOptions" :departmentSelect="departmentOptions" :userTypeSelect="userTypeOptions" :userTypeList="userTypeOptions"
-      @gridSaveEvent="userSaveEvent" :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-view>
+      :curUserUuidParm="curUserUuid" @canelDialogEvent="handleClose"> </user-view>
     </el-dialog>
     <div>
       <el-pagination

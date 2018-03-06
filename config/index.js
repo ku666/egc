@@ -56,7 +56,8 @@ module.exports = {
       //更新升级模块接口
        "/egc-applicationupgradecomponent": {
         //  target: 'http://172.16.30.147:8080/',  // 赵石凤(更新升级)
-         target: 'http://192.168.0.186:9039/',
+         target: 'http://192.168.0.186:30940/',
+        //  target: 'http://192.168.0.186:9039/',
          changeOrigin: true
        },
       //  "/egc-applicationupgradecomponent": {
