@@ -27,9 +27,9 @@
               <el-form-item label="模型名称">
                 <span>{{ currentTaskAndModelAndModelVersion.name }}</span>
               </el-form-item>
-              <el-form-item label="小区">
-                <span>{{ communityIdMap[currentTaskAndModelAndModelVersion.communityId] }}</span>
-              </el-form-item>
+              <!--<el-form-item label="小区">-->
+                <!--<span>{{ communityIdMap[currentTaskAndModelAndModelVersion.communityId] }}</span>-->
+              <!--</el-form-item>-->
               <el-form-item label="模型版本">
                 <span>{{ currentTaskAndModelAndModelVersion.versionNo }}</span>
               </el-form-item>
@@ -108,10 +108,10 @@
 
 
       <!--<el-table-column-->
-      <!--label="小区"-->
-      <!--width="150">-->
-      <!--<template slot-scope="scope"><span>{{ communityIdMap[scope.row.communityId] }}</span></template>-->
-      <!--&lt;!&ndash;{{ systemRuntimeTypeMap[scope.row.runtimeType] }}&ndash;&gt;-->
+        <!--label="小区"-->
+        <!--width="150">-->
+        <!--<template slot-scope="scope"><span>{{ communityIdMap[scope.row.communityId] }}</span></template>-->
+        <!--&lt;!&ndash;{{ systemRuntimeTypeMap[scope.row.runtimeType] }}&ndash;&gt;-->
       <!--</el-table-column>-->
       <el-table-column
         label="结果类型">
@@ -162,10 +162,12 @@
         <template slot-scope="scope">
 
 
-          <a v-if="scope.row.filePath && scope.row.fileStorageType" v-bind:href="`/scp-modelmgmtcomponent/modelmgmt/web/download?filePath=${scope.row.filePath}&fileStorageType=${scope.row.fileStorageType}`">
+          <!-- <a v-if="scope.row.filePath && scope.row.fileStorageType" v-bind:href="`/scp-modelmgmtcomponent/modelmgmt/web/download?filePath=${scope.row.filePath}&fileStorageType=${scope.row.fileStorageType}`"> -->
+          <a v-if="scope.row.filePath && scope.row.fileStorageType">
             <el-button
               size="mini"
               type="primary"
+              @click="downloadFile(scope.$index, scope.row)"
             >下载结果文件</el-button>
           </a >
 
@@ -314,7 +316,8 @@
 
 
 <script>
-  import { getTaskAndModelAndModelVersionByAlgTaskPk, getTaskResultByAlgTaskPk } from '@/views/modelManagement/apis/model_task_info_api.js'
+  // import Axios from '@/assets/js/AxiosPlugin'
+  import { getTaskAndModelAndModelVersionByAlgTaskPk, getTaskResultByAlgTaskPk, downloadFile } from '@/views/modelManagement/apis/model_task_info_api.js'
   import {
     startSystemLoading,
     getSystemSettings,
@@ -368,8 +371,7 @@
           createUser: '',
           createTime: '',
           updateUser: '',
-          updateTime: '',
-          deleteFlag: '0'
+          updateTime: ''
         },
         // newRunTimeOfProxyNode: {
         //   proxyNodePk: this.$route.params.proxyNodePk,
@@ -575,33 +577,45 @@
               console.info(error)
             }.bind(this)
           )
+      },
+      downloadFile (index, item) {
+        let filePath = this.displayedTableList[index].filePath
+        let fileStorageType = this.displayedTableList[index].fileStorageType
+        // let paramData = {
+        //   filePath: filePath,
+        //   fileStorageType: fileStorageType
+        // }
+        downloadFile(filePath, fileStorageType)
+          .then(
+            function (result) {
+              console.log('success')
+            }
+          )
+          .catch(
+            function (error) {
+              console.info(error)
+            }
+          )
+        // Axios.post('/scp-modelmgmtcomponent/modelmgmt/web/download', paramData, {
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //     Authorization: sessionStorage.token
+        //   }
+        // })
+        // Axios.get('/scp-modelmgmtcomponent/modelmgmt/web/download?filePath=' + filePath + '&fileStorageType=' + fileStorageType, {
+        //   headers: {
+        //     'Content-Type': 'application/x-www-form-urlencoded',
+        //     Authorization: sessionStorage.token
+        //   }
+        // })
+        // this.loading2 = true
+        // /scp-modelmgmtcomponent/modelmgmt/web/download?filePath=${scope.row.filePath}&fileStorageType=${scope.row.fileStorageType}
+        // this.downloadForm.filePath = this.displayedTableList[index].filePath
+        // this.downloadForm.fileStorageType = this.displayedTableList[index].fileStorageType
+        // this.$refs.downloadFileForm.submit()
+        // this.$refs['downloadFileForm'].submit()
+        // console.info(param)
       }
-      // downloadFile (index, item) {
-      //   // this.loading2 = true
-      //   var params = {
-      //     filePath: this.displayedTableList[index].filePath,
-      //     fileStorageType: this.displayedTableList[index].fileStorageType
-      //   }
-      //   console.log('gfgfgfgfgfgfg' + params)
-      //   let loadingTaskInfo = startSystemLoading()
-      //   executeFileUpload(params)
-      //     .then(
-      //       function (result) {
-      //         this.$nextTick(() => {
-      //           loadingTaskInfo.close()
-      //         })
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         // this.loading2 = false
-      //         this.$nextTick(() => {
-      //           loadingTaskInfo.close()
-      //         })
-      //         console.info(error)
-      //       }.bind(this)
-      //     )
-      // }
     }
   }
 </script>

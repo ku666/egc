@@ -741,8 +741,7 @@
           realtimeFlag: '',
           shareFlag: '1',
           modelStatus: SYSTEM_MODELSTATUS_ENABLE,
-          addEventTypeList: [],
-          deleteFlag: '0'
+          addEventTypeList: []
         },
         editModel: {
           eventTypeList: '',
@@ -884,13 +883,13 @@
     methods: {
       loadData () {
         // this.loading2 = true
-        // let condition = {
-        //   deleteFlag: 0
-        // }
+        // let condition = {}
         // if (this.modelListSearch.name) {
-        let condition = {
-          deleteFlag: 0,
-          name: '%' + this.modelListSearch.name + '%'
+        let condition = {}
+        if (this.modelListSearch.name.length > 0) {
+          condition.name = this.modelListSearch.name
+        } else {
+          condition.name = undefined
         }
         if (this.modelListSearch.nodeType && this.modelListSearch.nodeType !== '全部' && this.modelListSearch.nodeType !== '0') {
           condition.nodeType = this.modelListSearch.nodeType
