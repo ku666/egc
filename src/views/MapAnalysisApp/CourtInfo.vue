@@ -26,23 +26,23 @@
       </div>
       <!-- end info-con -->
       <el-card class="echarts-box">
-        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(1)">查看详情</el-button>
+        <el-button class="checkmore-btn" type="text" @click="onCheckDetailHandler(1)">查看详情</el-button>
         <div id="map-ecarts2" style="width:480px; height:330px"></div>
         <div v-show="isPerErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echarts-box">
-        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(2)">查看详情</el-button>
+        <el-button class="checkmore-btn" type="text" @click="onCheckDetailHandler(2)">查看详情</el-button>
         <div id="map-ecarts3" style="width:480px; height:330px"></div>
         <div v-show="isCarErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echarts-box1">
-        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(0)">查看详情</el-button>
+        <el-button class="checkmore-btn" type="text" @click="onCheckDetailHandler(0)">查看详情</el-button>
         <div id="map-ecarts0" class="small-box" style="width:420px; height:330px"></div>
         <div id="map-ecarts1" class="small-box" style="width:570px; height:330px"></div>
         <div v-show="isOwnerErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
       <el-card class="echarts-box">
-        <el-button class="checkmore-btn" type="text" @click="handleCheckDetail(3)">查看详情</el-button>
+        <el-button class="checkmore-btn" type="text" @click="onCheckDetailHandler(3)">查看详情</el-button>
         <div id="map-ecarts4" style="width:480px; height:330px"></div>
         <div v-show="isEquiErrInfo" class="err-info"><img :src="perErrImg"></div>
       </el-card>
@@ -109,7 +109,9 @@ export default {
     this.getCourtOwnerData()
   },
   methods: {
-    /** 获取小区详情信息 */
+    /**
+     * @description 获取小区详情信息
+     */
     getCourtInfoData: function () {
       let param = { courtUuid: this.courtInfo.courtUuid }
       getCourtInfo(param).then(res => {
@@ -131,7 +133,9 @@ export default {
         console.warn(LOG_TAG + ' 获取到小区详情数据失败： ' + err)
       })
     },
-    /** 获取最近一个月内的人员流量日报数据 */
+    /**
+     * @description 获取最近一个月内的人员流量日报数据
+     */
     getPeopleStreamData: function () {
       let param = {
         courtUuid: this.courtInfo.courtUuid,
@@ -173,7 +177,9 @@ export default {
         })
       })
     },
-    /** 获取最近一个月内的车行流量日报数据 */
+    /**
+     * @description 获取最近一个月内的车行流量日报数据
+     */
     getCarStreamData: function () {
       let param = {
         courtUuid: this.courtInfo.courtUuid,
@@ -216,7 +222,9 @@ export default {
         })
       })
     },
-    /** 获取小区设备种类数据 */
+    /**
+     * @description 获取小区设备种类数据
+     */
     getEquipKindsData: function () {
       let param = {
         courtUuid: this.courtInfo.courtUuid
@@ -237,7 +245,6 @@ export default {
               equipData.push(obj)
             }
           })
-          // equipData.splice(7)
           equipData.push(oto)
           equipKind.updateData(equipData)
           // 判断设备数据是否为空
@@ -262,7 +269,9 @@ export default {
         })
       })
     },
-    /** 获取小区业主年龄、性别占比数据 */
+    /**
+     * @description 获取小区业主年龄、性别占比数据
+     */
     getCourtOwnerData: function () {
       let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
       getCourtProfile(param).then(res => {
@@ -310,8 +319,11 @@ export default {
         })
       })
     },
-    // 查看各个报表的详情
-    handleCheckDetail: function (index) {
+    /**
+     * @description 查看各个报表的详情
+     * @param {Int} index 索引
+     */
+    onCheckDetailHandler: function (index) {
       switch (index) {
         case 0:
           this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtUuid)
@@ -327,6 +339,11 @@ export default {
           break
       }
     },
+    /**
+     * @description 获取索引对应的Echarts对象
+     * @param {Int} index 索引
+     * @returns {Object} Echarts对象
+     */
     getMyCharts: function (index) {
       return this.echartsList[index] ? this.echartsList[index] : this.$echarts.init(document.getElementById('map-ecarts' + index))
     }

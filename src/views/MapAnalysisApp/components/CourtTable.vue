@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" @row-dblclick="handleRowClick" stripe>
+  <el-table :data="tableData" @row-dblclick="onDoubleClickHandler" stripe>
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
@@ -32,7 +32,12 @@ export default {
     }
   },
   methods: {
-    handleRowClick: function (row, e) {
+    /**
+     * @description 双击小区行item，跳转到小区详情页
+     * @param {Object} row 小区数据对象
+     * @param {Event} e 双击事件
+     */
+    onDoubleClickHandler: function (row, e) {
       this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     }
   }
