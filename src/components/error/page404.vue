@@ -16,7 +16,6 @@
     </div>
   </div>
 </template>
-404_cloud.png
 <script>
 import img404 from '@/assets/images/404.png'
 import img404cloud from '@/assets/images/404_cloud.png'
