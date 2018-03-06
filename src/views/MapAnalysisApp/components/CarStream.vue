@@ -1,6 +1,6 @@
 <template>
   <div v-if="isShowCarInfoMap" class="car-info">
-    <el-dialog :visible.sync="isShowCarInfoMap" @close="closeDialog" title="小区车流量" width="70%">
+    <el-dialog :visible.sync="isShowCarInfoMap" @close="onCloseDialog" title="小区车流量" width="70%">
       <el-row>
         <el-col :span="4">
           <div class="description">
@@ -30,7 +30,7 @@
             <el-row :span="24" class="first-row">
               <el-col :span="8">
                 <el-form-item label="报表类型">
-                  <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
+                  <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="onReportTypeSelected">
                     <el-option label="日报" value="0"></el-option>
                     <el-option label="月报" value="1"></el-option>
                     <el-option label="年报" value="2"></el-option>
@@ -39,20 +39,20 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开始时间">
-                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align:left">
                 <el-form-item label="结束时间">
-                  <el-date-picker :type="formDatePickType" @change="datePickRangeConfrim" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
             <el-row :span="24" style="text-align:right">
               <el-col :span="24">
-                <el-button type="primary" @click="submitForm('form')">查询</el-button>
-                <el-button type="success" plain @click="goToTable()">表单</el-button>
-                <el-button type="danger" plain @click="goToMap()">图表</el-button>
+                <el-button type="primary" @click="onSubmitForm('form')">查询</el-button>
+                <el-button type="success" plain @click="onGoToTable()">表单</el-button>
+                <el-button type="danger" plain @click="onGoToMap()">图表</el-button>
               </el-col>
             </el-row>
           </el-form>
@@ -74,7 +74,7 @@
               </el-table>
               <!-- 展示表格结束 -->
               <!-- 分页显示控件开始 -->
-              <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="currentPage" :page-sizes="[10,20,30,50,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" background small>
+              <el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" :current-page="currentPage" :page-sizes="[10,20,30,50,100]" :page-size="pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" background small>
               </el-pagination>
             </div>
             <!-- 地图展示 -->
@@ -160,7 +160,7 @@ export default {
     /**
     * @description 切换到表格
     */
-    goToTable: function () {
+    onGoToTable: function () {
       if (!this.canLeaveChart) return
       this.isShowTable = true
       this.isShowChart = false
@@ -168,7 +168,7 @@ export default {
     /**
     * @description 切换到图表
     */
-    goToMap: function () {
+    onGoToMap: function () {
       this.preTableShowStatus = this.isShowTable
       this.isShowTable = false
       this.isShowChart = true
@@ -192,14 +192,20 @@ export default {
       window.onresize = function () {
         throttle(myChartResize, null, 200)
       }
-      function myChartResize (params) {
+      function myChartResize () {
         that.myChart.resize()
       }
-      // onresize事件节流控制
-      function throttle (fn, context, delay, val) {
+      /**
+       * @description 节流函数
+       * @param {function} fn 被限制调用频率的函数
+       * @param {Object} context fn被绑定对象
+       * @param {number} delay 多长时间间隔才能调用fn
+       * @param {any} val 传入fn函数的参数
+       */
+      function throttle (fn, context, delay) {
         clearTimeout(fn.timeoutId)
         fn.timeoutId = setTimeout(function () {
-          fn.call(context, val)
+          fn.call(context)
         }, delay)
       }
       // 注册图表缩放控件事件
@@ -242,7 +248,7 @@ export default {
     /**
     * @description 切换报表类型,年报表或月报表等
     */
-    reportTypeSelected: function () {
+    onReportTypeSelected: function () {
       if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
         this.form.startTime = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
@@ -257,7 +263,7 @@ export default {
     /**
     * @description 改变分页显示条数,发送请求,更改状态
     */
-    handleSizeChange: function (val) {
+    onHandleSizeChange: function (val) {
       this.pageSize = val
       this.currentPage = 1
       this.getCarAccessPageList()
@@ -265,15 +271,15 @@ export default {
     /**
     * @description 改变当前页,发送请求,更改状态
     */
-    handleCurrentChange: function (val) {
+    onHandleCurrentChange: function (val) {
       this.currentPage = val
       this.getCarAccessPageList()
     },
     /**
     * @description 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
     */
-    submitForm: function (formName) {
-      if (this.datePickRangeConfrim() === 1) return
+    onSubmitForm: function (formName) {
+      if (this.onDatePickRangeConfrim() === 1) return
       if (this.isShowTable) {
         this.pageSize = 10
         this.currentPage = 1
@@ -288,7 +294,7 @@ export default {
     * @description ajax获取echarts表格数据
     */
     getCourtCarAccessInfo: function () {
-      if (this.datePickRangeConfrim()) return
+      if (this.onDatePickRangeConfrim()) return
       this.canLeaveChart = false
       var data = this.queryParam()
       getCourtCarAccessInfo(data).then((res) => {
@@ -316,7 +322,7 @@ export default {
     * @description ajax获取表格分页数据
     */
     getCarAccessPageList: function () {
-      if (this.datePickRangeConfrim()) return
+      if (this.onDatePickRangeConfrim()) return
       var queryParam = this.queryParam()
       queryParam = Object.assign(queryParam, { pageSize: this.pageSize, currentPage: this.currentPage })
       getCarAccessPageList(queryParam).then(res => {
@@ -365,7 +371,7 @@ export default {
     /**
     * @description 关闭弹窗
     */
-    closeDialog: function () {
+    onCloseDialog: function () {
       this.clickCount = 0
       this.isReponseData = false
       if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
@@ -375,7 +381,7 @@ export default {
     * @description 时间选择器范围限制，日报表一个月，月报表一年，年报表无限制*
     * @returns {bool}  日期是否在限制范围内
     */
-    datePickRangeConfrim () {
+    onDatePickRangeConfrim () {
       switch (this.form.reportType) {
         case '0':
           if (Math.ceil((this.form.endTime - this.form.startTime) / 86400000) > 31) {
