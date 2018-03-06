@@ -8,7 +8,7 @@
         <egsc-sidebar :checkedTitle="selectedTitle"></egsc-sidebar>
       </el-aside>
       <el-container>
-        <el-main style="min-width:1775px;">
+        <el-main style="min-width:1700px;">
           <!--
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
