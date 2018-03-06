@@ -3,7 +3,7 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>模型管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item>模型管理</el-breadcrumb-item> -->
         <el-breadcrumb-item :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
         <el-breadcrumb-item>模型结果定义</el-breadcrumb-item>

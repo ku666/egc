@@ -3,11 +3,19 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item> -->
+        <!-- <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item> -->
         <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId" :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item v-if="$route.params.versionId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/modelmgmt/taskmgmt'}">任务管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="$route.params.modelId && $route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version/'+$route.params.versionId+'/taskplan' }">计划管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="$route.params.modelId && !$route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/taskplan' }">计划管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/planmgmt' }">计划管理</el-breadcrumb-item>
+
+        <el-breadcrumb-item v-if="$route.params.versionId && !$route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version/'+$route.params.versionId+'/task' }">任务管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="$route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/plan/'+$route.params.planId+'/task' }">任务管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId && !$route.params.planId" :to="{ path: '/modelmgmt/taskmgmt' }">任务管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item>任务管理</el-breadcrumb-item> -->
+        <!-- <el-breadcrumb-item :to="{ path: '/modelmgmt/taskmgmt'}">任务管理</el-breadcrumb-item> -->
         <el-breadcrumb-item>任务结果</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
