@@ -59,8 +59,7 @@ import {
   updateAppServiceInfo,
   getAppServiceHistoryList,
   syncAppServiceData,
-  downloadResultFile,
-  downloadAppServiceTemplate
+  downloadResultFile
 } from './apis/index'
 export default {
   components: {
@@ -187,20 +186,7 @@ export default {
         this.dialogStatus = '上传应用服务配置信息'
         this.dialogUploadVisible = true
       } else if (type === 'downtemplate') {
-        downloadAppServiceTemplate(params)
-          .then(
-            function (result) {
-              this.auServerListData = result.auServersList
-              this.total = result.pageCount
-              this.loading = false
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.loading = false
-              console.log(error)
-            }.bind(this)
-          )
+        console.log('setting table list')
       }
     },
 

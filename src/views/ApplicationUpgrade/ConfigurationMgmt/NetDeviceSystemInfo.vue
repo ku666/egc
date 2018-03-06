@@ -58,7 +58,6 @@ import {
   updateNetDeviceInfo,
   getNetDeviceHistoryList,
   downloadResultFile,
-  downloadEquipTemplate,
   syncNetDeviceData
 } from './apis/index'
 export default {
@@ -187,18 +186,7 @@ export default {
         this.dialogStatus = '上传网络设备配置信息'
         this.dialogUploadVisible = true
       } else if (type === 'downtemplate') {
-        downloadEquipTemplate(params)
-          .then(
-            function (result) {
-              this.loading = false
-            }.bind(this)
-          )
-          .catch(
-            function (error) {
-              this.loading = false
-              console.log(error)
-            }.bind(this)
-          )
+        console.log('setting table list')
       }
     },
 

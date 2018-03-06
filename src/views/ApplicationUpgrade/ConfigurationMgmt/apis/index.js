@@ -63,31 +63,29 @@ export const uploadAppServiceConfigFile = (params) => {
 
 // 导出模板
 export const downCfgMgmtTemplate = (params) => {
-  console.log(' generate download template excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
+  console.log(' generate download template params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
   return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params
-  ).then(res => res.data)
-}
-
-export const downHardwareTemplate = (params) => {
-  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
-  ).then(res => res.data)
-}
-
-export const downloadEquipTemplate = (params) => {
-  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
-  ).then(res => res.data)
-}
-
-export const downloadAppServiceTemplate = (params) => {
-  console.log(' generate download excel params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.post(BASE_PATH + '/download/templateDownload?downloadCls=' + params
-  ).then(res => res.data)
+    ).then(res => {
+      console.log('res.headers --->  ' + JSON.stringify(res.headers))
+      let fileName = decodeResHeader(res.headers)
+      let blob = new Blob([res.data], { type: 'application/x-xls' })
+      if ('msSaveOrOpenBlob' in navigator) {
+        console.log('res filename --->  ' + fileName.replace('\\', ''))
+        window.navigator.msSaveOrOpenBlob(blob, fileName.replace('\\', ''))
+      } else {
+        let url = window.URL.createObjectURL(blob)
+        let link = document.createElement('a')
+        link.href = url
+        link.target = '_blank'
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+      }
+      return res.data
+    })
 }
 
 // 导出结果
-
 export const downloadResultFile = (params1, params2) => {
   console.log(' download excel file params ->>>>>>>>>>>>>   ' + JSON.stringify(params1) + '    >>>>>>>> the second params2:  --->   ' + params2)
   return Axios.get(BASE_PATH + '/download/resultDownload?condition=' + encodeURI(JSON.stringify(params1)) + '&downloadCls=' + params2, {responseType: 'arraybuffer'}

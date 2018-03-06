@@ -36,9 +36,9 @@
       </el-form>
     </div>
     <div class="border-divide"></div>
-    <!-- <div>
-      <el-button style="float: right;" type="primary" @click="showSelectCol">列表设置</el-button>
-    </div> -->
+    <div>
+      <!-- <el-button style="float: right;" type="primary" @click="showSelectCol">列表设置</el-button> -->
+    </div>
   </div>
 </template>
 
