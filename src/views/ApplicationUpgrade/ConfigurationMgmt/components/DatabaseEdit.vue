@@ -24,14 +24,16 @@
       <el-form-item label="数据库安装路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.path"></el-input>
       </el-form-item>
-      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.server.name"></el-input>
-      </el-form-item>
+      <template v-if="databaseEditDetails.server !== null">
+        <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.server.name"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.serverId"></el-input>
       </el-form-item>
       <el-form-item label="操作系统提供者" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled"  v-model="databaseEditDetails.provider" :maxlength="maxlength"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="databaseEditDetails.provider" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="databaseEditDetails.remark" :maxlength="maxlength"></el-input>
