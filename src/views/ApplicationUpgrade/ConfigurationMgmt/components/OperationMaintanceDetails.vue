@@ -24,9 +24,11 @@
       <el-form-item label="中间件安装路径" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="operMainDetails.path"></el-input>
       </el-form-item>
-      <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="operMainDetails.server.name"></el-input>
-      </el-form-item>
+      <template v-if=" operMainDetails.server !== null">
+        <el-form-item label="服务器主机名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="operMainDetails.server.name"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="所在服务器UUID" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="operMainDetails.serverId"></el-input>
       </el-form-item>
@@ -42,8 +44,8 @@
         </el-form-item>
       </template>
     </el-form>
-   <div style="text-align: center">
-       <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
+    <div style="text-align: center">
+      <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
     </div>
   </div>
 </template>

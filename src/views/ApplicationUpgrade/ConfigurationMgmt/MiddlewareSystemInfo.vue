@@ -196,7 +196,7 @@ export default {
       getMiddlewareDetails(eachRowUUID)
         .then(
           function (result) {
-            console.log(result)
+            console.log(' detail result ->>>>>>>>>>>>>   ' + JSON.stringify(result))
             this.middlewareDetails = result.auMiddleware
             this.dialogDetailsVisible = true
           }.bind(this)
@@ -213,6 +213,7 @@ export default {
       getMiddlewareDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log(' edit result ->>>>>>>>>>>>>   ' + JSON.stringify(result))
             this.middlewareDetails = result.auMiddleware
             this.dialogEditVisible = true
           }.bind(this)
