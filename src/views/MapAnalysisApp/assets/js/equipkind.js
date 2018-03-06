@@ -1,15 +1,12 @@
 // 设备种类数据
 var data = [
-  // { value: 400, name: '搜索引擎' }
 ]
 var option = {
-  // backgroundColor: '#2c343c',
   title: {
     text: '小区设备种类',
     left: 'center',
     top: 5,
     textStyle: {
-      // color: '#000',
       fontSize: '14',
       fontWeight: 'bold'
     }
@@ -29,21 +26,15 @@ var option = {
     min: 80,
     max: 600,
     inRange: {
-      // colorLightness: [0, 1]
     }
   },
   series: [
     {
       name: '小区设备',
       type: 'pie',
-      // radius: '55%',
-      // center: ['50%', '50%'],
-      // roseType: 'radius',
       radius: [20, 120],
       center: ['50%', '55%'],
       roseType: 'area',
-      // color: ['#f2c955', '#00a69d', '#46d185', '#ec5845'], // 区域的颜色
-      // selectedMode: 'single',
       data: data,
       label: {
         normal: {
@@ -64,7 +55,6 @@ var option = {
       },
       itemStyle: {
         normal: {
-          // color: '#c23531', // 区域的颜色
           shadowBlur: 200,
           shadowColor: 'rgba(0, 0, 0, 0.5)'
         }

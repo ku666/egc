@@ -55,8 +55,7 @@
 </template>
 <script>
 import { getCourtInfo, getCourtPerAccessInfo, getCourtCarAccessInfo, getListDeviceType, getCourtProfile } from '@/views/MapAnalysisApp/apis/index.js'
-import peopleOption from '@/views/MapAnalysisApp/assets/js/peoplestream.js'
-import carOption from '@/views/MapAnalysisApp/assets/js/carstream.js'
+import {updateCarData, updatePeopleData} from '@/views/MapAnalysisApp/assets/js/iostream.js'
 import equipKind from '@/views/MapAnalysisApp/assets/js/equipkind.js'
 import ownerOption from '@/views/MapAnalysisApp/assets/js/ownerinfo.js'
 import StreamPeople from '@/views/MapAnalysisApp/components/StreamPeople'
@@ -153,13 +152,11 @@ export default {
             perInCount.push(parseFloat(item.perInCount))
             perOutCount.push(parseFloat(item.perOutCount))
           })
-          peopleOption.updateTimeData(timeDate)
-          peopleOption.updateInData(perInCount)
-          peopleOption.updateOutData(perOutCount)
           // 判断人流数据是否为空
           if (timeDate.length > 0 && perInCount.length > 0 && perOutCount.length > 0) {
             isEmpty = false
-            this.getMyCharts(2).setOption(peopleOption.option)
+            let caro = updatePeopleData(timeDate, perInCount, perOutCount)
+            this.getMyCharts(2).setOption(caro)
           }
         } else {
           this.$message({
@@ -196,15 +193,13 @@ export default {
             carInCount.push(parseFloat(item.carInCount))
             carOutCount.push(parseFloat(item.carOutCount))
           })
-          carOption.updateTimeData(timeDate)
-          carOption.updateInData(carInCount)
-          carOption.updateOutData(carOutCount)
           // 判断车流数据是否为空
           if (timeDate.length <= 0 || carInCount.length <= 0 || carOutCount.length <= 0) {
             this.isCarErrInfo = true
           } else {
             this.isCarErrInfo = false
-            this.getMyCharts(3).setOption(carOption.option)
+            let caro = updateCarData(timeDate, carInCount, carOutCount)
+            this.getMyCharts(3).setOption(caro)
           }
         } else {
           this.isCarErrInfo = true
