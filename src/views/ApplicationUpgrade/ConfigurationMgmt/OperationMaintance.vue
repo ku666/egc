@@ -3,7 +3,6 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <div class="border-divide"></div>
     <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="operMainListData" stripe border v-loading="loading" height="680">

@@ -3,10 +3,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchAttrForm' ref='searchAttrForm' label-width="70px" style='margin-top: 20px'>
         <el-form-item label='属性编码'>
-          <el-input placeholder='请输入属性编码' v-model.trim='searchAttrForm.attrCode' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
+          <el-input placeholder='请输入属性编码' v-model='searchAttrForm.attrCode' @keyup.enter.native='search' :maxlength="64" clearable></el-input>
         </el-form-item>
         <el-form-item label='属性描述'>
-          <el-input placeholder='请输入属性描述' v-model.trim='searchAttrForm.attrDesc' @keyup.enter.native='search' :maxlength="128" clearable></el-input>
+          <el-input placeholder='请输入属性描述' v-model='searchAttrForm.attrDesc' @keyup.enter.native='search' :maxlength="128" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">

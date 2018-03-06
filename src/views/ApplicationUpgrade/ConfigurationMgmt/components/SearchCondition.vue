@@ -1,39 +1,43 @@
 <template>
   <div class="ui-common">
     <div>
-    <el-form :inline="true" :model="searchConDetails">
-      <div class="search-container">
-        <el-form-item label="选择省">
-          <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable>
-            <el-option v-for="item in provinces" :key="item.label" :label="item.label" :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择市" :label-width="formLabelWidth">
-          <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable>
-            <el-option v-for="item in cities" :key="item.label" :label="item.label" :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="选择区" :label-width="formLabelWidth">
-          <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
-            <el-option v-for="item in districts" :key="item.label" :label="item.label" :value="item.label">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="搜索条件">
-          <el-input v-model="searchConDetails.condition" @keyup.enter.native="_callHandleFilter" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
-        </el-form-item>
-        <div class="btn-container">
-          <el-form-item>
-            <el-button @click="_handleClearQuery" :class="cancelBtnClsName">清空</el-button>
-            <el-button type="primary" @click="_callHandleFilter" :class="actionBtnClsName">搜索</el-button>
-            <el-button type="primary" @click="_callHanderDownLoadResult" :class="actionBtnClsName">导出</el-button>
-            <el-button type="primary" @click="_callUploadFile" :class="actionBtnClsName" v-show="isShowBtn">导入</el-button>
+      <el-form :inline="true" :model="searchConDetails">
+        <div class="search-container">
+          <el-form-item label="选择省">
+            <el-select v-model="searchConDetails.province" placeholder="请选择省" clearable>
+              <el-option v-for="item in provinces" :key="item.label" :label="item.label" :value="item.label">
+              </el-option>
+            </el-select>
           </el-form-item>
+          <el-form-item label="选择市" :label-width="formLabelWidth">
+            <el-select v-model="searchConDetails.city" placeholder="请选择市" clearable>
+              <el-option v-for="item in cities" :key="item.label" :label="item.label" :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="选择区" :label-width="formLabelWidth">
+            <el-select v-model="searchConDetails.district" placeholder="请选择区" clearable>
+              <el-option v-for="item in districts" :key="item.label" :label="item.label" :value="item.label">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="搜索条件">
+            <el-input v-model="searchConDetails.condition" @keyup.enter.native="_callHandleFilter" class="appupgrade_el-select" placeholder="请输入搜索关键字" clearable :maxlength="maxlength"></el-input>
+          </el-form-item>
+          <div class="btn-container">
+            <el-form-item>
+              <el-button @click="_handleClearQuery" :class="cancelBtnClsName">清空</el-button>
+              <el-button type="primary" @click="_callHandleFilter" :class="actionBtnClsName">搜索</el-button>
+              <el-button type="primary" @click="_callHanderDownLoadResult" :class="actionBtnClsName">导出</el-button>
+              <el-button type="primary" @click="_callUploadFile" :class="actionBtnClsName" v-show="isShowBtn">导入</el-button>
+            </el-form-item>
+          </div>
         </div>
-      </div>
-    </el-form>
+      </el-form>
+    </div>
+    <div class="border-divide"></div>
+    <div>
+      <!-- <el-button style="float: right;" type="primary" @click="showSelectCol">列表设置</el-button> -->
     </div>
   </div>
 </template>
@@ -182,6 +186,9 @@ export default {
       } else {
         this.searchConDetails.district = ''
       }
+    },
+    showSelectCol () {
+      this.$emit('handleFilterEvent', this.searchConDetails, 'showcols')
     }
   },
   watch: {

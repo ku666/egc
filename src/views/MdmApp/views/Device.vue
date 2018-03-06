@@ -1,7 +1,7 @@
 <template>
   <div class='ui-common'>
     <el-tabs v-model="activeName" @tab-click="handleTabClick">
-      <el-tab-pane label="设备主数据" name="0">
+      <el-tab-pane label="设备主数据管理" name="0">
       </el-tab-pane>
       <el-tab-pane label="设备属性管理" name="1">
       </el-tab-pane>
