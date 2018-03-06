@@ -200,7 +200,6 @@ export default {
        * @param {function} fn 被限制调用频率的函数
        * @param {Object} context fn被绑定对象
        * @param {number} delay 多长时间间隔才能调用fn
-       * @param {any} val 传入fn函数的参数
        */
       function throttle (fn, context, delay) {
         clearTimeout(fn.timeoutId)
