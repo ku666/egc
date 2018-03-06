@@ -233,7 +233,7 @@ export default {
       this.clear()
       this.providerForm = {
         uuid: attr.uuid,
-        category: attr.category,
+        category: attr.category + '',
         providerCode: attr.providerCode,
         providerName: attr.providerName,
         contact: attr.contact,
