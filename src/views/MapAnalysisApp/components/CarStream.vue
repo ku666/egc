@@ -183,6 +183,7 @@ export default {
     * @description 初始化echarts图表
     */
     chartInit: function () {
+      let that = this
       if (!this.myChart) {
         this.myChart = this.$echarts.init(document.getElementById('car-info-map'))
       }
@@ -192,7 +193,7 @@ export default {
         throttle(myChartResize, null, 200)
       }
       function myChartResize (params) {
-        this.myChart.resize()
+        that.myChart.resize()
       }
       // onresize事件节流控制
       function throttle (fn, context, delay, val) {
