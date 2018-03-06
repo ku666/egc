@@ -24,10 +24,11 @@
               <el-input v-model.trim='deviceCategoryDetail.typeModel' :disabled='viewFlag' :maxlength="64"></el-input>
             </el-form-item>
             <el-form-item label='供应商' prop='providerCode'>
-              <el-select clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
+              <el-select v-if='mode === 2' clearable filterable v-model='deviceCategoryDetail.providerCode' :disabled='viewFlag'>
                 <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
                 </el-option>
               </el-select>
+              <el-input v-else v-model='deviceCategoryDetail.providerName' :disabled='viewFlag'></el-input>
             </el-form-item>
             <el-form-item label='软件版本' prop='softwareVersion'>
               <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
@@ -100,7 +101,8 @@ export default {
         typeModel: '',
         hardwareVersion: '',
         softwareVersion: '',
-        providerCode: ''
+        providerCode: '',
+        providerName: ''
       },
       searchCon: {
         typeCode: '',
@@ -173,6 +175,7 @@ export default {
       this.deviceCategoryDetail.hardwareVersion = categoryDetail.hardwareVersion
       this.deviceCategoryDetail.softwareVersion = categoryDetail.softwareVersion
       this.deviceCategoryDetail.providerCode = categoryDetail.providerCode
+      this.deviceCategoryDetail.providerName = categoryDetail.providerName
       this.deviceCategoryDetailVisible = true
       this.deviceSaved = true
       this.viewFlag = true
@@ -190,6 +193,7 @@ export default {
       this.deviceCategoryDetail.hardwareVersion = ''
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
+      this.deviceCategoryDetail.providerName = ''
       this.deviceCategoryDetailVisible = true
       this.viewFlag = false
       this.getAllAttr()
@@ -279,6 +283,7 @@ export default {
       this.deviceCategoryDetail.hardwareVersion = ''
       this.deviceCategoryDetail.softwareVersion = ''
       this.deviceCategoryDetail.providerCode = ''
+      this.deviceCategoryDetail.providerName = ''
       this.clearValidate()
     },
     // 关闭当前弹框前执行的方法
