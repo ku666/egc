@@ -887,7 +887,7 @@
         // if (this.modelListSearch.name) {
         let condition = {}
         if (this.modelListSearch.name.length > 0) {
-          condition.name = this.modelListSearch.name
+          condition.name = '%' + this.modelListSearch.name + '%'
         } else {
           condition.name = undefined
         }
