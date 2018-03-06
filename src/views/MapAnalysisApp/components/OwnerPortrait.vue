@@ -23,7 +23,7 @@
           <el-row class="table-header" :span="24">
             <el-col :span="4">
               <el-form-item label="楼栋选择">
-                <el-select v-model="form.buildValue" placeholder="请选择" size="small" @change='buildingSelection'>
+                <el-select v-model="form.buildValue" placeholder="请选择" size="small" @change='onBuildingSelection'>
                   <el-option v-for="item in form.buildList" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -31,7 +31,7 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="查询项">
-                <el-select v-model="parameter.classValue" placeholder="请选择" size="small" @change="reportLabel">
+                <el-select v-model="parameter.classValue" placeholder="请选择" size="small" @change="onReportLabel">
                   <el-option v-for="item in form.classList" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -39,7 +39,7 @@
             </el-col>
             <el-col :span="4">
               <el-form-item label="报表类型">
-                <el-select v-model="parameter.reportType" placeholder="请选择" size="small" :disabled='disabled' @change="reportTypeEvent">
+                <el-select v-model="parameter.reportType" placeholder="请选择" size="small" :disabled='disabled' @change="onReportTypeEvent">
                   <el-option v-for="item in form.reportTypeList" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -47,13 +47,13 @@
             </el-col>
             <el-col :span="6">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
+                <el-date-picker v-model="startTime" :type="timeType" placeholder="开始时间" style="width:100%" :picker-options="starForbiddenDatetime" size="small" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="6">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="timeJudgment">
+                <el-date-picker v-model="endTime" :type="timeType" placeholder="结束时间" style="width:100%" size="small" :picker-options="endForbiddenDatetime" :disabled='disabled' :clearable="clearableDatepick" :editable="editableDatepick" @blur="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -94,7 +94,7 @@
               <el-table-column style="width:100%" prop="outCount" label="出去次数">
               </el-table-column>
             </el-table>
-            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 30, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="sizeChange" @current-change="currentChange">
+            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 30, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="total" @size-change="onSizeChange" @current-change="onCurrentChange">
             </el-pagination>
           </div>
           <!-- 图表展示  -->
@@ -248,7 +248,7 @@ export default {
      * @description 楼栋选择
      * @param {String} id 选中的数据ID
      */
-    buildingSelection (id) {
+    onBuildingSelection (id) {
       this.tempId = id
       if (id !== this.courtId) { // 选中的是楼栋
         this.buildId = id
@@ -258,7 +258,7 @@ export default {
      * @description 报表选择
      * @param {String} val 选中的报表类型
      */
-    reportTypeEvent (val) {
+    onReportTypeEvent (val) {
       switch (val) {
         case '0':
           this.timeType = 'date'
@@ -322,7 +322,7 @@ export default {
      * @description 切换每页条数
      * @param {Number} pageSize 每页条数
      */
-    sizeChange (pageSize) {
+    onSizeChange (pageSize) {
       this.parameter.pageSize = pageSize
       this.parameter.currentPage = 1
       if (this.tempId !== this.courtId && this.tempId !== '') {
@@ -335,7 +335,7 @@ export default {
      * @description 切换当前页
      * @param {Number} currentPage 当前页数
      */
-    currentChange (currentPage) {
+    onCurrentChange (currentPage) {
       console.log(LOG_TAG + '当前页数:' + currentPage)
       this.parameter.currentPage = currentPage
       if (this.tempId !== this.courtId && this.tempId !== '') {
@@ -403,7 +403,7 @@ export default {
      * @description 是否禁用时间
      * @param {String} type 1表示禁用，2可用
      */
-    reportLabel (type) {
+    onReportLabel (type) {
       switch (type) {
         case '1':
           this.isRequest = true
@@ -421,7 +421,7 @@ export default {
     /**
      * @description 判断选择的时间是否符合要求
      */
-    timeJudgment () {
+    onTimeJudgment () {
       switch (this.parameter.reportType) {
         case '0':
           if (this.endTime.getTime() - this.startTime.getTime() > 2851200000) { // 一个月2851200000
@@ -508,7 +508,7 @@ export default {
           }
           break
         case '2': // 选择出入频率
-          this.timeJudgment()
+          this.onTimeJudgment()
           if (!this.isRequest) {
             return
           }
