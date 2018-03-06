@@ -11,6 +11,9 @@
             <el-button icon="el-icon-circle-plus-outline" @click="handleCreate" plain type="primary" >添加</el-button>
             <span style="float:right">
               <el-input @keyup.enter.native="handleFilter" style="width:360px; display:inline-block" class="filter-item" placeholder="请输入部门名称查询" v-model="listQuery.q_departName"></el-input>
+              <el-form-item v-show="false">
+                <el-input> </el-input>
+              </el-form-item>
               <el-button class="cancel-btn" type="primary" @click="handleFilterReset" style="margin-left:10px">清空</el-button>
               <el-button class="action-btn" type="primary" @click="handleFilter" style="margin-left:10px">查询</el-button>
             </span>
