@@ -1458,7 +1458,7 @@
           algModelPk: this.$route.params.modelId
         }
         if (this.modelListSearch.versionNo.length > 0) {
-          condition.versionNo = this.modelListSearch.versionNo
+          condition.versionNo = '%' + this.modelListSearch.versionNo + '%'
         } else {
           condition.versionNo = undefined
         }

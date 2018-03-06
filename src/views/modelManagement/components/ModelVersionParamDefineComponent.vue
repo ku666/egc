@@ -462,7 +462,7 @@
           algModelVersionPk: this.algModelVersionPk
         }
         if (this.modelListSearch.paramName.length > 0) {
-          condition.paramName = this.modelListSearch.paramName
+          condition.paramName = '%' + this.modelListSearch.paramName + '%'
         } else {
           condition.paramName = undefined
         }
