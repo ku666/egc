@@ -31,9 +31,9 @@
               <el-col :span="8">
                 <el-form-item label="报表类型">
                   <el-select v-model="form.reportType" placeholder="请选择查询方式" style="width:100%" @change="reportTypeSelected">
-                    <el-option label="日报表" value="0"></el-option>
-                    <el-option label="月报表" value="1"></el-option>
-                    <el-option label="年报表" value="2"></el-option>
+                    <el-option label="日报" value="0"></el-option>
+                    <el-option label="月报" value="1"></el-option>
+                    <el-option label="年报" value="2"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
@@ -139,7 +139,7 @@ export default {
   },
   methods: {
     /**
-    * 进入车流查询页面，小区ID改变，isShowChart=false
+    * @description 进入车流查询页面，小区ID改变，isShowChart=false
     */
     goToCarStreamPage: function (courtUuid) {
       if (courtUuid) {
@@ -158,7 +158,7 @@ export default {
       }
     },
     /**
-    * 切换到表格
+    * @description 切换到表格
     */
     goToTable: function () {
       if (!this.canLeaveChart) return
@@ -166,7 +166,7 @@ export default {
       this.isShowChart = false
     },
     /**
-    * 切换到图表
+    * @description 切换到图表
     */
     goToMap: function () {
       this.preTableShowStatus = this.isShowTable
@@ -180,9 +180,10 @@ export default {
       this.clickCount++
     },
     /**
-    * 初始化echarts图表
+    * @description 初始化echarts图表
     */
     chartInit: function () {
+      let that = this
       if (!this.myChart) {
         this.myChart = this.$echarts.init(document.getElementById('car-info-map'))
       }
@@ -192,7 +193,7 @@ export default {
         throttle(myChartResize, null, 200)
       }
       function myChartResize (params) {
-        this.myChart.resize()
+        that.myChart.resize()
       }
       // onresize事件节流控制
       function throttle (fn, context, delay, val) {
@@ -219,7 +220,7 @@ export default {
       })
     },
     /**
-    * 映射成echart的数据格式
+    * @description 映射成echart的数据格式
     * @param {Array} data getCourtCarAccessInfo接口返回的数据
     */
     sortData: function (data) {
@@ -239,7 +240,7 @@ export default {
       }
     },
     /**
-    * 切换报表类型,年报表或月报表等
+    * @description 切换报表类型,年报表或月报表等
     */
     reportTypeSelected: function () {
       if (this.form.reportType === '0') {
@@ -254,7 +255,7 @@ export default {
       }
     },
     /**
-    * 改变分页显示条数,发送请求,更改状态
+    * @description 改变分页显示条数,发送请求,更改状态
     */
     handleSizeChange: function (val) {
       this.pageSize = val
@@ -262,14 +263,14 @@ export default {
       this.getCarAccessPageList()
     },
     /**
-    * 改变当前页,发送请求,更改状态
+    * @description 改变当前页,发送请求,更改状态
     */
     handleCurrentChange: function (val) {
       this.currentPage = val
       this.getCarAccessPageList()
     },
     /**
-    * 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
+    * @description 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
     */
     submitForm: function (formName) {
       if (this.datePickRangeConfrim() === 1) return
@@ -284,7 +285,7 @@ export default {
       this.clickCount = 0
     },
     /**
-    * ajax获取echarts表格数据
+    * @description ajax获取echarts表格数据
     */
     getCourtCarAccessInfo: function () {
       if (this.datePickRangeConfrim()) return
@@ -312,7 +313,7 @@ export default {
       })
     },
     /**
-    * ajax获取表格分页数据
+    * @description ajax获取表格分页数据
     */
     getCarAccessPageList: function () {
       if (this.datePickRangeConfrim()) return
@@ -329,7 +330,7 @@ export default {
       })
     },
     /**
-    * ajax获取左侧小区小区信息
+    * @description ajax获取左侧小区小区信息
     */
     getCourtInfo: function () {
       getCourtInfo({ courtUuid: this.form.courtUuid }).then(res => {
@@ -342,7 +343,7 @@ export default {
       })
     },
     /**
-    * 获取查询参数
+    * @description 获取查询参数
     * @returns {Object} 表单字符
     */
     queryParam: function () {
@@ -352,7 +353,7 @@ export default {
       })
     },
     /**
-    * Date对象格式化为 YYYY-MM-DD
+    * @description Date对象格式化为 YYYY-MM-DD
     * @returns {string} 格式化后的时间
     */
     timeFomate: function (date) {
@@ -362,7 +363,7 @@ export default {
       return year + '-' + month + '-' + day
     },
     /**
-    * 关闭弹窗
+    * @description 关闭弹窗
     */
     closeDialog: function () {
       this.clickCount = 0
@@ -371,7 +372,7 @@ export default {
       this.myChart = null
     },
     /**
-    * 时间选择器范围限制，日报表一个月，月报表一年，年报表无限制*
+    * @description 时间选择器范围限制，日报表一个月，月报表一年，年报表无限制*
     * @returns {bool}  日期是否在限制范围内
     */
     datePickRangeConfrim () {
@@ -397,7 +398,7 @@ export default {
       }
     },
     /**
-    * 错误处理*
+    * @description 错误处理*
     * @param {string} err
     */
     errMessage: function (err) {

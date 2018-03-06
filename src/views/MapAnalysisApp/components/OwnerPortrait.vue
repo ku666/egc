@@ -231,7 +231,7 @@ export default {
             res.data.data.buildInfo.map(item => {
               this.form.buildList.push({
                 value: item.uuid,
-                label: item.memo.slice(item.memo.indexOf(' ') + 1)
+                label: item.memo
               })
             })
             console.log(LOG_TAG + '获取到小区楼栋名并插入到列表')
