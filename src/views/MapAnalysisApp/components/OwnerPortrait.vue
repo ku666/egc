@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup-own' @close="closeDialog">
+  <el-dialog title="业主画像数据展示" :visible.sync="dialogVisible" width="70%" class='popup-own' @close="onCloseDialog">
     <el-row>
       <el-col :span="4">
         <div class='court-info'>
@@ -58,9 +58,9 @@
               </el-form-item>
             </el-col>
             <el-col :span="24" style="text-align:right;margin-top:10px;">
-              <el-button type="primary" @click.native="inquireData">查询</el-button>
-              <el-button type="success" plain @click.native="goToTable">表单</el-button>
-              <el-button type="danger" plain @click.native="goToMap">图表</el-button>
+              <el-button type="primary" @click.native="onInquireData">查询</el-button>
+              <el-button type="success" plain @click.native="onGoTable">表单</el-button>
+              <el-button type="danger" plain @click.native="onGoMap">图表</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -199,7 +199,7 @@ export default {
      * @description 进入业主弹窗
      * @param {String} courtId 小区id
      */
-    OwnerPortrait (courtId) {
+    ownerPortrait (courtId) {
       this.dialogVisible = true
       this.form.buildList = []
       this.parameter.courtUuid = courtId
@@ -280,7 +280,7 @@ export default {
     /**
      * @description 切换到表格显示
      */
-    goToTable () {
+    onGoTable () {
       console.log(LOG_TAG + '切换到表格显示')
       this.tableOrMap = '0'
       switch (this.flagVal) {
@@ -347,7 +347,7 @@ export default {
     /**
      * @description 切换到图表显示
      */
-    goToMap () {
+    onGoMap () {
       console.log(LOG_TAG + '切换到图表显示')
       this.tableOrMap = '1'
       switch (this.flagVal) {
@@ -491,7 +491,7 @@ export default {
     /**
      * @description 点击查询
      */
-    inquireData () {
+    onInquireData () {
       this.clickTap = true // 控制重复点击图表
       this.clickTable = true
       this.flagVal = this.parameter.classValue
@@ -502,9 +502,9 @@ export default {
           this.isOwner = true
           this.isRate = false
           if (this.tableOrMap === '0') { // 当前是表格
-            this.goToTable()
+            this.onGoTable()
           } else { // 当前是图表
-            this.goToMap()
+            this.onGoMap()
           }
           break
         case '2': // 选择出入频率
@@ -517,9 +517,9 @@ export default {
           this.parameter.startDate = this.processingDate(this.startTime)
           this.parameter.endDate = this.processingDate(this.endTime)
           if (this.tableOrMap === '0') { // 当前是表格
-            this.goToTable()
+            this.onGoTable()
           } else { // 当前是图表
-            this.goToMap()
+            this.onGoMap()
           }
           break
         default:
@@ -555,7 +555,7 @@ export default {
     /**
      * @description 关闭弹窗（初始化数据）
      */
-    closeDialog () {
+    onCloseDialog () {
       console.log(LOG_TAG + '关闭弹窗')
       this.isOwner = true
       this.isRate = false

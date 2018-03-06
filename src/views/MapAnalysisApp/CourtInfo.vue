@@ -319,7 +319,7 @@ export default {
     handleCheckDetail: function (index) {
       switch (index) {
         case 0:
-          this.$refs['OwnerPortrait'].OwnerPortrait(this.courtInfo.courtUuid)
+          this.$refs['OwnerPortrait'].ownerPortrait(this.courtInfo.courtUuid)
           break
         case 1:
           this.$refs['streamPeople'].streamPeople(this.courtInfo.courtUuid)
