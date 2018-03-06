@@ -7,9 +7,9 @@
     <div class="flex-1 flex-c">
       <div style="margin-top: 15px">
         <el-table :data="softDispatchHisList" stripe border v-loading="loading" height="680">
-          <el-table-column type="index" label="序号" width="50">
+          <el-table-column type="index" label="序号" width="50" >
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable >
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="80">
             <template slot-scope="scope">
@@ -34,7 +34,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <soft-ware-dispatch-history-details :softDispDetails="softDispDetails"></soft-ware-dispatch-history-details>
+        <soft-ware-dispatch-history-details :softDispDetails="softDispDetails" @closeDialogEvent="closeDialog"></soft-ware-dispatch-history-details>
       </el-dialog>
     </div>
   </div>
@@ -91,7 +91,7 @@ export default {
           prop: 'courtName'
         },
         {
-          colName: '目标服务器名称',
+          colName: '目标服务器',
           prop: 'hostName'
         },
         // {
@@ -194,6 +194,9 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.pageNo = val
       this.loadData()
+    },
+    closeDialog () {
+      this.dialogDetailsVisible = false
     }
   },
   mounted () {

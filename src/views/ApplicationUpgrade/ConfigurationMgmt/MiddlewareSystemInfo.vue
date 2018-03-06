@@ -33,7 +33,7 @@
       </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <middleware-details :middlewareDetails="middlewareDetails"></middleware-details>
+        <middleware-details :middlewareDetails="middlewareDetails" @closeDialogEvent="closeDialog"></middleware-details>
       </el-dialog>
     </div>
     <div>
@@ -223,8 +223,9 @@ export default {
     },
 
     // 更新
-    _updateMiddlewareInfo (params) {
-      updateMiddlewareInfo(params)
+    _updateMiddlewareInfo (params, type) {
+      if (type === 'save') {
+        updateMiddlewareInfo(params)
         .then(
           function (result) {
             this.dialogEditVisible = false
@@ -241,6 +242,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
 
     // 比对刷新
@@ -296,7 +300,9 @@ export default {
           console.log(error)
         })
     },
-
+    closeDialog () {
+      this.dialogDetailsVisible = false
+    },
     // 初始加载
     loadData () {
       getMiddlewareInfoByPage(this.searchConditionList)

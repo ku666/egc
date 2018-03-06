@@ -32,7 +32,7 @@
       </div>
     </div>
     <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-      <server-hardware-details :auServerDetails="auServerDetails"></server-hardware-details>
+      <server-hardware-details :auServerDetails="auServerDetails" @closeDialogEvent="closeDialog"></server-hardware-details>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
       <server-hardware-edit :auServerDetails="auServerDetails" @saveServInfoEvent="_updateServerInfo"></server-hardware-edit>
@@ -258,8 +258,9 @@ export default {
         })
     },
     // 更新
-    _updateServerInfo (params) {
-      updateAuServerInfor(params)
+    _updateServerInfo (params, type) {
+      if (type === 'save') {
+        updateAuServerInfor(params)
         .then(
           function (result) {
             console.log('update response --- >' + result)
@@ -277,6 +278,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
     // 比对刷新
     _handleSynData (rowIdx) {
@@ -332,6 +336,9 @@ export default {
             this.loading = false
           }.bind(this)
         )
+    },
+    closeDialog () {
+      this.dialogDetailsVisible = false
     },
     // 初始加载
     loadData () {

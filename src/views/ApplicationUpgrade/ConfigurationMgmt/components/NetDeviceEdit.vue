@@ -75,6 +75,7 @@
         </el-form-item>
       </template>
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateNetDeviceInfo" type="primary">保 存</el-button>
         <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
           <div>
@@ -132,7 +133,7 @@ export default {
   },
   methods: {
     updateNetDeviceInfo () {
-      this.$emit('saveOsInfoEvent', this.netDeviceDetails)
+      this.$emit('saveOsInfoEvent', this.netDeviceDetails, 'save')
       // if (this.validateDetailsChanged()) {
       //   this.$emit('saveOsInfoEvent', this.netDeviceDetails)
       // } else {
@@ -184,6 +185,9 @@ export default {
       this.showAddNewEvent = false
       this.newLabel = ''
       this.newValue = ''
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveOsInfoEvent', this.netDeviceDetails, 'cancel')
     }
   },
   watch: {

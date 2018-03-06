@@ -78,6 +78,7 @@
   </el-form-item>
 </template>
       <div style="text-align:center;">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button @click="updateAppServiceInfo" class="action-btn" type="primary">保 存</el-button>
         <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
           <div>
@@ -128,7 +129,7 @@ export default {
   },
   methods: {
     updateAppServiceInfo () {
-      this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
+      this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails, 'save')
       // if (this.validateDetailsChanged()) {
       //   this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
       // } else {
@@ -183,6 +184,9 @@ export default {
       this.showAddNewEvent = false
       this.newLabel = ''
       this.newValue = ''
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails, 'cancel')
     }
   },
   watch: {

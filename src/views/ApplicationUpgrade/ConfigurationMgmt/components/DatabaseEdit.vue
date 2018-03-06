@@ -43,6 +43,7 @@
       </template>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateDatabaseInfo" type="primary">保 存</el-button>
         <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
           <div>
@@ -90,7 +91,7 @@ export default {
   },
   methods: {
     updateDatabaseInfo () {
-      this.$emit('saveDatabaseInfoEvent', this.databaseEditDetails)
+      this.$emit('saveDatabaseInfoEvent', this.databaseEditDetails, 'save')
       // if (this.databaseEditDetails.remark !== this.tempRemark || this.tempExtDataList !== this.databaseEditDetails.extDataList) {
       //   this.$emit('saveDatabaseInfoEvent', this.databaseEditDetails)
       // } else {
@@ -120,6 +121,9 @@ export default {
       this.showAddNewEvent = false
       this.newLabel = ''
       this.newValue = ''
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveDatabaseInfoEvent', this.databaseEditDetails, 'cancel')
     }
   },
   watch: {
