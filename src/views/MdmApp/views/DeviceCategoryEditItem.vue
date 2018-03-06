@@ -5,7 +5,7 @@
     <el-tabs style="margin-top:-20px" v-model='activeTab'>
       <el-tab-pane label="设备基本信息" name='basic'>
         <div style="padding-left: 30px">
-          <span style="color: red;">从设备主数编码下拉框中选择了设备分类后，会自动为您生成设备主数据编码，生成规则为：设备分类编码(4位)+供应商编码(4位)+顺番(4位)。</span>
+          <span v-if='mode === 2' style="color: red;">从设备主数编码下拉框中选择了设备分类后，会自动为您生成设备主数据编码，生成规则为：设备分类编码(4位)+供应商编码(4位)+顺番(4位)。</span>
           <el-form :model='deviceCategoryDetail' ref='deviceCategoryDetail' label-width='160px' :rules='rules' :inline='true'>
             <el-form-item label='设备主数据编码' prop='typeCode'>
               <el-select v-if="!viewFlag" v-model='deviceCategoryDetail.typeCode' filterable>
@@ -28,7 +28,7 @@
                 <el-option v-for='provider in providers' :key='provider.providerCode' :label='provider.providerCode + ":" + provider.providerName' :value='provider.providerCode'>
                 </el-option>
               </el-select>
-              <el-input v-else v-model='deviceCategoryDetail.providerName' :disabled='viewFlag'></el-input>
+              <el-input v-else v-model='providerCodeName' :disabled='viewFlag'></el-input>
             </el-form-item>
             <el-form-item label='软件版本' prop='softwareVersion'>
               <el-input v-model.trim='deviceCategoryDetail.softwareVersion' :disabled='viewFlag' :maxlength="32"></el-input>
@@ -154,6 +154,9 @@ export default {
       } else if (this.mode === 3) {
         return '修改设备'
       }
+    },
+    providerCodeName: function () {
+      return this.deviceCategoryDetail.providerCode + ':' + this.deviceCategoryDetail.providerName
     }
   },
   methods: {
