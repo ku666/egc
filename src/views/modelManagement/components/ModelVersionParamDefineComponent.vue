@@ -834,6 +834,8 @@
         console.log(file)
         if (/.*[\u4e00-\u9fa5]+.*$/.test(file.name)) {
           this.$message.error('不支持中文文件名，请重命名文件')
+          fileList = []
+          this.$refs.upload.clearFiles()
           return false
         }
         if (fileList.length === 2) {
