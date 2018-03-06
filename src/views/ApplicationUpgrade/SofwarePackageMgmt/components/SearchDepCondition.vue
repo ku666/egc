@@ -7,6 +7,9 @@
           clearable :maxlength="maxlength" width="650" @keyup.enter.native="_callHandleFilter">
            </el-input>
         </el-form-item>
+        <el-form-item v-show="false">
+          <el-input> </el-input>
+        </el-form-item>
         <div class="btn-container">
           <el-form-item>
             <el-button @click="_handleClearQuery" class="cancel-btn">清空</el-button>

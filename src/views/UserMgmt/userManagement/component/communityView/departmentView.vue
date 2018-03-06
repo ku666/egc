@@ -10,7 +10,7 @@
         <el-input v-model='department.departmentName' placeholder='无数据' class="user_el-input" readonly></el-input>
       </el-form-item>
       <el-form-item label='上级部门' :label-width="formLabelWidth">
-        <el-select v-model='department.parentDepartmentUuid' class="user_el-select" placeholder="无数据">
+        <el-select v-model='department.parentDepartmentUuid' class="user_el-select" placeholder="无数据" disabled>
           <el-option v-for='item in departmentSelect' :key='item.uuid' :label='item.departmentName' :value='item.uuid' disabled></el-option>
        </el-select>
       </el-form-item>

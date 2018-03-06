@@ -411,7 +411,7 @@
         // this.loading2 = true
         let condition = {}
         if (this.modelListSearch.paramCode.length > 0) {
-          condition.paramCode = this.modelListSearch.paramCode
+          condition.paramCode = '%' + this.modelListSearch.paramCode + '%'
         } else {
           condition.paramCode = undefined
         }
