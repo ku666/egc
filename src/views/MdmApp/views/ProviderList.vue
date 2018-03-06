@@ -3,10 +3,10 @@
     <div class="search-container">
       <el-form :inline='true' :model='searchProviderForm' ref='searchProviderForm' style='margin-top:20px'>
         <el-form-item label='供应商主数据编码'>
-          <el-input placeholder='请输入供应商主数据编码' v-model.trim='searchProviderForm.providerCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
+          <el-input placeholder='请输入供应商主数据编码' v-model='searchProviderForm.providerCode' @keyup.enter.native='search' :maxlength="4" clearable></el-input>
         </el-form-item>
         <el-form-item label='供应商名称'>
-          <el-input placeholder='请输入供应商名称' v-model.trim='searchProviderForm.providerName' @keyup.enter.native='search' :maxlength="100" clearable></el-input>
+          <el-input placeholder='请输入供应商名称' v-model='searchProviderForm.providerName' @keyup.enter.native='search' :maxlength="100" clearable></el-input>
         </el-form-item>
         <el-form-item>
           <div class="btn-container">
