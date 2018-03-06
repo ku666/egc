@@ -532,8 +532,8 @@ export const getResourceListByPage = (listQuery) => {
   ).then(res => res.data)
 }
 // 查询应用程序下拉框
-export const getAppCodeOptions = (cloudFlag) => {
-  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1&cloudFlag=' + cloudFlag
+export const getAppCodeOptions = (cloudFlag, courtUuid) => {
+  return Axios.get(contextPath + '/usermgmt/resource/list?resourceType=1&cloudFlag=' + cloudFlag + '&courtUuid=' + courtUuid
   ).then(res => res.data)
 }
 // 新增资源

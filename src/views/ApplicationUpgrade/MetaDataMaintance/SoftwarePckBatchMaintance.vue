@@ -61,6 +61,7 @@
           </el-row>
 
           <div style="text-align:center;">
+            <el-button @click="beforeCloseDialog" class="cancel-btn" type="primary">取 消</el-button>
             <el-button type="primary" @click="_registerSoftwareBatchs('registerParaList')" class="search-btn">注 册</el-button>
           </div>
         </el-form>
@@ -195,8 +196,9 @@ export default {
         })
     },
     // 编辑
-    _updateSoftwareBatchInfo (params) {
-      updateSoftwareBatch(params)
+    _updateSoftwareBatchInfo (params, type) {
+      if (type === 'save') {
+        updateSoftwareBatch(params)
         .then(
           function (result) {
             this.dialogEditVisible = false
@@ -208,6 +210,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
     // 删除
     _handleDeleteData (rowIdx) {

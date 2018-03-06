@@ -18,6 +18,7 @@
       </el-form-item>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateCodeInst" type="primary">保 存</el-button>
       </div>
     </el-form>
@@ -41,11 +42,14 @@ export default {
   },
   methods: {
     updateCodeInst () {
-      this.$emit('saveCodeInstEvent', this.codeInstDetails)
+      this.$emit('saveCodeInstEvent', this.codeInstDetails, 'save')
       // if (this.codeInstDetails.remark !== this.tempRemark) {
       // } else {
       //   this.$message.error('请修改数据后再提交')
       // }
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveCodeInstEvent', this.codeInstDetails, 'cancel')
     }
   },
   watch: {

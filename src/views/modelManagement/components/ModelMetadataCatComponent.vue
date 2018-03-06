@@ -315,7 +315,7 @@
         // this.loading2 = true
         let condition = {}
         if (this.modelListSearch.catName.length > 0) {
-          condition.catName = this.modelListSearch.catName
+          condition.catName = '%' + this.modelListSearch.catName + '%'
         } else {
           condition.catName = undefined
         }

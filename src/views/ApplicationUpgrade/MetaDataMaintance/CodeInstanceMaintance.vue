@@ -93,6 +93,7 @@
             </el-col>
           </el-row>
           <div style="text-align:center;">
+            <el-button @click="beforeCloseDialog" class="cancel-btn" type="primary">取 消</el-button>
             <el-button type="primary" @click="_registerCodeInstance('registerParaList')" class="search-btn">注 册</el-button>
           </div>
         </el-form>
@@ -313,19 +314,23 @@ export default {
           console.log(error)
         })
     },
-    _updateCodeInstInfo (params) {
-      updateCodeInstance(params)
-        .then(
-          function (result) {
-            this.dialogEditVisible = false
-            this.$message.success('保存成功')
-            // 加载数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error)
-        })
+    _updateCodeInstInfo (params, type) {
+      if (type === 'save') {
+        updateCodeInstance(params)
+          .then(
+            function (result) {
+              this.dialogEditVisible = false
+              this.$message.success('保存成功')
+              // 加载数据
+              this.loadData()
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
     // 删除
     _handleDeleteData (rowIdx) {

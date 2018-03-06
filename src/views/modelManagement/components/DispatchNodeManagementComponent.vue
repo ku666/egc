@@ -786,7 +786,7 @@
         // this.loading2 = true
         let condition = {}
         if (this.mgmtNodeListSearch.name.length > 0) {
-          condition.name = this.mgmtNodeListSearch.name
+          condition.name = '%' + this.mgmtNodeListSearch.name + '%'
         } else {
           condition.name = undefined
         }

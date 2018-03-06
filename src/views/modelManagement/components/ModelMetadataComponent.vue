@@ -370,7 +370,7 @@
           catCode: this.currentMetacat.catCode
         }
         if (this.modelListSearch.name.length > 0) {
-          condition.itemCustName = this.modelListSearch.name
+          condition.itemCustName = '%' + this.modelListSearch.name + '%'
         } else {
           condition.itemCustName = undefined
         }

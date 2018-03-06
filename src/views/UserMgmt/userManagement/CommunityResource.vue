@@ -273,20 +273,7 @@ export default {
         )
     },
     loadSelectData () {
-    // 获取应用程序下拉框信息
-      getAppCodeOptions(0)// ‘0’ 是默认查小区端
-        .then(
-            function (result) {
-              console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
-              this.appCodeOptions = result
-            }.bind(this)
-          )
-        .catch(
-          function (error) {
-            console.log(error)
-          }
-        )
-        // 获取操作类型字典项
+      // 获取操作类型字典项
       getActionTypeOptions(this.dictData)
         .then(
             function (result) {
@@ -357,6 +344,19 @@ export default {
       console.log('communitySelected-----' + JSON.stringify(data))
       this.listQuery.q_courtUuid = data
       this.curCourtUuid = data
+      // 获取应用程序下拉框信息
+      getAppCodeOptions(0, data)// ‘0’ 是默认查小区端
+        .then(
+            function (result) {
+              console.log('<<<<<getAppCodeOptions:' + JSON.stringify(result))
+              this.appCodeOptions = result
+            }.bind(this)
+          )
+        .catch(
+          function (error) {
+            console.log(error)
+          }
+        )
       this.loadData()
     },
     // 重置搜选宽内容

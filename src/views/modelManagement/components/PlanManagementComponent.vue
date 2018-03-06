@@ -37,9 +37,9 @@
           <div class="text-right">
 
             <div class="form-info">
-              <div class="item-info label">任务类型</div>
+              <div class="item-info label">计划类型</div>
               <div class="item-info">
-                <el-select @change="loadData" v-model="modelListSearch.taskType" placeholder="任务类型">
+                <el-select @change="loadData" v-model="modelListSearch.taskType" placeholder="计划类型">
                   <el-option key="0" label="全部" value="0"></el-option>
                   <el-option
                     v-for="item in systemTaskTypeList"
@@ -52,9 +52,9 @@
               </div>
             </div>
             <div class="form-info">
-              <div class="item-info label">任务来源</div>
+              <div class="item-info label">计划来源</div>
               <div class="item-info">
-                <el-select @change="loadData" v-model="modelListSearch.taskSource" placeholder="任务来源">
+                <el-select @change="loadData" v-model="modelListSearch.taskSource" placeholder="计划来源">
                   <el-option key="0" label="全部" value="0"></el-option>
                   <el-option
                     v-for="item in systemTaskSourceList"
@@ -138,13 +138,13 @@
         </el-table-column>
 
         <el-table-column
-          label="任务类型"
+          label="计划类型"
           width="120">
           <template slot-scope="scope">{{ systemTaskTypeMap[scope.row.taskType] }}</template>
         </el-table-column>
 
         <el-table-column
-          label="任务来源"
+          label="计划来源"
           width="120">
           <template slot-scope="scope">{{ systemTaskSourceMap[scope.row.taskSource] }}</template>
         </el-table-column>
@@ -227,8 +227,8 @@
               </span>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now'" class="model-dropdown-item" command="stop"><i class="el-icon-remove"></i>中止</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now' && scope.row.planStatus == 'mm.plnsts.create' " class="model-dropdown-item" command="edit" divided><i
+                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now' && scope.row.planStatus == 'mm.plnsts.start'" class="model-dropdown-item" command="stop"><i class="el-icon-remove"></i>中止</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now' && scope.row.planStatus == 'mm.plnsts.create'" class="model-dropdown-item" command="edit" divided><i
                   class="el-icon-edit-outline"></i>修改
                 </el-dropdown-item>
                 <el-dropdown-item class="model-dropdown-item" command="delete"><i class="el-icon-delete"></i>删除
@@ -930,7 +930,7 @@
         // this.loadingVersion = true
         let condition = {}
         if (this.modelListSearch.name.length > 0) {
-          condition.name = this.modelListSearch.name
+          condition.name = '%' + this.modelListSearch.name + '%'
         } else {
           condition.name = undefined
         }
