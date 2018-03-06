@@ -107,7 +107,7 @@ var initDataFunction = function (params) {
         },
         itemStyle: {
           normal: {
-            color: '#f7b851'
+            color: params.colorarr[0]
           }
         },
         lineStyle: {
@@ -129,7 +129,7 @@ var initDataFunction = function (params) {
         },
         itemStyle: {
           normal: {
-            color: '#58c8da'
+            color: params.colorarr[1]
           }
         },
         lineStyle: {
@@ -143,27 +143,23 @@ var initDataFunction = function (params) {
   return option
 }
 
-var carObj = {
+var caroption = initDataFunction({
   title: '车行流量',
   legarr: ['进园车流量', '出园车流量'],
   colorarr: ['#f7b851', '#58c8da'],
   timeData: [],
   inData: [],
   outData: []
-}
+})
 
-var peopleObj = {
+var peopleoption = initDataFunction({
   title: '人员流量',
   legarr: ['进园人流量', '出园人流量'],
   colorarr: ['#87CEFA', '#FFE4E1'],
   timeData: [],
   inData: [],
   outData: []
-}
-
-var caroption = initDataFunction(carObj)
-
-var peopleoption = initDataFunction(peopleObj)
+})
 
 /**
  * 更新车流图表数据
