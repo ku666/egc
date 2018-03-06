@@ -173,6 +173,11 @@ export default [
     component: modelTaskInfo
   },
   {
+    path: '/modelmgmt/model/:modelId/version/:versionId/task/:taskId/taskinfo',
+    name: 'modelandversionnoplantask',
+    component: modelTaskInfo
+  },
+  {
     path: '/modelmgmt/dispatchnodemgmt/publishhistory/:mgmtNodePk',
     name: 'mgmtNodePublishHistory',
     component: mgmtNodePublishHistory

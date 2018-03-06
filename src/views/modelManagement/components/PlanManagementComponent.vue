@@ -5,8 +5,8 @@
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
         <!--<el-breadcrumb-item>模型执行管理</el-breadcrumb-item>-->
-        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item> -->
+        <!-- <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item> -->
         <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId" :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item v-if="$route.params.versionId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
         <el-breadcrumb-item>计划管理</el-breadcrumb-item>
@@ -231,7 +231,7 @@
                 <el-dropdown-item v-if="scope.row.frequencyType != 'mm.frqtyp.now' && scope.row.planStatus == 'mm.plnsts.create'" class="model-dropdown-item" command="edit" divided><i
                   class="el-icon-edit-outline"></i>修改
                 </el-dropdown-item>
-                <el-dropdown-item class="model-dropdown-item" command="delete"><i class="el-icon-delete"></i>删除
+                <el-dropdown-item v-if="scope.row.planStatus != '﻿mm.plnsts.stop' && scope.row.planStatus != '﻿mm.plnsts.finish'" class="model-dropdown-item" command="delete"><i class="el-icon-delete"></i>删除
                 </el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
@@ -355,7 +355,17 @@
               :value="item.item_code"
             ></el-option>
           </el-select>
+          <el-tooltip class="item" effect="light" @mouseenter="getParamValueCron(item.item_code)" placement="right">
+            <div slot="content">频次表达式为：{{cron}}</div>
+            <i class="el-icon-question"></i>
+          </el-tooltip>
         </el-form-item>
+
+        <!--<el-form-item label="频次表达式" prop="frequencyCron">-->
+          <!--<el-input v-if="newTaskPlan.frequencyType == 'mm.frqtyp.dayone'" disabled v-model="newTaskPlan.frequencyType" ></el-input>-->
+          <!--<el-input disabled v-if="newTaskPlan.frequencyType == 'mm.frqtyp.weekone'" disabled v-model="newTaskPlan.frequencyType"></el-input>-->
+          <!--<el-input disabled v-if="newTaskPlan.frequencyType == 'mm.frqtyp.monthone'" disabled v-model="newTaskPlan.frequencyType"></el-input>-->
+        <!--</el-form-item>-->
 
         <!--<el-form-item labbel="频次表达式" prop="frequencyCron">-->
           <!--<el-input disabled v-if="item.item_code == 'mm.frqtyp.dayone'">{{}}</el-input>-->
@@ -698,7 +708,7 @@
   import modelVersionInfoComponenet from './model/ModelVersionInfoComponenet'
   import { getCommunityByStatus } from '@/views/modelManagement/apis/model_version_api'
   import { getPlanList, addNewTaskPlan, updateTaskPlan, deleteTaskPlanById, stopTaskPlanById } from '@/views/modelManagement/apis/model_plan_api'
-  import { getVersionParamsByVersionId } from '@/views/modelManagement/apis/model_paramdefine_api'
+  import { getVersionParamsByVersionId, getCron } from '@/views/modelManagement/apis/model_paramdefine_api'
   import {
     startSystemLoading,
     getSystemSettings,
@@ -769,6 +779,7 @@
           url: '/scp-modelmgmtcomponent/modelmgmt/web/uploadModelFile',
           data: {}
         },
+        cron: '',
         excuteParamsDialogVisible: false,
         curPlanExcuteParams: [],
         curEditExcuteVersionParams: [],
@@ -1215,7 +1226,7 @@
       },
       stopTaskPlan (index, item) {
         var data = item
-        this.$confirm('确定要停用"' + data.name + '"?', '提示', {
+        this.$confirm('确定要中止"' + data.name + '"?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
@@ -1237,7 +1248,7 @@
                 // this.editModelDialogVisible = false
                 this.$message({
                   type: 'success',
-                  message: '停用计划成功'
+                  message: '中止计划成功'
                 })
                 this.$nextTick(() => {
                   loadingStop.close()
@@ -1460,6 +1471,20 @@
         if (this.modelPlanList[index].paramList) {
           this.curPlanExcuteParams = JSON.parse(this.modelPlanList[index].paramList)
         }
+      },
+      getParamValueCron (code) {
+        getCron(code)
+          .then(
+            function (result) {
+              let cron = result.data.paramValue
+              return cron
+            }
+          )
+          .catch(
+            function (error) {
+              console.log(error)
+            }
+          )
       }
     }
   }
