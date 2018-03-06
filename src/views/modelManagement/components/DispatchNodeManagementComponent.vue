@@ -658,8 +658,7 @@
           shareFlag: '',
           nodeStatus: '',
           latestPublishVersion: '',
-          latestEventTypeList: '',
-          deleteFlag: '0'
+          latestEventTypeList: ''
         },
         editNode: {
           deviceId: ''
@@ -786,14 +785,17 @@
       loadData () {
         // this.loading2 = true
         let condition = {}
-        condition.name = '%' + this.mgmtNodeListSearch.name + '%'
+        if (this.mgmtNodeListSearch.name.length > 0) {
+          condition.name = '%' + this.mgmtNodeListSearch.name + '%'
+        } else {
+          condition.name = undefined
+        }
         if (this.mgmtNodeListSearch.nodeType && this.mgmtNodeListSearch.nodeType !== '全部' && this.mgmtNodeListSearch.nodeType !== '0') {
           condition.nodeType = this.mgmtNodeListSearch.nodeType
         } else {
           condition.nodeType = undefined
         }
         // let condition = {
-        //   deleteFlag: 0,
         //   name: this.mgmtNodeListSearch.name
         // }
         var params = {

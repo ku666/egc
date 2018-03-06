@@ -28,7 +28,7 @@
         <el-input v-model="user.primaryEmail" auto-complete="off" placeholder="无数据" class="user_el-input" readonly></el-input>
       </el-form-item>
       <el-form-item label="部门" :label-width="formLabelWidth" prop="departmentUuid">
-        <el-select v-model="user.departmentUuid" placeholder="无数据" class="user_el-select">
+        <el-select v-model="user.departmentUuid" placeholder="无数据" class="user_el-select" disabled>
           <el-option v-for="department in departmentSelect" :key="department.uuid" :label="department.departmentName" :value="department.uuid"> </el-option>
         </el-select>
       </el-form-item>
@@ -36,7 +36,7 @@
         <el-input v-model="user.position" auto-complete="off" placeholder="无数据" class="user_el-select" readonly></el-input>
       </el-form-item>
       <el-form-item label="状态" :label-width="formLabelWidth">
-        <el-select v-model="user.userAccStatus" placeholder="无数据" class="user_el-select">
+        <el-select v-model="user.userAccStatus" placeholder="无数据" class="user_el-select" disabled>
           <el-option v-for="userStatus in userAccStatusSelect" :key="userStatus.itemCode" :label="userStatus.itemName" :value="userStatus.itemCode"> </el-option>
         </el-select>
       </el-form-item>

@@ -315,8 +315,7 @@
           paramCat: '',
           paramCode: '',
           paramValue: '',
-          paramDesc: '',
-          deleteFlag: '0'
+          paramDesc: ''
         },
         editModel: {},
         modelListSearch: {
@@ -410,15 +409,20 @@
     methods: {
       loadData () {
         // this.loading2 = true
+        let condition = {}
+        if (this.modelListSearch.paramCode.length > 0) {
+          condition.paramCode = '%' + this.modelListSearch.paramCode + '%'
+        } else {
+          condition.paramCode = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          condition: {
-            paramCode: '%' + this.modelListSearch.paramCode + '%',
-            communityId: this.modelListSearch.communityId,
-            deleteFlag: 0
-          },
-          orderBy: 'createTime'
+          orderBy: 'createTime',
+          condition: condition
+          // {
+          //   paramCode: this.modelListSearch.paramCode
+          // },
         }
         console.log(params)
         let loadingData = startSystemLoading()

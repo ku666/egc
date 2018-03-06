@@ -347,7 +347,6 @@
           paramType: '',
           defaultValue: '',
           paramDesc: '',
-          deleteFlag: '0',
           createTime: '',
           updateTime: '',
           createUser: '',
@@ -459,14 +458,18 @@
     methods: {
       loadData () {
         // this.loading2 = true
+        let condition = {
+          algModelVersionPk: this.algModelVersionPk
+        }
+        if (this.modelListSearch.paramName.length > 0) {
+          condition.paramName = '%' + this.modelListSearch.paramName + '%'
+        } else {
+          condition.paramName = undefined
+        }
         var params = {
           currentPage: this.currentPage,
           pageSize: this.pageSize,
-          condition: {
-            deleteFlag: 0,
-            algModelVersionPk: this.algModelVersionPk,
-            paramName: '%' + this.modelListSearch.paramName + '%'
-          }
+          condition: condition
         }
         console.log(params)
         let loadingData = startSystemLoading()
