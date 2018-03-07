@@ -6,7 +6,7 @@
     <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="appServiceListData" stripe border v-loading="loading" height="680">
-          <el-table-column type="index" label="序号" width="50">
+          <el-table-column type="index" :index="indexMethod" label="序号" width="50">
           </el-table-column>
           <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
@@ -347,6 +347,14 @@ export default {
     _handleBeforClose () {
       this.dialogUploadVisible = false
       this.$refs.uploadCmpt.clearFileList()
+    },
+    indexMethod (index) {
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.page
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      return computedIndex
     }
   },
   mounted () {

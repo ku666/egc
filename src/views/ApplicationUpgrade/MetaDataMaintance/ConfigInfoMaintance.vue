@@ -7,7 +7,7 @@
             <el-input class="appupgrade_el-select" placeholder="请输入配置项名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="代码值" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入配置项的值" v-model="searchConditionList.value" @keyup.enter.native="_handleFilter"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入配置项的值" v-model="searchConditionList.code" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -24,7 +24,7 @@
       <div class="flex-1 flex-c">
         <div style="margin-top: 15px">
           <el-table :data="configInfoDataList" stripe border v-loading="loading" height="680">
-            <el-table-column type="index" label="序号" width="50">
+            <el-table-column type="index" :index="indexMethod" label="序号" width="50">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
             </el-table-column>
@@ -159,7 +159,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
         codeName: '',
-        value: '',
+        code: '',
         vendor: ''
       },
       registerParaList: {
@@ -351,6 +351,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    },
+    indexMethod (index) {
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.currentPage
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      return computedIndex
     }
   },
   watch: {

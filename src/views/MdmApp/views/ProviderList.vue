@@ -52,7 +52,7 @@
     <el-pagination ref='pager' background :current-page='searchProviderForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchProviderForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchProviderForm.total' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
 
-    <el-dialog :visible.sync='providerDialogVisible' :modal-append-to-body='false'>
+    <el-dialog :visible.sync='providerDialogVisible' :modal-append-to-body='false' :close-on-click-modal="false">
       <div slot='title' class='header-style'>
         <i class='el-icon-edit'></i>{{ title }}</div>
       <div style='margin-top:-20px'>

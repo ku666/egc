@@ -56,7 +56,7 @@
     <el-pagination ref='pager' background :current-page='searchAttrForm.currentPage' :page-sizes='[10, 20, 50, 100]' :page-size='searchAttrForm.pageSize' layout='total, sizes, prev, pager, next, jumper' :total='searchAttrForm.total' @size-change='sizeChange' @current-change='currentChange'>
     </el-pagination>
 
-    <el-dialog :visible.sync='attrDialogVisible' :modal-append-to-body='false' :before-close='closedialog' style="min-width: 750px">
+    <el-dialog :visible.sync='attrDialogVisible' :modal-append-to-body='false' :before-close='closedialog' style="min-width: 750px" :close-on-click-modal="false">
       <div slot='title' class='header-style'>
         <i class='el-icon-edit'></i>{{ title }}</div>
       <el-tabs style="margin-top:-20px" v-model='activeTab'>

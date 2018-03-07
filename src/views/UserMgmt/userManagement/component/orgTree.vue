@@ -27,6 +27,9 @@
 // import {getAllOrgs, getOrgNextLevel} from '../apis/index.js'
 import {getAllOrgs} from '../apis/index.js'
 export default {
+  props: {
+    courtUuidTree: undefined
+  },
   data () {
     return {
       orgsData: [],
@@ -53,7 +56,7 @@ export default {
   },
   methods: {
     _loadALlOrgs () {
-      getAllOrgs()
+      getAllOrgs(this.courtUuidTree)
         .then(
           function (result) {
             this.orgsDataTree = []
