@@ -318,6 +318,7 @@
             </el-row>
             <div style="text-align:center;">
               <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
+              <!-- <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button> -->
             </div>
           </el-form>
         </div>
@@ -353,7 +354,6 @@ export default {
         pageNo: 1,
         pageSize: 10
       },
-      selectOpts: [],
       total: 0,
       dialogTitle: '',
       dialogImportTitle: '',
@@ -905,11 +905,14 @@ export default {
       var rowData = this.softwarePackListData[rowIdx]
       console.info('histroy row index-->: ' + rowIdx)
       this.dialogTitle = '软件包 ' + rowData.name + ' 版本号 ' + rowData.version + ' 历史信息'
-      // this.rowIdx = rowIdx
-      // this.hisUuid = rowData.uuid
+      this.rowIdx = rowIdx
+      this.hisUuid = rowData.uuid
       this.dialogHistoryVisible = true
-      this.$refs.packageHistory.softwarePckHistory = []
-      this.$refs.packageHistory.loadData(rowData.uuid)
+      if (this.$refs.packageHistory !== null && this.$refs.packageHistory !== undefined) {
+        this.$refs.packageHistory.softwarePckHistory = []
+        console.info('packageHistory loadData start -->: ' + rowIdx)
+        this.$refs.packageHistory.loadData(rowData.uuid)
+      }
     },
     // 初始加载软件包的信息
     loadData () {

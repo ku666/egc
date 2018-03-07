@@ -71,7 +71,7 @@
     </div>
 
     <!-- 弹出新窗口 -->
-    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" style="min-width: 920px">
+    <el-dialog :visible.sync='detailDialogVisible' :modal-append-to-body='false' :before-close="handleClose" :close-on-click-modal="false" style="min-width: 920px">
       <div slot='title' class='header-style'>
         <i class='el-icon-document'></i>{{ this.title }}</div>
       <el-tabs style="height: 230px; margin-top:-20px;" v-model='activeName'>
