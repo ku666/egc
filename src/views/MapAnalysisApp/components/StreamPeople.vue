@@ -49,8 +49,8 @@
             </el-col>
             <el-col :span="24" style="text-align:right">
               <el-button type="primary" @click="onTimeQuery">查询</el-button>
-              <el-button type="success" @click="onTableSwitch" plain>表单</el-button>
-              <el-button type="danger" @click="onChartSwitch" plain>图表</el-button>
+              <el-button type="success" @click="onTableSwitch" :plain="isTableActivated">表单</el-button>
+              <el-button type="danger" @click="onChartSwitch" :plain="isChartActivated">图表</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -118,6 +118,8 @@ export default {
       timeType: 'date', // 日期type属性
       totalRows: 10, // 数据条数
       tableData: [], // 表格数据
+      isTableActivated: false, // 是否激活表格按钮
+      isChartActivated: true, // 是否激活图表按钮
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
       isPerErrInfo: false, // 图表不显示时的错误提示
@@ -164,8 +166,12 @@ export default {
     */
     onChartSwitch: function () {
       console.log(LOG_TAG + ' 点击切换图表展示 ')
+      // 图表显隐
       this.isChartShow = true
       this.isTableShow = false
+      // 图表按钮是否激活状态
+      this.isChartActivated = false
+      this.isTableActivated = true
       // 自适应宽
       setTimeout(() => {
         this.myChartContainer = function () {
@@ -183,7 +189,16 @@ export default {
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
-      this.getData()
+      // 判断时间是否选择正确
+      if (this.isRequest) {
+        this.getData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
+      // this.getData()
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
         this.myChartContainer()
@@ -354,8 +369,12 @@ export default {
     */
     onTableSwitch: function () {
       console.log(LOG_TAG + ' 点击切换表格展示 ')
+      // 图表显隐
       this.isChartShow = false
       this.isTableShow = true
+      // 图表按钮是否激活状态
+      this.isChartActivated = true
+      this.isTableActivated = false
       // // 请求数据后重置表格宽度
       let tableHeader = document.querySelector('.el-table__header')
       let tableBody = document.querySelector('.el-table__body')
