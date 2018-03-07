@@ -6,12 +6,12 @@
       </el-form-item>
       <el-form-item label="设备类型" :label-width="formLabelWidth">
         <el-select v-model="resourceDeviceGroupVue.deviceType" placeholder="请选择设备类型" class="user_el-select">
-          <el-option v-for="deviceType in deviceOptions" :key="deviceType.itemCode" :label="deviceType.itemName" :value="deviceType.itemCode" disabled> </el-option>
+          <el-option v-for="deviceType in deviceOptions" :key="deviceType.itemCode" :label="deviceType.itemName" :value="deviceType.itemCode"> </el-option>
         </el-select>
       </el-form-item>
       <div>
         <el-form-item label="选择关联组织" :label-width="formLabelWidth">
-          <org-tree ref="orgTree"></org-tree>
+          <org-tree ref="orgTree" :courtUuidTree=courtUuid></org-tree>
         </el-form-item>
         <el-form-item label="供应商" :label-width="formLabelWidth">
           <el-select v-model="resourceDeviceGroupVue.providerCode" placeholder="请选择供应商" class="user_el-select">
@@ -31,6 +31,7 @@ export default {
     deviceOptions: undefined,
     providerOptions: undefined,
     isAddFlagParm: undefined,
+    courtUuid: undefined,
     resourceDeviceGroupVue: {
       resourceType: undefined,       // 资源类别
       resourceName: undefined,       // 资源名称

@@ -604,8 +604,8 @@ export const getMenuTreeDetail = (data) => {
   ).then(res => res.data)
 }
 // 获取组织树
-export const getAllOrgs = () => {
-  return Axios.get(contextPath + '/usermgmt/maindata/getOrg'
+export const getAllOrgs = (courtUuid) => {
+  return Axios.get(contextPath + '/usermgmt/maindata/getOrg?courtUuid=' + courtUuid
   ).then(res => res.data)
 }
 // // 主数据子节点

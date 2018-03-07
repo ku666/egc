@@ -43,7 +43,7 @@
     <el-dialog :title="dialogStatus" :visible.sync="dialogFormVisible" :before-close="handleClose">
       <resource-view ref="resourceEditVue" :tableData="resourceList" :resource="resourceForm"
       :resourceTypeSelect="resourceTypeOptions" :isAddFlag="addFlag" :actionTypeSelect="actionTypeOptions" :deviceTypeSelect="deviceTypeOptions" 
-      :providerCodeTypeSelect="providerCodeTypeOptions" :appCodeSelect="appCodeOptions"
+      :providerCodeTypeSelect="providerCodeTypeOptions" :appCodeSelect="appCodeOptions" :curCourtUuidParm="curCourtUuid"
       > </resource-view>
     </el-dialog>
 
@@ -137,7 +137,8 @@ export default {
       labelTitle: undefined,
       appLabelTitle: undefined,
       showQueryParm: true,
-      showQueryApp: true
+      showQueryApp: true,
+      curCourtUuid: undefined
     }
   },
   components: {
@@ -411,7 +412,7 @@ export default {
           this.showQueryParm = true
           this.showQueryApp = false
           this.resourceListParam = this.deviceGroupListParm
-        } else if (this.listQuery.q_resourceType === '99') {
+        } else if (this.listQuery.q_resourceType === '5') {
           this.labelTitle = '设备名称'
           this.appLabelTitle = '所属应用'
           this.showQueryParm = true
@@ -485,7 +486,7 @@ export default {
         this.showQueryApp = false
         this.listQuery.q_appCode = ''
         this.listQuery.q_resourceName = ''
-      } else if (this.listQuery.q_resourceType === '99') {
+      } else if (this.listQuery.q_resourceType === '5') {
         this.labelTitle = '设备名称'
         this.appLabelTitle = '所属应用'
         this.showQueryParm = true
