@@ -357,11 +357,11 @@ export default {
       this.isChartShow = false
       this.isTableShow = true
       // 请求数据后重置表格宽度
-      let belTableHeaderbb = document.querySelector('.el-table__header')
-      let elTableBody = document.querySelector('.el-table__body')
-      if (belTableHeaderbb) {
-        belTableHeaderbb.style.width = '100%'
-        elTableBody.style.width = '100%'
+      let tableHeader = document.querySelector('.el-table__header')
+      let tableBody = document.querySelector('.el-table__body')
+      if (tableHeader) {
+        tableHeader.style.width = '100%'
+        tableBody.style.width = '100%'
       }
       let elTable = document.querySelector('.el-table')
       elTable.style.height = '382px'
@@ -577,6 +577,9 @@ export default {
   }
   /deep/.el-dialog__body {
     padding: 0px 20px;
+  }
+  /deep/.gutter{
+    display: block
   }
 }
 #flow-information {

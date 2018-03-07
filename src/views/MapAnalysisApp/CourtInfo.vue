@@ -273,7 +273,7 @@ export default {
      * @description 获取小区业主年龄、性别占比数据
      */
     getCourtOwnerData: function () {
-      let param = { courtUuid: this.courtInfo.courtUuid, queryType: '0', type: '1' }
+      let param = { courtUuid: this.courtInfo.courtUuid, type: '1' }
       getCourtProfile(param).then(res => {
         if (res.data.code === '00000') {
           let ageData = []
@@ -335,7 +335,7 @@ export default {
           this.$refs.carStream.goToCarStreamPage(this.courtInfo.courtUuid)
           break
         case 3:
-          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtUuid)
+          this.$refs['equipmentReport'].equipmentReport(this.courtInfo.courtUuid, this.courtInfo.courtName)
           break
       }
     },
