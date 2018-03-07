@@ -140,7 +140,7 @@ export default {
         },
         {
           colName: '服务器主机名称',
-          prop: 'server.name',
+          prop: 'server.hostname',
           width: 220
         },
         {
