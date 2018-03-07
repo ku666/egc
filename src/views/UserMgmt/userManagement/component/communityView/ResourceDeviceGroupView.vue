@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="设备类型" :label-width="formLabelWidth">
         <el-select v-model="resourceDeviceGroupVue.deviceType" placeholder="请选择设备类型" class="user_el-select">
-          <el-option v-for="deviceType in deviceOptions" :key="deviceType.itemCode" :label="deviceType.itemName" :value="deviceType.itemCode"> </el-option>
+          <el-option v-for="deviceType in deviceOptions" :key="deviceType.itemCode" :label="deviceType.itemName" :value="deviceType.itemCode" disabled> </el-option>
         </el-select>
       </el-form-item>
       <div>
