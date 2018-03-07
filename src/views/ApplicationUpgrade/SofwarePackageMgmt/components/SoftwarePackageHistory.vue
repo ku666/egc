@@ -65,6 +65,7 @@ export default {
                 changedData = JSON.parse(result.data[i].changedData)
               }
               for (let k = 0; k < changedData.length; k++) {
+                varInfo = {}
                 varInfo = changedData[k]
                 varInfo['changeDate'] = result.data[i].updateTime
                 varInfo['operator'] = result.data[i].updateUser
@@ -87,6 +88,9 @@ export default {
     softwarePckHistory (newValue, oldValue) {
       this.softwarePckHistory = newValue
     }
+  },
+  mounted () {
+    this.loadData(this.hisUuid)
   }
 }
 </script>

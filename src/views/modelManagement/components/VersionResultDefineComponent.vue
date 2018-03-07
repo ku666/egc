@@ -270,15 +270,17 @@
           .then(
             function (result) {
               console.log(' result.data.total ' + result.data.length)
-              this.resultType = result.data[0].resultType
-              this.algVersResultPk = result.data[0].algVersResultPk
+              let tmpResultType = result.data[0].resultType
+              let tmpAlgVersResultPk = result.data[0].algVersResultPk
               // this.loading2 = false
               this.$nextTick(() => {
                 loadingData.close()
               })
               console.info(result)
               // 编辑
-              if (this.algVersResultPk) {
+              if (tmpAlgVersResultPk && tmpResultType !== 'mm.restyp.none') {
+                this.resultType = result.data[0].resultType
+                this.algVersResultPk = result.data[0].algVersResultPk
                 this.paramList = result.data
                 this.chooseable = false
               } else {

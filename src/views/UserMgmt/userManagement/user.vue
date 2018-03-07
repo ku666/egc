@@ -560,6 +560,8 @@ export default {
       }
     },
     handleOnchange (file, fileList) {
+      this.errorList = ''
+      this.errorMsg = ''
       if (this.beforeUpload(file)) {
         this.uploadFiles = new FormData()
         this.uploadFiles.append('file', fileList[0].raw)
