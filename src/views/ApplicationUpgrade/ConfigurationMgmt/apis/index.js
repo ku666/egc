@@ -143,7 +143,7 @@ export const updateAuServerInfor = (params) => {
 
 // 刷新硬件服务器信息
 export const syncauServersData = (id) => {
-  console.log('refresh database param: uuid -- > ' + JSON.stringify(id))
+  console.log('refresh server param: uuid -- > ' + JSON.stringify(id))
   return Axios.get(BASE_PATH + '/auServers/updateComparsion?id=' + id).then(res => res.data)
 }
 
@@ -271,7 +271,7 @@ export const updateDatabaseInfo = (params) => {
 // 刷新数据库
 export const syncDatabaseData = (id) => {
   console.log('refresh database param: uuid -- > ' + JSON.stringify(id))
-  return Axios.get(BASE_PATH + '/auMiddleware/updateComparsion?id=' + id).then(res => res.data)
+  return Axios.get(BASE_PATH + '/auDbms/updateComparsion?id=' + id).then(res => res.data)
 }
 
   // 获取数据库历史记录信息
