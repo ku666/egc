@@ -90,7 +90,7 @@ export default {
           prop: 'hostname'
         },
         {
-          colName: '软件包源路径名称',
+          colName: '软件包源路径',
           prop: 'path',
           width: 140
         },
@@ -99,7 +99,7 @@ export default {
           prop: 'registerTime'
         },
         {
-          colName: '软件包登记操作者',
+          colName: '软件包登记者',
           prop: 'register'
         },
         {
