@@ -321,8 +321,8 @@ export default {
           }.bind(this)
         )
         .catch(function (error) {
-          console.log(error)
           this.synDataLoading = false
+          console.log(error)
         })
     },
     // 历史记录
