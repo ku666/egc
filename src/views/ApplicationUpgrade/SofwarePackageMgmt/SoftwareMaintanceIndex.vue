@@ -508,7 +508,7 @@ export default {
         softwareNameEn: [
           { required: true, message: '应用/组件英语英文名字', trigger: 'blur,change' },
           { max: 64, message: '长度不能超过64个字符' },
-          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入英数字' }
+          { pattern: /^[a-zA-Z0-9—_-]+$/, message: '请输入英数字' }
         ],
         functionDesc: [
           { max: 256, message: '长度不能超过256个字符' }
