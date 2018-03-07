@@ -318,7 +318,7 @@
             </el-row>
             <div style="text-align:center;">
               <el-button type="primary" @click="_importRegisterSoftware()" class="action-btn">导入</el-button>
-              <!-- <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button> -->
+              <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button>
             </div>
           </el-form>
         </div>
@@ -332,7 +332,7 @@ import softwarePackageDetails from './components/SoftwarePackageDetails'
 import softwarePackageEdit from './components/SoftwarePackageEdit'
 import softwarePackageHistory from './components/SoftwarePackageHistory'
 
-import { getBatchesList, getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, registerSoftwarePackage, uploadExcelFiles } from './apis/index'
+import { getBatchesList, getSoftwarePackageByPage, getsoftwarePckById, deleteSoftwarePack, updateSoftwarePackage, registerSoftwarePackage, downCfgMgmtTemplate, uploadExcelFiles } from './apis/index'
 export default {
   components: {
     softwarePackageDetails,
@@ -508,7 +508,7 @@ export default {
         softwareNameEn: [
           { required: true, message: '应用/组件英语英文名字', trigger: 'blur,change' },
           { max: 64, message: '长度不能超过64个字符' },
-          { pattern: /^[a-zA-Z0-9]+$/, message: '请输入英数字' }
+          { pattern: /^[a-zA-Z0-9—_-]+$/, message: '请输入英数字(包含下划线 _ 中划线 - ' }
         ],
         functionDesc: [
           { max: 256, message: '长度不能超过256个字符' }
@@ -689,6 +689,16 @@ export default {
     // 软件包批量导入
     _importFile () {
       this.dialogImportTitle = '软件包批量导入'
+      // new Promise( function() {
+      //   this.fileList = []
+      //   this.fileJarAttachmentList = []
+      //   }).then(
+      //     function() {
+      //     this.dialogImportVisible = true
+      //   }
+      // )
+      this.fileList = []
+      this.fileJarAttachmentList = []
       this.dialogImportVisible = true
     },
     _importRegisterSoftware () {
@@ -1011,6 +1021,16 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.pageNo = val
       this.loadData()
+    },
+    _callDownTemplate () {
+      console.log('download')
+      let tempFlag = 73
+      downCfgMgmtTemplate(tempFlag)
+        .then(
+          function (result) {
+          }
+        ).catch(
+        )
     }
   },
   mounted () {
