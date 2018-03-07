@@ -193,7 +193,8 @@ export default {
         throttle(myChartResize, null, 200)
       }
       function myChartResize () {
-        that.myChart.resize()
+        console.log('a')
+        that.myChart.resize && that.myChart.resize()
       }
       /**
        * @description 节流函数
@@ -416,7 +417,6 @@ export default {
   computed: {
     // echarts配置信息
     optionData: function () {
-      console.log('computedoptiondata')
       return {
         title: {
           text: '小区车流量d'

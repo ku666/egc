@@ -1,23 +1,11 @@
 <template>
-  <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="onCloseDialog">
-    <div class="container">
-      <el-button type="primary" @click="onChartSwitch">图表</el-button>
-      <el-button type="success" @click="onTableSwitch">表格</el-button>
-      <div class="court-name">{{cellDetailsList.courtName}}</div>
-      <div v-show="isChartShow" class="chart-container">
-        <div id="equipment-chartsbox">
-          <span v-show="noDataTips">暂无数据 </span>
-          <img v-show="isReponseData" src="../assets/images/err.png">
-          <div id="equipment-charts"></div>
-        </div>
-        <div id="equipment-online-chartsbox">
-          <span v-show="noDataTips">暂无数据 </span>
-          <img v-show="isReponseData" src="../assets/images/err.png">
-          <div id="equipment-online-charts"></div>
-        </div>
-      </div>
-      <div v-show="isTableShow">
-        <div class="equipment-table">
+  <div v-if="dialogReportVisible">
+    <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="onCloseDialog">
+      <div class="container">
+        <el-button type="primary" @click="onChartSwitch">图表</el-button>
+        <el-button type="success" @click="onTableSwitch">表格</el-button>
+        <div class="court-name">{{cellDetailsList.courtName}}</div>
+        <div class="equipment-table" v-show="isTableShow">
           <el-table :data="tableData" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
             <el-table-column prop="deviceType" label="设备ID" align="center">
             </el-table-column>
@@ -29,9 +17,21 @@
             </el-table-column>
           </el-table>
         </div>
+        <div v-show="isChartShow" class="chart-container">
+          <div id="equipment-chartsbox">
+            <span v-show="noDataTips">暂无数据 </span>
+            <img v-show="isReponseData" src="../assets/images/err.png">
+            <div id="equipment-charts"></div>
+          </div>
+          <div id="equipment-online-chartsbox">
+            <span v-show="noDataTips">暂无数据 </span>
+            <img v-show="isReponseData" src="../assets/images/err.png">
+            <div id="equipment-online-charts"></div>
+          </div>
+        </div>
       </div>
-    </div>
-  </el-dialog>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import { getListDeviceType, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
@@ -50,8 +50,8 @@ export default {
       onlinedata: [], // 实时在网设备echart图表数据
       totaldata: [], // 设备总数echarts图表数据
       cellDetailsList: {}, // 小区详细信息
-      equipmentcharts: {}, // 总设备数据echarts实例
-      equipmentonlinecharts: {} // 实时在网设备数据echarts实例
+      equipmentcharts: null, // 总设备数据echarts实例
+      equipmentonlinecharts: null // 实时在网设备数据echarts实例
     }
   },
   methods: {
@@ -73,8 +73,7 @@ export default {
      * @description 设备总数据echart初始化
      */
     chartInit () {
-      let equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
-      this.equipmentcharts = equipmentcharts
+      this.equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
       // 设备数量数据
       let option = {
         title: {
@@ -123,14 +122,13 @@ export default {
           }
         ]
       }
-      equipmentcharts.setOption(option)
+      this.equipmentcharts.setOption(option)
     },
     /**
      * @description 实时在网设备数据echart初始化
      */
     onlineChartInit () {
-      let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
-      this.equipmentonlinecharts = equipmentonlinecharts
+      this.equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
       let option1 = {
         title: {
           text: '设备实时在网数量',
@@ -168,7 +166,7 @@ export default {
           }
         ]
       }
-      equipmentonlinecharts.setOption(option1)
+      this.equipmentonlinecharts.setOption(option1)
     },
     /**
      * @description ajax获取小区名，及小区设备数据
@@ -195,7 +193,6 @@ export default {
           if (res.data.code === '00000') {
             this.isOnlineReponseData = false
             this.tableData = res.data.data
-
             this.onlinedata = []
             this.totaldata = []
             for (let i in this.tableData) {
@@ -258,8 +255,9 @@ export default {
       this.isReponseData = false
       this.onlinedata = []
       this.totaldata = []
-      if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
-      if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
+      this.tableData = []
+      if (this.equipmentcharts && this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
+      if (this.equipmentonlinecharts && this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     },
     /**
      * @description 表格数据求和
