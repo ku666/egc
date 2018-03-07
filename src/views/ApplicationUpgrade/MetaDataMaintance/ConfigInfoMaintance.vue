@@ -7,7 +7,7 @@
             <el-input class="appupgrade_el-select" placeholder="请输入配置项名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="代码值" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入配置项的值" v-model="searchConditionList.value" @keyup.enter.native="_handleFilter"> </el-input>
+            <el-input class="appupgrade_el-select" placeholder="请输入配置项的值" v-model="searchConditionList.code" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <div class="btn-container">
             <el-form-item>
@@ -159,7 +159,7 @@ export default {
         currentPage: 1,
         pageSize: 10,
         codeName: '',
-        value: '',
+        code: '',
         vendor: ''
       },
       registerParaList: {
