@@ -2,8 +2,8 @@
   <div>
     <el-form ref='resourceServiceVue' :inline="true" :model="resourceServiceVue">
       <el-form-item label="所属应用" :label-width="formLabelWidth">
-        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择所属应用" class="user_el-select">
-          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode" disabled> </el-option>
+        <el-select v-model="resourceServiceVue.appCode" placeholder="请选择所属应用" class="user_el-select" disabled>
+          <el-option v-for="appCodeType in appCodeSelectOption" :key="appCodeType.appCode" :label="appCodeType.resourceName" :value="appCodeType.appCode"> </el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="服务名称" :label-width="formLabelWidth">  
