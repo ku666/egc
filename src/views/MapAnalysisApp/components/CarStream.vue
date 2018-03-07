@@ -193,7 +193,6 @@ export default {
         throttle(myChartResize, null, 200)
       }
       function myChartResize () {
-        console.log('a')
         that.myChart.resize && that.myChart.resize()
       }
       /**
