@@ -26,6 +26,7 @@
             v-model="dateValue"
             type="datetimerange"
             :editable=false
+            :clearable="false"
             @blur="screeningData['timeSlot']=dateValue"
             range-separator="至"
             start-placeholder="开始日期"
