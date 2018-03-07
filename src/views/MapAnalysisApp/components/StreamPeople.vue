@@ -198,7 +198,6 @@ export default {
           message: '请选择正确的时间'
         })
       }
-      // this.getData()
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
         this.myChartContainer()
