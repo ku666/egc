@@ -27,3 +27,8 @@ export const addModelParam = (data) => {
 export const editModelParam = (data) => {
   return Axios.post(BASE_PATH + '/versionParam/update', data).then(res => res.data)
 }
+
+// 通过参数编码查询参数值
+export const getCron = (data) => {
+  return Axios.post(BASE_PATH + '/modelparam/selectSysParamByCode', data).then(res => res.data)
+}

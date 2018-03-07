@@ -102,6 +102,7 @@
       </template>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button @click="callBackSaveEvent" class="action-btn" type="primary">保 存</el-button>
 
         <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
@@ -160,7 +161,7 @@ export default {
   },
   methods: {
     callBackSaveEvent () {
-      this.$emit('saveServInfoEvent', this.auServerDetails)
+      this.$emit('saveServInfoEvent', this.auServerDetails, 'save')
       // if (this.validateDetailsChanged()) {
       //   this.$emit('saveServInfoEvent', this.auServerDetails)
       // } else {
@@ -222,6 +223,9 @@ export default {
       this.showAddNewEvent = false
       this.fieldName = ''
       this.fieldValue = ''
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveServInfoEvent', this.auServerDetails, 'cancel')
     }
   },
   watch: {

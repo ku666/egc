@@ -504,24 +504,24 @@ export default {
           function (result) {
             if (result.code === '0') {
               this.errorMsg = result.msg
-              this.errorList = '<p><strong>' + result.msg + '</strong>'
+              this.errorList = '<span><strong>' + result.msg + '</strong></span>'
               if (result.errorList != null) {
                 // this.errorMsg += '：'
                 // this.errorList += '：<br>'
-                this.errorList += '<br>'
+                this.errorList += '<br><ul>'
                 for (var i = 0; i < result.errorList.length; i++) {
                   this.errorMsg += result.errorList[i].errorMsg + '、'
-                  this.errorList += result.errorList[i].errorMsg + '<br>'
+                  this.errorList += '<li>' + result.errorList[i].errorMsg + '</li>'
                 }
                 var length = this.errorMsg.length
                 this.errorMsg = this.errorMsg.substr(0, length - 1)
-                this.errorList += '</p>'
+                this.errorList += '</ul></span>'
               }
               this.$message({
-                message: this.errorMsg,
+                message: result.msg,
                 showClose: true,
                 type: 'error',
-                duration: 4000
+                duration: 2000
               })
             } else if (result.code === '1') {
               this.$message({
@@ -553,13 +553,15 @@ export default {
         this.$message({
           message: '请先选择需要上传的文件',
           type: 'error',
-          duration: 20000,
+          duration: 2000,
           center: true,
           showClose: true
         })
       }
     },
     handleOnchange (file, fileList) {
+      this.errorList = ''
+      this.errorMsg = ''
       if (this.beforeUpload(file)) {
         this.uploadFiles = new FormData()
         this.uploadFiles.append('file', fileList[0].raw)
@@ -606,9 +608,15 @@ export default {
 
 <style scoped>
   #errorList {
-    margin: 20px 0 50px 50px;
+    margin: 20px 0 20px 20px;
     text-align: left;
     color: red;
-    font-size: 0.9em;
+    /* font-size: 1em !important; */
+  }
+  #errorList >>> span {
+    font-size: 1em !important;
+  }
+  #errorList >>> li {
+    font-size: 0.9em !important;
   }
 </style>

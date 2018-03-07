@@ -9,6 +9,7 @@
       </el-form-item>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateSoftwareBatchEvent" type="primary">保 存</el-button>
       </div>
     </el-form>
@@ -32,7 +33,10 @@ export default {
   },
   methods: {
     updateSoftwareBatchEvent () {
-      this.$emit('saveSoftwareBatchEvent', this.softwareBatchDetails)
+      this.$emit('saveSoftwareBatchEvent', this.softwareBatchDetails, 'save')
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveSoftwareBatchEvent', this.softwareBatchDetails, 'cancel')
     }
   },
   watch: {

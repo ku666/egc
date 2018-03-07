@@ -18,6 +18,7 @@
       </el-form-item>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateCommCodeEvent" type="primary">保 存</el-button>
       </div>
     </el-form>
@@ -41,7 +42,10 @@ export default {
   },
   methods: {
     updateCommCodeEvent () {
-      this.$emit('saveCommCodeEvent', this.commCodeDetails)
+      this.$emit('saveCommCodeEvent', this.commCodeDetails, 'save')
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveCommCodeEvent', this.commCodeDetails, 'cancel')
     }
   },
   watch: {

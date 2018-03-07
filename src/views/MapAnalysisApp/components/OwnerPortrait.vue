@@ -271,7 +271,7 @@ export default {
           break
         case '2':
           this.timeType = 'month'
-          this.startTime = new Date(this.endTime.getTime() - 86400000 * 366)// 默认开始时间
+          this.startTime = new Date(this.endTime.getTime() - 86400000 * 365)// 默认开始时间
           break
         default:
           break
@@ -424,7 +424,7 @@ export default {
     onTimeJudgment () {
       switch (this.parameter.reportType) {
         case '0':
-          if (this.endTime.getTime() - this.startTime.getTime() > 2851200000) { // 一个月2851200000
+          if (this.endTime.getTime() - this.startTime.getTime() > 30 * 24 * 3600 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
@@ -435,7 +435,7 @@ export default {
           }
           break
         case '1':
-          if (this.endTime.getTime() - this.startTime.getTime() > 31622400000) { // 一年31622400000
+          if (this.endTime.getTime() - this.startTime.getTime() > 365 * 24 * 3600 * 1000) {
             this.isRequest = false
             this.$message({
               type: 'error',
