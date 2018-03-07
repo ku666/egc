@@ -25,7 +25,7 @@
      :resourceDeviceVue="resource"></resource-device>
 
     <resource-device-group v-if="showDeviceGroup" ref="resourceDeviceGroupVue" :isAddFlagParm="isAddFlag" :deviceOptions="deviceTypeSelect"
-    :providerOptions="providerCodeTypeSelect"
+    :providerOptions="providerCodeTypeSelect" :courtUuid="curCourtUuidParm"
      :resourceDeviceGroupVue="resource"></resource-device-group>
 
     <div v-show="gridResourceRole">
@@ -80,7 +80,8 @@ export default {
     providerCodeTypeSelect: undefined,
     resourceTypeSelect: undefined,
     appCodeSelect: undefined,
-    actionTypeSelect: undefined
+    actionTypeSelect: undefined,
+    curCourtUuidParm: undefined
   },
   components: {
     resourceRoleList,
@@ -175,7 +176,7 @@ export default {
         this.showMenu = false
         this.showApplication = false
         this.showDevice = false
-      } else if (resourceType === '99') {
+      } else if (resourceType === '5') {
         this.showDevice = true
         this.showService = false
         this.showMenu = false

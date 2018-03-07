@@ -6,7 +6,7 @@
     <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="operMainListData" stripe border v-loading="loading" height="680">
-          <el-table-column type="index" label="序号" width="50">
+          <el-table-column type="index" :index="indexMethod" label="序号" width="50">
           </el-table-column>
           <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
@@ -257,14 +257,22 @@ export default {
       syncOperMgmtInfo(eachRowUUID)
         .then(
           function (result) {
-            console.log((this.syncDataStatus = result.syncMessage.msg))
-            this.syncDataStatus = result.syncMessage.msg
-            this.synDataLoading = false
-            this.$message({
-              message: '刷新成功',
-              type: 'success'
-            })
-            this.loadData()
+            console.log('refresh oper maintance result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
+            if (this.syncDataStatus === 'Success!') {
+              this.synDataLoading = false
+              this.loadData()
+              this.$message({
+                message: '刷新成功',
+                type: 'success'
+              })
+            } else {
+              this.synDataLoading = false
+              this.$message({
+                message: '刷新失败',
+                type: 'error'
+              })
+            }
           }.bind(this)
         )
         .catch(function (error) {
@@ -321,6 +329,14 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.currentPage = val
       this.loadData()
+    },
+    indexMethod (index) {
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.currentPage
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      return computedIndex
     }
   },
   mounted () {

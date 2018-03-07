@@ -5,8 +5,8 @@
         <el-select class="pro-select" v-model="provinceSel">
           <el-option v-for="vo in provinArr" :key="vo.value" :label="vo.label" :value="vo.value"></el-option>
         </el-select>
-        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="searchCourt" clearable></el-input>
-        <el-button class="search-btn" type="primary" @click="searchCourt">查询</el-button>
+        <el-input v-model="searchCourtName" :maxlength="16" :minlength="1" placeholder="请输入小区名称" @keyup.enter.native="onSearchCourt" clearable></el-input>
+        <el-button class="search-btn" type="primary" @click="onSearchCourt">查询</el-button>
       </div>
       <div id="map-ecarts" style="width:1000px; height:800px"></div>
     </div>
@@ -28,7 +28,7 @@
 <script>
 import CourtTable from '@/views/MapAnalysisApp/components/CourtTable'
 import { getCourtList } from '@/views/MapAnalysisApp/apis/index.js'
-import mapData from '@/views/MapAnalysisApp/assets/js/map-echarts-data.js'
+import mapData from '@/views/MapAnalysisApp/assets/js/mapechartsdata.js'
 import LOG_TAG from '@/views/MapAnalysisApp/assets/js/mapanalysislog.js'
 require('echarts/map/js/china')
 export default {
@@ -57,7 +57,7 @@ export default {
   },
   methods: {
     /**
-     * 点击地图
+     * @description 点击地图
      * @param e 点击事件对象
      */
     handleClickMap: function (e) {
@@ -73,8 +73,8 @@ export default {
       }
     },
     /**
-     * 获取小区列表数据
-     * @param{String} isSearch 是否要查询部分小区
+     * @description 获取小区列表数据
+     * @param {String} isSearch 是否要查询部分小区
      */
     getCourtListData: function (isSearch) {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
@@ -85,7 +85,6 @@ export default {
           let pointdata = []
           let prodata = []
           let proObj = {}
-          // console.log(list)
           console.log(LOG_TAG + ' 成功获取到小区列表数据; 小区数量： ' + list.length)
           let test = [[113.619942, 23.304629], [108.93, 34.27], [116.4, 39.9], [121.47, 31.23], [120.19, 30.26], [113.5611, 28.4445]] // 广州 西安  北京  上海  杭州
           for (let i = 0, len = list.length; i < len; i++) {
@@ -114,7 +113,6 @@ export default {
               proObj[pname].courts.push(item)
             }
           }
-          // console.log(proObj)
           if (isSearch && isSearch === 'search') {
             mapData.updateChooseData(pointdata)
             this.activeName = 'third'
@@ -140,8 +138,10 @@ export default {
         console.warn(LOG_TAG + ' 获取到小区列表数据失败： ' + err)
       })
     },
-    /** 按条件查询小区列表 */
-    searchCourt: function () {
+    /**
+     * @description 按条件查询小区列表
+     */
+    onSearchCourt: function () {
       let str = this.searchCourtName // 把多个空格合并成一个空格
       str = str.trim() // 去掉字符串前后的空格
       str = str.replace(/s+/g, ' ')
@@ -154,9 +154,6 @@ export default {
         return
       }
       this.getCourtListData('search')
-    },
-    handleRowClick: function (row, e) {
-      this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
     }
   },
   computed: {

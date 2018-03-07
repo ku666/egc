@@ -159,7 +159,9 @@ export default {
         this.startDate = new Date(this.endDate.getTime() - 31622400000)
       }
     },
-    // 点击切换图表展示
+    /**
+    * @description 点击切换图表展示 *
+    */
     onChartSwitch: function () {
       console.log(LOG_TAG + ' 点击切换图表展示 ')
       this.isChartShow = true
@@ -188,7 +190,9 @@ export default {
         this.myChart.resize()
       }
     },
-    // echart图表数据
+    /**
+    * @description echart图表数据 *
+    */
     echartsData: function () {
       let options = {
         title: {
@@ -345,7 +349,9 @@ export default {
       }
       return options
     },
-    // 点击切换表格展示
+    /**
+    * @description 点击切换表格展示 *
+    */
     onTableSwitch: function () {
       console.log(LOG_TAG + ' 点击切换表格展示 ')
       this.isChartShow = false
@@ -365,7 +371,7 @@ export default {
       this.getPgingData()
     },
     /**
-    * 打开组件的回调 *
+    * @description 打开组件的回调 *
     * @param {string} _courtUuid 从主页传入的当前小区id
     */
     streamPeople: function (_courtUuid) {
@@ -378,10 +384,11 @@ export default {
       })
       this.dialogVisible = true
     },
-    // 按时间（报表类型）查询
+    /**
+    * @description 按时间（报表类型）查询 *
+    */
     onTimeQuery: function () {
       console.log(LOG_TAG + ' 按时间（报表类型）查询 ')
-      // 查询时页面初始化到第一页
       this.parameter.currentPage = 1
       this.onTimeJudgment()
       if (this.isRequest) {
@@ -400,6 +407,9 @@ export default {
         this.tableClickNum = 0
       }
     },
+    /**
+    * @description 检查日期范围是否超出规定 *
+    */
     onTimeJudgment () {
       switch (this.parameter.reportType) {
         case '0':
@@ -430,7 +440,7 @@ export default {
       }
     },
     /**
-    * 分页组件单页总数变化 *
+    * @description 分页组件单页总数变化 *
     * @param {string} val 每页显示数据条数
     */
     onSizeChange: function (val) {
@@ -439,14 +449,16 @@ export default {
       this.getPgingData()
     },
     /**
-    * 分页组件当前页变化 *
+    * @description 分页组件当前页变化 *
     * @param {string} val 显示的页数
     */
     onCurrentChange: function (val) {
       this.parameter.currentPage = val
       this.getPgingData()
     },
-    // 获取人流信息(图表)
+    /**
+    * @description 获取人流信息(图表) *
+    */
     getData: function () {
       this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)
@@ -488,7 +500,7 @@ export default {
       })
     },
     /**
-    * 处理日期对象 *
+    * @description 处理日期对象 *
     * @param {Object} date 要处理的日期对象
     * @return {String} 返回后台所需要的日期格式（2018-2-16）
     */
@@ -498,7 +510,9 @@ export default {
       let day = date.getDate()
       return year + '-' + month + '-' + day
     },
-    // 获取人流分页信息（表格）
+    /**
+    * @description 获取人流分页信息（表格） *
+    */
     getPgingData: function () {
       this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)

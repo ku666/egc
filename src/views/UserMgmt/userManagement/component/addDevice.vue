@@ -218,7 +218,7 @@ export default {
           function (result) {
             for (var i = 0; i < result.length; i++) {
               var tmp = result[i]
-              if (tmp['itemCode'].toString() === '4' || tmp['itemCode'].toString() === '99') {
+              if (tmp['itemCode'].toString() === '4' || tmp['itemCode'].toString() === '5') {
                 filterArray.push(tmp)
               }
             }

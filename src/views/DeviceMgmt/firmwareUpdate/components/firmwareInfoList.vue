@@ -143,10 +143,16 @@
       },
       _deleteFirmware (index, row) {
         // 删除固件
-        deleteDmFotaFile({'listFotaFileVo': [row]})
-          .then(result => {
-            this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
-          })
+        this.$confirm('是否确定删除该固件文件信息?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          deleteDmFotaFile({'listFotaFileVo': [row]})
+            .then(result => {
+              this.loadFirmwareInfoData(1, this.pageSize, this.selectData)
+            })
+        }).catch()
       },
       _refresh () {
         this.currentPage = 1
