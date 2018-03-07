@@ -1,5 +1,42 @@
 <template>
   <div style="margin-top: 10px">
+    <el-row :gutter="60">
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
+          <input-box title="固件名称"
+                     code="fileName"
+                     ref="fileName"
+                     @listenToInput="_saveDeviceData">
+          </input-box>
+        </div>
+      </el-col>
+      <el-col :span="6">
+        <div class="grid-content bg-purple">
+          <input-box title="小区名称"
+                     code="courtName"
+                     @listenToInput="_saveDeviceData"
+                     ref="courtName">
+          </input-box>
+        </div>
+      </el-col>
+      <el-col :span="8">
+        <div class="grid-content bg-purple">
+          <span class="sub-title">下发时间：</span>
+          <el-date-picker
+            v-model="dateValue"
+            type="datetimerange"
+            :editable=false
+            @blur="screeningData['timeSlot']=dateValue"
+            range-separator="至"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期">
+          </el-date-picker>
+        </div>
+      </el-col>
+    </el-row>
+      <div class="action-container">
+        <el-button type="primary" @click="_seekFirmware" icon="el-icon-search">查找</el-button>
+      </div>
     <el-button size="small" type="info" round plain icon="el-icon-refresh" style="margin-left:90%;margin-bottom: 20px"  @click="_refresh">刷新</el-button>
     <el-table
       class="deviceMgmTable"
@@ -70,16 +107,26 @@
 </template>
 
 <script>
-  import {getFotaIssueList} from '../apis/index.js'
+  import {getFotaIssueList, selectFotaIssueList} from '../apis/index.js'
   import {getLocalTime} from '../../deviceInfoMaintain/assets/js/tool.js'
+  import inputBox from '../../deviceInfoMaintain/components/inputBox'
+  import ElRow from 'element-ui/packages/row/src/row'
+  import ElButton from 'element-ui/packages/button/src/button.vue'
 
   export default {
+    components: {
+      ElButton,
+      ElRow,
+      inputBox
+    },
     data () {
       return {
+        dateValue: [],
         currentPage: 1,
         total: 0,
         pageSize: 10,
-        sendStatusData: []
+        sendStatusData: [],
+        screeningData: {}
       }
     },
     methods: {
@@ -105,6 +152,23 @@
       _refresh () {
         this.currentPage = 1
         this._loadSendStatusData(1, this.pageSize)
+      },
+      _saveDeviceData (data) {
+        for (var key in data) {
+          this.screeningData[key] = data[key]
+        }
+      },
+      _seekFirmware () {
+        this.screeningData['currentPage'] = this.currentPage
+        this.screeningData['pageSize'] = this.pageSize
+        selectFotaIssueList(this.screeningData)
+          .then(result => {
+            this.sendStatusData = result.listFotaIssueRecordVo
+            for (let i = 0; i < this.sendStatusData.length; i++) {
+              this.sendStatusData[i]['createTime'] = getLocalTime(this.sendStatusData[i]['createTime'])
+            }
+            this.total = result.totalCount
+          })
       }
     },
     mounted () {
