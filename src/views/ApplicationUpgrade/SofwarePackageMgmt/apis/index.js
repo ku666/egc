@@ -1,4 +1,5 @@
 import Axios from '@/assets/js/AxiosPlugin'
+import { decodeResHeader } from '../assets/js/index'
 
 let contextPath = '/scp-upgradecomponent'
 // 接口地址
@@ -107,6 +108,31 @@ export const register = (params) => {
     console.info(res)
     return res.data
   })
+}
+
+// 导出模板
+export const downCfgMgmtTemplate = (params) => {
+  console.log(' generate download template params ->  ' + JSON.stringify(params))
+  return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params, {responseType: 'arraybuffer'}
+    ).then(res => {
+      console.log('res.headers --->  ' + JSON.stringify(res.headers))
+      let fileName = decodeResHeader(res.headers)
+      let blob = new Blob([res.data], { type: 'application/x-xls' })
+      if ('msSaveOrOpenBlob' in navigator) {
+        console.log('res filename --->  ' + fileName.replace('\\', ''))
+        window.navigator.msSaveOrOpenBlob(blob, fileName.replace('\\', ''))
+      } else {
+        let url = window.URL.createObjectURL(blob)
+        let link = document.createElement('a')
+        link.href = url
+        link.target = '_blank'
+        link.download = fileName
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+      }
+      return res.data
+    })
 }
 
 /** =================依赖关系================================ */
