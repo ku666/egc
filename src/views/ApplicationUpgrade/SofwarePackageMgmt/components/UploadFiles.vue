@@ -19,11 +19,12 @@
           <div class="el-upload__tip" slot="tip">只能上传excel文件，且不超过10M</div>
       </el-upload>
       <el-button type="primary" @click="_submitUpload" class="search-btn" style="margin-top: 20px">上传服务器</el-button>
+      <el-button type="primary" @click="_callDownTemplate" class="search-btn" style="margin-top: 20px; margin-left: 20px;" icon="el-icon-download">模板下载</el-button>
     </div>
 </template>
 
 <script>
-import { uploadDependencyExcelFiles } from '../apis/index'
+import { uploadDependencyExcelFiles, downCfgMgmtTemplate } from '../apis/index'
 export default {
   data () {
     return {
@@ -94,6 +95,16 @@ export default {
     },
     handleExceed (files, fileList) {
       this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+    },
+    _callDownTemplate () {
+      console.log('download')
+      let tempFlag = 74
+      downCfgMgmtTemplate(tempFlag)
+        .then(
+          function (result) {
+          }
+        ).catch(
+        )
     }
   }
 }
