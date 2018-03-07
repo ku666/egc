@@ -45,7 +45,7 @@
       </div>
     </div>
     <el-dialog :title="dialogTittle" :visible.sync="dialogEditVisible">
-      <config-info-edit :configInfoDetails="configInfoDetails" @saveConfigInfoEvent="_updateConigInfo"></config-info-edit>
+      <config-info-edit ref="editPage" :configInfoDetails="configInfoDetails" @saveConfigInfoEvent="_updateConigInfo"></config-info-edit>
     </el-dialog>
     <el-dialog :title="dialogTittle" :visible.sync="dialogRegisterVisible" :before-close="beforeCloseDialog">
       <div>
@@ -94,6 +94,7 @@
             </el-col>
           </el-row>
           <div style="text-align:center;">
+            <el-button @click="beforeCloseDialog" class="cancel-btn" type="primary">取 消</el-button>
             <el-button type="primary" @click="_registerConfigInfo('registerParaList')" class="search-btn">注 册</el-button>
           </div>
         </el-form>
@@ -111,7 +112,6 @@ import {
   registerConfigInfo,
   updateConfigInfo,
   getInstanceCodes
-  // deleteConfigInfo
 } from './apis/index'
 export default {
   components: {
@@ -167,7 +167,7 @@ export default {
         configTypeCode: '',
         configItem: '',
         value: '',
-        encryptFlag: 0,
+        encryptFlag: 1,
         remark: ''
       },
       rules: {
@@ -323,49 +323,27 @@ export default {
           console.log(error)
         })
     },
-    _updateConigInfo (params) {
-      updateConfigInfo(params)
-        .then(
-          function (result) {
-            this.dialogEditVisible = false
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-            // 加载数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error)
-        })
+    _updateConigInfo (params, type) {
+      if (type === 'save') {
+        updateConfigInfo(params)
+          .then(
+            function (result) {
+              this.dialogEditVisible = false
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+              // 加载数据
+              this.loadData()
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
-    // 删除
-    // _handleDeleteData (rowIdx) {
-    //   var rowData = this.configInfoDataList[rowIdx]
-    //   var codeTypeUuid = rowData.uuid
-    //   this.$confirm("确定要删除配置项'" + rowData.name + "'?', '提示'", {
-    //     confirmButtonText: '确定',
-    //     cancelButtonText: '取消',
-    //     type: 'warning'
-    //   }).then(() => {
-    //     deleteConfigInfo(codeTypeUuid)
-    //       .then(
-    //         function (result) {
-    //           this.$message({
-    //             message: '删除成功',
-    //             type: 'success'
-    //           })
-    //           // 加载数据
-    //           this.loadData()
-    //         }.bind(this)
-    //       )
-    //       .catch(function (error) {
-    //         console.log(error)
-    //       })
-    //   })
-    // },
-    // },
     handleSizeChange (val) {
       this.searchConditionList.pageSize = val
       this.loadData()
@@ -382,10 +360,10 @@ export default {
     checkStatus: function (newValue, oldValue) {
       if (newValue === true) {
         this.inputType = 'password'
-        this.registerParaList.encryptFlag = 1
+        this.registerParaList.encryptFlag = 0
       } else {
         this.inputType = 'text'
-        this.registerParaList.encryptFlag = 0
+        this.registerParaList.encryptFlag = 1
       }
     }
   },

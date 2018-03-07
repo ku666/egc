@@ -32,7 +32,7 @@
       </div>
     </div>
     <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-      <net-device-details :netDeviceDetails="netDeviceDetails"></net-device-details>
+      <net-device-details :netDeviceDetails="netDeviceDetails" @closeDialogEvent="closeDialog"></net-device-details>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
       <net-device-edit :netDeviceDetails="netDeviceDetails" @saveOsInfoEvent="_updateOsInfo"></net-device-edit>
@@ -229,8 +229,9 @@ export default {
     },
 
     // 更新
-    _updateOsInfo (params) {
-      updateNetDeviceInfo(params)
+    _updateOsInfo (params, type) {
+      if (type === 'save') {
+        updateNetDeviceInfo(params)
         .then(
           function (result) {
             this.dialogEditVisible = false
@@ -252,6 +253,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
 
     // 比对刷新
@@ -306,6 +310,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    closeDialog () {
+      this.dialogDetailsVisible = false
     },
     // 初始加载
     loadData () {

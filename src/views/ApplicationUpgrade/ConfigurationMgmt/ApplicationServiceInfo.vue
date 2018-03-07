@@ -32,7 +32,7 @@
       </div>
     </div>
     <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-      <app-service-details :auappServiceDetails="auappServiceData"></app-service-details>
+      <app-service-details :auappServiceDetails="auappServiceData" @closeDialogEvent="closeDialog"></app-service-details>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
       <app-service-edit :auappServiceDetails="auappServiceData" @saveAppServiceInfoEvent="_updateAppServiceInfo"></app-service-edit>
@@ -228,8 +228,9 @@ export default {
         })
     },
     // 更新
-    _updateAppServiceInfo (params) {
-      updateAppServiceInfo(params)
+    _updateAppServiceInfo (params, type) {
+      if (type === 'save') {
+        updateAppServiceInfo(params)
         .then(
           function (result) {
             if (result === 'Success!') {
@@ -248,6 +249,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
 
     // 比对刷新
@@ -301,6 +305,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    closeDialog () {
+      this.dialogDetailsVisible = false
     },
     // 初始加载
     loadData () {

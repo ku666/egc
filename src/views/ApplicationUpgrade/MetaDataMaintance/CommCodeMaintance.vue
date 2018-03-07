@@ -85,6 +85,7 @@
             </el-col>
           </el-row>
           <div style="text-align:center;">
+            <el-button @click="beforeCloseDialog" class="cancel-btn" type="primary">取 消</el-button>
             <el-button type="primary" @click="_registerCommCode('registerParaList')" class="search-btn">注 册</el-button>
           </div>
         </el-form>
@@ -284,22 +285,26 @@ export default {
           console.log(error)
         })
     },
-    _updateCommCode (params) {
-      updateCommCode(params)
-        .then(
-          function (result) {
-            this.dialogEditVisible = false
-            this.$message({
-              message: '保存成功',
-              type: 'success'
-            })
-            // 加载数据
-            this.loadData()
-          }.bind(this)
-        )
-        .catch(function (error) {
-          console.log(error)
-        })
+    _updateCommCode (params, type) {
+      if (type === 'save') {
+        updateCommCode(params)
+          .then(
+            function (result) {
+              this.dialogEditVisible = false
+              this.$message({
+                message: '保存成功',
+                type: 'success'
+              })
+              // 加载数据
+              this.loadData()
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
     // 删除
     _handleDeleteData (rowIdx) {

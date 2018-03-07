@@ -33,7 +33,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <os-details :osDetails="osDetails"></os-details>
+        <os-details :osDetails="osDetails" @closeDialogEvent="closeDialog"></os-details>
       </el-dialog>
     </div>
     <div>
@@ -207,6 +207,7 @@ export default {
       getOSDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log(' detail result ->>>>>>>>>>>>>   ' + JSON.stringify(result))
             console.log(result)
             this.osDetails = result.auOss
             this.dialogDetailsVisible = true
@@ -224,8 +225,8 @@ export default {
       getOSDetails(eachRowUUID)
         .then(
           function (result) {
+            console.log('edit result --> ' + JSON.stringify(result))
             this.osDetails = result.auOss
-            console.info('edit oss --- >  ' + JSON.stringify(this.osDetails))
             this.dialogEditVisible = true
           }.bind(this)
         )
@@ -235,8 +236,9 @@ export default {
     },
 
     // 更新
-    _updateOsInfo (params) {
-      updateOSInfo(params)
+    _updateOsInfo (params, type) {
+      if (type === 'save') {
+        updateOSInfo(params)
         .then(
           function (result) {
             if (result === 'Success!') {
@@ -255,6 +257,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
 
     // 比对刷新
@@ -308,7 +313,9 @@ export default {
           console.log(error)
         })
     },
-
+    closeDialog () {
+      this.dialogDetailsVisible = false
+    },
     // 初始加载
     loadData () {
       getOSInfoByPage(this.searchConditionList)

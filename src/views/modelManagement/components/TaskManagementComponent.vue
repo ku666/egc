@@ -4,10 +4,13 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item>
-        <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId">模型执行管理</el-breadcrumb-item> -->
+        <!-- <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId">模型算法管理</el-breadcrumb-item> -->
         <el-breadcrumb-item v-if="$route.params.modelId || $route.params.versionId" :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item v-if="$route.params.versionId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="$route.params.modelId && $route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version/'+$route.params.versionId+'/taskplan' }">计划管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="$route.params.modelId && !$route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/taskplan' }">计划管理</el-breadcrumb-item>
+        <el-breadcrumb-item v-if="!$route.params.modelId && !$route.params.versionId && $route.params.planId" :to="{ path: '/modelmgmt/planmgmt' }">计划管理</el-breadcrumb-item>
         <el-breadcrumb-item>任务管理</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
@@ -919,10 +922,12 @@
       },
       checkExcuteResult (index, item) {
         let curItem = this.modelPlanList[index]
-        if (!this.$route.params.versionId && this.$route.params.modelId) {
+        if (!this.$route.params.versionId && this.$route.params.modelId && this.$route.params.planId) {
           this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/plan/' + this.$route.params.planId + '/task/' + curItem.algTaskPk + '/taskinfo'})
-        } else if (this.$route.params.versionId) {
+        } else if (this.$route.params.versionId && this.$route.params.planId) {
           this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/version/' + this.$route.params.versionId + '/plan/' + item.algTaskPlanPk + '/task/' + curItem.algTaskPk + '/taskinfo'})
+        } else if (this.$route.params.versionId) {
+          this.$router.push({path: '/modelmgmt/model/' + this.$route.params.modelId + '/version/' + this.$route.params.versionId + '/task/' + curItem.algTaskPk + '/taskinfo'})
         } else {
           this.$router.push({path: '/modelmgmt/taskmgmt/task/' + item.algTaskPk + '/taskinfo'})
           // this.$router.push({path: '/modelmgmt/taskmgmt/plan/' + item.algTaskPlanPk + '/task'})

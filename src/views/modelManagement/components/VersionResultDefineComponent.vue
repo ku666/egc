@@ -3,7 +3,7 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>模型管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item>模型管理</el-breadcrumb-item> -->
         <el-breadcrumb-item :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
         <el-breadcrumb-item>模型结果定义</el-breadcrumb-item>
@@ -270,15 +270,17 @@
           .then(
             function (result) {
               console.log(' result.data.total ' + result.data.length)
-              this.resultType = result.data[0].resultType
-              this.algVersResultPk = result.data[0].algVersResultPk
+              let tmpResultType = result.data[0].resultType
+              let tmpAlgVersResultPk = result.data[0].algVersResultPk
               // this.loading2 = false
               this.$nextTick(() => {
                 loadingData.close()
               })
               console.info(result)
               // 编辑
-              if (this.algVersResultPk) {
+              if (tmpAlgVersResultPk && tmpResultType !== 'mm.restyp.none') {
+                this.resultType = result.data[0].resultType
+                this.algVersResultPk = result.data[0].algVersResultPk
                 this.paramList = result.data
                 this.chooseable = false
               } else {

@@ -3,7 +3,7 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>模型管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item>模型管理</el-breadcrumb-item> -->
         <el-breadcrumb-item :to="{ path: '/modelmgmt/baseinfomgmt' }">基本信息管理</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/modelmgmt/model/'+$route.params.modelId+'/version' }">版本管理</el-breadcrumb-item>
         <el-breadcrumb-item>模型版本参数定义</el-breadcrumb-item>
@@ -832,6 +832,12 @@
       },
       handleFileChange (file, fileList) {
         console.log(file)
+        if (/.*[\u4e00-\u9fa5]+.*$/.test(file.name)) {
+          this.$message.error('不支持中文文件名，请重命名文件')
+          fileList = []
+          this.$refs.upload.clearFiles()
+          return false
+        }
         if (fileList.length === 2) {
           fileList.shift()
         }

@@ -33,7 +33,7 @@
     </div>
     <div>
       <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-        <database-details :databaseDetails="databaseDetails"></database-details>
+        <database-details :databaseDetails="databaseDetails" @closeDialogEvent="closeDialog"></database-details>
       </el-dialog>
     </div>
     <div>
@@ -232,18 +232,17 @@ export default {
     },
 
     // 编辑
-    _updateDatabaseInfo (params) {
-      updateDatabaseInfo(params)
+    _updateDatabaseInfo (params, type) {
+      if (type === 'save') {
+        updateDatabaseInfo(params)
         .then(
           function (result) {
             console.log('update response --- >' + result)
             if (result === 'Success!') {
               this.dialogEditVisible = false
               this.$message({
-                title: '成功',
                 message: '保存成功',
-                type: 'success',
-                duration: 2000
+                type: 'success'
               })
               // 再次加载列表的数据
               this.loadData()
@@ -253,6 +252,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
 
     // 更新
@@ -308,7 +310,9 @@ export default {
           console.log(error)
         })
     },
-
+    closeDialog () {
+      this.dialogDetailsVisible = false
+    },
     // 初始加载
     loadData () {
       getDatabaseInfoByPage(this.searchConditionList)

@@ -86,7 +86,7 @@ export default {
           prop: 'provider'
         },
         {
-          colName: '软件包源服务器名称',
+          colName: '软件包源服务器',
           prop: 'hostname'
         },
         {

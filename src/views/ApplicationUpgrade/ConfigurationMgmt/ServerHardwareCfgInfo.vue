@@ -6,7 +6,7 @@
     <div class="flex-1 flex-c" v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
       <div style="margin-top: 15px">
         <el-table :data="auServerListData" stripe border v-loading="loading" height="680">
-          <el-table-column type="index" label="序号" width="50">
+          <el-table-column type="index" :index="indexMethod" label="序号" width="50">
           </el-table-column>
           <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" v-if="item.showColumn" :label="item.colName" sortable>
           </el-table-column>
@@ -32,7 +32,7 @@
       </div>
     </div>
     <el-dialog :title="dialogStatus" :visible.sync="dialogDetailsVisible" top="8vh">
-      <server-hardware-details :auServerDetails="auServerDetails"></server-hardware-details>
+      <server-hardware-details :auServerDetails="auServerDetails" @closeDialogEvent="closeDialog"></server-hardware-details>
     </el-dialog>
     <el-dialog :title="dialogStatus" :visible.sync="dialogEditVisible" top="8vh">
       <server-hardware-edit :auServerDetails="auServerDetails" @saveServInfoEvent="_updateServerInfo"></server-hardware-edit>
@@ -159,6 +159,14 @@ export default {
     }
   },
   methods: {
+    indexMethod (index) {
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.page
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      return computedIndex
+    },
     handleSave (checkedColumns) {
       console.log('begin to save columns--> ' + checkedColumns)
       for (var i = 0; i < this.allTableTitleList.length; i++) {
@@ -258,8 +266,9 @@ export default {
         })
     },
     // 更新
-    _updateServerInfo (params) {
-      updateAuServerInfor(params)
+    _updateServerInfo (params, type) {
+      if (type === 'save') {
+        updateAuServerInfor(params)
         .then(
           function (result) {
             console.log('update response --- >' + result)
@@ -277,6 +286,9 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+      } else if (type === 'cancel') {
+        this.dialogEditVisible = false
+      }
     },
     // 比对刷新
     _handleSynData (rowIdx) {
@@ -332,6 +344,9 @@ export default {
             this.loading = false
           }.bind(this)
         )
+    },
+    closeDialog () {
+      this.dialogDetailsVisible = false
     },
     // 初始加载
     loadData () {

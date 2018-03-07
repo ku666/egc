@@ -15,7 +15,7 @@
     </el-form>
   </div>
 </template>
-<script></script>
+<script>
 import {
 } from '@/views/UserMgmt/userManagement/apis'
 export default {

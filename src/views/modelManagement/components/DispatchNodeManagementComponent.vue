@@ -3,7 +3,7 @@
     <div class="margin-top-15">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+        <!-- <el-breadcrumb-item>系统管理</el-breadcrumb-item> -->
         <el-breadcrumb-item>管理节点管理</el-breadcrumb-item>
         <!--<el-breadcrumb-item>恒大绿洲模型</el-breadcrumb-item>-->
       </el-breadcrumb>
@@ -389,6 +389,9 @@
         <el-form-item label="节点IP" prop="ip">
           <el-input id="editIp" @blur="inputBlur" size="small" v-model="editNode.ip"></el-input>
         </el-form-item>
+        <el-form-item label="节点端口" prop="port">
+          <el-input id="editPort" @blur="inputBlur" size="small" v-model="editNode.port"></el-input>
+        </el-form-item>
         <el-form-item label="设备ID" prop="deviceId">
           <el-input v-if="editNode.nodeType == currentNodeType" id="editDeviceId" @blur="inputBlur" size="small" v-model="editNode.deviceId">
             <template slot="prepend">{{ deviceIdPrefix }}</template>
@@ -405,9 +408,7 @@
         <!--<el-form-item label="设备ID" prop="deviceId">-->
           <!--<el-input id="editDeviceId" @blur="inputBlur"size="small" v-model="editNode.deviceId"></el-input>-->
         <!--</el-form-item>-->
-        <el-form-item label="节点端口" prop="port">
-          <el-input id="editPort" @blur="inputBlur" size="small" v-model="editNode.port"></el-input>
-        </el-form-item>
+
         <!--<el-form-item label="节点状态" prop="nodeStatus">-->
         <!--<el-select size="small" v-model="editNode.nodeStatus" value="editNode.nodeStatus">-->
         <!--<el-option-->

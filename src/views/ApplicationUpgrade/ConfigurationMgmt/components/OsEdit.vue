@@ -43,6 +43,7 @@
       </template>
 
       <div style="text-align: center">
+        <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button class="action-btn" @click="updateOsInfo" type="primary">保 存</el-button>
 
         <el-popover ref="newCIEventPop" visible="showAddNewCIPop" placement="right" width="160" :hide="clearData" v-model="showAddNewEvent">
@@ -93,7 +94,7 @@ export default {
   methods: {
     updateOsInfo () {
       console.log(JSON.stringify(this.osDetails))
-      this.$emit('saveOsInfoEvent', this.osDetails)
+      this.$emit('saveOsInfoEvent', this.osDetails, 'save')
       // if (this.tempRemark !== this.osDetails.remark || this.tempExtDataList !== this.osDetails.extDataList) {
       //   this.$emit('saveOsInfoEvent', this.osDetails)
       // } else {
@@ -123,6 +124,9 @@ export default {
       this.showAddNewEvent = false
       this.newLabel = ''
       this.newValue = ''
+    },
+    callBackCloseDialogEvent () {
+      this.$emit('saveOsInfoEvent', this.osDetails, 'cancel')
     }
   },
   watch: {
