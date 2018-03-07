@@ -157,13 +157,13 @@ export default {
       if (value !== '' && value !== null && value !== undefined) {
         if (value.length === 15) {
           if (!isIDCard1.test(value)) {
-            callback(new Error('15位身份证号码无效'))
+            callback(new Error('请输入有效的身份证号码'))
           } else {
             callback()
           }
         } else {
           if (!isIDCard2.test(value)) {
-            callback(new Error('18位身份证号码无效'))
+            callback(new Error('请输入有效的身份证号码'))
           } else {
             callback()
           }
@@ -209,7 +209,7 @@ export default {
           { validator: validateIdenNum, trigger: 'blur,change' }
         ],
         primaryEmail: [
-          { type: 'email', message: '请输入正确的邮箱地址', trigger: 'blur,change' },
+          { type: 'email', message: '请输入有效的邮箱地址', trigger: 'blur,change' },
           { max: 128, message: '长度不能超过128个字符' }
         ],
         primaryPhone: [
