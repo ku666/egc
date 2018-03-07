@@ -3,7 +3,7 @@
     <div class="container">
       <el-button type="primary" @click="onChartSwitch">图表</el-button>
       <el-button type="success" @click="onTableSwitch">表格</el-button>
-      <div class="court-name">{{cellDetailsList.courtName}}</div>
+      <div class="court-name">{{courtName}}</div>
       <div v-show="isChartShow" class="chart-container">
         <div id="equipment-chartsbox">
           <span v-show="noDataTips">暂无数据 </span>
@@ -16,25 +16,23 @@
           <div id="equipment-online-charts"></div>
         </div>
       </div>
-      <div v-show="isTableShow">
-        <div class="equipment-table">
-          <el-table :data="tableData" :summary-method="getSummaries" height="500" border show-summary style="width: 100%; margin-top: 20px">
-            <el-table-column prop="deviceType" label="设备ID" align="center">
-            </el-table-column>
-            <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
-            </el-table-column>
-            <el-table-column prop="deviceCount" label="数量" align="center">
-            </el-table-column>
-            <el-table-column prop="onlineCount" label="在网数量" align="center">
-            </el-table-column>
-          </el-table>
-        </div>
+      <div v-show="isTableShow" class="equipment-table" style="width: 100%; margin-top: 20px;">
+        <el-table :data="tableData2" :summary-method="getSummaries" height="604" border show-summary style="width: 100%;">
+          <el-table-column prop="deviceType" label="设备ID" align="center">
+          </el-table-column>
+          <el-table-column prop="deviceTypeDesc" label="设备名称" align="center">
+          </el-table-column>
+          <el-table-column prop="deviceCount" label="数量" align="center">
+          </el-table-column>
+          <el-table-column prop="onlineCount" label="在网数量" align="center">
+          </el-table-column>
+        </el-table>
       </div>
     </div>
   </el-dialog>
 </template>
 <script>
-import { getListDeviceType, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
+import { getListDeviceType } from '@/views/MapAnalysisApp/apis/index'
 export default {
   name: 'EquipmentReport',
   data () {
@@ -45,11 +43,12 @@ export default {
       isReponseData: false, // ajax是否成功获取数据
       noDataTips: false, // 没有数据是显示“暂无数据”
       tableData: [], // 表格数据
+      tableData2: [], // 表格数据
       names: [], // 设备总数echarts图表图例数据
       onlinenames: [], // 实时在网设备echart图表图例数据
       onlinedata: [], // 实时在网设备echart图表数据
       totaldata: [], // 设备总数echarts图表数据
-      cellDetailsList: {}, // 小区详细信息
+      courtName: '', // 小区名字
       equipmentcharts: {}, // 总设备数据echarts实例
       equipmentonlinecharts: {} // 实时在网设备数据echarts实例
     }
@@ -58,21 +57,22 @@ export default {
     /**
      * @description echarts图表展示
      */
-    onChartSwitch () {
+    onChartSwitch: function () {
       this.isChartShow = true
       this.isTableShow = false
     },
     /**
      * @description 表格展示
      */
-    onTableSwitch () {
+    onTableSwitch: function () {
       this.isChartShow = false
+      this.tableData2 = this.tableData
       this.isTableShow = true
     },
     /**
      * @description 设备总数据echart初始化
      */
-    chartInit () {
+    chartInit: function () {
       let equipmentcharts = this.$echarts.init(document.getElementById('equipment-charts'))
       this.equipmentcharts = equipmentcharts
       // 设备数量数据
@@ -128,7 +128,7 @@ export default {
     /**
      * @description 实时在网设备数据echart初始化
      */
-    onlineChartInit () {
+    onlineChartInit: function () {
       let equipmentonlinecharts = this.$echarts.init(document.getElementById('equipment-online-charts'))
       this.equipmentonlinecharts = equipmentonlinecharts
       let option1 = {
@@ -174,25 +174,16 @@ export default {
      * @description ajax获取小区名，及小区设备数据
      * @param {string} courtId 小区ID
      */
-    equipmentReport (courtId) {
+    equipmentReport: function (courtId, _courtName) {
       this.dialogReportVisible = true
       if (!courtId) { courtId = '222b79f4a7b44d03b6f55f028992851f' }
+      this.courtName = _courtName // 小区名字从前一个页面（小区详情页）传过来
       this.$nextTick(() => {
-        getCourtInfo({ courtUuid: courtId }).then(res => {
-          if (res.data.code === '00000') {
-            this.cellDetailsList = res.data.data
-          } else {
-            this.$message.error({
-              message: res.data.message,
-              duration: 1500
-            })
-          }
-        }).catch(() => {
-        })
         let equiData = {}
         equiData.courtUuid = courtId
         getListDeviceType(equiData).then(res => {
           if (res.data.code === '00000') {
+            debugger
             this.isOnlineReponseData = false
             this.tableData = res.data.data
 
@@ -252,20 +243,18 @@ export default {
     /**
      * @description 关闭小区设备信息弹窗
      */
-    onCloseDialog () {
+    onCloseDialog: function () {
       this.isChartShow = true
       this.isTableShow = false
       this.isReponseData = false
       this.onlinedata = []
       this.totaldata = []
-      if (this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
-      if (this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
     },
     /**
      * @description 表格数据求和
      * @param {Object} param elementUI隐式传递参数
      */
-    getSummaries (param) {
+    getSummaries: function (param) {
       const { columns, data } = param
       const sums = []
       columns.forEach((column, index) => {
