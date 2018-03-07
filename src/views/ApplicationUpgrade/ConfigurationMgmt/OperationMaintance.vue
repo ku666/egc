@@ -259,12 +259,20 @@ export default {
           function (result) {
             console.log((this.syncDataStatus = result.syncMessage.msg))
             this.syncDataStatus = result.syncMessage.msg
-            this.synDataLoading = false
-            this.$message({
-              message: '刷新成功',
-              type: 'success'
-            })
-            this.loadData()
+            if (this.syncDataStatus === 'Success!') {
+              this.synDataLoading = false
+              this.loadData()
+              this.$message({
+                message: '刷新成功',
+                type: 'success'
+              })
+            } else {
+              this.synDataLoading = false
+              this.$message({
+                message: '刷新失败',
+                type: 'error'
+              })
+            }
           }.bind(this)
         )
         .catch(function (error) {

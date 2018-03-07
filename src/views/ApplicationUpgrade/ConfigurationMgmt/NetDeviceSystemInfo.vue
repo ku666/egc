@@ -280,6 +280,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.synDataLoading = false
               this.$message({
                 message: '刷新失败',
                 type: 'error'
@@ -288,8 +289,8 @@ export default {
           }.bind(this)
         )
         .catch(function (error) {
-          console.log(error)
           this.synDataLoading = false
+          console.log(error)
         })
     },
 

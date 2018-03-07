@@ -279,6 +279,7 @@ export default {
                 type: 'success'
               })
             } else {
+              this.synDataLoading = false
               this.$message({
                 message: '刷新失败',
                 type: 'error'
