@@ -275,6 +275,9 @@ export const catchError = function (error) {
           type: 'error'
         })
         break
+      case 499:
+        window.location.href = '/login'
+        break
       default:
         Vue.prototype.$message({
           message: messageInfo || '服务端异常，请联系技术支持',

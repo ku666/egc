@@ -257,8 +257,8 @@ export default {
       syncOperMgmtInfo(eachRowUUID)
         .then(
           function (result) {
-            console.log((this.syncDataStatus = result.syncMessage.msg))
-            this.syncDataStatus = result.syncMessage.msg
+            console.log('refresh oper maintance result -- > ' + JSON.stringify(result))
+            this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
               this.loadData()
