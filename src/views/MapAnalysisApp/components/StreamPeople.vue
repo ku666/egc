@@ -356,12 +356,14 @@ export default {
       console.log(LOG_TAG + ' 点击切换表格展示 ')
       this.isChartShow = false
       this.isTableShow = true
-      // 请求数据后重置表格宽度
+      // // 请求数据后重置表格宽度
       let tableHeader = document.querySelector('.el-table__header')
       let tableBody = document.querySelector('.el-table__body')
+      let gutter = document.querySelector('.gutter')
       if (tableHeader) {
         tableHeader.style.width = '100%'
         tableBody.style.width = '100%'
+        gutter.style.display = 'block'
       }
       let elTable = document.querySelector('.el-table')
       elTable.style.height = '382px'
@@ -577,9 +579,6 @@ export default {
   }
   /deep/.el-dialog__body {
     padding: 0px 20px;
-  }
-  /deep/.gutter{
-    display: block
   }
 }
 #flow-information {
