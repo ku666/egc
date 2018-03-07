@@ -63,8 +63,8 @@ export const uploadAppServiceConfigFile = (params) => {
 
 // 导出模板
 export const downCfgMgmtTemplate = (params) => {
-  console.log(' generate download template params ->>>>>>>>>>>>>   ' + JSON.stringify(params))
-  return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params
+  console.log(' generate download template params ->  ' + JSON.stringify(params))
+  return Axios.get(BASE_PATH + '/download/templateDownload?downloadCls=' + params, {responseType: 'arraybuffer'}
     ).then(res => {
       console.log('res.headers --->  ' + JSON.stringify(res.headers))
       let fileName = decodeResHeader(res.headers)
@@ -80,6 +80,7 @@ export const downCfgMgmtTemplate = (params) => {
         link.download = fileName
         document.body.appendChild(link)
         link.click()
+        document.body.removeChild(link)
       }
       return res.data
     })
@@ -104,6 +105,7 @@ export const downloadResultFile = (params1, params2) => {
         link.download = fileName
         document.body.appendChild(link)
         link.click()
+        document.body.removeChild(link)
       }
       return res.data
     })
