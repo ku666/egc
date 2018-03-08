@@ -186,9 +186,6 @@ export default {
       this.canvasNode = document.querySelector('.echarts-frame')
       this.myChart = this.$echarts.init(this.myChartNode)
       this.myChart.setOption(this.echartsData())
-      // 多次点击
-      if (this.chartClickNum > 0) return
-      this.chartClickNum++
       // 判断时间是否选择正确
       if (this.isRequest) {
         this.getData()
@@ -198,6 +195,9 @@ export default {
           message: '请选择正确的时间'
         })
       }
+      // 多次点击
+      if (this.chartClickNum > 0) return
+      this.chartClickNum++
       // 屏幕宽度发生改变时重置容器高宽
       window.onresize = () => {
         this.myChartContainer()
@@ -385,19 +385,29 @@ export default {
       }
       let elTable = document.querySelector('.el-table')
       elTable.style.height = '382px'
+      // 判断时间是否选择正确
+      if (this.isRequest) {
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
       // 多次点击
       if (this.tableClickNum > 0) return
       this.tableClickNum++
-      this.getPgingData()
     },
     /**
     * @description 打开组件的回调 *
     * @param {string} _courtUuid 从主页传入的当前小区id
     */
     streamPeople: function (_courtUuid) {
-      this.getPgingData()
       this.onTimeJudgment()
-      if (this.isRequest) this.getData()
+      if (this.isRequest) {
+        this.getData()
+        this.getPgingData()
+      }
       this.parameter.courtUuid = _courtUuid
       // 获取小区详细信息
       getCourtInfo({ courtUuid: _courtUuid }).then(res => {
