@@ -60,7 +60,6 @@
             <el-button type="primary" size="mini" @click="addNewEvent">添加</el-button>
           </div>
         </el-popover>
-        <!-- <a v-popover:newCIEventPop class="blue cursor-hand"><i class="el-icon-plus"></i><span>新增CI项</span></a> -->
         <a v-popover:newCIEventPop>
           <span>
             <el-button icon="el-icon-circle-plus-outline" style="margin-center: 10px" plain type="primary">添加</el-button>
@@ -130,9 +129,10 @@ export default {
     }
   },
   watch: {
-    osDetails (newValue, oldValue) {
+    osDetails: function (newValue, oldValue) {
       this.osDetails = newValue
-    }
+    },
+    deep: true
   },
   mounted () {
     this.tempRemark = this.osDetails.remark
