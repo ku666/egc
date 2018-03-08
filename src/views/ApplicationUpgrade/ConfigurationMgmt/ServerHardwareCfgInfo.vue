@@ -189,11 +189,6 @@ export default {
         getauServersByPage(params)
           .then(
             function (result) {
-              for (let i = 0; i < result.auServersList.length; i++) {
-                let element = result.auServersList[i]
-                let tempCourtDto = element.courtDtoList[0]
-                element.courtDto = tempCourtDto
-              }
               this.auServerListData = result.auServersList
               this.total = result.pageCount
               this.loading = false
@@ -358,11 +353,6 @@ export default {
             console.log('hardware lsit --> ' + JSON.stringify(result))
             this.allTableTitleList = result.columnDtoList
             this.temptableTitleList = result.columnDtoList
-            for (let i = 0; i < result.auServersList.length; i++) {
-              let element = result.auServersList[i]
-              let tempCourtDto = element.courtDtoList[0]
-              element.courtDto = tempCourtDto
-            }
             this.auServerListData = result.auServersList
             this.total = result.pageCount
             this.loading = false

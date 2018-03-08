@@ -6,18 +6,18 @@
     服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
 
     <el-form :inline="true" :model="auServerDetails">
-      <template v-if=" auServerDetails.courtDtoList.length !== 0">
+      <template v-if=" auServerDetails.courtDto !== null">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].province"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
         </el-form-item>
         <el-form-item label="市" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].city"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.city"></el-input>
         </el-form-item>
         <el-form-item label="区" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].district"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.district"></el-input>
         </el-form-item>
         <el-form-item label="小区名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].name"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
       <el-form-item label="服务器产品名称" :label-width="formLabelWidth">
@@ -60,7 +60,7 @@
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.mgmtIp"></el-input>
       </el-form-item>
       <el-form-item label="服务器用途" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.roles"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.functionName"></el-input>
       </el-form-item>
       <el-form-item label="物理机房" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.deployment"></el-input>
@@ -113,7 +113,7 @@
       </template>
     </el-form>
     <div style="text-align: center">
-       <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
+      <el-button type="primary" @click="closeDialog" class="cancel-btn">取 消</el-button>
     </div>
   </div>
 </template>
@@ -149,9 +149,10 @@ export default {
     }
   },
   watch: {
-    auServerDetails (newValue, oldValue) {
+    auServerDetails: function (newValue, oldValue) {
       this.auServerDetails = newValue
-    }
+    },
+    deep: true
   }
 }
 </script>

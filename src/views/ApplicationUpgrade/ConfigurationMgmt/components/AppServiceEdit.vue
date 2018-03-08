@@ -56,19 +56,19 @@
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.domainName" :maxlength="maxlength"></el-input>
       </el-form-item>
       <template v-if=" auappServiceDetails.upgradeServers !== null">
-  <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
-    <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.publicIp" :maxlength="maxlength"></el-input>
-  </el-form-item>
-  <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
-    <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.domainName" :maxlength="maxlength"></el-input>
-  </el-form-item>
-  <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
-    <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.hostname" :maxlength="maxlength"></el-input>
-  </el-form-item>
-  <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
-    <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.intranetIp" :maxlength="maxlength"></el-input>
-  </el-form-item>
-</template>
+        <el-form-item label="小区云升级服务公网IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.publicIp" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="小区云升级服务域名" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.domainName" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器主机名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.hostname" :maxlength="maxlength"></el-input>
+        </el-form-item>
+        <el-form-item label="升级服务器IP" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="auappServiceDetails.upgradeServers.intranetIp" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>

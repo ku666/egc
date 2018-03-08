@@ -53,12 +53,14 @@
       <el-form-item label="配置文件版本" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.version"></el-input>
       </el-form-item>
-      <el-form-item label="操作系统名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.oss.name"></el-input>
-      </el-form-item>
-      <el-form-item label="操作系统位数" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.oss.dataLength"></el-input>
-      </el-form-item>
+      <template v-if="auappServiceDetails.oss !== null">
+        <el-form-item label="操作系统名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.oss.name"></el-input>
+        </el-form-item>
+        <el-form-item label="操作系统位数" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.oss.dataLength"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="服务域名" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.domainName"></el-input>
       </el-form-item>
@@ -79,7 +81,7 @@
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auappServiceDetails.remark"></el-input>
       </el-form-item>
-      <template v-if=" auappServiceDetails.extDataList.length > 0 ">
+      <template v-if=" auappServiceDetails.extDataList ">
         <el-form-item :label="item.fieldName" v-for="item in auappServiceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
           <el-input class="upgrade_el-input" v-model="item.fieldValue" :disabled="isInptDisabled"></el-input>
         </el-form-item>
