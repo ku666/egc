@@ -1156,6 +1156,8 @@
           console.info(curEditEventTypeList)
           this.systemEditEventTypeList = curEditEventTypeList
           console.info(this.systemEditEventTypeList)
+        } else {
+          this.systemEditEventTypeList = []
         }
         this.editModel = JSON.parse(JSON.stringify(item))
         // let realTimeFlagVal = true
