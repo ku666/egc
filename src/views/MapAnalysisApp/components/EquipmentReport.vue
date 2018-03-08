@@ -2,8 +2,8 @@
   <div v-if="dialogReportVisible">
     <el-dialog title="设备数报表" :visible.sync="dialogReportVisible" width="70%" @close="onCloseDialog">
       <div class="container">
-        <el-button type="primary" @click="onChartSwitch">图表</el-button>
-        <el-button type="success" @click="onTableSwitch">表格</el-button>
+        <el-button type="primary" :plain="!isChartShow" @click="onChartSwitch">图表</el-button>
+        <el-button type="success" :plain="!isTableShow" @click="onTableSwitch">表格</el-button>
         <div class="court-name">{{courtName}}</div>
         <div class="equipment-table" v-show="isTableShow" style="width: 100%; margin-top: 20px;">
           <el-table :data="tableData" :summary-method="getSummaries" height="604" border show-summary style="width: 100%;">
