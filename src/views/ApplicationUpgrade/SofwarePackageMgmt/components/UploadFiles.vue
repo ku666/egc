@@ -47,6 +47,7 @@ export default {
       if (fileLength > 0) {
         uploadDependencyExcelFiles(this.uploadFiles)
         .then((res) => {
+          this.fileList = []
           this.$message({
             message: '上传成功!',
             type: 'success'
