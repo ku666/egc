@@ -148,13 +148,9 @@ export default {
       this.getCourtInfo()
       this.isShowCarInfoMap = true
       if (!this.isShowChart) {
-        this.$nextTick(function () {
-          this.getCarAccessPageList()
-        })
+        this.getCarAccessPageList()
       } else {
-        this.$nextTick(function () {
-          this.getCourtCarAccessInfo()
-        })
+        this.getCourtCarAccessInfo()
       }
     },
     /**
@@ -174,9 +170,7 @@ export default {
       this.isShowChart = true
       if (!this.preTableShowStatus) return
       if (this.clickCount > 0) return
-      this.$nextTick(() => {
-        this.getCourtCarAccessInfo()
-      })
+      this.getCourtCarAccessInfo()
       this.clickCount++
     },
     /**
@@ -216,7 +210,13 @@ export default {
       }.bind(this))
       console.log(LOG_TAG + ' echarts图表初始化  ')
     },
-    // 改变图表显示范围
+    /**
+     * @description Echarts内置分发事件
+     * @param {object} myChart Echarts实例对象
+     * @param {array} data 图标X轴坐标
+     * @param {object} params 当前点击位置X坐标
+     * @param {number} zooSize 数据可是区域
+     */
     disPatchAction: function (myChart, data, params, zoomSize) {
       myChart.dispatchAction({
         type: 'dataZoom',
