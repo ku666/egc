@@ -575,6 +575,7 @@ export default {
       this.searchConditionList.version = ''
       this.searchConditionList.provider = ''
       this.searchConditionList.key = ''
+      this.loadData()
     },
     _handleClearRegister (detail) {
       detail.name = ''
