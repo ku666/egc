@@ -36,7 +36,7 @@ name	type	mgmt_ip	status	desc	serial_no	 bios_version	asset_no	vendor	vendor	dep
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.serialNo"></el-input>
       </el-form-item>
       <el-form-item label="固资编号" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.aeestNo"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.assetNo"></el-input>
       </el-form-item>
       <el-form-item label="设备厂商" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.vendor"></el-input>
