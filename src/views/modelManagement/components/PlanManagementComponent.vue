@@ -170,7 +170,7 @@
           <template slot-scope="scope">{{ systemFrequencyMap[scope.row.frequencyType] }}</template>
         </el-table-column>
         <el-table-column
-          label="频率Cron表达式">
+          label="频次表达式">
           <template slot-scope="scope">{{ scope.row.frequencyCron }}</template>
         </el-table-column>
         <el-table-column
@@ -355,9 +355,10 @@
               :value="item.item_code"
             ></el-option>
           </el-select>
-          <el-tooltip class="item" effect="light" @mouseenter="getParamValueCron(item.item_code)" placement="right">
+          <!--<span @click="getParamValueCron('mm.frqtyp.dayone')">查看表达式</span>-->
+          <el-tooltip v-if="newTaskPlan.frequencyType" class="item" effect="light" placement="right">
+            <i class="el-icon-question" @mouseenter="getParamValueCron(newTaskPlan.frequencyType)"></i>
             <div slot="content">频次表达式为：{{cron}}</div>
-            <i class="el-icon-question"></i>
           </el-tooltip>
         </el-form-item>
 
@@ -566,6 +567,10 @@
               :value="item.item_code"
             ></el-option>
           </el-select>
+          <el-tooltip v-if="editTaskPlan.frequencyType" class="item" effect="light" placement="right">
+            <i class="el-icon-question" @mouseenter="getParamValueCron(editTaskPlan.frequencyType)"></i>
+            <div slot="content">频次表达式为：{{cron}}</div>
+          </el-tooltip>
         </el-form-item>
 
         <el-form-item label="执行参数" prop="description">
@@ -706,28 +711,17 @@
 <script>
   import modelInfoComponenet from './model/ModelInfoComponenet'
   import modelVersionInfoComponenet from './model/ModelVersionInfoComponenet'
-  import { getCommunityByStatus } from '@/views/modelManagement/apis/model_version_api'
-  import { getPlanList, addNewTaskPlan, updateTaskPlan, deleteTaskPlanById, stopTaskPlanById } from '@/views/modelManagement/apis/model_plan_api'
-  import { getVersionParamsByVersionId, getCron } from '@/views/modelManagement/apis/model_paramdefine_api'
+  import {getCommunityByStatus} from '@/views/modelManagement/apis/model_version_api'
   import {
-    startSystemLoading,
-    getSystemSettings,
-    getSystemDataByCode,
-    getSystemCodeNameMap,
-    SYSTEM_PLANSTATUS,
-    SYSTEM_FREQUENTTYPE,
-    SYSTEM_TASKTYPE,
-    SYSTEM_TASKSOURCE,
-    SYSTEM_MODELSTATUS,
-    SYSTEM_VERSSTATUS,
-    SYSTEM_NODETYPE,
-    SYSTEM_EVENTTYPE,
-    SYSTEM_MODELCAT,
-    SYSTEM_RUNTIMETYPE,
-    COMMUNITY,
-    SYSTEM_PUBLISH_STATUS_PUBLISH,
-    SYSTEM_MODELSTATUS_ENABLE,
-    SYSTEM_VERSIONSTATUS_ENABLE
+    addNewTaskPlan, deleteTaskPlanById, getPlanList, stopTaskPlanById,
+    updateTaskPlan
+  } from '@/views/modelManagement/apis/model_plan_api'
+  import {getCron, getVersionParamsByVersionId} from '@/views/modelManagement/apis/model_paramdefine_api'
+  import {
+    COMMUNITY, getSystemCodeNameMap, getSystemDataByCode, getSystemSettings, startSystemLoading, SYSTEM_EVENTTYPE,
+    SYSTEM_FREQUENTTYPE, SYSTEM_MODELCAT, SYSTEM_MODELSTATUS, SYSTEM_MODELSTATUS_ENABLE, SYSTEM_NODETYPE,
+    SYSTEM_PLANSTATUS, SYSTEM_PUBLISH_STATUS_PUBLISH, SYSTEM_RUNTIMETYPE, SYSTEM_TASKSOURCE, SYSTEM_TASKTYPE,
+    SYSTEM_VERSIONSTATUS_ENABLE, SYSTEM_VERSSTATUS
   } from '@/views/modelManagement/assets/js/common'
   import {formatDate} from '../assets/js/format_date.js'
   import '../assets/css/common.less'
@@ -1473,12 +1467,18 @@
         }
       },
       getParamValueCron (code) {
-        getCron(code)
+        // var _this = this
+        let param = {
+          paramCode: code
+        }
+        console.info(param)
+        getCron(param)
           .then(
             function (result) {
-              let cron = result.data.paramValue
-              return cron
-            }
+              console.info(result)
+              this.cron = result.data.paramValue
+              console.log('cron: ' + this.cron)
+            }.bind(this)
           )
           .catch(
             function (error) {
