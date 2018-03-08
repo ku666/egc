@@ -68,7 +68,9 @@
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceLevel" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="服务到期时间" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceDuring" :maxlength="maxlength"></el-input>
+        <!-- <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceDuring" :maxlength="maxlength"></el-input> -->
+        <el-date-picker v-model="netDeviceDetails.serviceDuring" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptionsStart" :editable="false" style="width:186px;">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.remark" :maxlength="maxlength"></el-input>
@@ -133,6 +135,11 @@ export default {
       fieldValue: '',
       showAddNewEvent: false,
       tempExtDataList: undefined,
+      pickerOptionsStart: {
+        disabledDate (time) {
+          return time.getTime() < new Date() - 3600 * 1000 * 24
+        }
+      },
       coreList: [
         {
           value: 1,
