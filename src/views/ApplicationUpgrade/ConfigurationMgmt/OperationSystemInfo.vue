@@ -293,7 +293,7 @@ export default {
         .catch(function (error) {
           console.log(error)
           this.synDataLoading = false
-        })
+        }.bind(this))
     },
 
     // 历史记录

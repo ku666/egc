@@ -34,10 +34,10 @@
     <el-row style='height: 100%;'>
       <el-col style='height: 100%;'>
         <div style="margin-top: 15px; max-height: 100%;"> 
-          <el-table :data="softwarePackListData" stripe border style="margin-top: 15px; height: 700px;overflow-y: scroll;" >
+          <el-table :data="softwarePackListData" stripe border style="margin-top: 15px; height: 700px;overflow-y: scroll;">
             <el-table-column  type="index" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable> 
             </el-table-column>
             <el-table-column label="操作" width="150">
               <template slot-scope="scope">
@@ -425,6 +425,11 @@ export default {
       JarAttachmentArray: [],
       tableTitleList: [
         {
+          colName: '批次',
+          prop: 'batchName',
+          width: 200
+        },
+        {
           colName: '软件包名称',
           prop: 'name',
           width: 200
@@ -436,25 +441,28 @@ export default {
           colName: '开发者',
           prop: 'provider',
           width: 120
-        }, {
-          colName: '软件包功能说明',
-          prop: 'functionDesc',
-          width: 200
-        }, {
+        },
+        // {
+        //   colName: '软件包功能说明',
+        //   prop: 'functionDesc',
+        //   width: 200
+        // },
+        {
           colName: '前续软件包名称',
           prop: 'lastestPreName',
           width: 150
         }, {
           colName: '前续软件包版本',
-          prop: 'latestPreVer'
+          prop: 'latestPreVer',
+          width: 150
         }, {
           colName: '软件包登记日期/时间',
           prop: 'createTime',
-          width: 160
+          width: 150
         }, {
           colName: '软件包登记者',
           prop: 'createUser',
-          width: 120
+          width: 150
         }
       ],
       detailsTitle: '查看详情',
@@ -502,13 +510,13 @@ export default {
           { max: 32, message: '长度不能超过32个字符' }
         ],
         softwareName: [
-          { required: true, message: '请输入开发者姓名', trigger: 'blur,change' },
+          { required: true, message: '应用/组件名称', trigger: 'blur,change' },
           { max: 32, message: '长度不能超过32个字符' }
         ],
         softwareNameEn: [
-          { required: true, message: '应用/组件英语英文名字', trigger: 'blur,change' },
+          { required: true, message: '应用/组件英语名称', trigger: 'blur,change' },
           { max: 64, message: '长度不能超过64个字符' },
-          { pattern: /^[a-zA-Z0-9—_-]+$/, message: '请输入英数字(包含下划线 _ 中划线 - ' }
+          { pattern: /^[a-zA-Z0-9—_-]+$/, message: '请输入英数字(包含下划线 _ 中划线 - )' }
         ],
         functionDesc: [
           { max: 256, message: '长度不能超过256个字符' }
@@ -689,13 +697,13 @@ export default {
     // 软件包批量导入
     _importFile () {
       this.dialogImportTitle = '软件包批量导入'
-      // new Promise( function() {
+      // let p = new Promise(function () {
       //   this.fileList = []
       //   this.fileJarAttachmentList = []
-      //   }).then(
-      //     function() {
-      //     this.dialogImportVisible = true
-      //   }
+      // })
+      // p.then(function () {
+      //   this.dialogImportVisible = true
+      // }
       // )
       this.fileList = []
       this.fileJarAttachmentList = []

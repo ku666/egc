@@ -273,7 +273,6 @@ export default {
                 message: '保存成功',
                 type: 'success'
               })
-              // 再次加载列表的数据
               this.loadData()
             }
           }.bind(this)
@@ -294,9 +293,7 @@ export default {
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
-            console.log(
-              'refresh middleware result -- > ' + JSON.stringify(result)
-            )
+            console.log('refresh server  hardware result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
@@ -318,7 +315,7 @@ export default {
         .catch(function (error) {
           this.synDataLoading = false
           console.log(error)
-        })
+        }.bind(this))
     },
     // 历史记录
     _handleCheckHistory (rowIdx) {
