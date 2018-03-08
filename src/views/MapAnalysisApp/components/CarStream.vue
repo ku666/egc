@@ -52,7 +52,7 @@
               <el-col :span="24">
                 <el-button type="primary" @click="onSubmitForm('form')">查询</el-button>
                 <el-button type="success" :plain="!isShowTable" @click="onGoToTable()">表单</el-button>
-                <el-button type="danger" :plain="!isShowChart"  @click="onGoToMap()">图表</el-button>
+                <el-button type="danger" :plain="!isShowChart" @click="onGoToMap()">图表</el-button>
               </el-col>
             </el-row>
           </el-form>
@@ -375,6 +375,7 @@ export default {
       this.isReponseData = false
       if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
       this.myChart = null
+      window.onresize = null
     },
     /**
     * @description 时间选择器范围限制，日报表一个月，月报表一年，年报表无限制*
