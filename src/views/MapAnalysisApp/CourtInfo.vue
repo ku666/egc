@@ -285,7 +285,7 @@ export default {
             maleOwner: 0,
             femaleOwner: 0
           }
-          if (!list.sexInfo[0])list.sexInfo[0] = sexObj
+          if (list.sexInfo[0])sexObj = list.sexInfo[0]
           let sexData = [{ value: sexObj.maleOwner, name: '男' }, { value: sexObj.femaleOwner, name: '女' }]
           list = list.ageGroupInfo
           list.map(function (item, index) {
