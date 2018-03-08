@@ -58,6 +58,7 @@ export default {
   },
   methods: {
     loadOrgs (param) {
+      this.orgsData = []
       getOrg(param)
         .then(
           function (result) {

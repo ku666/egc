@@ -51,8 +51,8 @@
             <el-row :span="24" style="text-align:right">
               <el-col :span="24">
                 <el-button type="primary" @click="onSubmitForm('form')">查询</el-button>
-                <el-button type="success" plain @click="onGoToTable()">表单</el-button>
-                <el-button type="danger" plain @click="onGoToMap()">图表</el-button>
+                <el-button type="success" :plain="!isShowTable" @click="onGoToTable()">表单</el-button>
+                <el-button type="danger" :plain="!isShowChart" @click="onGoToMap()">图表</el-button>
               </el-col>
             </el-row>
           </el-form>
@@ -375,6 +375,7 @@ export default {
       this.isReponseData = false
       if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
       this.myChart = null
+      window.onresize = null
     },
     /**
     * @description 时间选择器范围限制，日报表一个月，月报表一年，年报表无限制*
@@ -383,7 +384,7 @@ export default {
     onDatePickRangeConfrim () {
       switch (this.form.reportType) {
         case '0':
-          if (Math.ceil((this.form.endTime - this.form.startTime) / 86400000) > 31) {
+          if (this.form.endTime.getTime() - this.form.startTime.getTime() > 30 * 24 * 60 * 60 * 1000) {
             this.$message.error({
               message: '只能查一个月之内的日报表',
               duration: 1500
@@ -392,7 +393,7 @@ export default {
           }
           break
         case '1':
-          if (Math.ceil((this.form.endTime - this.form.startTime) / 86400000 / 30) > 12) {
+          if (this.form.endTime.getTime() - this.form.startTime.getTime() > 365 * 24 * 60 * 60 * 1000) {
             this.$message.error({
               message: '只能查一年之内的月报表',
               duration: 1500
