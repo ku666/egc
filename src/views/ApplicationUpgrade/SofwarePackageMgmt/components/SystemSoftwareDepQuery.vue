@@ -9,9 +9,9 @@
           <el-table :data="sysSoftwareDepListData" style="height: 750px;overflow-y: scroll;" stripe border>
             <el-table-column  type="index" label="No" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable>
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableOsTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width">
+            <el-table-column v-for="(item, index) in tableOsTitleExtData " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable>
             </el-table-column>
             <!-- <el-table-column fixed="right" label="操作" width="80">
               <template slot-scope="scope">

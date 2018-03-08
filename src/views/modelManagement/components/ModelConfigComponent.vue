@@ -25,10 +25,9 @@
         <el-col :span="20">
           <div class="text-right">
             <el-form :inline="true" :model="modelListSearch" :rules="searchRules" ref="modelListSearch" class="demo-form-inline">
-                <el-form-item label="小区">
+               <!--  <el-form-item label="小区">
                   <div class="item-info">
                     <el-select @change="loadData" v-model="modelListSearch.communityId" placeholder="小区">
-                      <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                       <el-option
                         v-for="item in communityId"
                         :key="item.item_code"
@@ -37,6 +36,9 @@
                       </el-option>
                     </el-select>
                   </div>
+                </el-form-item> -->
+                <el-form-item label="占位符" v-show="false">
+                  <el-input  placeholder="占位符"></el-input>
                 </el-form-item>
                 <el-form-item label="系统参数代码" prop="paramCode">
                   <div class="item-info">
@@ -133,7 +135,7 @@
       :before-close="handleClose">
 
       <el-form v-loading="loadingStep" :model="newModel" :rules="rules" ref="newModel" label-width="120px" class="demo-ruleForm">
-        <el-form-item label="小区名称" prop="communityId">
+        <!-- <el-form-item label="小区名称" prop="communityId">
           <el-select size="small" v-model="newModel.communityId" placeholder="请选择一个小区">
             <el-option
               v-for="item in communityId"
@@ -142,7 +144,7 @@
               :value="item.item_code">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="系统参数类别" prop="paramCat">
           <el-select size="small" v-model="newModel.paramCat" placeholder="请选择系统参数类别">
             <!-- <el-option label="模型管理" value="mm.paramcat.modelmgmt"></el-option>
@@ -187,7 +189,7 @@
       :before-close="handleClose">
 
       <el-form v-loading="loadingEditStep" :model="editModel" :rules="rules" ref="editModel" label-width="120px" class="demo-ruleForm">
-        <el-form-item label="小区名称" prop="communityId">
+        <!-- <el-form-item label="小区名称" prop="communityId">
           <el-select size="small" disabled v-model="editModel.communityId" placeholder="请选择一个小区">
             <el-option
               v-for="item in communityId"
@@ -196,7 +198,7 @@
               :value="item.item_code">
             </el-option>
           </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="系统参数类别" prop="paramCat">
           <el-select size="small" v-model="editModel.paramCat" placeholder="请选择系统参数类别">
             <el-option
@@ -336,9 +338,9 @@
           //   { required: true, message: '请输入系统参数类别', trigger: 'blur' },
           //   { min: 1, max: 32, message: '长度在 1 到 32 个字符', trigger: 'blur' }
           // ],
-          communityId: [
-            {required: true, message: '请选择小区', trigger: 'change'}
-          ],
+          // communityId: [
+          //   {required: true, message: '请选择小区', trigger: 'change'}
+          // ],
           paramCat: [
             {required: true, message: '请选择系统参数类别', trigger: 'change'}
           ],

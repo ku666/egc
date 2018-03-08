@@ -117,7 +117,8 @@
     data () {
       return {
         importData: {},
-        fileInfo: {}
+        fileInfo: {},
+        descArray: {}
       }
     },
     methods: {
@@ -152,10 +153,10 @@
         }
         var array = file.name.split('_')
         // 判断文件名是否合法
-        if (array.length === 4 && this._isValid(array[0], this.deviceType) && this._isValid(array[1], this.providerType)) {
+        if (array.length === 4 && this._isValid('deviceTypeDesc', array[0], this.deviceType) && this._isValid('providerName', array[1], this.providerType)) {
           if (file.size !== 0 && file.size < 52428800) {
-            file['deviceType'] = array[0]
-            file['providerCode'] = array[1]
+            file['deviceType'] = this.descArray.deviceTypeDesc
+            file['providerCode'] = this.descArray.providerName
             file['firmwareVersion'] = array[2]
             this.fileInfo = file
             this.importData['deviceType'] = array[0]
@@ -184,11 +185,12 @@
           this.importData[key] = data[key]
         }
       },
-      _isValid (data, array) {
+      _isValid (type, data, array) {
         var isValid = false
         array.forEach((value) => {
           if (data === value.value) {
             isValid = true
+            this.descArray[type] = value.label
             return isValid
           }
         })

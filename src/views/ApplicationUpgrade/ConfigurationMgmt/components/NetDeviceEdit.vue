@@ -34,7 +34,7 @@
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.status" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="固资编号" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="netDeviceDetails.aeestNo" :maxlength="maxlength"></el-input>
+        <el-input class="upgrade_el-input" v-model="netDeviceDetails.assetNo" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="设备厂商" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.vendor" :maxlength="maxlength"></el-input>

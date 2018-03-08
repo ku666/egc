@@ -5,18 +5,18 @@
     物理网卡1名称？	物理网卡1 MAC？	物理网卡2名称？	物理网卡2 MAC？	硬盘1序列号SN？	硬盘1容量？	硬盘2序列号SN？	硬盘2序列号SN？
     服务器用途	固资编号	管理IP	物理机房	安装的机柜	安装的机柜位置（U）	运行状态	维护人	维保服务	服务到期时间	 -->
     <el-form :inline="true" :model="auServerDetails">
-      <template v-if=" auServerDetails.courtDtoList.length !== 0">
+      <template v-if="auServerDetails.courtDto !== null">
         <el-form-item label="省（直辖市）" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].province"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.province"></el-input>
         </el-form-item>
         <el-form-item label="市" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].city"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.city"></el-input>
         </el-form-item>
         <el-form-item label="区" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].district"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.district"></el-input>
         </el-form-item>
         <el-form-item label="小区名称" :label-width="formLabelWidth">
-          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDtoList[0].name"></el-input>
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="auServerDetails.courtDto.name"></el-input>
         </el-form-item>
       </template>
       <el-form-item label="CPU型号" :label-width="formLabelWidth">
@@ -68,7 +68,7 @@
         <el-input class="upgrade_el-input" v-model="auServerDetails.mgmtIp"></el-input>
       </el-form-item>
       <el-form-item label="服务器用途" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auServerDetails.roles" :maxlength="maxlength"></el-input>
+        <el-input class="upgrade_el-input" v-model="auServerDetails.functionName" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="物理机房" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.deployment" :maxlength="maxlength"></el-input>
@@ -89,7 +89,8 @@
         <el-input class="upgrade_el-input" v-model="auServerDetails.serviceLevel"></el-input>
       </el-form-item>
       <el-form-item label="服务到期时间" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="auServerDetails.serviceDuring"></el-input>
+        <el-date-picker v-model="auServerDetails.serviceDuring" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptionsStart" :editable="false" style="width:186px;" @change="selectDuring">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="auServerDetails.remark" :maxlength="maxlength"></el-input>
@@ -156,7 +157,13 @@ export default {
       tempRemark: undefined,
       fieldName: '',
       fieldValue: '',
-      tempExtDataList: undefined
+      tempExtDataList: undefined,
+      // 生效日期选择
+      pickerOptionsStart: {
+        disabledDate (time) {
+          return time.getTime() < new Date() - 3600 * 1000 * 24
+        }
+      }
     }
   },
   methods: {
@@ -226,12 +233,22 @@ export default {
     },
     callBackCloseDialogEvent () {
       this.$emit('saveServInfoEvent', this.auServerDetails, 'cancel')
+    },
+    selectDuring () {
+      console.log('---------->' + this.auServerDetails.serviceDuring)
     }
   },
   watch: {
     auServerDetails (newValue, oldValue) {
       this.auServerDetails = newValue
-    }
+    },
+    'this.auServerDetails.serviceDuring': function (newValue, oldValue) {
+      if (newValue) {
+        console.log('new date --> ' + newValue)
+        // this.auServerDetails.serviceDuring = newValue.format('yyyy-MM-dd hh:mm:ss')
+      }
+    },
+    deep: true
   },
   mounted () {
     this.tempFunctionName = this.auServerDetails.roles

@@ -263,9 +263,7 @@ export default {
       syncAppServiceData(eachRowUUID)
         .then(
           function (result) {
-            console.log(
-              'refresh middleware result -- > ' + JSON.stringify(result)
-            )
+            console.log('refresh app service result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
@@ -287,7 +285,7 @@ export default {
         .catch(function (error) {
           console.log(error)
           this.synDataLoading = false
-        })
+        }.bind(this))
     },
     // 历史记录
     _handleCheckHistory (rowIdx) {

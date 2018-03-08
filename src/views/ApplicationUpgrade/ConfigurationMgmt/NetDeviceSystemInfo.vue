@@ -267,9 +267,7 @@ export default {
       syncNetDeviceData(eachRowUUID)
         .then(
           function (result) {
-            console.log(
-              'refresh middleware result -- > ' + JSON.stringify(result)
-            )
+            console.log('refresh netdevice result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
@@ -291,7 +289,7 @@ export default {
         .catch(function (error) {
           this.synDataLoading = false
           console.log(error)
-        })
+        }.bind(this))
     },
 
     // 历史记录
