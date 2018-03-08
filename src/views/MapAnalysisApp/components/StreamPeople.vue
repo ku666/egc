@@ -396,6 +396,7 @@ export default {
     */
     streamPeople: function (_courtUuid) {
       this.getPgingData()
+      this.getData()
       this.parameter.courtUuid = _courtUuid
       // 获取小区详细信息
       getCourtInfo({ courtUuid: _courtUuid }).then(res => {
