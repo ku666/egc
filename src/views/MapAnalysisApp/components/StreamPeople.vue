@@ -396,7 +396,8 @@ export default {
     */
     streamPeople: function (_courtUuid) {
       this.getPgingData()
-      this.getData()
+      this.onTimeJudgment()
+      if (this.isRequest) this.getData()
       this.parameter.courtUuid = _courtUuid
       // 获取小区详细信息
       getCourtInfo({ courtUuid: _courtUuid }).then(res => {
@@ -476,6 +477,7 @@ export default {
     onCurrentChange: function (val) {
       this.parameter.currentPage = val
       this.getPgingData()
+      console.log(val)
     },
     /**
     * @description 获取人流信息(图表) *
@@ -496,14 +498,10 @@ export default {
             this.form.perInCountList.push(perData[i].perInCount)
             this.form.perOutCountList.push(perData[i].perOutCount)
           }
-          if (this.form.dateList.length <= 0 || this.form.perInCountList.length <= 0 || this.form.perOutCountList.length <= 0) {
-            this.isPerErrInfo = true
-          } else {
-            // 数据改变时 初始化图表数据
-            if (this.isChartShow) {
-              this.isPerErrInfo = false
-              this.myChart.setOption(this.echartsData())
-            }
+          // 数据改变时 初始化图表数据
+          if (this.isChartShow) {
+            this.isPerErrInfo = false
+            this.myChart.setOption(this.echartsData())
           }
         } else {
           this.isPerErrInfo = true
