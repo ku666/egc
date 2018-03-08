@@ -140,7 +140,7 @@ export default {
         },
         {
           colName: '服务器主机名称',
-          prop: 'server.name',
+          prop: 'server.hostname',
           width: 220
         },
         {
@@ -257,7 +257,7 @@ export default {
       }
     },
 
-    // 更新
+    // 刷新
     _handleSynData (rowIdx) {
       this.synDataLoading = true
       var rowData = this.databaseListData[rowIdx]
@@ -266,9 +266,7 @@ export default {
       syncDatabaseData(eachRowUUID)
         .then(
           function (result) {
-            console.log(
-              'refresh middleware result -- > ' + JSON.stringify(result)
-            )
+            console.log('refresh database result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
@@ -290,7 +288,7 @@ export default {
         .catch(function (error) {
           console.log(error)
           this.synDataLoading = false
-        })
+        }.bind(this))
     },
 
     // 历史记录

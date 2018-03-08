@@ -13,10 +13,10 @@
       </el-col>
       <el-col :span="6">
         <div class="grid-content bg-purple">
-          <select-box title="厂商编码"
+          <select-box title="厂商名称"
                       code="providerCode"
                       ref="providerCode"
-                      :initValue="mainDeviceData.providerCode"
+                      :initValue="mainDeviceData.providerName"
                       :disabled='true'>
           </select-box>
         </div>
