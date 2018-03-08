@@ -336,7 +336,4 @@ export default {
 #equipment-online-charts {
   height: 600px;
 }
-.clear {
-  clear: both;
-}
 </style>
