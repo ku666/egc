@@ -263,7 +263,7 @@ export default {
       syncAppServiceData(eachRowUUID)
         .then(
           function (result) {
-            console.log('refresh middleware result -- > ' + JSON.stringify(result))
+            console.log('refresh app service result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false

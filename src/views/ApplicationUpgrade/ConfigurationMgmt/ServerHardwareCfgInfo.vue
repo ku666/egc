@@ -293,7 +293,7 @@ export default {
       syncauServersData(eachRowUUID)
         .then(
           function (result) {
-            console.log('refresh server hardware result -- > ' + JSON.stringify(result))
+            console.log('refresh server  hardware result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
               this.synDataLoading = false
