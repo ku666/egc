@@ -378,6 +378,7 @@ export const getNetDeviceDetails = (id) => {
 
 // 更新网络设备信息
 export const updateNetDeviceInfo = (params) => {
+  console.log('update  net equipment param -- > ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auNetequip/update', params
   ).then(res => res.data)
 

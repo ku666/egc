@@ -46,7 +46,11 @@
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.deployment" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="是否核心" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="netDeviceDetails.isCore" :maxlength="maxlength"></el-input>
+        <!-- <el-input class="upgrade_el-input" v-model="netDeviceDetails.isCore" :maxlength="maxlength"></el-input> -->
+        <el-select v-model="netDeviceDetails.isCore" placeholder="请选择" clearable style="width:186px;">
+          <el-option v-for="item in coreList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="外网IP" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.internetIp" :maxlength="maxlength"></el-input>
@@ -128,7 +132,17 @@ export default {
       fieldName: '',
       fieldValue: '',
       showAddNewEvent: false,
-      tempExtDataList: undefined
+      tempExtDataList: undefined,
+      coreList: [
+        {
+          value: 1,
+          label: '是'
+        },
+        {
+          value: 0,
+          label: '否'
+        }
+      ]
     }
   },
   methods: {
@@ -193,6 +207,9 @@ export default {
   watch: {
     netDeviceDetails (newValue, oldValue) {
       this.netDeviceDetails = newValue
+    },
+    'this.netDeviceDetails.coreList': function (newValue, oldValue) {
+      console.log('--------> ' + this.netDeviceDetails.coreList)
     }
   },
   mounted () {
