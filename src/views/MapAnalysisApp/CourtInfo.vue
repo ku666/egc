@@ -281,7 +281,12 @@ export default {
           let list = res.data.data
           let lastAge = 80
           let lastAgeNum = 0
-          let sexData = [{ value: list.sexInfo[0].maleOwner, name: '男' }, { value: list.sexInfo[0].femaleOwner, name: '女' }]
+          let sexObj = {
+            maleOwner: 0,
+            femaleOwner: 0
+          }
+          if (list.sexInfo[0])sexObj = list.sexInfo[0]
+          let sexData = [{ value: sexObj.maleOwner, name: '男' }, { value: sexObj.femaleOwner, name: '女' }]
           list = list.ageGroupInfo
           list.map(function (item, index) {
             let aa = item.group.split('-')
@@ -292,12 +297,16 @@ export default {
               ageData.push(item.countNum)
             }
           })
-          ageLevelData.push(lastAge + '以上')
+          if (list.length > 0) {
+            ageLevelData.push(lastAge + '以上')
+          } else {
+            ageLevelData.push(0)
+          }
           ageData.push(lastAgeNum)
           ownerOption.updateSexData(sexData)
           ownerOption.updateAgeLevelData(ageLevelData)
           ownerOption.updateAgeData(ageData)
-          if (sexData.length <= 0 || ageLevelData.length <= 0 || ageData.length <= 0) {
+          if (ageData.length <= 0) {
             this.isOwnerErrInfo = true
           } else {
             this.isOwnerErrInfo = false

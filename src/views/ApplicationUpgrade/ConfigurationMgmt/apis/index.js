@@ -127,7 +127,6 @@ export const getauServersByPage = (params) => {
 
 // 获取服务器单条信息的详细信息
 export const getauServersDetails = (id) => {
-  // console.log(' id -- > ' + id)
   return Axios.get(BASE_PATH + '/auServers/get?id=' + id
    ).then(res => res.data)
 
@@ -137,6 +136,7 @@ export const getauServersDetails = (id) => {
 
 // 更新硬件服务器信息
 export const updateAuServerInfor = (params) => {
+  console.log('update server param: uuid -- > ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auServers/update', params
   ).then(res => res.data)
 
@@ -378,6 +378,7 @@ export const getNetDeviceDetails = (id) => {
 
 // 更新网络设备信息
 export const updateNetDeviceInfo = (params) => {
+  console.log('update  net equipment param -- > ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/auNetequip/update', params
   ).then(res => res.data)
 

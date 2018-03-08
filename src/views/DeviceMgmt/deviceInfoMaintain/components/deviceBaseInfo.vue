@@ -254,15 +254,22 @@
       },
       _changeSatus (selectedOrgVaue) {
         this.showOrgDialog = false
-        this.selectedOrgVaue = selectedOrgVaue
-        this.screeningData['orgName'] = selectedOrgVaue.orgName
-        this.screeningData['orgId'] = selectedOrgVaue.orgId
+        if (this.selectedOrgVaue.orgId !== selectedOrgVaue.orgId) {
+          this.$refs.orgId.clearBox()
+          this.$refs.orgName.clearBox()
+          this.selectedOrgVaue = selectedOrgVaue
+          this.screeningData['orgName'] = selectedOrgVaue.orgName
+          this.screeningData['orgId'] = selectedOrgVaue.orgId
+        }
       },
       _setDistrictInfo (data) {
         this.showDistrictDialog = false
         if (data.name === '') this.$refs.name.clearBox()
         this.screeningData['courtName'] = data.name
         this.screeningData['courtUuid'] = data.uuid
+        this.selectedOrgVaue = {}
+        this.$refs.orgId.clearBox()
+        this.$refs.orgName.clearBox()
       },
       _pageResult (val) {
         this.pageSize = val

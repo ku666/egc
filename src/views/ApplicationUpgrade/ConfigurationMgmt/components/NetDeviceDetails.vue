@@ -99,12 +99,26 @@ export default {
   methods: {
     callBackCloseDialogEvent () {
       this.$emit('closeDialogEvent')
+    },
+    setCore () {
+      if (this.netDeviceDetails.isCore === 1) {
+        this.netDeviceDetails.isCore = '是'
+      } else if (this.netDeviceDetails.isCore === 0) {
+        this.netDeviceDetails.isCore = '否'
+      }
     }
   },
   watch: {
     netDeviceDetails (newValue, oldValue) {
       this.netDeviceDetails = newValue
+      this.setCore()
+    },
+    'this.netDeviceDetails.isCore': function (newValue, oldValue) {
+
     }
+  },
+  mounted () {
+    this.setCore()
   }
 }
 </script>
