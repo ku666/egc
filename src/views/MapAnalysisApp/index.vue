@@ -46,7 +46,7 @@ export default {
       activeName: 'first',
       provinceName: '全省小区',
       provinceSel: '',
-      provinArr: [{value: '', label: '-全国范围-'}]
+      provinArr: [{ value: '', label: '-全国范围-' }]
     }
   },
   mounted: function () {
@@ -67,6 +67,7 @@ export default {
         // 跳转到指定的小区的详情页
         this.$router.push('/mapanalysisapp/courtinfo/' + e.data.courtUuid)
       } else if (e.seriesType === 'map') {
+        this.searchCourtName = ''
         this.activeName = 'second'
         this.provinceName = e.data.name + '小区'
         this.provinceListTB = e.data.courts
@@ -78,7 +79,7 @@ export default {
      */
     getCourtListData: function (isSearch) {
       // 查询小区列表数据，初始化全国小区列表点位 { courtName: this.searchCourtName }
-      getCourtList({courtName: this.searchCourtName, org: this.provinceSel}).then(res => {
+      getCourtList({ courtName: this.searchCourtName, org: this.provinceSel }).then(res => {
         if (res.data.code === '00000') {
           let list = res.data.data ? res.data.data : []
           this.courtList = list
@@ -107,7 +108,7 @@ export default {
                 proObj[pname] = {}
                 proObj[pname].value = 0
                 proObj[pname].courts = []
-                prodata.push({value: item.org, label: item.org})
+                prodata.push({ value: item.org, label: item.org })
               }
               proObj[pname].value += 1
               proObj[pname].courts.push(item)
@@ -121,6 +122,7 @@ export default {
             mapData.updateData(pointdata)
             mapData.updateProvinceData(proObj)
             this.courtListTB = list.slice(0, 10)
+            prodata = this.pinyinSort(prodata) // 把省份名称按字母顺序排序
             if (prodata.length > 0) this.provinArr = this.provinArr.concat(prodata)
           }
           this.getMyCharts.setOption(mapData.option)
@@ -154,6 +156,25 @@ export default {
         return
       }
       this.getCourtListData('search')
+    },
+    /**
+     * @description 把数组里的数据按字母顺序排序
+     * @param {Array} arr 要排序的数组
+     * @returns {Array} data1 排好序后的数组
+     */
+    pinyinSort: function (arr) {
+      if (!String.prototype.localeCompare) return []
+      var zh = '阿八嚓哒妸发旮哈讥咔垃痳拏噢妑七呥扨它穵夕丫帀'.split('')
+      var data1 = []
+      for (var i = 0; i <= zh.length; i++) {
+        arr.map(function (v, index) {
+          let kk = v.label.localeCompare(zh[i], 'zh')
+          if ((!zh[i - 1] || zh[i - 1].localeCompare(v.label, 'zh') <= 0) && kk === -1) {
+            data1.push(v)
+          }
+        })
+      }
+      return data1
     }
   },
   computed: {
@@ -182,7 +203,7 @@ export default {
       overflow: auto;
     }
     .el-table::before {
-      display:none;
+      display: none;
     }
     .el-table__row {
       height: 60px;
@@ -190,23 +211,19 @@ export default {
     .demo-table-expand {
       font-size: 0;
     }
-    .demo-table-expand 
-    label {
+    .demo-table-expand label {
       width: 90px;
       color: #999;
     }
-    .demo-table-expand 
-    span {
+    .demo-table-expand span {
       color: rgb(224, 127, 15);
     }
-    .demo-table-expand 
-    .el-form-item {
+    .demo-table-expand .el-form-item {
       margin-right: 0;
       margin-bottom: 0;
       width: 50%;
     }
-    .demo-table-expand 
-    .el-form-item.itemlarge {
+    .demo-table-expand .el-form-item.itemlarge {
       width: 100%;
     }
   }

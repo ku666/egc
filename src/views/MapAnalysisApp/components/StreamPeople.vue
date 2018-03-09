@@ -187,14 +187,8 @@ export default {
       this.myChart = this.$echarts.init(this.myChartNode)
       this.myChart.setOption(this.echartsData())
       // 判断时间是否选择正确
-      if (this.isRequest) {
-        this.getData()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择正确的时间'
-        })
-      }
+      this.onTimeJudgment()
+      if (this.isRequest) this.getPerData()
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
@@ -386,14 +380,8 @@ export default {
       let elTable = document.querySelector('.el-table')
       elTable.style.height = '382px'
       // 判断时间是否选择正确
-      if (this.isRequest) {
-        this.getPgingData()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择正确的时间'
-        })
-      }
+      this.onTimeJudgment()
+      if (this.isRequest) this.getPgingData()
       // 多次点击
       if (this.tableClickNum > 0) return
       this.tableClickNum++
@@ -405,7 +393,7 @@ export default {
     streamPeople: function (_courtUuid) {
       this.onTimeJudgment()
       if (this.isRequest) {
-        this.getData()
+        this.getPerData()
         this.getPgingData()
       }
       this.parameter.courtUuid = _courtUuid
@@ -425,12 +413,7 @@ export default {
       this.onTimeJudgment()
       if (this.isRequest) {
         if (this.isTableShow) this.getPgingData()
-        else this.getData()
-      } else {
-        this.$message({
-          type: 'error',
-          message: '请选择正确的时间'
-        })
+        else this.getPerData()
       }
       // 重置点击次数
       if (this.isTableShow) {
@@ -478,7 +461,8 @@ export default {
     onSizeChange: function (val) {
       this.parameter.pageSize = val
       this.parameter.currentPage = 1
-      this.getPgingData()
+      this.onTimeJudgment()
+      if (this.isRequest) this.getPgingData()
     },
     /**
     * @description 分页组件当前页变化 *
@@ -486,13 +470,13 @@ export default {
     */
     onCurrentChange: function (val) {
       this.parameter.currentPage = val
-      this.getPgingData()
-      console.log(val)
+      this.onTimeJudgment()
+      if (this.isRequest) this.getPgingData()
     },
     /**
     * @description 获取人流信息(图表) *
     */
-    getData: function () {
+    getPerData: function () {
       this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)
       getCourtPerAccessInfo(this.parameter).then(res => {

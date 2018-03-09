@@ -50,8 +50,8 @@ export default {
       onlinedata: [], // 实时在网设备echart图表数据
       totaldata: [], // 设备总数echarts图表数据
       courtName: '', // 小区名字
-      equipmentcharts: {}, // 总设备数据echarts实例
-      equipmentonlinecharts: {} // 实时在网设备数据echarts实例
+      equipmentcharts: null, // 总设备数据echarts实例
+      equipmentonlinecharts: null // 实时在网设备数据echarts实例
     }
   },
   methods: {
@@ -250,6 +250,8 @@ export default {
       this.tableData = []
       if (this.equipmentcharts && this.equipmentcharts.dispose) { this.equipmentcharts.dispose() }
       if (this.equipmentonlinecharts && this.equipmentonlinecharts.dispose) { this.equipmentonlinecharts.dispose() }
+      this.equipmentcharts = null
+      this.equipmentonlinecharts = null
     },
     /**
      * @description 表格数据求和
@@ -333,8 +335,5 @@ export default {
 }
 #equipment-online-charts {
   height: 600px;
-}
-.clear {
-  clear: both;
 }
 </style>
