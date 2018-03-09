@@ -188,7 +188,7 @@ export default {
       this.myChart.setOption(this.echartsData())
       // 判断时间是否选择正确
       if (this.isRequest) {
-        this.getData()
+        this.getPerData()
       } else {
         this.$message({
           type: 'error',
@@ -405,7 +405,7 @@ export default {
     streamPeople: function (_courtUuid) {
       this.onTimeJudgment()
       if (this.isRequest) {
-        this.getData()
+        this.getPerData()
         this.getPgingData()
       }
       this.parameter.courtUuid = _courtUuid
@@ -425,7 +425,7 @@ export default {
       this.onTimeJudgment()
       if (this.isRequest) {
         if (this.isTableShow) this.getPgingData()
-        else this.getData()
+        else this.getPerData()
       } else {
         this.$message({
           type: 'error',
@@ -478,7 +478,14 @@ export default {
     onSizeChange: function (val) {
       this.parameter.pageSize = val
       this.parameter.currentPage = 1
-      this.getPgingData()
+      if (this.isRequest) {
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
     },
     /**
     * @description 分页组件当前页变化 *
@@ -486,13 +493,19 @@ export default {
     */
     onCurrentChange: function (val) {
       this.parameter.currentPage = val
-      this.getPgingData()
-      console.log(val)
+      if (this.isRequest) {
+        this.getPgingData()
+      } else {
+        this.$message({
+          type: 'error',
+          message: '请选择正确的时间'
+        })
+      }
     },
     /**
     * @description 获取人流信息(图表) *
     */
-    getData: function () {
+    getPerData: function () {
       this.parameter.startTime = this.processingDate(this.startDate)
       this.parameter.endTime = this.processingDate(this.endDate)
       getCourtPerAccessInfo(this.parameter).then(res => {
