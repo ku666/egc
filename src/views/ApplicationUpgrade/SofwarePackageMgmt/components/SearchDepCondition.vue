@@ -35,6 +35,7 @@ export default {
   methods: {
     _handleClearQuery () {
       this.searchConDetails.key = ''
+      this.$emit('handleFilterEvent', this.searchConDetails)
     },
     _callHandleFilter () {
       // if (this.validateInput()) {
