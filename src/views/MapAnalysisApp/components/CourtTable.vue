@@ -1,5 +1,5 @@
 <template>
-  <el-table :data="tableData" @row-dblclick="onDoubleClickHandler" stripe>
+  <el-table ref="courttable" :data="tableData" @row-click="onClickRowHandler" @row-dblclick="onDoubleClickHandler" stripe>
     <el-table-column type="expand">
       <template slot-scope="props">
         <el-form label-position="left" inline class="demo-table-expand">
@@ -39,6 +39,16 @@ export default {
      */
     onDoubleClickHandler: function (row, e) {
       this.$router.push('/mapanalysisapp/courtinfo/' + row.courtUuid)
+    },
+    /**
+     * @description 单击小区行item，展开或收起该行隐藏的项
+     * @param {Object} row 小区数据对象
+     * @param {Event} e 双击事件
+     */
+    onClickRowHandler: function (row, e) {
+      if (e.target.className === 'cell') {
+        this.$refs['courttable'].toggleRowExpansion(row)
+      }
     }
   }
 }
