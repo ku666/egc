@@ -6,8 +6,8 @@
     <el-row style="height: 100%">
       <el-col :span="24">
         <div style="margin-top: 20px">
-          <el-table :data="softpackDepListData" style="height: 750px;overflow-y: scroll;" stripe border>
-            <el-table-column  type="index" label="序号" width="50">
+          <el-table :data="softpackDepListData" style="height: 750px;overflow-y: scroll;" stripe border :index="indexMethod">
+            <el-table-column  type="index" label="序号" width="50" :index="indexMethod">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable>
             </el-table-column>
@@ -27,7 +27,7 @@
             <el-pagination
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
-              :current-page.sync="searchConditionList.currentPage"
+              :current-page.sync="searchConditionList.pageNo"
               :page-sizes="[10, 20, 50]"
               :page-size="searchConditionList.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
@@ -188,8 +188,18 @@ export default {
 
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.currentPage = val
+      this.searchConditionList.pageNo = val
       this.loadData()
+    },
+    indexMethod (index) {
+      console.log('indexMethod : ' + index)
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.pageNo
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      console.log('computedIndex : ' + computedIndex)
+      return computedIndex
     },
     getExtData (keyArr, valArr) {
       var data = {}
