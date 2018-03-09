@@ -112,6 +112,9 @@ export default {
       this.dateValue = ''
       this.searchConditionList.startDate = ''
       this.searchConditionList.endDate = ''
+      this.searchConditionList.packageName = ''
+      this.searchConditionList.version = ''
+      this.searchConditionList.keyWord = ''
       this.$emit('handleFilterEvent', this.searchConditionList, 'search')
     },
     _callHandleFilter () {
