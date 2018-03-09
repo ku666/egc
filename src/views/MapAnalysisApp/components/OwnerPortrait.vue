@@ -59,8 +59,8 @@
             </el-col>
             <el-col :span="24" style="text-align:right;margin-top:10px;">
               <el-button type="primary" @click.native="onInquireData">查询</el-button>
-              <el-button type="success" plain @click.native="onGoTable">表单</el-button>
-              <el-button type="danger" plain @click.native="onGoMap">图表</el-button>
+              <el-button type="success" :plain="tableOrMap!=='0'" @click.native="onGoTable">表单</el-button>
+              <el-button type="danger" :plain="tableOrMap!=='1'" @click.native="onGoMap">图表</el-button>
             </el-col>
           </el-row>
         </el-form>
@@ -231,7 +231,7 @@ export default {
             res.data.data.buildInfo.map(item => {
               this.form.buildList.push({
                 value: item.uuid,
-                label: item.memo
+                label: item.memo.slice(item.memo.indexOf(' ') + 1)
               })
             })
             console.log(LOG_TAG + '获取到小区楼栋名并插入到列表')
