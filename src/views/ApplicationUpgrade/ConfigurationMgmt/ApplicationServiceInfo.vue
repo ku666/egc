@@ -340,8 +340,10 @@ export default {
       this.loadData()
     },
     _handleCloseUploadDialog () {
-      this.dialogUploadVisible = false
+      console.log('close upload dialog')
       this.loadData()
+      console.log('reloaded data')
+      this.dialogUploadVisible = false
     },
     _handleBeforClose () {
       this.dialogUploadVisible = false

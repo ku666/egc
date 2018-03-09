@@ -120,9 +120,7 @@ export default {
     }
   },
   mounted () {
-    console.log(
-      ' --------->' + (this.auappServiceDetails.applications !== null)
-    )
+    console.log(' --------->' + (this.auappServiceDetails.applications !== null))
   }
 }
 </script>
