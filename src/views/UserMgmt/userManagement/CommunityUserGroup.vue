@@ -79,16 +79,11 @@
 <script>
   import gridList from './component/gridList.vue'
   import UserGroupView from './component/communityView/UserGroupView.vue'
-  // import userGroupCreate from './component/userGroupCreate'
   import {
     getUserGroupList,
-    // getFilteredUserGroupList,
     getUserGroupData,
     deleteUserGroup,
     listCommunity
-    // createUserGroup,
-    // getTreeData,
-    // getUserGroupDetail
   } from '@/views/UserMgmt/userManagement/apis'
   export default {
     name: 'CommunityUserGroup',
@@ -160,7 +155,6 @@
             function (result) {
               this.userGroupList = result.usergroupBaseVoList
               this.total = result.pageCount
-              console.log('用户组：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -174,8 +168,6 @@
           .then(
             function (result) {
               this.communityList = result
-              // this.total = result.pageCount
-              // console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -193,7 +185,6 @@
         return data.label.indexOf(value) !== -1
       },
       handleFilter () {
-        // if (this.searchText) {
         this.query.userGroupName = this.searchText
         this.getUserGroupListFunction()
       },
@@ -202,12 +193,9 @@
         this.query.userGroupName = ''
         this.query.courtUuid = ''
         this.userGroupList = ''
-        // this.getUserGroupListFunction()
       },
       handleTabClick (tab, event) {
         this.showGrid = (tab.name === '0')
-        // this.showSubGrid = (tab.name === '0')
-        console.log('*******************************************' + tab, event)
       },
       handleSizeChange (val) {
         this.query.pageSize = val
@@ -220,7 +208,6 @@
         this.getUserGroupListFunction()
       },
       userGroupDeleteEvent (data) {
-        console.log('userGroup：删除了第' + data.uuid + '行')
         this.usergroupUuid = data.uuid
         this.query.usergroupUuid = this.usergroupUuid
         deleteUserGroup(this.usergroupUuid)
@@ -236,10 +223,8 @@
           )
       },
       userGroupEditEvent (data) {
-        console.log('userGroup：编辑了第' + data.uuid + '行')
         this.usergroupUuid = data.uuid
         this.query.usergroupUuid = this.usergroupUuid
-        console.log(this.query.usergroupUuid)
         getUserGroupData(this.query)
             .then(
               function (result) {
@@ -249,12 +234,8 @@
                 this.roleData = this.subUserGroupData.usergroupRolePageVo || []
                 this.userGroupForm.usergroupName = result.usergroupBaseVo.usergroupName
                 this.userGroupForm.uuid = result.usergroupBaseVo.uuid
-                // this.userGroupForm.parentUsergroupName = result.usergroupBaseVo.parentUsergroupName
                 this.userGroupForm.remark = result.usergroupBaseVo.remark
                 this.usergroupUuid = result.usergroupBaseVo.uuid
-                // this.dialogStatus = '编辑用户组'
-                console.log('角色组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
-                console.log('角色信息：' + JSON.stringify(this.userData))
               }.bind(this)
             )
             .catch(
@@ -264,15 +245,12 @@
             )
       },
       gridViewEvent (data) {
-        console.log('userGroup：编辑了第' + data.uuid + '行')
         this.dialogFormEditVisible = true
         this.showEdit = true
         this.showCreate = false
         this.dialogEditStatus = '查看用户组'
         this.usergroupUuid = data.uuid
         this.query.usergroupUuid = this.usergroupUuid
-        console.log(this.query.usergroupUuid)
-        console.log(JSON.stringify(this.query))
         this.query.currentPage = 1
         this.query.pageSize = 5
         getUserGroupData(this.query)
@@ -284,12 +262,8 @@
                 this.roleData = this.subUserGroupData.usergroupRolePageVo || []
                 this.userGroupForm.usergroupName = result.usergroupBaseVo.usergroupName
                 this.userGroupForm.uuid = result.usergroupBaseVo.uuid
-                // this.userGroupForm.parentUsergroupName = result.usergroupBaseVo.parentUsergroupName
                 this.userGroupForm.remark = result.usergroupBaseVo.remark
                 this.usergroupUuid = result.usergroupBaseVo.uuid
-                // this.dialogStatus = '编辑用户组'
-                console.log('用户组信息：' + JSON.stringify(this.dirChildrenUserGroupData))
-                console.log('用户信息：' + JSON.stringify(this.userData))
               }.bind(this)
             )
             .catch(
@@ -305,7 +279,6 @@
         this.getUserGroupListFunction()
       },
       userGroupAddEvent (data) {
-        console.log('用户组：添加了 ' + data)
         this.getUserGroupListFunction()
         this.dialogFormAddVisible = false
         this.showCreate = false
@@ -314,11 +287,6 @@
     created () {
       this.loadData()
     }
-    // watch: {
-    //   filterText (val) {
-    //     this.$refs.menuTree.filter(val)
-    //   }
-    // }
   }
 </script>
 
