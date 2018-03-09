@@ -8,7 +8,7 @@
         <el-table :data="netDeviceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" :index="indexMethod" label="序号" width="50">
           </el-table-column>
-          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable show-overflow-tooltip>
+          <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
           </el-table-column>
           <el-table-column label="操作" width="140" align="center">
             <template slot-scope="scope">
@@ -120,7 +120,7 @@ export default {
         },
         {
           colName: '设备名称',
-          prop: 'name',
+          prop: 'nename',
           width: 120
         },
         {
@@ -341,6 +341,9 @@ export default {
       this.loadData()
     },
     _handleCloseUploadDialog () {
+      console.log('close upload dialog')
+      this.loadData()
+      console.log('reloaded data')
       this.dialogUploadVisible = false
     },
     _handleBeforClose () {

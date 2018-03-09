@@ -16,7 +16,7 @@
         </el-form-item>
       </template>
       <el-form-item label="设备名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.name"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.nename"></el-input>
       </el-form-item>
       <el-form-item label="设备类型/型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.type"></el-input>
