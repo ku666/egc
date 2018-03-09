@@ -50,12 +50,12 @@ export default {
             .then(
               function (res) {
                 console.log('upload response -- > ' + JSON.stringify(res))
-                this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
                   this.$message({
                     message: '上传成功',
                     type: 'success'
                   })
+                  this.$emit('handleUploadSuccessEvent')
                 } else {
                   this.$message({
                     message: '上传失败',
@@ -72,8 +72,8 @@ export default {
           uploadNetEquipConfigFile(this.uploadFiles)
             .then(
               function (res) {
-                this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
+                  this.$emit('handleUploadSuccessEvent')
                   this.$message({
                     message: '上传成功',
                     type: 'success'
@@ -94,8 +94,8 @@ export default {
           uploadAppServiceConfigFile(this.uploadFiles)
             .then(
               function (res) {
-                this.$emit('handleUploadSuccessEvent')
                 if (res.code === '200') {
+                  this.$emit('handleUploadSuccessEvent')
                   this.$message({
                     message: '上传成功',
                     type: 'success'
