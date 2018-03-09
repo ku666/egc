@@ -85,7 +85,6 @@
     methods: {
       // 校验原密码是否正确
       validateOriginalPwd (userName, userPwd) {
-        console.log('start validating... ')
         checkUserPwd(userName, userPwd)
           .then(
             function (result) {
@@ -104,7 +103,6 @@
           )
       },
       handleSave (changeForm) {
-        console.log(this.$store.state.mutations.userinfo.uuid)
         this.$refs[changeForm].validate((valid) => {
           let userUuid = this.$store.state.mutations.userinfo.uuid
           if (valid) {

@@ -112,13 +112,11 @@ export default {
   methods: {
     // 加载数据
     loadData () {
-      console.log('<<<<<loadData app start:')
       // 获取应用程序名称下拉框信息
       var resourceQuery = {cloudFlag: 1, type: this.val}
       getResourceList(resourceQuery)
         .then(
             function (result) {
-              console.log('<<<<<getAppResourceList:' + result)
               this.appResourceList = result
             }.bind(this)
           )
@@ -132,19 +130,15 @@ export default {
       this.loadData()
     },
     handleChange: function () {
-      console.log('handleChange')
-      console.log(this.form.uuid)
       // 获取应用程序名称下拉框信息-OK
       this.treeParam.appCode = this.appResource
       this.treeParam.uuid = this.form.uuid
-      console.log(this.treeParam)
       getTreeResourceData(this.treeParam)
           .then(
             function (result) {
               this.treeData = result
               this.checkedKeys = []
               this.deepJsonData(result)
-              console.log('树形数据：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -154,7 +148,6 @@ export default {
           )
     },
     handleCheckChange: function (data, checked, indeterminate) {
-      console.log('handleCheckChange ' + checked)
       this.deepChangeCheckedJsonData(data.children, checked)
     },
     handleNodeClick: function () {
@@ -178,8 +171,6 @@ export default {
       } else if (json instanceof Object) {
         for (var key in json) {
           if (key === 'uuid') {
-            console.log('deepChangeCheckedJsonData...checkedchange uuid: ' + json['uuid'].toString())
-            console.log(json['uuid'].toString())
             this.$refs.tree.setChecked(json['uuid'].toString(), checked, true)
           }
           if (key === 'children') {
@@ -191,19 +182,15 @@ export default {
       }
     },
     deepParentJsonData: function (json, parenetUuid) {
-      console.log('deepParentJsonData start: ')
       if (json instanceof Array) {
         for (var i = 0; i < json.length; i++) {
           var jsonObj = json[i]
-          console.log('deepParentJsonData start: Array ')
           this.deepParentJsonData(jsonObj, parenetUuid)
         }
       } else if (json instanceof Object) {
-        console.log('deepParentJsonData start: Object')
         for (var key in json) {
           if (key === 'uuid') {
             if (parenetUuid === json['uuid'].toString()) {
-              console.log('deepParentJsonData...push: ' + json['uuid'].toString())
               if (!this.isContainsData(this.parentItem, json['uuid'].toString())) {
                 if (json['parentResourceUuid'] !== null) {
                   this.parentItem.push(json['uuid'].toString())
@@ -223,14 +210,12 @@ export default {
     },
     deepJsonData: function (json) {
       if (json instanceof Array) {
-        console.log('deepJsonData...Array...')
         for (var i = 0; i < json.length; i++) {
           var jsonObj = json[i]
           this.deepJsonData(jsonObj)
         }
       } else if (json instanceof Object) {
         for (var key in json) {
-          console.log('key...Loop ' + key)
           if (json['hasAutho'].toString() === 'true' && !this.isContainsData(this.checkedKeys, json['hasAutho'].toString())) {
             this.checkedKeys.push(json['uuid'].toString())
           }
@@ -242,15 +227,12 @@ export default {
       console.log('checked' + this.checkedKeys)
     },
     cancelEvent () {
-      console.log('cancelEvent')
       this.$emit('canelDialogEvent')
     },
     refresh () {
-      console.log('refresh uuid:' + this.form.uuid)
       this.reset()
     },
     reset () {
-      console.log('addApp reset')
       this.treeData = []
       this.appResource = ''
     },
@@ -262,15 +244,9 @@ export default {
           )
         return
       }
-      console.log('getCheckedNodes:')
-      console.log(this.$refs.tree.getCheckedNodes())
-      console.log('getCheckedKeys:')
-      console.log(this.$refs.tree.getCheckedKeys())
-      console.log(this.appResource)
       this.items = []
       this.parentItem = []
       if (this.$refs.tree.getCheckedNodes().length > 0) {
-        console.log('Top uuid : ' + this.treeData[0].uuid)
         if (!this.isContainsData(this.parentItem, this.treeData[0].uuid)) {
           this.parentItem.push(this.treeData[0].uuid)
         }
@@ -278,11 +254,6 @@ export default {
       for (let index = 0; index < this.$refs.tree.getCheckedNodes().length; index++) {
         const node = this.$refs.tree.getCheckedNodes()[index]
         this.deepParentJsonData(this.treeData, node.parentResourceUuid)
-        console.log('parentResourceUuid : ' + node.parentResourceUuid)
-        console.log('node:')
-        console.log(node)
-        console.log('appResource:appResource')
-        console.log(this.appResource)
         this.items.push({
           actionType: '1',
           actionTypeName: '',
@@ -298,12 +269,8 @@ export default {
           uuid: ''
         })
       }
-      console.log('parentItem........')
-      console.log(JSON.stringify(this.parentItem))
       for (let index = 0; index < this.parentItem.length; index++) {
         var uuid = this.parentItem[index]
-        console.log('appResource:appResource')
-        console.log(this.appResource)
         this.items.push({
           actionType: '1',
           actionTypeName: '',
@@ -319,8 +286,6 @@ export default {
           uuid: ''
         })
       }
-      console.log('this.items........')
-      console.log(JSON.stringify(this.items))
       this.saveItem.authorityExtList = this.items
       this.saveItem.appCode = this.appResource
       this.saveItem.resourceType = '2'

@@ -128,7 +128,6 @@ export default {
       getResourceList(resourceQuery)
         .then(
             function (result) {
-              console.log('<<<<<getAppList:' + result)
               result.unshift(this.emptyData)
               this.appResourceList = result
             }.bind(this)
@@ -146,12 +145,9 @@ export default {
       this.listPageParm.appCode = this.appResource
       this.listPageParm.resourceName = this.searchServiceTxt
       this.listPageParm.roleUuid = this.form.uuid
-      console.log('listPageParm:' + this.searchServiceTxt)
-      console.log(this.listPageParm)
       getServiceListPage(this.listPageParm)
         .then(
             function (result) {
-              console.log('<<<<<getServiceList:' + result)
               this.tableData = result.resource
               this.total = result.pageCount
             }.bind(this)
@@ -163,7 +159,6 @@ export default {
         )
     },
     cancelEvent () {
-      console.log('cancelEvent')
       this.$emit('canelDialogEvent')
     },
     handleSave () {
@@ -171,9 +166,6 @@ export default {
         this.items = []
         for (let index = 0; index < this.multipleSelection.length; index++) {
           const data = this.multipleSelection[index]
-          console.log('handleSave.....SAVE')
-          console.log(data.uuid)
-          console.log(this.form.uuid)
           this.items.push({
             actionType: '1',
             authority: true,
@@ -202,13 +194,10 @@ export default {
       }
     },
     handleSelectionChange (val) {
-      console.log('handleSelectionChange')
-      console.log(val)
       this.multipleSelection = val
     },
     // 改变分页大小
     handleSizeChange (val) {
-      console.log('handleSelectionChange:' + val)
       this.pageSize = val
       this.listPageParm.pageSize = this.pageSize
       this.listPageParm.currentPage = this.currentPage
@@ -216,7 +205,6 @@ export default {
     },
     // 跳转页数
     handleCurrentChange (val) {
-      console.log('handleCurrentChange:' + val)
       this.currentPage = val
       this.listPageParm.pageSize = this.pageSize
       this.listPageParm.currentPage = this.currentPage
@@ -226,11 +214,9 @@ export default {
       this.getServiceList()
     },
     refresh () {
-      console.log('refresh uuid:' + this.form.uuid)
       this.handleFilter()
     },
     reset () {
-      console.log('addSevice reset')
       this.appResource = ''
       this.searchServiceTxt = ''
       this.total = 0

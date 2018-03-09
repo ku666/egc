@@ -243,14 +243,11 @@ export default {
             getRoleUserFilter(this.form.uuid)
               .then(
                 function (result) {
-                  console.log('获取筛选数据：' + result.pageCount)
                   this.userFilterList = result.roleUserVoList
                   if (result.pageCount > 0) {
                     for (var i = 0; i < this.userFilterList.length; i++) {
-                      console.log('改变isDisabled状态：' + this.userFilterList[i].userUuid)
                       this.disableUser(this.userFilterList[i].userUuid)
                     }
-                    console.log(this.tmpRoleUserList)
                   }
                   this.roleUserList = this.tmpRoleUserList.filter(function (item) { return !item.isDisabled })
                 }.bind(this)
@@ -552,7 +549,6 @@ export default {
       this.$emit('listenToCloseEvent')
     },
     createAppEvent (data) {
-      console.log('createAppEvent Start')
       createAuthority(data)
         .then(
           function (result) {
@@ -562,11 +558,9 @@ export default {
             })
             this.$refs.addapp.refresh()
             this.query.roleId = this.form.uuid
-            console.log(this.query)
             getRoleAssResource(this.query)
               .then(
                 function (result) {
-                  console.log(JSON.stringify(result))
                   this.roleResourceData = result
                 }.bind(this)
               )
@@ -582,13 +576,10 @@ export default {
             console.log(error)
           }
         )
-      console.log('createAppEvent End')
       this.dialogFormVisible = false
       this.showApp = false
     },
     createServiceEvent (data) {
-      console.log('createServiceEvent Start')
-      console.log(JSON.stringify(data))
       createService(data)
           .then(
             function (result) {
@@ -598,11 +589,9 @@ export default {
               })
               this.$refs.addservice.refresh()
               this.query.roleId = this.form.uuid
-              console.log(this.query)
               getRoleAssResource(this.query)
                 .then(
                   function (result) {
-                    console.log(JSON.stringify(result))
                     this.roleResourceData = result
                   }.bind(this)
                 )
@@ -613,12 +602,10 @@ export default {
                 )
             }.bind(this)
           )
-      console.log('createServiceEvent End')
       this.dialogFormVisible = false
       this.showService = false
     },
     createRegionalDataEvent (data) {
-      console.log('createRegionalDataEvent Start')
       createService(data)
           .then(
             function (result) {
@@ -628,11 +615,9 @@ export default {
               })
               this.$refs.addregionaldata.refresh()
               this.query.roleId = this.form.uuid
-              console.log(this.query)
               getRoleAssResource(this.query)
                 .then(
                   function (result) {
-                    console.log(JSON.stringify(result))
                     this.roleResourceData = result
                   }.bind(this)
                 )
@@ -648,12 +633,10 @@ export default {
               console.log(error)
             }
           )
-      console.log('createRegionalDataEvent End')
       this.dialogFormVisible = false
       this.showRegionalData = false
     },
     cancelEvent () {
-      console.log('dialog cancelEvent Start')
       this.dialogFormVisible = false
       this.showApp = false
       this.showService = false
@@ -667,10 +650,8 @@ export default {
       if (this.$refs.addservice != null && this.$refs.addservice !== undefined) {
         this.$refs.addservice.reset()
       }
-      console.log('dialog cancelEvent End')
     },
     changeRoleEditDiaLogEvent () {
-      console.log('dialog changeRoleEditDiaLogEvent Start')
       if (this.$refs.addapp != null && this.$refs.addapp !== undefined) {
         this.$refs.addapp.reset()
       }
@@ -680,7 +661,6 @@ export default {
       if (this.$refs.addservice != null && this.$refs.addservice !== undefined) {
         this.$refs.addservice.reset()
       }
-      console.log('dialog changeRoleEditDiaLogEvent End')
     },
     trim (string) {
       return string.replace(/(^\s*)|(\s*$)/g, '')
@@ -691,7 +671,6 @@ export default {
   },
   watch: {
     'form.uuid': function (newVal, oldVal) {
-      console.log('watch: form!!!!!!!!!!!!!!!!')
       this.subActiveName = '0'
       this.showSummary = true
       this.showUserGroup = false
@@ -830,14 +809,6 @@ export default {
           title: 'URI',
           prop: 'resourceUrl'
         },
-        // {
-        //   title: '操作类型',
-        //   prop: 'actionTypeName'
-        // },
-        // {
-        //   title: '安装位置',
-        //   prop: 'houseOrgName'
-        // },
         {
           title: '区域',
           prop: 'regionName'
