@@ -219,3 +219,17 @@ export default {
   }
 }
 </script>
+<style scoped>
+  .ui-common >>> .el-table__header-wrapper {
+    height: 50px !important;
+  }
+  .el-table__header {
+    height: 50px !important;
+  }
+  .el-table >>> th {
+    padding: 0 !important;
+  }
+  .el-table >>> td {
+    padding: 0 !important;
+  }
+</style>
