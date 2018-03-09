@@ -188,14 +188,14 @@ export default {
 
     // 跳转页数
     handleCurrentChange (val) {
-      this.searchConditionList.PageNo = val
+      this.searchConditionList.pageNo = val
       this.loadData()
     },
     indexMethod (index) {
       console.log('indexMethod : ' + index)
       var pageSize = this.searchConditionList.pageSize
       if (!pageSize) pageSize = 10
-      var page = this.searchConditionList.PageNo
+      var page = this.searchConditionList.pageNo
       if (!page) page = 1
       var computedIndex = pageSize * (page - 1) + index + 1
       console.log('computedIndex : ' + computedIndex)
