@@ -102,22 +102,6 @@
       trim (string) {
         return string.replace(/(^\s*)|(\s*$)/g, '')
       },
-      // // 校验角色名的唯一性
-      // validateName (roleUuid, roleName) {
-      //   console.log('start validating...' + roleUuid + roleName)
-      //   checkRoleName(roleUuid, roleName)
-      //     .then(
-      //       function (result) {
-      //         console.log('<<<<<roleNameFlag:' + result)
-      //         this.roleNameFlag = result
-      //       }.bind(this)
-      //     )
-      //     .catch(
-      //       function (error) {
-      //         console.log(error)
-      //       }
-      //     )
-      // },
       handleSave (form) {
         this.$refs[form].validate((valid) => {
           if (valid) {

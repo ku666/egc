@@ -74,15 +74,12 @@
       },
       handleClickEdit (rowIndex) {
         this.$emit('listenToEditEvent', this.tableData[rowIndex])
-        console.log('gridlist 编辑' + rowIndex + '行')
       },
       handleClickView (rowIndex) {
         this.$emit('listenToViewEvent', this.tableData[rowIndex])
-        console.log('gridlist 查看' + rowIndex + '行')
       },
       handleClickSelect (row) {
         this.$emit('listenToClickEvent', this.tableData[row])
-        console.log('gridlist 选择' + row + '行')
       }
     },
     created () {

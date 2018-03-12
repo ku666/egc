@@ -18,7 +18,7 @@ name	type	mgmt_ip	status	desc	serial_no	 bios_version	asset_no	vendor	vendor	dep
         </el-form-item>
       </template>
       <el-form-item label="设备名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.name"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.nename"></el-input>
       </el-form-item>
       <el-form-item label="设备类型/型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.type"></el-input>
@@ -99,12 +99,26 @@ export default {
   methods: {
     callBackCloseDialogEvent () {
       this.$emit('closeDialogEvent')
+    },
+    setCore () {
+      if (this.netDeviceDetails.isCore === 1) {
+        this.netDeviceDetails.isCore = '是'
+      } else if (this.netDeviceDetails.isCore === 0) {
+        this.netDeviceDetails.isCore = '否'
+      }
     }
   },
   watch: {
     netDeviceDetails (newValue, oldValue) {
       this.netDeviceDetails = newValue
+      this.setCore()
+    },
+    'this.netDeviceDetails.isCore': function (newValue, oldValue) {
+
     }
+  },
+  mounted () {
+    this.setCore()
   }
 }
 </script>

@@ -89,7 +89,7 @@
         <el-input class="upgrade_el-input" v-model="auServerDetails.serviceLevel"></el-input>
       </el-form-item>
       <el-form-item label="服务到期时间" :label-width="formLabelWidth">
-        <el-date-picker v-model="auServerDetails.serviceDuring" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptionsStart" :editable="false" style="width:186px;" @change="selectDuring">
+        <el-date-picker v-model="auServerDetails.serviceDuring" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptionsStart" :editable="false" style="width:186px;">
         </el-date-picker>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
@@ -233,9 +233,6 @@ export default {
     },
     callBackCloseDialogEvent () {
       this.$emit('saveServInfoEvent', this.auServerDetails, 'cancel')
-    },
-    selectDuring () {
-      console.log('---------->' + this.auServerDetails.serviceDuring)
     }
   },
   watch: {

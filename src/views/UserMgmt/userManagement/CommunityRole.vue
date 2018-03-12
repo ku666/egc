@@ -142,7 +142,6 @@
             function (result) {
               this.communityList = result
               this.total = result.pageCount
-              // console.log('小区列表：' + JSON.stringify(result))
             }.bind(this)
           )
           .catch(
@@ -169,8 +168,6 @@
           )
       },
       roleViewEvent (data) {
-        console.log(data)
-        console.log('role：编辑了第' + data.roleName + '行')
         this.showCreate = false
         this.showGrid = true
         this.roleId = data.uuid
@@ -182,7 +179,6 @@
               this.subUserData = result.roleUserPageVo
               this.subResourceData = result.roleAuthResourcePageVo
               this.roleForm.roleName = result.roleBaseVo.roleName
-              console.log(this.roleForm.roleName)
               this.roleForm.remark = result.roleBaseVo.remark
               this.roleForm.uuid = result.roleBaseVo.uuid
               this.roleName = result.roleBaseVo.roleName
@@ -193,28 +189,23 @@
               console.log(error)
             }
           )
-        // this.$refs.roleedit.changeRoleEditDiaLogEvent()
       },
       roleAddEvent (data) {
-        console.log('role：添加了 ' + data)
         this.getRoleListFunction()
         this.dialogFormVisible = false
         this.showCreate = false
       },
       handleRoleCurrentChange (val) {
         this.query.currentPage = val
-        // this.query.roleId = this.form.uuid
         this.getRoleListFunction()
       },
       handleRoleSizeChange (val) {
         this.query.pageSize = val
-        // this.query.roleId = this.form.uuid
         this.getRoleListFunction()
       },
       handleFilterReset () {
         this.query.courtUuid = ''
         this.roleData.roleBaseVoList = ''
-        // this.getRoleListFunction()
       }
     },
     created: function () {

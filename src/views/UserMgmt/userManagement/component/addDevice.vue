@@ -187,22 +187,15 @@ export default {
           title: '供应商',
           prop: 'providerCodeName'
         }
-        // ,
-        // {
-        //   title: '安装位置',
-        //   prop: 'location'
-        // }
       ]
     }
   },
   mounted () {
-    console.log('mounted')
     this.loadData()
     this.appResource = '4'
   },
   methods: {
     loadData () {
-      console.log('loadData')
       this.getResourceTypeList()
       this.getDeviceList()
       this.getProviders()
@@ -212,7 +205,6 @@ export default {
     getResourceTypeList () {
       // 设备组，设备筛选
       var filterArray = []
-      console.log('loadData getResourceTypeList Start : ' + this.dictData.resourceTypeDict)
       getResourceTypeOptions(this.dictData)
         .then(
           function (result) {
@@ -223,44 +215,35 @@ export default {
               }
             }
             this.resourceList = filterArray
-            console.log('loadData getResourceTypeList successfully')
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error)
         })
-      console.log('loadData getResourceTypeList end')
     },
     // 操作类型
     getActionTypeOptionsList () {
-      console.log('loadData getHandelTypeList Start : ' + this.dictData.actTypeDict)
       getActionTypeOptions(this.dictData)
         .then(
           function (result) {
             this.tableDataHandleType = result
-            console.log('loadData getActionTypeOptions successfully')
-            console.log(result)
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error)
         })
-      console.log('loadData getHandelTypeList End')
     },
     getDeviceList () {
-      console.log('loadData getDeviceList Start')
       getDeviceList()
         .then(
           function (result) {
             this.deviceList = result
             result.unshift(this.emptydeviceTypeData)
-            console.log('loadData getDeviceList successfully')
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error)
         })
-      console.log('loadData getDeviceList End')
     },
     getProviders () {
       getProviderList(this.providerVal)
@@ -268,8 +251,6 @@ export default {
           function (result) {
             this.providerList = result
             result.unshift(this.emptyProviderData)
-            console.log('成功添加供应商')
-            console.log(result)
           }.bind(this)
         )
         .catch(function (error) {
@@ -286,11 +267,9 @@ export default {
       this.items = []
 
       // 保存选择的设备
-      console.log('保存选择的设备 SaveData....')
       if (this.multipleSelection && (this.multipleSelection.length > 0)) {
         for (let index = 0; index < this.multipleSelection.length; index++) {
           var node = this.multipleSelection[index]
-          console.log(node)
           this.items.push(node.uuid.toString())
         }
       } else {
@@ -310,8 +289,6 @@ export default {
       // 保存所选择的操作权限
       savedata.actionTypeList = this.actionSelectedType
       savedata.resourceUuidList = this.items
-      console.log('call savedata....')
-      console.log(savedata)
       this.$emit('createDeviceAuthorityEvent', savedata)
     },
     handleClick (row) {
@@ -319,12 +296,6 @@ export default {
     },
     handleSearch () {
       // 搜索
-      console.log('handleSearch start')
-      console.log('uuid start:' + this.form.uuid)
-      console.log('resource type:')
-      console.log('resourceType:' + this.appResource)
-      console.log('deviceType:' + this.device)
-      console.log('providerCode:' + this.provider)
       this.listParam.roleDeviceQueryRequestVo.uuid = this.form.uuid
       this.listParam.roleDeviceQueryRequestVo.roleUuid = this.form.uuid
       this.listParam.roleDeviceQueryRequestVo.resourceType = this.appResource
@@ -332,24 +303,19 @@ export default {
       this.listParam.roleDeviceQueryRequestVo.providerCode = this.provider
       this.listParam.pageSize = this.pageSize
       this.listParam.currentPage = this.currentPage
-      console.log(JSON.stringify(this.listParam))
       getDeviceListPage(this.listParam)
         .then(
           function (result) {
             this.tableData = result.resourceVoList
             this.total = result.total
-            console.log('搜索......successfully')
-            console.log(result)
           }.bind(this)
         )
         .catch(function (error) {
           console.log(error)
         })
-      console.log('handleSearch end')
     },
     // 改变分页大小
     handleSizeChange (val) {
-      console.log('handleSelectionChange:' + val)
       this.pageSize = val
       this.listParam.pageSize = this.pageSize
       this.listParam.currentPage = this.currentPage
@@ -357,42 +323,33 @@ export default {
     },
     // 跳转页数
     handleCurrentChange (val) {
-      console.log('handleCurrentChange:' + val)
       this.currentPage = val
       this.listParam.pageSize = this.pageSize
       this.listParam.currentPage = this.currentPage
       this.handleSearch()
     },
     cancelEvent () {
-      console.log('cancelEvent')
       this.$emit('canelDialogEvent')
     },
     handleTypeSelectionChange (val) {
       this.multipleTableHandleType = val
-      console.log(this.multipleTableHandleType)
     },
     handleSelectionChange (val) {
       this.multipleSelection = val
-      console.log(this.multipleSelection)
     },
     handleCheckChange (data, checked, indeterminate) {
-      console.log('checkchange data: ' + data + ', checked: ' + checked + ', indeterminate:' + indeterminate)
       if (checked) {
         this.nodeData = data
-        console.log(data.label)
       }
     },
     handleCheckedChange (value) {
       this.operationType = value
-      console.log(this.operationType)
     },
     refresh () {
-      console.log('refresh uuid:' + this.form.uuid)
       this.handleSearch()
       this.actionSelectedType = []
     },
     reset () {
-      console.log('addDevice reset')
       this.appResource = '4'
       this.device = ''
       this.provider = ''

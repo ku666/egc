@@ -37,7 +37,6 @@
 import {
   createUserGroup,
   checkUserGroupName
-  // listUserType
 } from '@/views/UserMgmt/userManagement/apis'
 
 export default {
@@ -82,7 +81,6 @@ export default {
     handleCancel (createForm) {
       this.createForm = {
         usergroupName: undefined,
-        // parentUsergroupName: undefined,
         remark: undefined,
         uuid: undefined,
         userType: undefined

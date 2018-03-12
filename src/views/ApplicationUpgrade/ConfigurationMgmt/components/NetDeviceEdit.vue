@@ -16,7 +16,7 @@
         </el-form-item>
       </template>
       <el-form-item label="设备名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.name"></el-input>
+        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.nename"></el-input>
       </el-form-item>
       <el-form-item label="设备类型/型号" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="netDeviceDetails.type"></el-input>
@@ -46,7 +46,11 @@
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.deployment" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="是否核心" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="netDeviceDetails.isCore" :maxlength="maxlength"></el-input>
+        <!-- <el-input class="upgrade_el-input" v-model="netDeviceDetails.isCore" :maxlength="maxlength"></el-input> -->
+        <el-select v-model="netDeviceDetails.isCore" placeholder="请选择" clearable style="width:186px;">
+          <el-option v-for="item in coreList" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="外网IP" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.internetIp" :maxlength="maxlength"></el-input>
@@ -64,7 +68,9 @@
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceLevel" :maxlength="maxlength"></el-input>
       </el-form-item>
       <el-form-item label="服务到期时间" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceDuring" :maxlength="maxlength"></el-input>
+        <!-- <el-input class="upgrade_el-input" v-model="netDeviceDetails.serviceDuring" :maxlength="maxlength"></el-input> -->
+        <el-date-picker v-model="netDeviceDetails.serviceDuring" type="datetime" placeholder="选择日期时间"  value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptionsStart" :editable="false" style="width:186px;">
+        </el-date-picker>
       </el-form-item>
       <el-form-item label="描述" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="netDeviceDetails.remark" :maxlength="maxlength"></el-input>
@@ -128,7 +134,22 @@ export default {
       fieldName: '',
       fieldValue: '',
       showAddNewEvent: false,
-      tempExtDataList: undefined
+      tempExtDataList: undefined,
+      pickerOptionsStart: {
+        disabledDate (time) {
+          return time.getTime() < new Date() - 3600 * 1000 * 24
+        }
+      },
+      coreList: [
+        {
+          value: 1,
+          label: '是'
+        },
+        {
+          value: 0,
+          label: '否'
+        }
+      ]
     }
   },
   methods: {
@@ -193,6 +214,9 @@ export default {
   watch: {
     netDeviceDetails (newValue, oldValue) {
       this.netDeviceDetails = newValue
+    },
+    'this.netDeviceDetails.coreList': function (newValue, oldValue) {
+      console.log('--------> ' + this.netDeviceDetails.coreList)
     }
   },
   mounted () {

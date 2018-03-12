@@ -2,7 +2,6 @@
   <div>
     <el-tabs v-model='subActiveName' @tab-click='handleSubTabClick'>
       <el-tab-pane label='用户组概要' name='0'></el-tab-pane>
-      <!-- <el-tab-pane label='下属用户组' name='1'></el-tab-pane> -->
       <el-tab-pane label='直属用户' name='2'></el-tab-pane>
       <el-tab-pane label='关联角色' name='3'></el-tab-pane>
     </el-tabs>
@@ -151,7 +150,6 @@ export default {
   methods: {
     getParUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
       getRoleUserGroup(1)
         .then(
           function (result) {
@@ -171,7 +169,6 @@ export default {
             .catch(function (error) {
               console.log(error)
             })
-            console.log('用户组：' + JSON.stringify(result))
           }.bind(this)
         )
         .catch(
@@ -182,7 +179,6 @@ export default {
     },
     getDirUsergroupOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log(this.query.usergroupUuid)
       getRoleUserGroup(1)
         .then(
           function (result) {
@@ -202,7 +198,6 @@ export default {
             .catch(function (error) {
               console.log(error)
             })
-            console.log('用户组：' + JSON.stringify(result))
           }.bind(this)
         )
         .catch(
@@ -215,13 +210,11 @@ export default {
       for (var i = 0; i < this.tmpUserGroupList.length; i++) {
         if (usergroupUuid === this.tmpUserGroupList[i].uuid) {
           this.tmpUserGroupList[i].isDisabled = true
-          console.log('success')
         }
       }
     },
     getUserOptionList () {
       this.query.usergroupUuid = this.usergroupUuid
-      console.log('userType: ' + this.editForm.userType)
       getRoleUser(1, this.editForm.userType)
         .then(
           function (result) {
@@ -230,14 +223,12 @@ export default {
             .then(
               function (result) {
                 this.userFilterList = result.usergroupUserVoList
-                console.log('清单：' + JSON.stringify(this.userFilterList))
                 if (result.pageCount > 0) {
                   for (var i = 0; i < this.userFilterList.length; i++) {
                     this.disableUser(this.userFilterList[i].userUuid)
                   }
                 }
                 this.userList = this.tmpUserList.filter(function (item) { return !item.isDisabled })
-                console.log('筛选后清单：' + JSON.stringify(this.userList))
               }.bind(this)
             )
             .catch(function (error) {
@@ -255,7 +246,6 @@ export default {
       for (var i = 0; i < this.tmpUserList.length; i++) {
         if (userUuid === this.tmpUserList[i].uuid) {
           this.tmpUserList[i].isDisabled = true
-          console.log(i)
         }
       }
     },
@@ -265,7 +255,6 @@ export default {
         .then(
           function (result) {
             this.tmpRoleList = result
-            console.log(this.tmpRoleList)
             getUsergroupRoleFilterList(this.usergroupUuid)
             .then(
               function (result) {
@@ -293,7 +282,6 @@ export default {
       for (var i = 0; i < this.tmpRoleList.length; i++) {
         if (roleUuid === this.tmpRoleList[i].uuid) {
           this.tmpRoleList[i].isDisabled = true
-          console.log('success')
         }
       }
     },
@@ -329,7 +317,6 @@ export default {
       this.queryUser.usergroupUuid = this.usergroupUuid
       this.query.usergroupUuid = this.usergroupUuid
       this.queryUser.userUuid = data
-      console.log('添加用户' + JSON.stringify(this.queryUser))
       createUserUsergroup(this.queryUser)
         .then(
           function (result) {
@@ -337,7 +324,6 @@ export default {
             getDirUserList(this.query)
               .then(
                 function (result) {
-                  console.log('result:' + JSON.stringify(result))
                   this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
                   this.dirUserDetailData.pageCount = result.pageCount
                 }.bind(this)
@@ -359,7 +345,6 @@ export default {
       this.queryRole.usergroupUuid = this.usergroupUuid
       this.query.usergroupUuid = this.usergroupUuid
       this.queryRole.roleUuid = data
-      console.log('添加角色' + JSON.stringify(this.queryRole))
       createRoleUserGroup(this.queryRole)
         .then(
           function (result) {
@@ -369,7 +354,6 @@ export default {
                 function (result) {
                   this.roleDetailData.usergroupRoleVoList = result.usergroupRoleVoList
                   this.roleDetailData.pageCount = result.pageCount
-                  console.log(result)
                 }.bind(this)
               )
               .catch(
@@ -393,7 +377,6 @@ export default {
       this.showRole = tab.name === '3'
     },
     userDeleteEvent (data) {
-      console.log(JSON.stringify(data))
       deleteDirUser(data.usergroupUserUuid)
         .then(
           function (result) {
@@ -406,7 +389,6 @@ export default {
             getDirUserList(this.query)
               .then(
                 function (result) {
-                  console.log('result:' + JSON.stringify(result))
                   this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
                   this.dirUserDetailData.pageCount = result.pageCount
                 }.bind(this)
@@ -416,7 +398,6 @@ export default {
                   console.log(error)
                 }
               )
-            console.log('解除了直属用户：' + data.usergroupUserUuid)
           }.bind(this)
         )
         .catch(
@@ -427,7 +408,6 @@ export default {
         )
     },
     roleDeleteEvent (data) {
-      console.log(JSON.stringify(data))
       deleteAssRole(data.usergroupRoleUuid)
         .then(
           function (result) {
@@ -442,7 +422,6 @@ export default {
                 function (result) {
                   this.roleDetailData.usergroupRoleVoList = result.usergroupRoleVoList
                   this.roleDetailData.pageCount = result.pageCount
-                  console.log(result)
                 }.bind(this)
               )
               .catch(
@@ -450,7 +429,6 @@ export default {
                   console.log(error)
                 }
               )
-            console.log('解除了关联角色：' + data.usergroupRoleUuid)
           }.bind(this)
         )
         .catch(
@@ -491,7 +469,6 @@ export default {
       getDirUserList(this.query)
         .then(
           function (result) {
-            console.log('result:' + JSON.stringify(result))
             this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
             this.dirUserDetailData.pageCount = result.pageCount
           }.bind(this)
@@ -506,11 +483,9 @@ export default {
     handleUserCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
-      console.log('翻页：' + JSON.stringify(this.query))
       getDirUserList(this.query)
         .then(
           function (result) {
-            console.log('result:' + JSON.stringify(result))
             this.dirUserDetailData.usergroupUserVoList = result.usergroupUserVoList
             this.dirUserDetailData.pageCount = result.pageCount
           }.bind(this)
@@ -529,7 +504,6 @@ export default {
           function (result) {
             this.roleDetailData.usergroupRoleVoList = result.usergroupRoleVoList
             this.roleDetailData.pageCount = result.pageCount
-            console.log(result)
           }.bind(this)
         )
         .catch(
@@ -542,13 +516,11 @@ export default {
     handleRoleCurrentChange (val) {
       this.query.currentPage = val
       this.query.usergroupUuid = this.usergroupUuid
-      console.log('翻页：' + JSON.stringify(this.query))
       getUsergroupRoleList(this.query)
         .then(
           function (result) {
             this.roleDetailData.usergroupRoleVoList = result.usergroupRoleVoList
             this.roleDetailData.pageCount = result.pageCount
-            console.log(result)
           }.bind(this)
         )
         .catch(
@@ -569,7 +541,6 @@ export default {
   },
   watch: {
     'editForm.uuid': function (newVal, oldVal) {
-      console.log('watch: editForm!!!!!!!!!!!!!!!!')
       this.subActiveName = '0'
       this.showSummary = true
       this.showDirUserGroup = false

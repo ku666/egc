@@ -35,7 +35,7 @@
       <el-col style='height: 100%;'>
         <div style="margin-top: 15px; max-height: 100%;"> 
           <el-table :data="softwarePackListData" stripe border style="margin-top: 15px; height: 700px;overflow-y: scroll;">
-            <el-table-column  type="index" label="序号" width="50">
+            <el-table-column  type="index" label="序号" width="50" :index="indexMethod">
             </el-table-column>
             <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable> 
             </el-table-column>
@@ -575,6 +575,7 @@ export default {
       this.searchConditionList.version = ''
       this.searchConditionList.provider = ''
       this.searchConditionList.key = ''
+      this.loadData()
     },
     _handleClearRegister (detail) {
       detail.name = ''
@@ -1029,6 +1030,16 @@ export default {
     handleCurrentChange (val) {
       this.searchConditionList.pageNo = val
       this.loadData()
+    },
+    indexMethod (index) {
+      console.log('indexMethod : ' + index)
+      var pageSize = this.searchConditionList.pageSize
+      if (!pageSize) pageSize = 10
+      var page = this.searchConditionList.pageNo
+      if (!page) page = 1
+      var computedIndex = pageSize * (page - 1) + index + 1
+      console.log('computedIndex : ' + computedIndex)
+      return computedIndex
     },
     _callDownTemplate () {
       console.log('download')

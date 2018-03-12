@@ -175,7 +175,6 @@
           .then(
             function (result) {
               this.userTypeOptions = result
-              console.log(this.userTypeOptions)
             }.bind(this)
           )
           .catch(
@@ -185,8 +184,6 @@
           )
       },
       roleDeleteEvent (data) {
-        console.log(data)
-        console.log('role：删除了第' + data.roleName + '行')
         this.roleId = data.uuid
         deleteRole(data.uuid)
           .then(
@@ -202,12 +199,10 @@
           .catch(
             function (error) {
               this.$message.error(error.response.data.message)
-              console.log('error:' + JSON.stringify(error.response.data.message))
             }
           )
       },
       roleEditEvent (data) {
-        console.log('role：编辑了第' + data.roleName + '行')
         this.showCreate = false
         this.showGrid = true
         this.roleId = data.uuid

@@ -255,6 +255,7 @@ export default {
       this.$refs[formName].validate(
         (valid) => {
           if (valid) {
+            if (this.sendModeRadio === '1') this.sendSMSForm.sendTime = null
             sendSMS(this.sendSMSForm).then(result => this.$msgbox(result, '返回执行结果')).catch(error => console.log(error))
           } else {
             return false

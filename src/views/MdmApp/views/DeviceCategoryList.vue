@@ -377,7 +377,7 @@ export default {
 @import "~@/views/MdmApp/assets/css/index.less";
 @import "~@/views/MdmApp/assets/css/font-awesome/css/font-awesome.min.css";
 </style>
-<style >
+<style scoped>
 @font-face {
   font-family: "FontAwesome";
   src: url("~@/views/MdmApp/assets/css/font-awesome/fonts/fontawesome-webfont.eot?v=4.7.0");
@@ -397,10 +397,10 @@ export default {
 .el-table {
   border: none;
 }
-.el-table__expanded-cell[class*="cell"] {
+.el-table /deep/ .el-table__expanded-cell[class*="cell"] {
   padding: 0px 0px 0px 50px;
 }
-.el-table .child-row td {
+.el-table /deep/ .child-row td {
   padding: 0px;
 }
 </style>
