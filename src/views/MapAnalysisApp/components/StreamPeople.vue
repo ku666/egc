@@ -127,6 +127,8 @@ export default {
       perErrImg: errImg, // 图表错误提示
       startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
       endDate: new Date(), // 结束时间
+      lastStartTime: null, // 上一个开始时间
+      lastEndTime: null, // 上一个结束时间
       myChart: null,
       myChartNode: null,
       canvasNode: null,
@@ -188,7 +190,11 @@ export default {
       this.myChart.setOption(this.echartsData())
       // 判断时间是否选择正确
       this.onTimeJudgment()
-      if (this.isRequest) this.getPerData()
+      if (!this.isRequest) {
+        this.startDate = this.lastStartTime
+        this.endDate = this.lastEndTime
+      }
+      this.getPerData()
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
@@ -435,6 +441,8 @@ export default {
             })
             this.isRequest = false
           } else {
+            this.lastStartTime = this.startDate
+            this.lastEndTime = this.endDate
             this.isRequest = true
           }
           break
@@ -447,6 +455,8 @@ export default {
             this.isRequest = false
           } else {
             this.isRequest = true
+            this.lastStartTime = this.startDate
+            this.lastEndTime = this.endDate
           }
           break
         case '2':
@@ -462,7 +472,11 @@ export default {
       this.parameter.pageSize = val
       this.parameter.currentPage = 1
       this.onTimeJudgment()
-      if (this.isRequest) this.getPgingData()
+      if (!this.isRequest) {
+        this.startDate = this.lastStartTime
+        this.endDate = this.lastEndTime
+      }
+      this.getPgingData()
     },
     /**
     * @description 分页组件当前页变化 *
@@ -471,7 +485,11 @@ export default {
     onCurrentChange: function (val) {
       this.parameter.currentPage = val
       this.onTimeJudgment()
-      if (this.isRequest) this.getPgingData()
+      if (!this.isRequest) {
+        this.startDate = this.lastStartTime
+        this.endDate = this.lastEndTime
+      }
+      this.getPgingData()
     },
     /**
     * @description 获取人流信息(图表) *
