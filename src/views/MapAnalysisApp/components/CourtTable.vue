@@ -46,9 +46,8 @@ export default {
      * @param {Event} e 双击事件
      */
     onClickRowHandler: function (row, e) {
-      if (e.target.className === 'cell') {
-        this.$refs['courttable'].toggleRowExpansion(row)
-      }
+      if (e.target.className === 'el-icon el-icon-arrow-right') return
+      this.$refs['courttable'].toggleRowExpansion(row)
     }
   }
 }

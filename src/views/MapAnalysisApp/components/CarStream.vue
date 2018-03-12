@@ -112,6 +112,7 @@ export default {
         startTime: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
         endTime: new Date() // 结束时间
       },
+      queryParam: null, // 分业接口验证通过的查询参数
       courtInfo: {}, // 小区信息
       carStreamData: [], // 后端请求回的车流信息
       mapDataList: { // 车流信息映射到echarts的数据
@@ -272,13 +273,15 @@ export default {
     */
     onHandleCurrentChange: function (val) {
       this.currentPage = val
+      this.form.startTime = new Date(this.queryParam.startTime)
+      this.form.endTime = new Date(this.queryParam.endTime)
       this.getCarAccessPageList()
     },
     /**
     * @description 点击查询按钮，在表格页面请求表格数据，在图表页请求echarts图表数据
     */
     onSubmitForm: function (formName) {
-      if (this.onDatePickRangeConfrim() === 1) return
+      if (this.onDatePickRangeConfrim()) return
       if (this.isShowTable) {
         this.pageSize = 10
         this.currentPage = 1
@@ -295,7 +298,7 @@ export default {
     getCourtCarAccessInfo: function () {
       if (this.onDatePickRangeConfrim()) return
       this.canLeaveChart = false
-      var data = this.queryParam()
+      var data = this.queryParamMethod()
       getCourtCarAccessInfo(data).then((res) => {
         if (res.data.code === '00000') {
           console.log(LOG_TAG + ' 成功获取小区echarts图表展示车流信息  ')
@@ -322,9 +325,9 @@ export default {
     */
     getCarAccessPageList: function () {
       if (this.onDatePickRangeConfrim()) return
-      var queryParam = this.queryParam()
-      queryParam = Object.assign(queryParam, { pageSize: this.pageSize, currentPage: this.currentPage })
-      getCarAccessPageList(queryParam).then(res => {
+      var queryParam = this.queryParamMethod()
+      this.queryParam = Object.assign(queryParam, { pageSize: this.pageSize, currentPage: this.currentPage })
+      getCarAccessPageList(this.queryParam).then(res => {
         if (res.data.code === '00000') {
           console.log(LOG_TAG + ` 获取第${this.currentPage}页小区车流信息`)
           this.totalRows = res.data.data.totalRows
@@ -351,7 +354,7 @@ export default {
     * @description 获取查询参数
     * @returns {Object} 表单字符
     */
-    queryParam: function () {
+    queryParamMethod: function () {
       return Object.assign({}, this.form, {
         startTime: this.timeFomate(this.form.startTime),
         endTime: this.timeFomate(this.form.endTime)
@@ -386,8 +389,7 @@ export default {
         case '0':
           if (this.form.endTime.getTime() - this.form.startTime.getTime() > 30 * 24 * 60 * 60 * 1000) {
             this.$message.error({
-              message: '只能查一个月之内的日报表',
-              duration: 1500
+              message: '只能查一个月之内的日报表'
             })
             return true
           }
@@ -395,8 +397,7 @@ export default {
         case '1':
           if (this.form.endTime.getTime() - this.form.startTime.getTime() > 365 * 24 * 60 * 60 * 1000) {
             this.$message.error({
-              message: '只能查一年之内的月报表',
-              duration: 1500
+              message: '只能查一年之内的月报表'
             })
             return true
           }
