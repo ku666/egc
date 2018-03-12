@@ -154,7 +154,7 @@
         var array = file.name.split('_')
         // 判断文件名是否合法
         if (array.length === 4 && this._isValid('deviceTypeDesc', array[0], this.deviceType) && this._isValid('providerName', array[1], this.providerType)) {
-          if (file.size !== 0 && file.size < 52428800) {
+          if (file.size !== 0) {
             file['deviceType'] = this.descArray.deviceTypeDesc
             file['providerCode'] = this.descArray.providerName
             file['firmwareVersion'] = array[2]
@@ -169,7 +169,7 @@
             })
           } else {
             this.$message({
-              message: '导入文件不能为空文件或大于50M的文件',
+              message: '导入文件不能为空文件',
               type: 'error'
             })
           }
