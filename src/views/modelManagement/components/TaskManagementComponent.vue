@@ -388,9 +388,9 @@
                 <span><b>参数值</b></span>
               </el-form-item>
             </el-col>
-            <el-col :span="24" v-for="(item, index) in curPlanExcuteParams.pl" :key="index">
+            <el-col :span="24" v-for="(item, index) in curPlanExcuteParams" :key="index">
               <el-form-item :label="item.n" prop="item">
-                <el-input disabled="disabled" size="small" v-model="item.dv"></el-input>
+                <el-input disabled="disabled" size="small" v-model="item.v"></el-input>
                 <!-- <span>{{item.v}}</span> -->
               </el-form-item>
             </el-col>
@@ -747,11 +747,11 @@
               this.modelPlanList = result.data.items
               this.total = result.data.pageCount
               for (let i = 0; i < this.modelPlanList.length; i++) {
-                if (this.modelPlanList[i].paramList && this.modelPlanList[i].paramList.indexOf('{') > -1 && this.modelPlanList[i].paramList.indexOf('pl') > -1) {
+                if (this.modelPlanList[i].paramList && this.modelPlanList[i].paramList.indexOf('"n"') > -1) {
                   this.modelPlanList[i].paramList = JSON.parse(this.modelPlanList[i].paramList)
-                  this.modelPlanList[i].paramListJson = this.modelPlanList[i].paramList.ep.pl
-                  let length = this.modelPlanList[i].paramListJson.length
-                  console.log(length)
+                  this.modelPlanList[i].paramListJson = this.modelPlanList[i].paramList
+                  // let length = this.modelPlanList[i].paramListJson.length
+                  // console.log(length)
                 }
                 console.log(this.modelPlanList[i].paramList)
               }
@@ -842,7 +842,7 @@
         if (this.modelPlanList[index].paramList && this.modelPlanList[index].paramList !== 'TASKPARAMLIST') {
           // console.log(this.modelPlanList[index].paramList.type())
           let tmpParams = this.modelPlanList[index].paramList
-          this.curPlanExcuteParams = tmpParams.ep
+          this.curPlanExcuteParams = tmpParams
           console.log(this.modelPlanList[index])
         }
       },

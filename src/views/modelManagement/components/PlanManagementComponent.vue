@@ -18,7 +18,7 @@
 
 
       <modelInfoComponenet v-if="$route.params.modelId && !$route.params.versionId" :curModelId="$route.params.modelId"></modelInfoComponenet>
-      <modelVersionInfoComponenet v-if="$route.params.versionId" :curVersionId="$route.params.versionId"></modelVersionInfoComponenet>
+      <modelVersionInfoComponenet v-if="$route.params.versionId" :curVersionId="$route.params.versionId" v-on:listenToChildEvent="showMessageFromChild"></modelVersionInfoComponenet>
 
 
       <el-row :gutter="20" class="margin-top-25">
@@ -26,7 +26,7 @@
           <div>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="">
-                <el-button v-if="$route.params.versionId" :disabled="loadingVersion" @click="showAddModelDialog()" type="primary"
+                <el-button v-if="$route.params.versionId && displayVersionStatus != 'mm.versts.disable'" :disabled="loadingVersion" @click="showAddModelDialog()" type="primary"
                            icon="el-icon-circle-plus-outline">添加计划
                 </el-button>
               </el-form-item>
@@ -721,7 +721,7 @@
     COMMUNITY, getSystemCodeNameMap, getSystemDataByCode, getSystemSettings, startSystemLoading, SYSTEM_EVENTTYPE,
     SYSTEM_FREQUENTTYPE, SYSTEM_MODELCAT, SYSTEM_MODELSTATUS, SYSTEM_MODELSTATUS_ENABLE, SYSTEM_NODETYPE,
     SYSTEM_PLANSTATUS, SYSTEM_PUBLISH_STATUS_PUBLISH, SYSTEM_RUNTIMETYPE, SYSTEM_TASKSOURCE, SYSTEM_TASKTYPE,
-    SYSTEM_VERSIONSTATUS_ENABLE, SYSTEM_VERSSTATUS
+    SYSTEM_VERSIONSTATUS_ENABLE, SYSTEM_VERSIONSTATUS_DISABLE, SYSTEM_VERSSTATUS
   } from '@/views/modelManagement/assets/js/common'
   import {formatDate} from '../assets/js/format_date.js'
   import '../assets/css/common.less'
@@ -827,6 +827,7 @@
         loadingVersion: false,
         loadingStep: false,
         modelPlanList: [],
+        displayVersionStatus: SYSTEM_VERSIONSTATUS_DISABLE,
         multipleSelection: []
       }
     },
@@ -903,6 +904,9 @@
       }
     },
     methods: {
+      showMessageFromChild (data) {
+        this.displayVersionStatus = data
+      },
       imitateProgress (size) {
         this.fileUploadProgress = 10
         var target = this

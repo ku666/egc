@@ -47,6 +47,8 @@ export const SYSTEM_PUBLISH_STATUS_PUBLISH = 'mm.pubsts.publish'
 export const SYSTEM_NODETYPE_STRUCTURED = 'mm.nodtyp.structured'
 export const SYSTEM_NODETYPE_VIDEO = 'mm.nodtyp.video'
 export const SYSTEM_VERSIONSTATUS_ENABLE = 'mm.versts.enable'
+export const SYSTEM_VERSIONSTATUS_DISABLE = 'mm.versts.disable'
+export const SYSTEM_VERSIONSTATUS_INIT = 'mm.versts.init'
 export const SYSTEM_MODELSTATUS_ENABLE = 'mm.modsts.enable'
 export const COMMUNITY = 'community'
 
