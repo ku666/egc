@@ -323,6 +323,7 @@ export default {
      * @param {Number} pageSize 每页条数
      */
     onSizeChange (pageSize) {
+      if (!this.parameter.courtUuid) return
       this.parameter.pageSize = pageSize
       this.parameter.currentPage = 1
       if (this.tempId !== this.courtId && this.tempId !== '') {
@@ -336,6 +337,7 @@ export default {
      * @param {Number} currentPage 当前页数
      */
     onCurrentChange (currentPage) {
+      if (!this.parameter.courtUuid) return
       console.log(LOG_TAG + '当前页数:' + currentPage)
       this.parameter.currentPage = currentPage
       if (this.tempId !== this.courtId && this.tempId !== '') {
