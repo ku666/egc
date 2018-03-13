@@ -268,11 +268,11 @@
           <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec/1000 }}</template>
         </el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           label="执行IP"
           width="180">
           <template slot-scope="scope">{{ scope.row.executorAddress }}</template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column
           label="状态"
