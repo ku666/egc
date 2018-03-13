@@ -165,7 +165,7 @@ export default {
 .house-manager {
   width: 100%;
   height: 100%;
-  min-width: 1000px;
+  min-width: 1670px;
   min-height: 500px;
 }
 
@@ -188,9 +188,5 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-}
-
-.el-table /deep/ .el-table__body{
-  width: 100% !important;
 }
 </style>
