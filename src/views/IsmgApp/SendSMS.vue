@@ -62,7 +62,7 @@
       <div>
         <el-row>
           <el-col :span="6">
-            <span style="float:right">(字符串数组,最多为200个手机号码)</span>
+            <span style="float:right">(号码之间用英文","分割,最多为200个手机号码)</span>
           </el-col>
           <el-col :span="12">
             <el-form-item label=" " prop="mobiles">
@@ -124,7 +124,7 @@ export default {
             callback(new Error('请输入有效的手机号码:' + '某个手机号码为空号，请排查。'))
             break
           }
-          var myreg = /^(((13)|(15)|(18))+\d{9})$/
+          var myreg = /^(((1))+\d{10})$/
           if (!myreg.test(mobiles[index])) {
             this.inputMobilesError = true
             callback(new Error('请输入有效的手机号码:' + mobiles[index] + '出错'))
@@ -256,6 +256,13 @@ export default {
         (valid) => {
           if (valid) {
             if (this.sendModeRadio === '1') this.sendSMSForm.sendTime = null
+            if (this.sendModeRadio === '2' && (this.sendSMSForm.sendTime === '' || this.sendSMSForm.sendTime === null)) {
+              this.$message({
+                type: 'error',
+                message: '请输入定时时间！'
+              })
+              return false
+            }
             sendSMS(this.sendSMSForm).then(result => this.$msgbox(result, '返回执行结果')).catch(error => console.log(error))
           } else {
             return false
