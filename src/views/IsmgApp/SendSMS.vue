@@ -105,38 +105,6 @@
 import { sendSMS } from '@/views/IsmgApp/apis'
 export default {
   data () {
-    var validateInputMobiles = (rule, value, callback) => {
-      this.inputMobilesError = false
-      if (value !== '') {
-        var str = value
-        str = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str
-        str = (str.substring(0, 1) === ',') ? str.substring(1, str.length) : str
-        var mobiles = str.split(',')
-        var index
-        for (index in mobiles) {
-          if (mobiles[index].length !== 11 && mobiles[index].length !== 0) {
-            this.inputMobilesError = true
-            callback(new Error('请输入有效的手机号码:' + mobiles[index] + '出错'))
-            break
-          }
-          if (mobiles[index].length === 0) {
-            this.inputMobilesError = true
-            callback(new Error('请输入有效的手机号码:' + '某个手机号码为空号，请排查。'))
-            break
-          }
-          var myreg = /^(((1))+\d{10})$/
-          if (!myreg.test(mobiles[index])) {
-            this.inputMobilesError = true
-            callback(new Error('请输入有效的手机号码:' + mobiles[index] + '出错'))
-            break
-          }
-        }
-        if (!this.inputMobilesError) callback()
-      } else {
-        this.inputMobilesError = false
-        callback()
-      }
-    }
     var validateSendContent = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请输入短信内容'))
@@ -211,12 +179,8 @@ export default {
         smsId: '0'
       },
       rules: {
-        inputMobiles: [
-          { validator: validateInputMobiles, trigger: 'blur' }
-        ],
         mobiles: [
-          { required: true, message: '请输入电话号码', trigger: 'blur' },
-          { validator: validateInputMobiles, trigger: 'blur' }
+          { required: true, message: '请输入电话号码', trigger: 'blur' }
         ],
         smsContent: [
           { required: true, message: '请输入短信内容', trigger: 'blur' },
@@ -243,7 +207,6 @@ export default {
       this.sendSMSForm.smsId = autoId
     },
     addMobile () {
-      if (this.inputMobilesError) return
       this.sendSMSForm.mobiles = this.sendSMSForm.mobiles + ',' + this.sendSMSForm.inputMobiles
       var str = this.sendSMSForm.mobiles
       str = (str.substring(str.length - 1) === ',') ? str.substring(0, str.length - 1) : str
