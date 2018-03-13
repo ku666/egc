@@ -3,7 +3,7 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命异步更新中,稍后手动刷新数据...">
         <div style="margin-top: 15px">
           <el-table :data="middlewareListData" stripe border v-loading="loading" height="680">
             <el-table-column type="index" :index="indexMethod" label="序号" width="50">
@@ -260,19 +260,15 @@ export default {
             console.log('refresh middleware result -- > ' + JSON.stringify(result))
             this.syncDataStatus = result
             if (this.syncDataStatus === 'Success!') {
-              this.synDataLoading = false
-              // 加载数据
-              this.loadData()
-              this.$message({
-                message: '刷新成功',
-                type: 'success'
-              })
-            } else {
-              this.synDataLoading = false
-              this.$message({
-                message: '刷新失败',
-                type: 'error'
-              })
+              this.synDataLoading = true
+              setTimeout(() => {
+                this.synDataLoading = false
+                this.loadData()
+                this.$message({
+                  message: '刷新成功',
+                  type: 'success'
+                })
+              }, 3000)
             }
           }.bind(this)
         )
