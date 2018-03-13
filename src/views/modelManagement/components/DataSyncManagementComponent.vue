@@ -94,6 +94,7 @@
               <el-form-item label="任务创建时间大于" prop="startTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   format="yyyy-MM-dd HH:mm"
                   v-model="modelListSearch.startTime"
                   type="datetime"
@@ -105,6 +106,7 @@
               <el-form-item label="任务创建时间小于" prop="endTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   @change="checkPlanEndTime"

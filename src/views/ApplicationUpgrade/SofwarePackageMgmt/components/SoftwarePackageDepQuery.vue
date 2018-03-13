@@ -84,13 +84,13 @@ export default {
           prop: 'packageVersion',
           width: 150
         }, {
-          colName: '应用&组件英语名称',
+          colName: '所依赖的应用&组件英语名称',
           prop: 'softwareType',
-          width: 150
+          width: 200
         }, {
-          colName: '应用&组件名称',
+          colName: '所依赖的应用&组件名称',
           prop: 'name',
-          width: 150
+          width: 200
         }, {
           colName: '最低版本',
           prop: 'earliestVer',
