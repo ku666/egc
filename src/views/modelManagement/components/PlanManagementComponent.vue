@@ -317,6 +317,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               size="small"
               :class="{ 'error-border': isStartTimeError || isEndTimeErrorNoStart }"
               format="yyyy-MM-dd HH:mm"
@@ -333,6 +334,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               size="small"
               :class="{ 'error-border': isEndTimeErrorBefore }"
               format="yyyy-MM-dd HH:mm"
@@ -531,6 +533,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               :class="{ 'error-border': isStartTimeError || isEndTimeErrorNoStart }"
               format="yyyy-MM-dd HH:mm"
               @change="editCheckPlanStartTime"
@@ -546,6 +549,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               :class="{ 'error-border': isEndTimeErrorBefore }"
               format="yyyy-MM-dd HH:mm"
               @change="editCheckPlanEndTime"
