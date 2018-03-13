@@ -161,6 +161,7 @@
               <el-form-item label="从" prop="startCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   v-model="modelListSearch.startCreateTime"
@@ -174,6 +175,7 @@
               <el-form-item label="到" prop="endCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   @change="checkPlanEndTime"
