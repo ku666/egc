@@ -122,9 +122,9 @@
               <el-form-item label="创建人">
                 <span>{{ props.row.createUser }}</span>
               </el-form-item>
-              <el-form-item label="创建人">
-                <span>{{ props.row.createUser }}</span>
-              </el-form-item>
+              <!--<el-form-item label="创建人">-->
+                <!--<span>{{ props.row.createUser }}</span>-->
+              <!--</el-form-item>-->
               <el-form-item label="创建时间">
                 <span>{{ props.row.createTime | formatDate }}</span>
               </el-form-item>
