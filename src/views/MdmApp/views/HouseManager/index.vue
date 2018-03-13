@@ -189,4 +189,8 @@ export default {
   width: 100%;
   height: 100%;
 }
+
+.el-table /deep/ .el-table__body{
+  width: 100% !important;
+}
 </style>
