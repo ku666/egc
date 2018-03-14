@@ -64,7 +64,7 @@ module.exports = {
         changeOrigin: true
       },
       '/egc-usermgmtcomponent': {
-        target: 'http://192.168.0.186:30940',  // 242线上用户管理
+        target: 'http://192.168.0.139:30940',  // 242线上用户管理
         // target: 'http://192.168.0.186:9011',  // 云端用户管理
         changeOrigin: true
       },
@@ -73,10 +73,11 @@ module.exports = {
         changeOrigin: true
       },
       '/egc-ismgcomponent': {
-        target: 'http://192.168.0.186:9013/',  // 短信网关
-        changeOrigin: true,
-        pathRewrite: {
-          '/egc-ismgcomponent':'/'}
+        target: 'http://172.16.30.75:9013/',  // 短信网关
+        changeOrigin: true
+        //,
+        // pathRewrite: {
+        //   '/egc-ismgcomponent':'/'}
       }
       },
     // Various Dev Server settings

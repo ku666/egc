@@ -217,10 +217,10 @@
           </template>
         </el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           label="当前版本">
           <template slot-scope="scope"><span>{{ scope.row.latestVersionNo }}</span></template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column
           label="版本管理"

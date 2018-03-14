@@ -350,7 +350,7 @@
           ],
           paramValue: [
             { message: '请输入系统参数值', trigger: 'blur' },
-            { pattern: '^[A-Za-z0-9_]+$', min: 0, max: 256, message: '长度在 0 到 256 个字符（只支持字母,数字和下划线）', trigger: 'blur' }
+            { min: 0, max: 256, message: '长度在 0 到 256 个字符', trigger: 'blur' }
           ],
           paramDesc: [
             { message: '请输入系统参数描述', trigger: 'blur' },

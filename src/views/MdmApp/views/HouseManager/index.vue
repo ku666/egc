@@ -64,8 +64,8 @@ export default {
     getDictData: function () {
       const HOUSE_USE_FOR = '14'
       getDictItem({ 'itemType': HOUSE_USE_FOR })
-      .then(res => { this.houseUseFors = res.data })
-      .catch(err => { console.log(err) })
+        .then(res => { this.houseUseFors = res.data })
+        .catch(err => { console.log(err) })
     },
     /**
      * @description 点击table组件复选框触发
@@ -120,11 +120,8 @@ export default {
           .then(res => {
             var self = this
             self.total = res.data.totalCount
-            const timeOut = setTimeout(function () {
-              self.tableData = res.data.result
-              self.loading = false
-              clearTimeout(timeOut)
-            }, 1000)
+            self.tableData = res.data.result
+            self.loading = false
           })
           .catch(
           function (error) {
@@ -165,7 +162,7 @@ export default {
 .house-manager {
   width: 100%;
   height: 100%;
-  min-width: 1000px;
+  min-width: 1670px;
   min-height: 500px;
 }
 
