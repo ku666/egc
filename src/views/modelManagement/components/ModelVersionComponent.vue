@@ -422,10 +422,10 @@
       <el-form v-loading="loadingStep" :model="editModelVersion" :rules="rules" ref="editModelVersion" label-width="100px" class="demo-ruleForm">
 
         <el-form-item label="版本号" prop="versionNo">
-          <el-input :disabled="editModelVersion.displayPublishStatus == 'mm.pubsts.publish'?'disabled':undefined" id="editNo" @blur="inputBlur" size="small" v-model="editModelVersion.versionNo"></el-input>
+          <el-input :disabled="editModelVersion.deployed" id="editNo" @blur="inputBlur" size="small" v-model="editModelVersion.versionNo"></el-input>
         </el-form-item>
         <el-form-item label="版本描述" prop="description">
-          <el-input id="editDesc" @blur="inputBlur"  type="textarea" v-model="editModelVersion.description"></el-input>
+          <el-input :disabled="editModelVersion.deployed" id="editDesc" @blur="inputBlur"  type="textarea" v-model="editModelVersion.description"></el-input>
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">
