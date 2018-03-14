@@ -833,7 +833,7 @@
         loadingVersion: false,
         loadingStep: false,
         modelPlanList: [],
-        taskSrcNotShowInFilter: ['mm.tsksrc.direct','mm.tsksrc.service','mm.tsksrc.systask'],
+        taskSrcNotShowInFilter: ['mm.tsksrc.direct', 'mm.tsksrc.service', 'mm.tsksrc.systask'],
         taskTypeNotShowInFilter: ['mm.tsktyp.deploy'],
         displayVersionStatus: SYSTEM_VERSIONSTATUS_DISABLE,
         multipleSelection: []
