@@ -3,7 +3,7 @@
     <div>
       <search-condition @handleFilterEvent="_handleFilter" :searchConDetails="searchConditionList"></search-condition>
     </div>
-    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命同步中...">
+    <div v-loading="synDataLoading" element-loading-background="rgba(0, 0, 0, 0.8)" element-loading-text="玩命异步更新中,稍后手动刷新数据...">
       <div style="margin-top: 15px">
         <el-table :data="netDeviceListData" stripe border v-loading="loading" height="680">
           <el-table-column type="index" :index="indexMethod" label="序号" width="50">

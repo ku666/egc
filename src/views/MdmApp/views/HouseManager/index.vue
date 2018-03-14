@@ -165,7 +165,7 @@ export default {
 .house-manager {
   width: 100%;
   height: 100%;
-  min-width: 1000px;
+  min-width: 1670px;
   min-height: 500px;
 }
 
