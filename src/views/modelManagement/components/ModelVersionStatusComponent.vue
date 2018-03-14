@@ -67,9 +67,9 @@
           show-overflow-tooltip>
         </el-table-column>
         <el-table-column
-          prop="avgExeTimeInSec"
-          label="平均成功时间"
-          >
+          label="平均执行时间（秒）"
+          width="180">
+          <template slot-scope="scope" v-if="scope.row.avgExeTimeInSec>0">{{ scope.row.avgExeTimeInSec/1000 }}</template>
         </el-table-column>
       </el-table>
       <div class="block text-center margin-top-20">
