@@ -257,10 +257,10 @@
             <span v-if="!scope.row.paramListJson">无参数</span>
           </template>
         </el-table-column>
-        <!--<el-table-column-->
-          <!--label="任务开始时间">-->
-          <!--<template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+          label="任务开始时间">
+          <template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>
+        </el-table-column>
         <el-table-column
           label="任务结束时间">
           <template slot-scope="scope" v-if="scope.row.endTime">{{ scope.row.endTime | formatDate }}</template>
