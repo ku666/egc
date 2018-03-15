@@ -108,7 +108,7 @@ export default {
         },
         {
           colName: '前续软件包版本',
-          prop: 'latestPreVer'
+          prop: 'lastestPreName'
         },
         {
           colName: '备注',
