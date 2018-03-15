@@ -214,8 +214,9 @@ export default {
           }.bind(this)
         )
         .catch(function (error) {
+          this.resetOrgData()
           console.log(error)
-        })
+        }.bind(this))
     },
     _downloadDispatchResult (params) {
       this.downloadResultVisible = false
