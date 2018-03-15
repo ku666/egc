@@ -124,7 +124,6 @@ export default {
       this.loadDataAgain()
       // console.log(this.$refs.softwareTable)
     },
-
     multipleSelection (newVal, oldValue) {
       if (newVal.length === 0) {
         this.disabled = true
