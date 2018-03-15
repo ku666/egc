@@ -1284,6 +1284,9 @@
           modelVerId: this.currentVersionId,
           publishStatus: this.versionPublishedStatus
         }
+        if (type === 'edit') {
+          param.modelVerId = this.editTaskPlan.algModelVersionPk
+        }
         let loadingDeployNode = startSystemLoading()
         getCommunityByStatus(param)
           .then(
