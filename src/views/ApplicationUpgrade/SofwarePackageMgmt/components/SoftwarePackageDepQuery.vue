@@ -85,7 +85,7 @@ export default {
           width: 150
         }, {
           colName: '所依赖的应用&组件英语名称',
-          prop: 'softwareType',
+          prop: 'nameEn',
           width: 200
         }, {
           colName: '所依赖的应用&组件名称',
