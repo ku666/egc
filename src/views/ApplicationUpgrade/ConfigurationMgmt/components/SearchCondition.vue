@@ -36,9 +36,13 @@
       </el-form>
     </div>
     <div class="border-divide"></div>
-    <div>
-      <!-- <el-button style="float: right;" type="primary" @click="showSelectCol">列表设置</el-button> -->
+    <div >
+      <el-button type="primary" @click="_initCfgInfo" v-show="isShowInitBtn">初始化配置信息</el-button>
+      <!-- <el-button  style="float: right;" type="primary" @click="showSelectCol">列表设置</el-button> -->
     </div>
+  <el-dialog :title="dialogTittle" :visible.sync="isShowOrgDialog" :before-close="resetOrgData">
+      <courts-tree @handleInitCfgMtmtEvent="_confirmInitCfgInfo" ref="courts"></courts-tree>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,13 +50,18 @@
 import {
   getProvinceDataList,
   getCityDataList,
-  getDisctrictDataList
+  getDisctrictDataList,
+  initConfigMgmt
 } from '../apis/index'
+import CourtsTree from './CourtsTree'
 export default {
   props: {
     searchConDetails: {
       type: Object
     }
+  },
+  components: {
+    CourtsTree
   },
   data () {
     return {
@@ -63,6 +72,9 @@ export default {
       maxlength: 30,
       formLabelWidth: '80px',
       isShowBtn: false,
+      isShowInitBtn: false,
+      isShowOrgDialog: false,
+      dialogTittle: '',
       actionBtnClsName: 'action-btn',
       cancelBtnClsName: 'cancel-btn'
     }
@@ -98,6 +110,10 @@ export default {
         this.isShowBtn = true
         this.actionBtnClsName = 'small-action-btn'
         this.cancelBtnClsName = 'small-cancel-btn'
+      }
+
+      if (this.searchConDetails.pageFlag === 'hw') {
+        this.isShowInitBtn = true
       }
     },
     // 验证输入内容是否为空
@@ -189,6 +205,27 @@ export default {
     },
     showSelectCol () {
       this.$emit('handleFilterEvent', this.searchConDetails, 'showcols')
+    },
+    _initCfgInfo () {
+      this.dialogTittle = '选择小区'
+      this.isShowOrgDialog = true
+    },
+    resetOrgData () {
+      this.isShowOrgDialog = false
+      this.$refs.courts.resetData()
+    },
+    _confirmInitCfgInfo (courtId) {
+      initConfigMgmt(courtId)
+          .then(
+            function (result) {
+              this.isShowOrgDialog = false
+              this.$message.success('异步初始化数据中，请稍后手动刷新数据')
+              this.resetOrgData()
+            }.bind(this)
+          )
+          .catch(function (error) {
+            console.log(error)
+          })
     }
   },
   watch: {

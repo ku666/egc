@@ -73,10 +73,10 @@
         <el-input class="upgrade_el-input" v-model="auappServiceDetails.remark" :maxlength="maxlength"></el-input>
       </el-form-item>
       <template v-if="auappServiceDetails.extDataList !== null">
-  <el-form-item :label="item.fieldName" v-for="item in auappServiceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
-    <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
-  </el-form-item>
-</template>
+        <el-form-item :label="item.fieldName" v-for="item in auappServiceDetails.extDataList" :key="item.fieldName" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="item.fieldValue" :maxlength="maxlength"></el-input>
+        </el-form-item>
+      </template>
       <div style="text-align:center;">
         <el-button @click="callBackCloseDialogEvent" class="cancel-btn" type="primary">取 消</el-button>
         <el-button @click="updateAppServiceInfo" class="action-btn" type="primary">保 存</el-button>
@@ -129,7 +129,13 @@ export default {
   },
   methods: {
     updateAppServiceInfo () {
-      this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails, 'save')
+      if (this.validateUpgradeServersValues) {
+        delete this.auappServiceDetails.upgradeServers
+        this.auappServiceDetails.upgradeServers = null
+        this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails, 'save')
+      } else {
+        this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails, 'save')
+      }
       // if (this.validateDetailsChanged()) {
       //   this.$emit('saveAppServiceInfoEvent', this.auappServiceDetails)
       // } else {
@@ -139,7 +145,30 @@ export default {
       //   })
       // }
     },
-
+    // 校验upgradeServers是否所有值都为null
+    validateUpgradeServersValues () {
+      if (this.auappServiceDetails.upgradeServers !== null) {
+        if (
+          this.upgradeServers.uuid === null &&
+          this.upgradeServers.serverId === null &&
+          this.upgradeServers.publicIp === null &&
+          this.upgradeServers.domainName === null &&
+          this.upgradeServers.hostname === null &&
+          this.upgradeServers.intranetIp === null &&
+          this.upgradeServers.hostCourtUuid === null &&
+          this.upgradeServers.pkgPath === null &&
+          this.upgradeServers.deleteFlag === null &&
+          this.upgradeServers.createTime === null &&
+          this.upgradeServers.updateTime === null &&
+          this.upgradeServers.createUser === null &&
+          this.upgradeServers.updateUser === null &&
+          this.upgradeServers.courtUuid === null
+        ) {
+          return true
+        }
+        return false
+      }
+    },
     // 校验数据是否更改
     validateDetailsChanged () {
       if (this.auappServiceDetails.upgradeServers !== null) {

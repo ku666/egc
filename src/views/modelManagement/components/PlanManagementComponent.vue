@@ -40,9 +40,10 @@
               <div class="item-info label">计划类型</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.taskType" placeholder="计划类型">
-                  <el-option key="0" label="全部" value="0"></el-option>
+                  <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                   <el-option
                     v-for="item in systemTaskTypeList"
+                    v-if="taskTypeNotShowInFilter.indexOf(item.item_code)<0"
                     :key="item.item_code"
                     :label="item.item_name"
                     :value="item.item_code"
@@ -55,9 +56,10 @@
               <div class="item-info label">计划来源</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.taskSource" placeholder="计划来源">
-                  <el-option key="0" label="全部" value="0"></el-option>
+                  <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                   <el-option
                     v-for="item in systemTaskSourceList"
+                    v-if="taskSrcNotShowInFilter.indexOf(item.item_code)<0"
                     :key="item.item_code"
                     :label="item.item_name"
                     :value="item.item_code"
@@ -756,9 +758,9 @@
         editTaskPlan: {},
         modelListSearch: {
           name: '',
-          taskType: '全部',
+          taskType: 'mm.tsktyp.exe',
           // taskSource: 'mm.tsksrc.plan',
-          taskSource: '全部',
+          taskSource: 'mm.tsksrc.plan',
           planStatus: '全部'
         },
         rules: {
@@ -831,6 +833,8 @@
         loadingVersion: false,
         loadingStep: false,
         modelPlanList: [],
+        taskSrcNotShowInFilter: ['mm.tsksrc.direct', 'mm.tsksrc.service', 'mm.tsksrc.systask'],
+        taskTypeNotShowInFilter: ['mm.tsktyp.deploy'],
         displayVersionStatus: SYSTEM_VERSIONSTATUS_DISABLE,
         multipleSelection: []
       }
@@ -1279,6 +1283,9 @@
         let param = {
           modelVerId: this.currentVersionId,
           publishStatus: this.versionPublishedStatus
+        }
+        if (type === 'edit') {
+          param.modelVerId = this.editTaskPlan.algModelVersionPk
         }
         let loadingDeployNode = startSystemLoading()
         getCommunityByStatus(param)

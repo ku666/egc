@@ -399,3 +399,10 @@ export const getNetDeviceHistoryList = (id) => {
 
   // return Axios.get(BASE_PATH + '/osServices/queryHistoryById/{id}').then(res => res.data)
 }
+
+// 初始化配置信息
+export const initConfigMgmt = (id) => {
+  console.log('init cfg court id ---- >' + id)
+  return Axios.get(BASE_PATH + '/updateConfig/updateCourtInfo?courtInfo=' + id
+    ).then(res => res.data)
+}

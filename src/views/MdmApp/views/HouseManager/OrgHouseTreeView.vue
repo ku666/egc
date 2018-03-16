@@ -73,10 +73,8 @@ export default {
       condition.currentPage = this.currentPage
       getCourtsByConditions(condition).then(res => {
         this.total = res.data.totalCount
-        setTimeout(() => {
-          this.treeData = res.data.result
-          this.loading = false
-        }, 1000)
+        this.treeData = res.data.result
+        this.loading = false
       })
     },
     // 获取组织树数据
