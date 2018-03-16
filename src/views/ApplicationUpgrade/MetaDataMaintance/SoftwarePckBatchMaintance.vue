@@ -77,13 +77,34 @@ import {
   getSoftwareBatchDetails,
   registerSoftwareBatchs,
   updateSoftwareBatch,
-  deleteSoftwareBatchs
+  deleteSoftwareBatchs,
+  validateNameRepeat
 } from './apis/index'
 export default {
   components: {
     SoftwarePckBatchEdit
   },
   data () {
+    var validateSoftPckName = (rule, value, callback) => {
+      if (value === '' || value === undefined) {
+        callback(new Error('请输入软件包批次名称'))
+      } else {
+        validateNameRepeat(this.registerParaList.name)
+        .then(
+          function (result) {
+            console.log('validate result --> ' + JSON.stringify(result))
+            if (result) {
+              callback(new Error('软件包批次名称已存在，请修改!'))
+            } else {
+              callback()
+            }
+          }
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+      }
+    }
     return {
       dialogEditVisible: false,
       dialogRegisterVisible: false,
@@ -119,8 +140,8 @@ export default {
         name: [
           {
             required: true,
-            message: '请输入软件包批次名称',
-            trigger: 'blur,change'
+            validator: validateSoftPckName,
+            trigger: 'blur'
           }
         ]
       }

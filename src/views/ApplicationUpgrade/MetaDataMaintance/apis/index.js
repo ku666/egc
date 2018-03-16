@@ -43,6 +43,11 @@ export const deleteCodeInstance = (params) => {
   return Axios.get(BASE_PATH + '/codeInstances/delete?uuid=' + params).then(res => res.data)
 }
 
+export const validateCodeInsRepeat = (params1, params2, params3) => {
+  console.log('repeat code instance  params ---> ' + params1 + '--- ' + params2 + '---- ' + params3)
+  return Axios.post(BASE_PATH + '/codeInstances/repeat?typeCodeUuid=' + encodeURI(params1) + '&code=' + params2 + '&instanceName=' + params3).then(res => res.data)
+}
+
 //  ******************** 公共代码维护 ********************
 
 export const getCommCodeByPage = (params) => {
@@ -68,6 +73,11 @@ export const deleteCommCode = (params) => {
 export const registerCommCode = (params) => {
   console.log('register comm code maintance params ---> ' + JSON.stringify(params))
   return Axios.post(BASE_PATH + '/codes/insert', params).then(res => res.data)
+}
+
+export const validateCommCodeRepeat = (params) => {
+  console.log('repeat comm code  params ---> ' + JSON.stringify(params, null, ' '))
+  return Axios.post(BASE_PATH + '/codes/repeat?code=' + encodeURI(params)).then(res => res.data)
 }
 
 //  ******************** 配置信息维护 ********************
@@ -97,6 +107,11 @@ export const deleteConfigInfo = (params) => {
   return Axios.get(BASE_PATH + '/configs/delete?uuid=' + params).then(res => res.data)
 }
 
+export const validateCfgValueRepeat = (params) => {
+  console.log('repeat cfg name  params ---> ' + JSON.stringify(params, null, ' '))
+  return Axios.post(BASE_PATH + '/configs/repeat?name=' + encodeURI(params)).then(res => res.data)
+}
+
 //  ******************** 软件包批次维护 ********************
 
 export const getSoftwareBatchByPage = (params) => {
@@ -122,4 +137,9 @@ export const registerSoftwareBatchs = (params) => {
 export const deleteSoftwareBatchs = (params) => {
   console.log('delete soft batchs maintance params ---> ' + JSON.stringify(params, null, ' '))
   return Axios.get(BASE_PATH + '/batches/delete?uuid=' + params).then(res => res.data)
+}
+
+export const validateNameRepeat = (params) => {
+  console.log('repeat softpck name  params ---> ' + JSON.stringify(params, null, ' '))
+  return Axios.post(BASE_PATH + '/batches/repeat?name=' + encodeURI(params)).then(res => res.data)
 }

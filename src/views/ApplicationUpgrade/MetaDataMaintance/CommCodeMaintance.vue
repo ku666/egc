@@ -102,13 +102,34 @@ import {
   registerCommCode,
   updateCommCode,
   deleteCommCode,
-  getCodeInstances
+  getCodeInstances,
+  validateCommCodeRepeat
 } from './apis/index'
 export default {
   components: {
     CommCodeEdit
   },
   data () {
+    var validateCommCode = (rule, value, callback) => {
+      if (value === '' || value === undefined) {
+        callback(new Error('请输入代码值'))
+      } else {
+        validateCommCodeRepeat(this.registerParaList.code)
+        .then(
+          function (result) {
+            console.log('validate result --> ' + JSON.stringify(result))
+            if (result) {
+              callback(new Error('代码值已存在，请修改!'))
+            } else {
+              callback()
+            }
+          }
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+      }
+    }
     return {
       dialogEditVisible: false,
       dialogRegisterVisible: false,
@@ -184,7 +205,10 @@ export default {
           }
         ],
         code: [
-          { required: true, message: '请输入代码值', trigger: 'blur,change' }
+          { required: true,
+            validator: validateCommCode,
+            trigger: 'blur'
+          }
         ]
       }
     }
