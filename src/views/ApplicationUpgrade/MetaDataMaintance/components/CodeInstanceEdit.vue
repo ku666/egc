@@ -1,16 +1,18 @@
 <template>
   <div>
     <el-form :inline="true" :model="codeInstDetails">
-      <el-form-item label="代码类型" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.code"></el-input>
-      </el-form-item>
+      <template v-if="codeInstDetails.codeTypes">
+        <el-form-item label="代码类型" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" :disabled="isInptDisabled" v-model="codeInstDetails.codeTypes.typeName"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="代码" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="codeInstDetails.code" :disabled="isInptDisabled"></el-input>
       </el-form-item>
       <el-form-item label="代码实例名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="codeInstDetails.instanceName"></el-input>
       </el-form-item>
-       <el-form-item label="软件名称" :label-width="formLabelWidth">
+      <el-form-item label="软件名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="codeInstDetails.name"></el-input>
       </el-form-item>
       <el-form-item label="提供商" :label-width="formLabelWidth">
