@@ -1,6 +1,6 @@
 <template>
   <div class="ui-common">
-    <el-input placeholder="输入关键字进行过滤" class="user_el-select" v-model="filterText">
+    <el-input placeholder="输入首字母小写进行过滤" class="user_el-select" v-model="filterText">
     </el-input>
     <div class="tree">
       <el-tree class="filter-tree" node-key="uuid" :data="orgsData" :props="defaultProps" ref="tree" show-checkbox @check-change="handleCheckChange" :filter-node-method="filterNode" :default-expanded-keys="expandedKeys">

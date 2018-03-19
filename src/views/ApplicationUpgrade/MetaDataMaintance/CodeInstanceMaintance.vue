@@ -3,7 +3,7 @@
     <div class="flex-c flex-1">
       <el-form :inline="true" :model="searchConditionList">
         <div class="search-container">
-          <el-form-item label="代码实例值">
+          <el-form-item label="代码实例名称">
             <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="软件名称" :label-width="formLabelWidth">
@@ -64,7 +64,7 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
+              <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
                 <el-select v-model="registerParaList.code" placeholder="请选择代码值" clearable>
                   <el-option v-for="item in instanceCodes" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
@@ -75,7 +75,7 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码实例值" :label-width="formLabelWidth" prop="instanceName">
+              <el-form-item label="代码实例名称" :label-width="formLabelWidth" prop="instanceName">
                 <el-input v-model="registerParaList.instanceName"></el-input>
               </el-form-item>
             </el-col>
@@ -168,12 +168,12 @@ export default {
           width: 220
         },
         {
-          colName: '代码值',
+          colName: '代码',
           prop: 'code',
           width: 220
         },
         {
-          colName: '代码实例值',
+          colName: '代码实例名称',
           prop: 'instanceName',
           width: 220
         },
@@ -274,7 +274,7 @@ export default {
           console.log(error)
         })
     },
-    // 代码值
+    // 代码
     _getCodeCategories () {
       this.registerParaList.code = ''
       this.instanceCodes = []
