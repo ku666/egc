@@ -26,6 +26,7 @@ var initDataFunction = function (params) {
       data: params.legarr
     },
     toolbox: {
+      right: '15',
       feature: {
         saveAsImage: {}
       }

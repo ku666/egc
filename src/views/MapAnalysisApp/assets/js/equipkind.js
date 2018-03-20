@@ -16,6 +16,7 @@ var option = {
     formatter: '{a} <br/>{b} : {c} ({d}%)'
   },
   toolbox: {
+    right: '15',
     feature: {
       saveAsImage: {}
     }

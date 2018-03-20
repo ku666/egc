@@ -15,6 +15,7 @@ var optionSex = {
     formatter: '{a} <br/>{b}: {c} ({d}%)'
   },
   toolbox: {
+    right: '30',
     feature: {
       saveAsImage: {}
     }
@@ -72,6 +73,7 @@ var optionAge = {
     formatter: '{a}: {b}<br/>人数: {c}'
   },
   toolbox: {
+    right: '15',
     feature: {
       saveAsImage: {}
     }
