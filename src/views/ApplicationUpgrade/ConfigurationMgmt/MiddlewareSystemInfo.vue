@@ -123,7 +123,7 @@ export default {
         },
         {
           colName: '小区名称',
-          prop: 'courtDto.memo',
+          prop: 'courtDto.name',
           width: 120
         },
         {
