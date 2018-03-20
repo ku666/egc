@@ -3,11 +3,11 @@
     <div class="flex-c flex-1">
       <el-form :inline="true" :model="searchConditionList">
         <div class="search-container">
-          <el-form-item label="代码实例值">
+          <el-form-item label="代码实例名称">
             <el-input class="appupgrade_el-select" placeholder="请输入代码实例值" v-model="searchConditionList.code" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
-          <el-form-item label="代码实例对应名称" :label-width="formLabelWidth">
-            <el-input class="appupgrade_el-select" placeholder="请输入代码实例对应名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
+          <el-form-item label="软件名称" :label-width="formLabelWidth">
+            <el-input class="appupgrade_el-select" placeholder="请输入软件名称" v-model="searchConditionList.codeName" @keyup.enter.native="_handleFilter"> </el-input>
           </el-form-item>
           <el-form-item label="提供商" :label-width="formLabelWidth">
             <el-input class="appupgrade_el-select" placeholder="请输入提供商" v-model="searchConditionList.vendor" @keyup.enter.native="_handleFilter"> </el-input>
@@ -29,7 +29,7 @@
           <el-table :data="codeInstList" stripe border v-loading="loading" id="codeInstanceTable" height="680">
             <el-table-column type="index" :index="indexMethod" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" show-overflow-tooltip sortable>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
@@ -55,8 +55,8 @@
         <el-form :model="registerParaList" :rules="rules" ref='registerParaList'>
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码实例值" :label-width="formLabelWidth" prop="instanceValue">
-                <el-select v-model="registerParaList.instanceValue" placeholder="请选择代码实例值" clearable>
+              <el-form-item label="代码类型" :label-width="formLabelWidth" prop="instanceValue">
+                <el-select v-model="registerParaList.instanceValue" placeholder="请选择代码类型" clearable>
                   <el-option v-for="item in instanceValues" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
                 </el-select>
@@ -64,7 +64,7 @@
             </el-col>
 
             <el-col :span="12">
-              <el-form-item label="代码值" :label-width="formLabelWidth" prop="code">
+              <el-form-item label="代码" :label-width="formLabelWidth" prop="code">
                 <el-select v-model="registerParaList.code" placeholder="请选择代码值" clearable>
                   <el-option v-for="item in instanceCodes" :key="item.value" :label="item.label" :value="item.value">
                   </el-option>
@@ -75,17 +75,22 @@
 
           <el-row>
             <el-col :span="12">
-              <el-form-item label="代码实例对应名称" :label-width="formLabelWidth" prop="instanceName">
+              <el-form-item label="代码实例名称" :label-width="formLabelWidth" prop="instanceName">
                 <el-input v-model="registerParaList.instanceName"></el-input>
               </el-form-item>
             </el-col>
             <el-col :span="12">
-              <el-form-item label="提供商" :label-width="formLabelWidth" prop="sourceVendor">
-                <el-input v-model="registerParaList.sourceVendor"></el-input>
+              <el-form-item label="软件名称" :label-width="formLabelWidth" prop="sourceVendor">
+                <el-input v-model="registerParaList.name"></el-input>
               </el-form-item>
             </el-col>
           </el-row>
           <el-row>
+             <el-col :span="12">
+              <el-form-item label="提供商" :label-width="formLabelWidth" prop="sourceVendor">
+                <el-input v-model="registerParaList.sourceVendor"></el-input>
+              </el-form-item>
+            </el-col>
             <el-col :span="12">
               <el-form-item label="备注" :label-width="formLabelWidth" prop="remark">
                 <el-input v-model="registerParaList.remark"></el-input>
@@ -111,13 +116,38 @@ import {
   registerCodeInstance,
   getCodeInstances,
   getInstanceCodes,
-  deleteCodeInstance
+  deleteCodeInstance,
+  validateCodeInsRepeat
 } from './apis/index'
 export default {
   components: {
     CodeInstanceEdit
   },
   data () {
+    var validateCodeInstance = (rule, value, callback) => {
+      console.log('-->' + this.registerParaList.instanceValue)
+      console.log('-->' + this.registerParaList.code)
+      if (value === '' || value === undefined) {
+        callback(new Error('请输入代码实例值'))
+      } else {
+        if (this.registerParaList.code && this.registerParaList.instanceName) {
+          validateCodeInsRepeat(this.registerParaList.instanceValue, this.registerParaList.code, this.registerParaList.instanceName)
+        .then(
+          function (result) {
+            console.log('validate result --> ' + JSON.stringify(result))
+            if (result) {
+              callback(new Error('代码实例值已存在，请修改!'))
+            } else {
+              callback()
+            }
+          }
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+        }
+      }
+    }
     return {
       dialogEditVisible: false,
       dialogRegisterVisible: false,
@@ -133,23 +163,28 @@ export default {
       deleteTitle: '删除',
       tableTitleList: [
         {
-          colName: '代码实例值',
+          colName: '代码类型',
+          prop: 'codeTypes.typeName',
+          width: 220
+        },
+        {
+          colName: '代码',
           prop: 'code',
           width: 220
         },
         {
-          colName: '代码实例对应名称',
+          colName: '代码实例名称',
           prop: 'instanceName',
+          width: 220
+        },
+        {
+          colName: '软件名称',
+          prop: 'name',
           width: 220
         },
         {
           colName: '提供商',
           prop: 'sourceVendor',
-          width: 220
-        },
-        {
-          colName: '代码值',
-          prop: 'code',
           width: 220
         },
         {
@@ -167,6 +202,7 @@ export default {
       registerParaList: {
         instanceValue: '',
         instanceName: '',
+        name: '',
         code: '',
         sourceVendor: '',
         ramark: ''
@@ -175,7 +211,7 @@ export default {
         instanceValue: [
           {
             required: true,
-            message: '请选择代码实例值',
+            message: '请选择代码类型',
             trigger: 'blur,change'
           }
         ],
@@ -185,8 +221,8 @@ export default {
         instanceName: [
           {
             required: true,
-            message: '请输入开发者姓名',
-            trigger: 'blur,change'
+            validator: validateCodeInstance,
+            trigger: 'blur'
           }
         ]
       }
@@ -238,7 +274,7 @@ export default {
           console.log(error)
         })
     },
-    // 代码值
+    // 代码
     _getCodeCategories () {
       this.registerParaList.code = ''
       this.instanceCodes = []

@@ -26,7 +26,7 @@
           <el-table :data="commCodeDataList" stripe border v-loading="loading" height="680">
             <el-table-column type="index" :index="indexMethod" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
@@ -102,13 +102,34 @@ import {
   registerCommCode,
   updateCommCode,
   deleteCommCode,
-  getCodeInstances
+  getCodeInstances,
+  validateCommCodeRepeat
 } from './apis/index'
 export default {
   components: {
     CommCodeEdit
   },
   data () {
+    var validateCommCode = (rule, value, callback) => {
+      if (value === '' || value === undefined) {
+        callback(new Error('请输入代码值'))
+      } else {
+        validateCommCodeRepeat(this.registerParaList.code)
+        .then(
+          function (result) {
+            console.log('validate result --> ' + JSON.stringify(result))
+            if (result) {
+              callback(new Error('代码值已存在，请修改!'))
+            } else {
+              callback()
+            }
+          }
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+      }
+    }
     return {
       dialogEditVisible: false,
       dialogRegisterVisible: false,
@@ -184,7 +205,10 @@ export default {
           }
         ],
         code: [
-          { required: true, message: '请输入代码值', trigger: 'blur,change' }
+          { required: true,
+            validator: validateCommCode,
+            trigger: 'blur'
+          }
         ]
       }
     }

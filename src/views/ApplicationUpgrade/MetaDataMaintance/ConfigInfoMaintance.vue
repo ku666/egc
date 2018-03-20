@@ -26,7 +26,7 @@
           <el-table :data="configInfoDataList" stripe border v-loading="loading" height="680">
             <el-table-column type="index" :index="indexMethod" label="序号" width="50">
             </el-table-column>
-            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" show-overflow-tooltip sortable>
+            <el-table-column v-for="(item, index) in tableTitleList " :key="index" :prop="item.prop" :label="item.colName" :width="item.width" sortable>
             </el-table-column>
             <el-table-column label="操作" width="80" align="center">
               <template slot-scope="scope">
@@ -111,13 +111,34 @@ import {
   getConfigInfoDetails,
   registerConfigInfo,
   updateConfigInfo,
-  getInstanceCodes
+  getInstanceCodes,
+  validateCfgValueRepeat
 } from './apis/index'
 export default {
   components: {
     ConfigInfoEdit
   },
   data () {
+    var validateCfgValue = (rule, value, callback) => {
+      if (value === '' || value === undefined) {
+        callback(new Error('请输入配置项名称'))
+      } else {
+        validateCfgValueRepeat(this.registerParaList.configItem)
+        .then(
+          function (result) {
+            console.log('validate result --> ' + JSON.stringify(result))
+            if (result) {
+              callback(new Error('配置项名称已存在，请修改!'))
+            } else {
+              callback()
+            }
+          }
+        )
+        .catch(function (error) {
+          console.log(error)
+        })
+      }
+    }
     return {
       dialogEditVisible: false,
       dialogRegisterVisible: false,
@@ -188,12 +209,15 @@ export default {
         configItem: [
           {
             required: true,
-            message: '请输入配置项名称',
-            trigger: 'blur,change'
+            validator: validateCfgValue,
+            trigger: 'blur'
           }
         ],
         value: [
-          { required: true, message: '请输入配置项值', trigger: 'blur,change' }
+          { required: true,
+            message: '请输入配置项值',
+            trigger: 'blur,change'
+          }
         ]
       }
     }

@@ -304,10 +304,10 @@
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable'" class="model-dropdown-item" command="deploy"><i class="el-icon-tickets"></i>部署发布</el-dropdown-item>
                 <!-- <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable' && scope.row.displayDeployStatus == 'mm.depsts.deploy' && scope.row.displayPublishStatus != 'mm.pubsts.publish'" class="model-dropdown-item" command="publish"><i class="el-icon-upload2"></i>发布</el-dropdown-item> -->
-                <el-dropdown-item v-if="scope.row.versionStatus!='mm.versts.disable'" class="model-dropdown-item" command="excuteTask"><i class="el-icon-tickets"></i>执行任务</el-dropdown-item>
-                <el-dropdown-item class="model-dropdown-item" command="taskplan"><i class="el-icon-time"></i>查看计划</el-dropdown-item>
-                <el-dropdown-item class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
-                <el-dropdown-item class="model-dropdown-item" command="excuteStatus"><i class="el-icon-search"></i>运行状况</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.deployed && scope.row.versionStatus!='mm.versts.disable'" class="model-dropdown-item" command="excuteTask"><i class="el-icon-tickets"></i>执行任务</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.deployed" class="model-dropdown-item" command="taskplan"><i class="el-icon-time"></i>查看计划</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.deployed" class="model-dropdown-item" command="task"><i class="el-icon-search"></i>查看任务</el-dropdown-item>
+                <el-dropdown-item v-if="scope.row.deployed" class="model-dropdown-item" command="excuteStatus"><i class="el-icon-search"></i>运行状况</el-dropdown-item>
                 <!--<el-dropdown-item class="model-dropdown-item" command="params" ><i class="el-icon-upload"></i>参数管理</el-dropdown-item>-->
                 <!--<el-dropdown-item class="model-dropdown-item" command="result" ><i class="el-icon-upload"></i>结果定义</el-dropdown-item>-->
                 <el-dropdown-item v-if="scope.row.fileUploadFlag && scope.row.versionStatus!='mm.versts.disable' && !scope.row.deployed" class="model-dropdown-item" command="updatefile"><i class="el-icon-upload"></i>更新模型文件</el-dropdown-item>
@@ -317,7 +317,7 @@
 
                 <!--<el-dropdown-item>螺蛳粉</el-dropdown-item>-->
                 <el-dropdown-item class="model-dropdown-item" command="edit" divided><i class="el-icon-edit-outline"></i>修改</el-dropdown-item>
-                <el-dropdown-item v-if="scope.row.displayDeployStatus != 'mm.depsts.progress' && scope.row.displayPublishStatus != 'mm.pubsts.publish'" class="model-dropdown-item" command="delete" ><i class="el-icon-delete"></i>删除</el-dropdown-item>
+                <el-dropdown-item v-if="!scope.row.deployed" class="model-dropdown-item" command="delete" ><i class="el-icon-delete"></i>删除</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
 
@@ -422,10 +422,10 @@
       <el-form v-loading="loadingStep" :model="editModelVersion" :rules="rules" ref="editModelVersion" label-width="100px" class="demo-ruleForm">
 
         <el-form-item label="版本号" prop="versionNo">
-          <el-input :disabled="editModelVersion.displayPublishStatus == 'mm.pubsts.publish'?'disabled':undefined" id="editNo" @blur="inputBlur" size="small" v-model="editModelVersion.versionNo"></el-input>
+          <el-input :disabled="editModelVersion.deployed" id="editNo" @blur="inputBlur" size="small" v-model="editModelVersion.versionNo"></el-input>
         </el-form-item>
         <el-form-item label="版本描述" prop="description">
-          <el-input id="editDesc" @blur="inputBlur"  type="textarea" v-model="editModelVersion.description"></el-input>
+          <el-input :disabled="editModelVersion.deployed" id="editDesc" @blur="inputBlur"  type="textarea" v-model="editModelVersion.description"></el-input>
         </el-form-item>
 
         <el-form-item class="text-right add-model-button">

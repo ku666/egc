@@ -83,13 +83,13 @@ export default {
           prop: 'packageVersion',
           width: 150
         }, {
-          colName: '操作系统名称',
+          colName: '所依赖的操作系统名称',
           prop: 'osName',
           width: 200
         }, {
-          colName: '操作系统版本',
+          colName: '所依赖的操作系统版本',
           prop: 'version',
-          width: 150
+          width: 200
         }, {
           colName: 'ServicePack',
           prop: 'servicePack',

@@ -100,7 +100,8 @@
       }
     },
     props: [
-      'curVersionId'
+      'curVersionId',
+      'message'
     ],
     mounted () {
       var codeListParam = {
@@ -153,6 +154,9 @@
       }
     },
     methods: {
+      sendMessageToParent (versiontStatus) {
+        this.$emit('listenToChildEvent', versiontStatus)
+      },
       getModelById () {
         var params = {
           id: this.curVersionId
@@ -167,6 +171,7 @@
                 loadingVersionInfo.close()
               })
               this.currentVersion = result.data
+              this.sendMessageToParent(this.currentVersion.versionStatus)
               // this.newModelVersion.type = this.currentModel.nodeType
               // this.loadData()
             }.bind(this)

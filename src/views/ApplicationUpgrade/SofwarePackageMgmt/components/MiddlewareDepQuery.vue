@@ -83,13 +83,13 @@ export default {
           prop: 'packageVersion',
           width: 150
         }, {
-          colName: '中间件类型',
+          colName: '所依赖的中间件类型',
           prop: 'softwareType',
-          width: 150
+          width: 200
         }, {
-          colName: '中间件名称',
+          colName: '所依赖的中间件名称',
           prop: 'name',
-          width: 150
+          width: 200
         }, {
           colName: '最低版本',
           prop: 'earliestVer',

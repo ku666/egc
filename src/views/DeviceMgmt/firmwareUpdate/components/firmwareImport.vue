@@ -153,14 +153,14 @@
         }
         var array = file.name.split('_')
         // 判断文件名是否合法
-        if (array.length === 4 && this._isValid('deviceTypeDesc', array[0], this.deviceType) && this._isValid('providerName', array[1], this.providerType)) {
+        if (array.length === 4 && this._isValid('deviceTypeDesc', array[1], this.deviceType) && this._isValid('providerName', array[0], this.providerType)) {
           if (file.size !== 0) {
             file['deviceType'] = this.descArray.deviceTypeDesc
             file['providerCode'] = this.descArray.providerName
             file['firmwareVersion'] = array[2]
             this.fileInfo = file
-            this.importData['deviceType'] = array[0]
-            this.importData['providerCode'] = array[1]
+            this.importData['deviceType'] = array[1]
+            this.importData['providerCode'] = array[0]
             this.importData['firmwareVersion'] = array[2]
             this.importData['fileName'] = file.name
             this.importData['fileSize'] = (parseInt(file.size) / 1000000).toString()

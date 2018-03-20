@@ -104,7 +104,7 @@ export default {
         },
         {
           colName: '前续软件包名称',
-          prop: 'preName'
+          prop: 'lastestPreName'
         },
         {
           colName: '前续软件包版本',
@@ -124,7 +124,6 @@ export default {
       this.loadDataAgain()
       // console.log(this.$refs.softwareTable)
     },
-
     multipleSelection (newVal, oldValue) {
       if (newVal.length === 0) {
         this.disabled = true
@@ -215,8 +214,9 @@ export default {
           }.bind(this)
         )
         .catch(function (error) {
+          this.resetOrgData()
           console.log(error)
-        })
+        }.bind(this))
     },
     _downloadDispatchResult (params) {
       this.downloadResultVisible = false

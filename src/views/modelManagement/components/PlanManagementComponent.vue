@@ -18,7 +18,7 @@
 
 
       <modelInfoComponenet v-if="$route.params.modelId && !$route.params.versionId" :curModelId="$route.params.modelId"></modelInfoComponenet>
-      <modelVersionInfoComponenet v-if="$route.params.versionId" :curVersionId="$route.params.versionId"></modelVersionInfoComponenet>
+      <modelVersionInfoComponenet v-if="$route.params.versionId" :curVersionId="$route.params.versionId" v-on:listenToChildEvent="showMessageFromChild"></modelVersionInfoComponenet>
 
 
       <el-row :gutter="20" class="margin-top-25">
@@ -26,7 +26,7 @@
           <div>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="">
-                <el-button v-if="$route.params.versionId" :disabled="loadingVersion" @click="showAddModelDialog()" type="primary"
+                <el-button v-if="$route.params.versionId && displayVersionStatus != 'mm.versts.disable'" :disabled="loadingVersion" @click="showAddModelDialog()" type="primary"
                            icon="el-icon-circle-plus-outline">添加计划
                 </el-button>
               </el-form-item>
@@ -40,9 +40,10 @@
               <div class="item-info label">计划类型</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.taskType" placeholder="计划类型">
-                  <el-option key="0" label="全部" value="0"></el-option>
+                  <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                   <el-option
                     v-for="item in systemTaskTypeList"
+                    v-if="taskTypeNotShowInFilter.indexOf(item.item_code)<0"
                     :key="item.item_code"
                     :label="item.item_name"
                     :value="item.item_code"
@@ -55,9 +56,10 @@
               <div class="item-info label">计划来源</div>
               <div class="item-info">
                 <el-select @change="loadData" v-model="modelListSearch.taskSource" placeholder="计划来源">
-                  <el-option key="0" label="全部" value="0"></el-option>
+                  <!-- <el-option key="0" label="全部" value="0"></el-option> -->
                   <el-option
                     v-for="item in systemTaskSourceList"
+                    v-if="taskSrcNotShowInFilter.indexOf(item.item_code)<0"
                     :key="item.item_code"
                     :label="item.item_name"
                     :value="item.item_code"
@@ -317,6 +319,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               size="small"
               :class="{ 'error-border': isStartTimeError || isEndTimeErrorNoStart }"
               format="yyyy-MM-dd HH:mm"
@@ -333,6 +336,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               size="small"
               :class="{ 'error-border': isEndTimeErrorBefore }"
               format="yyyy-MM-dd HH:mm"
@@ -531,6 +535,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               :class="{ 'error-border': isStartTimeError || isEndTimeErrorNoStart }"
               format="yyyy-MM-dd HH:mm"
               @change="editCheckPlanStartTime"
@@ -546,6 +551,7 @@
           <div class="block">
             <!--<span class="demonstration">默认</span>-->
             <el-date-picker
+              :editable="false"
               :class="{ 'error-border': isEndTimeErrorBefore }"
               format="yyyy-MM-dd HH:mm"
               @change="editCheckPlanEndTime"
@@ -721,7 +727,7 @@
     COMMUNITY, getSystemCodeNameMap, getSystemDataByCode, getSystemSettings, startSystemLoading, SYSTEM_EVENTTYPE,
     SYSTEM_FREQUENTTYPE, SYSTEM_MODELCAT, SYSTEM_MODELSTATUS, SYSTEM_MODELSTATUS_ENABLE, SYSTEM_NODETYPE,
     SYSTEM_PLANSTATUS, SYSTEM_PUBLISH_STATUS_PUBLISH, SYSTEM_RUNTIMETYPE, SYSTEM_TASKSOURCE, SYSTEM_TASKTYPE,
-    SYSTEM_VERSIONSTATUS_ENABLE, SYSTEM_VERSSTATUS
+    SYSTEM_VERSIONSTATUS_ENABLE, SYSTEM_VERSIONSTATUS_DISABLE, SYSTEM_VERSSTATUS
   } from '@/views/modelManagement/assets/js/common'
   import {formatDate} from '../assets/js/format_date.js'
   import '../assets/css/common.less'
@@ -752,9 +758,9 @@
         editTaskPlan: {},
         modelListSearch: {
           name: '',
-          taskType: '全部',
+          taskType: 'mm.tsktyp.exe',
           // taskSource: 'mm.tsksrc.plan',
-          taskSource: '全部',
+          taskSource: 'mm.tsksrc.plan',
           planStatus: '全部'
         },
         rules: {
@@ -827,6 +833,9 @@
         loadingVersion: false,
         loadingStep: false,
         modelPlanList: [],
+        taskSrcNotShowInFilter: ['mm.tsksrc.direct', 'mm.tsksrc.service', 'mm.tsksrc.systask'],
+        taskTypeNotShowInFilter: ['mm.tsktyp.deploy'],
+        displayVersionStatus: SYSTEM_VERSIONSTATUS_DISABLE,
         multipleSelection: []
       }
     },
@@ -903,6 +912,9 @@
       }
     },
     methods: {
+      showMessageFromChild (data) {
+        this.displayVersionStatus = data
+      },
       imitateProgress (size) {
         this.fileUploadProgress = 10
         var target = this
@@ -1271,6 +1283,9 @@
         let param = {
           modelVerId: this.currentVersionId,
           publishStatus: this.versionPublishedStatus
+        }
+        if (type === 'edit') {
+          param.modelVerId = this.editTaskPlan.algModelVersionPk
         }
         let loadingDeployNode = startSystemLoading()
         getCommunityByStatus(param)

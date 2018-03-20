@@ -64,8 +64,8 @@ export default {
     getDictData: function () {
       const HOUSE_USE_FOR = '14'
       getDictItem({ 'itemType': HOUSE_USE_FOR })
-      .then(res => { this.houseUseFors = res.data })
-      .catch(err => { console.log(err) })
+        .then(res => { this.houseUseFors = res.data })
+        .catch(err => { console.log(err) })
     },
     /**
      * @description 点击table组件复选框触发
@@ -84,7 +84,12 @@ export default {
     sizeChange: function (val) {
       this.pageSize = val
       this.currentPage = 1
-      this.search(this.searchOption)
+      if (this.searchOption.courtUuid !== undefined || this.searchOption.uuid !== undefined) {
+        this.search(this.searchOption)
+      } else {
+        this.tableData = []
+        this.loading = false
+      }
     },
     /**
      * @description 分页组件当前页变化
@@ -92,7 +97,12 @@ export default {
      */
     currentChange: function (val) {
       this.currentPage = val
-      this.search(this.searchOption)
+      if (this.searchOption.courtUuid !== undefined || this.searchOption.uuid !== undefined) {
+        this.search(this.searchOption)
+      } else {
+        this.tableData = []
+        this.loading = false
+      }
     },
     search: function (options) {
       const t = this
@@ -102,25 +112,24 @@ export default {
       let func = null
       if (options.nodeLevel === 1) {
         func = getHousesByConditions
-      } else {
+      } else if (options.nodeLevel > 1) {
         func = getHousesByOrgUuid
       }
-      func(options)
-        .then(res => {
-          var self = this
-          self.total = res.data.totalCount
-          const timeOut = setTimeout(function () {
+      if (typeof func === 'function') {
+        func(options)
+          .then(res => {
+            var self = this
+            self.total = res.data.totalCount
             self.tableData = res.data.result
             self.loading = false
-            clearTimeout(timeOut)
-          }, 1000)
-        })
-        .catch(
-        function (error) {
-          this.loading = false
-          console.log(error)
-        }.bind(this)
-        )
+          })
+          .catch(
+          function (error) {
+            this.loading = false
+            console.log(error)
+          }.bind(this)
+          )
+      }
     },
     addEventHandler: function (target, type, fn) {
       if (target.addEventListener) {
@@ -153,7 +162,7 @@ export default {
 .house-manager {
   width: 100%;
   height: 100%;
-  min-width: 1000px;
+  min-width: 1670px;
   min-height: 500px;
 }
 

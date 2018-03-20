@@ -10,14 +10,14 @@
 
     <div class="margin-top-30">
 
-      <div class="model-title"><i class="el-icon-news"></i> 元数据类别管理</div>
+      <div class="model-title"><i class="el-icon-news"></i> 元数据分类管理</div>
 
       <el-row :gutter="20">
         <el-col :span="4">
           <div>
             <el-form :inline="true" :model="formInline" class="demo-form-inline">
               <el-form-item label="">
-                <el-button @click="showAddModelDialog()" type="primary" icon="el-icon-circle-plus-outline">添加元数据类别</el-button>
+                <el-button @click="showAddModelDialog()" type="primary" icon="el-icon-circle-plus-outline">添加元数据分类</el-button>
               </el-form-item>
             </el-form>
           </div>

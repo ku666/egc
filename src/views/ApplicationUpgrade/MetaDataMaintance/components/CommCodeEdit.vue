@@ -1,6 +1,11 @@
 <template>
   <div>
     <el-form :inline="true" :model="commCodeDetails">
+      <template v-if="commCodeDetails.codeTypes">
+        <el-form-item label="代码大类名称" :label-width="formLabelWidth">
+          <el-input class="upgrade_el-input" v-model="commCodeDetails.codeTypes.typeName" :disabled="isInptDisabled"></el-input>
+        </el-form-item>
+      </template>
       <el-form-item label="代码中文名称" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="commCodeDetails.name"></el-input>
       </el-form-item>
@@ -9,9 +14,6 @@
       </el-form-item>
       <el-form-item label="代码值" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="commCodeDetails.code"></el-input>
-      </el-form-item>
-      <el-form-item label="代码大类名称" :label-width="formLabelWidth">
-        <el-input class="upgrade_el-input" v-model="commCodeDetails.typeCode"></el-input>
       </el-form-item>
       <el-form-item label="备注" :label-width="formLabelWidth">
         <el-input class="upgrade_el-input" v-model="commCodeDetails.remark"></el-input>

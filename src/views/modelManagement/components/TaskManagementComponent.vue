@@ -161,6 +161,7 @@
               <el-form-item label="从" prop="startCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   v-model="modelListSearch.startCreateTime"
@@ -174,6 +175,7 @@
               <el-form-item label="到" prop="endCreateTime">
                 <!--<span class="demonstration">默认</span>-->
                 <el-date-picker
+                  :editable="false"
                   :class="{ 'error-border': isEndTimeErrorBefore }"
                   format="yyyy-MM-dd HH:mm"
                   @change="checkPlanEndTime"
@@ -255,10 +257,10 @@
             <span v-if="!scope.row.paramListJson">无参数</span>
           </template>
         </el-table-column>
-        <!--<el-table-column-->
-          <!--label="任务开始时间">-->
-          <!--<template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>-->
-        <!--</el-table-column>-->
+        <el-table-column
+          label="任务开始时间">
+          <template slot-scope="scope" v-if="scope.row.startTime">{{ scope.row.startTime | formatDate }}</template>
+        </el-table-column>
         <el-table-column
           label="任务结束时间">
           <template slot-scope="scope" v-if="scope.row.endTime">{{ scope.row.endTime | formatDate }}</template>
@@ -268,11 +270,11 @@
           <template slot-scope="scope" v-if="scope.row.exeTimeInSec>0">{{ scope.row.exeTimeInSec/1000 }}</template>
         </el-table-column>
 
-        <el-table-column
+        <!-- <el-table-column
           label="执行IP"
           width="180">
           <template slot-scope="scope">{{ scope.row.executorAddress }}</template>
-        </el-table-column>
+        </el-table-column> -->
 
         <el-table-column
           label="状态"
@@ -388,9 +390,9 @@
                 <span><b>参数值</b></span>
               </el-form-item>
             </el-col>
-            <el-col :span="24" v-for="(item, index) in curPlanExcuteParams.pl" :key="index">
+            <el-col :span="24" v-for="(item, index) in curPlanExcuteParams" :key="index">
               <el-form-item :label="item.n" prop="item">
-                <el-input disabled="disabled" size="small" v-model="item.dv"></el-input>
+                <el-input disabled="disabled" size="small" v-model="item.v"></el-input>
                 <!-- <span>{{item.v}}</span> -->
               </el-form-item>
             </el-col>
@@ -747,11 +749,11 @@
               this.modelPlanList = result.data.items
               this.total = result.data.pageCount
               for (let i = 0; i < this.modelPlanList.length; i++) {
-                if (this.modelPlanList[i].paramList && this.modelPlanList[i].paramList.indexOf('{') > -1 && this.modelPlanList[i].paramList.indexOf('pl') > -1) {
+                if (this.modelPlanList[i].paramList && this.modelPlanList[i].paramList.indexOf('"n"') > -1) {
                   this.modelPlanList[i].paramList = JSON.parse(this.modelPlanList[i].paramList)
-                  this.modelPlanList[i].paramListJson = this.modelPlanList[i].paramList.ep.pl
-                  let length = this.modelPlanList[i].paramListJson.length
-                  console.log(length)
+                  this.modelPlanList[i].paramListJson = this.modelPlanList[i].paramList
+                  // let length = this.modelPlanList[i].paramListJson.length
+                  // console.log(length)
                 }
                 console.log(this.modelPlanList[i].paramList)
               }
@@ -842,7 +844,7 @@
         if (this.modelPlanList[index].paramList && this.modelPlanList[index].paramList !== 'TASKPARAMLIST') {
           // console.log(this.modelPlanList[index].paramList.type())
           let tmpParams = this.modelPlanList[index].paramList
-          this.curPlanExcuteParams = tmpParams.ep
+          this.curPlanExcuteParams = tmpParams
           console.log(this.modelPlanList[index])
         }
       },
