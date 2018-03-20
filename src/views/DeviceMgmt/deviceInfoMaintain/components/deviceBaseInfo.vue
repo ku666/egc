@@ -268,6 +268,8 @@
         this.screeningData['courtName'] = data.name
         this.screeningData['courtUuid'] = data.uuid
         this.selectedOrgVaue = {}
+        this.screeningData['orgName'] = ''
+        this.screeningData['orgId'] = ''
         this.$refs.orgId.clearBox()
         this.$refs.orgName.clearBox()
       },
