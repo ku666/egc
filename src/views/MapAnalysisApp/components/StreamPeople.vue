@@ -129,7 +129,7 @@ export default {
       endDate: new Date(), // 结束时间
       lastStartTime: null, // 上一个开始时间
       lastEndTime: null, // 上一个结束时间
-      myChart: null,
+      peopleChart: null,
       myChartNode: null,
       canvasNode: null,
       chartClickNum: 0, // 图表点击
@@ -181,13 +181,13 @@ export default {
           this.myChartNode.style.width = this.canvasNode.offsetWidth === 0 ? '900px' : this.canvasNode.offsetWidth + 'px'
         }
         this.myChartContainer()
-        this.myChart.resize()
+        this.peopleChart.resize()
       })
       // echarts图表
       this.myChartNode = document.querySelector('#flow-information')
       this.canvasNode = document.querySelector('.echarts-frame')
-      this.myChart = this.$echarts.init(this.myChartNode)
-      this.myChart.setOption(this.echartsData())
+      this.peopleChart = this.$echarts.init(this.myChartNode)
+      this.peopleChart.setOption(this.echartsData())
       // 判断时间是否选择正确
       this.onTimeJudgment()
       if (!this.isRequest) {
@@ -198,11 +198,6 @@ export default {
       // 多次点击
       if (this.chartClickNum > 0) return
       this.chartClickNum++
-      // 屏幕宽度发生改变时重置容器高宽
-      window.onresize = () => {
-        this.myChartContainer()
-        this.myChart.resize()
-      }
     },
     /**
     * @description echart图表数据 *
@@ -409,6 +404,11 @@ export default {
         console.log(LOG_TAG + ' 成功获取到小区的详细信息 ')
       })
       this.dialogVisible = true
+      // 屏幕宽度发生改变时重置容器高宽
+      window.onresize = () => {
+        this.myChartContainer()
+        this.peopleChart.resize()
+      }
     },
     /**
     * @description 按时间（报表类型）查询 *
@@ -513,7 +513,7 @@ export default {
           // 数据改变时 初始化图表数据
           if (this.isChartShow) {
             this.isPerErrInfo = false
-            this.myChart.setOption(this.echartsData())
+            this.peopleChart.setOption(this.echartsData())
           }
         } else {
           this.isPerErrInfo = true
