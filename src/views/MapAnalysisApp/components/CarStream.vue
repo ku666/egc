@@ -52,7 +52,7 @@
               <el-col :span="24">
                 <el-button type="primary" @click="onSubmitForm('form')">查询</el-button>
                 <el-button type="success" :plain="!isShowTable" @click="onGoToTable()">表单</el-button>
-                <el-button type="danger" :plain="!isShowChart" @click="onGoToMap()">图表</el-button>
+                <el-button type="danger" :plain="!isShowChartContaint" @click="onGoToMap()">图表</el-button>
               </el-col>
             </el-row>
           </el-form>
@@ -78,7 +78,7 @@
               </el-pagination>
             </div>
             <!-- 地图展示 -->
-            <div id="car-info-Mapbox" v-show="isShowChart">
+            <div id="car-info-Mapbox" v-show="isShowChartContaint">
               <img v-show="isReponseData" src="../assets/images/err.png">
               <div id="car-info-map" v-show="isShowChart"></div>
             </div>
@@ -98,11 +98,13 @@ export default {
     return {
       isShowCarInfoMap: false, // 是否显示弹框
       isShowTable: true, // 是否显示表格
-      isShowChart: false, // 是否显示echarts图表
+      isShowChartContaint: false, // 是否显示echarts图表容器
+      isShowChart: true, // 是否显示echarts图表
       isReponseData: false, // 接口是否获取到非空数据
+      isNeedFreshTable: false, // 是否要更新表格
       canLeaveChart: true, // 能否离开echart显示
       clickCount: 0, // 点击图表按钮计数
-      preTableShowStatus: '', // 判断是否第一次进入echarts图表页面
+      tableBtnClickCount: 0, // 表格按钮点击次数
       formDatePickType: 'date', // 报表类型
       clearableDatepick: false, // 日期选择器能否清空
       editableDatepick: false, // 日期选择器能否键盘输入
@@ -148,7 +150,7 @@ export default {
       }
       this.getCourtInfo()
       this.isShowCarInfoMap = true
-      if (!this.isShowChart) {
+      if (!this.isShowChartContaint) {
         this.getCarAccessPageList()
       } else {
         this.getCourtCarAccessInfo()
@@ -160,16 +162,18 @@ export default {
     onGoToTable: function () {
       if (!this.canLeaveChart) return
       this.isShowTable = true
-      this.isShowChart = false
+      this.isShowChartContaint = false
+      if (this.tableBtnClickCount > 0) return
+      this.onHandleCurrentChange()
+      this.tableBtnClickCount++
     },
     /**
     * @description 切换到图表
     */
     onGoToMap: function () {
-      this.preTableShowStatus = this.isShowTable
+      this.tableBtnClickCount = 0
       this.isShowTable = false
-      this.isShowChart = true
-      if (!this.preTableShowStatus) return
+      this.isShowChartContaint = true
       if (this.clickCount > 0) return
       this.getCourtCarAccessInfo()
       this.clickCount++
@@ -252,12 +256,15 @@ export default {
       if (this.form.reportType === '0') {
         this.formDatePickType = 'date'
         this.form.startTime = new Date(new Date().setDate(new Date().getDate() - 6))// 开始时间
+        this.form.endTime = new Date()
       } else if (this.form.reportType === '1') {
         this.formDatePickType = 'date'
         this.form.startTime = new Date(new Date() - 86400000 * 30)
+        this.form.endTime = new Date()
       } else {
         this.formDatePickType = 'month'
         this.form.startTime = new Date(new Date() - 86400000 * 30 * 12)// 开始时间
+        this.form.endTime = new Date()
       }
     },
     /**
@@ -272,9 +279,11 @@ export default {
     * @description 改变当前页,发送请求,更改状态
     */
     onHandleCurrentChange: function (val) {
-      this.currentPage = val
-      this.form.startTime = new Date(this.queryParam.startTime)
-      this.form.endTime = new Date(this.queryParam.endTime)
+      if (val) { this.currentPage = val }
+      if (this.onDatePickRangeConfrim()) {
+        this.form.startTime = new Date(this.queryParam.startTime)
+        this.form.endTime = new Date(this.queryParam.endTime)
+      }
       this.getCarAccessPageList()
     },
     /**
@@ -289,8 +298,8 @@ export default {
       } else {
         this.getCourtCarAccessInfo()
       }
-      this.preTableShowStatus = ''
       this.clickCount = 0
+      this.tableBtnClickCount = 0
     },
     /**
     * @description ajax获取echarts表格数据
@@ -303,19 +312,23 @@ export default {
         if (res.data.code === '00000') {
           console.log(LOG_TAG + ' 成功获取小区echarts图表展示车流信息  ')
           if (res.data.data.length === 0) {
+            this.isShowChart = false
             this.isReponseData = true
           } else {
+            this.isShowChart = true
             this.isReponseData = false
             var data = res.data.data
             this.sortData(data)
             this.chartInit()
           }
         } else {
+          this.isShowChart = false
           this.isReponseData = true
           this.errMessage(res.data.message)
         }
         this.canLeaveChart = true
       }).catch(() => {
+        this.isShowChart = false
         this.isReponseData = true
         this.canLeaveChart = true
       })
@@ -375,6 +388,7 @@ export default {
     */
     onCloseDialog: function () {
       this.clickCount = 0
+      this.tableBtnClickCount = 0
       this.isReponseData = false
       if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
       this.myChart = null
@@ -393,7 +407,7 @@ export default {
             })
             return true
           }
-          break
+          return false
         case '1':
           if (this.form.endTime.getTime() - this.form.startTime.getTime() > 365 * 24 * 60 * 60 * 1000) {
             this.$message.error({
@@ -401,7 +415,7 @@ export default {
             })
             return true
           }
-          break
+          return false
       }
     },
     /**
@@ -420,7 +434,7 @@ export default {
     optionData: function () {
       return {
         title: {
-          text: '小区车流量d'
+          text: '小区车流量'
         },
         tooltip: {
           trigger: 'axis',
