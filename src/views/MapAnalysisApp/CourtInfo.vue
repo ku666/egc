@@ -434,7 +434,7 @@ export default {
   line-height: 30px;
   position: absolute;
   top: 6px;
-  right: 70px;
+  right: 75px;
   padding: 0px;
   z-index: 10;
   border-bottom: 2px solid rgb(228, 140, 10);
