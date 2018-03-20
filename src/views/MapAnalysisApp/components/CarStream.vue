@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isShowCarInfoMap" class="car-info">
+  <div v-show="isShowCarInfoMap" class="car-info">
     <el-dialog :visible.sync="isShowCarInfoMap" @close="onCloseDialog" title="小区车流量" width="70%">
       <el-row>
         <el-col :span="4">
@@ -160,6 +160,7 @@ export default {
     * @description 切换到表格
     */
     onGoToTable: function () {
+      this.clickCount = 0
       if (!this.canLeaveChart) return
       this.isShowTable = true
       this.isShowChartContaint = false
@@ -189,7 +190,7 @@ export default {
       this.myChart.setOption(this.optionData)
       // echarts大小自适应
       window.onresize = function () {
-        throttle(myChartResize, null, 200)
+        throttle(myChartResize, null, 100)
       }
       function myChartResize () {
         that.myChart.resize && that.myChart.resize()
@@ -213,6 +214,11 @@ export default {
       this.myChart.on('click', function (params) {
         this.disPatchAction(this.myChart, data, params, zoomSize)
       }.bind(this))
+      if (this.myChart) {
+        this.$nextTick(_ => {
+          this.myChart.resize()
+        })
+      }
       console.log(LOG_TAG + ' echarts图表初始化  ')
     },
     /**
@@ -315,8 +321,8 @@ export default {
             this.isShowChart = false
             this.isReponseData = true
           } else {
-            this.isShowChart = true
             this.isReponseData = false
+            this.isShowChart = true
             var data = res.data.data
             this.sortData(data)
             this.chartInit()
@@ -390,8 +396,8 @@ export default {
       this.clickCount = 0
       this.tableBtnClickCount = 0
       this.isReponseData = false
-      if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
-      this.myChart = null
+      // if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
+      // this.myChart = null
       window.onresize = null
     },
     /**
