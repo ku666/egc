@@ -396,8 +396,6 @@ export default {
       this.clickCount = 0
       this.tableBtnClickCount = 0
       this.isReponseData = false
-      // if (this.myChart && this.myChart.dispose) { this.myChart.dispose() }
-      // this.myChart = null
       window.onresize = null
     },
     /**
