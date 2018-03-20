@@ -64,8 +64,8 @@ module.exports = {
         changeOrigin: true
       },
       '/egc-usermgmtcomponent': {
-        target: 'http://192.168.0.139:30940',  // 242线上用户管理
-        // target: 'http://192.168.0.186:9011',  // 云端用户管理
+        // target: 'http://192.168.0.139:30940',  // 242线上用户管理
+        target: 'http://192.168.0.186:30940',  // 云端用户管理
         changeOrigin: true
       },
       '/egc-logservicecomponent': {
