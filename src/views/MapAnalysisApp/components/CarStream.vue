@@ -39,12 +39,12 @@
               </el-col>
               <el-col :span="8">
                 <el-form-item label="开始时间">
-                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.startTime" style="width:100%" :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.startTime" style="width:100%" :disabled='disabled' :picker-options="forbiddenStartDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
               <el-col :span="8" style="text-align:left">
                 <el-form-item label="结束时间">
-                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.endTime" style="width:100%" :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
+                  <el-date-picker :type="formDatePickType" @change="onDatePickRangeConfrim" placeholder="选择日期" v-model="form.endTime" style="width:100%" :disabled='disabled' :picker-options="forbiddenEndDatetime" :clearable="clearableDatepick" :editable="editableDatepick"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -96,6 +96,7 @@ export default {
   name: 'CarStream',
   data () {
     return {
+      disabled: true,
       isShowCarInfoMap: false, // 是否显示弹框
       isShowTable: true, // 是否显示表格
       isShowChartContaint: false, // 是否显示echarts图表容器
@@ -152,6 +153,9 @@ export default {
       this.isShowCarInfoMap = true
       if (!this.isShowChartContaint) {
         this.getCarAccessPageList()
+        setTimeout(() => {
+          this.disabled = false
+        }, 160)
       } else {
         this.getCourtCarAccessInfo()
       }
