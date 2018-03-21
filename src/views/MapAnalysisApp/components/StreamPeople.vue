@@ -37,13 +37,13 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="开始时间">
-                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
+                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :disabled='disabled' :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
             <el-col :span="8">
               <el-form-item label="结束时间">
-                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
+                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :disabled='disabled' :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
                 </el-date-picker>
               </el-form-item>
             </el-col>
@@ -122,6 +122,7 @@ export default {
       isChartActivated: true, // 是否激活图表按钮
       isChartShow: false, // 是否显示图表
       isTableShow: true, // 是否显示表格
+      disabled: true,
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
       perErrImg: errImg, // 图表错误提示
@@ -155,13 +156,17 @@ export default {
     * @param {string} val 报表类型：日报(0) 月报(1) 年报(2)
     */
     onReportTypeEvent: function (val) {
-      if (val === '0' || val === '1') { // 1年31622400000  7天604800000
+      if (val === '0') { // 1年31622400000  7天604800000
         this.timeType = 'date'
         this.startDate = new Date(this.endDate.getTime() - 518400000)
+      } else if (val === '1') {
+        this.timeType = 'date'
+        this.startDate = new Date(this.endDate.getTime() - 2592000000)
       } else {
         this.timeType = 'month'
         this.startDate = new Date(this.endDate.getTime() - 31622400000)
       }
+      console.log(this.startDate)
     },
     /**
     * @description 点击切换图表展示 *
@@ -409,6 +414,14 @@ export default {
         this.myChartContainer()
         this.peopleChart.resize()
       }
+      // 处理在ie下变换报表形式日期不变的问题
+      if (window.ActiveXObject || 'ActiveXObject' in window) {
+        setTimeout(() => {
+          this.disabled = false
+        }, 230)
+      } else {
+        this.disabled = false
+      }
     },
     /**
     * @description 按时间（报表类型）查询 *
@@ -568,7 +581,11 @@ export default {
     // 关闭窗口(dialog)前重置数据
     onCloseCallback: function () {
       this.chartClickNum = 0
+      this.disabled = true
     }
+  },
+  mounted: function () {
+
   }
 }
 </script>
