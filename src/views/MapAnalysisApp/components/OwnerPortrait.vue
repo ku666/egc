@@ -152,7 +152,7 @@ export default {
       },
       total: 10, // 总条数
       disabled: true, // 业主默认报表,时间不可选
-      startTime: new Date(new Date().setDate(new Date().getDate() - 3)), // 默认开始时间
+      startTime: new Date(new Date().setDate(new Date().getDate() - 6)), // 默认开始时间
       endTime: new Date(), // 结束时间
       starForbiddenDatetime: { // 限制开始时间选择器
         disabledDate: (time) => {
@@ -262,7 +262,7 @@ export default {
       switch (val) {
         case '0':
           this.timeType = 'date'
-          this.startTime = new Date(new Date().setDate(new Date().getDate() - 3)) // 默认开始时间
+          this.startTime = new Date(new Date().setDate(new Date().getDate() - 6)) // 默认开始时间
           this.endTime = new Date()
           break
         case '1':

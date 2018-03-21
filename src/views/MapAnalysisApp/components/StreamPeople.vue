@@ -125,7 +125,7 @@ export default {
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
       perErrImg: errImg, // 图表错误提示
-      startDate: new Date(new Date().setDate(new Date().getDate() - 7)), // 开始时间
+      startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
       endDate: new Date(), // 结束时间
       lastStartTime: null, // 上一个开始时间
       lastEndTime: null, // 上一个结束时间
@@ -157,7 +157,7 @@ export default {
     onReportTypeEvent: function (val) {
       if (val === '0' || val === '1') { // 1年31622400000  7天604800000
         this.timeType = 'date'
-        this.startDate = new Date(this.endDate.getTime() - 604800000)
+        this.startDate = new Date(this.endDate.getTime() - 518400000)
       } else {
         this.timeType = 'month'
         this.startDate = new Date(this.endDate.getTime() - 31622400000)
