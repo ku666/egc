@@ -1,83 +1,87 @@
 <template>
-  <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="onCloseCallback" class='popup-peo'>
-    <el-row>
-      <el-col :span="4" class="left-text">
-        <div>
+  <div>
+    <el-dialog title="人流数据展示" :visible.sync="dialogVisible" width="70%" @close="onCloseCallback" class='popup-peo'>
+      <el-row>
+        <el-col :span="4" class="left-text">
           <div>
-            <span>小区名称</span>
-            ：{{cellDetailsList.courtName}}</div>
-          <div>
-            <span>小区地址</span>
-            ：{{cellDetailsList.regionName}}</div>
-          <div>
-            <span>户数</span>
-            ：{{cellDetailsList.homeCount}}户</div>
-          <div>
-            <span>房屋总数</span>
-            ：{{cellDetailsList.houseCount}}间</div>
-          <div>
-            <span>占地面积</span>
-            ：{{cellDetailsList.floorArea}}平方米</div>
-          <div>
-            <span>建筑面积</span>
-            ：{{cellDetailsList.buildArea}}平方米</div>
-        </div>
-      </el-col>
-      <!-- 表格展示 -->
-      <el-col :span="19" style="height:600px">
-        <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="报表类型">
-                <el-select v-model="parameter.reportType" placeholder="请选择" @change="onReportTypeEvent" style="width:95%">
-                  <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="开始时间">
-                <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :disabled='disabled' :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="结束时间">
-                <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :disabled='disabled' :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:95%" @change="onTimeJudgment">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="24" style="text-align:right">
-              <el-button type="primary" @click="onTimeQuery">查询</el-button>
-              <el-button type="success" @click="onTableSwitch" :plain="isTableActivated">表单</el-button>
-              <el-button type="danger" @click="onChartSwitch" :plain="isChartActivated">图表</el-button>
-            </el-col>
-          </el-row>
-        </el-form>
-        <div class="show">
-          <div v-show="isTableShow">
-            <el-table :data="tableData" width="100%" height="380" stripe border>
-              <el-table-column prop="date" label="时间">
-              </el-table-column>
-              <el-table-column prop="courtName" label="小区名称">
-              </el-table-column>
-              <el-table-column prop="perInCount" label="入园人数">
-              </el-table-column>
-              <el-table-column prop="perOutCount" label="出园人数">
-              </el-table-column>
-            </el-table>
-            <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" @size-change="onSizeChange" @current-change="onCurrentChange">
-            </el-pagination>
+            <div>
+              <span>小区名称</span>
+              ：{{cellDetailsList.courtName}}</div>
+            <div>
+              <span>小区地址</span>
+              ：{{cellDetailsList.regionName}}</div>
+            <div>
+              <span>户数</span>
+              ：{{cellDetailsList.homeCount}}户</div>
+            <div>
+              <span>房屋总数</span>
+              ：{{cellDetailsList.houseCount}}间</div>
+            <div>
+              <span>占地面积</span>
+              ：{{cellDetailsList.floorArea}}平方米</div>
+            <div>
+              <span>建筑面积</span>
+              ：{{cellDetailsList.buildArea}}平方米</div>
           </div>
-          <!-- 图表展示 -->
-          <div class="echarts-frame" style="width:100%" v-show="isChartShow">
-            <div id="flow-information"></div>
-            <div v-show="isPerErrInfo" class="pererr-info"><img :src="perErrImg"></div>
+        </el-col>
+        <!-- 表格展示 -->
+        <el-col :span="19" style="height:600px">
+          <el-form ref="form" :model="parameter" label-width="80px" label-position="top">
+            <el-row>
+              <el-col :span="8">
+                <el-form-item label="报表类型">
+                  <el-select v-model="parameter.reportType" placeholder="请选择" @change="onReportTypeEvent" style="width:95%">
+                    <el-option v-for="item in reportTypeList" :key="item.value" :label="item.label" :value="item.value">
+                    </el-option>
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="开始时间">
+                  <el-date-picker v-model="startDate" :type="timeType" placeholder="开始时间" :disabled='disabled' :picker-options="starForbiddenDatetime" :clearable="false" :editable="false" style="width:100%" @change="onTimeJudgment">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+              <el-col :span="8">
+                <el-form-item label="结束时间">
+                  <el-date-picker v-model="endDate" :type="timeType" placeholder="结束时间" :disabled='disabled' :picker-options="endForbiddenDatetime" :clearable="false" :editable="false" style="width:100%" @change="onTimeJudgment">
+                  </el-date-picker>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="24" style="text-align:right">
+                <el-button type="primary" @click="onTimeQuery">查询</el-button>
+                <el-button type="success" @click="onTableSwitch" :plain="isTableActivated">表单</el-button>
+                <el-button type="danger" @click="onChartSwitch" :plain="isChartActivated">图表</el-button>
+              </el-col>
+            </el-row>
+          </el-form>
+          <div class="show">
+            <div v-show="isTableShow">
+              <el-table :data="tableData" width="100%" height="380" stripe border>
+                <el-table-column prop="date" label="时间">
+                </el-table-column>
+                <el-table-column prop="courtName" label="小区名称">
+                </el-table-column>
+                <el-table-column prop="perInCount" label="入园人数">
+                </el-table-column>
+                <el-table-column prop="perOutCount" label="出园人数">
+                </el-table-column>
+              </el-table>
+              <el-pagination class="table-pager" background :current-page="parameter.currentPage" :page-sizes="[10, 20, 50, 100]" :page-size="parameter.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="totalRows" @size-change="onSizeChange" @current-change="onCurrentChange">
+              </el-pagination>
+            </div>
+            <!-- 图表展示 -->
+            <div class="echarts-frame" style="width:100%" v-show="isChartShow">
+              <div id="flow-information"></div>
+              <div v-show="isPerErrInfo" class="pererr-info"><img :src="perErrImg"></div>
+            </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
-  </el-dialog>
+        </el-col>
+      </el-row>
+    </el-dialog>
+  </div>
 </template>
 <script>
 import { getCourtPerAccessInfo, getPerAccessPageList, getCourtInfo } from '@/views/MapAnalysisApp/apis/index'
@@ -125,6 +129,7 @@ export default {
       disabled: true,
       isPerErrInfo: false, // 图表不显示时的错误提示
       dialogVisible: false, // 弹窗开关
+      pickerShow: null,
       perErrImg: errImg, // 图表错误提示
       startDate: new Date(new Date().setDate(new Date().getDate() - 6)), // 开始时间
       endDate: new Date(), // 结束时间
@@ -581,11 +586,7 @@ export default {
     // 关闭窗口(dialog)前重置数据
     onCloseCallback: function () {
       this.chartClickNum = 0
-      this.disabled = true
     }
-  },
-  mounted: function () {
-
   }
 }
 </script>

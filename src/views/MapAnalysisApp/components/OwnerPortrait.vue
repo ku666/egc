@@ -201,6 +201,7 @@ export default {
      */
     ownerPortrait (courtId) {
       this.dialogVisible = true
+      this.disabled = true
       this.form.buildList = []
       this.parameter.courtUuid = courtId
       this.courtId = courtId
@@ -580,7 +581,6 @@ export default {
         startDate: null,
         endDate: null
       }
-      this.disabled = true
       this.ownerTableData = []
       this.isErrData = false
     },
